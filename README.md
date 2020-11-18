@@ -12,7 +12,7 @@
 
 - :whale: cross-check with Snorkel-based distant supervision [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/phurwicz/hover-binder/master?urlpath=/proxy/5006/app-snorkel-explorer) [Source](https://github.com/phurwicz/hover-binder/app-snorkel-explorer/main.py)
 
-Check out [@phurwicz/hover-binder](https://github.com/) for a complete list of demo apps.
+Check out [@phurwicz/hover-binder](https://github.com/phurwicz/hover-binder) for a complete list of demo apps.
 
 
 ## Installation
@@ -23,12 +23,12 @@ To get the latest release version, you can use pip:
 pip install hover
 ```
 
-Conda-forge is not yet supported.
+Installation through `conda` is not yet supported.
 
 
 ## Resources
 
-For documentation, please check out the mkdocs site.
+- [Documentation](https://phurwicz.github.io/hover/)
 
 ## Dependencies
 
