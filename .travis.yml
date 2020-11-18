@@ -1,0 +1,10 @@
+language: python
+python:
+  - "3.6"
+  - "3.7"
+# command to install dependencies
+before_script: pip install pytest
+script: python -m pytest
+branches:
+  only:
+    - master
