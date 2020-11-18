@@ -3,7 +3,7 @@ Submodule that loads and preprocesses public datasets into formats that work smo
 """
 
 from sklearn.datasets import fetch_20newsgroups
-from hover import config
+from hover import module_config
 import re
 
 
@@ -48,7 +48,7 @@ def newsgroups_dictl(
 
     label_list = sorted(list(label_set))
     label_decoder = {idx: value for idx, value in enumerate(label_list)}
-    label_decoder[config.ABSTAIN_ENCODED] = config.ABSTAIN_DECODED
+    label_decoder[module_config.ABSTAIN_ENCODED] = module_config.ABSTAIN_DECODED
     label_encoder = {value: idx for idx, value in label_decoder.items()}
     return dataset, label_encoder, label_decoder
 

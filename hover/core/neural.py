@@ -109,7 +109,7 @@ class TextVectorNet(object):
         # the actual prediction
         self.nn.eval()
         vectors = torch.Tensor([self.vectorizer(_text) for _text in texts])
-        logits = self.nn(vectors.unsqueeze(0))
+        logits = self.nn(vectors)
         probs = F.softmax(logits, dim=-1)
 
         # inverse-cast if applicable

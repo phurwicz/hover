@@ -19,7 +19,7 @@ class TestTextVectorNet(object):
     """
     def test_save(self, example_tvnet):
         default_path = example_tvnet.nn_update_path
-        example_tvnet.save(f"{nn_update_path}.test")
+        example_tvnet.save(f"{default_path}.test")
 
     def test_adjust_optimier_params(self, example_tvnet):
         example_tvnet.adjust_optimizer_params()

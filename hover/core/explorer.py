@@ -11,7 +11,7 @@ from bokeh.layouts import column, row
 from abc import ABC, abstractmethod
 from copy import deepcopy
 from hover import module_config
-from local_config import bokeh_hover_tooltip
+from .local_config import bokeh_hover_tooltip
 
 
 class BokehForLabeledText(ABC):
