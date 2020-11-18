@@ -228,7 +228,7 @@ class BokehCorpusAnnotator(BokehForLabeledText):
             assert _key in df_working.columns
         self.df_working = df_working.copy()
         if not "label" in self.df_working.columns:
-            self.df_working["label"] = "_"
+            self.df_working["label"] = module_config.ABSTAIN_DECODED
 
         self.source = ColumnDataSource(self.df_working)
         self.plot_kwargs = {"line_alpha": 0.3}

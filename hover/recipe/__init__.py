@@ -8,54 +8,22 @@ from hover.core.dataset import SupervisableTextDataset
 from hover.core.neural import create_text_vector_net_from_module, TextVectorNet
 from hover.utils.torch_helper import vector_dataloader, one_hot, label_smoothing
 from wasabi import msg as logger
+from wrappy import todo
 
 
 class VisualAnnotation:
     """
-    Strongly coupled with the SupervisableDataset class.
     """
 
+    @todo(
+        "Think about what belongs in this class and what belongs in the core modules."
+    )
     def __init__(self, dataset, vectorizer=None, model_module_name=None):
         """
         """
         assert isinstance(dataset, SupervisableDataset)
         self.dataset = dataset
         self.model_module_name = model_module_name
-
-    def compute_text_to_2d(self, method, **kwargs):
-        """
-        Calculate a 2D manifold, excluding the test set.
-        :param method: the dimensionality reduction method to use.
-        :type method: str, "umap" or "ivis"
-        """
-        from hover.representation.reduction import DimensionalityReducer
-
-        vectorizer = create_text_vector_net_from_module(
-            TextVectorNet, self.model_module_name, self.dataset.classes
-        ).vectorizer
-
-        # prepare input vectors to manifold learning
-        subset = ["raw", "train", "dev"]
-        fit_texts = []
-        for _key in subset:
-            _df = self.dataset.dfs[_key]
-            if _df.empty:
-                continue
-            fit_texts += _df["text"].tolist()
-        fit_arr = np.array([vectorizer(_text) for _text in tqdm(fit_texts)])
-
-        # initialize and fit manifold learning reducer
-        reducer = DimensionalityReducer(fit_arr)
-        embedding = reducer.fit_transform(method, **kwargs)
-
-        # assign x and y coordinates to dataset
-        start_idx = 0
-        for _key in subset:
-            _df = self.dataset.dfs[_key]
-            _length = _df.shape[0]
-            _df["x"] = pd.Series(embedding[start_idx : (start_idx + _length), 0])
-            _df["y"] = pd.Series(embedding[start_idx : (start_idx + _length), 1])
-            start_idx += _length
 
     def get_loader(self, key, vectorizer, batch_size=64, smoothing_coeff=0.0):
         """

@@ -9,12 +9,12 @@ from snorkel.classification import cross_entropy_with_probs
 import numpy as np
 
 
-def create_text_vector_net_from_module(specific_class, model_module_name, labels):
+def create_vector_net_from_module(specific_class, model_module_name, labels):
     """
     Create a TextVectorNet model, or of its child class.
     :param specific_class: TextVectorNet or its child class.
     :type specific_class: class
-    :param model_module_name: path to a local Python module in the working directory whose __init__.py file contains a get_text_to_vec() callable, get_architecture() callable, and a get_state_dict_path() callable.
+    :param model_module_name: path to a local Python module in the working directory whose __init__.py file contains a get_vectorizer() callable, get_architecture() callable, and a get_state_dict_path() callable.
     :type model_module_name: str
     :param labels: the classification labels, e.g. ["POSITIVE", "NEGATIVE"].
     :type labels: list of str
@@ -23,9 +23,9 @@ def create_text_vector_net_from_module(specific_class, model_module_name, labels
 
     model_module = import_module(model_module_name)
 
-    # Load the model by retrieving the text-to-vec function, architecture, and state dict
+    # Load the model by retrieving the inp-to-vec function, architecture, and state dict
     model = specific_class(
-        model_module.get_text_to_vec(),
+        model_module.get_vectorizer(),
         model_module.get_architecture(),
         model_module.get_state_dict_path(),
         labels,
@@ -34,16 +34,16 @@ def create_text_vector_net_from_module(specific_class, model_module_name, labels
     return model
 
 
-class TextVectorNet(object):
-    """Simple transfer learning model: a user-supplied text vectorizer followed by a neural net.
+class VectorNet(object):
+    """Simple transfer learning model: a user-supplied vectorizer followed by a neural net.
     This is a parent class whose children may use different training schemes.
     Please refer to hover.utils.torch_helper.VectorDataset and vector_dataloader for more info.
     """
 
-    def __init__(self, text_to_vec, architecture, state_dict_path, labels):
+    def __init__(self, vectorizer, architecture, state_dict_path, labels):
         """
-        :param text_to_vec: a function that converts any string to a NumPy 1-D array.
-        :type text_to_vec: callable
+        :param vectorizer: a function that converts any string to a NumPy 1-D array.
+        :type vectorizer: callable
         :param architecture: a Torch.nn.Module child class to be instantiated into a neural net.
         :type architecture: child class of Torch.nn.Module
         :param state_dict_path: path to a PyTorch state dict that matches the architecture.
@@ -58,7 +58,7 @@ class TextVectorNet(object):
         self.num_classes = len(self.label_encoder)
 
         # set up vectorizer and the neural network with appropriate dimensions
-        self.vectorizer = text_to_vec
+        self.vectorizer = vectorizer
         vec_dim = self.vectorizer("").shape[0]
         self.nn = architecture(vec_dim, self.num_classes)
 
@@ -97,18 +97,18 @@ class TextVectorNet(object):
         for _group in self.nn_optimizer.param_groups:
             _group.update(self._dynamic_params["optimizer"])
 
-    def predict_proba(self, texts):
+    def predict_proba(self, inps):
         """
-        End-to-end single/multi-piece prediction from text to class probabilities.
+        End-to-end single/multi-piece prediction from inp to class probabilities.
         """
-        # if the input is a single piece of text, cast it to a list
-        FLAG_SINGLE = isinstance(texts, str)
+        # if the input is a single piece of inp, cast it to a list
+        FLAG_SINGLE = isinstance(inps, str)
         if FLAG_SINGLE:
-            texts = [texts]
+            inps = [inps]
 
         # the actual prediction
         self.nn.eval()
-        vectors = torch.Tensor([self.vectorizer(_text) for _text in texts])
+        vectors = torch.Tensor([self.vectorizer(_inp) for _inp in inps])
         logits = self.nn(vectors)
         probs = F.softmax(logits, dim=-1)
 
@@ -118,28 +118,30 @@ class TextVectorNet(object):
 
         return probs
 
-    def manifold_trajectory(self, texts, **kwargs):
+    def manifold_trajectory(self, inps, method="umap", **kwargs):
         """
-        (1) vectorize texts
+        TODO: need a clean way to pass kwargs to dimensionality reduction.
+
+        (1) vectorize inps
         (2) forward propagate, keeping intermediates
         (3) fit intermediates to 2D manifolds
         (4) fit manifolds using Procrustes shape analysis
         (5) fit shapes to trajectory splines
-        :param texts: input texts to calculate the manifold profile from.
-        :type texts: list of str
+        :param inps: input to calculate the manifold profile from.
+        :type inps: list
         """
         from hover.core.representation.manifold import LayerwiseManifold
         from hover.core.representation.trajectory import manifold_spline
 
         # step 1 & 2
-        vectors = torch.Tensor([self.vectorizer(_text) for _text in texts])
+        vectors = torch.Tensor([self.vectorizer(_inp) for _inp in inps])
         self.nn.eval()
         intermediates = self.nn.eval_per_layer(vectors)
         intermediates = [_tensor.detach().numpy() for _tensor in intermediates]
 
         # step 3 & 4
         LM = LayerwiseManifold(intermediates)
-        LM.unfold(method="umap")
+        LM.unfold(method=method)
         seq_arr, disparities = LM.procrustes()
         seq_arr = np.array(seq_arr)
 

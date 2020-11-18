@@ -1,22 +1,18 @@
 import pytest
-from hover.core.neural import (
-    create_text_vector_net_from_module as create_tvnet,
-    TextVectorNet,
-)
+from hover.core.neural import create_vector_net_from_module as create_tvnet, VectorNet
+
 
 @pytest.fixture
 def example_tvnet():
-    model = create_tvnet(
-        TextVectorNet,
-        "model_template",
-        ["positive", "negative"],
-    )
+    model = create_tvnet(VectorNet, "model_template", ["positive", "negative"])
     return model
 
-class TestTextVectorNet(object):
+
+class TestVectorNet(object):
     """
-    For the TextVectorNet base class.
+    For the VectorNet base class.
     """
+
     def test_save(self, example_tvnet):
         default_path = example_tvnet.nn_update_path
         example_tvnet.save(f"{default_path}.test")

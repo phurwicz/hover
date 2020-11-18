@@ -31,7 +31,7 @@ class TestSupervisableTextDataset:
             train_dictl=self.__class__.TRAIN_DICTL[:],
             dev_dictl=self.__class__.DEV_DICTL[:],
             test_dictl=self.__class__.TEST_DICTL[:],
-            text_key="content",
+            feature_key="content",
             label_key="mark",
         )
 
@@ -40,4 +40,4 @@ class TestSupervisableTextDataset:
             assert dataset.dfs[_key].shape[0] == _value
 
         # check the number of classes
-        assert len(dataset.label_encoder) == self.__class__.EFFECTIVE_CLASSES
+        assert len(dataset.classes) == self.__class__.EFFECTIVE_CLASSES

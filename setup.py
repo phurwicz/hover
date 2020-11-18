@@ -8,7 +8,7 @@ with open("requirements.txt", "r") as fd:
 
 setuptools.setup(
     name="hover",
-    version="0.1.2",
+    version="0.1.3",
     description="Hovercraft-like machine learning",
     long_description=long_description,
     long_description_content_type="text/markdown",

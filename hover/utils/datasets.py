@@ -14,7 +14,7 @@ def clean_string(text, sub_from=r"[^a-zA-Z0-9\ ]", sub_to=r" "):
 
 
 def newsgroups_dictl(
-    data_home="./sklearn_data",
+    data_home="~/scikit_learn_data",
     to_remove=("headers", "footers", "quotes"),
     text_key="text",
     label_key="label",
