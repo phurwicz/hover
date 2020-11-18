@@ -1,6 +1,6 @@
-# Hover (REPLACE WITH A LOGO IMAGE)
+# Hover
 
-![GitHub Stars]https://img.shields.io/github/stars/phurwicz/hover
+![GitHub Stars](https://img.shields.io/github/stars/phurwicz/hover)
 
 ----
 
