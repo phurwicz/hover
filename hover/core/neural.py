@@ -97,14 +97,25 @@ class TextVectorNet(object):
         for _group in self.nn_optimizer.param_groups:
             _group.update(self._dynamic_params["optimizer"])
 
-    def predict(self, text):
+    def predict_proba(self, texts):
         """
-        End-to-end single-piece prediction from text to class probabilities.
+        End-to-end single/multi-piece prediction from text to class probabilities.
         """
+        # if the input is a single piece of text, cast it to a list
+        FLAG_SINGLE = isinstance(texts, str)
+        if FLAG_SINGLE:
+            texts = [texts]
+
+        # the actual prediction
         self.nn.eval()
-        vector = self.vectorizer(text)
-        logits = self.nn(torch.Tensor(vector).unsqueeze(0))
+        vectors = torch.Tensor([self.vectorizer(_text) for _text in texts])
+        logits = self.nn(vectors.unsqueeze(0))
         probs = F.softmax(logits, dim=-1)
+
+        # inverse-cast if applicable
+        if FLAG_SINGLE:
+            probs = probs[0]
+
         return probs
 
     def manifold_trajectory(self, texts, **kwargs):
