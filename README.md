@@ -1,5 +1,7 @@
 # Hover (REPLACE WITH A LOGO IMAGE)
 
+![GitHub Stars]https://img.shields.io/github/stars/phurwicz/hover
+
 ----
 
 `Hover` is a machine learning **dev-time-helper** library that enables smooth and effective supervision. In other words, it's an interface where you _hover_ over and label your data.. differently. For instance, you can:
