@@ -1,7 +1,8 @@
 # Hover
 
-![GitHub Stars](https://img.shields.io/github/stars/phurwicz/hover)
-
+![Travis CI](https://img.shields.io/travis/phurwicz/hover?style=for-the-badge)
+![PyPI Version](https://img.shields.io/pypi/v/hover?style=for-the-badge)
+![GitHub Stars](https://img.shields.io/github/stars/phurwicz/hover?style=for-the-badge)
 ----
 
 `Hover` is a machine learning **dev-time-helper** library that enables smooth and effective supervision. In other words, it's an interface where you _hover_ over and label your data.. differently. For instance, you can:
@@ -30,7 +31,7 @@ Installation through `conda` is not yet supported.
 
 - [Documentation](https://phurwicz.github.io/hover/)
 
-## Dependencies
+## Developer
 
 - `./requirements.txt` lists the installation requirements.
 - `./requirements-dev.txt` is for developers.
