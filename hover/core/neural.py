@@ -128,8 +128,8 @@ class TextVectorNet(object):
         :param texts: input texts to calculate the manifold profile from.
         :type texts: list of str
         """
-        from hover.representation.manifold import LayerwiseManifold
-        from hover.representation.trajectory import manifold_spline
+        from hover.core.representation.manifold import LayerwiseManifold
+        from hover.core.representation.trajectory import manifold_spline
 
         # step 1 & 2
         vectors = torch.Tensor([self.vectorizer(_text) for _text in texts])
