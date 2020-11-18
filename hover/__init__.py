@@ -1,4 +1,4 @@
-'''
+"""
 Abstracting the I/O workflow
 
 Inputs
@@ -13,9 +13,9 @@ Useful in the loop, which could also be byproducts
  - localized geometric functions
  - neural-net functions
  - [so on and so forth]
- 
+
 ----
- 
+
 Hover's main functionality: Dij -> Dik in a visual interface
 - Bokeh server hosting a 2D plot with widgets and callbacks
  - lasso select
@@ -31,7 +31,7 @@ Hover's main functionality: Dij -> Dik in a visual interface
 ----
 
 "You only pay for what you use... but you must use something"
-Each use case deserves its own folder and loadable module hosting Python-based configs. 
+Each use case deserves its own folder and loadable module hosting Python-based configs.
 Think about what should be in that __init__ file:
 [*] means mandatory on its level, [+] means optional on its level, [^] means built-in support should be in place
 
@@ -57,4 +57,4 @@ Think about what should be in that __init__ file:
  - [+] active learning
   - [*] how to select sample(s)?
    - [^] selected sample(s) should be linked to Bokeh for immediate annotation
-'''
+"""

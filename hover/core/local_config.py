@@ -1,5 +1,7 @@
 # bokeh hovertool template
-def bokeh_hover_tooltip(label=False, text=False, image=False, coords=True, index=True, custom={}):
+def bokeh_hover_tooltip(
+    label=False, text=False, image=False, coords=True, index=True, custom={}
+):
     """
     Create a Bokeh hover tooltip from a template.
     """

@@ -10,8 +10,8 @@ from bokeh.models import CustomJS, ColumnDataSource
 from bokeh.layouts import column, row
 from abc import ABC, abstractmethod
 from copy import deepcopy
-import ..module_config as module_config
-from local_config as bokeh_hover_tooltip
+from hover import module_config
+from local_config import bokeh_hover_tooltip
 
 
 class BokehForLabeledText(ABC):
@@ -29,7 +29,9 @@ class BokehForLabeledText(ABC):
                 "hover",
                 "reset",
             ],
-            "tooltips": bokeh_hover_tooltip(label=True, text=True, image=False, coords=True, index=True),
+            "tooltips": bokeh_hover_tooltip(
+                label=True, text=True, image=False, coords=True, index=True
+            ),
             "output_backend": "webgl",
         }
         self.figure_settings.update(kwargs)
@@ -400,6 +402,7 @@ class BokehSnorkelExplorer(BokehCorpusExplorer):
     """
     Plot text data points along with labeling function outputs.
     """
+
     def __init__(self, df_raw, df_labeled, **kwargs):
         super().__init__(df_raw, **kwargs)
 

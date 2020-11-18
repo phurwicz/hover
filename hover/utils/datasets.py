@@ -6,10 +6,12 @@ from sklearn.datasets import fetch_20newsgroups
 from hover import config
 import re
 
-def clean_string(text, sub_from=r'[^a-zA-Z0-9\ ]', sub_to=r' '):
+
+def clean_string(text, sub_from=r"[^a-zA-Z0-9\ ]", sub_to=r" "):
     cleaned = re.sub(sub_from, sub_to, text)
-    cleaned = re.sub(r' +', r' ', cleaned)
+    cleaned = re.sub(r" +", r" ", cleaned)
     return cleaned
+
 
 def newsgroups_dictl(
     data_home="./sklearn_data",
@@ -34,8 +36,8 @@ def newsgroups_dictl(
             _text = clean_string(text)
             _label = _bunch.target_names[_bunch.target[i]]
             _label = label_mapping.get(_label, _label)
-            
-            _text_actual_characters = re.sub(r'[^a-zA-Z0-9]', r'', _text)
+
+            _text_actual_characters = re.sub(r"[^a-zA-Z0-9]", r"", _text)
             if len(_text_actual_characters) > 5:
                 label_set.add(_label)
                 _entry = {text_key: _text, label_key: _label}

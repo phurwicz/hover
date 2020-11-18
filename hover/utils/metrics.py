@@ -1,5 +1,6 @@
 import numpy as np
 
+
 def classification_accuracy(true, pred):
     """
     Accuracy measure on two arrays. Intended for classification problems.
