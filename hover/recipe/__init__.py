@@ -1,7 +1,6 @@
 """
 High-level workflows.
 """
-import numpy as np
 import pandas as pd
 from tqdm import tqdm
 from hover.core.dataset import SupervisableTextDataset

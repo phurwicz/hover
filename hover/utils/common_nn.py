@@ -1,6 +1,4 @@
-import torch
 import torch.nn as nn
-import numpy as np
 
 
 class BaseSequential(nn.Module):
@@ -9,6 +7,9 @@ class BaseSequential(nn.Module):
     """
 
     def __init__(self):
+        """
+        Inheriting the parent constructor.
+        """
         super().__init__()
 
     def init_weights(self):
@@ -37,6 +38,9 @@ class BaseSequential(nn.Module):
 
 class MLP(BaseSequential):
     def __init__(self, embed_dim, num_classes, dropout=0.25, n_hid=128):
+        """
+        Set up a proportionally fixed architecture.
+        """
         super().__init__()
         self.model = nn.Sequential(
             nn.Dropout(dropout),
@@ -55,6 +59,9 @@ class MLP(BaseSequential):
 
 class LogisticRegression(BaseSequential):
     def __init__(self, embed_dim, num_classes):
+        """
+        Set up a minimal architecture.
+        """
         super().__init__()
         self.model = nn.Sequential(nn.Linear(embed_dim, num_classes))
         self.init_weights()
