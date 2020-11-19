@@ -1,6 +1,5 @@
 """Interactive explorers mostly based on Bokeh."""
 import numpy as np
-import bokeh
 import wrappy
 from wasabi import msg as logger
 from bokeh.models import CustomJS, ColumnDataSource
@@ -8,6 +7,7 @@ from bokeh.layouts import column, row
 from abc import ABC, abstractmethod
 from copy import deepcopy
 from hover import module_config
+from hover.utils.misc import current_time
 from .local_config import bokeh_hover_tooltip
 
 
@@ -297,7 +297,7 @@ class BokehCorpusAnnotator(BokehForLabeledText):
 
             self.reset_source()
             self.plot()
-            logger.good(f"Updated annotator plot")
+            logger.good(f"Updated annotator plot at {current_time()}")
 
         def export():
             # a callback on clicking self.annotator_export
