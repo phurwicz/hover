@@ -1,5 +1,4 @@
-"""
-Abstracting the I/O workflow
+"""Abstracting the I/O workflow
 
 Inputs
 - data_entries_in: list of dicts {Di} that can hold attributes of any form {Dij}

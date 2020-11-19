@@ -1,6 +1,4 @@
-"""
-Interactive explorers mostly based on Bokeh.
-"""
+"""Interactive explorers mostly based on Bokeh."""
 import numpy as np
 import bokeh
 import wrappy
