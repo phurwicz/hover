@@ -8,12 +8,12 @@ with open("requirements.txt", "r") as fd:
 
 setuptools.setup(
     name="hover",
-    version="0.1.3",
+    version="0.1.4",
     description="Hovercraft-like machine learning",
     long_description=long_description,
     long_description_content_type="text/markdown",
     author="Pavel",
-    author_email="pepsimixt@gmail.com",
+    author_email="pavelhurwicz@gmail.com",
     url="https://github.com/phurwicz/hover",
     packages=setuptools.find_packages(),
     install_requires=deps,
