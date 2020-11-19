@@ -8,6 +8,7 @@ def example_tvnet():
     return model
 
 
+@pytest.mark.core
 class TestVectorNet(object):
     """
     For the VectorNet base class.
