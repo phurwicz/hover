@@ -33,7 +33,6 @@ class BokehForLabeledText(ABC):
             # navigate changes
             "undo",
             "redo",
-            "reset",
         ],
         # inspection details
         "tooltips": bokeh_hover_tooltip(
@@ -81,7 +80,7 @@ class BokehForLabeledText(ABC):
         """
         return column(self.layout_widgets(), self.figure)
 
-    def activate_search(self, source, kwargs, altered_param=("size", 8, 3, 5)):
+    def activate_search(self, source, kwargs, altered_param=("size", 10, 5, 7)):
         """
         Enables string/regex search-and-highlight mechanism.
         Modifies plotting source in-place.
@@ -203,7 +202,7 @@ class BokehCorpusExplorer(BokehForLabeledText):
         Assuming that there will not be a labeled dev set.
         """
         self.background_kwargs = self.activate_search(
-            self.source, self.background_kwargs, altered_param=("size", 8, 3, 5)
+            self.source, self.background_kwargs, altered_param=("size", 10, 5, 7)
         )
         self.background_kwargs = self.activate_search(
             self.source,
@@ -247,7 +246,7 @@ class BokehCorpusAnnotator(BokehForLabeledText):
     def reset_source(self):
         self.source.data = self.df_working
         self.plot_kwargs = self.activate_search(
-            self.source, self.plot_kwargs, altered_param=("size", 8, 3, 5)
+            self.source, self.plot_kwargs, altered_param=("size", 10, 5, 7)
         )
         self.plot_kwargs = self.activate_search(
             self.source, self.plot_kwargs, altered_param=("fill_alpha", 0.4, 0.05, 0.2)
@@ -429,7 +428,9 @@ class BokehSnorkelExplorer(BokehCorpusExplorer):
         """
         Overriding the parent method, because there will be a labeled dev set.
         """
-        self.activate_search(source, background_kwargs, altered_param=("size", 6, 1, 3))
+        self.activate_search(
+            source, background_kwargs, altered_param=("size", 10, 5, 7)
+        )
         self.activate_search(
             source, background_kwargs, altered_param=("fill_alpha", 0.6, 0.0, 0.3)
         )
@@ -452,7 +453,7 @@ class BokehSnorkelExplorer(BokehCorpusExplorer):
         axes = ("x", "y")
         decoded_targets = [lf.label_decoder[_target] for _target in lf.targets]
         legend = f"{', '.join(decoded_targets)} | {lf.name}"
-        template_kwargs = {"line_alpha": 0.6, "fill_alpha": 0.0, "size": 5}
+        template_kwargs = {"line_alpha": 0.6, "fill_alpha": 0.0, "size": 7}
         template_kwargs.update(kwargs)
 
         # create correct/incorrect/missed/hit subsets

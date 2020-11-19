@@ -19,7 +19,7 @@ def bokeh_hover_tooltip(
         """
     if text:
         tooltip += """
-        <div style="word-wrap: break-word; width: 500px; text-overflow: ellipsis; line-height: 90%">
+        <div style="word-wrap: break-word; width: 95%; text-overflow: ellipsis; line-height: 90%">
             <span style="font-size: 11px;">
                 Text: @text
             </span>
