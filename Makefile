@@ -15,6 +15,6 @@ publish:
 	@echo "Done."
 coverage:
 	@coverage run --source=$(TEST_MODULE_PATH) -m pytest
-	@coverage report -m
+	@coverage xml -o cobertura.xml
 vulture:
 	@vulture $(TEST_MODULE_PATH) --exclude $(VULTURE_EXCLUDE)
