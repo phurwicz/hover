@@ -7,6 +7,7 @@ def test_vector_dataloader(num_entries=100, dim_inp=128, dim_out=3):
     vec_out = np.random.rand(num_entries, dim_out)
     loader = vector_dataloader(vec_inp, vec_out, batch_size=min(num_entries, 16))
     # no further assertions; just checking that the vector_dataloader function does not crash
+    assert loader
 
 
 def test_one_hot():

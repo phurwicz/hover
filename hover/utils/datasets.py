@@ -18,11 +18,12 @@ def newsgroups_dictl(
     to_remove=("headers", "footers", "quotes"),
     text_key="text",
     label_key="label",
-    label_mapping={},
+    label_mapping=None,
 ):
     """
     Load the 20 Newsgroups dataset into a list of dicts, deterministically.
     """
+    label_mapping = label_mapping or dict()
     dataset = dict()
     label_set = set()
     for _key in ["train", "test"]:

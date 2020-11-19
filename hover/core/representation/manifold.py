@@ -5,7 +5,6 @@ Can be useful for improved interpretability of neural nets.
 from .reduction import DimensionalityReducer
 from hover import module_params
 from tqdm import tqdm
-import numpy as np
 from scipy.spatial import procrustes
 
 DEFAULT_UMAP_PARAMS = {
@@ -68,7 +67,6 @@ class LayerwiseManifold(object):
         :param method: the dimensionality reduction method to use.
         :type method: str
         """
-        import umap
 
         self.manifolds = []
         self.logger.info(f"Running {method}...")

@@ -1,11 +1,10 @@
 """
 Dataset objects which extend beyond DataFrames.
 """
-from abc import ABC, abstractmethod
+from abc import ABC
 from rich.console import Console
 import pandas as pd
 import numpy as np
-import wrappy
 from hover import module_config
 from tqdm import tqdm
 
@@ -28,9 +27,9 @@ class SupervisableDataset(ABC):
     def __init__(
         self,
         raw_dictl,
-        train_dictl=[],
-        dev_dictl=[],
-        test_dictl=[],
+        train_dictl=None,
+        dev_dictl=None,
+        test_dictl=None,
         feature_key="feature",
         label_key="label",
     ):
@@ -48,9 +47,13 @@ class SupervisableDataset(ABC):
             """
             Burner function to transform the input list of dictionaries into standard format.
             """
+            # transform the feature and possibly the label
             key_transform = {feature_key: self.__class__.FEATURE_KEY}
             if labels:
                 key_transform[label_key] = "label"
+            # corner case when dictl is empty or None
+            if not dictl:
+                return []
             return [
                 {
                     key_transform.get(_key, _key): _value
@@ -205,5 +208,3 @@ class SupervisableTextDataset(SupervisableDataset):
     """
 
     FEATURE_KEY = "text"
-
-    pass

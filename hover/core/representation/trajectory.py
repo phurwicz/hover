@@ -3,10 +3,9 @@ Trajectory interpolation for sequences of vectors.
 """
 from scipy import interpolate
 import numpy as np
-import numba
 
 
-def spline(arr_per_dim, points_per_step=1, splprep_kwargs={}):
+def spline(arr_per_dim, points_per_step=1, splprep_kwargs=None):
     """
     Fit a spline and evaluate it at a specified density of points.
     :param arr_per_dim: arrays representing the part of the curve in each dimension.
@@ -17,6 +16,7 @@ def spline(arr_per_dim, points_per_step=1, splprep_kwargs={}):
     :type splprep_kwargs: dict
     """
     assert points_per_step >= 1, "Need at least one point per step"
+    splprep_kwargs = splprep_kwargs or dict()
 
     # check the number of given points in the curve
     num_given_points = arr_per_dim[0].shape[0]
@@ -38,26 +38,17 @@ def spline(arr_per_dim, points_per_step=1, splprep_kwargs={}):
     return traj_per_dim
 
 
-def manifold_spline(seq_arr, points_per_step=1, splprep_kwargs={}):
+def manifold_spline(seq_arr, **kwargs):
     """
     Fit a spline to every sequence of points in a manifold.
     :param seq_arr: L-sequence of M-by-N arrays each containing vectors matched by index.
     :type seq_arr: numpy.ndarray
-    :param points_per_step: number of points interpolated in between each given point on the curve.
-    :type points_per_step: int
-    :param splprep_kwargs: keyword arguments to the splprep() function for fitting the spline in SciPy.
-    :type splprep_kwargs: dict
     """
     L, M, N = seq_arr.shape
 
     # this gives M-by-N-by-f(L, args)
     traj_arr = np.array(
-        [
-            spline(
-                [seq_arr[:, _m, _n] for _n in range(N)], points_per_step, splprep_kwargs
-            )
-            for _m in range(M)
-        ]
+        [spline([seq_arr[:, _m, _n] for _n in range(N)], **kwargs) for _m in range(M)]
     )
 
     # return f(L, args)-by-M-by-N
