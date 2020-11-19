@@ -1,4 +1,4 @@
-from hover.utils.common_nn import BaseSequential, MLP, LogisticRegression
+from hover.utils.common_nn import MLP, LogisticRegression
 import numpy as np
 import torch
 
