@@ -1,7 +1,6 @@
 import torch
 import torch.nn as nn
 import numpy as np
-import torch.nn.functional as F
 
 
 class BaseSequential(nn.Module):
@@ -57,5 +56,5 @@ class MLP(BaseSequential):
 class LogisticRegression(BaseSequential):
     def __init__(self, embed_dim, num_classes):
         super().__init__()
-        self.model = nn.Sequential(nn.Linear(embed_dim, num_classes),)
+        self.model = nn.Sequential(nn.Linear(embed_dim, num_classes))
         self.init_weights()

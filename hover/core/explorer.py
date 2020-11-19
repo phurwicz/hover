@@ -1,7 +1,6 @@
 """
 Interactive explorers mostly based on Bokeh.
 """
-import pandas as pd
 import numpy as np
 import bokeh
 import wrappy
@@ -304,13 +303,13 @@ class BokehCorpusAnnotator(BokehForLabeledText):
 
         def export():
             # a callback on clicking self.annotator_export
-            import dill
+            from dill import dump
             from datetime import datetime
 
             timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
             filename = f"bokeh-annotated-df-{timestamp}.pkl"
             with open(filename, "wb") as f:
-                dill.dump(self.df_working, f)
+                dump(self.df_working, f)
             logger.good(f"Saved DataFrame to {filename}")
 
         self.annotator_apply.on_event(ButtonClick, apply)
