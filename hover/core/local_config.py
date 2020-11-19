@@ -19,7 +19,7 @@ def bokeh_hover_tooltip(
         """
     if text:
         tooltip += """
-        <div style="word-wrap: break-word; width: 800px; text-overflow: ellipsis; line-height: 80%">
+        <div style="word-wrap: break-word; width: 500px; text-overflow: ellipsis; line-height: 90%">
             <span style="font-size: 11px;">
                 Text: @text
             </span>
@@ -52,7 +52,7 @@ def bokeh_hover_tooltip(
         </div>
         """
     for _key, _field in custom.items():
-        assert _field.startswith("@")
+        assert _field.startswith("@"), "Expected a leading @ symbol"
         tooltip += f"""
         <div>
             <span style="font-size: 12px; color: #606;">
