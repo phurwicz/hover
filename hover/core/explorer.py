@@ -19,21 +19,32 @@ class BokehForLabeledText(ABC):
     Base class that keeps template figure settings.
     """
 
+    DEFAULT_FIGURE_KWARGS = {
+        "tools": [
+            # change the scope
+            "pan",
+            "wheel_zoom",
+            # make selections
+            "tap",
+            "poly_select",
+            "lasso_select",
+            # make inspections
+            "hover",
+            # navigate changes
+            "undo",
+            "redo",
+            "reset",
+        ],
+        # inspection details
+        "tooltips": bokeh_hover_tooltip(
+            label=True, text=True, image=False, coords=True, index=True
+        ),
+        # bokeh recommends webgl for scalability
+        "output_backend": "webgl",
+    }
+
     def __init__(self, **kwargs):
-        self.figure_settings = {
-            "tools": [
-                "pan",
-                "wheel_zoom",
-                "lasso_select",
-                "box_select",
-                "hover",
-                "reset",
-            ],
-            "tooltips": bokeh_hover_tooltip(
-                label=True, text=True, image=False, coords=True, index=True
-            ),
-            "output_backend": "webgl",
-        }
+        self.figure_settings = self.__class__.DEFAULT_FIGURE_KWARGS.copy()
         self.figure_settings.update(kwargs)
         self.reset_figure()
         self.setup_widgets()
@@ -66,16 +77,14 @@ class BokehForLabeledText(ABC):
 
     def view(self):
         """
-        Return a formatted figure for display.
+        Define the layout of the whole explorer.
         """
-
-        layout = column(self.layout_widgets(), self.figure)
-        return layout
+        return column(self.layout_widgets(), self.figure)
 
     def activate_search(self, source, kwargs, altered_param=("size", 8, 3, 5)):
         """
         Enables string/regex search-and-highlight mechanism.
-        Modifies plotting source and kwargs in-place.
+        Modifies plotting source in-place.
         """
         assert isinstance(source, ColumnDataSource)
         assert isinstance(kwargs, dict)
@@ -168,7 +177,7 @@ class BokehCorpusExplorer(BokehForLabeledText):
     Plot unlabeled, 2-D-vectorized text data points in a corpus.
     """
 
-    BACKGROUND_KWARGS = {
+    BACKGROUND_GLYPH_KWARGS = {
         "color": "gainsboro",
         "line_alpha": 0.3,
         "legend_label": "unlabeled",
@@ -183,7 +192,7 @@ class BokehCorpusExplorer(BokehForLabeledText):
         self.df_raw = df_raw.copy()
 
         # plot the train set as a background
-        self.background_kwargs = deepcopy(self.__class__.BACKGROUND_KWARGS)
+        self.background_kwargs = self.__class__.BACKGROUND_GLYPH_KWARGS.copy()
         self.source = ColumnDataSource(self.df_raw)
         self._activate_search_on_corpus()
 
@@ -335,7 +344,11 @@ class BokehMarginExplorer(BokehCorpusExplorer):
     Currently not considering multi-label scenarios.
     """
 
-    BACKGROUND_KWARGS = {"color": "gainsboro", "line_alpha": 0.3, "fill_alpha": 0.0}
+    BACKGROUND_GLYPH_KWARGS = {
+        "color": "gainsboro",
+        "line_alpha": 0.3,
+        "fill_alpha": 0.0,
+    }
 
     def __init__(self, df_raw, label_col_a, label_col_b, **kwargs):
         super().__init__(df_raw, **kwargs)
@@ -352,11 +365,6 @@ class BokehMarginExplorer(BokehCorpusExplorer):
         self.background_kwargs = self.activate_search(
             self.source, self.background_kwargs, altered_param=("size", 6, 1, 3)
         )
-        # self.background_kwargs = self.activate_search(
-        #    self.source,
-        #    self.background_kwargs,
-        #    altered_param=("fill_alpha", 0.6, 0.0, 0.3),
-        # )
 
     def plot(self, label, **kwargs):
         """
@@ -366,7 +374,7 @@ class BokehMarginExplorer(BokehCorpusExplorer):
 
         # prepare plot settings
         axes = ("x", "y")
-        eff_kwargs = deepcopy(self.background_kwargs)
+        eff_kwargs = self.background_kwargs.copy()
         eff_kwargs.update(kwargs)
         eff_kwargs["legend_label"] = f"{label}"
 
