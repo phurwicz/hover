@@ -70,6 +70,8 @@ class LayerwiseManifold(object):
         assert method in {"umap", "ivis"}
         if method == "umap":
             reducer_kwargs = reducer_kwargs or DEFAULT_UMAP_KWARGS
+        else:
+            reducer_kwargs = reducer_kwargs or dict()
 
         self.manifolds = []
         self.logger.info(f"Running {method}...")
