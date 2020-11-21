@@ -1,9 +1,9 @@
 # Hover
 
-![PyPI Stage](https://img.shields.io/pypi/status/hover?style=for-the-badge)
-![PyPI Version](https://img.shields.io/pypi/v/hover?style=for-the-badge)
-![Travis CI](https://img.shields.io/travis/phurwicz/hover?style=for-the-badge)
-![Codacy Grade](https://img.shields.io/codacy/grade/689827d9077b43ac8721c7658d122d1a?style=for-the-badge)
+[![PyPI Stage](https://img.shields.io/pypi/status/hover?style=for-the-badge)]
+[![PyPI Version](https://img.shields.io/pypi/v/hover?style=for-the-badge)](https://pypi.org)
+[![Travis CI](https://img.shields.io/travis/phurwicz/hover/main?style=for-the-badge)](https://travis-ci.org)
+[![Codacy Grade](https://img.shields.io/codacy/grade/689827d9077b43ac8721c7658d122d1a?style=for-the-badge)](https://www.codacy.com)
 
 ----
 
