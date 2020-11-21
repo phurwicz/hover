@@ -433,7 +433,7 @@ class BokehSnorkelExplorer(BokehCorpusExplorer):
         )
 
     # def plot(self, lf, L_train, L_dev, include, **kwargs):
-    def plot(self, lf, L_raw=None, L_labeled=None, include=["C", "I", "M"], **kwargs):
+    def plot(self, lf, L_raw=None, L_labeled=None, include=("C", "I", "M"), **kwargs):
         """
         Plot a single labeling function.
         """
