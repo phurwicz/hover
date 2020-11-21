@@ -44,7 +44,8 @@ def manifold_spline(seq_arr, **kwargs):
     :param seq_arr: L-sequence of M-by-N arrays each containing vectors matched by index.
     :type seq_arr: numpy.ndarray
     """
-    L, M, N = seq_arr.shape
+    # L is unused
+    _L, M, N = seq_arr.shape
 
     # this gives M-by-N-by-f(L, args)
     traj_arr = np.array(
