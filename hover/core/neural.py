@@ -1,7 +1,7 @@
 import torch
 import torch.nn.functional as F
 from datetime import datetime
-from hover.utils.torch_helper import one_hot, label_smoothing
+from hover.utils.torch_helper import label_smoothing
 from hover.utils.metrics import classification_accuracy
 from wasabi import msg as logger
 from sklearn.metrics import confusion_matrix
@@ -203,7 +203,7 @@ class VectorNet(object):
         Supports flexible args and kwargs for child classes that may implement self.train() and self.train_batch() differently.
         """
         self.adjust_optimizer_params()
-        for batch_idx, (loaded_input, loaded_output, index) in enumerate(train_loader):
+        for batch_idx, (loaded_input, loaded_output, _) in enumerate(train_loader):
             self._dynamic_params["batch"] = batch_idx + 1
             self.train_batch(loaded_input, loaded_output, *args, **kwargs)
 
