@@ -61,12 +61,15 @@ class LayerwiseManifold(object):
         self.arrays = [transform(_arr) for _arr in self.arrays]
         self.logger.good("Standardized input arrays")
 
-    def unfold(self, method="umap", reducer_kwargs=DEFAULT_UMAP_PARAMS):
+    def unfold(self, method="umap", reducer_kwargs=None):
         """
         Compute lower-dimensional manifolds using UMAP.
         :param method: the dimensionality reduction method to use.
         :type method: str
         """
+        assert method in {"umap", "ivis"}
+        if method == "umap":
+            reducer_kwargs = reducer_kwargs or DEFAULT_UMAP_KWARGS
 
         self.manifolds = []
         self.logger.info(f"Running {method}...")
