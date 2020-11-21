@@ -1,7 +1,6 @@
 import torch
 import torch.nn.functional as F
 from datetime import datetime
-from hover.utils.torch_helper import label_smoothing
 from hover.utils.metrics import classification_accuracy
 from wasabi import msg as logger
 from sklearn.metrics import confusion_matrix
