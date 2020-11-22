@@ -2,7 +2,7 @@
 import numpy as np
 import wrappy
 from wasabi import msg as logger
-from bokeh.models import CustomJS, ColumnDataSource
+from bokeh.models import CustomJS, ColumnDataSource, CDSView, IndexFilter
 from bokeh.layouts import column, row
 from abc import ABC, abstractmethod
 from copy import deepcopy
@@ -366,7 +366,6 @@ class BokehMarginExplorer(BokehCorpusExplorer):
         """
         Plot the margins about a single label.
         """
-        from bokeh.models import CDSView, IndexFilter
 
         # prepare plot settings
         axes = ("x", "y")
@@ -407,6 +406,8 @@ class BokehSnorkelExplorer(BokehCorpusExplorer):
     Plot text data points along with labeling function outputs.
     """
 
+    BACKGROUND_GLYPH_KWARGS = {"line_alpha": 0.6, "fill_alpha": 0.0, "size": 7}
+
     def __init__(self, df_raw, df_labeled, **kwargs):
         super().__init__(df_raw, **kwargs)
 
@@ -421,18 +422,19 @@ class BokehSnorkelExplorer(BokehCorpusExplorer):
         # initialize a list of LFs to enable toggles
         self.lfs = []
 
-    def _activate_search_on_corpus(self, source, background_kwargs):
+    def _activate_search_on_corpus(self):
         """
         Overriding the parent method, because there will be a labeled dev set.
         """
-        self.activate_search(
-            source, background_kwargs, altered_param=("size", 10, 5, 7)
+        self.background_kwargs = self.activate_search(
+            self.source, self.background_kwargs, altered_param=("size", 10, 5, 7)
         )
-        self.activate_search(
-            source, background_kwargs, altered_param=("fill_alpha", 0.6, 0.0, 0.3)
+        self.background_kwargs = self.activate_search(
+            self.source,
+            self.background_kwargs,
+            altered_param=("fill_alpha", 0.6, 0.0, 0.3),
         )
 
-    # def plot(self, lf, L_train, L_dev, include, **kwargs):
     def plot(self, lf, L_raw=None, L_labeled=None, include=("C", "I", "M"), **kwargs):
         """
         Plot a single labeling function.
@@ -449,75 +451,75 @@ class BokehSnorkelExplorer(BokehCorpusExplorer):
         # prepare plot settings
         axes = ("x", "y")
         decoded_targets = [lf.label_decoder[_target] for _target in lf.targets]
-        legend = f"{', '.join(decoded_targets)} | {lf.name}"
-        template_kwargs = {"line_alpha": 0.6, "fill_alpha": 0.0, "size": 7}
-        template_kwargs.update(kwargs)
+        eff_kwargs = self.background_kwargs.copy()
+        eff_kwargs.update(kwargs)
+        eff_kwargs["legend_label"] = f"{', '.join(decoded_targets)} | {lf.name}"
 
         # create correct/incorrect/missed/hit subsets
         to_plot = []
         if "C" in include:
             to_plot.append(
-                {
-                    "source": self._source_correct(L_labeled),
-                    "marker": self.figure.square,
-                }
+                {"view": self._view_correct(L_labeled), "marker": self.figure.square}
             )
         if "I" in include:
             to_plot.append(
-                {"source": self._source_incorrect(L_labeled), "marker": self.figure.x}
+                {"view": self._view_incorrect(L_labeled), "marker": self.figure.x}
             )
         if "M" in include:
             to_plot.append(
                 {
-                    "source": self._source_missed(L_labeled, lf.targets),
+                    "view": self._view_missed(L_labeled, lf.targets),
                     "marker": self.figure.cross,
                 }
             )
         if "H" in include:
             to_plot.append(
-                {"source": self._source_hit(L_raw), "marker": self.figure.circle}
+                {"view": self._view_hit(L_raw), "marker": self.figure.circle}
             )
 
         # plot created subsets
         for _dict in to_plot:
-            _source = _dict["source"]
+            _view = _dict["view"]
             _marker = _dict["marker"]
-            _kwargs = deepcopy(template_kwargs)
-            self.activate_search(_source, _kwargs)
-            _marker(*axes, source=_source, legend_label=legend, **_kwargs)
+            _marker(*axes, source=self.source, view=_view, **eff_kwargs)
 
-    @wrappy.todo("Review whether it's appropriate to create a ColumnDataSource")
-    def _source_correct(self, L_labeled):
+    def _view_correct(self, L_labeled):
         """
         Determine the subset correctly labeled by a labeling function.
         """
-        indices = self.df_labeled["label"].values == L_labeled
-        return ColumnDataSource(self.df_labeled.iloc[indices])
 
-    @wrappy.todo("Review whether it's appropriate to create a ColumnDataSource")
-    def _source_incorrect(self, L_labeled):
+        indices_raw = self.df_labeled["label"].values == L_labeled
+        indices = np.where(indices_raw)[0].tolist()
+        view = CDSView(source=self.source, filters=[IndexFilter(indices)])
+        return view
+
+    def _view_incorrect(self, L_labeled):
         """
         Determine the subset incorrectly labeled by a labeling function.
         """
         disagreed = self.df_labeled["label"].values != L_labeled
         attempted = L_labeled != module_config.ABSTAIN_ENCODED
-        indices = np.multiply(disagreed, attempted)
-        return ColumnDataSource(self.df_labeled.iloc[indices])
+        indices_raw = np.multiply(disagreed, attempted)
+        indices = np.where(indices_raw)[0].tolist()
+        view = CDSView(source=self.source, filters=[IndexFilter(indices)])
+        return view
 
-    @wrappy.todo("Review whether it's appropriate to create a ColumnDataSource")
-    def _source_missed(self, L_labeled, targets):
+    def _view_missed(self, L_labeled, targets):
         """
         Determine the subset missed by a labeling function.
         """
         targetable = np.isin(self.df_labeled["label"], targets)
         abstained = L_labeled == module_config.ABSTAIN_DECODED
-        indices = np.multiply(targetable, abstained)
-        return ColumnDataSource(self.df_labeled.iloc[indices])
+        indices_raw = np.multiply(targetable, abstained)
+        indices = np.where(indices_raw)[0].tolist()
+        view = CDSView(source=self.source, filters=[IndexFilter(indices)])
+        return view
 
-    @wrappy.todo("Review whether it's appropriate to create a ColumnDataSource")
-    def _source_hit(self, L_raw):
+    def _view_hit(self, L_raw):
         """
         Determine the subset hit by a labeling function.
         """
-        indices = L_raw != module_config.ABSTAIN_DECODED
-        return ColumnDataSource(self.df_raw.iloc[indices])
+        indices_raw = L_raw != module_config.ABSTAIN_DECODED
+        indices = np.where(indices_raw)[0].tolist()
+        view = CDSView(source=self.source, filters=[IndexFilter(indices)])
+        return view

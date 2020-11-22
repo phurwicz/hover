@@ -73,6 +73,6 @@ class TestBokehMarginExplorer:
 @pytest.mark.core
 class TestBokehSnorkelExplorer:
     def test_init(self):
-        # explorer = BokehSnorkelExplorer(EXAMPLE_RAW_DF, EXAMPLE_DEV_DF)
-        # _ = explorer.view()
+        explorer = BokehSnorkelExplorer(EXAMPLE_RAW_DF, EXAMPLE_DEV_DF)
+        _ = explorer.view()
         pass
