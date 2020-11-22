@@ -10,7 +10,7 @@ before_install:
 before_script:
   - pip install -r requirements-test.txt
 script:
-  - make coverage
+  #  - make coverage
 after_success:
   - java -jar codacy-coverage-reporter-assembly.jar report -l Java -r build/reports/jacoco/test/jacocoTestReport.xml
 branches:
