@@ -412,7 +412,8 @@ class BokehSnorkelExplorer(BokehCorpusExplorer):
         super().__init__(df_raw, **kwargs)
 
         # add 'label' column to df_raw
-        self.df_raw["label"] = "unlabeled"
+        if not "label" in self.df_raw.columns:
+            self.df_raw["label"] = module_config.ABSTAIN_DECODED
 
         # prepare plot-ready dataframe for dev set
         for _key in ["text", "label", "x", "y"]:
@@ -438,6 +439,7 @@ class BokehSnorkelExplorer(BokehCorpusExplorer):
     def plot(self, lf, L_raw=None, L_labeled=None, include=("C", "I", "M"), **kwargs):
         """
         Plot a single labeling function.
+        :param lf: labeling function decorated by @hover.utils.snorkel_helper.labeling_function()
         """
         # keep track of added LF
         self.lfs.append(lf)
@@ -498,7 +500,7 @@ class BokehSnorkelExplorer(BokehCorpusExplorer):
         Determine the subset incorrectly labeled by a labeling function.
         """
         disagreed = self.df_labeled["label"].values != L_labeled
-        attempted = L_labeled != module_config.ABSTAIN_ENCODED
+        attempted = L_labeled != module_config.ABSTAIN_DECODED
         indices_raw = np.multiply(disagreed, attempted)
         indices = np.where(indices_raw)[0].tolist()
         view = CDSView(source=self.source, filters=[IndexFilter(indices)])
