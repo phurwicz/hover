@@ -1,5 +1,6 @@
-from hover.core.dataset import SupervisableTextDataset
 import pytest
+from copy import deepcopy
+from hover.core.dataset import SupervisableTextDataset
 
 
 @pytest.mark.core
@@ -41,3 +42,11 @@ class TestSupervisableTextDataset:
 
         # check the number of classes
         assert len(dataset.classes) == self.__class__.EFFECTIVE_CLASSES
+
+    @staticmethod
+    def test_compute_2d_embedding(mini_supervisable_text_dataset, dummy_vectorizer):
+        dataset = deepcopy(mini_supervisable_text_dataset)
+
+        dataset.compute_2d_embedding(dummy_vectorizer, "umap")
+        # this seems broken, at least under pytest
+        # dataset.compute_2d_embedding(dummy_vectorizer, "ivis")
