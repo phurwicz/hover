@@ -40,7 +40,7 @@ class VisualAnnotation:
             self.dataset.dfs["raw"], title="Corpus Annotator"
         )
 
-    @wrappy.todo("Review this function")
+    @todo("Review this function")
     def flush(self, subset="train"):
         """
         Flush annotated pieces into train/dev/test, then re-create explorers.
