@@ -4,16 +4,11 @@ python:
   - "3.7"
   - "3.8"
 # command to install dependencies
-before_install:
-  - sudo apt-get install jq
-  - curl -LSs "$(curl -LSs https://api.github.com/repos/codacy/codacy-coverage-reporter/releases/latest | jq -r '.assets | map({name, browser_download_url} | select(.name | endswith(".jar"))) | .[0].browser_download_url')" -o codacy-coverage-reporter-assembly.jar
 before_script:
   - pip install -r requirements-test.txt
 script:
   - make coverage
-after_success:
-  - java -jar codacy-coverage-reporter-assembly.jar report -l Java -r build/reports/jacoco/test/jacocoTestReport.xml
+  - make coverage-report
 branches:
   only:
-    - master
     - main
