@@ -1,12 +1,15 @@
 import pytest
+import random
 
 
 @pytest.fixture(scope="module")
 def mini_df_text():
-    from sklearn.datasets import fetch_20newsgroups
+    from hover.utils.datasets import newsgroups_dictl
+    import pandas as pd
 
-    newsgroups_test = fetch_20newsgroups(
-        remove=("headers", "footers", "quotes"), categories=["alt.atheism", "sci.space"]
-    )
+    dataset, _, _ = newsgroups_dictl()
 
-    return newsgroups_test
+    mini_dictl = random.sample(dataset["train"], k=1000)
+    mini_df = pd.DataFrame(mini_dictl)
+
+    return mini_df
