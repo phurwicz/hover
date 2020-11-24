@@ -1,11 +1,9 @@
 """Interactive explorers mostly based on Bokeh."""
 import numpy as np
-import wrappy
 from wasabi import msg as logger
 from bokeh.models import CustomJS, ColumnDataSource, CDSView, IndexFilter
 from bokeh.layouts import column, row
 from abc import ABC, abstractmethod
-from copy import deepcopy
 from hover import module_config
 from hover.utils.misc import current_time
 from .local_config import bokeh_hover_tooltip
