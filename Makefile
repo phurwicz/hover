@@ -16,6 +16,7 @@ publish:
 coverage:
 	@coverage run --source=$(TEST_MODULE_PATH) -m pytest
 	@coverage xml -o cobertura.xml
-	@bash <(curl -Ls https://coverage.codacy.com/get.sh) report
+	@curl https://coverage.codacy.com/get.sh -o get.sh
+	@bash get.sh report
 vulture:
 	@vulture $(TEST_MODULE_PATH) --exclude $(VULTURE_EXCLUDE)
