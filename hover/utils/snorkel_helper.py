@@ -6,8 +6,10 @@ import uuid
 def labeling_function(targets, label_decoder, *args, **kwargs):
     """
     Hover flavor of the Snorkel labeling_function decorator.
+
     (1) assigns a UUID for easy identification;
     (2) keeps track of LF targets.
+
     :param targets: labels that the labeling function is intended to create.
     :type targets: list of int
     :param label_decoder: {encoded_label -> decoded_label} mapping.

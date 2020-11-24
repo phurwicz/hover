@@ -11,6 +11,7 @@ import numpy as np
 def create_vector_net_from_module(specific_class, model_module_name, labels):
     """
     Create a TextVectorNet model, or of its child class.
+
     :param specific_class: TextVectorNet or its child class.
     :type specific_class: class
     :param model_module_name: path to a local Python module in the working directory whose __init__.py file contains a get_vectorizer() callable, get_architecture() callable, and a get_state_dict_path() callable.
@@ -34,7 +35,9 @@ def create_vector_net_from_module(specific_class, model_module_name, labels):
 
 
 class VectorNet(object):
-    """Simple transfer learning model: a user-supplied vectorizer followed by a neural net.
+
+    """
+    Simple transfer learning model: a user-supplied vectorizer followed by a neural net.
     This is a parent class whose children may use different training schemes.
     Please refer to hover.utils.torch_helper.VectorDataset and vector_dataloader for more info.
     """
