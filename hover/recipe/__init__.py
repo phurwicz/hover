@@ -27,6 +27,18 @@ class VisualAnnotation:
         self.vectorizer = vectorizer
         self.flush()
         self.dataset.compute_2d_embedding(self.vectorizer, **kwargs)
+        self.setup_explorers()
+
+    def setup_explorers(self):
+        """
+        Determines which explorers are involved.
+        """
+        self.corpus_explorer = BokehCorpusExplorer(
+            self.dataset.dfs["raw"], title="Corpus Explorer"
+        )
+        self.corpus_annotator = BokehCorpusAnnotator(
+            self.dataset.dfs["raw"], title="Corpus Annotator"
+        )
 
     @wrappy.todo("Review this function")
     def flush(self, subset="train"):
@@ -48,12 +60,7 @@ class VisualAnnotation:
         self.dataset.synchronize_df_to_dictl()
 
         # DF entries have now changed; reset the plots
-        self.corpus_explorer = BokehCorpusExplorer(
-            self.dataset.dfs["raw"], title="Corpus Explorer"
-        )
-        self.corpus_annotator = BokehCorpusAnnotator(
-            self.dataset.dfs["raw"], title="Corpus Annotator"
-        )
+        self.setup_explorers()
 
     def plots(self, **kwargs):
         """
