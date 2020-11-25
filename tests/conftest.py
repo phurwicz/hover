@@ -19,7 +19,7 @@ def tiny_spacy():
 def dummy_vectorizer(tiny_spacy):
     def vectorizer(text):
         clean_text = re.sub(r"[\t\n]", r" ", text)
-        doc = tiny_spacy(clean_text, disable=nlp.pipe_names)
+        doc = tiny_spacy(clean_text, disable=tiny_spacy.pipe_names)
         return doc.vector
 
     return vectorizer
