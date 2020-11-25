@@ -4,6 +4,13 @@ def bokeh_hover_tooltip(
 ):
     """
     Create a Bokeh hover tooltip from a template.
+
+    :param label: whether to expect and show a "label" field.
+    :param text: whether to expect and show a "text" field.
+    :param image: whether to expect an "image" (path) field and show the corresponding images.
+    :param coords: whether to show xy-coordinates.
+    :param index: whether to show indices in the dataset.
+    :param custom: {display: column} mapping of additional (text) tooltips.
     """
     custom = custom or dict()
     prefix = """<div>\n"""
