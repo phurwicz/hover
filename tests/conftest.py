@@ -22,6 +22,9 @@ def dummy_vectorizer(tiny_spacy):
         doc = tiny_spacy(clean_text, disable=tiny_spacy.pipe_names)
         return doc.vector
 
+    trial_vector = vectorizer("hi")
+    assert trial_vector.shape == (96,)
+
     return vectorizer
 
 
