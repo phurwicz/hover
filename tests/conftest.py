@@ -43,7 +43,7 @@ def mini_df_text():
 def mini_supervisable_text_dataset():
     my_20ng, _, _ = newsgroups_dictl()
 
-    split_idx = int(0.2 * len(my_20ng["train"]))
+    split_idx = int(0.05 * len(my_20ng["train"]))
     dataset = SupervisableTextDataset(
         raw_dictl=my_20ng["train"][:split_idx],
         dev_dictl=my_20ng["train"][split_idx : int(split_idx * 1.2)],

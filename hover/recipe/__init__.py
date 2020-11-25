@@ -83,38 +83,6 @@ class TBD:
         self.dataset = dataset
         self.model_module_name = model_module_name
 
-    def get_loader(self, key, vectorizer, batch_size=64, smoothing_coeff=0.0):
-        """
-        Prepare a Torch Dataloader for training or evaluation.
-        :param key: the subset of dataset to use.
-        :type key: str
-        :param vectorizer: callable that turns a string into a vector.
-        :type vectorizer: callable
-        :param smoothing_coeff: the smoothing coeffient for soft labels.
-        :type smoothing_coeff: float
-        """
-        labels = (
-            self.dataset.dfs[key]["label"]
-            .apply(lambda x: self.dataset.label_encoder[x])
-            .tolist()
-        )
-        texts = self.dataset.dfs[key]["text"].tolist()
-        output_vectors = one_hot(labels, num_classes=len(self.dataset.classes))
-
-        logger.info(f"Preparing input vectors...")
-        input_vectors = [vectorizer(_text) for _text in tqdm(texts)]
-        output_vectors = label_smoothing(
-            output_vectors,
-            num_classes=len(self.dataset.classes),
-            coefficient=smoothing_coeff,
-        )
-        logger.info(f"Preparing data loader...")
-        loader = vector_dataloader(input_vectors, output_vectors, batch_size=batch_size)
-        logger.good(
-            f"Prepared {key} loader consisting of {len(texts)} examples with batch size {batch_size}"
-        )
-        return loader
-
     def model_from_dev(self, **kwargs):
         """
         Train a Prodigy-compatible model from the dev set.

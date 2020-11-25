@@ -3,11 +3,12 @@ Dataset objects which extend beyond DataFrames.
 Specifically, we need a collection of DataFrames where rows can be transferred cleanly and columns can be transformed easily.
 """
 from abc import ABC
-from rich.console import Console
 import pandas as pd
 import numpy as np
-from hover import module_config
 from tqdm import tqdm
+from rich.console import Console
+from hover import module_config
+from hover.utils.torch_helper import vector_dataloader, one_hot, label_smoothing
 
 console = Console()
 
@@ -124,13 +125,13 @@ class SupervisableDataset(ABC):
         """
         Cross-deduplicate data entries by feature between subsets.
         """
+        # for data entry accounting
+        before, after = dict(), dict()
+
         # keep track of which df has which columns and which rows came from which subset
         columns = dict()
         for _key in self.__class__.ORDERED_SUBSET:
-            console.print(
-                f"--subset {_key} has {self.dfs[_key].shape[0]} entries before.",
-                style="blue",
-            )
+            before[_key] = self.dfs[_key].shape[0]
             columns[_key] = self.dfs[_key].columns
             self.dfs[_key]["__subset"] = _key
 
@@ -150,9 +151,9 @@ class SupervisableDataset(ABC):
             self.dfs[_key] = overall_df[overall_df["__subset"] == _key].reset_index(
                 drop=True, inplace=False
             )[columns[_key]]
+            after[_key] = self.dfs[_key].shape[0]
             console.print(
-                f"--subset {_key} has {self.dfs[_key].shape[0]} entries after.",
-                style="blue",
+                f"--subset {_key} rows: {before[_key]} -> {after[_key]}.", style="blue"
             )
 
     def synchronize_dictl_to_df(self):
@@ -201,6 +202,35 @@ class SupervisableDataset(ABC):
             start_idx += _length
 
         return reducer
+
+    def loader(self, key, vectorizer, batch_size=64, smoothing_coeff=0.0):
+        """
+        Prepare a Torch Dataloader for training or evaluation.
+        :param key: the subset of dataset to use.
+        :type key: str
+        :param vectorizer: callable that turns a string into a vector.
+        :type vectorizer: callable
+        :param smoothing_coeff: the smoothing coeffient for soft labels.
+        :type smoothing_coeff: float
+        """
+        df = self.dfs[key]
+        labels = df["label"].apply(lambda x: self.label_encoder[x]).tolist()
+        features = df[self.__class__.FEATURE_KEY].tolist()
+        output_vectors = one_hot(labels, num_classes=len(self.classes))
+
+        console.print(f"Preparing input vectors...", style="blue")
+        input_vectors = [vectorizer(_f) for _f in tqdm(features)]
+        if smoothing_coeff > 0.0:
+            output_vectors = label_smoothing(
+                output_vectors, coefficient=smoothing_coeff
+            )
+        console.print(f"Preparing data loader...", style="blue")
+        loader = vector_dataloader(input_vectors, output_vectors, batch_size=batch_size)
+        console.print(
+            f"Prepared {key} loader consisting of {len(features)} examples with batch size {batch_size}",
+            style="green",
+        )
+        return loader
 
 
 class SupervisableTextDataset(SupervisableDataset):

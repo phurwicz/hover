@@ -49,3 +49,15 @@ class TestSupervisableTextDataset:
 
         dataset.compute_2d_embedding(dummy_vectorizer, "umap")
         dataset.compute_2d_embedding(dummy_vectorizer, "ivis")
+
+    @staticmethod
+    def test_loader(mini_supervisable_text_dataset, dummy_vectorizer):
+        dataset = deepcopy(mini_supervisable_text_dataset)
+
+        try:
+            loader = dataset.loader("raw", dummy_vectorizer, smoothing_coeff=0.1)
+            pytest.fail(
+                "The raw subset managed to produce a loader, which should not happen"
+            )
+        except KeyError:
+            loader = dataset.loader("dev", dummy_vectorizer, smoothing_coeff=0.1)

@@ -48,19 +48,16 @@ def one_hot(encoded_labels, num_classes):
     return F.one_hot(torch.LongTensor(encoded_labels), num_classes=num_classes).float()
 
 
-def label_smoothing(probabilistic_labels, num_classes, coefficient=0.1):
+def label_smoothing(probabilistic_labels, coefficient=0.1):
     """
     :param probabilistic_labels: N by num_classes tensor
     :type probabilistic_labels: torch.Tensor or numpy.ndarray
-    :param num_classes: the number of classes to encode.
-    :type num_classes: int
     :param coefficient: the smoothing coeffient for soft labels.
     :type coefficient: float
     """
     assert (
         len(probabilistic_labels.shape) == 2
     ), f"Expected 2 dimensions, got shape {probabilistic_labels.shape}"
-    assert (
-        probabilistic_labels.shape[-1] == num_classes
-    ), f"Expected {num_classes} classes, got {probabilistic_labels.shape[-1]}"
+    assert coefficient >= 0.0, f"Expected non-negative smoothing, got {coefficient}"
+    num_classes = probabilistic_labels.shape[-1]
     return (1.0 - coefficient) * probabilistic_labels + coefficient / num_classes
