@@ -1,5 +1,6 @@
 """
 Dataset objects which extend beyond DataFrames.
+Specifically, we need a collection of DataFrames where rows can be transferred cleanly and columns can be transformed easily.
 """
 from abc import ABC
 from rich.console import Console
