@@ -25,11 +25,11 @@ def spline(arr_per_dim, points_per_step=1, splprep_kwargs=None):
     # check if two vectors are almost identical, and apply a noise in that case
     # note that we did not modify arr_per_dim in place
     # and that the noise only goes up in a greedy random-walk manner
-    noise_arr = np.random.zeros(arr_per_dim.shape)
+    noise_arr = np.zeros(arr_per_dim.shape)
     for i in range(1, num_given_points):
         prev_vec, vec = arr_per_dim[:, i - 1] + noise_arr[:, i - 1], arr_per_dim[:, i]
         while np.allclose(vec + noise_arr[:, i], prev_vec):
-            noise_arr[:, i] += np.random.uniform(low=-1e-6, high=1e-6, size=vec.shape)
+            noise_arr[:, i] += np.random.normal(loc=0.0, scale=1e-6, size=vec.shape)
 
     # reduce spline order if necessary, then fit the spline parameters
     splprep_kwargs["k"] = min(3, num_given_points - 1)
