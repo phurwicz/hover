@@ -38,6 +38,12 @@ class BokehForLabeledText(ABC):
     }
 
     def __init__(self, **kwargs):
+        """
+        Operations shared by all child classes.
+        (1) settle the figure settings by using child class defaults + kwargs overrides
+        (2) create a blank figure under such settings
+        (3) create widgets that child classes can override
+        """
         self.figure_settings = self.__class__.DEFAULT_FIGURE_KWARGS.copy()
         self.figure_settings.update(kwargs)
         self.reset_figure()
@@ -178,6 +184,12 @@ class BokehCorpusExplorer(BokehForLabeledText):
     }
 
     def __init__(self, df_raw, **kwargs):
+        """
+        Requires the input dataframe to contain:
+
+        (1) "x" and "y" columns for coordinates;
+        (2) a "text" column for data point tooltips.
+        """
         super().__init__(**kwargs)
 
         # prepare plot-ready dataframe for train set
@@ -189,8 +201,6 @@ class BokehCorpusExplorer(BokehForLabeledText):
         self.background_kwargs = self.__class__.BACKGROUND_GLYPH_KWARGS.copy()
         self.source = ColumnDataSource(self.df_raw)
         self._activate_search_on_corpus()
-
-        self.figure.circle("x", "y", source=self.source, **self.background_kwargs)
 
     def _activate_search_on_corpus(self):
         """
@@ -212,9 +222,11 @@ class BokehCorpusExplorer(BokehForLabeledText):
 
     def plot(self, *args, **kwargs):
         """
-        Does nothing.
+        (Re)-plot the corpus.
+        Called just once per instance most of the time.
         """
-        pass
+        self.reset_figure()
+        self.figure.circle("x", "y", source=self.source, **self.background_kwargs)
 
 
 class BokehCorpusAnnotator(BokehForLabeledText):
@@ -224,7 +236,15 @@ class BokehCorpusAnnotator(BokehForLabeledText):
     """
 
     def __init__(self, df_working, **kwargs):
+        """
+        Requires the input dataframe to contain:
 
+        (1) "x" and "y" columns for coordinates;
+        (2) a "text" column for data point tooltips.
+
+        Optional:
+        (3) a "label" column that defaults to ABSTAIN.
+        """
         super().__init__(**kwargs)
 
         for _key in ["text", "x", "y"]:
@@ -345,6 +365,12 @@ class BokehMarginExplorer(BokehCorpusExplorer):
     }
 
     def __init__(self, df_raw, label_col_a, label_col_b, **kwargs):
+        """
+        On top of the requirements of the parent class,
+        the input dataframe should contain:
+
+        (1) label_col_a and label_col_b for "label margins".
+        """
         super().__init__(df_raw, **kwargs)
 
         for _key in ["text", label_col_a, label_col_b, "x", "y"]:
@@ -407,6 +433,12 @@ class BokehSnorkelExplorer(BokehCorpusExplorer):
     BACKGROUND_GLYPH_KWARGS = {"line_alpha": 0.6, "fill_alpha": 0.0, "size": 7}
 
     def __init__(self, df_raw, df_labeled, **kwargs):
+        """
+        On top of the requirements of the parent class,
+        the df_labeled input dataframe should contain:
+
+        (1) a "label" column for "ground truths".
+        """
         super().__init__(df_raw, **kwargs)
 
         # add 'label' column to df_raw
