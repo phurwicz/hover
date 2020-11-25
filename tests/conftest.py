@@ -2,7 +2,6 @@ import pytest
 import random
 import spacy
 import re
-import numpy as np
 import pandas as pd
 from hover.utils.datasets import newsgroups_dictl
 from hover.core.dataset import SupervisableTextDataset

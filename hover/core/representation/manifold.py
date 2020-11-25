@@ -3,7 +3,6 @@ Manifold similarity measures for any collection of sequences of vectors.
 Can be useful for improved interpretability of neural nets.
 """
 from .reduction import DimensionalityReducer
-from hover import module_config
 from tqdm import tqdm
 from wasabi import msg as logger
 from scipy.spatial import procrustes

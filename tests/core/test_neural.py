@@ -1,4 +1,5 @@
 import pytest
+import numpy as np
 from hover.core.neural import create_vector_net_from_module as create_tvnet, VectorNet
 
 
@@ -40,3 +41,7 @@ class TestVectorNet(object):
         traj_arr, seq_arr, disparities = example_tvnet.manifold_trajectory(
             mini_df_text["text"].tolist()
         )
+        assert isinstance(traj_arr, np.ndarray)
+        assert isinstance(seq_arr, np.ndarray)
+        assert isinstance(disparities, list)
+        assert isinstance(disparities[0], float)

@@ -52,6 +52,8 @@ class TestSupervisableTextDataset:
 
     @staticmethod
     def test_loader(mini_supervisable_text_dataset, dummy_vectorizer):
+        from torch.utils.data import DataLoader
+
         dataset = deepcopy(mini_supervisable_text_dataset)
 
         try:
@@ -61,3 +63,4 @@ class TestSupervisableTextDataset:
             )
         except KeyError:
             loader = dataset.loader("dev", dummy_vectorizer, smoothing_coeff=0.1)
+            assert isinstance(loader, DataLoader)
