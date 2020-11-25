@@ -48,5 +48,4 @@ class TestSupervisableTextDataset:
         dataset = deepcopy(mini_supervisable_text_dataset)
 
         dataset.compute_2d_embedding(dummy_vectorizer, "umap")
-        # this seems broken, at least under pytest
-        # dataset.compute_2d_embedding(dummy_vectorizer, "ivis")
+        dataset.compute_2d_embedding(dummy_vectorizer, "ivis")
