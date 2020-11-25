@@ -23,10 +23,8 @@ def test_label_smoothing(num_entries=100, num_classes=3, coeff=0.1):
     categorical_labels = [0] * num_entries
     prob_labels = one_hot(categorical_labels, num_classes)
 
-    assert np.allclose(
-        label_smoothing(prob_labels, num_classes, coefficient=0.0), prob_labels
-    )
-    smoothed = label_smoothing(prob_labels, num_classes, coefficient=coeff)
+    assert np.allclose(label_smoothing(prob_labels, coefficient=0.0), prob_labels)
+    smoothed = label_smoothing(prob_labels, coefficient=coeff)
     np.testing.assert_almost_equal(
         smoothed[0][0], 1.0 - coeff * (1.0 - 1.0 / num_classes)
     )
