@@ -6,7 +6,6 @@ python:
 # command to install dependencies
 before_script:
   - pip install -r requirements-test.txt
-  - python -m spacy download en_core_web_sm
   - python -m spacy download en_core_web_md
 script:
   - make coverage

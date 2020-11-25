@@ -10,20 +10,21 @@ from copy import deepcopy
 
 
 @pytest.fixture(scope="module")
-def tiny_spacy():
-    nlp = spacy.load("en_core_web_sm")
+def spacy_en_md():
+    nlp = spacy.load("en_core_web_md")
     return nlp
 
 
 @pytest.fixture(scope="module")
-def dummy_vectorizer(tiny_spacy):
+def dummy_vectorizer(spacy_en_md):
     def vectorizer(text):
         clean_text = re.sub(r"[\t\n]", r" ", text)
-        doc = tiny_spacy(clean_text, disable=tiny_spacy.pipe_names)
+        to_disable = spacy_en_md.pipe_names
+        doc = spacy_en_md(clean_text, disable=to_disable)
         return doc.vector
 
     trial_vector = vectorizer("hi")
-    assert trial_vector.shape == (96,)
+    assert trial_vector.shape == (300,)
 
     return vectorizer
 
