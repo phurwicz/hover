@@ -1,11 +1,12 @@
 import pytest
 import numpy as np
-from hover.core.neural import create_vector_net_from_module as create_tvnet, VectorNet
+from copy import deepcopy
+from hover.core.neural import create_vector_net_from_module as create_vecnet, VectorNet
 
 
 @pytest.fixture
-def example_tvnet():
-    model = create_tvnet(VectorNet, "model_template", ["positive", "negative"])
+def example_vecnet():
+    model = create_vecnet(VectorNet, "model_template", ["positive", "negative"])
     return model
 
 
@@ -16,32 +17,47 @@ class TestVectorNet(object):
     """
 
     @staticmethod
-    def test_save_and_load(example_tvnet):
-        default_path = example_tvnet.nn_update_path
-        example_tvnet.save(f"{default_path}.test")
-        loaded_tvnet = create_tvnet(
+    def test_save_and_load(example_vecnet):
+        default_path = example_vecnet.nn_update_path
+        example_vecnet.save(f"{default_path}.test")
+        loaded_vecnet = create_vecnet(
             VectorNet, "model_template", ["positive", "negative"]
         )
-        loaded_tvnet.save()
+        loaded_vecnet.save()
 
     @staticmethod
-    def test_adjust_optimier_params(example_tvnet):
-        example_tvnet.adjust_optimizer_params()
+    def test_adjust_optimier_params(example_vecnet):
+        example_vecnet.adjust_optimizer_params()
 
     @staticmethod
-    def test_predict_proba(example_tvnet):
-        proba_single = example_tvnet.predict_proba("hello")
+    def test_predict_proba(example_vecnet):
+        proba_single = example_vecnet.predict_proba("hello")
         assert proba_single.shape[0] == 2
-        proba_multi = example_tvnet.predict_proba(["hello", "bye", "ciao"])
+        proba_multi = example_vecnet.predict_proba(["hello", "bye", "ciao"])
         assert proba_multi.shape[0] == 3
         assert proba_multi.shape[1] == 2
 
     @staticmethod
-    def test_manifold_trajectory(example_tvnet, mini_df_text):
-        traj_arr, seq_arr, disparities = example_tvnet.manifold_trajectory(
+    def test_manifold_trajectory(example_vecnet, mini_df_text):
+        traj_arr, seq_arr, disparities = example_vecnet.manifold_trajectory(
             mini_df_text["text"].tolist()
         )
         assert isinstance(traj_arr, np.ndarray)
         assert isinstance(seq_arr, np.ndarray)
         assert isinstance(disparities, list)
         assert isinstance(disparities[0], float)
+
+    @staticmethod
+    def test_train_and_evaluate(example_vecnet, mini_supervisable_text_dataset):
+        vecnet = deepcopy(example_vecnet)
+        dataset = mini_supervisable_text_dataset
+        dev_loader = dataset.loader("dev", vectorizer=example_vecnet.vectorizer)
+        test_loader = dataset.loader("test", vectorizer=example_vecnet.vectorizer)
+
+        train_info = vecnet.train(dev_loader, dev_loader, epochs=5)
+        accuracy, conf_mat = vecnet.evaluate(test_loader)
+
+        assert isinstance(train_info, list)
+        assert isinstance(train_info[0], dict)
+        assert isinstance(accuracy, float)
+        assert isinstance(conf_mat, np.ndarray)
