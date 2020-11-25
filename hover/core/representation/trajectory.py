@@ -9,7 +9,7 @@ def spline(arr_per_dim, points_per_step=1, splprep_kwargs=None):
     """
     Fit a spline and evaluate it at a specified density of points.
     :param arr_per_dim: arrays representing the part of the curve in each dimension.
-    :type arr_per_dim: list of numpy.array
+    :type arr_per_dim: (list of) numpy.array
     :param points_per_step: number of points interpolated in between each given point on the curve.
     :type points_per_step: int
     :param splprep_kwargs: keyword arguments to the splprep() function for fitting the spline in SciPy.
@@ -58,7 +58,10 @@ def manifold_spline(seq_arr, **kwargs):
 
     # this gives M-by-N-by-f(L, args)
     traj_arr = np.array(
-        [spline([seq_arr[:, _m, _n] for _n in range(N)], **kwargs) for _m in range(M)]
+        [
+            spline(np.array([seq_arr[:, _m, _n] for _n in range(N)]), **kwargs)
+            for _m in range(M)
+        ]
     )
 
     # return f(L, args)-by-M-by-N
