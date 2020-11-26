@@ -6,6 +6,7 @@ from tqdm import tqdm
 from hover import module_config
 from hover.core.dataset import SupervisableTextDataset
 from hover.core.neural import create_text_vector_net_from_module, TextVectorNet
+from hover.core.explorer import BokehCorpusExplorer, BokehCorpusAnnotator
 from hover.utils.torch_helper import vector_dataloader, one_hot, label_smoothing
 from .subroutine import link_plots
 from wasabi import msg as logger
@@ -18,10 +19,10 @@ class VisualAnnotation:
     produce a 2-D visualization of the dataset, then annotate it.
     """
 
-    def __init__(self, dataset, vectorizer):
+    def __init__(self, dataset, vectorizer, **kwargs):
         """
         """
-        assert isinstance(dataset, SupervisableDataset)
+        assert isinstance(dataset, SupervisableTextDataset)
         assert callable(vectorizer)
         self.dataset = dataset
         self.vectorizer = vectorizer
@@ -33,12 +34,9 @@ class VisualAnnotation:
         """
         Determines which explorers are involved.
         """
-        self.corpus_explorer = BokehCorpusExplorer(
-            self.dataset.dfs["raw"], title="Corpus Explorer"
-        )
-        self.corpus_annotator = BokehCorpusAnnotator(
-            self.dataset.dfs["raw"], title="Corpus Annotator"
-        )
+        df_dict = {"raw": self.dataset.dfs["raw"]}
+        self.corpus_explorer = BokehCorpusExplorer(df_dict, title="Corpus Explorer")
+        self.corpus_annotator = BokehCorpusAnnotator(df_dict, title="Corpus Annotator")
 
     @todo("Review this function")
     def flush(self, subset="train"):
