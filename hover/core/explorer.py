@@ -38,29 +38,33 @@ class BokehForLabeledText(ABC):
         "output_backend": "webgl",
     }
 
-    DATA_KEYS = []
+    DATA_KEY_TO_KWARGS = {}
 
-    def __init__(self, **kwargs):
+    def __init__(self, df_dict, **kwargs):
         """
         Operations shared by all child classes.
+
         (1) settle the figure settings by using child class defaults + kwargs overrides
         (2) create a blank figure under such settings
-        (3) create widgets that child classes can override
+        (3) settle the glyph settings by using child class defaults
+        (4) create widgets that child classes can override
+        (5) create data sources the correspond to class-specific data subsets.
+        (6) activate builtin search callbacks depending on the child class.
         """
-        self.figure_settings = self.__class__.DEFAULT_FIGURE_KWARGS.copy()
-        self.figure_settings.update(kwargs)
+        self.figure_kwargs = self.__class__.DEFAULT_FIGURE_KWARGS.copy()
+        self.figure_kwargs.update(kwargs)
         self.reset_figure()
-        self.reset_data()
         self.setup_widgets()
+        self._setup_sources(df_dict)
+        self._activate_search_builtin()
 
     def reset_figure(self):
         """Start over on the figure."""
-        self.figure = figure(**self.figure_settings)
-
-    def reset_data(self):
-        """Start over on data that comprise the figure."""
-        self.dfs = {_key: None for _key in self.__class__.DATA_KEYS}
-        self.sources = {_key: None for _key in self.__class__.DATA_KEYS}
+        self.figure = figure(**self.figure_kwargs)
+        self.glyph_kwargs = {
+            _key: _dict["constant"].copy()
+            for _key, _dict in self.__class__.DATA_KEY_TO_KWARGS.items()
+        }
 
     def setup_widgets(self):
         """
@@ -86,6 +90,32 @@ class BokehForLabeledText(ABC):
     def view(self):
         """Define the layout of the whole explorer."""
         return column(self.layout_widgets(), self.figure)
+
+    def _setup_sources(self, df_dict):
+        """Store DataFrames and create ColumnDataSource objects."""
+        expected_keys = set(self.__class__.DATA_KEY_TO_KWARGS.keys())
+        assert (
+            set(df_dict.keys()) == expected_keys
+        ), f"Expected the keys of df_dict to be exactly {expected_keys}"
+
+        self.dfs = {_key: _df.copy() for _key, _df in df_dict.items()}
+        self.sources = {_key: ColumnDataSource(_df) for _key, _df in self.dfs.items()}
+
+    def _activate_search_builtin(self):
+        """
+        Typically called once during initialization.
+        Highlight positive search results and mute negative search results.
+
+        Note that this is a template method which heavily depends on class attributes.
+        """
+        for _key, _dict in self.__class__.DATA_KEY_TO_KWARGS.items():
+            for _flag, _params in _dict["search"].items():
+                logger.info(
+                    f"Activated {_flag} on subset {_key} to respond to the search widgets."
+                )
+                self.glyph_kwargs[_key] = self.activate_search(
+                    self.sources[_key], self.glyph_kwargs[_key], altered_param=_params
+                )
 
     def activate_search(self, source, kwargs, altered_param=("size", 10, 5, 7)):
         """
@@ -184,52 +214,33 @@ class BokehCorpusExplorer(BokehForLabeledText):
     Plot unlabeled, 2-D-vectorized text data points in a corpus.
     """
 
-    DATA_KEYS = ["raw"]
-
-    BACKGROUND_GLYPH_KWARGS = {
-        "color": "gainsboro",
-        "line_alpha": 0.3,
-        "legend_label": "unlabeled",
+    DATA_KEY_TO_KWARGS = {
+        "raw": {
+            "constant": {"line_alpha": 0.5},
+            "search": {
+                "size": ("size", 10, 5, 7),
+                "fill_alpha": ("fill_alpha", 0.6, 0.4, 0.5),
+                "color": ("color", "coral", "linen", "gainsboro"),
+            },
+        }
     }
 
-    SEARCH_FLAG_TO_PARAMS = {
-        "size": ("size", 10, 5, 7),
-        "fill_alpha": ("fill_alpha", 0.6, 0.4, 0.5),
-        "color": ("color", "coral", "linen", "gainsboro"),
-    }
-
-    def __init__(self, df_raw, **kwargs):
+    def __init__(self, df_dict, **kwargs):
         """
         Requires the input dataframe to contain:
 
         (1) "x" and "y" columns for coordinates;
         (2) a "text" column for data point tooltips.
         """
-        super().__init__(**kwargs)
+        super().__init__(df_dict, **kwargs)
 
-        # prepare plot-ready dataframe for train set
-        for _key in ["text", "x", "y"]:
-            assert _key in df_raw.columns
-        self.dfs["raw"] = df_raw.copy()
+    def _setup_sources(self, df_dict):
+        """Extending from the parent method."""
+        super()._setup_sources(self, df_dict)
 
-        # plot the train set as a background
-        self.background_kwargs = self.__class__.BACKGROUND_GLYPH_KWARGS.copy()
-        self.sources["raw"] = ColumnDataSource(self.dfs["raw"])
-        self._activate_search_builtin()
-
-    def _activate_search_builtin(self):
-        """
-        Highlight positive search results and mute negative search results.
-
-        Note that this is a template method which heavily depend on class attributes.
-        """
-        for _flag, _params in self.__class__.SEARCH_FLAG_TO_PARAMS.items():
-            logger.info(f"Activated {_flag} to respond to the search widgets.")
-            _params = self.__class__.SEARCH_FLAG_TO_PARAMS[_flag]
-            for _key in self.__class__.DATA_KEYS:
-                self.background_kwargs = self.activate_search(
-                    self.sources[_key], self.background_kwargs, altered_param=_params
-                )
+        for _key in self.__class__.DATA_KEY_TO_KWARGS.keys():
+            for _col in ["text", "x", "y"]:
+                assert _col in self.dfs[_key].columns
 
     def plot(self, *args, **kwargs):
         """
@@ -238,7 +249,7 @@ class BokehCorpusExplorer(BokehForLabeledText):
         """
         self.reset_figure()
         self.figure.circle(
-            "x", "y", source=self.sources["raw"], **self.background_kwargs
+            "x", "y", source=self.sources["raw"], **self.glyph_kwargs["raw"]
         )
 
 
@@ -248,9 +259,17 @@ class BokehCorpusAnnotator(BokehForLabeledText):
     Annoate text data points via callbacks.
     """
 
-    DATA_KEYS = ["raw"]
+    DATA_KEY_TO_KWARGS = {
+        "raw": {
+            "constant": {"line_alpha": 0.5},
+            "search": {
+                "size": ("size", 10, 5, 7),
+                "fill_alpha": ("fill_alpha", 0.4, 0.05, 0.2),
+            },
+        }
+    }
 
-    def __init__(self, df_raw, **kwargs):
+    def __init__(self, df_dict, **kwargs):
         """
         Requires the input dataframe to contain:
 
@@ -262,32 +281,26 @@ class BokehCorpusAnnotator(BokehForLabeledText):
         """
         super().__init__(**kwargs)
 
-        for _key in ["text", "x", "y"]:
-            assert _key in df_raw.columns
-        self.dfs["raw"] = df_raw.copy()
+        self.update_source()
+        self.plot()
+
+    def _setup_sources(self, df_dict):
+        """Extending from the parent method."""
+        super()._setup_sources(self, df_dict)
+
+        for _key in self.__class__.DATA_KEY_TO_KWARGS.keys():
+            for _col in ["text", "x", "y"]:
+                assert _col in self.dfs[_key].columns
         if not "label" in self.dfs["raw"].columns:
             self.dfs["raw"]["label"] = module_config.ABSTAIN_DECODED
 
-        self.sources["raw"] = ColumnDataSource(self.dfs["raw"])
-        self.plot_kwargs = {"line_alpha": 0.3}
-        self.reset_source()
-        self.plot()
-
-    def reset_source(self):
+    def update_source(self):
+        """Note that it seems required to re-activate the search widgets."""
         self.sources["raw"].data = self.dfs["raw"]
-        self.plot_kwargs = self.activate_search(
-            self.sources["raw"], self.plot_kwargs, altered_param=("size", 10, 5, 7)
-        )
-        self.plot_kwargs = self.activate_search(
-            self.sources["raw"],
-            self.plot_kwargs,
-            altered_param=("fill_alpha", 0.4, 0.05, 0.2),
-        )
+        self._activate_search_builtin()
 
     def layout_widgets(self):
-        """
-        Define the layout of widgets.
-        """
+        """Define the layout of widgets."""
         first_row = row(self.search_pos, self.search_neg)
         second_row = row(
             self.annotator_input, self.annotator_apply, self.annotator_export
@@ -333,7 +346,7 @@ class BokehCorpusAnnotator(BokehForLabeledText):
             example_new = self.dfs["raw"].at[selected_idx[0], "label"]
             logger.good(f"Updated DataFrame, e.g. {example_old} -> {example_new}")
 
-            self.reset_source()
+            self.update_source()
             self.plot()
             logger.good(f"Updated annotator plot at {current_time()}")
 
@@ -373,7 +386,7 @@ class BokehCorpusAnnotator(BokehForLabeledText):
             color=factor_cmap("label", cmap, all_labels),
             legend_field="label",
             source=self.sources["raw"],
-            **self.plot_kwargs,
+            **self.glyph_kwargs["raw"],
         )
 
 
@@ -384,29 +397,30 @@ class BokehMarginExplorer(BokehCorpusExplorer):
     Currently not considering multi-label scenarios.
     """
 
-    DATA_KEYS = ["raw"]
-
-    BACKGROUND_GLYPH_KWARGS = {
-        "color": "gainsboro",
-        "line_alpha": 0.3,
-        "fill_alpha": 0.0,
+    DATA_KEY_TO_KWARGS = {
+        "raw": {
+            "constant": {"color": "gainsboro", "line_alpha": 0.5, "fill_alpha": 0.0},
+            "search": {"size": ("size", 10, 5, 7)},
+        }
     }
 
-    SEARCH_FLAG_TO_PARAMS = {"size": ("size", 10, 5, 7)}
-
-    def __init__(self, df_raw, label_col_a, label_col_b, **kwargs):
+    def __init__(self, df_dict, label_col_a, label_col_b, **kwargs):
         """
         On top of the requirements of the parent class,
         the input dataframe should contain:
 
         (1) label_col_a and label_col_b for "label margins".
         """
-        super().__init__(df_raw, **kwargs)
-
-        for _key in ["text", label_col_a, label_col_b, "x", "y"]:
-            assert _key in self.dfs["raw"].columns
         self.label_col_a = label_col_a
         self.label_col_b = label_col_b
+        super().__init__(df_dict, **kwargs)
+
+    def _setup_sources(self, df_dict):
+        """Extending from the parent method."""
+        super()._setup_sources(self, df_dict)
+
+        for _key in [self.label_col_a, self.label_col_b]:
+            assert _key in self.dfs["raw"].columns
 
     def plot(self, label, **kwargs):
         """
@@ -415,7 +429,7 @@ class BokehMarginExplorer(BokehCorpusExplorer):
 
         # prepare plot settings
         axes = ("x", "y")
-        eff_kwargs = self.background_kwargs.copy()
+        eff_kwargs = self.glyph_kwargs["raw"].copy()
         eff_kwargs.update(kwargs)
         eff_kwargs["legend_label"] = f"{label}"
 
@@ -455,16 +469,21 @@ class BokehSnorkelExplorer(BokehCorpusExplorer):
     Plot text data points along with labeling function outputs.
     """
 
-    DATA_KEYS = ["raw", "labeled"]
-
-    BACKGROUND_GLYPH_KWARGS = {"line_alpha": 0.6, "fill_alpha": 0.0, "size": 7}
-
-    SEARCH_FLAG_TO_PARAMS = {
-        "size": ("size", 10, 5, 7),
-        "fill_alpha": ("fill_alpha", 0.6, 0.0, 0.3),
+    DATA_KEY_TO_KWARGS = {
+        "raw": {
+            "constant": {"line_alpha": 0.5, "color": "gainsboro"},
+            "search": {
+                "size": ("size", 10, 5, 7),
+                "fill_alpha": ("fill_alpha", 0.4, 0.05, 0.2),
+            },
+        },
+        "labeled": {
+            "constant": {"line_alpha": 0.5, "fill_alpha": 0.0},
+            "search": {"size": ("size", 10, 5, 7)},
+        },
     }
 
-    def __init__(self, df_raw, df_labeled, **kwargs):
+    def __init__(self, df_dict, **kwargs):
         """
         On top of the requirements of the parent class,
         the df_labeled input dataframe should contain:
@@ -473,18 +492,16 @@ class BokehSnorkelExplorer(BokehCorpusExplorer):
         """
         super().__init__(df_raw, **kwargs)
 
-        # add 'label' column to df_raw
-        if not "label" in self.dfs["raw"].columns:
-            self.dfs["raw"]["label"] = module_config.ABSTAIN_DECODED
-
-        # prepare plot-ready dataframe for df_labeled
-        for _key in ["text", "label", "x", "y"]:
-            assert _key in df_labeled.columns
-        self.dfs["labeled"] = df_labeled.copy()
-        self.sources["labeled"] = ColumnDataSource(self.dfs["labeled"])
-
         # initialize a list to keep track of plotted LFs
         self.lfs = []
+
+    def _setup_sources(self, df_dict):
+        """Extending from the parent method."""
+        super()._setup_sources(self, df_dict)
+
+        assert "label" in self.dfs["labeled"].columns
+        if not "label" in self.dfs["raw"].columns:
+            self.dfs["raw"]["label"] = module_config.ABSTAIN_DECODED
 
     def plot(self, lf, L_raw=None, L_labeled=None, include=("C", "I", "M"), **kwargs):
         """
@@ -507,37 +524,57 @@ class BokehSnorkelExplorer(BokehCorpusExplorer):
         # prepare plot settings
         axes = ("x", "y")
         decoded_targets = [lf.label_decoder[_target] for _target in lf.targets]
-        eff_kwargs = self.background_kwargs.copy()
-        eff_kwargs.update(kwargs)
-        eff_kwargs["legend_label"] = f"{', '.join(decoded_targets)} | {lf.name}"
+        legend_label = f"{', '.join(decoded_targets)} | {lf.name}"
+
+        raw_glyph_kwargs = self.glyph_kwargs["raw"].copy()
+        raw_glyph_kwargs["legend_label"] = legend_label
+        raw_glyph_kwargs.update(kwargs)
+
+        labeled_glyph_kwargs = self.glyph_kwargs["labeled"].copy()
+        labeled_glyph_kwargs["legend_label"] = legend_label
+        labeled_glyph_kwargs.update(kwargs)
 
         # create correct/incorrect/missed/hit subsets
         to_plot = []
         if "C" in include:
             to_plot.append(
-                {"view": self._view_correct(L_labeled), "marker": self.figure.square}
+                {
+                    "view": self._view_correct(L_labeled),
+                    "marker": self.figure.square,
+                    "kwargs": labeled_glyph_kwargs,
+                }
             )
         if "I" in include:
             to_plot.append(
-                {"view": self._view_incorrect(L_labeled), "marker": self.figure.x}
+                {
+                    "view": self._view_incorrect(L_labeled),
+                    "marker": self.figure.x,
+                    "kwargs": labeled_glyph_kwargs,
+                }
             )
         if "M" in include:
             to_plot.append(
                 {
                     "view": self._view_missed(L_labeled, lf.targets),
                     "marker": self.figure.cross,
+                    "kwargs": labeled_glyph_kwargs,
                 }
             )
         if "H" in include:
             to_plot.append(
-                {"view": self._view_hit(L_raw), "marker": self.figure.circle}
+                {
+                    "view": self._view_hit(L_raw),
+                    "marker": self.figure.circle,
+                    "kwargs": raw_glyph_kwargs,
+                }
             )
 
         # plot created subsets
         for _dict in to_plot:
             _view = _dict["view"]
             _marker = _dict["marker"]
-            _marker(*axes, source=_view.source, view=_view, **eff_kwargs)
+            _kwargs = _dict["kwargs"]
+            _marker(*axes, source=_view.source, view=_view, **_kwargs)
 
     def _view_correct(self, L_labeled):
         """
