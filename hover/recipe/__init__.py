@@ -5,10 +5,10 @@ import pandas as pd
 from tqdm import tqdm
 from hover import module_config
 from hover.core.dataset import SupervisableTextDataset
-from hover.core.neural import create_vector_net_from_module, TextVectorNet
+from hover.core.neural import create_vector_net_from_module, VectorNet
 from hover.core.explorer import BokehCorpusExplorer, BokehCorpusAnnotator
 from hover.utils.torch_helper import vector_dataloader, one_hot, label_smoothing
-from .subroutine import link_plots
+from .subroutine import link_size_and_range, link_selection
 from wasabi import msg as logger
 from wrappy import todo
 
@@ -37,6 +37,10 @@ class VisualAnnotation:
         df_dict = {"raw": self.dataset.dfs["raw"]}
         self.corpus_explorer = BokehCorpusExplorer(df_dict, title="Corpus Explorer")
         self.corpus_annotator = BokehCorpusAnnotator(df_dict, title="Corpus Annotator")
+        link_size_and_range(self.corpus_explorer.figure, self.corpus_annotator.figure)
+        link_selection(
+            self.corpus_explorer.sources["raw"], self.corpus_annotator.sources["raw"]
+        )
 
     @todo("Review this function")
     def flush(self, subset="train"):
@@ -60,11 +64,11 @@ class VisualAnnotation:
         # DF entries have now changed; reset the plots
         self.setup_explorers()
 
-    def plots(self, **kwargs):
+    def plots(self):
         """
         A list of plots to be shown.
         """
-        return link_plots(self.corpus_explorer, self.corpus_annotator, **kwargs)
+        return [self.corpus_explorer, self.corpus_annotator]
 
 
 class TBD:
@@ -86,7 +90,7 @@ class TBD:
         Train a Prodigy-compatible model from the dev set.
         """
         model = create_vector_net_from_module(
-            TextVectorNet, self.model_module_name, self.dataset.classes
+            VectorNet, self.model_module_name, self.dataset.classes
         )
         dev_loader = self.get_loader("dev", model.vectorizer, smoothing_coeff=0.1)
         train_info = model.train(dev_loader, dev_loader, **kwargs)

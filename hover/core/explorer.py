@@ -55,6 +55,10 @@ class BokehForLabeledText(ABC):
         self.figure_kwargs = self.__class__.DEFAULT_FIGURE_KWARGS.copy()
         self.figure_kwargs.update(kwargs)
         self.reset_figure()
+        self.glyph_kwargs = {
+            _key: _dict["constant"].copy()
+            for _key, _dict in self.__class__.DATA_KEY_TO_KWARGS.items()
+        }
         self._setup_widgets()
         self._setup_dfs(df_dict)
         self._setup_sources()
@@ -64,10 +68,6 @@ class BokehForLabeledText(ABC):
         """Start over on the figure."""
         logger.info("Creating/resetting Figure")
         self.figure = figure(**self.figure_kwargs)
-        self.glyph_kwargs = {
-            _key: _dict["constant"].copy()
-            for _key, _dict in self.__class__.DATA_KEY_TO_KWARGS.items()
-        }
 
     def _setup_widgets(self):
         """
@@ -265,7 +265,6 @@ class BokehCorpusExplorer(BokehForLabeledText):
         (Re)-plot the corpus.
         Called just once per instance most of the time.
         """
-        self.reset_figure()
         self.figure.circle(
             "x", "y", source=self.sources["raw"], **self.glyph_kwargs["raw"]
         )
