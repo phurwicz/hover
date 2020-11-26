@@ -50,21 +50,21 @@ EXAMPLE_DEV_DF = pd.DataFrame(
 @pytest.mark.core
 class TestBokehCorpusExplorer:
     def test_init(self):
-        explorer = BokehCorpusExplorer(EXAMPLE_RAW_DF)
+        explorer = BokehCorpusExplorer({"raw": EXAMPLE_RAW_DF})
         _ = explorer.view()
 
 
 @pytest.mark.core
 class TestBokehCorpusAnnotator:
     def test_init(self):
-        explorer = BokehCorpusAnnotator(EXAMPLE_RAW_DF)
+        explorer = BokehCorpusAnnotator({"raw": EXAMPLE_RAW_DF})
         _ = explorer.view()
 
 
 @pytest.mark.core
 class TestBokehMarginExplorer:
     def test_init(self):
-        explorer = BokehMarginExplorer(EXAMPLE_MARGIN_DF, "label_1", "label_2")
+        explorer = BokehMarginExplorer({"raw": EXAMPLE_MARGIN_DF}, "label_1", "label_2")
         explorer.plot("A")
         explorer.plot("B")
         _ = explorer.view()
@@ -73,5 +73,7 @@ class TestBokehMarginExplorer:
 @pytest.mark.core
 class TestBokehSnorkelExplorer:
     def test_init(self):
-        explorer = BokehSnorkelExplorer(EXAMPLE_RAW_DF, EXAMPLE_DEV_DF)
+        explorer = BokehSnorkelExplorer(
+            {"raw": EXAMPLE_RAW_DF, "labeled": EXAMPLE_DEV_DF}
+        )
         _ = explorer.view()

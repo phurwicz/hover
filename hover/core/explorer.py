@@ -236,7 +236,7 @@ class BokehCorpusExplorer(BokehForLabeledText):
 
     def _setup_sources(self, df_dict):
         """Extending from the parent method."""
-        super()._setup_sources(self, df_dict)
+        super()._setup_sources(df_dict)
 
         for _key in self.__class__.DATA_KEY_TO_KWARGS.keys():
             for _col in ["text", "x", "y"]:
@@ -279,14 +279,14 @@ class BokehCorpusAnnotator(BokehForLabeledText):
         Optional:
         (3) a "label" column that defaults to ABSTAIN.
         """
-        super().__init__(**kwargs)
+        super().__init__(df_dict, **kwargs)
 
         self.update_source()
         self.plot()
 
     def _setup_sources(self, df_dict):
         """Extending from the parent method."""
-        super()._setup_sources(self, df_dict)
+        super()._setup_sources(df_dict)
 
         for _key in self.__class__.DATA_KEY_TO_KWARGS.keys():
             for _col in ["text", "x", "y"]:
@@ -417,7 +417,7 @@ class BokehMarginExplorer(BokehCorpusExplorer):
 
     def _setup_sources(self, df_dict):
         """Extending from the parent method."""
-        super()._setup_sources(self, df_dict)
+        super()._setup_sources(df_dict)
 
         for _key in [self.label_col_a, self.label_col_b]:
             assert _key in self.dfs["raw"].columns
