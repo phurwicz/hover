@@ -490,7 +490,7 @@ class BokehSnorkelExplorer(BokehCorpusExplorer):
 
         (1) a "label" column for "ground truths".
         """
-        super().__init__(df_raw, **kwargs)
+        super().__init__(df_dict, **kwargs)
 
         # initialize a list to keep track of plotted LFs
         self.lfs = []
@@ -508,8 +508,8 @@ class BokehSnorkelExplorer(BokehCorpusExplorer):
         Plot a single labeling function.
 
         :param lf: labeling function decorated by @hover.utils.snorkel_helper.labeling_function()
-        :param L_raw: labeling function predictions, in decoded labels, on df_raw.
-        :param L_labeled: labeling function predictions, in decoded labels, on df_labeled.
+        :param L_raw: labeling function predictions, in decoded labels, on the raw df.
+        :param L_labeled: labeling function predictions, in decoded labels, on the labeled df.
         :param include: subsets to show, which can be correct(C)/incorrect(I)/missed(M)/hit(H).
         """
         # keep track of added LF
