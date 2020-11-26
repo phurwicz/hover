@@ -253,7 +253,7 @@ class BokehCorpusExplorer(BokehForLabeledText):
         )
 
 
-class BokehCorpusAnnotator(BokehForLabeledText):
+class BokehCorpusAnnotator(BokehCorpusExplorer):
     """
     [SERVER ONLY]
     Annoate text data points via callbacks.
@@ -270,27 +270,17 @@ class BokehCorpusAnnotator(BokehForLabeledText):
     }
 
     def __init__(self, df_dict, **kwargs):
-        """
-        Requires the input dataframe to contain:
-
-        (1) "x" and "y" columns for coordinates;
-        (2) a "text" column for data point tooltips.
-
-        Optional:
-        (3) a "label" column that defaults to ABSTAIN.
-        """
+        """Conceptually the same as the parent method."""
         super().__init__(df_dict, **kwargs)
 
-        self.update_source()
-        self.plot()
-
     def _setup_sources(self, df_dict):
-        """Extending from the parent method."""
+        """
+        Extending from the parent method.
+
+        Add a "label" column if it is not present.
+        """
         super()._setup_sources(df_dict)
 
-        for _key in self.__class__.DATA_KEY_TO_KWARGS.keys():
-            for _col in ["text", "x", "y"]:
-                assert _col in self.dfs[_key].columns
         if not "label" in self.dfs["raw"].columns:
             self.dfs["raw"]["label"] = module_config.ABSTAIN_DECODED
 
@@ -372,6 +362,7 @@ class BokehCorpusAnnotator(BokehForLabeledText):
         """
         Re-plot with the new labels.
 
+        Overrides the parent method.
         Determines the label->color mapping dynamically.
         """
         from bokeh.transform import factor_cmap
