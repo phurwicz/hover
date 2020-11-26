@@ -51,22 +51,25 @@ class BokehForLabeledText(ABC):
         (5) create data sources the correspond to class-specific data subsets.
         (6) activate builtin search callbacks depending on the child class.
         """
+        logger.divider(f"Initializing {self.__class__.__name__}")
         self.figure_kwargs = self.__class__.DEFAULT_FIGURE_KWARGS.copy()
         self.figure_kwargs.update(kwargs)
         self.reset_figure()
-        self.setup_widgets()
-        self._setup_sources(df_dict)
+        self._setup_widgets()
+        self._setup_dfs(df_dict)
+        self._setup_sources()
         self._activate_search_builtin()
 
     def reset_figure(self):
         """Start over on the figure."""
+        logger.info("Creating/resetting Figure")
         self.figure = figure(**self.figure_kwargs)
         self.glyph_kwargs = {
             _key: _dict["constant"].copy()
             for _key, _dict in self.__class__.DATA_KEY_TO_KWARGS.items()
         }
 
-    def setup_widgets(self):
+    def _setup_widgets(self):
         """
         Prepare widgets for interactive functionality.
 
@@ -74,6 +77,7 @@ class BokehForLabeledText(ABC):
         """
         from bokeh.models import TextInput
 
+        logger.info("Setting up widgets")
         self.search_pos = TextInput(
             title="Text contains (plain text, or /pattern/flag for regex):",
             width_policy="fit",
@@ -91,14 +95,27 @@ class BokehForLabeledText(ABC):
         """Define the layout of the whole explorer."""
         return column(self.layout_widgets(), self.figure)
 
-    def _setup_sources(self, df_dict):
-        """Store DataFrames and create ColumnDataSource objects."""
+    def _setup_dfs(self, df_dict):
+        """
+        Check and store DataFrames.
+
+        Intended to be extended in child classes for pre/post processing.
+        """
+        logger.info("Setting up dfs")
         expected_keys = set(self.__class__.DATA_KEY_TO_KWARGS.keys())
         assert (
             set(df_dict.keys()) == expected_keys
         ), f"Expected the keys of df_dict to be exactly {expected_keys}"
 
         self.dfs = {_key: _df.copy() for _key, _df in df_dict.items()}
+
+    def _setup_sources(self):
+        """
+        Create (NOT UPDATE) ColumnDataSource objects.
+
+        Intended to be extended in child classes for pre/post processing.
+        """
+        logger.info("Setting up sources")
         self.sources = {_key: ColumnDataSource(_df) for _key, _df in self.dfs.items()}
 
     def _activate_search_builtin(self):
@@ -108,6 +125,7 @@ class BokehForLabeledText(ABC):
 
         Note that this is a template method which heavily depends on class attributes.
         """
+        logger.info("Activating built-in search")
         for _key, _dict in self.__class__.DATA_KEY_TO_KWARGS.items():
             for _flag, _params in _dict["search"].items():
                 logger.info(
@@ -216,10 +234,10 @@ class BokehCorpusExplorer(BokehForLabeledText):
 
     DATA_KEY_TO_KWARGS = {
         "raw": {
-            "constant": {"line_alpha": 0.5},
+            "constant": {"line_alpha": 0.4},
             "search": {
                 "size": ("size", 10, 5, 7),
-                "fill_alpha": ("fill_alpha", 0.6, 0.4, 0.5),
+                "fill_alpha": ("fill_alpha", 0.4, 0.1, 0.2),
                 "color": ("color", "coral", "linen", "gainsboro"),
             },
         }
@@ -234,13 +252,13 @@ class BokehCorpusExplorer(BokehForLabeledText):
         """
         super().__init__(df_dict, **kwargs)
 
-    def _setup_sources(self, df_dict):
+    def _setup_dfs(self, df_dict):
         """Extending from the parent method."""
-        super()._setup_sources(df_dict)
-
         for _key in self.__class__.DATA_KEY_TO_KWARGS.keys():
             for _col in ["text", "x", "y"]:
-                assert _col in self.dfs[_key].columns
+                assert _col in df_dict[_key].columns
+
+        super()._setup_dfs(df_dict)
 
     def plot(self, *args, **kwargs):
         """
@@ -261,10 +279,10 @@ class BokehCorpusAnnotator(BokehCorpusExplorer):
 
     DATA_KEY_TO_KWARGS = {
         "raw": {
-            "constant": {"line_alpha": 0.5},
+            "constant": {"line_alpha": 0.3},
             "search": {
                 "size": ("size", 10, 5, 7),
-                "fill_alpha": ("fill_alpha", 0.4, 0.05, 0.2),
+                "fill_alpha": ("fill_alpha", 0.3, 0.05, 0.2),
             },
         }
     }
@@ -273,13 +291,13 @@ class BokehCorpusAnnotator(BokehCorpusExplorer):
         """Conceptually the same as the parent method."""
         super().__init__(df_dict, **kwargs)
 
-    def _setup_sources(self, df_dict):
+    def _setup_dfs(self, df_dict):
         """
         Extending from the parent method.
 
         Add a "label" column if it is not present.
         """
-        super()._setup_sources(df_dict)
+        super()._setup_dfs(df_dict)
 
         if not "label" in self.dfs["raw"].columns:
             self.dfs["raw"]["label"] = module_config.ABSTAIN_DECODED
@@ -297,14 +315,14 @@ class BokehCorpusAnnotator(BokehCorpusExplorer):
         )
         return column(first_row, second_row)
 
-    def setup_widgets(self):
+    def _setup_widgets(self):
         """
         Create annotator widgets and assign Python callbacks.
         """
         from bokeh.models import TextInput, Button
         from bokeh.events import ButtonClick
 
-        super().setup_widgets()
+        super()._setup_widgets()
 
         self.annotator_input = TextInput(title="Label")
         self.annotator_apply = Button(
@@ -406,12 +424,12 @@ class BokehMarginExplorer(BokehCorpusExplorer):
         self.label_col_b = label_col_b
         super().__init__(df_dict, **kwargs)
 
-    def _setup_sources(self, df_dict):
+    def _setup_dfs(self, df_dict):
         """Extending from the parent method."""
-        super()._setup_sources(df_dict)
-
         for _key in [self.label_col_a, self.label_col_b]:
-            assert _key in self.dfs["raw"].columns
+            assert _key in df_dict["raw"].columns
+
+        super()._setup_dfs(df_dict)
 
     def plot(self, label, **kwargs):
         """
@@ -486,9 +504,9 @@ class BokehSnorkelExplorer(BokehCorpusExplorer):
         # initialize a list to keep track of plotted LFs
         self.lfs = []
 
-    def _setup_sources(self, df_dict):
+    def _setup_dfs(self, df_dict):
         """Extending from the parent method."""
-        super()._setup_sources(df_dict)
+        super()._setup_dfs(df_dict)
 
         assert "label" in self.dfs["labeled"].columns
         if not "label" in self.dfs["raw"].columns:
