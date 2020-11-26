@@ -1,8 +1,10 @@
+"""Example importable module holding customized ingredients of a workflow with hover."""
+
 import os
 import re
 import numpy as np
-from hover.utils.common_nn import MLP
 import wrappy
+from hover.utils.common_nn import MLP
 
 CACHE_PATH = os.path.join(os.path.dirname(__file__), "vecs.pkl")
 

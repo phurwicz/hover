@@ -497,7 +497,7 @@ class BokehSnorkelExplorer(BokehCorpusExplorer):
 
     def _setup_sources(self, df_dict):
         """Extending from the parent method."""
-        super()._setup_sources(self, df_dict)
+        super()._setup_sources(df_dict)
 
         assert "label" in self.dfs["labeled"].columns
         if not "label" in self.dfs["raw"].columns:
