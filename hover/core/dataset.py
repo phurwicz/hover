@@ -218,13 +218,13 @@ class SupervisableDataset(ABC):
         features = df[self.__class__.FEATURE_KEY].tolist()
         output_vectors = one_hot(labels, num_classes=len(self.classes))
 
-        console.print(f"Preparing input vectors...", style="blue")
+        console.print(f"Preparing {key} input vectors...", style="blue")
         input_vectors = [vectorizer(_f) for _f in tqdm(features)]
         if smoothing_coeff > 0.0:
             output_vectors = label_smoothing(
                 output_vectors, coefficient=smoothing_coeff
             )
-        console.print(f"Preparing data loader...", style="blue")
+        console.print(f"Preparing {key} data loader...", style="blue")
         loader = vector_dataloader(input_vectors, output_vectors, batch_size=batch_size)
         console.print(
             f"Prepared {key} loader consisting of {len(features)} examples with batch size {batch_size}",
