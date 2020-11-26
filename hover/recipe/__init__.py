@@ -5,7 +5,7 @@ import pandas as pd
 from tqdm import tqdm
 from hover import module_config
 from hover.core.dataset import SupervisableTextDataset
-from hover.core.neural import create_text_vector_net_from_module, TextVectorNet
+from hover.core.neural import create_vector_net_from_module, TextVectorNet
 from hover.core.explorer import BokehCorpusExplorer, BokehCorpusAnnotator
 from hover.utils.torch_helper import vector_dataloader, one_hot, label_smoothing
 from .subroutine import link_plots
@@ -85,7 +85,7 @@ class TBD:
         """
         Train a Prodigy-compatible model from the dev set.
         """
-        model = create_text_vector_net_from_module(
+        model = create_vector_net_from_module(
             TextVectorNet, self.model_module_name, self.dataset.classes
         )
         dev_loader = self.get_loader("dev", model.vectorizer, smoothing_coeff=0.1)
