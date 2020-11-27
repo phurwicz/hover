@@ -37,12 +37,13 @@ class SupervisableDataset(ABC):
     ):
         """
         Initialize the dataset with dictl and df forms; initialize the mapping between categorical-int and string labels.
-        :param raw_dictl: a list of dicts holding the raw data that DO NOT have annotation.
-        :param train_dictl: a list of dicts holding the batch-annotated noisy train set.
-        :param dev_dictl: a list of dicts holding the gold dev set.
-        :param test_dictl: a list of dicts holding the gold test set.
-        :param feature_key: key in each piece of dict mapping to the feature.
-        :param label_key: key in each piece of dict mapping to the ground truth in STRING form.
+
+        - param raw_dictl: a list of dicts holding the raw data that DO NOT have annotation.
+        - param train_dictl: a list of dicts holding the batch-annotated noisy train set.
+        - param dev_dictl: a list of dicts holding the gold dev set.
+        - param test_dictl: a list of dicts holding the gold test set.
+        - param feature_key: key in each piece of dict mapping to the feature.
+        - param label_key: key in each piece of dict mapping to the ground truth in STRING form.
         """
 
         def dictl_transform(dictl, labels=True):
@@ -206,12 +207,11 @@ class SupervisableDataset(ABC):
     def loader(self, key, vectorizer, batch_size=64, smoothing_coeff=0.0):
         """
         Prepare a Torch Dataloader for training or evaluation.
-        :param key: the subset of dataset to use.
-        :type key: str
-        :param vectorizer: callable that turns a string into a vector.
-        :type vectorizer: callable
-        :param smoothing_coeff: the smoothing coeffient for soft labels.
-        :type smoothing_coeff: float
+
+        - param key(str): the subset of dataset to use.
+        - param vectorizer(callable): callable that turns a string into a vector.
+        - param smoothing_coeff: the smoothing coeffient for soft labels.
+          - type smoothing_coeff: float
         """
         df = self.dfs[key]
         labels = df["label"].apply(lambda x: self.label_encoder[x]).tolist()
