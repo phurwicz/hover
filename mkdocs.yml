@@ -1,0 +1,16 @@
+site_name: Docs - Hover
+nav:
+    - Home: index.md
+    - API Reference: api.md
+theme:
+    name: material
+plugins:
+- mkdocstrings:
+    default_handler: python
+    handlers:
+      python:
+        rendering:
+          show_source: false
+    watch:
+      - hover
+      - hover/core
