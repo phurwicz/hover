@@ -4,6 +4,7 @@ from wasabi import msg as logger
 from bokeh.plotting import figure
 from bokeh.models import CustomJS, ColumnDataSource, CDSView, IndexFilter
 from bokeh.layouts import column, row
+from bokeh.palettes import Category20
 from abc import ABC, abstractmethod
 from hover import module_config
 from hover.utils.misc import current_time
@@ -45,16 +46,15 @@ class BokehForLabeledText(ABC):
         Operations shared by all child classes.
 
         (1) settle the figure settings by using child class defaults + kwargs overrides
-        (2) create a blank figure under such settings
-        (3) settle the glyph settings by using child class defaults
-        (4) create widgets that child classes can override
-        (5) create data sources the correspond to class-specific data subsets.
-        (6) activate builtin search callbacks depending on the child class.
+        (2) settle the glyph settings by using child class defaults
+        (3) create widgets that child classes can override
+        (4) create data sources the correspond to class-specific data subsets.
+        (5) activate builtin search callbacks depending on the child class.
+        (6) create a (likely) blank figure under such settings
         """
         logger.divider(f"Initializing {self.__class__.__name__}")
         self.figure_kwargs = self.__class__.DEFAULT_FIGURE_KWARGS.copy()
         self.figure_kwargs.update(kwargs)
-        self.reset_figure()
         self.glyph_kwargs = {
             _key: _dict["constant"].copy()
             for _key, _dict in self.__class__.DATA_KEY_TO_KWARGS.items()
@@ -63,11 +63,15 @@ class BokehForLabeledText(ABC):
         self._setup_dfs(df_dict)
         self._setup_sources()
         self._activate_search_builtin()
+        self.reset_figure()
 
     def reset_figure(self):
         """Start over on the figure."""
         logger.info("Creating/resetting Figure")
-        self.figure = figure(**self.figure_kwargs)
+        if hasattr(self, "figure"):
+            self.figure.renderers.clear()
+        else:
+            self.figure = figure(**self.figure_kwargs)
 
     def _setup_widgets(self):
         """
@@ -479,14 +483,14 @@ class BokehSnorkelExplorer(BokehCorpusExplorer):
 
     DATA_KEY_TO_KWARGS = {
         "raw": {
-            "constant": {"line_alpha": 0.5, "color": "gainsboro"},
+            "constant": {"line_alpha": 1.0, "color": "gainsboro"},
             "search": {
                 "size": ("size", 10, 5, 7),
                 "fill_alpha": ("fill_alpha", 0.4, 0.05, 0.2),
             },
         },
         "labeled": {
-            "constant": {"line_alpha": 0.5, "fill_alpha": 0.0},
+            "constant": {"line_alpha": 1.0, "fill_alpha": 0.0},
             "search": {"size": ("size", 10, 5, 7)},
         },
     }
@@ -502,6 +506,7 @@ class BokehSnorkelExplorer(BokehCorpusExplorer):
 
         # initialize a list to keep track of plotted LFs
         self.lfs = []
+        self.palette = Category20[20]
 
     def _setup_dfs(self, df_dict):
         """Extending from the parent method."""
@@ -511,7 +516,9 @@ class BokehSnorkelExplorer(BokehCorpusExplorer):
         if not "label" in self.dfs["raw"].columns:
             self.dfs["raw"]["label"] = module_config.ABSTAIN_DECODED
 
-    def plot(self, lf, L_raw=None, L_labeled=None, include=("C", "I", "M"), **kwargs):
+    def plot_lf(
+        self, lf, L_raw=None, L_labeled=None, include=("C", "I", "M"), **kwargs
+    ):
         """
         Plot a single labeling function.
 
@@ -525,21 +532,23 @@ class BokehSnorkelExplorer(BokehCorpusExplorer):
 
         # calculate predicted labels if not provided
         if L_raw is None:
-            L_raw = self.dfs["raw"].apply(lf.row_to_label, axis=1).values
+            L_raw = self.dfs["raw"].apply(lf, axis=1).values
         if L_labeled is None:
-            L_labeled = self.dfs["labeled"].apply(lf.row_to_label, axis=1).values
+            L_labeled = self.dfs["labeled"].apply(lf, axis=1).values
 
         # prepare plot settings
         axes = ("x", "y")
-        decoded_targets = [lf.label_decoder[_target] for _target in lf.targets]
-        legend_label = f"{', '.join(decoded_targets)} | {lf.name}"
+        legend_label = f"{', '.join(lf.targets)} | {lf.name}"
+        color = self.palette[len(self.lfs) - 1]
 
         raw_glyph_kwargs = self.glyph_kwargs["raw"].copy()
         raw_glyph_kwargs["legend_label"] = legend_label
+        raw_glyph_kwargs["color"] = color
         raw_glyph_kwargs.update(kwargs)
 
         labeled_glyph_kwargs = self.glyph_kwargs["labeled"].copy()
         labeled_glyph_kwargs["legend_label"] = legend_label
+        labeled_glyph_kwargs["color"] = color
         labeled_glyph_kwargs.update(kwargs)
 
         # create correct/incorrect/missed/hit subsets
