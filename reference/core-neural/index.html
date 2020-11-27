@@ -1,0 +1,826 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      <link rel="shortcut icon" href="../../images/favicon.png">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-6.1.2">
+    
+    
+      
+        <title>hover.core.neural - Docs - Hover</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.19190aaf.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.24b84193.min.css">
+        
+      
+    
+    
+    
+      
+        
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>body,input{font-family:"Roboto",-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono",SFMono-Regular,Consolas,Menlo,monospace}</style>
+      
+    
+    
+    
+    
+      
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="none" data-md-color-accent="none">
+      
+  
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#hovercoreneuralvectornet" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid" aria-label="Header">
+    <a href="../.." title="Docs - Hover" class="md-header-nav__button md-logo" aria-label="Docs - Hover">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9 7v10h2v-4h2v4h2V7h-2v4h-2V7H9M5 3h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2z"/></svg>
+
+    </a>
+    <label class="md-header-nav__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header-nav__title" data-md-component="header-title">
+      
+        <div class="md-header-nav__ellipsis">
+          <span class="md-header-nav__topic md-ellipsis">
+            Docs - Hover
+          </span>
+          <span class="md-header-nav__topic md-ellipsis">
+            
+              hover.core.neural
+            
+          </span>
+        </div>
+      
+    </div>
+    
+      <label class="md-header-nav__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active">
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" data-md-component="search-reset" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Docs - Hover" class="md-nav__button md-logo" aria-label="Docs - Hover">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9 7v10h2v-4h2v4h2V7h-2v4h-2V7H9M5 3h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2z"/></svg>
+
+    </a>
+    Docs - Hover
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../.." class="md-nav__link">
+      Home
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-2" type="checkbox" id="nav-2" checked>
+    
+    <label class="md-nav__link" for="nav-2">
+      API Reference
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="API Reference" data-md-level="1">
+      <label class="md-nav__title" for="nav-2">
+        <span class="md-nav__icon md-icon"></span>
+        API Reference
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../core-dataset/" class="md-nav__link">
+      hover.core.dataset
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../core-explorer/" class="md-nav__link">
+      hover.core.explorer
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        hover.core.neural
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+    
+    <a href="./" class="md-nav__link md-nav__link--active">
+      hover.core.neural
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#hover.core.neural.VectorNet" class="md-nav__link">
+    hover.core.neural.VectorNet
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hover.core.neural.VectorNet.__init__" class="md-nav__link">
+    __init__()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hover.core.neural.VectorNet.evaluate" class="md-nav__link">
+    evaluate()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hover.core.neural.VectorNet.predict_proba" class="md-nav__link">
+    predict_proba()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hover.core.neural.VectorNet.save" class="md-nav__link">
+    save()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hover.core.neural.VectorNet.train" class="md-nav__link">
+    train()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hover.core.neural.VectorNet.train_batch" class="md-nav__link">
+    train_batch()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hover.core.neural.VectorNet.train_epoch" class="md-nav__link">
+    train_epoch()
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#hover.core.neural.VectorNet" class="md-nav__link">
+    hover.core.neural.VectorNet
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hover.core.neural.VectorNet.__init__" class="md-nav__link">
+    __init__()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hover.core.neural.VectorNet.evaluate" class="md-nav__link">
+    evaluate()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hover.core.neural.VectorNet.predict_proba" class="md-nav__link">
+    predict_proba()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hover.core.neural.VectorNet.save" class="md-nav__link">
+    save()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hover.core.neural.VectorNet.train" class="md-nav__link">
+    train()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hover.core.neural.VectorNet.train_batch" class="md-nav__link">
+    train_batch()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hover.core.neural.VectorNet.train_epoch" class="md-nav__link">
+    train_epoch()
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                
+                <h1 id="hovercoreneuralvectornet"><code>hover.core.neural.VectorNet</code></h1>
+<ul>
+<li>
+<div class="doc doc-object doc-class">
+<h2 class="hidden-toc" href="#hover.core.neural.VectorNet" id="hover.core.neural.VectorNet" style="visibility: hidden; position: absolute;">
+        </h2>
+<div class="doc doc-contents first">
+<p>Simple transfer learning model: a user-supplied vectorizer followed by a neural net.</p>
+<p>This is a parent class whose children may use different training schemes.</p>
+<p>Please refer to hover.utils.torch_helper.VectorDataset and vector_dataloader for more info.</p>
+<div class="doc doc-children">
+<div class="doc doc-object doc-method">
+<h2 class="doc doc-heading" id="hover.core.neural.VectorNet.__init__">
+
+        <code class="highlight language-python">
+__init__<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vectorizer</span><span class="p">,</span> <span class="n">architecture</span><span class="p">,</span> <span class="n">state_dict_path</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span>        </code>
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-special"><code>special</code></small>
+  </span>
+
+      </h2>
+<div class="doc doc-contents ">
+<ul>
+<li>param vectorizer(callable): a function that converts any string to a NumPy 1-D array.</li>
+<li>param architecture(class): a <code>torch.nn.Module</code> child class to be instantiated into a neural net.</li>
+<li>param state_dict_path(str): path to a PyTorch state dict that matches the architecture.</li>
+<li>param labels(list of str): the classification labels, e.g. ["POSITIVE", "NEGATIVE"].</li>
+</ul>
+<details class="quote">
+          <summary>Source code in <code>hover/core/neural.py</code></summary>
+          <div class="highlight">
+<pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vectorizer</span><span class="p">,</span> <span class="n">architecture</span><span class="p">,</span> <span class="n">state_dict_path</span><span class="p">,</span> <span class="n">labels</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    - param vectorizer(callable): a function that converts any string to a NumPy 1-D array.</span>
+<span class="sd">    - param architecture(class): a `torch.nn.Module` child class to be instantiated into a neural net.</span>
+<span class="sd">    - param state_dict_path(str): path to a PyTorch state dict that matches the architecture.</span>
+<span class="sd">    - param labels(list of str): the classification labels, e.g. ["POSITIVE", "NEGATIVE"].</span>
+<span class="sd">    """</span>
+
+    <span class="c1"># set up label conversion</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">label_encoder</span> <span class="o">=</span> <span class="p">{</span><span class="n">_label</span><span class="p">:</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">_label</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">labels</span><span class="p">)}</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">label_decoder</span> <span class="o">=</span> <span class="p">{</span><span class="n">i</span><span class="p">:</span> <span class="n">_label</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">_label</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">labels</span><span class="p">)}</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">num_classes</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">label_encoder</span><span class="p">)</span>
+
+    <span class="c1"># set up vectorizer and the neural network with appropriate dimensions</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">vectorizer</span> <span class="o">=</span> <span class="n">vectorizer</span>
+    <span class="n">vec_dim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vectorizer</span><span class="p">(</span><span class="s2">""</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">nn</span> <span class="o">=</span> <span class="n">architecture</span><span class="p">(</span><span class="n">vec_dim</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_classes</span><span class="p">)</span>
+
+    <span class="c1"># if a state dict exists, load it and create a backup copy</span>
+    <span class="kn">import</span> <span class="nn">os</span>
+
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">state_dict_path</span><span class="p">):</span>
+        <span class="kn">from</span> <span class="nn">shutil</span> <span class="kn">import</span> <span class="n">copyfile</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">load_state_dict</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">state_dict_path</span><span class="p">))</span>
+        <span class="n">state_dict_backup_path</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">state_dict_path</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">'%Y%m</span><span class="si">%d</span><span class="s1">%H%M%S'</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span>
+        <span class="p">)</span>
+        <span class="n">copyfile</span><span class="p">(</span><span class="n">state_dict_path</span><span class="p">,</span> <span class="n">state_dict_backup_path</span><span class="p">)</span>
+
+    <span class="c1"># set a path to store updated parameters</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">nn_update_path</span> <span class="o">=</span> <span class="n">state_dict_path</span>
+
+    <span class="c1"># initialize an optimizer object and a dict to hold dynamic parameters</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">nn_optimizer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">parameters</span><span class="p">())</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_dynamic_params</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"optimizer"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"lr"</span><span class="p">:</span> <span class="mf">0.01</span><span class="p">,</span> <span class="s2">"betas"</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.999</span><span class="p">)}}</span>
+</code></pre>
+</div>
+</details>
+</div>
+</div>
+<div class="doc doc-object doc-method">
+<h2 class="doc doc-heading" id="hover.core.neural.VectorNet.evaluate">
+
+        <code class="highlight language-python">
+evaluate<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dev_loader</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>        </code>
+
+
+      </h2>
+<div class="doc doc-contents ">
+<p>Evaluate the neural network against a dev set.</p>
+<details class="quote">
+          <summary>Source code in <code>hover/core/neural.py</code></summary>
+          <div class="highlight">
+<pre><span></span><code><span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dev_loader</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    Evaluate the neural network against a dev set.</span>
+<span class="sd">    """</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+    <span class="n">true</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">pred</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">loaded_input</span><span class="p">,</span> <span class="n">loaded_output</span><span class="p">,</span> <span class="n">_idx</span> <span class="ow">in</span> <span class="n">dev_loader</span><span class="p">:</span>
+        <span class="n">_input_tensor</span> <span class="o">=</span> <span class="n">loaded_input</span><span class="o">.</span><span class="n">float</span><span class="p">()</span>
+        <span class="n">_output_tensor</span> <span class="o">=</span> <span class="n">loaded_output</span><span class="o">.</span><span class="n">float</span><span class="p">()</span>
+
+        <span class="n">_logits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nn</span><span class="p">(</span><span class="n">_input_tensor</span><span class="p">)</span>
+        <span class="n">_true_batch</span> <span class="o">=</span> <span class="n">_output_tensor</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+        <span class="n">_pred_batch</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">softmax</span><span class="p">(</span><span class="n">_logits</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+        <span class="n">true</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_true_batch</span><span class="p">)</span>
+        <span class="n">pred</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_pred_batch</span><span class="p">)</span>
+    <span class="n">true</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">true</span><span class="p">)</span>
+    <span class="n">pred</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">pred</span><span class="p">)</span>
+    <span class="n">accuracy</span> <span class="o">=</span> <span class="n">classification_accuracy</span><span class="p">(</span><span class="n">true</span><span class="p">,</span> <span class="n">pred</span><span class="p">)</span>
+    <span class="n">conf_mat</span> <span class="o">=</span> <span class="n">confusion_matrix</span><span class="p">(</span><span class="n">true</span><span class="p">,</span> <span class="n">pred</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">verbose</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">log_info</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dynamic_params</span><span class="p">)</span>
+        <span class="n">log_info</span><span class="p">[</span><span class="s2">"performance"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"Acc </span><span class="si">{0:.3f}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">accuracy</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="s2">"</span><span class="si">{0: &lt;80}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="s2">"Eval: Epoch </span><span class="si">{epoch}</span><span class="s2"> </span><span class="si">{performance}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="n">log_info</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">accuracy</span><span class="p">,</span> <span class="n">conf_mat</span>
+</code></pre>
+</div>
+</details>
+</div>
+</div>
+<div class="doc doc-object doc-method">
+<h2 class="doc doc-heading" id="hover.core.neural.VectorNet.predict_proba">
+
+        <code class="highlight language-python">
+predict_proba<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inps</span><span class="p">)</span>        </code>
+
+
+      </h2>
+<div class="doc doc-contents ">
+<p>End-to-end single/multi-piece prediction from inp to class probabilities.</p>
+<details class="quote">
+          <summary>Source code in <code>hover/core/neural.py</code></summary>
+          <div class="highlight">
+<pre><span></span><code><span class="k">def</span> <span class="nf">predict_proba</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inps</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    End-to-end single/multi-piece prediction from inp to class probabilities.</span>
+<span class="sd">    """</span>
+    <span class="c1"># if the input is a single piece of inp, cast it to a list</span>
+    <span class="n">FLAG_SINGLE</span> <span class="o">=</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">inps</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">FLAG_SINGLE</span><span class="p">:</span>
+        <span class="n">inps</span> <span class="o">=</span> <span class="p">[</span><span class="n">inps</span><span class="p">]</span>
+
+    <span class="c1"># the actual prediction</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+    <span class="n">vectors</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">vectorizer</span><span class="p">(</span><span class="n">_inp</span><span class="p">)</span> <span class="k">for</span> <span class="n">_inp</span> <span class="ow">in</span> <span class="n">inps</span><span class="p">])</span>
+    <span class="n">logits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nn</span><span class="p">(</span><span class="n">vectors</span><span class="p">)</span>
+    <span class="n">probs</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">softmax</span><span class="p">(</span><span class="n">logits</span><span class="p">,</span> <span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># inverse-cast if applicable</span>
+    <span class="k">if</span> <span class="n">FLAG_SINGLE</span><span class="p">:</span>
+        <span class="n">probs</span> <span class="o">=</span> <span class="n">probs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">probs</span>
+</code></pre>
+</div>
+</details>
+</div>
+</div>
+<div class="doc doc-object doc-method">
+<h2 class="doc doc-heading" id="hover.core.neural.VectorNet.save">
+
+        <code class="highlight language-python">
+save<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">save_path</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>        </code>
+
+
+      </h2>
+<div class="doc doc-contents ">
+<p>Save the current state dict with authorization to overwrite.</p>
+<details class="quote">
+          <summary>Source code in <code>hover/core/neural.py</code></summary>
+          <div class="highlight">
+<pre><span></span><code><span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">save_path</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    Save the current state dict with authorization to overwrite.</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="n">save_path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">save_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nn_update_path</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">state_dict</span><span class="p">(),</span> <span class="n">save_path</span><span class="p">)</span>
+</code></pre>
+</div>
+</details>
+</div>
+</div>
+<div class="doc doc-object doc-method">
+<h2 class="doc doc-heading" id="hover.core.neural.VectorNet.train">
+
+        <code class="highlight language-python">
+train<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">train_loader</span><span class="p">,</span> <span class="n">dev_loader</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>        </code>
+
+
+      </h2>
+<div class="doc doc-contents ">
+<p>Train the neural network.</p>
+<ul>
+<li>This method is a vanilla template and is intended to be overridden in child classes.</li>
+<li>Also intended to be coupled with self.train_batch().</li>
+</ul>
+<details class="quote">
+          <summary>Source code in <code>hover/core/neural.py</code></summary>
+          <div class="highlight">
+<pre><span></span><code><span class="k">def</span> <span class="nf">train</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">train_loader</span><span class="p">,</span> <span class="n">dev_loader</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    Train the neural network.</span>
+
+<span class="sd">    - This method is a vanilla template and is intended to be overridden in child classes.</span>
+<span class="sd">    - Also intended to be coupled with self.train_batch().</span>
+<span class="sd">    """</span>
+    <span class="n">train_info</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">epoch_idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">epochs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dynamic_params</span><span class="p">[</span><span class="s2">"epoch"</span><span class="p">]</span> <span class="o">=</span> <span class="n">epoch_idx</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_epoch</span><span class="p">(</span><span class="n">train_loader</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">dev_loader</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">acc</span><span class="p">,</span> <span class="n">conf_mat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">dev_loader</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
+            <span class="n">train_info</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">"accuracy"</span><span class="p">:</span> <span class="n">acc</span><span class="p">,</span> <span class="s2">"confusion_matrix"</span><span class="p">:</span> <span class="n">conf_mat</span><span class="p">})</span>
+    <span class="k">return</span> <span class="n">train_info</span>
+</code></pre>
+</div>
+</details>
+</div>
+</div>
+<div class="doc doc-object doc-method">
+<h2 class="doc doc-heading" id="hover.core.neural.VectorNet.train_batch">
+
+        <code class="highlight language-python">
+train_batch<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">loaded_input</span><span class="p">,</span> <span class="n">loaded_output</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>        </code>
+
+
+      </h2>
+<div class="doc doc-contents ">
+<p>Train the neural network for one batch.</p>
+<details class="quote">
+          <summary>Source code in <code>hover/core/neural.py</code></summary>
+          <div class="highlight">
+<pre><span></span><code><span class="k">def</span> <span class="nf">train_batch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">loaded_input</span><span class="p">,</span> <span class="n">loaded_output</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    Train the neural network for one batch.</span>
+<span class="sd">    """</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+    <span class="n">input_tensor</span> <span class="o">=</span> <span class="n">loaded_input</span><span class="o">.</span><span class="n">float</span><span class="p">()</span>
+    <span class="n">output_tensor</span> <span class="o">=</span> <span class="n">loaded_output</span><span class="o">.</span><span class="n">float</span><span class="p">()</span>
+
+    <span class="c1"># compute logits</span>
+    <span class="n">logits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nn</span><span class="p">(</span><span class="n">input_tensor</span><span class="p">)</span>
+    <span class="n">loss</span> <span class="o">=</span> <span class="n">cross_entropy_with_probs</span><span class="p">(</span><span class="n">logits</span><span class="p">,</span> <span class="n">output_tensor</span><span class="p">)</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">nn_optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+    <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">nn_optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">verbose</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">log_info</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dynamic_params</span><span class="p">)</span>
+        <span class="n">log_info</span><span class="p">[</span><span class="s2">"performance"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"Loss </span><span class="si">{0:.3f}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">loss</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="s2">"</span><span class="si">{0: &lt;80}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="s2">"Train: Epoch </span><span class="si">{epoch}</span><span class="s2"> Batch </span><span class="si">{batch}</span><span class="s2"> </span><span class="si">{performance}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="o">**</span><span class="n">log_info</span>
+                <span class="p">)</span>
+            <span class="p">),</span>
+            <span class="n">end</span><span class="o">=</span><span class="s2">"</span><span class="se">\r</span><span class="s2">"</span><span class="p">,</span>
+        <span class="p">)</span>
+</code></pre>
+</div>
+</details>
+</div>
+</div>
+<div class="doc doc-object doc-method">
+<h2 class="doc doc-heading" id="hover.core.neural.VectorNet.train_epoch">
+
+        <code class="highlight language-python">
+train_epoch<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">train_loader</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>        </code>
+
+
+      </h2>
+<div class="doc doc-contents ">
+<p>Train the neural network for one epoch.</p>
+<ul>
+<li>Supports flexible args and kwargs for child classes that may implement self.train() and self.train_batch() differently.</li>
+</ul>
+<details class="quote">
+          <summary>Source code in <code>hover/core/neural.py</code></summary>
+          <div class="highlight">
+<pre><span></span><code><span class="k">def</span> <span class="nf">train_epoch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">train_loader</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    Train the neural network for one epoch.</span>
+
+<span class="sd">    - Supports flexible args and kwargs for child classes that may implement self.train() and self.train_batch() differently.</span>
+<span class="sd">    """</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">adjust_optimizer_params</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">batch_idx</span><span class="p">,</span> <span class="p">(</span><span class="n">loaded_input</span><span class="p">,</span> <span class="n">loaded_output</span><span class="p">,</span> <span class="n">_</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">train_loader</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dynamic_params</span><span class="p">[</span><span class="s2">"batch"</span><span class="p">]</span> <span class="o">=</span> <span class="n">batch_idx</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_batch</span><span class="p">(</span><span class="n">loaded_input</span><span class="p">,</span> <span class="n">loaded_output</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</code></pre>
+</div>
+</details>
+</div>
+</div>
+</div>
+</div>
+</div>
+</li>
+</ul>
+<h1 id="hovercoreneuralcreate_vector_net_from_module"><code>hover.core.neural.create_vector_net_from_module</code></h1>
+<ul>
+<li>
+<div class="doc doc-object doc-function">
+<h2 class="hidden-toc" href="#hover.core.neural.create_vector_net_from_module" id="hover.core.neural.create_vector_net_from_module" style="visibility: hidden; position: absolute;">
+        </h2>
+<div class="doc doc-contents first">
+<p>Create a TextVectorNet model, or of its child class.</p>
+<ul>
+<li>param specific_class(class): TextVectorNet or its child class.</li>
+<li>param model_module_name(str): path to a local Python module in the working directory whose <strong>init</strong>.py file contains a get_vectorizer() callable, get_architecture() callable, and a get_state_dict_path() callable.</li>
+<li>param labels(list of str): the classification labels, e.g. ["POSITIVE", "NEGATIVE"].</li>
+</ul>
+<details class="quote">
+          <summary>Source code in <code>hover/core/neural.py</code></summary>
+          <div class="highlight">
+<pre><span></span><code><span class="k">def</span> <span class="nf">create_vector_net_from_module</span><span class="p">(</span><span class="n">specific_class</span><span class="p">,</span> <span class="n">model_module_name</span><span class="p">,</span> <span class="n">labels</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    Create a TextVectorNet model, or of its child class.</span>
+
+<span class="sd">    - param specific_class(class): TextVectorNet or its child class.</span>
+<span class="sd">    - param model_module_name(str): path to a local Python module in the working directory whose __init__.py file contains a get_vectorizer() callable, get_architecture() callable, and a get_state_dict_path() callable.</span>
+<span class="sd">    - param labels(list of str): the classification labels, e.g. ["POSITIVE", "NEGATIVE"].</span>
+<span class="sd">    """</span>
+    <span class="kn">from</span> <span class="nn">importlib</span> <span class="kn">import</span> <span class="n">import_module</span>
+
+    <span class="n">model_module</span> <span class="o">=</span> <span class="n">import_module</span><span class="p">(</span><span class="n">model_module_name</span><span class="p">)</span>
+
+    <span class="c1"># Load the model by retrieving the inp-to-vec function, architecture, and state dict</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">specific_class</span><span class="p">(</span>
+        <span class="n">model_module</span><span class="o">.</span><span class="n">get_vectorizer</span><span class="p">(),</span>
+        <span class="n">model_module</span><span class="o">.</span><span class="n">get_architecture</span><span class="p">(),</span>
+        <span class="n">model_module</span><span class="o">.</span><span class="n">get_state_dict_path</span><span class="p">(),</span>
+        <span class="n">labels</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">model</span>
+</code></pre>
+</div>
+</details>
+</div>
+</div>
+</li>
+</ul>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
+        
+          <a href="../core-explorer/" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+            </div>
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                hover.core.explorer
+              </div>
+            </div>
+          </a>
+        
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../../assets/javascripts/vendor.7e0ee788.min.js"></script>
+      <script src="../../assets/javascripts/bundle.c1ccee15.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}</script>
+      
+      <script>
+        app = initialize({
+          base: "../..",
+          features: ['navigation.expand', 'toc.integrate', 'search.suggest'],
+          search: Object.assign({
+            worker: "../../assets/javascripts/worker/search.4ac00218.min.js"
+          }, typeof search !== "undefined" && search)
+        })
+      </script>
+      
+    
+  </body>
+</html>

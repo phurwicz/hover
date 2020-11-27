@@ -1,0 +1,658 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      <link rel="shortcut icon" href="../../images/favicon.png">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-6.1.2">
+    
+    
+      
+        <title>hover.core.dataset - Docs - Hover</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.19190aaf.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.24b84193.min.css">
+        
+      
+    
+    
+    
+      
+        
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>body,input{font-family:"Roboto",-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono",SFMono-Regular,Consolas,Menlo,monospace}</style>
+      
+    
+    
+    
+    
+      
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="none" data-md-color-accent="none">
+      
+  
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#hovercoredatasetsupervisabledataset" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid" aria-label="Header">
+    <a href="../.." title="Docs - Hover" class="md-header-nav__button md-logo" aria-label="Docs - Hover">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9 7v10h2v-4h2v4h2V7h-2v4h-2V7H9M5 3h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2z"/></svg>
+
+    </a>
+    <label class="md-header-nav__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header-nav__title" data-md-component="header-title">
+      
+        <div class="md-header-nav__ellipsis">
+          <span class="md-header-nav__topic md-ellipsis">
+            Docs - Hover
+          </span>
+          <span class="md-header-nav__topic md-ellipsis">
+            
+              hover.core.dataset
+            
+          </span>
+        </div>
+      
+    </div>
+    
+      <label class="md-header-nav__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active">
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" data-md-component="search-reset" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Docs - Hover" class="md-nav__button md-logo" aria-label="Docs - Hover">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9 7v10h2v-4h2v4h2V7h-2v4h-2V7H9M5 3h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2z"/></svg>
+
+    </a>
+    Docs - Hover
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../.." class="md-nav__link">
+      Home
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-2" type="checkbox" id="nav-2" checked>
+    
+    <label class="md-nav__link" for="nav-2">
+      API Reference
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="API Reference" data-md-level="1">
+      <label class="md-nav__title" for="nav-2">
+        <span class="md-nav__icon md-icon"></span>
+        API Reference
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        hover.core.dataset
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+    
+    <a href="./" class="md-nav__link md-nav__link--active">
+      hover.core.dataset
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#hover.core.dataset.SupervisableDataset" class="md-nav__link">
+    hover.core.dataset.SupervisableDataset
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hover.core.dataset.SupervisableDataset.__init__" class="md-nav__link">
+    __init__()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hover.core.dataset.SupervisableDataset.compute_2d_embedding" class="md-nav__link">
+    compute_2d_embedding()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hover.core.dataset.SupervisableDataset.loader" class="md-nav__link">
+    loader()
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../core-explorer/" class="md-nav__link">
+      hover.core.explorer
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../core-neural/" class="md-nav__link">
+      hover.core.neural
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#hover.core.dataset.SupervisableDataset" class="md-nav__link">
+    hover.core.dataset.SupervisableDataset
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hover.core.dataset.SupervisableDataset.__init__" class="md-nav__link">
+    __init__()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hover.core.dataset.SupervisableDataset.compute_2d_embedding" class="md-nav__link">
+    compute_2d_embedding()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hover.core.dataset.SupervisableDataset.loader" class="md-nav__link">
+    loader()
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                
+                <h1 id="hovercoredatasetsupervisabledataset"><code>hover.core.dataset.SupervisableDataset</code></h1>
+<ul>
+<li>
+<div class="doc doc-object doc-class">
+<h2 class="hidden-toc" href="#hover.core.dataset.SupervisableDataset" id="hover.core.dataset.SupervisableDataset" style="visibility: hidden; position: absolute;">
+        </h2>
+<div class="doc doc-contents first">
+<p>Type-agnostic class for a dataset open to supervision.
+Raw -- piecewise annoatation -&gt; Gold -&gt; Dev/Test
+Raw -- batch annotation -&gt; Noisy -&gt; Train</p>
+<p>Keeping a DataFrame form and a list-of-dicts form, with the intention
+that synchronization should be called manually and sparingly.</p>
+<div class="doc doc-children">
+<div class="doc doc-object doc-method">
+<h2 class="doc doc-heading" id="hover.core.dataset.SupervisableDataset.__init__">
+
+        <code class="highlight language-python">
+__init__<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">raw_dictl</span><span class="p">,</span> <span class="n">train_dictl</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dev_dictl</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">test_dictl</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">feature_key</span><span class="o">=</span><span class="s1">'feature'</span><span class="p">,</span> <span class="n">label_key</span><span class="o">=</span><span class="s1">'label'</span><span class="p">)</span>        </code>
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-special"><code>special</code></small>
+  </span>
+
+      </h2>
+<div class="doc doc-contents ">
+<p>Initialize the dataset with dictl and df forms; initialize the mapping between categorical-int and string labels.</p>
+<ul>
+<li>param raw_dictl: a list of dicts holding the raw data that DO NOT have annotation.</li>
+<li>param train_dictl: a list of dicts holding the batch-annotated noisy train set.</li>
+<li>param dev_dictl: a list of dicts holding the gold dev set.</li>
+<li>param test_dictl: a list of dicts holding the gold test set.</li>
+<li>param feature_key: key in each piece of dict mapping to the feature.</li>
+<li>param label_key: key in each piece of dict mapping to the ground truth in STRING form.</li>
+</ul>
+<details class="quote">
+          <summary>Source code in <code>hover/core/dataset.py</code></summary>
+          <div class="highlight">
+<pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">raw_dictl</span><span class="p">,</span>
+    <span class="n">train_dictl</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">dev_dictl</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">test_dictl</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">feature_key</span><span class="o">=</span><span class="s2">"feature"</span><span class="p">,</span>
+    <span class="n">label_key</span><span class="o">=</span><span class="s2">"label"</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    Initialize the dataset with dictl and df forms; initialize the mapping between categorical-int and string labels.</span>
+
+<span class="sd">    - param raw_dictl: a list of dicts holding the raw data that DO NOT have annotation.</span>
+<span class="sd">    - param train_dictl: a list of dicts holding the batch-annotated noisy train set.</span>
+<span class="sd">    - param dev_dictl: a list of dicts holding the gold dev set.</span>
+<span class="sd">    - param test_dictl: a list of dicts holding the gold test set.</span>
+<span class="sd">    - param feature_key: key in each piece of dict mapping to the feature.</span>
+<span class="sd">    - param label_key: key in each piece of dict mapping to the ground truth in STRING form.</span>
+<span class="sd">    """</span>
+
+    <span class="k">def</span> <span class="nf">dictl_transform</span><span class="p">(</span><span class="n">dictl</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">"""</span>
+<span class="sd">        Burner function to transform the input list of dictionaries into standard format.</span>
+<span class="sd">        """</span>
+        <span class="c1"># transform the feature and possibly the label</span>
+        <span class="n">key_transform</span> <span class="o">=</span> <span class="p">{</span><span class="n">feature_key</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">FEATURE_KEY</span><span class="p">}</span>
+        <span class="k">if</span> <span class="n">labels</span><span class="p">:</span>
+            <span class="n">key_transform</span><span class="p">[</span><span class="n">label_key</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"label"</span>
+        <span class="c1"># corner case when dictl is empty or None</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">dictl</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[]</span>
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="n">key_transform</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">_key</span><span class="p">,</span> <span class="n">_key</span><span class="p">):</span> <span class="n">_value</span>
+                <span class="k">for</span> <span class="n">_key</span><span class="p">,</span> <span class="n">_value</span> <span class="ow">in</span> <span class="n">_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+            <span class="p">}</span>
+            <span class="k">for</span> <span class="n">_dict</span> <span class="ow">in</span> <span class="n">dictl</span>
+        <span class="p">]</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">dictls</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">"raw"</span><span class="p">:</span> <span class="n">dictl_transform</span><span class="p">(</span><span class="n">raw_dictl</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+        <span class="s2">"train"</span><span class="p">:</span> <span class="n">dictl_transform</span><span class="p">(</span><span class="n">train_dictl</span><span class="p">),</span>
+        <span class="s2">"dev"</span><span class="p">:</span> <span class="n">dictl_transform</span><span class="p">(</span><span class="n">dev_dictl</span><span class="p">),</span>
+        <span class="s2">"test"</span><span class="p">:</span> <span class="n">dictl_transform</span><span class="p">(</span><span class="n">test_dictl</span><span class="p">),</span>
+    <span class="p">}</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">synchronize_dictl_to_df</span><span class="p">()</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">df_deduplicate</span><span class="p">()</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">synchronize_df_to_dictl</span><span class="p">()</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">setup_label_coding</span><span class="p">()</span>
+</code></pre>
+</div>
+</details>
+</div>
+</div>
+<div class="doc doc-object doc-method">
+<h2 class="doc doc-heading" id="hover.core.dataset.SupervisableDataset.compute_2d_embedding">
+
+        <code class="highlight language-python">
+compute_2d_embedding<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vectorizer</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>        </code>
+
+
+      </h2>
+<div class="doc doc-contents ">
+<p>Get embeddings in the xy-plane and return the reducer.</p>
+<details class="quote">
+          <summary>Source code in <code>hover/core/dataset.py</code></summary>
+          <div class="highlight">
+<pre><span></span><code><span class="k">def</span> <span class="nf">compute_2d_embedding</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vectorizer</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    Get embeddings in the xy-plane and return the reducer.</span>
+<span class="sd">    """</span>
+    <span class="kn">from</span> <span class="nn">hover.core.representation.reduction</span> <span class="kn">import</span> <span class="n">DimensionalityReducer</span>
+
+    <span class="c1"># prepare input vectors to manifold learning</span>
+    <span class="n">subset</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"raw"</span><span class="p">,</span> <span class="s2">"train"</span><span class="p">,</span> <span class="s2">"dev"</span><span class="p">]</span>
+    <span class="n">fit_inp</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">_key</span> <span class="ow">in</span> <span class="n">subset</span><span class="p">:</span>
+        <span class="n">_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dfs</span><span class="p">[</span><span class="n">_key</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">_df</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="n">fit_inp</span> <span class="o">+=</span> <span class="n">_df</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">FEATURE_KEY</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+    <span class="n">fit_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">vectorizer</span><span class="p">(</span><span class="n">_inp</span><span class="p">)</span> <span class="k">for</span> <span class="n">_inp</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">fit_inp</span><span class="p">)])</span>
+
+    <span class="c1"># initialize and fit manifold learning reducer</span>
+    <span class="n">reducer</span> <span class="o">=</span> <span class="n">DimensionalityReducer</span><span class="p">(</span><span class="n">fit_arr</span><span class="p">)</span>
+    <span class="n">embedding</span> <span class="o">=</span> <span class="n">reducer</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="c1"># assign x and y coordinates to dataset</span>
+    <span class="n">start_idx</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">_key</span> <span class="ow">in</span> <span class="n">subset</span><span class="p">:</span>
+        <span class="n">_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dfs</span><span class="p">[</span><span class="n">_key</span><span class="p">]</span>
+        <span class="n">_length</span> <span class="o">=</span> <span class="n">_df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">_df</span><span class="p">[</span><span class="s2">"x"</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">embedding</span><span class="p">[</span><span class="n">start_idx</span> <span class="p">:</span> <span class="p">(</span><span class="n">start_idx</span> <span class="o">+</span> <span class="n">_length</span><span class="p">),</span> <span class="mi">0</span><span class="p">])</span>
+        <span class="n">_df</span><span class="p">[</span><span class="s2">"y"</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">embedding</span><span class="p">[</span><span class="n">start_idx</span> <span class="p">:</span> <span class="p">(</span><span class="n">start_idx</span> <span class="o">+</span> <span class="n">_length</span><span class="p">),</span> <span class="mi">1</span><span class="p">])</span>
+        <span class="n">start_idx</span> <span class="o">+=</span> <span class="n">_length</span>
+
+    <span class="k">return</span> <span class="n">reducer</span>
+</code></pre>
+</div>
+</details>
+</div>
+</div>
+<div class="doc doc-object doc-method">
+<h2 class="doc doc-heading" id="hover.core.dataset.SupervisableDataset.loader">
+
+        <code class="highlight language-python">
+loader<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">vectorizer</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">smoothing_coeff</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>        </code>
+
+
+      </h2>
+<div class="doc doc-contents ">
+<p>Prepare a Torch Dataloader for training or evaluation.</p>
+<ul>
+<li>param key(str): the subset of dataset to use.</li>
+<li>param vectorizer(callable): callable that turns a string into a vector.</li>
+<li>param smoothing_coeff: the smoothing coeffient for soft labels.</li>
+<li>type smoothing_coeff: float</li>
+</ul>
+<details class="quote">
+          <summary>Source code in <code>hover/core/dataset.py</code></summary>
+          <div class="highlight">
+<pre><span></span><code><span class="k">def</span> <span class="nf">loader</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">vectorizer</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">smoothing_coeff</span><span class="o">=</span><span class="mf">0.0</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    Prepare a Torch Dataloader for training or evaluation.</span>
+
+<span class="sd">    - param key(str): the subset of dataset to use.</span>
+<span class="sd">    - param vectorizer(callable): callable that turns a string into a vector.</span>
+<span class="sd">    - param smoothing_coeff: the smoothing coeffient for soft labels.</span>
+<span class="sd">      - type smoothing_coeff: float</span>
+<span class="sd">    """</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dfs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+    <span class="n">labels</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">"label"</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">label_encoder</span><span class="p">[</span><span class="n">x</span><span class="p">])</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+    <span class="n">features</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">FEATURE_KEY</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+    <span class="n">output_vectors</span> <span class="o">=</span> <span class="n">one_hot</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="n">num_classes</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">classes</span><span class="p">))</span>
+
+    <span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Preparing </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2"> input vectors..."</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s2">"blue"</span><span class="p">)</span>
+    <span class="n">input_vectors</span> <span class="o">=</span> <span class="p">[</span><span class="n">vectorizer</span><span class="p">(</span><span class="n">_f</span><span class="p">)</span> <span class="k">for</span> <span class="n">_f</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">features</span><span class="p">)]</span>
+    <span class="k">if</span> <span class="n">smoothing_coeff</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">:</span>
+        <span class="n">output_vectors</span> <span class="o">=</span> <span class="n">label_smoothing</span><span class="p">(</span>
+            <span class="n">output_vectors</span><span class="p">,</span> <span class="n">coefficient</span><span class="o">=</span><span class="n">smoothing_coeff</span>
+        <span class="p">)</span>
+    <span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Preparing </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2"> data loader..."</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s2">"blue"</span><span class="p">)</span>
+    <span class="n">loader</span> <span class="o">=</span> <span class="n">vector_dataloader</span><span class="p">(</span><span class="n">input_vectors</span><span class="p">,</span> <span class="n">output_vectors</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">)</span>
+    <span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">"Prepared </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2"> loader consisting of </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">features</span><span class="p">)</span><span class="si">}</span><span class="s2"> examples with batch size </span><span class="si">{</span><span class="n">batch_size</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
+        <span class="n">style</span><span class="o">=</span><span class="s2">"green"</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">loader</span>
+</code></pre>
+</div>
+</details>
+</div>
+</div>
+</div>
+</div>
+</div>
+</li>
+</ul>
+<h1 id="hovercoredatasetsupervisabletextdataset"><code>hover.core.dataset.SupervisableTextDataset</code></h1>
+<ul>
+<li>
+<div class="doc doc-object doc-class">
+<h2 class="hidden-toc" href="#hover.core.dataset.SupervisableTextDataset" id="hover.core.dataset.SupervisableTextDataset" style="visibility: hidden; position: absolute;">
+        </h2>
+<div class="doc doc-contents first">
+<p>Can add text-specific methods.</p>
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+</div>
+</div>
+</li>
+</ul>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
+        
+          <a href="../.." class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+            </div>
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                Home
+              </div>
+            </div>
+          </a>
+        
+        
+          <a href="../core-explorer/" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                hover.core.explorer
+              </div>
+            </div>
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../../assets/javascripts/vendor.7e0ee788.min.js"></script>
+      <script src="../../assets/javascripts/bundle.c1ccee15.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}</script>
+      
+      <script>
+        app = initialize({
+          base: "../..",
+          features: ['navigation.expand', 'toc.integrate', 'search.suggest'],
+          search: Object.assign({
+            worker: "../../assets/javascripts/worker/search.4ac00218.min.js"
+          }, typeof search !== "undefined" && search)
+        })
+      </script>
+      
+    
+  </body>
+</html>
