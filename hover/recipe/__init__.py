@@ -8,7 +8,6 @@ from hover.core.dataset import SupervisableTextDataset
 from hover.core.neural import create_vector_net_from_module, VectorNet
 from hover.core.explorer import BokehCorpusExplorer, BokehCorpusAnnotator
 from hover.utils.torch_helper import vector_dataloader, one_hot, label_smoothing
-from .subroutine import link_size_and_range, link_selection
 from wasabi import msg as logger
 from wrappy import todo
 
@@ -37,10 +36,8 @@ class VisualAnnotation:
         df_dict = {"raw": self.dataset.dfs["raw"]}
         self.corpus_explorer = BokehCorpusExplorer(df_dict, title="Corpus Explorer")
         self.corpus_annotator = BokehCorpusAnnotator(df_dict, title="Corpus Annotator")
-        link_size_and_range(self.corpus_explorer.figure, self.corpus_annotator.figure)
-        link_selection(
-            self.corpus_explorer.sources["raw"], self.corpus_annotator.sources["raw"]
-        )
+        self.corpus_explorer.link_xy_range(self.corpus_annotator)
+        self.corpus_explorer.link_selection("raw", self.corpus_annotator, "raw")
 
     @todo("Review this function")
     def flush(self, subset="train"):
