@@ -63,15 +63,13 @@ class BokehForLabeledText(ABC):
         self._setup_dfs(df_dict)
         self._setup_sources()
         self._activate_search_builtin()
+        self.figure = figure(**self.figure_kwargs)
         self.reset_figure()
 
     def reset_figure(self):
         """Start over on the figure."""
-        logger.info("Creating/resetting Figure")
-        if hasattr(self, "figure"):
-            self.figure.renderers.clear()
-        else:
-            self.figure = figure(**self.figure_kwargs)
+        logger.info("Initializing/resetting Figure")
+        self.figure.renderers.clear()
 
     def _setup_widgets(self):
         """
