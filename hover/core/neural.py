@@ -12,12 +12,9 @@ def create_vector_net_from_module(specific_class, model_module_name, labels):
     """
     Create a TextVectorNet model, or of its child class.
 
-    :param specific_class: TextVectorNet or its child class.
-    :type specific_class: class
-    :param model_module_name: path to a local Python module in the working directory whose __init__.py file contains a get_vectorizer() callable, get_architecture() callable, and a get_state_dict_path() callable.
-    :type model_module_name: str
-    :param labels: the classification labels, e.g. ["POSITIVE", "NEGATIVE"].
-    :type labels: list of str
+    - param specific_class(class): TextVectorNet or its child class.
+    - param model_module_name(str): path to a local Python module in the working directory whose __init__.py file contains a get_vectorizer() callable, get_architecture() callable, and a get_state_dict_path() callable.
+    - param labels(list of str): the classification labels, e.g. ["POSITIVE", "NEGATIVE"].
     """
     from importlib import import_module
 
@@ -38,20 +35,18 @@ class VectorNet(object):
 
     """
     Simple transfer learning model: a user-supplied vectorizer followed by a neural net.
+
     This is a parent class whose children may use different training schemes.
+
     Please refer to hover.utils.torch_helper.VectorDataset and vector_dataloader for more info.
     """
 
     def __init__(self, vectorizer, architecture, state_dict_path, labels):
         """
-        :param vectorizer: a function that converts any string to a NumPy 1-D array.
-        :type vectorizer: callable
-        :param architecture: a Torch.nn.Module child class to be instantiated into a neural net.
-        :type architecture: child class of Torch.nn.Module
-        :param state_dict_path: path to a PyTorch state dict that matches the architecture.
-        :type state_dict_path: str
-        :param labels: the classification labels, e.g. ["POSITIVE", "NEGATIVE"].
-        :type labels: list of str
+        - param vectorizer(callable): a function that converts any string to a NumPy 1-D array.
+        - param architecture(class): a `torch.nn.Module` child class to be instantiated into a neural net.
+        - param state_dict_path(str): path to a PyTorch state dict that matches the architecture.
+        - param labels(list of str): the classification labels, e.g. ["POSITIVE", "NEGATIVE"].
         """
 
         # set up label conversion
@@ -94,7 +89,8 @@ class VectorNet(object):
     def adjust_optimizer_params(self):
         """
         Dynamically change parameters of the neural net optimizer.
-        Intended to be polymorphic in child classes and to be called per epoch.
+
+        - Intended to be polymorphic in child classes and to be called per epoch.
         """
         for _group in self.nn_optimizer.param_groups:
             _group.update(self._dynamic_params["optimizer"])
@@ -124,13 +120,13 @@ class VectorNet(object):
         """
         TODO: need a clean way to pass kwargs to dimensionality reduction.
 
-        (1) vectorize inps
-        (2) forward propagate, keeping intermediates
-        (3) fit intermediates to 2D manifolds
-        (4) fit manifolds using Procrustes shape analysis
-        (5) fit shapes to trajectory splines
-        :param inps: input to calculate the manifold profile from.
-        :type inps: list
+        1. vectorize inps
+        2. forward propagate, keeping intermediates
+        3. fit intermediates to 2D manifolds
+        4. fit manifolds using Procrustes shape analysis
+        5. fit shapes to trajectory splines
+
+        - param inps(list): input to calculate the manifold profile from.
         """
         from hover.core.representation.manifold import LayerwiseManifold
         from hover.core.representation.trajectory import manifold_spline
@@ -187,8 +183,9 @@ class VectorNet(object):
     def train(self, train_loader, dev_loader=None, epochs=1, verbose=1):
         """
         Train the neural network.
-        This method is a vanilla template and is intended to be overridden in child classes.
-        Also intended to be coupled with self.train_batch().
+
+        - This method is a vanilla template and is intended to be overridden in child classes.
+        - Also intended to be coupled with self.train_batch().
         """
         train_info = []
         for epoch_idx in range(epochs):
@@ -202,7 +199,8 @@ class VectorNet(object):
     def train_epoch(self, train_loader, *args, **kwargs):
         """
         Train the neural network for one epoch.
-        Supports flexible args and kwargs for child classes that may implement self.train() and self.train_batch() differently.
+
+        - Supports flexible args and kwargs for child classes that may implement self.train() and self.train_batch() differently.
         """
         self.adjust_optimizer_params()
         for batch_idx, (loaded_input, loaded_output, _) in enumerate(train_loader):

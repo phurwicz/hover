@@ -522,10 +522,10 @@ class BokehSnorkelExplorer(BokehCorpusExplorer):
         """
         Plot a single labeling function.
 
-        :param lf: labeling function decorated by @hover.utils.snorkel_helper.labeling_function()
-        :param L_raw: labeling function predictions, in decoded labels, on the raw df.
-        :param L_labeled: labeling function predictions, in decoded labels, on the labeled df.
-        :param include: subsets to show, which can be correct(C)/incorrect(I)/missed(M)/hit(H).
+        - param lf: labeling function decorated by @hover.utils.snorkel_helper.labeling_function()
+        - param L_raw: labeling function predictions, in decoded labels, on the raw df.
+        - param L_labeled: labeling function predictions, in decoded labels, on the labeled df.
+        - param include: subsets to show, which can be correct(C)/incorrect(I)/missed(M)/hit(H).
         """
         # keep track of added LF
         self.lfs.append(lf)
