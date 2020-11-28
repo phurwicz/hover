@@ -33,7 +33,7 @@ def distance_preserving_array_sequence(example_array):
 @pytest.fixture(scope="module")
 def diagonal_multiplication_array_sequence(example_array):
     A = example_array
-    R = np.diag(np.random.rand(dim))
+    M = np.diag(np.random.rand(A.shape[-1]))
     B = A @ M
 
     return [A, B]
@@ -42,7 +42,8 @@ def diagonal_multiplication_array_sequence(example_array):
 @pytest.fixture(scope="module")
 def random_multiplication_array_sequence(example_array):
     A = example_array
-    R = np.random.rand(dim, np.random.randint(dim // 2, dim))
+    ref_dim = A.shape[-1]
+    M = np.random.rand(ref_dim, np.random.randint(ref_dim // 2, ref_dim))
     B = A @ M
 
     return [A, B]
