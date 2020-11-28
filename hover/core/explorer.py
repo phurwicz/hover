@@ -89,17 +89,17 @@ class BokehForLabeledText(ABC):
             title="Text does not contain:", width_policy="fit", height_policy="fit"
         )
 
-    def layout_widgets(self):
+    def _layout_widgets(self):
         """Define the layout of widgets."""
         return column(self.search_pos, self.search_neg)
 
     def view(self):
         """Define the layout of the whole explorer."""
-        return column(self.layout_widgets(), self.figure)
+        return column(self._layout_widgets(), self.figure)
 
-    def _setup_dfs(self, df_dict):
+    def _setup_dfs(self, df_dict, copy=False):
         """
-        Check and store DataFrames.
+        Check and store DataFrames BY REFERENCE BY DEFAULT.
 
         Intended to be extended in child classes for pre/post processing.
         """
@@ -109,7 +109,9 @@ class BokehForLabeledText(ABC):
             set(df_dict.keys()) == expected_keys
         ), f"Expected the keys of df_dict to be exactly {expected_keys}"
 
-        self.dfs = {_key: _df.copy() for _key, _df in df_dict.items()}
+        self.dfs = {
+            _key: (_df.copy() if copy else _df) for _key, _df in df_dict.items()
+        }
 
     def _setup_sources(self):
         """
@@ -119,6 +121,17 @@ class BokehForLabeledText(ABC):
         """
         logger.info("Setting up sources")
         self.sources = {_key: ColumnDataSource(_df) for _key, _df in self.dfs.items()}
+
+    def _update_sources(self):
+        """
+        Update the sources with the corresponding dfs.
+
+        Note that it seems mandatory to re-activate the search widgets.
+        This is because the source loses plotting kwargs.
+        """
+        for _key in self.__class__.DATA_KEY_TO_KWARGS.keys():
+            self.sources[_key].data = self.dfs[_key]
+        self._activate_search_builtin()
 
     def _activate_search_builtin(self):
         """
@@ -303,12 +316,7 @@ class BokehCorpusAnnotator(BokehCorpusExplorer):
         if not "label" in self.dfs["raw"].columns:
             self.dfs["raw"]["label"] = module_config.ABSTAIN_DECODED
 
-    def update_source(self):
-        """Note that it seems required to re-activate the search widgets."""
-        self.sources["raw"].data = self.dfs["raw"]
-        self._activate_search_builtin()
-
-    def layout_widgets(self):
+    def _layout_widgets(self):
         """Define the layout of widgets."""
         first_row = row(self.search_pos, self.search_neg)
         second_row = row(
@@ -355,7 +363,7 @@ class BokehCorpusAnnotator(BokehCorpusExplorer):
             example_new = self.dfs["raw"].at[selected_idx[0], "label"]
             logger.good(f"Updated DataFrame, e.g. {example_old} -> {example_new}")
 
-            self.update_source()
+            self._update_sources()
             self.plot()
             logger.good(f"Updated annotator plot at {current_time()}")
 
