@@ -12,7 +12,7 @@
 
 -   [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/phurwicz/hover-binder/master?urlpath=/proxy/5006/app-simple-annotator) :seedling: annotate an intuitively selected group of data points at a time
 -   [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/phurwicz/hover-binder/master?urlpath=/proxy/5006/app-snorkel-annotator) :whale: cross-check with Snorkel-based distant supervision
--   [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/phurwicz/hover-binder/master?urlpath=/proxy/5006/app-active-annotator) :ferris_wheel: **UPCOMING** throw a model in the loop and exploit all kinds of active learning
+-   [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/phurwicz/hover-binder/master?urlpath=/proxy/5006/app-active-annotator) :ferris_wheel: **UPCOMING** throw a model in the loop and take advantage of active learning
 
 Check out [@phurwicz/hover-binder](https://github.com/phurwicz/hover-binder) for a complete list of demo apps.
 
@@ -22,7 +22,7 @@ Here we attempt a quick comparison with a few other packages that do machine tea
 
 Package        | `Hover`                               | `Prodigy`                               | `Snorkel`
 -------------- | ------------------------------------- | --------------------------------------- | -------------------------
-No.1 feature   | supervise like painting a picture     | scriptable active learning              | programmatic distant supervision
+Core idea      | supervise like painting a picture     | scriptable active learning              | programmatic distant supervision
 Annotates per  | batch of just the size you find right | piece predicted to be the most valuable | the whole dataset as long as it fits in
 Supports       | all classification (text only atm)    | text & images, audio, vidio, & more     | text classification (for the most part)
 Status         | open-source                           | proprietary                             | open-source
