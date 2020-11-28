@@ -234,6 +234,35 @@ class BokehForLabeledText(ABC):
         self.search_neg.js_on_change("value", search_callback)
         return updated_kwargs
 
+    def _prelink_check(self, other):
+        """
+        Sanity check before linking two explorers.
+        """
+        assert other is not self, "Self-loops are fordidden"
+        assert isinstance(other, BokehForLabeledText), "Must link to BokehForLabelText"
+
+    def link_selection(self, key, other, other_key):
+        """
+        Sync the selected indices between specified sources.
+        """
+        self._prelink_check(other)
+        # link selection in a bidirectional manner
+        sl, sr = self.sources[key], other.sources[other_key]
+        sl.selected.js_link("indices", sl.selected, "indices")
+        sr.selected.js_link("indices", sr.selected, "indices")
+
+    def link_xy_range(self, other):
+        """
+        Sync plotting ranges on the xy-plane.
+        """
+        self._prelink_check(other)
+        # link coordinate ranges in a bidirectional manner
+        for _attr in ["start", "end"]:
+            self.figure.x_range.js_link(_attr, other.figure.x_range, _attr)
+            self.figure.y_range.js_link(_attr, other.figure.y_range, _attr)
+            other.figure.x_range.js_link(_attr, self.figure.x_range, _attr)
+            other.figure.y_range.js_link(_attr, self.figure.y_range, _attr)
+
     @abstractmethod
     def plot(self, *args, **kwargs):
         """
