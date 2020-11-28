@@ -22,7 +22,7 @@ Here we attempt a quick comparison with a few other packages that do machine tea
 
 Package        | `Hover`                               | `Prodigy`                               | `Snorkel`
 -------------- | ------------------------------------- | --------------------------------------- | -------------------------
-No.1 feature   | best deal of scale vs. precision      | scriptable active learning              | programmatic distant supervision
+No.1 feature   | supervise like painting a picture     | scriptable active learning              | programmatic distant supervision
 Annotates per  | batch of just the size you find right | piece predicted to be the most valuable | the whole dataset as long as it fits in
 Supports       | all classification (text only atm)    | text & images, audio, vidio, & more     | text classification (for the most part)
 Status         | open-source                           | proprietary                             | open-source
@@ -34,11 +34,11 @@ Hardcore usage | exploit `hover.core` templates        | custom @prodigy.recipe 
 
 `Hover` claims the best deal of scale vs. precision thanks to
 
--   its flexibility to use, or not use, any technique beyond annotating on an explorer "canvas";
+-   the flexibility to use, or not use, any technique beyond annotating on a "map";
 
 -   the speed, or coarseness, of annotation being *literally at your fingertips*;
 
--   informative interaction with the person working with it.
+-   the interaction between multiple "maps" that each serves a different but connected purpose.
 
 ## Installation
 
