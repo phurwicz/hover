@@ -296,13 +296,13 @@ class BokehCorpusExplorer(BokehForLabeledText):
         """
         super().__init__(df_dict, **kwargs)
 
-    def _setup_dfs(self, df_dict):
+    def _setup_dfs(self, df_dict, **kwargs):
         """Extending from the parent method."""
         for _key in self.__class__.DATA_KEY_TO_KWARGS.keys():
             for _col in ["text", "x", "y"]:
                 assert _col in df_dict[_key].columns
 
-        super()._setup_dfs(df_dict)
+        super()._setup_dfs(df_dict, **kwargs)
 
     def plot(self, *args, **kwargs):
         """
@@ -334,13 +334,13 @@ class BokehCorpusAnnotator(BokehCorpusExplorer):
         """Conceptually the same as the parent method."""
         super().__init__(df_dict, **kwargs)
 
-    def _setup_dfs(self, df_dict):
+    def _setup_dfs(self, df_dict, **kwargs):
         """
         Extending from the parent method.
 
         Add a "label" column if it is not present.
         """
-        super()._setup_dfs(df_dict)
+        super()._setup_dfs(df_dict, **kwargs)
 
         if not "label" in self.dfs["raw"].columns:
             self.dfs["raw"]["label"] = module_config.ABSTAIN_DECODED
@@ -462,12 +462,12 @@ class BokehMarginExplorer(BokehCorpusExplorer):
         self.label_col_b = label_col_b
         super().__init__(df_dict, **kwargs)
 
-    def _setup_dfs(self, df_dict):
+    def _setup_dfs(self, df_dict, **kwargs):
         """Extending from the parent method."""
         for _key in [self.label_col_a, self.label_col_b]:
             assert _key in df_dict["raw"].columns
 
-        super()._setup_dfs(df_dict)
+        super()._setup_dfs(df_dict, **kwargs)
 
     def plot(self, label, **kwargs):
         """
@@ -543,9 +543,9 @@ class BokehSnorkelExplorer(BokehCorpusExplorer):
         self.lfs = []
         self.palette = Category20[20]
 
-    def _setup_dfs(self, df_dict):
+    def _setup_dfs(self, df_dict, **kwargs):
         """Extending from the parent method."""
-        super()._setup_dfs(df_dict)
+        super()._setup_dfs(df_dict, **kwargs)
 
         assert "label" in self.dfs["labeled"].columns
         if not "label" in self.dfs["raw"].columns:

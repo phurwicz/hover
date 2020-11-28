@@ -10,7 +10,6 @@ from hover.core.explorer import (
 )
 from hover.utils.snorkel_helper import labeling_function
 import pytest
-import pandas as pd
 import random
 
 PSEUDO_LABELS = ["A", "B"]
@@ -36,11 +35,6 @@ def example_dev_df(generate_text_df_with_coords):
     df = generate_text_df_with_coords(100)
     df["label"] = df.apply(RANDOM_LABEL, axis=1)
     return df
-
-
-@pytest.fixture
-def corpus_explorer():
-    explorer = BokehCorpusExplorer({"raw": EXAMPLE_RAW_DF})
 
 
 @pytest.mark.core
