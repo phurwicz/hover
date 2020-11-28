@@ -8,66 +8,81 @@ from hover.core.explorer import (
     BokehMarginExplorer,
     BokehSnorkelExplorer,
 )
+from hover.utils.snorkel_helper import labeling_function
 import pytest
 import pandas as pd
-import faker
 import random
 
-fake_en = faker.Faker("en")
+PSEUDO_LABELS = ["A", "B"]
+RANDOM_LABEL = lambda x: random.choice(PSEUDO_LABELS)
+RANDOM_LABEL_LF = labeling_function(targets=PSEUDO_LABELS)(RANDOM_LABEL)
 
-EXAMPLE_RAW_DF = pd.DataFrame(
-    [
-        {
-            "text": fake_en.paragraph(3),
-            "x": random.uniform(-1.0, 1.0),
-            "y": random.uniform(-1.0, 1.0),
-        }
-        for i in range(300)
-    ]
-)
 
-EXAMPLE_MARGIN_DF = EXAMPLE_RAW_DF.copy()
-EXAMPLE_MARGIN_DF["label_1"] = EXAMPLE_MARGIN_DF["text"].apply(
-    lambda x: random.choice(["A", "B"])
-)
-EXAMPLE_MARGIN_DF["label_2"] = EXAMPLE_MARGIN_DF["text"].apply(
-    lambda x: random.choice(["A", "B"])
-)
+@pytest.fixture
+def example_raw_df(generate_text_df_with_coords):
+    return generate_text_df_with_coords(300)
 
-EXAMPLE_DEV_DF = pd.DataFrame(
-    [
-        {
-            "text": fake_en.paragraph(3),
-            "x": random.uniform(-1.0, 1.0),
-            "y": random.uniform(-1.0, 1.0),
-            "label": random.choice(["A", "B"]),
-        }
-        for i in range(100)
-    ]
-)
+
+@pytest.fixture
+def example_margin_df(example_raw_df):
+    df = example_raw_df.copy()
+    df["label_1"] = df.apply(RANDOM_LABEL, axis=1)
+    df["label_2"] = df.apply(RANDOM_LABEL, axis=1)
+    return df
+
+
+@pytest.fixture
+def example_dev_df(generate_text_df_with_coords):
+    df = generate_text_df_with_coords(100)
+    df["label"] = df.apply(RANDOM_LABEL, axis=1)
+    return df
+
+
+@pytest.fixture
+def corpus_explorer():
+    explorer = BokehCorpusExplorer({"raw": EXAMPLE_RAW_DF})
 
 
 @pytest.mark.core
 class TestBokehCorpusExplorer:
     @staticmethod
-    def test_init():
-        explorer = BokehCorpusExplorer({"raw": EXAMPLE_RAW_DF})
+    def test_comprehensive(example_raw_df):
+        """
+        Some methods are the same across child classes.
+
+        Test as many of those as possible here.
+        """
+        explorer = BokehCorpusExplorer({"raw": example_raw_df})
+        other = BokehCorpusAnnotator({"raw": example_raw_df})
+
+        explorer.reset_figure()
+        assert len(explorer.figure.renderers) == 0
+
+        explorer.plot()
+        assert len(explorer.figure.renderers) == 1
+
+        explorer._update_sources()
+
+        explorer.link_selection("raw", other, "raw")
+        explorer.link_xy_range(other)
+
         _ = explorer.view()
 
 
 @pytest.mark.core
 class TestBokehCorpusAnnotator:
     @staticmethod
-    def test_init():
-        explorer = BokehCorpusAnnotator({"raw": EXAMPLE_RAW_DF})
+    def test_init(example_raw_df):
+        explorer = BokehCorpusAnnotator({"raw": example_raw_df})
+        explorer.plot()
         _ = explorer.view()
 
 
 @pytest.mark.core
 class TestBokehMarginExplorer:
     @staticmethod
-    def test_init():
-        explorer = BokehMarginExplorer({"raw": EXAMPLE_MARGIN_DF}, "label_1", "label_2")
+    def test_init(example_raw_df):
+        explorer = BokehMarginExplorer({"raw": example_margin_df}, "label_1", "label_2")
         explorer.plot("A")
         explorer.plot("B")
         _ = explorer.view()
@@ -76,8 +91,10 @@ class TestBokehMarginExplorer:
 @pytest.mark.core
 class TestBokehSnorkelExplorer:
     @staticmethod
-    def test_init():
+    def test_init(example_raw_df, example_dev_df):
         explorer = BokehSnorkelExplorer(
-            {"raw": EXAMPLE_RAW_DF, "labeled": EXAMPLE_DEV_DF}
+            {"raw": example_raw_df, "labeled": example_dev_df}
         )
+        explorer.plot()
+        explorer.plot_lf(RANDOM_LABEL_LF, include=("C", "I", "M", "H"))
         _ = explorer.view()

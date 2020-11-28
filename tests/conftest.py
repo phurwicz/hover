@@ -1,11 +1,14 @@
 import pytest
 import random
 import spacy
+import faker
 import re
 import pandas as pd
 from hover.utils.datasets import newsgroups_dictl
 from hover.core.dataset import SupervisableTextDataset
 from copy import deepcopy
+
+fake_en = faker.Faker("en")
 
 
 @pytest.fixture(scope="module")
@@ -26,6 +29,24 @@ def dummy_vectorizer(spacy_en_md):
     assert trial_vector.shape == (300,)
 
     return vectorizer
+
+
+@pytest.fixture(scope="module")
+def generate_text_df_with_coords():
+    def random_text_df_with_coords(size=300):
+        df = pd.DataFrame(
+            [
+                {
+                    "text": fake_en.paragraph(3),
+                    "x": random.uniform(-1.0, 1.0),
+                    "y": random.uniform(-1.0, 1.0),
+                }
+                for i in range(300)
+            ]
+        )
+        return df
+
+    return random_text_df_with_coords
 
 
 @pytest.fixture(scope="module")
