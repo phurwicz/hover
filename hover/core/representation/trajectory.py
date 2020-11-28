@@ -8,13 +8,18 @@ import numpy as np
 def spline(arr_per_dim, points_per_step=1, splprep_kwargs=None):
     """
     Fit a spline and evaluate it at a specified density of points.
-    :param arr_per_dim: arrays representing the part of the curve in each dimension.
-    :type arr_per_dim: (list of) numpy.array
-    :param points_per_step: number of points interpolated in between each given point on the curve.
-    :type points_per_step: int
-    :param splprep_kwargs: keyword arguments to the splprep() function for fitting the spline in SciPy.
-    :type splprep_kwargs: dict
+
+    - param arr_per_dim(numpy.ndarray): dim-by-points array representing the part of the curve in each dimension.
+
+    - param points_per_step(int): number of points interpolated in between each given point on the curve.
+
+    - param splprep_kwargs(dict): keyword arguments to the splprep() function for fitting the spline in SciPy.
     """
+
+    # cast to array if appropriate
+    if isinstance(arr_per_dim, list):
+        arr_per_dim = np.array(arr_per_dim)
+
     assert points_per_step >= 1, "Need at least one point per step"
     splprep_kwargs = splprep_kwargs or dict()
 
@@ -50,7 +55,7 @@ def spline(arr_per_dim, points_per_step=1, splprep_kwargs=None):
 def manifold_spline(seq_arr, **kwargs):
     """
     Fit a spline to every sequence of points in a manifold.
-    :param seq_arr: L-sequence of M-by-N arrays each containing vectors matched by index.
+    - param seq_arr: L-sequence of M-by-N arrays each containing vectors matched by index.
     :type seq_arr: numpy.ndarray
     """
     # L is unused
