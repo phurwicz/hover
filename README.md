@@ -8,13 +8,37 @@
 
 ----
 
-`Hover` is a machine learning **dev-time-helper** library that enables smooth and effective supervision. In other words, it's an interface where you _hover_ over and label your data.. differently. For instance, you can:
+`Hover` is a **machine teaching** library that enables smooth and effective supervision. In other words, it's an interface where you _hover_ over and label your data.. differently. For instance, you can:
 
 -   :seedling: annotate an intuitively selected group of data points at a time [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/phurwicz/hover-binder/master?urlpath=/proxy/5006/app-simple-annotator) [Source](https://github.com/phurwicz/hover-binder/app-simple-annotator/main.py)
 -   :ferris_wheel: **UPCOMING** throw a model in the loop and exploit all kinds of active learning [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/phurwicz/hover-binder/master?urlpath=/proxy/5006/app-active-learning) [Source](https://github.com/phurwicz/hover-binder/app-active-learning/main.py)
 -   :whale: **UPCOMING** cross-check with Snorkel-based distant supervision [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/phurwicz/hover-binder/master?urlpath=/proxy/5006/app-snorkel-explorer) [Source](https://github.com/phurwicz/hover-binder/app-snorkel-explorer/main.py)
 
 Check out [@phurwicz/hover-binder](https://github.com/phurwicz/hover-binder) for a complete list of demo apps.
+
+## Features
+
+Here we attempt a quick comparison with a few other packages that do machine teaching:
+
+Package        | `Hover`                               | `Prodigy`                               | `Snorkel` (not `Snorkel Flow`)
+-------------- | ------------------------------------- | --------------------------------------- | -------------------------
+No.1 feature   | best deal of scale vs. precision      | scriptable active learning              | programmatic distant supervision
+Annotates per  | batch of just the size you find right | piece predicted to be the most valuable | the whole dataset as long as it fits in
+Supports       | all classification (text only atm)    | text & images, audio, vidio, & more     | text classification (for the most part)
+Status         | open-source                           | proprietary                             | open-source
+Devs           | indie                                 | Explosion AI                            | Snorkel AI
+Related        | lots of thanks to the awesome `Bokeh` | builds on the `Thinc`/`SpaCy` stack     | `Snorkel Flow`, `MeTaL`, `DeepDive`
+Vanilla usage  | define a vectorizer and annotate away | choose a base model and annotate away   | define labeling functions and apply away
+Advanced usage | combine w/ active learning & snorkel  | patterns / transformers / custom models | transforming / slicing functions
+Hardcore usage | exploit `hover.core` templates        | custom @prodigy.recipe                  | The Snorkel Project
+
+`Hover` claims the best deal of scale vs. precision thanks to
+
+-   its flexibility to use, or not use, any technique beyond annotating on an explorer "canvas";
+
+-   the speed, or coarseness, of annotation being literally at your fingertips;
+
+-   informative interaction with the person working with it.
 
 ## Installation
 
@@ -32,5 +56,6 @@ Installation through `conda` is not yet supported.
 
 ## Developer
 
--   `./requirements.txt` lists the installation requirements.
--   `./requirements-dev.txt` is for developers.
+-   `./requirements.txt` lists the dependencies for installation.
+-   `./requirements-test.txt` lists additional dependencies for the test suite.
+-   `./requirements-dev.txt` lists the packages for developers.
