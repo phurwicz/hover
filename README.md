@@ -1,6 +1,8 @@
 # Hover
 
-### Imagine painting a picture layer by layer, not pixel by pixel. That has come to machine teaching.
+#### Imagine editing a picture layer by layer, not pixel by pixel, nor by splashing paint.
+
+#### That has come to machine teaching.
 
 [![PyPI Stage](https://img.shields.io/pypi/status/hover?style=for-the-badge)](https://pypi.org)
 [![PyPI Version](https://img.shields.io/pypi/v/hover?style=for-the-badge)](https://pypi.org)
@@ -26,7 +28,7 @@ Here we attempt a quick comparison with a few other packages that do machine tea
 
 Package        | `Hover`                               | `Prodigy`                               | `Snorkel`
 -------------- | ------------------------------------- | --------------------------------------- | -------------------------
-Core idea      | supervise like painting a picture     | scriptable active learning              | programmatic distant supervision
+Core idea      | supervise like editing a picture      | scriptable active learning              | programmatic distant supervision
 Annotates per  | batch of just the size you find right | piece predicted to be the most valuable | the whole dataset as long as it fits in
 Supports       | all classification (text only atm)    | text & images, audio, vidio, & more     | text classification (for the most part)
 Status         | open-source                           | proprietary                             | open-source
