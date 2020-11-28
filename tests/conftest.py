@@ -51,7 +51,7 @@ def generate_text_df_with_coords():
 
 @pytest.fixture(scope="module")
 def mini_df_text():
-    my_20ng, _, _ = newsgroups_dictl()
+    my_20ng, _, _ = newsgroups_reduced_dictl()
 
     mini_dictl = random.sample(my_20ng["train"], k=1000)
     mini_df = pd.DataFrame(mini_dictl)

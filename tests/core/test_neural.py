@@ -39,13 +39,14 @@ class TestVectorNet(object):
 
     @staticmethod
     def test_manifold_trajectory(example_vecnet, mini_df_text):
-        traj_arr, seq_arr, disparities = example_vecnet.manifold_trajectory(
-            mini_df_text["text"].tolist()
-        )
-        assert isinstance(traj_arr, np.ndarray)
-        assert isinstance(seq_arr, np.ndarray)
-        assert isinstance(disparities, list)
-        assert isinstance(disparities[0], float)
+        for _method in ["umap", "ivis"]:
+            traj_arr, seq_arr, disparities = example_vecnet.manifold_trajectory(
+                mini_df_text["text"].tolist()
+            )
+            assert isinstance(traj_arr, np.ndarray)
+            assert isinstance(seq_arr, np.ndarray)
+            assert isinstance(disparities, list)
+            assert isinstance(disparities[0], float)
 
     @staticmethod
     def test_train_and_evaluate(example_vecnet, mini_supervisable_text_dataset):
