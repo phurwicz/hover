@@ -17,6 +17,7 @@ setuptools.setup(
     url="https://github.com/phurwicz/hover",
     packages=setuptools.find_packages(),
     install_requires=deps,
+    python_requires=">=3.6, <3.9",
     classifiers=[
         "Programming Language :: Python :: 3",
         "Development Status :: 4 - Beta",
