@@ -1,5 +1,7 @@
 # Hover
 
+### Imagine painting a picture layer by layer, not pixel by pixel. That has come to machine teaching.
+
 [![PyPI Stage](https://img.shields.io/pypi/status/hover?style=for-the-badge)](https://pypi.org)
 [![PyPI Version](https://img.shields.io/pypi/v/hover?style=for-the-badge)](https://pypi.org)
 [![Travis CI](https://img.shields.io/travis/com/phurwicz/hover/main?style=for-the-badge)](https://travis-ci.com)
