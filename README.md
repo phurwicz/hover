@@ -1,8 +1,8 @@
 # Hover
 
-#### Imagine editing a picture layer by layer, not pixel by pixel, nor by splashing paint.
+> Imagine editing a picture layer by layer, not pixel by pixel, nor by splashing paint.
 
-#### That has come to machine teaching.
+> That has come to machine teaching.
 
 [![PyPI Stage](https://img.shields.io/pypi/status/hover?style=for-the-badge)](https://pypi.org)
 [![PyPI Version](https://img.shields.io/pypi/v/hover?style=for-the-badge)](https://pypi.org)
@@ -43,6 +43,22 @@ Hardcore usage | exploit `hover.core` templates        | custom @prodigy.recipe 
 -   the flexibility to use, or not use, any technique beyond annotating on a "map";
 -   the speed, or coarseness, of annotation being _literally at your fingertips_;
 -   the interaction between multiple "maps" that each serves a different but connected purpose.
+
+## Quick Start
+
+```python
+from hover.core.explorer import BokehCorpusAnnotator
+from bokeh.io import curdoc
+
+# df is a pandas dataframe with 2D embedding
+# which hover can help you compute
+
+annotator = BokehCorpusAnnotator({"raw": df})
+annotator.plot()
+
+curdoc().add_root(annotator.view())
+curdoc().title = "Simple-Annotator"
+```
 
 ## Installation
 
