@@ -35,9 +35,7 @@ Hardcore usage | exploit `hover.core` templates        | custom @prodigy.recipe 
 `Hover` claims the best deal of scale vs. precision thanks to
 
 -   the flexibility to use, or not use, any technique beyond annotating on a "map";
-
--   the speed, or coarseness, of annotation being *literally at your fingertips*;
-
+-   the speed, or coarseness, of annotation being _literally at your fingertips_;
 -   the interaction between multiple "maps" that each serves a different but connected purpose.
 
 ## Installation
