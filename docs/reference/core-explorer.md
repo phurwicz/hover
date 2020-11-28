@@ -5,7 +5,11 @@
       members:
         - __init__
         - reset_figure
+        - _setup_sources
+        - _update_sources
         - activate_search
+        - link_selection
+        - link_xy_range
 
 # `hover.core.explorer.BokehCorpusExplorer`
 
