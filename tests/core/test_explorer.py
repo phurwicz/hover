@@ -69,10 +69,13 @@ class TestBokehCorpusExplorer:
 @pytest.mark.core
 class TestBokehCorpusAnnotator:
     @staticmethod
-    def test_init(example_raw_df):
+    def test_annotation(example_raw_df):
         explorer = BokehCorpusAnnotator({"raw": example_raw_df})
         explorer.plot()
         _ = explorer.view()
+
+        explorer._callback_apply()
+        explorer._callback_export()
 
 
 @pytest.mark.core

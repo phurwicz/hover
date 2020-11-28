@@ -358,7 +358,6 @@ class BokehCorpusAnnotator(BokehCorpusExplorer):
         Create annotator widgets and assign Python callbacks.
         """
         from bokeh.models import TextInput, Button
-        from bokeh.events import ButtonClick
 
         super()._setup_widgets()
 
@@ -376,7 +375,7 @@ class BokehCorpusAnnotator(BokehCorpusExplorer):
             width_policy="min",
         )
 
-        def apply():
+        def callback_apply():
             """
             A callback on clicking the 'self.annotator_apply' button.
 
@@ -396,23 +395,32 @@ class BokehCorpusAnnotator(BokehCorpusExplorer):
             self.plot()
             logger.good(f"Updated annotator plot at {current_time()}")
 
-        def export():
+        def callback_export(path=None):
             """
             A callback on clicking the 'self.annotator_export' button.
 
             Saves the dataframe to a pickle.
             """
             from dill import dump
-            from datetime import datetime
 
-            timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
-            filename = f"bokeh-annotated-df-{timestamp}.pkl"
-            with open(filename, "wb") as f:
+            # auto-determine the export path
+            if path is None:
+                timestamp = current_time("%Y%m%d%H%M%S")
+                path = f".bokeh-annotated-df-{timestamp}.pkl"
+
+            # save a pickle, then send a message
+            # note that excel/csv can be problematic with certain kinds of data
+            with open(path, "wb") as f:
                 dump(self.dfs["raw"], f)
-            logger.good(f"Saved DataFrame to {filename}")
+            logger.good(f"Saved DataFrame to {path}")
 
-        self.annotator_apply.on_event(ButtonClick, apply)
-        self.annotator_export.on_event(ButtonClick, export)
+        # keep the references to the callbacks
+        self._callback_apply = callback_apply
+        self._callback_export = callback_export
+
+        # assign callbacks
+        self.annotator_apply.on_click(self._callback_apply)
+        self.annotator_export.on_click(self._callback_export)
 
     def plot(self):
         """
