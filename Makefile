@@ -14,7 +14,4 @@ publish:
 	@echo "Done."
 coverage:
 	@coverage run --source=$(TEST_MODULE_PATH) -m pytest
-coverage-report:
 	@coverage xml -o cobertura.xml
-	@curl https://coverage.codacy.com/get.sh -o get.sh
-	@bash get.sh report
