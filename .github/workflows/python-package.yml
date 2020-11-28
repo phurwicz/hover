@@ -28,6 +28,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
         pip install -r requirements-test.txt
+        python -m spacy download en_core_web_md
     - name: Test and send coverage report
       run: |
         make coverage
