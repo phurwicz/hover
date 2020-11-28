@@ -68,27 +68,27 @@ class VisualAnnotation:
         return [self.corpus_explorer, self.corpus_annotator]
 
 
-class TBD:
-    """
-    """
-
-    @todo(
-        "Think about what belongs in this class and what belongs in the core modules."
-    )
-    def __init__(self, dataset, vectorizer=None, model_module_name=None):
-        """
-        """
-        assert isinstance(dataset, SupervisableDataset)
-        self.dataset = dataset
-        self.model_module_name = model_module_name
-
-    def model_from_dev(self, **kwargs):
-        """
-        Train a Prodigy-compatible model from the dev set.
-        """
-        model = create_vector_net_from_module(
-            VectorNet, self.model_module_name, self.dataset.classes
-        )
-        dev_loader = self.get_loader("dev", model.vectorizer, smoothing_coeff=0.1)
-        train_info = model.train(dev_loader, dev_loader, **kwargs)
-        return model, train_info
+# class TBD:
+#    """
+#    """
+#
+#    @todo(
+#        "Think about what belongs in this class and what belongs in the core modules."
+#    )
+#    def __init__(self, dataset, vectorizer=None, model_module_name=None):
+#        """
+#        """
+#        assert isinstance(dataset, SupervisableDataset)
+#        self.dataset = dataset
+#        self.model_module_name = model_module_name
+#
+#    def model_from_dev(self, **kwargs):
+#        """
+#        Train a Prodigy-compatible model from the dev set.
+#        """
+#        model = create_vector_net_from_module(
+#            VectorNet, self.model_module_name, self.dataset.classes
+#        )
+#        dev_loader = self.get_loader("dev", model.vectorizer, smoothing_coeff=0.1)
+#        train_info = model.train(dev_loader, dev_loader, **kwargs)
+#        return model, train_info
