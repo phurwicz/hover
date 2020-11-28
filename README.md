@@ -46,7 +46,11 @@ Hardcore usage | exploit `hover.core` templates        | custom @prodigy.recipe 
 
 ## Quick Start
 
+`Hover` uses [`bokeh`](https://bokeh.org) to build its annotation interface:
+
 ```python
+# app-annotator.py
+
 from hover.core.explorer import BokehCorpusAnnotator
 from bokeh.io import curdoc
 
@@ -59,6 +63,12 @@ annotator.plot()
 curdoc().add_root(annotator.view())
 curdoc().title = "Simple-Annotator"
 ```
+
+```bash
+bokeh serve app-annotator.py
+```
+
+The most exciting features of `Hover` employ lots of Python callbacks, for which [`bokeh serve`](https://docs.bokeh.org/en/latest/docs/user_guide/server.html) comes into play.
 
 ## Installation
 
