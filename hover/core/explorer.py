@@ -248,8 +248,8 @@ class BokehForLabeledText(ABC):
         self._prelink_check(other)
         # link selection in a bidirectional manner
         sl, sr = self.sources[key], other.sources[other_key]
-        sl.selected.js_link("indices", sl.selected, "indices")
-        sr.selected.js_link("indices", sr.selected, "indices")
+        sl.selected.js_link("indices", sr.selected, "indices")
+        sr.selected.js_link("indices", sl.selected, "indices")
 
     def link_xy_range(self, other):
         """
