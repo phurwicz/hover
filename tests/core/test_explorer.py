@@ -46,7 +46,7 @@ def corpus_explorer():
 @pytest.mark.core
 class TestBokehCorpusExplorer:
     @staticmethod
-    def test_comprehensive(example_raw_df):
+    def test_comprehensive(example_raw_df, example_dev_df):
         """
         Some methods are the same across child classes.
 
@@ -61,6 +61,9 @@ class TestBokehCorpusExplorer:
         explorer.plot()
         assert len(explorer.figure.renderers) == 1
 
+        explorer.dfs["raw"] = example_dev_df
+        explorer._update_sources()
+        explorer.dfs["raw"] = example_raw_df
         explorer._update_sources()
 
         explorer.link_selection("raw", other, "raw")
@@ -81,7 +84,7 @@ class TestBokehCorpusAnnotator:
 @pytest.mark.core
 class TestBokehMarginExplorer:
     @staticmethod
-    def test_init(example_raw_df):
+    def test_init(example_margin_df):
         explorer = BokehMarginExplorer({"raw": example_margin_df}, "label_1", "label_2")
         explorer.plot("A")
         explorer.plot("B")
