@@ -27,16 +27,16 @@ Annotates per  | batch of just the size you find right | piece predicted to be t
 Supports       | all classification (text only atm)    | text & images, audio, vidio, & more     | text classification (for the most part)
 Status         | open-source                           | proprietary                             | open-source
 Devs           | indie                                 | Explosion AI                            | Snorkel AI
-Related        | lots of thanks to the awesome `Bokeh` | builds on the `Thinc`/`SpaCy` stack     | `Snorkel Flow`, `MeTaL`, `DeepDive`
+Related        | lots of thanks to the awesome `Bokeh` | builds on the `Thinc`/`SpaCy` stack     | `Snorkel Drybell`, `MeTaL`, `DeepDive`
 Vanilla usage  | define a vectorizer and annotate away | choose a base model and annotate away   | define labeling functions and apply away
 Advanced usage | combine w/ active learning & snorkel  | patterns / transformers / custom models | transforming / slicing functions
-Hardcore usage | exploit `hover.core` templates        | custom @prodigy.recipe                  | The Snorkel Project
+Hardcore usage | exploit `hover.core` templates        | custom @prodigy.recipe                  | the upcoming `Snorkel Flow`
 
 `Hover` claims the best deal of scale vs. precision thanks to
 
 -   its flexibility to use, or not use, any technique beyond annotating on an explorer "canvas";
 
--   the speed, or coarseness, of annotation being literally at your fingertips;
+-   the speed, or coarseness, of annotation being *literally at your fingertips*;
 
 -   informative interaction with the person working with it.
 
@@ -54,7 +54,7 @@ Installation through `conda` is not yet supported.
 
 -   [Documentation](https://phurwicz.github.io/hover/)
 
-## Developer
+## Dependencies
 
 -   `./requirements.txt` lists the dependencies for installation.
 -   `./requirements-test.txt` lists additional dependencies for the test suite.
