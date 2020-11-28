@@ -8,7 +8,7 @@
 
 ----
 
-`Hover` is a **machine teaching** library that enables smooth and effective supervision. In other words, it's an interface where you _hover_ over and label your data.. differently. For instance, you can:
+`Hover` is a **machine teaching** library that enables intuitive and effecient supervision. In other words, it provides a map where you _hover_ over and label your data... differently. For instance, you can:
 
 -   [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/phurwicz/hover-binder/master?urlpath=/proxy/5006/app-simple-annotator) :seedling: annotate an intuitively selected group of data points at a time
 -   [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/phurwicz/hover-binder/master?urlpath=/proxy/5006/app-snorkel-annotator) :whale: cross-check with Snorkel-based distant supervision
@@ -27,7 +27,7 @@ Annotates per  | batch of just the size you find right | piece predicted to be t
 Supports       | all classification (text only atm)    | text & images, audio, vidio, & more     | text classification (for the most part)
 Status         | open-source                           | proprietary                             | open-source
 Devs           | indie                                 | Explosion AI                            | Stanford / Snorkel AI
-Related        | lots of thanks to the awesome `Bokeh` | builds on the `Thinc`/`SpaCy` stack     | `Snorkel Drybell`, `MeTaL`, `DeepDive`
+Related        | many imports of the awesome `Bokeh`   | builds on the `Thinc`/`SpaCy` stack     | Variants: `Snorkel Drybell`, `MeTaL`, `DeepDive`
 Vanilla usage  | define a vectorizer and annotate away | choose a base model and annotate away   | define labeling functions and apply away
 Advanced usage | combine w/ active learning & snorkel  | patterns / transformers / custom models | transforming / slicing functions
 Hardcore usage | exploit `hover.core` templates        | custom @prodigy.recipe                  | the upcoming `Snorkel Flow`
@@ -42,7 +42,7 @@ Hardcore usage | exploit `hover.core` templates        | custom @prodigy.recipe 
 
 ## Installation
 
-To get the latest release version, you can use pip:
+To get the latest release version, you can use `pip`:
 
 ```bash
 pip install hover
