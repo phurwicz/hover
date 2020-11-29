@@ -27,6 +27,14 @@
         - __init__
         - plot
 
+# `hover.core.explorer.BokehSoftLabelExplorer`
+
+- ::: hover.core.explorer.BokehSoftLabelExplorer
+    selection:
+      members:
+        - __init__
+        - plot
+
 # `hover.core.explorer.BokehMarginExplorer`
 
 - ::: hover.core.explorer.BokehMarginExplorer
