@@ -8,7 +8,7 @@ with open("requirements.txt", "r") as fd:
 
 setuptools.setup(
     name="hover",
-    version="0.2.2",
+    version="0.2.3",
     description="Data annotation done right: easy, fun, hyper-productive, and inducing insight.",
     long_description=long_description,
     long_description_content_type="text/markdown",
