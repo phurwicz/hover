@@ -60,11 +60,10 @@ def bokeh_hover_tooltip(
         </div>
         """
     for _key, _field in custom.items():
-        assert _field.startswith("@"), "Expected a leading @ symbol"
         tooltip += f"""
         <div>
             <span style="font-size: 12px; color: #606;">
-                {_key}: {_field}
+                {_key}: @{_field}
             </span>
         </div>
         """

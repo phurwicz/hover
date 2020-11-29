@@ -5,10 +5,20 @@ from bokeh.plotting import figure
 from bokeh.models import CustomJS, ColumnDataSource, CDSView, IndexFilter
 from bokeh.layouts import column, row
 from bokeh.palettes import Category20
+from bokeh.transform import factor_cmap
 from abc import ABC, abstractmethod
 from hover import module_config
 from hover.utils.misc import current_time
 from .local_config import bokeh_hover_tooltip
+
+
+def auto_cmap(labels):
+    """
+    Find an appropriate color map based on provide labels.
+    """
+    assert len(labels) <= 20, "Too many labels to support"
+    cmap = "Category10_10" if len(labels) <= 10 else "Category20_20"
+    return cmap
 
 
 class BokehForLabeledText(ABC):
@@ -77,8 +87,10 @@ class BokehForLabeledText(ABC):
 
         Create positive/negative text search boxes.
         """
-        from bokeh.models import TextInput
+        from bokeh.models import TextInput, CheckboxButtonGroup
 
+        # set up text search widgets, without assigning callbacks yet
+        # to provide more flexibility with callbacks
         logger.info("Setting up widgets")
         self.search_pos = TextInput(
             title="Text contains (plain text, or /pattern/flag for regex):",
@@ -89,9 +101,26 @@ class BokehForLabeledText(ABC):
             title="Text does not contain:", width_policy="fit", height_policy="fit"
         )
 
+        # set up subset display toggles which do have clearly defined callbacks
+        data_keys = list(self.__class__.DATA_KEY_TO_KWARGS.keys())
+        self.data_key_button_group = CheckboxButtonGroup(
+            labels=data_keys, active=list(range(len(data_keys)))
+        )
+
+        def update_data_key_display(active):
+            visible_keys = {self.data_key_button_group.labels[idx] for idx in active}
+            for _renderer in self.figure.renderers:
+                # if the renderer has a name "on the list", update its visibility
+                if _renderer.name in self.__class__.DATA_KEY_TO_KWARGS.keys():
+                    _renderer.visible = _renderer.name in visible_keys
+
+        # store the callback (useful, for example, during automated tests) and link it
+        self.update_data_key_display = update_data_key_display
+        self.data_key_button_group.on_click(self.update_data_key_display)
+
     def _layout_widgets(self):
         """Define the layout of widgets."""
-        return column(self.search_pos, self.search_neg)
+        return column(self.search_pos, self.search_neg, self.data_key_button_group)
 
     def view(self):
         """Define the layout of the whole explorer."""
@@ -310,7 +339,7 @@ class BokehCorpusExplorer(BokehForLabeledText):
         Called just once per instance most of the time.
         """
         self.figure.circle(
-            "x", "y", source=self.sources["raw"], **self.glyph_kwargs["raw"]
+            "x", "y", name="raw", source=self.sources["raw"], **self.glyph_kwargs["raw"]
         )
 
 
@@ -347,11 +376,12 @@ class BokehCorpusAnnotator(BokehCorpusExplorer):
 
     def _layout_widgets(self):
         """Define the layout of widgets."""
-        first_row = row(self.search_pos, self.search_neg)
-        second_row = row(
-            self.annotator_input, self.annotator_apply, self.annotator_export
+        layout_rows = (
+            row(self.search_pos, self.search_neg),
+            row(self.data_key_button_group),
+            row(self.annotator_input, self.annotator_apply, self.annotator_export),
         )
-        return column(first_row, second_row)
+        return column(*layout_rows)
 
     def _setup_widgets(self):
         """
@@ -429,20 +459,97 @@ class BokehCorpusAnnotator(BokehCorpusExplorer):
         Overrides the parent method.
         Determines the label->color mapping dynamically.
         """
-        from bokeh.transform import factor_cmap
-
         all_labels = sorted(set(self.dfs["raw"]["label"].values), reverse=True)
-        assert len(all_labels) <= 20, "Too many labels to support"
-        cmap = "Category10_10" if len(all_labels) <= 10 else "Category20_20"
+        cmap = auto_cmap(all_labels)
 
         self.figure.circle(
             x="x",
             y="y",
+            name="raw",
             color=factor_cmap("label", cmap, all_labels),
             legend_field="label",
             source=self.sources["raw"],
             **self.glyph_kwargs["raw"],
         )
+
+
+class BokehSoftLabelExplorer(BokehCorpusExplorer):
+    """
+    Plot text data points according to its label and confidence.
+    Currently not considering multi-label scenarios.
+    """
+
+    DATA_KEY_TO_KWARGS = {
+        "raw": {
+            "constant": {"line_alpha": 0.5},
+            "search": {"size": ("size", 10, 5, 7)},
+        },
+        "labeled": {
+            "constant": {"line_alpha": 0.5},
+            "search": {"size": ("size", 10, 5, 7)},
+        },
+    }
+
+    def __init__(self, df_dict, label_col, score_col, **kwargs):
+        """
+        On top of the requirements of the parent class,
+        the input dataframe should contain:
+
+        (1) label_col and score_col for "soft predictions".
+        """
+        assert label_col != "label", "'label' field is reserved"
+        self.label_col = label_col
+        self.score_col = score_col
+        kwargs.update(
+            {
+                "tooltips": bokeh_hover_tooltip(
+                    label=False,
+                    text=True,
+                    image=False,
+                    coords=True,
+                    index=True,
+                    custom={"Soft Label": self.label_col, "Soft Score": self.score_col},
+                )
+            }
+        )
+        super().__init__(df_dict, **kwargs)
+
+    def _setup_dfs(self, df_dict, **kwargs):
+        """Extending from the parent method."""
+        for _key in self.__class__.DATA_KEY_TO_KWARGS.keys():
+            for _col in [self.label_col, self.score_col]:
+                assert _col in df_dict[_key].columns
+
+        super()._setup_dfs(df_dict, **kwargs)
+
+    def plot(self, **kwargs):
+        """
+        Plot the confidence map.
+        """
+
+        # auto-detect all labels
+        all_labels = set()
+        for _key in self.__class__.DATA_KEY_TO_KWARGS.keys():
+            _df = self.dfs[_key]
+            _labels = set(_df[self.label_col].values)
+            all_labels = all_labels.union(_labels)
+        all_labels = sorted(all_labels, reverse=True)
+        cmap = auto_cmap(all_labels)
+
+        for _key in self.__class__.DATA_KEY_TO_KWARGS.keys():
+            # prepare plot settings
+            preset_kwargs = {
+                "legend_field": self.label_col,
+                "color": factor_cmap(self.label_col, cmap, all_labels),
+                "fill_alpha": self.score_col,
+            }
+            eff_kwargs = self.glyph_kwargs[_key].copy()
+            eff_kwargs.update(preset_kwargs)
+            eff_kwargs.update(kwargs)
+
+            self.figure.circle(
+                "x", "y", name=_key, source=self.sources[_key], **eff_kwargs
+            )
 
 
 class BokehMarginExplorer(BokehCorpusExplorer):
@@ -516,7 +623,9 @@ class BokehMarginExplorer(BokehCorpusExplorer):
         for _dict in to_plot:
             _view = _dict["view"]
             _marker = _dict["marker"]
-            _marker(*axes, source=self.sources["raw"], view=_view, **eff_kwargs)
+            _marker(
+                *axes, name="raw", source=self.sources["raw"], view=_view, **eff_kwargs
+            )
 
 
 class BokehSnorkelExplorer(BokehCorpusExplorer):
@@ -599,6 +708,7 @@ class BokehSnorkelExplorer(BokehCorpusExplorer):
         if "C" in include:
             to_plot.append(
                 {
+                    "name": "labeled",
                     "view": self._view_correct(L_labeled),
                     "marker": self.figure.square,
                     "kwargs": labeled_glyph_kwargs,
@@ -607,6 +717,7 @@ class BokehSnorkelExplorer(BokehCorpusExplorer):
         if "I" in include:
             to_plot.append(
                 {
+                    "name": "labeled",
                     "view": self._view_incorrect(L_labeled),
                     "marker": self.figure.x,
                     "kwargs": labeled_glyph_kwargs,
@@ -615,6 +726,7 @@ class BokehSnorkelExplorer(BokehCorpusExplorer):
         if "M" in include:
             to_plot.append(
                 {
+                    "name": "labeled",
                     "view": self._view_missed(L_labeled, lf.targets),
                     "marker": self.figure.cross,
                     "kwargs": labeled_glyph_kwargs,
@@ -623,6 +735,7 @@ class BokehSnorkelExplorer(BokehCorpusExplorer):
         if "H" in include:
             to_plot.append(
                 {
+                    "name": "raw",
                     "view": self._view_hit(L_raw),
                     "marker": self.figure.circle,
                     "kwargs": raw_glyph_kwargs,
