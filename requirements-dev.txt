@@ -3,5 +3,3 @@ jupyterlab
 mkdocs
 mkdocs-material
 pre-commit
-pytest
-coverage

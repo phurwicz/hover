@@ -86,6 +86,5 @@ Hardcore usage | exploit `hover.core` templates        | custom @prodigy.recipe 
 
 ## Dependencies
 
--   `./requirements.txt` lists the dependencies for installation.
 -   `./requirements-test.txt` lists additional dependencies for the test suite.
--   `./requirements-dev.txt` lists the packages for developers.
+-   `./requirements-dev.txt` lists recommended packages for developers.
