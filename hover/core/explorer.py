@@ -78,7 +78,7 @@ class BokehForLabeledText(ABC):
 
     def reset_figure(self):
         """Start over on the figure."""
-        logger.info("Initializing/resetting Figure")
+        logger.info("Resetting figure")
         self.figure.renderers.clear()
 
     def _setup_widgets(self):
