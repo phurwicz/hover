@@ -14,12 +14,21 @@ import random
 
 PSEUDO_LABELS = ["A", "B"]
 RANDOM_LABEL = lambda x: random.choice(PSEUDO_LABELS)
+RANDOM_SCORE = lambda x: random.uniform(0.2, 1.0)
 RANDOM_LABEL_LF = labeling_function(targets=PSEUDO_LABELS)(RANDOM_LABEL)
 
 
 @pytest.fixture
 def example_raw_df(generate_text_df_with_coords):
     return generate_text_df_with_coords(300)
+
+
+@pytest.fixture
+def example_soft_label_df(example_raw_df):
+    df = example_raw_df.copy()
+    df["pred_label"] = df.apply(RANDOM_LABEL, axis=1)
+    df["pred_score"] = df.apply(RANDOM_SCORE, axis=1)
+    return df
 
 
 @pytest.fixture
@@ -76,6 +85,19 @@ class TestBokehCorpusAnnotator:
 
         explorer._callback_apply()
         explorer._callback_export()
+
+
+@pytest.mark.core
+class TestBokehSoftLabelExplorer:
+    @staticmethod
+    def test_init(example_soft_label_df):
+        explorer = BokehSoftLabelExplorer(
+            {"raw": example_soft_label_df, "labeled": example_soft_label_df.copy()},
+            "pred_label",
+            "pred_score",
+        )
+        explorer.plot()
+        _ = explorer.view()
 
 
 @pytest.mark.core
