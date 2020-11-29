@@ -112,7 +112,7 @@ class VectorNet(object):
         self.nn.eval()
         vectors = torch.Tensor([self.vectorizer(_inp) for _inp in inps])
         logits = self.nn(vectors)
-        probs = F.softmax(logits, dim=-1)
+        probs = F.softmax(logits, dim=-1).detach().numpy()
 
         # inverse-cast if applicable
         if FLAG_SINGLE:
