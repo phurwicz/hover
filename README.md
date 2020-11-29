@@ -17,8 +17,8 @@
 `Hover` is a **machine teaching** library that enables intuitive and effecient supervision. In other words, it provides a map where you _hover_ over and label your data... differently. For instance, you can:
 
 -   [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/phurwicz/hover-binder/master?urlpath=/proxy/5006/app-simple-annotator) :seedling: annotate an intuitively selected group of data points at a time
--   [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/phurwicz/hover-binder/master?urlpath=/proxy/5006/app-snorkel-annotator) :whale: cross-check with Snorkel-based distant supervision
 -   [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/phurwicz/hover-binder/master?urlpath=/proxy/5006/app-active-learning) :ferris_wheel: throw a model in the loop and exploit active learning
+-   [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/phurwicz/hover-binder/master?urlpath=/proxy/5006/app-snorkel-annotator) :whale: cross-check with Snorkel-based distant supervision
 
 Check out [@phurwicz/hover-binder](https://github.com/phurwicz/hover-binder) for a complete list of demo apps.
 
