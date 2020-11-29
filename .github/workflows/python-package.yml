@@ -29,8 +29,11 @@ jobs:
         pip install -r requirements.txt
         pip install -r requirements-test.txt
         python -m spacy download en_core_web_md
-    - name: Test and send coverage report
+    - name: Test and make coverage report
       run: |
         make coverage
     - name: Codacy Coverage Reporter
-      uses: codacy/codacy-coverage-reporter-action@0.2.0
+      uses: codacy/codacy-coverage-reporter-action@master
+      with:
+        project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
+        coverage-reports: cobertura.xml
