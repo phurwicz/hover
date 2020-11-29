@@ -5,6 +5,7 @@ Note that the whole point of explorers is to allow interaction, for which this f
 from hover.core.explorer import (
     BokehCorpusExplorer,
     BokehCorpusAnnotator,
+    BokehSoftLabelExplorer,
     BokehMarginExplorer,
     BokehSnorkelExplorer,
 )
