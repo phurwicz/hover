@@ -65,7 +65,11 @@ class VectorNet(object):
         if os.path.isfile(state_dict_path):
             from shutil import copyfile
 
-            self.nn.load_state_dict(torch.load(state_dict_path))
+            try:
+                self.nn.load_state_dict(torch.load(state_dict_path))
+            except Exception as e:
+                logger.warn(f"Load VectorNet state path failed with {type(e)}: e")
+
             state_dict_backup_path = (
                 f"{state_dict_path}.{datetime.now().strftime('%Y%m%d%H%M%S')}"
             )
