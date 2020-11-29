@@ -91,6 +91,8 @@ class SupervisableDataset(ABC):
             _found_labels = set(_df["label"].tolist())
             all_labels = all_labels.union(_found_labels)
 
+        # exclude ABSTAIN from self.classes, but include it in the encoding
+        all_labels.discard(module_config.ABSTAIN_DECODED)
         self.classes = sorted(all_labels)
         self.label_encoder = {
             **{_label: _i for _i, _label in enumerate(self.classes)},
@@ -213,7 +215,9 @@ class SupervisableDataset(ABC):
         - param smoothing_coeff: the smoothing coeffient for soft labels.
           - type smoothing_coeff: float
         """
-        df = self.dfs[key]
+        # take the slice that has a meaningful label
+        df = self.dfs[key][self.dfs[key]["label"] != module_config.ABSTAIN_DECODED]
+
         labels = df["label"].apply(lambda x: self.label_encoder[x]).tolist()
         features = df[self.__class__.FEATURE_KEY].tolist()
         output_vectors = one_hot(labels, num_classes=len(self.classes))
