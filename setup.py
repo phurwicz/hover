@@ -24,18 +24,18 @@ setuptools.setup(
     install_requires=[
         # interactive/static visualization
         "bokeh>=2.2.3",
-        # data handling
-        "pandas>=1.1.4",
-        "numpy>=1.14",
-        "scipy>=1.3.2",
-        "numba>=0.46.0",
-        "scikit-learn>=0.21.0",
-        "umap-learn>=0.3.10",
-        "ivis[cpu]>=1.7",
         # distant supervision
         "snorkel>=0.9.6",
         # neural stuff
         "torch>=1.4.0",
+        # data handling
+        "pandas>=1.1.4",
+        "numpy>=1.14",
+        # computations
+        "scipy>=1.3.2",
+        "scikit-learn>=0.21.0",
+        "umap-learn>=0.3.10",
+        "ivis[cpu]>=1.7",
         # utilities
         "tqdm>=4.0",
         "wasabi>=0.4.0",
