@@ -1,4 +1,10 @@
+# standard testing
 pytest
 coverage
+# text generation
 faker
+# vectorizers
 spacy
+# dimensionality reduction
+umap-learn>=0.3.10
+ivis[cpu]>=1.7
