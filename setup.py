@@ -28,7 +28,6 @@ setuptools.setup(
         "pandas>=1.1.4",
         "numpy>=1.14",
         "scipy>=1.3.2",
-        "numba>=0.46.0",
         "scikit-learn>=0.21.0",
         "umap-learn>=0.3.10",
         "ivis[cpu]>=1.7",
