@@ -33,7 +33,7 @@ setuptools.setup(
         "numpy>=1.14",
         # computations
         "scipy>=1.3.2",
-        "scikit-learn>=0.21.0",
+        "scikit-learn==0.21.0",
         # utilities
         "tqdm>=4.0",
         "wasabi>=0.4.0",
