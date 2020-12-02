@@ -2,7 +2,7 @@
 
 > Imagine editing a picture layer by layer, not pixel by pixel, nor by splashing paint.
 
-> That has come to machine teaching.
+> We can apply this idea to datasets.
 
 [![PyPI Stage](https://img.shields.io/pypi/status/hover?style=for-the-badge)](https://pypi.org)
 [![PyPI Version](https://img.shields.io/pypi/v/hover?style=for-the-badge)](https://pypi.org)
