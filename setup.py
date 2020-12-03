@@ -23,10 +23,10 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     install_requires=[
         # interactive/static visualization
-        "bokeh==2.2.3",
+        "bokeh",
         # distant supervision
-        "snorkel==0.9.6",
-        # "scikit-learn==0.21.0" # letting snorkel pick the version,
+        "snorkel>=0.9.3",
+        "scikit-learn",
         # neural stuff
         "torch>=1.4.0",
         # data handling
