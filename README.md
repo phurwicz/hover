@@ -22,9 +22,12 @@
 
 Check out [@phurwicz/hover-binder](https://github.com/phurwicz/hover-binder) for a complete list of demo apps.
 
-:flags: Please do not hesitate to post any issues or questions! We are very much under active development and appreciate every piece of feedback.
+## :flags: Announcements
 
-## Quick Start
+-   **Dec 6** Video tutorials coming soon! The first one is projected to be available by Dec 15, 2020.
+-   **Dec 6** Please do not hesitate to post any issues or questions! We are very much under active development and appreciate every piece of feedback.
+
+## :flight_departure: Quick Start
 
 `Hover` uses [`bokeh`](https://bokeh.org) to build its annotation interface:
 
@@ -50,7 +53,7 @@ bokeh serve app-annotator.py
 
 The most exciting features of `Hover` employ lots of Python callbacks, for which [`bokeh serve`](https://docs.bokeh.org/en/latest/docs/user_guide/server.html) comes into play.
 
-## Installation
+## :package: Installation
 
 To get the latest release version, you can use `pip`:
 
@@ -60,7 +63,7 @@ pip install hover
 
 Installation through `conda` is not yet supported.
 
-## Features
+## :flamingo: Features
 
 Here we attempt a quick comparison with a few other packages that do machine teaching:
 
@@ -82,11 +85,14 @@ Hardcore usage | exploit `hover.core` templates        | custom @prodigy.recipe 
 -   the speed, or coarseness, of annotation being _literally at your fingertips_;
 -   the interaction between multiple "maps" that each serves a different but connected purpose.
 
-## Resources
+## :book: Resources
 
--   [Documentation](https://phurwicz.github.io/hover/)
+### [Documentation](https://phurwicz.github.io/hover/)
 
-## Dependencies
+-   Contains API references of the most crucial components.
+-   A lot more is on the way! (video tutorials, for example)
+
+### Dependencies
 
 -   `./requirements-test.txt` lists additional dependencies for the test suite.
 -   `./requirements-dev.txt` lists recommended packages for developers.
