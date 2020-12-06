@@ -22,6 +22,8 @@
 
 Check out [@phurwicz/hover-binder](https://github.com/phurwicz/hover-binder) for a complete list of demo apps.
 
+:flags: Please do not hesitate to post any issues or questions! We are very much under active development and appreciate every piece of feedback.
+
 ## Quick Start
 
 `Hover` uses [`bokeh`](https://bokeh.org) to build its annotation interface:
