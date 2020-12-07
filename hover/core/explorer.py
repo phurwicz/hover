@@ -24,6 +24,16 @@ def auto_cmap(labels):
 class BokehForLabeledText(ABC):
     """
     Base class that keeps template explorer settings.
+
+    Assumes:
+    - in supplied dataframes
+      - (always) text data in a 'text' column
+      - (always) xy coordinates in 'x' and 'y' columns
+      - (always) an index for the rows
+      - (likely) classification label in a 'label' column
+
+    Does not assume:
+    - what the explorer serves to do.
     """
 
     DEFAULT_FIGURE_KWARGS = {
@@ -312,7 +322,10 @@ class BokehForLabeledText(ABC):
 
 class BokehCorpusExplorer(BokehForLabeledText):
     """
-    Plot unlabeled, 2-D-vectorized text data points in a corpus.
+    Plot unlabeled, 2D-vectorized text data points in a corpus.
+
+    Features:
+    - the search widgets will highlight the results through a change of color, which is arguably the best visual effect.
     """
 
     DATA_KEY_TO_KWARGS = {
@@ -355,8 +368,11 @@ class BokehCorpusExplorer(BokehForLabeledText):
 
 class BokehCorpusAnnotator(BokehCorpusExplorer):
     """
-    [SERVER ONLY]
     Annoate text data points via callbacks.
+
+    Features:
+    - alter values in the 'label' column through the widgets.
+    - **SERVER ONLY**: only works in a setting that allows Python callbacks.
     """
 
     DATA_KEY_TO_KWARGS = {
@@ -485,8 +501,12 @@ class BokehCorpusAnnotator(BokehCorpusExplorer):
 
 class BokehSoftLabelExplorer(BokehCorpusExplorer):
     """
-    Plot text data points according to its label and confidence.
-    Currently not considering multi-label scenarios.
+    Plot text data points according to their labels and confidence scores.
+
+    Features:
+    - the predicted label will correspond to fill_color.
+    - the confidence score, assumed to be a float between 0.0 and 1.0, will be reflected through fill_alpha.
+    - currently not considering multi-label scenarios.
     """
 
     DATA_KEY_TO_KWARGS = {
@@ -566,7 +586,10 @@ class BokehMarginExplorer(BokehCorpusExplorer):
     """
     Plot text data points along with two versions of labels.
     Could be useful for A/B tests.
-    Currently not considering multi-label scenarios.
+
+    Features:
+    - can choose to only plot the margins about specific labels.
+    - currently not considering multi-label scenarios.
     """
 
     DATA_KEY_TO_KWARGS = {
@@ -640,7 +663,15 @@ class BokehMarginExplorer(BokehCorpusExplorer):
 
 class BokehSnorkelExplorer(BokehCorpusExplorer):
     """
-    Plot text data points along with labeling function outputs.
+    Plot text data points along with labeling function (LF) outputs.
+
+    Features:
+    - each labeling function corresponds to its own line_color.
+    - uses a different marker for each type of predictions: square for 'correct', x for 'incorrect', cross for 'missed', circle for 'hit'.
+      - 'correct': the LF made a correct prediction on a point in the 'labeled' set.
+      - 'incorrect': the LF made an incorrect prediction on a point in the 'labeled' set.
+      - 'missed': the LF is capable of predicting the target class, but did not make such prediction on the particular point.
+      - 'hit': the LF made a prediction on a point in the 'raw' set.
     """
 
     DATA_KEY_TO_KWARGS = {
