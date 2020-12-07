@@ -11,6 +11,8 @@
         - link_selection
         - link_xy_range
 
+---
+
 # `hover.core.explorer.BokehCorpusExplorer`
 
 - ::: hover.core.explorer.BokehCorpusExplorer
@@ -18,6 +20,8 @@
       members:
         - __init__
         - plot
+
+---
 
 # `hover.core.explorer.BokehCorpusAnnotator`
 
@@ -27,6 +31,8 @@
         - __init__
         - plot
 
+---
+
 # `hover.core.explorer.BokehSoftLabelExplorer`
 
 - ::: hover.core.explorer.BokehSoftLabelExplorer
@@ -35,6 +41,8 @@
         - __init__
         - plot
 
+---
+
 # `hover.core.explorer.BokehMarginExplorer`
 
 - ::: hover.core.explorer.BokehMarginExplorer
@@ -42,6 +50,8 @@
       members:
         - __init__
         - plot
+
+---
 
 # `hover.core.explorer.BokehSnorkelExplorer`
 

@@ -26,13 +26,15 @@ class BokehForLabeledText(ABC):
     Base class that keeps template explorer settings.
 
     Assumes:
+
     - in supplied dataframes
-      - (always) text data in a 'text' column
-      - (always) xy coordinates in 'x' and 'y' columns
+      - (always) text data in a `text` column
+      - (always) xy coordinates in `x` and `y` columns
       - (always) an index for the rows
-      - (likely) classification label in a 'label' column
+      - (likely) classification label in a `label` column
 
     Does not assume:
+
     - what the explorer serves to do.
     """
 
@@ -65,12 +67,12 @@ class BokehForLabeledText(ABC):
         """
         Operations shared by all child classes.
 
-        (1) settle the figure settings by using child class defaults + kwargs overrides
-        (2) settle the glyph settings by using child class defaults
-        (3) create widgets that child classes can override
-        (4) create data sources the correspond to class-specific data subsets.
-        (5) activate builtin search callbacks depending on the child class.
-        (6) create a (likely) blank figure under such settings
+        - settle the figure settings by using child class defaults & kwargs overrides
+        - settle the glyph settings by using child class defaults
+        - create widgets that child classes can override
+        - create data sources the correspond to class-specific data subsets.
+        - activate builtin search callbacks depending on the child class.
+        - create a (typically) blank figure under such settings
         """
         logger.divider(f"Initializing {self.__class__.__name__}")
         self.figure_kwargs = self.__class__.DEFAULT_FIGURE_KWARGS.copy()
@@ -325,6 +327,7 @@ class BokehCorpusExplorer(BokehForLabeledText):
     Plot unlabeled, 2D-vectorized text data points in a corpus.
 
     Features:
+
     - the search widgets will highlight the results through a change of color, which is arguably the best visual effect.
     """
 
@@ -371,6 +374,7 @@ class BokehCorpusAnnotator(BokehCorpusExplorer):
     Annoate text data points via callbacks.
 
     Features:
+
     - alter values in the 'label' column through the widgets.
     - **SERVER ONLY**: only works in a setting that allows Python callbacks.
     """
@@ -504,6 +508,7 @@ class BokehSoftLabelExplorer(BokehCorpusExplorer):
     Plot text data points according to their labels and confidence scores.
 
     Features:
+
     - the predicted label will correspond to fill_color.
     - the confidence score, assumed to be a float between 0.0 and 1.0, will be reflected through fill_alpha.
     - currently not considering multi-label scenarios.
@@ -588,6 +593,7 @@ class BokehMarginExplorer(BokehCorpusExplorer):
     Could be useful for A/B tests.
 
     Features:
+
     - can choose to only plot the margins about specific labels.
     - currently not considering multi-label scenarios.
     """
@@ -666,6 +672,7 @@ class BokehSnorkelExplorer(BokehCorpusExplorer):
     Plot text data points along with labeling function (LF) outputs.
 
     Features:
+
     - each labeling function corresponds to its own line_color.
     - uses a different marker for each type of predictions: square for 'correct', x for 'incorrect', cross for 'missed', circle for 'hit'.
       - 'correct': the LF made a correct prediction on a point in the 'labeled' set.

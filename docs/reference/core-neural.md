@@ -11,6 +11,8 @@
         - train_batch
         - evaluate
 
+---
+
 # `hover.core.neural.create_vector_net_from_module`
 
 - ::: hover.core.neural.create_vector_net_from_module
