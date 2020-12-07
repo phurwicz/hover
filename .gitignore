@@ -3,3 +3,5 @@
 .*.pkl
 .coverage
 cobertura.xml
+.DS_Store
+annoy.index
