@@ -513,7 +513,7 @@ class BokehSoftLabelExplorer(BokehCorpusExplorer):
         kwargs.update(
             {
                 "tooltips": bokeh_hover_tooltip(
-                    label=False,
+                    label=True,
                     text=True,
                     image=False,
                     coords=True,
