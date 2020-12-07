@@ -8,3 +8,5 @@ spacy
 # dimensionality reduction
 umap-learn>=0.3.10
 ivis[cpu]>=1.7
+# exporting excel files
+openpyxl

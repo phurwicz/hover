@@ -417,20 +417,21 @@ class BokehCorpusAnnotator(BokehCorpusExplorer):
         """
         Create annotator widgets and assign Python callbacks.
         """
-        from bokeh.models import TextInput, Button
+        from bokeh.models import TextInput, Button, Dropdown
 
         super()._setup_widgets()
 
-        self.annotator_input = TextInput(title="Label")
+        self.annotator_input = TextInput(title="Label:")
         self.annotator_apply = Button(
             label="Apply",
             button_type="primary",
             height_policy="fit",
             width_policy="min",
         )
-        self.annotator_export = Button(
+        self.annotator_export = Dropdown(
             label="Export",
-            button_type="success",
+            button_type="warning",
+            menu=["Excel", "CSV", "JSON", "pickle"],
             height_policy="fit",
             width_policy="min",
         )
@@ -455,24 +456,35 @@ class BokehCorpusAnnotator(BokehCorpusExplorer):
             self.plot()
             logger.good(f"Updated annotator plot at {current_time()}")
 
-        def callback_export(path=None):
+        def callback_export(event, path_root=None):
             """
             A callback on clicking the 'self.annotator_export' button.
 
             Saves the dataframe to a pickle.
             """
-            from dill import dump
+            export_format = event.item
 
-            # auto-determine the export path
-            if path is None:
+            # auto-determine the export path root
+            if path_root is None:
                 timestamp = current_time("%Y%m%d%H%M%S")
-                path = f".bokeh-annotated-df-{timestamp}.pkl"
+                path_root = f"hover-annotated-df-{timestamp}"
 
-            # save a pickle, then send a message
-            # note that excel/csv can be problematic with certain kinds of data
-            with open(path, "wb") as f:
-                dump(self.dfs["raw"], f)
-            logger.good(f"Saved DataFrame to {path}")
+            if export_format == "Excel":
+                export_path = f"{path_root}.xlsx"
+                self.dfs["raw"].to_excel(export_path, index=False)
+            elif export_format == "CSV":
+                export_path = f"{path_root}.csv"
+                self.dfs["raw"].to_csv(export_path, index=False)
+            elif export_format == "JSON":
+                export_path = f"{path_root}.json"
+                self.dfs["raw"].to_json(export_path, orient="records")
+            elif export_format == "pickle":
+                export_path = f"{path_root}.pkl"
+                self.dfs["raw"].to_pickle(export_path)
+            else:
+                raise ValueError(f"Unexpected export format {export_format}")
+
+            logger.good(f"Saved DataFrame to {export_path}")
 
         # keep the references to the callbacks
         self._callback_apply = callback_apply
