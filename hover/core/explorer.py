@@ -133,10 +133,20 @@ class BokehForLabeledText(ABC):
         Intended to be extended in child classes for pre/post processing.
         """
         logger.info("Setting up dfs")
+        supplied_keys = set(df_dict.keys())
         expected_keys = set(self.__class__.DATA_KEY_TO_KWARGS.keys())
-        assert (
-            set(df_dict.keys()) == expected_keys
-        ), f"Expected the keys of df_dict to be exactly {expected_keys}"
+
+        supplied_not_expected = supplied_keys.difference(expected_keys)
+        expected_not_supplied = expected_keys.difference(supplied_keys)
+
+        for _key in supplied_not_expected:
+            logger.warn(
+                f"{self.__class__.__name__}.__init__(): got unexpected df key {_key}"
+            )
+        for _key in expected_not_supplied:
+            logger.warn(
+                f"{self.__class__.__name__}.__init__(): missing expected df key {_key}"
+            )
 
         self.dfs = {
             _key: (_df.copy() if copy else _df) for _key, _df in df_dict.items()
