@@ -80,12 +80,17 @@ class TestBokehCorpusExplorer:
 class TestBokehCorpusAnnotator:
     @staticmethod
     def test_annotation(example_raw_df):
+        from bokeh.events import MenuItemClick
+
         explorer = BokehCorpusAnnotator({"raw": example_raw_df})
         explorer.plot()
         _ = explorer.view()
 
         explorer._callback_apply()
-        explorer._callback_export()
+
+        for _item in ["Excel", "CSV", "JSON", "pickle"]:
+            _event = MenuItemClick(explorer.annotator_export, item=_item)
+            explorer._callback_export(_event)
 
 
 @pytest.mark.core
