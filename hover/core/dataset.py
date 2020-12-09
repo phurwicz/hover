@@ -9,6 +9,9 @@ from tqdm import tqdm
 from rich.console import Console
 from hover import module_config
 from hover.utils.torch_helper import vector_dataloader, one_hot, label_smoothing
+from bokeh.models import Button
+from bokeh.models import ColumnDataSource, DataTable, TableColumn
+
 
 console = Console()
 
@@ -123,6 +126,51 @@ class SupervisableDataset(ABC):
                 console.print({_df.loc[_invalid_indices]})
                 if raise_exception:
                     raise ValueError("invalid labels")
+
+    def setup_pop_updater(self, subsets, sidebar_width=300):
+        pop_updater = Button(
+            label="Update population", button_type="primary", width=sidebar_width
+        )
+        pop_source = ColumnDataSource(dict())
+        pop_columns = [
+            TableColumn(field="label", title="label"),
+            *[
+                TableColumn(field=f"count_{_subset}", title=_subset)
+                for _subset in subsets
+            ],
+        ]
+        pop_table = DataTable(
+            source=pop_source, columns=pop_columns, width=sidebar_width
+        )
+
+        def update_population():
+            """
+            Callback function.
+            """
+            # make sure that the label coding is correct
+            self.setup_label_coding()
+
+            # re-compute label population
+            pop_data = dict(label=self.classes)
+            for _subset in subsets:
+                _df = self.dfs[_subset]
+                _subpop = _df["label"].value_counts()
+                pop_data[f"count_{_subset}"] = [
+                    _subpop.get(_label, 0) for _label in self.classes
+                ]
+
+            # push results to bokeh data source
+            pop_source.data = pop_data
+
+            # send a console message
+            console.print(
+                f"Pop updater: latest population with {len(self.classes)} classes",
+                style="green",
+            )
+
+        update_population()
+        pop_updater.on_click(update_population)
+        return pop_updater, pop_table
 
     def df_deduplicate(self):
         """

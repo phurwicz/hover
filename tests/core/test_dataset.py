@@ -64,3 +64,9 @@ class TestSupervisableTextDataset:
         except KeyError:
             loader = dataset.loader("dev", dummy_vectorizer, smoothing_coeff=0.1)
             assert isinstance(loader, DataLoader)
+
+    @staticmethod
+    def test_setup_pop_updater(mini_supervisable_text_dataset):
+        dataset = deepcopy(mini_supervisable_text_dataset)
+
+        pop_updater, pop_table = dataset.setup_pop_updater(subsets=["dev", "test"])
