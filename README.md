@@ -1,4 +1,4 @@
-# ![Hover](docs/images/Hover-logo-light.PNG)
+# ![Hover](docs/images/Hover-logo-title.PNG)
 
 > Imagine editing a picture layer by layer, not pixel by pixel, nor by splashing paint.
 > 
