@@ -14,7 +14,7 @@ def test_dimensionality_reduction(n_points=1000):
     assert embedding.shape == (n_points, 2)
 
     reducer.fit_transform(
-        "ivis", embedding_dims=2, k=3, distance="pn", margin=1, batch_size=16, epochs=20
+        "ivis", embedding_dims=2, k=3, distance="pn", batch_size=16, epochs=20
     )
     embedding = reducer.transform(arr, "ivis")
     assert embedding.shape == (n_points, 2)
