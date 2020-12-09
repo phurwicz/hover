@@ -18,7 +18,7 @@ console = Console()
 
 class SupervisableDataset(ABC):
     """
-    Type-agnostic class for a dataset open to supervision.
+    Feature-agnostic class for a dataset open to supervision.
     Raw -- piecewise annoatation -> Gold -> Dev/Test
     Raw -- batch annotation -> Noisy -> Train
 
