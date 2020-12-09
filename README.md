@@ -1,7 +1,7 @@
-# ![Hover](docs/images/Hover-logo-title.jpg)
+# ![Hover](docs/images/hover-logo-title.png)
 
 > Imagine editing a picture layer by layer, not pixel by pixel, nor by splashing paint.
-> 
+>
 > We can apply this idea to datasets.
 
 [![PyPI Stage](https://img.shields.io/pypi/status/hover?style=for-the-badge)](https://pypi.org)
