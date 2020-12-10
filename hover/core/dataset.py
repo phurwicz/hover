@@ -119,7 +119,10 @@ class SupervisableDataset(ABC):
 
         self.dedup_trigger.on_click(callback_dedup)
 
-    def layout_widgets(self):
+    def view(self):
+        """
+        Defines the layout of bokeh models.
+        """
         return column(
             row(self.update_pusher, self.data_committer, self.dedup_trigger),
             self.pop_table,

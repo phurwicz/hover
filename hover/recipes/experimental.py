@@ -37,7 +37,7 @@ def simple_annotator(dataset, height=600, width=600):
     dataset.subscribe_update_push(corpus_annotator, {"raw": "raw", "train": "train"})
     dataset.subscribe_data_commit(corpus_annotator, {"train": "raw"})
 
-    sidebar = dataset.layout_widgets()
+    sidebar = dataset.view()
     layout = row(sidebar, corpus_annotator.view())
     return layout
 
@@ -80,7 +80,7 @@ def linked_annotator(dataset, height=600, width=600):
     dataset.subscribe_update_push(corpus_annotator, {"raw": "raw", "train": "train"})
     dataset.subscribe_data_commit(corpus_annotator, {"train": "raw"})
 
-    sidebar = dataset.layout_widgets()
+    sidebar = dataset.view()
     layout = row(sidebar, corpus_explorer.view(), corpus_annotator.view())
     return layout
 
@@ -126,7 +126,7 @@ def snorkel_crosscheck(dataset, lf_list, height=600, width=600):
     dataset.subscribe_update_push(corpus_annotator, {"raw": "raw", "train": "train"})
     dataset.subscribe_data_commit(corpus_annotator, {"train": "raw"})
 
-    sidebar = dataset.layout_widgets()
+    sidebar = dataset.view()
     layout = row(sidebar, snorkel_explorer.view(), corpus_annotator.view())
     return layout
 
@@ -225,7 +225,7 @@ def active_learning(dataset, vectorizer, vecnet_callback, height=600, width=600)
         return model_retrainer, epochs_slider
 
     model_retrainer, epochs_slider = setup_model_retrainer()
-    sidebar = column(model_retrainer, epochs_slider, dataset.layout_widgets())
+    sidebar = column(model_retrainer, epochs_slider, dataset.view())
     layout = row(
         sidebar,
         *[
