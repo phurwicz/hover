@@ -55,19 +55,23 @@ The most exciting features of `Hover` employ lots of Python callbacks, for which
 
 ## :package: Installation
 
+> Python: 3.6+
+>
+> OS: tested on Mac & Linux
+
 To get the latest release version, you can use `pip`:
 
 ```bash
 pip install hover
 ```
 
-Installation through `conda` is not yet supported.
+Installation through `conda` is not yet available. Please open an issue if you would like `conda` or `conda-forge` support.
 
 ## :flamingo: Features
 
 Here we attempt a quick comparison with a few other packages that do machine teaching:
 
-Package        | `Hover`                               | `Prodigy`                               | `Snorkel`
+Package        | `Hover`                               | [`Prodigy`](https://prodi.gy)           | [`Snorkel`](https://snorkel.ai)
 -------------- | ------------------------------------- | --------------------------------------- | -------------------------
 Core idea      | supervise like editing a picture      | scriptable active learning              | programmatic distant supervision
 Annotates per  | batch of just the size you find right | piece predicted to be the most valuable | the whole dataset as long as it fits in
