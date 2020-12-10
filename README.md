@@ -22,10 +22,10 @@
 
 Check out [@phurwicz/hover-binder](https://github.com/phurwicz/hover-binder) for a complete list of demo apps.
 
-## :flags: Announcements
+## :flags: Latest Announcements
 
--   **Dec 6** Video tutorials coming soon! The first one is projected to be available by Dec 15, 2020.
--   **Dec 6** Please do not hesitate to post any issues or questions! We are very much under active development and appreciate every piece of feedback.
+-   **Dec 10** We are working to bundle up common usage workflows in `hover.recipes`. Stay tuned!
+-   **Dec 6** Video tutorials coming soon! The first one is projected to be available by Dec 15.
 
 ## :flight_departure: Quick Start
 
