@@ -13,21 +13,6 @@ from hover.core.explorer import (
 from hover.utils.bokeh_helper import servable
 
 
-def dataset_sync_explorer(dataset, explorer, subset_mapping):
-    """
-    Subscribe the sources of an explorer to a SupervisableDataset.
-    """
-    assert isinstance(dataset, SupervisableDataset)
-    assert isinstance(explorer, BokehForLabeledText)
-
-    def push_to_explorer():
-        df_dict = {_v: dataset.dfs[_k] for _k, _v in subset_mapping.items()}
-        explorer._setup_dfs(df_dict)
-        explorer._update_sources()
-
-    dataset.subscribe_update_pusher(push_to_explorer)
-
-
 @servable(title="Simple Annotator")
 def simple_annotator(dataset, height=600, width=600):
     """
@@ -37,17 +22,22 @@ def simple_annotator(dataset, height=600, width=600):
 
     sidebar | [annotate here]
     """
-    corpus_annotator = BokehCorpusAnnotator(
-        {"raw": dataset.dfs["raw"]},
+    # create explorers, setting up the first plots
+    corpus_annotator = BokehCorpusAnnotator.from_dataset(
+        dataset,
+        {"raw": "raw"},
         title="Annotator: apply labels to the selected points",
         height=height,
         width=width,
     )
 
     corpus_annotator.plot()
-    dataset_sync_explorer(dataset, corpus_annotator, {"raw": "raw"})
 
-    sidebar = column(dataset.update_pusher, dataset.pop_table)
+    # subscribe to dataset widgets
+    dataset.subscribe_update_push(corpus_annotator, {"raw": "raw", "train": "train"})
+    dataset.subscribe_data_commit(corpus_annotator, {"train": "raw"})
+
+    sidebar = dataset.layout_widgets()
     layout = row(sidebar, corpus_annotator.view())
     return layout
 
@@ -61,15 +51,18 @@ def linked_annotator(dataset, height=600, width=600):
 
     sidebar | [search here] | [annotate here]
     """
-    corpus_explorer = BokehCorpusExplorer(
-        {"raw": dataset.dfs["raw"]},
+    # create explorers, setting up the first plots
+    corpus_explorer = BokehCorpusExplorer.from_dataset(
+        dataset,
+        {"raw": "raw"},
         title="Corpus: use the search widget for highlights",
         height=height,
         width=width,
     )
 
-    corpus_annotator = BokehCorpusAnnotator(
-        {"raw": dataset.dfs["raw"]},
+    corpus_annotator = BokehCorpusAnnotator.from_dataset(
+        dataset,
+        {"raw": "raw"},
         title="Annotator: apply labels to the selected points",
         height=height,
         width=width,
@@ -78,12 +71,16 @@ def linked_annotator(dataset, height=600, width=600):
     corpus_explorer.plot()
     corpus_annotator.plot()
 
+    # link coordinates and selections
     corpus_explorer.link_xy_range(corpus_annotator)
     corpus_explorer.link_selection("raw", corpus_annotator, "raw")
-    dataset_sync_explorer(dataset, corpus_explorer, {"raw": "raw"})
-    dataset_sync_explorer(dataset, corpus_annotator, {"raw": "raw"})
 
-    sidebar = column(dataset.update_pusher, dataset.pop_table)
+    # subscribe to dataset widgets
+    dataset.subscribe_update_push(corpus_explorer, {"raw": "raw", "train": "train"})
+    dataset.subscribe_update_push(corpus_annotator, {"raw": "raw", "train": "train"})
+    dataset.subscribe_data_commit(corpus_annotator, {"train": "raw"})
+
+    sidebar = dataset.layout_widgets()
     layout = row(sidebar, corpus_explorer.view(), corpus_annotator.view())
     return layout
 
@@ -97,15 +94,18 @@ def snorkel_crosscheck(dataset, lf_list, height=600, width=600):
 
     sidebar | [inspect LFs here] | [annotate here]
     """
-    snorkel_explorer = BokehSnorkelExplorer(
-        {"raw": dataset.dfs["raw"], "labeled": dataset.dfs["dev"]},
+    # create explorers, setting up the first plots
+    snorkel_explorer = BokehSnorkelExplorer.from_dataset(
+        dataset,
+        {"raw": "raw", "dev": "labeled"},
         title="Snorkel: square for correct, x for incorrect, + for missed, o for hit; click on legends to hide or show LF",
         height=height,
         width=width,
     )
 
-    corpus_annotator = BokehCorpusAnnotator(
-        {"raw": dataset.dfs["raw"]},
+    corpus_annotator = BokehCorpusAnnotator.from_dataset(
+        dataset,
+        {"raw": "raw"},
         title="Annotator: apply labels to the selected points",
         height=height,
         width=width,
@@ -117,12 +117,16 @@ def snorkel_crosscheck(dataset, lf_list, height=600, width=600):
     snorkel_explorer.figure.legend.click_policy = "hide"
     corpus_annotator.plot()
 
+    # link coordinates and selections
     snorkel_explorer.link_xy_range(corpus_annotator)
     snorkel_explorer.link_selection("raw", corpus_annotator, "raw")
-    dataset_sync_explorer(dataset, snorkel_explorer, {"raw": "raw", "dev": "labeled"})
-    dataset_sync_explorer(dataset, corpus_annotator, {"raw": "raw"})
 
-    sidebar = column(dataset.update_pusher, dataset.pop_table)
+    # subscribe to dataset widgets
+    dataset.subscribe_update_push(snorkel_explorer, {"raw": "raw", "dev": "labeled"})
+    dataset.subscribe_update_push(corpus_annotator, {"raw": "raw", "train": "train"})
+    dataset.subscribe_data_commit(corpus_annotator, {"train": "raw"})
+
+    sidebar = dataset.layout_widgets()
     layout = row(sidebar, snorkel_explorer.view(), corpus_annotator.view())
     return layout
 
@@ -130,14 +134,21 @@ def snorkel_crosscheck(dataset, lf_list, height=600, width=600):
 @servable(title="Active Learning")
 def active_learning(dataset, vectorizer, vecnet_callback, height=600, width=600):
     """
-    [MISSING SUMMARY DOCSTRING]
+    Place a VectorNet in the loop.
+
+    TODO: this workflow, along with SoftLabelExplorer, should accept raw/train/dev
+    and allow any of them to be empty at any point.
 
     Layout:
 
     sidebar | [inspect soft labels here] | [annotate here] | [search here]
     """
-    softlabel_explorer = BokehSnorkelExplorer(
-        {"raw": dataset.dfs["raw"], "labeled": dataset.dfs["dev"]},
+    # create explorers, setting up the first plots
+    # link coordinates and selections
+    # subscribe to dataset widgets
+    softlabel_explorer = BokehSoftLabelExplorer.from_dataset(
+        dataset,
+        {"raw": "raw", "dev": "labeled"},
         "pred_label",
         "pred_score",
         title="Prediction Visualizer: retrain model and locate confusions",
@@ -145,15 +156,17 @@ def active_learning(dataset, vectorizer, vecnet_callback, height=600, width=600)
         width=width,
     )
 
-    corpus_annotator = BokehCorpusAnnotator(
-        {"raw": dataset.dfs["raw"]},
+    corpus_annotator = BokehCorpusAnnotator.from_dataset(
+        dataset,
+        {"raw": "raw"},
         title="Annotator: apply labels to the selected points",
         height=height,
         width=width,
     )
 
-    corpus_explorer = BokehCorpusExplorer(
-        {"raw": dataset.dfs["raw"]},
+    corpus_explorer = BokehCorpusExplorer.from_dataset(
+        dataset,
+        {"raw": "raw"},
         title="Corpus: use the search widget for highlights",
         height=height,
         width=width,
@@ -163,14 +176,21 @@ def active_learning(dataset, vectorizer, vecnet_callback, height=600, width=600)
     corpus_annotator.plot()
     corpus_explorer.plot()
 
+    # link coordinates and selections
     softlabel_explorer.link_xy_range(corpus_annotator)
     softlabel_explorer.link_xy_range(corpus_explorer)
     softlabel_explorer.link_selection("raw", corpus_annotator, "raw")
     softlabel_explorer.link_selection("raw", corpus_explorer, "raw")
-    dataset_sync_explorer(dataset, softlabel_explorer, {"raw": "raw", "dev": "labeled"})
-    dataset_sync_explorer(dataset, corpus_annotator, {"raw": "raw"})
-    dataset_sync_explorer(dataset, corpus_explorer, {"raw": "raw"})
 
+    # subscribe to dataset widgets
+    dataset.subscribe_update_push(
+        softlabel_explorer, {"raw": "raw", "train": "train", "dev": "dev"}
+    )
+    dataset.subscribe_update_push(corpus_annotator, {"raw": "raw", "train": "train"})
+    dataset.subscribe_update_push(corpus_explorer, {"raw": "raw", "train": "train"})
+    dataset.subscribe_data_commit(corpus_annotator, {"train": "raw"})
+
+    # recipe-specific widget
     def setup_model_retrainer():
         model_retrainer = Button(label="Train model", button_type="primary")
         epochs_slider = Slider(start=1, end=20, value=1, step=1, title="# epochs")
@@ -182,7 +202,7 @@ def active_learning(dataset, vectorizer, vecnet_callback, height=600, width=600)
             dataset.setup_label_coding()
             model = vecnet_callback()
 
-            train_loader = dataset.loader("raw", vectorizer, smoothing_coeff=0.2)
+            train_loader = dataset.loader("train", vectorizer, smoothing_coeff=0.2)
             dev_loader = dataset.loader("dev", vectorizer)
 
             _ = model.train(train_loader, dev_loader, epochs=epochs_slider.value)
@@ -205,9 +225,7 @@ def active_learning(dataset, vectorizer, vecnet_callback, height=600, width=600)
         return model_retrainer, epochs_slider
 
     model_retrainer, epochs_slider = setup_model_retrainer()
-    sidebar = column(
-        model_retrainer, epochs_slider, dataset.update_pusher, dataset.pop_table
-    )
+    sidebar = column(model_retrainer, epochs_slider, dataset.layout_widgets())
     layout = row(
         sidebar,
         *[
