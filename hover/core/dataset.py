@@ -8,7 +8,6 @@ import numpy as np
 from tqdm import tqdm
 from rich.console import Console
 from hover import module_config
-from hover.utils.torch_helper import vector_dataloader, one_hot, label_smoothing
 from bokeh.models import Button
 from bokeh.models import ColumnDataSource, DataTable, TableColumn
 
@@ -263,6 +262,9 @@ class SupervisableDataset(ABC):
         - param smoothing_coeff: the smoothing coeffient for soft labels.
           - type smoothing_coeff: float
         """
+        # lazy import: missing torch should not break the rest of the class
+        from hover.utils.torch_helper import vector_dataloader, one_hot, label_smoothing
+
         # take the slice that has a meaningful label
         df = self.dfs[key][self.dfs[key]["label"] != module_config.ABSTAIN_DECODED]
 
