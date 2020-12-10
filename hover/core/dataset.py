@@ -8,8 +8,8 @@ import numpy as np
 from tqdm import tqdm
 from rich.console import Console
 from hover import module_config
-from bokeh.models import Button
-from bokeh.models import ColumnDataSource, DataTable, TableColumn
+from bokeh.models import Button, Dropdown, ColumnDataSource, DataTable, TableColumn
+from bokeh.layouts import row
 
 
 console = Console()
@@ -79,17 +79,98 @@ class SupervisableDataset(ABC):
         self.synchronize_dictl_to_df()
         self.df_deduplicate()
         self.synchronize_df_to_dictl()
-        self.setup_update_pusher()
+        self.setup_widgets()
         # self.setup_label_coding() # redundant if setup_pop_table() immediately calls this again
         self.setup_pop_table()
 
-    def setup_update_pusher(self):
-        self.update_pusher = Button(label="Push dataset updates", button_type="Warning")
+    def setup_widgets(self):
+        """
+        Critical widgets for interactive data management.
+        """
+        self.update_pusher = Button(
+            label="Push", button_type="success", height_policy="fit", width_policy="min"
+        )
+        self.data_committer = Dropdown(
+            label="Commit",
+            button_type="warning",
+            menu=["train", "dev", "test"],
+            height_policy="fit",
+            width_policy="min",
+        )
+        self.dedup_trigger = Button(
+            label="Dedup",
+            button_type="warning",
+            height_policy="fit",
+            width_policy="min",
+        )
 
-    def subscribe_update_push(self, callback):
-        self.update_pusher.on_click(callback)
+        def callback_dedup():
+            self.deduplicate()
+
+        self.dedup_trigger.on_click(callback_dedup)
+
+    def layout_widgets(self):
+        return column(
+            row(self.update_pusher, self.data_committer, self.dedup_trigger),
+            self.pop_table,
+        )
+
+    def subscribe_update_push(self, explorer, subset_mapping):
+        """
+        Enable pushing updated DataFrames to explorers that depend on them.
+
+        Note: the reason we need this is due to `self.dfs[key] = ...`-like assignments. If DF operations were all in-place, then the explorers could directly access the updates through their `self.dfs` references.
+        """
+        assert isinstance(explorer, BokehForLabeledText)
+
+        def callback_push():
+            df_dict = {_v: self.dfs[_k] for _k, _v in subset_mapping.items()}
+            explorer._setup_dfs(df_dict)
+            explorer._update_sources()
+
+        self.update_pusher.on_click(callback_push)
         console.print(
-            f"Subscribed {callback.__name__} to dataset push updates.", style="green"
+            f"Subscribed {explorer.__class__.__name__} to dataset pushes: {subset_mapping}",
+            style="green",
+        )
+
+    def subscribe_data_commit(self, explorer, subset_mapping):
+        """
+        Enable committing data across subsets, specified by a selection in an explorer and a dropdown widget of the dataset.
+        """
+        if self.data_committer.subscribed_events:
+            console.print(
+                f"Attempting subscribe_data_commit: found existing callback, and there should only be one such callback",
+                style="red",
+            )
+            return
+
+        def callback_commit(event):
+            for sub_k, sub_v in subset_mapping.items():
+                sub_to = event.item
+                select_idx = explorer.sources[sub_v].selected.indices
+                if not selected_idx:
+                    console.print(
+                        "Attempting data commit: did not select any data points.",
+                        style="yellow",
+                    )
+                    return
+                selected_slice = self.dfs[sub_k].at[selected_idx]
+                self.dfs[sub_to] = pd.concat(
+                    [self.dfs[sub_to], selected_slice], axis=0, sort=False
+                )
+                self.dfs[sub_to].drop_duplicates(
+                    subset=[self.__class__.FEATURE_KEY], keep="first", inplace=True
+                )
+                console.print(
+                    f"Committed {selected_slice.shape[0]} entries from [{sub_k}] to [{sub_to}].",
+                    style="blue",
+                )
+
+        self.data_committer.on_click(callback_commit)
+        console.print(
+            f"Subscribed {explorer.__class__.__name__} to dataset commits: {subset_mapping}",
+            style="green",
         )
 
     def setup_label_coding(self):
