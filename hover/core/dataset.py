@@ -21,8 +21,10 @@ class SupervisableDataset(ABC):
     Raw -- piecewise annoatation -> Gold -> Dev/Test
     Raw -- batch annotation -> Noisy -> Train
 
-    Keeping a DataFrame form and a list-of-dicts form, with the intention
-    that synchronization should be called manually and sparingly.
+    Keeping a DataFrame form and a list-of-dicts ("dictl") form, with the intention that
+    - the DataFrame form supports most kinds of operations;
+    - the list-of-dicts form could be useful for manipulations outside the scope of pandas;
+    - synchronization between the two forms should be called sparingly.
     """
 
     ORDERED_SUBSET = ("test", "dev", "train", "raw")
@@ -77,7 +79,18 @@ class SupervisableDataset(ABC):
         self.synchronize_dictl_to_df()
         self.df_deduplicate()
         self.synchronize_df_to_dictl()
-        self.setup_label_coding()
+        self.setup_update_pusher()
+        # self.setup_label_coding() # redundant if setup_pop_table() immediately calls this again
+        self.setup_pop_table()
+
+    def setup_update_pusher(self):
+        self.update_pusher = Button(label="Push dataset updates", button_type="Warning")
+
+    def subscribe_update_push(self, callback):
+        self.update_pusher.on_click(callback)
+        console.print(
+            f"Subscribed {callback.__name__} to dataset push updates.", style="green"
+        )
 
     def setup_label_coding(self):
         """
@@ -126,10 +139,7 @@ class SupervisableDataset(ABC):
                 if raise_exception:
                     raise ValueError("invalid labels")
 
-    def setup_pop_updater(self, subsets, sidebar_width=300):
-        pop_updater = Button(
-            label="Update population", button_type="primary", width=sidebar_width
-        )
+    def setup_pop_table(self, subsets=("test", "dev", "train", "raw"), **kwargs):
         pop_source = ColumnDataSource(dict())
         pop_columns = [
             TableColumn(field="label", title="label"),
@@ -138,9 +148,7 @@ class SupervisableDataset(ABC):
                 for _subset in subsets
             ],
         ]
-        pop_table = DataTable(
-            source=pop_source, columns=pop_columns, width=sidebar_width
-        )
+        self.pop_table = DataTable(source=pop_source, columns=pop_columns, **kwargs)
 
         def update_population():
             """
@@ -168,8 +176,7 @@ class SupervisableDataset(ABC):
             )
 
         update_population()
-        pop_updater.on_click(update_population)
-        return pop_updater, pop_table
+        self.subscribe_update_push(update_population)
 
     def df_deduplicate(self):
         """
