@@ -4,11 +4,18 @@
     selection:
       members:
         - __init__
-        - setup_label_coding
-        - loader
-        - compute_2d_embedding
         - synchronize_df_to_dictl
         - synchronize_dictl_to_df
+        - df_deduplicate
+        - compute_2d_embedding
+        - setup_label_coding
+        - validate_labels
+        - loader
+        - setup_widgets
+        - setup_pop_table
+        - view
+        - subscribe_update_push
+        - subscribe_data_commit
 
 
 ---

@@ -4,12 +4,19 @@
     selection:
       members:
         - __init__
+        - from_dataset
         - reset_figure
+        - view
+        - _setup_widgets
+        - _layout_widgets
+        - _setup_dfs
         - _setup_sources
         - _update_sources
         - activate_search
+        - _activate_search_builtin
         - link_selection
         - link_xy_range
+        - _prelink_check
 
 ---
 
@@ -30,6 +37,8 @@
       members:
         - __init__
         - plot
+        - _setup_widgets
+        - _layout_widgets
 
 ---
 
@@ -60,3 +69,8 @@
       members:
         - __init__
         - plot
+        - plot_lf
+        - _view_correct
+        - _view_incorrect
+        - _view_missed
+        - _view_hit
