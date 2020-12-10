@@ -4,7 +4,7 @@ Useful subroutines for working with bokeh in general.
 from functools import wraps
 
 
-def servable(title="Hover-Bokeh"):
+def servable(title=None):
     """
     Parametrizes a decorator which returns a document handle to be passed to bokeh.
 
@@ -49,7 +49,7 @@ def servable(title="Hover-Bokeh"):
 
             def handle(doc):
                 doc.add_root(bokeh_model)
-                doc.title = title
+                doc.title = title or func.__name__
 
             return handle
 
