@@ -8,6 +8,7 @@ from bokeh.palettes import Category20
 from bokeh.transform import factor_cmap
 from abc import ABC, abstractmethod
 from hover import module_config
+from hover.core.dataset import SupervisableDataset
 from hover.utils.misc import current_time
 from .local_config import bokeh_hover_tooltip
 
@@ -87,6 +88,15 @@ class BokehForLabeledText(ABC):
         self._activate_search_builtin()
         self.figure = figure(**self.figure_kwargs)
         self.reset_figure()
+
+    @classmethod
+    def from_dataset(cls, dataset, subset_mapping, *args, **kwargs):
+        """
+        Construct from a SupervisableDataset.
+        """
+        assert isinstance(dataset, SupervisableDataset)
+        df_dict = {_v: dataset.dfs[_k] for _k, _v in subset_mapping.items()}
+        return cls(df_dict, *args, **kwargs)
 
     def reset_figure(self):
         """Start over on the figure."""
@@ -445,7 +455,7 @@ class BokehCorpusAnnotator(BokehCorpusExplorer):
             label = self.annotator_input.value
             selected_idx = self.sources["raw"].selected.indices
             if not selected_idx:
-                logger.warn("Did not select any data points.")
+                logger.warn("Attempting annotation: did not select any data points.")
                 return
             example_old = self.dfs["raw"].at[selected_idx[0], "label"]
             self.dfs["raw"].at[selected_idx, "label"] = label
