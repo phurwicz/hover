@@ -54,20 +54,30 @@ class SupervisableDataset(ABC):
             """
             Burner function to transform the input list of dictionaries into standard format.
             """
+            # edge case when dictl is empty or None
+            if not dictl:
+                return []
+
             # transform the feature and possibly the label
             key_transform = {feature_key: self.__class__.FEATURE_KEY}
             if labels:
                 key_transform[label_key] = "label"
-            # corner case when dictl is empty or None
-            if not dictl:
-                return []
-            return [
-                {
-                    key_transform.get(_key, _key): _value
-                    for _key, _value in _dict.items()
-                }
-                for _dict in dictl
-            ]
+
+            def burner(d):
+                """
+                Burner function to transform a single dict.
+                """
+                if labels:
+                    assert label_key in d, f"Expected dict key {label_key}"
+
+                trans_d = {key_transform.get(_k, _k): _v for _k, _v in d.items()}
+
+                if not labels:
+                    trans_d["label"] = module_config.ABSTAIN_DECODED
+
+                return trans_d
+
+            return [burner(_d) for _d in dictl]
 
         self.dictls = {
             "raw": dictl_transform(raw_dictl, labels=False),
@@ -257,7 +267,7 @@ class SupervisableDataset(ABC):
             )
 
         update_population()
-        self.subscribe_update_push(update_population)
+        self.update_pusher.on_click(update_population)
 
     def df_deduplicate(self):
         """
@@ -300,7 +310,14 @@ class SupervisableDataset(ABC):
         """
         self.dfs = dict()
         for _key, _dictl in self.dictls.items():
-            self.dfs[_key] = pd.DataFrame(_dictl)
+            if _dictl:
+                _df = pd.DataFrame(_dictl)
+                assert self.__class__.FEATURE_KEY in _df.columns
+                assert "label" in _df.columns
+            else:
+                _df = pd.DataFrame(columns=[self.__class__.FEATURE_KEY, "label"])
+
+            self.dfs[_key] = _df
 
     def synchronize_df_to_dictl(self):
         """

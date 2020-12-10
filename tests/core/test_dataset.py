@@ -1,5 +1,4 @@
 import pytest
-from copy import deepcopy
 from hover.core.dataset import SupervisableTextDataset
 
 
@@ -45,7 +44,7 @@ class TestSupervisableTextDataset:
 
     @staticmethod
     def test_compute_2d_embedding(mini_supervisable_text_dataset, dummy_vectorizer):
-        dataset = deepcopy(mini_supervisable_text_dataset)
+        dataset = mini_supervisable_text_dataset
 
         dataset.compute_2d_embedding(dummy_vectorizer, "umap")
         dataset.compute_2d_embedding(dummy_vectorizer, "ivis")
@@ -54,7 +53,7 @@ class TestSupervisableTextDataset:
     def test_loader(mini_supervisable_text_dataset, dummy_vectorizer):
         from torch.utils.data import DataLoader
 
-        dataset = deepcopy(mini_supervisable_text_dataset)
+        dataset = mini_supervisable_text_dataset
 
         try:
             loader = dataset.loader("raw", dummy_vectorizer, smoothing_coeff=0.1)
@@ -66,7 +65,7 @@ class TestSupervisableTextDataset:
             assert isinstance(loader, DataLoader)
 
     @staticmethod
-    def test_setup_pop_updater(mini_supervisable_text_dataset):
-        dataset = deepcopy(mini_supervisable_text_dataset)
+    def test_loader(mini_supervisable_text_dataset, dummy_vectorizer):
+        from torch.utils.data import DataLoader
 
-        pop_updater, pop_table = dataset.setup_pop_updater(subsets=["dev", "test"])
+        dataset = mini_supervisable_text_dataset
