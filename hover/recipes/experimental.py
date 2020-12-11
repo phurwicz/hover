@@ -35,7 +35,7 @@ def simple_annotator(dataset, height=600, width=600):
 
     # subscribe to dataset widgets
     dataset.subscribe_update_push(corpus_annotator, {"raw": "raw", "train": "train"})
-    dataset.subscribe_data_commit(corpus_annotator, {"train": "raw"})
+    dataset.subscribe_data_commit(corpus_annotator, {"raw": "raw"})
 
     sidebar = dataset.view()
     layout = row(sidebar, corpus_annotator.view())
@@ -78,7 +78,7 @@ def linked_annotator(dataset, height=600, width=600):
     # subscribe to dataset widgets
     dataset.subscribe_update_push(corpus_explorer, {"raw": "raw", "train": "train"})
     dataset.subscribe_update_push(corpus_annotator, {"raw": "raw", "train": "train"})
-    dataset.subscribe_data_commit(corpus_annotator, {"train": "raw"})
+    dataset.subscribe_data_commit(corpus_annotator, {"raw": "raw"})
 
     sidebar = dataset.view()
     layout = row(sidebar, corpus_explorer.view(), corpus_annotator.view())
@@ -124,7 +124,7 @@ def snorkel_crosscheck(dataset, lf_list, height=600, width=600):
     # subscribe to dataset widgets
     dataset.subscribe_update_push(snorkel_explorer, {"raw": "raw", "dev": "labeled"})
     dataset.subscribe_update_push(corpus_annotator, {"raw": "raw", "train": "train"})
-    dataset.subscribe_data_commit(corpus_annotator, {"train": "raw"})
+    dataset.subscribe_data_commit(corpus_annotator, {"raw": "raw"})
 
     sidebar = dataset.view()
     layout = row(sidebar, snorkel_explorer.view(), corpus_annotator.view())
@@ -188,7 +188,7 @@ def active_learning(dataset, vectorizer, vecnet_callback, height=600, width=600)
     )
     dataset.subscribe_update_push(corpus_annotator, {"raw": "raw", "train": "train"})
     dataset.subscribe_update_push(corpus_explorer, {"raw": "raw", "train": "train"})
-    dataset.subscribe_data_commit(corpus_annotator, {"train": "raw"})
+    dataset.subscribe_data_commit(corpus_annotator, {"raw": "raw"})
 
     # recipe-specific widget
     def setup_model_retrainer():
