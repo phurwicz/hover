@@ -191,7 +191,7 @@ class BokehForLabeledText(Loggable, ABC):
         Note that it seems mandatory to re-activate the search widgets.
         This is because the source loses plotting kwargs.
         """
-        for _key in self.__class__.DATA_KEY_TO_KWARGS.keys():
+        for _key in self.dfs.keys():
             self.sources[_key].data = self.dfs[_key]
         self._activate_search_builtin()
 
@@ -204,12 +204,16 @@ class BokehForLabeledText(Loggable, ABC):
         """
         self._info("Activating built-in search")
         for _key, _dict in self.__class__.DATA_KEY_TO_KWARGS.items():
-            for _flag, _params in _dict["search"].items():
+            if _key in self.sources.keys():
+                _responding = list(_dict["search"].keys())
+                for _flag, _params in _dict["search"].items():
+                    self.glyph_kwargs[_key] = self.activate_search(
+                        self.sources[_key],
+                        self.glyph_kwargs[_key],
+                        altered_param=_params,
+                    )
                 self._info(
-                    f"Activated {_flag} on subset {_key} to respond to the search widgets."
-                )
-                self.glyph_kwargs[_key] = self.activate_search(
-                    self.sources[_key], self.glyph_kwargs[_key], altered_param=_params
+                    f"Activated {_responding} on subset {_key} to respond to the search widgets."
                 )
 
     def activate_search(self, source, kwargs, altered_param=("size", 10, 5, 7)):
@@ -337,7 +341,7 @@ class BokehForLabeledText(Loggable, ABC):
         Find all labels and an appropriate color map.
         """
         labels = set()
-        for _key in self.__class__.DATA_KEY_TO_KWARGS.keys():
+        for _key in self.dfs.keys():
             labels = labels.union(set(self.dfs[_key]["label"].values))
         labels.discard(module_config.ABSTAIN_DECODED)
         labels = sorted(labels, reverse=True)
@@ -377,26 +381,14 @@ class BokehCorpusExplorer(BokehForLabeledText):
         """
         super().__init__(df_dict, **kwargs)
 
-    def _setup_dfs(self, df_dict, **kwargs):
-        """Extending from the parent method."""
-        for _key in self.__class__.DATA_KEY_TO_KWARGS.keys():
-            for _col in ["text", "x", "y"]:
-                assert _col in df_dict[_key].columns
-
-        super()._setup_dfs(df_dict, **kwargs)
-
     def plot(self, *args, **kwargs):
         """
         (Re)-plot the corpus.
         Called just once per instance most of the time.
         """
-        for _key in self.__class__.DATA_KEY_TO_KWARGS.keys():
+        for _key, _source in self.sources.items():
             self.figure.circle(
-                "x",
-                "y",
-                name=_key,
-                source=self.sources[_key],
-                **self.glyph_kwargs[_key],
+                "x", "y", name=_key, source=_source, **self.glyph_kwargs[_key]
             )
 
 
@@ -490,18 +482,20 @@ class BokehCorpusAnnotator(BokehCorpusExplorer):
                 timestamp = current_time("%Y%m%d%H%M%S")
                 path_root = f"hover-annotated-df-{timestamp}"
 
+            export_df = pd.concat(self.dfs, axis=0, sort=False, ignore_index=True)
+
             if export_format == "Excel":
                 export_path = f"{path_root}.xlsx"
-                self.dfs["raw"].to_excel(export_path, index=False)
+                export_df.to_excel(export_path, index=False)
             elif export_format == "CSV":
                 export_path = f"{path_root}.csv"
-                self.dfs["raw"].to_csv(export_path, index=False)
+                export_df.to_csv(export_path, index=False)
             elif export_format == "JSON":
                 export_path = f"{path_root}.json"
-                self.dfs["raw"].to_json(export_path, orient="records")
+                export_df.to_json(export_path, orient="records")
             elif export_format == "pickle":
                 export_path = f"{path_root}.pkl"
-                self.dfs["raw"].to_pickle(export_path)
+                export_df.to_pickle(export_path)
             else:
                 raise ValueError(f"Unexpected export format {export_format}")
 
@@ -524,14 +518,14 @@ class BokehCorpusAnnotator(BokehCorpusExplorer):
         """
         labels, cmap = self.auto_labels_cmap()
 
-        for _key in self.__class__.DATA_KEY_TO_KWARGS.keys():
+        for _key, _source in self.sources.items():
             self.figure.circle(
                 "x",
                 "y",
                 name=_key,
                 color=factor_cmap("label", cmap, labels),
                 legend_field="label",
-                source=self.sources[_key],
+                source=_source,
                 **self.glyph_kwargs[_key],
             )
 
@@ -578,11 +572,11 @@ class BokehSoftLabelExplorer(BokehCorpusExplorer):
 
     def _setup_dfs(self, df_dict, **kwargs):
         """Extending from the parent method."""
-        for _key in self.__class__.DATA_KEY_TO_KWARGS.keys():
-            for _col in [self.label_col, self.score_col]:
-                assert _col in df_dict[_key].columns
-
         super()._setup_dfs(df_dict, **kwargs)
+
+        for _key, _df in self.dfs.items():
+            for _col in [self.label_col, self.score_col]:
+                assert _col in _df.columns
 
     def plot(self, **kwargs):
         """
@@ -590,7 +584,7 @@ class BokehSoftLabelExplorer(BokehCorpusExplorer):
         """
         labels, cmap = self.auto_labels_cmap()
 
-        for _key in self.__class__.DATA_KEY_TO_KWARGS.keys():
+        for _key, _source in self.sources.items():
             # prepare plot settings
             preset_kwargs = {
                 "legend_field": self.label_col,
@@ -601,9 +595,7 @@ class BokehSoftLabelExplorer(BokehCorpusExplorer):
             eff_kwargs.update(preset_kwargs)
             eff_kwargs.update(kwargs)
 
-            self.figure.circle(
-                "x", "y", name=_key, source=self.sources[_key], **eff_kwargs
-            )
+            self.figure.circle("x", "y", name=_key, source=_source, **eff_kwargs)
 
 
 class BokehMarginExplorer(BokehCorpusExplorer):
