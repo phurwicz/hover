@@ -1,6 +1,5 @@
 """Interactive explorers mostly based on Bokeh."""
 import numpy as np
-from wasabi import msg as logger
 from bokeh.plotting import figure
 from bokeh.models import CustomJS, ColumnDataSource, CDSView, IndexFilter
 from bokeh.layouts import column, row
@@ -8,6 +7,7 @@ from bokeh.palettes import Category20
 from bokeh.transform import factor_cmap
 from abc import ABC, abstractmethod
 from hover import module_config
+from hover.core import Loggable
 from hover.utils.misc import current_time
 from .local_config import bokeh_hover_tooltip
 
@@ -21,7 +21,7 @@ def auto_cmap(labels):
     return cmap
 
 
-class BokehForLabeledText(ABC):
+class BokehForLabeledText(Loggable, ABC):
     """
     Base class that keeps template explorer settings.
 
@@ -63,6 +63,8 @@ class BokehForLabeledText(ABC):
 
     DATA_KEY_TO_KWARGS = {}
 
+    MANDATORY_COLUMNS = ["text", "label", "x", "y"]
+
     def __init__(self, df_dict, **kwargs):
         """
         Operations shared by all child classes.
@@ -74,7 +76,6 @@ class BokehForLabeledText(ABC):
         - activate builtin search callbacks depending on the child class.
         - create a (typically) blank figure under such settings
         """
-        logger.divider(f"Initializing {self.__class__.__name__}")
         self.figure_kwargs = self.__class__.DEFAULT_FIGURE_KWARGS.copy()
         self.figure_kwargs.update(kwargs)
         self.glyph_kwargs = {
@@ -102,7 +103,7 @@ class BokehForLabeledText(ABC):
 
     def reset_figure(self):
         """Start over on the figure."""
-        logger.info("Resetting figure")
+        self._info("Resetting figure")
         self.figure.renderers.clear()
 
     def _setup_widgets(self):
@@ -115,7 +116,7 @@ class BokehForLabeledText(ABC):
 
         # set up text search widgets, without assigning callbacks yet
         # to provide more flexibility with callbacks
-        logger.info("Setting up widgets")
+        self._info("Setting up widgets")
         self.search_pos = TextInput(
             title="Text contains (plain text, or /pattern/flag for regex):",
             width_policy="fit",
@@ -156,25 +157,32 @@ class BokehForLabeledText(ABC):
 
         Intended to be extended in child classes for pre/post processing.
         """
-        logger.info("Setting up dfs")
+        self._info("Setting up DataFrames")
         supplied_keys = set(df_dict.keys())
         expected_keys = set(self.__class__.DATA_KEY_TO_KWARGS.keys())
 
+        # perform high-level df key checks
         supplied_not_expected = supplied_keys.difference(expected_keys)
         expected_not_supplied = expected_keys.difference(supplied_keys)
 
         for _key in supplied_not_expected:
-            logger.warn(
+            self._warn(
                 f"{self.__class__.__name__}.__init__(): got unexpected df key {_key}"
             )
         for _key in expected_not_supplied:
-            logger.warn(
+            self._warn(
                 f"{self.__class__.__name__}.__init__(): missing expected df key {_key}"
             )
 
-        self.dfs = {
-            _key: (_df.copy() if copy else _df) for _key, _df in df_dict.items()
-        }
+        # create df with column checks
+        self.dfs = dict()
+        for _key, _df in df_dict.items():
+            if _key in expected_keys:
+                for _col in self.__class__.MANDATORY_COLUMNS:
+                    assert (
+                        _col in _df.columns
+                    ), f"Missing column '{_col}' from DataFrame: found {_df.columns}"
+                self.dfs[_key] = _df.copy() if copy else _df
 
     def _setup_sources(self):
         """
@@ -182,7 +190,7 @@ class BokehForLabeledText(ABC):
 
         Intended to be extended in child classes for pre/post processing.
         """
-        logger.info("Setting up sources")
+        self._info("Setting up sources")
         self.sources = {_key: ColumnDataSource(_df) for _key, _df in self.dfs.items()}
 
     def _update_sources(self):
@@ -203,10 +211,10 @@ class BokehForLabeledText(ABC):
 
         Note that this is a template method which heavily depends on class attributes.
         """
-        logger.info("Activating built-in search")
+        self._info("Activating built-in search")
         for _key, _dict in self.__class__.DATA_KEY_TO_KWARGS.items():
             for _flag, _params in _dict["search"].items():
-                logger.info(
+                self._info(
                     f"Activated {_flag} on subset {_key} to respond to the search widgets."
                 )
                 self.glyph_kwargs[_key] = self.activate_search(
@@ -405,17 +413,6 @@ class BokehCorpusAnnotator(BokehCorpusExplorer):
         """Conceptually the same as the parent method."""
         super().__init__(df_dict, **kwargs)
 
-    def _setup_dfs(self, df_dict, **kwargs):
-        """
-        Extending from the parent method.
-
-        Add a "label" column if it is not present.
-        """
-        super()._setup_dfs(df_dict, **kwargs)
-
-        if not "label" in self.dfs["raw"].columns:
-            self.dfs["raw"]["label"] = module_config.ABSTAIN_DECODED
-
     def _layout_widgets(self):
         """Define the layout of widgets."""
         layout_rows = (
@@ -457,16 +454,16 @@ class BokehCorpusAnnotator(BokehCorpusExplorer):
             label = self.annotator_input.value
             selected_idx = self.sources["raw"].selected.indices
             if not selected_idx:
-                logger.warn("Attempting annotation: did not select any data points.")
+                self._warn("Attempting annotation: did not select any data points.")
                 return
             example_old = self.dfs["raw"].at[selected_idx[0], "label"]
             self.dfs["raw"].at[selected_idx, "label"] = label
             example_new = self.dfs["raw"].at[selected_idx[0], "label"]
-            logger.good(f"Updated DataFrame, e.g. {example_old} -> {example_new}")
+            self._good(f"Updated DataFrame, e.g. {example_old} -> {example_new}")
 
             self._update_sources()
             self.plot()
-            logger.good(f"Updated annotator plot at {current_time()}")
+            self._good(f"Updated annotator plot at {current_time()}")
 
         def callback_export(event, path_root=None):
             """
@@ -496,7 +493,7 @@ class BokehCorpusAnnotator(BokehCorpusExplorer):
             else:
                 raise ValueError(f"Unexpected export format {export_format}")
 
-            logger.good(f"Saved DataFrame to {export_path}")
+            self._good(f"Saved DataFrame to {export_path}")
 
         # keep the references to the callbacks
         self._callback_apply = callback_apply
@@ -735,10 +732,6 @@ class BokehSnorkelExplorer(BokehCorpusExplorer):
     def _setup_dfs(self, df_dict, **kwargs):
         """Extending from the parent method."""
         super()._setup_dfs(df_dict, **kwargs)
-
-        assert "label" in self.dfs["labeled"].columns
-        if not "label" in self.dfs["raw"].columns:
-            self.dfs["raw"]["label"] = module_config.ABSTAIN_DECODED
 
     def plot_lf(
         self, lf, L_raw=None, L_labeled=None, include=("C", "I", "M"), **kwargs
