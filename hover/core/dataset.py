@@ -2,18 +2,15 @@
 Dataset objects which extend beyond DataFrames.
 Specifically, we need a collection of DataFrames where rows can be transferred cleanly and columns can be transformed easily.
 """
-from abc import ABC
 import pandas as pd
 import numpy as np
 from tqdm import tqdm
-from rich.console import Console
 from hover import module_config
+from hover.core import Loggable
 from bokeh.models import Button, Dropdown, ColumnDataSource, DataTable, TableColumn
 
-console = Console()
 
-
-class SupervisableDataset(ABC):
+class SupervisableDataset(Loggable):
     """
     Feature-agnostic class for a dataset open to supervision.
     Raw -- piecewise annoatation -> Gold -> Dev/Test
@@ -98,7 +95,7 @@ class SupervisableDataset(ABC):
         self.synchronize_df_to_dictl()
         self.setup_widgets()
         # self.setup_label_coding() # redundant if setup_pop_table() immediately calls this again
-        self.setup_pop_table(width="fit", height="fit")
+        self.setup_pop_table(width_policy="fit", height_policy="fit")
 
     def copy(self):
         """
@@ -195,49 +192,48 @@ class SupervisableDataset(ABC):
             explorer._update_sources()
 
         self.update_pusher.on_click(callback_push)
-        console.print(
-            f"Subscribed {explorer.__class__.__name__} to dataset pushes: {subset_mapping}",
-            style="green",
+        self._good(
+            f"Subscribed {explorer.__class__.__name__} to dataset pushes: {subset_mapping}"
         )
 
     def subscribe_data_commit(self, explorer, subset_mapping):
         """
         Enable committing data across subsets, specified by a selection in an explorer and a dropdown widget of the dataset.
         """
-        if self.data_committer.subscribed_events:
-            console.print(
-                f"Attempting subscribe_data_commit: found existing callback, and there should only be one such callback",
-                style="red",
-            )
-            return
 
         def callback_commit(event):
             for sub_k, sub_v in subset_mapping.items():
                 sub_to = event.item
                 selected_idx = explorer.sources[sub_v].selected.indices
                 if not selected_idx:
-                    console.print(
-                        "Attempting data commit: did not select any data points.",
-                        style="yellow",
+                    self._warn(
+                        "Attempting data commit: did not select any data points."
                     )
                     return
-                selected_slice = self.dfs[sub_k].iloc[selected_idx]
 
+                # take selected slice, ignoring ABSTAIN'ed rows
+                sel_slice = self.dfs[sub_k].iloc[selected_idx]
+                valid_slice = sel_slice[
+                    sel_slice["label"] != module_config.ABSTAIN_DECODED
+                ]
+
+                # concat to the end and do some accounting
                 size_before = self.dfs[sub_to].shape[0]
                 self.dfs[sub_to] = pd.concat(
-                    [self.dfs[sub_to], selected_slice], axis=0, sort=False
+                    [self.dfs[sub_to], valid_slice],
+                    axis=0,
+                    sort=False,
+                    ignore_index=True,
                 )
                 size_after = self.dfs[sub_to].shape[0]
 
-                console.print(
-                    f"Committed {selected_slice.shape[0]} entries from [{sub_k}] to [{sub_to}] ({size_before} -> {size_after}).",
-                    style="blue",
+                self._info(
+                    f"Committed {valid_slice.shape[0]} (valid out of {sel_slice.shape[0]} selected) entries from {sub_k} to {sub_to} ({size_before} -> {size_after})."
                 )
 
         self.data_committer.on_click(callback_commit)
-        console.print(
-            f"Subscribed {explorer.__class__.__name__} to dataset commits: {subset_mapping}",
-            style="green",
+        self._good(
+            f"Subscribed {explorer.__class__.__name__} to dataset commits: {subset_mapping}"
         )
 
     def setup_label_coding(self):
@@ -260,10 +256,7 @@ class SupervisableDataset(ABC):
         }
         self.label_decoder = {_v: _k for _k, _v in self.label_encoder.items()}
 
-        console.print(
-            f"Set up label encoder/decoder with {len(self.classes)} classes.",
-            style="green",
-        )
+        self._good(f"Set up label encoder/decoder with {len(self.classes)} classes.")
         self.validate_labels()
 
     def validate_labels(self, raise_exception=True):
@@ -279,8 +272,8 @@ class SupervisableDataset(ABC):
             _mask = _df["label"].apply(lambda x: x in self.label_encoder)
             _invalid_indices = np.where(_mask == False)[0].tolist()
             if _invalid_indices:
-                console.print(f"Subset [{_key}] has invalid labels:")
-                console.print({_df.loc[_invalid_indices]})
+                self._fail(f"Subset {_key} has invalid labels:")
+                self._print({_df.loc[_invalid_indices]})
                 if raise_exception:
                     raise ValueError("invalid labels")
 
@@ -319,10 +312,8 @@ class SupervisableDataset(ABC):
             # push results to bokeh data source
             pop_source.data = pop_data
 
-            # send a console message
-            console.print(
-                f"Pop updater: latest population with {len(self.classes)} classes",
-                style="green",
+            self._good(
+                f"Pop updater: latest population with {len(self.classes)} classes"
             )
 
         update_population()
@@ -332,7 +323,7 @@ class SupervisableDataset(ABC):
         """
         Cross-deduplicate data entries by feature between subsets.
         """
-        console.print(f"Deduplicating...", style="blue")
+        self._info("Deduplicating...")
         # for data entry accounting
         before, after = dict(), dict()
 
@@ -365,9 +356,7 @@ class SupervisableDataset(ABC):
                 drop=True, inplace=False
             )[columns[_key]]
             after[_key] = self.dfs[_key].shape[0]
-            console.print(
-                f"--subset {_key} rows: {before[_key]} -> {after[_key]}.", style="blue"
-            )
+            self._info(f"--subset {_key} rows: {before[_key]} -> {after[_key]}.")
 
     def synchronize_dictl_to_df(self):
         """
@@ -442,17 +431,16 @@ class SupervisableDataset(ABC):
         features = df[self.__class__.FEATURE_KEY].tolist()
         output_vectors = one_hot(labels, num_classes=len(self.classes))
 
-        console.print(f"Preparing {key} input vectors...", style="blue")
+        self._info(f"Preparing {key} input vectors...")
         input_vectors = [vectorizer(_f) for _f in tqdm(features)]
         if smoothing_coeff > 0.0:
             output_vectors = label_smoothing(
                 output_vectors, coefficient=smoothing_coeff
             )
-        console.print(f"Preparing {key} data loader...", style="blue")
+        self._info(f"Preparing {key} data loader...")
         loader = vector_dataloader(input_vectors, output_vectors, batch_size=batch_size)
-        console.print(
-            f"Prepared {key} loader consisting of {len(features)} examples with batch size {batch_size}",
-            style="green",
+        self._good(
+            f"Prepared {key} loader consisting of {len(features)} examples with batch size {batch_size}"
         )
         return loader
 
