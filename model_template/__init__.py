@@ -4,7 +4,6 @@ import os
 import re
 import numpy as np
 import wrappy
-from hover.utils.common_nn import MLP
 
 CACHE_PATH = os.path.join(os.path.dirname(__file__), "vecs.pkl")
 
@@ -50,6 +49,8 @@ def get_vectorizer():
 
 
 def get_architecture():
+    from hover.utils.common_nn import MLP
+
     return MLP
 
 
