@@ -9,8 +9,6 @@ from tqdm import tqdm
 from rich.console import Console
 from hover import module_config
 from bokeh.models import Button, Dropdown, ColumnDataSource, DataTable, TableColumn
-from bokeh.layouts import row
-
 
 console = Console()
 
@@ -100,7 +98,20 @@ class SupervisableDataset(ABC):
         self.synchronize_df_to_dictl()
         self.setup_widgets()
         # self.setup_label_coding() # redundant if setup_pop_table() immediately calls this again
-        self.setup_pop_table()
+        self.setup_pop_table(width="fit", height="fit")
+
+    def copy(self):
+        """
+        Create another instance, carrying over the data entries.
+        """
+        return self.__class__(
+            raw_dictl=self.dictls["raw"],
+            train_dictl=self.dictls["train"],
+            dev_dictl=self.dictls["dev"],
+            test_dictl=self.dictls["test"],
+            feature_key=self.__class__.FEATURE_KEY,
+            label_key="label",
+        )
 
     def setup_widgets(self):
         """
@@ -123,15 +134,45 @@ class SupervisableDataset(ABC):
             width_policy="min",
         )
 
-        def callback_dedup():
-            self.deduplicate()
+        def commit_base_callback():
+            """
+            COMMIT creates cross-duplicates between subsets.
 
-        self.dedup_trigger.on_click(callback_dedup)
+            - PUSH shall be blocked until DEDUP is executed.
+            """
+            self.dedup_trigger.disabled = False
+            self.update_pusher.disabled = True
+
+        def dedup_base_callback():
+            """
+            DEDUP re-creates dfs with different indices than before.
+
+            - COMMIT shall be blocked until PUSH is executed.
+            """
+            self.update_pusher.disabled = False
+            self.data_committer.disabled = True
+            self.df_deduplicate()
+
+        def push_base_callback():
+            """
+            PUSH enforces df consistency with all linked explorers.
+
+            - DEDUP could be blocked because it stays trivial until COMMIT is executed.
+            """
+            self.data_committer.disabled = False
+            self.dedup_trigger.disabled = True
+
+        self.update_pusher.on_click(push_base_callback)
+        self.data_committer.on_click(commit_base_callback)
+        self.dedup_trigger.on_click(dedup_base_callback)
 
     def view(self):
         """
         Defines the layout of bokeh models.
         """
+        # local import to avoid naming confusion/conflicts
+        from bokeh.layouts import row, column
+
         return column(
             row(self.update_pusher, self.data_committer, self.dedup_trigger),
             self.pop_table,
@@ -143,6 +184,9 @@ class SupervisableDataset(ABC):
 
         Note: the reason we need this is due to `self.dfs[key] = ...`-like assignments. If DF operations were all in-place, then the explorers could directly access the updates through their `self.dfs` references.
         """
+        # local import to avoid import cycles
+        from hover.core.explorer import BokehForLabeledText
+
         assert isinstance(explorer, BokehForLabeledText)
 
         def callback_push():
@@ -170,22 +214,23 @@ class SupervisableDataset(ABC):
         def callback_commit(event):
             for sub_k, sub_v in subset_mapping.items():
                 sub_to = event.item
-                select_idx = explorer.sources[sub_v].selected.indices
+                selected_idx = explorer.sources[sub_v].selected.indices
                 if not selected_idx:
                     console.print(
                         "Attempting data commit: did not select any data points.",
                         style="yellow",
                     )
                     return
-                selected_slice = self.dfs[sub_k].at[selected_idx]
+                selected_slice = self.dfs[sub_k].iloc[selected_idx]
+
+                size_before = self.dfs[sub_to].shape[0]
                 self.dfs[sub_to] = pd.concat(
                     [self.dfs[sub_to], selected_slice], axis=0, sort=False
                 )
-                self.dfs[sub_to].drop_duplicates(
-                    subset=[self.__class__.FEATURE_KEY], keep="last", inplace=True
-                )
+                size_after = self.dfs[sub_to].shape[0]
+
                 console.print(
-                    f"Committed {selected_slice.shape[0]} entries from [{sub_k}] to [{sub_to}].",
+                    f"Committed {selected_slice.shape[0]} entries from [{sub_k}] to [{sub_to}] ({size_before} -> {size_after}).",
                     style="blue",
                 )
 
@@ -287,6 +332,7 @@ class SupervisableDataset(ABC):
         """
         Cross-deduplicate data entries by feature between subsets.
         """
+        console.print(f"Deduplicating...", style="blue")
         # for data entry accounting
         before, after = dict(), dict()
 
