@@ -29,13 +29,13 @@ class SupervisableDataset(ABC):
 
     # 'scratch': intended to be directly editable by other objects, i.e. Explorers
     # labels will be stored but not used for information in hover itself
-    SCRATCH_SUBSETS = "raw"
+    SCRATCH_SUBSETS = tuple(["raw"])
 
     # non-'scratch': intended to be read-only outside of the class
     # 'public': labels will be considered as part of the classification task and will be used for built-in supervision
-    PUBLIC_SUBSETS = ("train", "dev")
+    PUBLIC_SUBSETS = tuple(["train", "dev"])
     # 'private': labels will be considered as part of the classification task and will NOT be used for supervision
-    PRIVATE_SUBSETS = "test"
+    PRIVATE_SUBSETS = tuple(["test"])
 
     FEATURE_KEY = "feature"
 
