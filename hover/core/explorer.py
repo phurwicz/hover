@@ -8,7 +8,6 @@ from bokeh.palettes import Category20
 from bokeh.transform import factor_cmap
 from abc import ABC, abstractmethod
 from hover import module_config
-from hover.core.dataset import SupervisableDataset
 from hover.utils.misc import current_time
 from .local_config import bokeh_hover_tooltip
 
@@ -94,6 +93,9 @@ class BokehForLabeledText(ABC):
         """
         Construct from a SupervisableDataset.
         """
+        # local import to avoid import cycles
+        from hover.core.dataset import SupervisableDataset
+
         assert isinstance(dataset, SupervisableDataset)
         df_dict = {_v: dataset.dfs[_k] for _k, _v in subset_mapping.items()}
         return cls(df_dict, *args, **kwargs)
