@@ -27,7 +27,16 @@ class SupervisableDataset(ABC):
     - synchronization between the two forms should be called sparingly.
     """
 
-    ORDERED_SUBSET = ("test", "dev", "train", "raw")
+    # 'scratch': intended to be directly editable by other objects, i.e. Explorers
+    # labels will be stored but not used for information in hover itself
+    SCRATCH_SUBSETS = "raw"
+
+    # non-'scratch': intended to be read-only outside of the class
+    # 'public': labels will be considered as part of the classification task and will be used for built-in supervision
+    PUBLIC_SUBSETS = ("train", "dev")
+    # 'private': labels will be considered as part of the classification task and will NOT be used for supervision
+    PRIVATE_SUBSETS = "test"
+
     FEATURE_KEY = "feature"
 
     def __init__(
@@ -103,7 +112,7 @@ class SupervisableDataset(ABC):
         self.data_committer = Dropdown(
             label="Commit",
             button_type="warning",
-            menu=["train", "dev", "test"],
+            menu=[*self.__class__.PUBLIC_SUBSETS, *self.__class__.PRIVATE_SUBSETS],
             height_policy="fit",
             width_policy="min",
         )
@@ -173,7 +182,7 @@ class SupervisableDataset(ABC):
                     [self.dfs[sub_to], selected_slice], axis=0, sort=False
                 )
                 self.dfs[sub_to].drop_duplicates(
-                    subset=[self.__class__.FEATURE_KEY], keep="first", inplace=True
+                    subset=[self.__class__.FEATURE_KEY], keep="last", inplace=True
                 )
                 console.print(
                     f"Committed {selected_slice.shape[0]} entries from [{sub_k}] to [{sub_to}].",
@@ -192,11 +201,8 @@ class SupervisableDataset(ABC):
         Add ABSTAIN as a no-label placeholder.
         """
         all_labels = set()
-        for _key in self.__class__.ORDERED_SUBSET[:-1]:
+        for _key in [*self.__class__.PUBLIC_SUBSETS, *self.__class__.PRIVATE_SUBSETS]:
             _df = self.dfs[_key]
-            if _df.empty:
-                continue
-            assert "label" in _df.columns
             _found_labels = set(_df["label"].tolist())
             all_labels = all_labels.union(_found_labels)
 
@@ -219,7 +225,7 @@ class SupervisableDataset(ABC):
         """
         Check that every label is in the encoder.
         """
-        for _key in self.__class__.ORDERED_SUBSET[:-1]:
+        for _key in [*self.__class__.PUBLIC_SUBSETS, *self.__class__.PRIVATE_SUBSETS]:
             _df = self.dfs[_key]
             _invalid_indices = None
             if _df.empty:
@@ -233,7 +239,12 @@ class SupervisableDataset(ABC):
                 if raise_exception:
                     raise ValueError("invalid labels")
 
-    def setup_pop_table(self, subsets=("test", "dev", "train", "raw"), **kwargs):
+    def setup_pop_table(self, **kwargs):
+        subsets = [
+            *self.__class__.SCRATCH_SUBSETS,
+            *self.__class__.PUBLIC_SUBSETS,
+            *self.__class__.PRIVATE_SUBSETS,
+        ]
         pop_source = ColumnDataSource(dict())
         pop_columns = [
             TableColumn(field="label", title="label"),
@@ -279,26 +290,31 @@ class SupervisableDataset(ABC):
         # for data entry accounting
         before, after = dict(), dict()
 
+        # deduplicating rule: entries that come LATER are of higher priority
+        ordered_subsets = [
+            *self.__class__.SCRATCH_SUBSETS,
+            *self.__class__.PUBLIC_SUBSETS,
+            *self.__class__.PRIVATE_SUBSETS,
+        ]
+
         # keep track of which df has which columns and which rows came from which subset
         columns = dict()
-        for _key in self.__class__.ORDERED_SUBSET:
+        for _key in ordered_subsets:
             before[_key] = self.dfs[_key].shape[0]
             columns[_key] = self.dfs[_key].columns
             self.dfs[_key]["__subset"] = _key
 
         # concatenate in order and deduplicate
         overall_df = pd.concat(
-            [self.dfs[_key] for _key in self.__class__.ORDERED_SUBSET],
-            axis=0,
-            sort=False,
+            [self.dfs[_key] for _key in ordered_subsets], axis=0, sort=False
         )
         overall_df.drop_duplicates(
-            subset=[self.__class__.FEATURE_KEY], keep="first", inplace=True
+            subset=[self.__class__.FEATURE_KEY], keep="last", inplace=True
         )
         overall_df.reset_index(drop=True, inplace=True)
 
         # cut up slices
-        for _key in self.__class__.ORDERED_SUBSET:
+        for _key in ordered_subsets:
             self.dfs[_key] = overall_df[overall_df["__subset"] == _key].reset_index(
                 drop=True, inplace=False
             )[columns[_key]]
@@ -337,7 +353,7 @@ class SupervisableDataset(ABC):
         from hover.core.representation.reduction import DimensionalityReducer
 
         # prepare input vectors to manifold learning
-        subset = ["raw", "train", "dev"]
+        subset = [*self.__class__.SCRATCH_SUBSETS, *self.__class__.PUBLIC_SUBSETS]
         fit_inp = []
         for _key in subset:
             _df = self.dfs[_key]
