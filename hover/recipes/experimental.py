@@ -25,7 +25,7 @@ def simple_annotator(dataset, height=600, width=600):
     # create explorers, setting up the first plots
     corpus_annotator = BokehCorpusAnnotator.from_dataset(
         dataset,
-        {"raw": "raw"},
+        {_k: _k for _k in ["raw", "train", "dev", "test"]},
         title="Annotator: apply labels to the selected points",
         height=height,
         width=width,
@@ -34,7 +34,9 @@ def simple_annotator(dataset, height=600, width=600):
     corpus_annotator.plot()
 
     # subscribe to dataset widgets
-    dataset.subscribe_update_push(corpus_annotator, {"raw": "raw", "train": "train"})
+    dataset.subscribe_update_push(
+        corpus_annotator, {_k: _k for _k in ["raw", "train", "dev", "test"]}
+    )
     dataset.subscribe_data_commit(corpus_annotator, {"raw": "raw"})
 
     sidebar = dataset.view()
@@ -54,7 +56,7 @@ def linked_annotator(dataset, height=600, width=600):
     # create explorers, setting up the first plots
     corpus_explorer = BokehCorpusExplorer.from_dataset(
         dataset,
-        {"raw": "raw"},
+        {_k: _k for _k in ["raw", "train", "dev", "test"]},
         title="Corpus: use the search widget for highlights",
         height=height,
         width=width,
@@ -62,7 +64,7 @@ def linked_annotator(dataset, height=600, width=600):
 
     corpus_annotator = BokehCorpusAnnotator.from_dataset(
         dataset,
-        {"raw": "raw"},
+        {_k: _k for _k in ["raw", "train", "dev", "test"]},
         title="Annotator: apply labels to the selected points",
         height=height,
         width=width,
@@ -76,8 +78,12 @@ def linked_annotator(dataset, height=600, width=600):
     corpus_explorer.link_selection("raw", corpus_annotator, "raw")
 
     # subscribe to dataset widgets
-    dataset.subscribe_update_push(corpus_explorer, {"raw": "raw", "train": "train"})
-    dataset.subscribe_update_push(corpus_annotator, {"raw": "raw", "train": "train"})
+    dataset.subscribe_update_push(
+        corpus_explorer, {_k: _k for _k in ["raw", "train", "dev", "test"]}
+    )
+    dataset.subscribe_update_push(
+        corpus_annotator, {_k: _k for _k in ["raw", "train", "dev", "test"]}
+    )
     dataset.subscribe_data_commit(corpus_annotator, {"raw": "raw"})
 
     sidebar = dataset.view()
@@ -105,7 +111,7 @@ def snorkel_crosscheck(dataset, lf_list, height=600, width=600):
 
     corpus_annotator = BokehCorpusAnnotator.from_dataset(
         dataset,
-        {"raw": "raw"},
+        {_k: _k for _k in ["raw", "train", "dev", "test"]},
         title="Annotator: apply labels to the selected points",
         height=height,
         width=width,
@@ -123,7 +129,9 @@ def snorkel_crosscheck(dataset, lf_list, height=600, width=600):
 
     # subscribe to dataset widgets
     dataset.subscribe_update_push(snorkel_explorer, {"raw": "raw", "dev": "labeled"})
-    dataset.subscribe_update_push(corpus_annotator, {"raw": "raw", "train": "train"})
+    dataset.subscribe_update_push(
+        corpus_annotator, {_k: _k for _k in ["raw", "train", "dev", "test"]}
+    )
     dataset.subscribe_data_commit(corpus_annotator, {"raw": "raw"})
 
     sidebar = dataset.view()
@@ -148,7 +156,7 @@ def active_learning(dataset, vectorizer, vecnet_callback, height=600, width=600)
     # subscribe to dataset widgets
     softlabel_explorer = BokehSoftLabelExplorer.from_dataset(
         dataset,
-        {"raw": "raw", "dev": "labeled"},
+        {_k: _k for _k in ["raw", "train", "dev"]},
         "pred_label",
         "pred_score",
         title="Prediction Visualizer: retrain model and locate confusions",
@@ -158,7 +166,7 @@ def active_learning(dataset, vectorizer, vecnet_callback, height=600, width=600)
 
     corpus_annotator = BokehCorpusAnnotator.from_dataset(
         dataset,
-        {"raw": "raw"},
+        {_k: _k for _k in ["raw", "train", "dev", "test"]},
         title="Annotator: apply labels to the selected points",
         height=height,
         width=width,
@@ -166,7 +174,7 @@ def active_learning(dataset, vectorizer, vecnet_callback, height=600, width=600)
 
     corpus_explorer = BokehCorpusExplorer.from_dataset(
         dataset,
-        {"raw": "raw"},
+        {_k: _k for _k in ["raw", "train", "dev", "test"]},
         title="Corpus: use the search widget for highlights",
         height=height,
         width=width,
@@ -184,10 +192,14 @@ def active_learning(dataset, vectorizer, vecnet_callback, height=600, width=600)
 
     # subscribe to dataset widgets
     dataset.subscribe_update_push(
-        softlabel_explorer, {"raw": "raw", "train": "train", "dev": "dev"}
+        softlabel_explorer, {_k: _k for _k in ["raw", "train", "dev"]}
     )
-    dataset.subscribe_update_push(corpus_annotator, {"raw": "raw", "train": "train"})
-    dataset.subscribe_update_push(corpus_explorer, {"raw": "raw", "train": "train"})
+    dataset.subscribe_update_push(
+        corpus_annotator, {_k: _k for _k in ["raw", "train", "dev", "test"]}
+    )
+    dataset.subscribe_update_push(
+        corpus_explorer, {_k: _k for _k in ["raw", "train", "dev", "test"]}
+    )
     dataset.subscribe_data_commit(corpus_annotator, {"raw": "raw"})
 
     # recipe-specific widget
