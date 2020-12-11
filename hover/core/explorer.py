@@ -12,15 +12,6 @@ from hover.utils.misc import current_time
 from .local_config import bokeh_hover_tooltip
 
 
-def auto_cmap(labels):
-    """
-    Find an appropriate color map based on provide labels.
-    """
-    assert len(labels) <= 20, "Too many labels to support"
-    cmap = "Category10_10" if len(labels) <= 10 else "Category20_20"
-    return cmap
-
-
 class BokehForLabeledText(Loggable, ABC):
     """
     Base class that keeps template explorer settings.
@@ -341,6 +332,20 @@ class BokehForLabeledText(Loggable, ABC):
         """
         pass
 
+    def auto_labels_cmap(self):
+        """
+        Find all labels and an appropriate color map.
+        """
+        labels = set()
+        for _key in self.__class__.DATA_KEY_TO_KWARGS.keys():
+            labels = labels.union(set(self.dfs[_key]["label"].values))
+        labels.discard(module_config.ABSTAIN_DECODED)
+        labels = sorted(labels, reverse=True)
+
+        assert len(labels) <= 20, "Too many labels to support (max at 20)"
+        cmap = "Category10_10" if len(labels) <= 10 else "Category20_20"
+        return labels, cmap
+
 
 class BokehCorpusExplorer(BokehForLabeledText):
     """
@@ -352,7 +357,7 @@ class BokehCorpusExplorer(BokehForLabeledText):
     """
 
     DATA_KEY_TO_KWARGS = {
-        "raw": {
+        _key: {
             "constant": {"line_alpha": 0.4},
             "search": {
                 "size": ("size", 10, 5, 7),
@@ -360,6 +365,7 @@ class BokehCorpusExplorer(BokehForLabeledText):
                 "color": ("color", "coral", "linen", "gainsboro"),
             },
         }
+        for _key in ["raw", "train", "dev", "test"]
     }
 
     def __init__(self, df_dict, **kwargs):
@@ -384,9 +390,14 @@ class BokehCorpusExplorer(BokehForLabeledText):
         (Re)-plot the corpus.
         Called just once per instance most of the time.
         """
-        self.figure.circle(
-            "x", "y", name="raw", source=self.sources["raw"], **self.glyph_kwargs["raw"]
-        )
+        for _key in self.__class__.DATA_KEY_TO_KWARGS.keys():
+            self.figure.circle(
+                "x",
+                "y",
+                name=_key,
+                source=self.sources[_key],
+                **self.glyph_kwargs[_key],
+            )
 
 
 class BokehCorpusAnnotator(BokehCorpusExplorer):
@@ -400,13 +411,14 @@ class BokehCorpusAnnotator(BokehCorpusExplorer):
     """
 
     DATA_KEY_TO_KWARGS = {
-        "raw": {
+        _key: {
             "constant": {"line_alpha": 0.3},
             "search": {
                 "size": ("size", 10, 5, 7),
                 "fill_alpha": ("fill_alpha", 0.3, 0.05, 0.2),
             },
         }
+        for _key in ["raw", "train", "dev", "test"]
     }
 
     def __init__(self, df_dict, **kwargs):
@@ -510,18 +522,18 @@ class BokehCorpusAnnotator(BokehCorpusExplorer):
         Overrides the parent method.
         Determines the label->color mapping dynamically.
         """
-        all_labels = sorted(set(self.dfs["raw"]["label"].values), reverse=True)
-        cmap = auto_cmap(all_labels)
+        labels, cmap = self.auto_labels_cmap()
 
-        self.figure.circle(
-            x="x",
-            y="y",
-            name="raw",
-            color=factor_cmap("label", cmap, all_labels),
-            legend_field="label",
-            source=self.sources["raw"],
-            **self.glyph_kwargs["raw"],
-        )
+        for _key in self.__class__.DATA_KEY_TO_KWARGS.keys():
+            self.figure.circle(
+                "x",
+                "y",
+                name=_key,
+                color=factor_cmap("label", cmap, labels),
+                legend_field="label",
+                source=self.sources[_key],
+                **self.glyph_kwargs[_key],
+            )
 
 
 class BokehSoftLabelExplorer(BokehCorpusExplorer):
@@ -536,14 +548,8 @@ class BokehSoftLabelExplorer(BokehCorpusExplorer):
     """
 
     DATA_KEY_TO_KWARGS = {
-        "raw": {
-            "constant": {"line_alpha": 0.5},
-            "search": {"size": ("size", 10, 5, 7)},
-        },
-        "labeled": {
-            "constant": {"line_alpha": 0.5},
-            "search": {"size": ("size", 10, 5, 7)},
-        },
+        _key: {"constant": {"line_alpha": 0.5}, "search": {"size": ("size", 10, 5, 7)}}
+        for _key in ["raw", "train", "dev"]
     }
 
     def __init__(self, df_dict, label_col, score_col, **kwargs):
@@ -582,21 +588,13 @@ class BokehSoftLabelExplorer(BokehCorpusExplorer):
         """
         Plot the confidence map.
         """
-
-        # auto-detect all labels
-        all_labels = set()
-        for _key in self.__class__.DATA_KEY_TO_KWARGS.keys():
-            _df = self.dfs[_key]
-            _labels = set(_df[self.label_col].values)
-            all_labels = all_labels.union(_labels)
-        all_labels = sorted(all_labels, reverse=True)
-        cmap = auto_cmap(all_labels)
+        labels, cmap = self.auto_labels_cmap()
 
         for _key in self.__class__.DATA_KEY_TO_KWARGS.keys():
             # prepare plot settings
             preset_kwargs = {
                 "legend_field": self.label_col,
-                "color": factor_cmap(self.label_col, cmap, all_labels),
+                "color": factor_cmap(self.label_col, cmap, labels),
                 "fill_alpha": self.score_col,
             }
             eff_kwargs = self.glyph_kwargs[_key].copy()
@@ -620,10 +618,11 @@ class BokehMarginExplorer(BokehCorpusExplorer):
     """
 
     DATA_KEY_TO_KWARGS = {
-        "raw": {
+        _key: {
             "constant": {"color": "gainsboro", "line_alpha": 0.5, "fill_alpha": 0.0},
             "search": {"size": ("size", 10, 5, 7)},
         }
+        for _key in ["raw", "train", "dev"]
     }
 
     def __init__(self, df_dict, label_col_a, label_col_b, **kwargs):
