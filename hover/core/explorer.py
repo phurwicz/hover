@@ -761,6 +761,17 @@ class BokehSnorkelExplorer(BokehCorpusExplorer):
         """Extending from the parent method."""
         super()._setup_dfs(df_dict, **kwargs)
 
+    def plot(self, *args, **kwargs):
+        """
+        Overriding the parent method.
+
+        Plot only the raw subset.
+        """
+        self.figure.circle(
+            "x", "y", name="raw", source=self.sources["raw"], **self.glyph_kwargs["raw"]
+        )
+        self._good(f"Plotted subset raw with {self.dfs['raw'].shape[0]} points")
+
     def plot_lf(
         self, lf, L_raw=None, L_labeled=None, include=("C", "I", "M"), **kwargs
     ):
@@ -782,7 +793,6 @@ class BokehSnorkelExplorer(BokehCorpusExplorer):
             L_labeled = self.dfs["labeled"].apply(lf, axis=1).values
 
         # prepare plot settings
-        axes = ("x", "y")
         legend_label = f"{', '.join(lf.targets)} | {lf.name}"
         color = self.palette[len(self.lfs) - 1]
 
@@ -837,10 +847,11 @@ class BokehSnorkelExplorer(BokehCorpusExplorer):
 
         # plot created subsets
         for _dict in to_plot:
+            _name = _dict["name"]
             _view = _dict["view"]
             _marker = _dict["marker"]
             _kwargs = _dict["kwargs"]
-            _marker(*axes, source=_view.source, view=_view, **_kwargs)
+            _marker("x", "y", source=_view.source, view=_view, name=_name, **_kwargs)
 
     def _view_correct(self, L_labeled):
         """
