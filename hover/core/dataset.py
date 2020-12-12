@@ -97,10 +97,12 @@ class SupervisableDataset(Loggable):
         # self.setup_label_coding() # redundant if setup_pop_table() immediately calls this again
         self.setup_pop_table(width_policy="fit", height_policy="fit")
 
-    def copy(self):
+    def copy(self, use_df=True):
         """
         Create another instance, carrying over the data entries.
         """
+        if use_df:
+            self.synchronize_df_to_dictl()
         return self.__class__(
             raw_dictl=self.dictls["raw"],
             train_dictl=self.dictls["train"],

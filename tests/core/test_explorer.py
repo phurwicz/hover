@@ -2,6 +2,7 @@
 Note that the whole point of explorers is to allow interaction, for which this file should not be considered a complete suite of tests.
 """
 
+from hover import module_config
 from hover.core.explorer import (
     BokehCorpusExplorer,
     BokehCorpusAnnotator,
@@ -21,7 +22,9 @@ RANDOM_LABEL_LF = labeling_function(targets=PSEUDO_LABELS)(RANDOM_LABEL)
 
 @pytest.fixture
 def example_raw_df(generate_text_df_with_coords):
-    return generate_text_df_with_coords(300)
+    df = generate_text_df_with_coords(300)
+    df["label"] = module_config.ABSTAIN_DECODED
+    return df
 
 
 @pytest.fixture
@@ -56,24 +59,35 @@ class TestBokehCorpusExplorer:
 
         Test as many of those as possible here.
         """
-        explorer = BokehCorpusExplorer({"raw": example_raw_df})
-        other = BokehCorpusAnnotator({"raw": example_raw_df})
 
-        explorer.reset_figure()
-        assert len(explorer.figure.renderers) == 0
+        def subroutine(df_dict):
+            explorer = BokehCorpusExplorer(df_dict)
+            annotator = BokehCorpusAnnotator(df_dict)
 
-        explorer.plot()
-        assert len(explorer.figure.renderers) == 1
+            explorer.reset_figure()
 
-        explorer.dfs["raw"] = example_dev_df
-        explorer._update_sources()
-        explorer.dfs["raw"] = example_raw_df
-        explorer._update_sources()
+            explorer.plot()
 
-        explorer.link_selection("raw", other, "raw")
-        explorer.link_xy_range(other)
+            explorer.dfs["raw"] = example_dev_df
+            explorer._update_sources()
+            explorer.dfs["raw"] = example_raw_df
+            explorer._update_sources()
 
-        _ = explorer.view()
+            explorer.link_selection("raw", annotator, "raw")
+            explorer.link_xy_range(annotator)
+
+            _ = explorer.view()
+
+        df_dict = {
+            "raw": example_raw_df.copy(),
+            "train": example_dev_df.copy(),
+            "dev": example_dev_df.copy(),
+            "test": example_dev_df.copy(),
+        }
+
+        for _key in ["test", "dev", "train", "raw"]:
+            subroutine(df_dict)
+            df_dict.pop(_key)
 
 
 @pytest.mark.core
@@ -98,7 +112,7 @@ class TestBokehSoftLabelExplorer:
     @staticmethod
     def test_init(example_soft_label_df):
         explorer = BokehSoftLabelExplorer(
-            {"raw": example_soft_label_df, "labeled": example_soft_label_df.copy()},
+            {"raw": example_soft_label_df, "train": example_soft_label_df.copy()},
             "pred_label",
             "pred_score",
         )

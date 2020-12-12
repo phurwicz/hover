@@ -175,7 +175,7 @@ class BokehForLabeledText(Loggable, ABC):
                         # edge case: DataFrame has zero rows
                         assert (
                             _df.shape[0] == 0
-                        ), f"Missing column '{_col}' from non-empty DataFrame: found {list(_df.columns)}"
+                        ), f"Missing column '{_col}' from non-empty {_key} DataFrame: found {list(_df.columns)}"
                         _df[_col] = None
 
                 self.dfs[_key] = _df.copy() if copy else _df

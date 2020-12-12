@@ -70,9 +70,6 @@ def mini_supervisable_text_dataset():
         test_dictl=my_20ng["test"][:split_idx],
     )
 
-    dataset.dfs["raw"].drop(["label"], inplace=True, axis=1)
-    dataset.synchronize_df_to_dictl()
-
     return dataset
 
 
@@ -80,8 +77,9 @@ def mini_supervisable_text_dataset():
 def mini_supervisable_text_dataset_embedded(
     mini_supervisable_text_dataset, dummy_vectorizer
 ):
-    dataset = deepcopy(mini_supervisable_text_dataset)
+    dataset = mini_supervisable_text_dataset.copy()
 
     dataset.compute_2d_embedding(dummy_vectorizer, "umap")
+    dataset.synchronize_df_to_dictl()
 
     return dataset
