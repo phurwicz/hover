@@ -421,7 +421,7 @@ class BokehCorpusExplorer(BokehForLabeledText):
             self.figure.circle(
                 "x", "y", name=_key, source=_source, **self.glyph_kwargs[_key]
             )
-            self._good(f"Plotted subset {_key}")
+            self._good(f"Plotted subset {_key} with {self.dfs[_key].shape[0]} points")
 
 
 class BokehCorpusAnnotator(BokehCorpusExplorer):
@@ -439,7 +439,7 @@ class BokehCorpusAnnotator(BokehCorpusExplorer):
             "constant": {"line_alpha": 0.3},
             "search": {
                 "size": ("size", 10, 5, 7),
-                "fill_alpha": ("fill_alpha", 0.3, 0.05, 0.2),
+                "fill_alpha": ("fill_alpha", 0.3, 0.1, 0.2),
             },
         }
         for _key in ["raw", "train", "dev", "test"]
