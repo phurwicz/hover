@@ -2,6 +2,7 @@
 Experimental recipes whose function signatures might change significantly in the future. Use with caution.
 """
 from bokeh.layouts import row, column
+from bokeh.models import Button, Slider
 from hover.core.dataset import SupervisableDataset
 from hover.core.explorer import (
     BokehForLabeledText,
