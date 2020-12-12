@@ -421,6 +421,7 @@ class BokehCorpusExplorer(BokehForLabeledText):
             self.figure.circle(
                 "x", "y", name=_key, source=_source, **self.glyph_kwargs[_key]
             )
+            self._good(f"Plotted subset {_key}")
 
 
 class BokehCorpusAnnotator(BokehCorpusExplorer):
@@ -559,6 +560,7 @@ class BokehCorpusAnnotator(BokehCorpusExplorer):
                 source=_source,
                 **self.glyph_kwargs[_key],
             )
+            self._good(f"Plotted subset {_key} with {self.dfs[_key].shape[0]} points")
 
         self.auto_legend_correction()
 
@@ -631,6 +633,9 @@ class BokehSoftLabelExplorer(BokehCorpusExplorer):
             eff_kwargs.update(kwargs)
 
             self.figure.circle("x", "y", name=_key, source=_source, **eff_kwargs)
+            self._good(f"Plotted subset {_key} with {self.dfs[_key].shape[0]} points")
+
+        self.auto_legend_correction()
 
 
 class BokehMarginExplorer(BokehCorpusExplorer):
