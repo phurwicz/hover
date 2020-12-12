@@ -600,7 +600,7 @@ class BokehSoftLabelExplorer(BokehCorpusExplorer):
 
         for _key, _df in self.dfs.items():
             if not self.label_col in _df.columns:
-                _df[self.label_col] = module_config.ABSTAIN
+                _df[self.label_col] = module_config.ABSTAIN_DECODED
             if not self.score_col in _df.columns:
                 _df[self.score_col] = 0.5
 
