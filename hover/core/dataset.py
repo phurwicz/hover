@@ -284,9 +284,9 @@ class SupervisableDataset(Loggable):
         ]
         pop_source = ColumnDataSource(dict())
         pop_columns = [
-            TableColumn(field="label", title="label"),
+            TableColumn(field="label", title="label", width=150),
             *[
-                TableColumn(field=f"count_{_subset}", title=_subset)
+                TableColumn(field=f"count_{_subset}", title=_subset, width=50)
                 for _subset in subsets
             ],
         ]
