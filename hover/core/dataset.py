@@ -406,7 +406,9 @@ class SupervisableDataset(Loggable):
         fit_embedding = reducer.fit_transform(method, **kwargs)
 
         # compute embedding of the whole dataset
-        self._info(f"Transforming {method.upper()} on {trans_arr.shape[0]} samples...")
+        self._info(
+            f"Transforming {method.upper()} on {trans_arr.shape[0]-fit_num} samples..."
+        )
         trans_embedding = reducer.transform(trans_arr[fit_num:], method)
 
         # assign x and y coordinates to dataset
