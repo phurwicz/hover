@@ -599,8 +599,10 @@ class BokehSoftLabelExplorer(BokehCorpusExplorer):
         super()._setup_dfs(df_dict, **kwargs)
 
         for _key, _df in self.dfs.items():
-            for _col in [self.label_col, self.score_col]:
-                assert _col in _df.columns
+            if not self.label_col in _df.columns:
+                _df[self.label_col] = module_config.ABSTAIN
+            if not self.score_col in _df.columns:
+                _df[self.score_col] = 0.5
 
     def plot(self, **kwargs):
         """
