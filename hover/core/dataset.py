@@ -264,16 +264,13 @@ class SupervisableDataset(Loggable):
         Check that every label is in the encoder.
         """
         for _key in [*self.__class__.PUBLIC_SUBSETS, *self.__class__.PRIVATE_SUBSETS]:
-            _df = self.dfs[_key]
             _invalid_indices = None
-            if _df.empty:
-                continue
-            assert "label" in _df.columns
-            _mask = _df["label"].apply(lambda x: x in self.label_encoder)
+            assert "label" in self.dfs[_key].columns
+            _mask = self.dfs[_key]["label"].apply(lambda x: x in self.label_encoder)
             _invalid_indices = np.where(_mask == False)[0].tolist()
             if _invalid_indices:
                 self._fail(f"Subset {_key} has invalid labels:")
-                self._print({_df.loc[_invalid_indices]})
+                self._print({self.dfs[_key].loc[_invalid_indices]})
                 if raise_exception:
                     raise ValueError("invalid labels")
 
@@ -303,8 +300,7 @@ class SupervisableDataset(Loggable):
             # re-compute label population
             pop_data = dict(label=self.classes)
             for _subset in subsets:
-                _df = self.dfs[_subset]
-                _subpop = _df["label"].value_counts()
+                _subpop = self.dfs[_subset]["label"].value_counts()
                 pop_data[f"count_{_subset}"] = [
                     _subpop.get(_label, 0) for _label in self.classes
                 ]
@@ -388,27 +384,44 @@ class SupervisableDataset(Loggable):
         from hover.core.representation.reduction import DimensionalityReducer
 
         # prepare input vectors to manifold learning
-        subset = [*self.__class__.SCRATCH_SUBSETS, *self.__class__.PUBLIC_SUBSETS]
-        fit_inp = []
-        for _key in subset:
-            _df = self.dfs[_key]
-            if _df.empty:
-                continue
-            fit_inp += _df[self.__class__.FEATURE_KEY].tolist()
-        fit_arr = np.array([vectorizer(_inp) for _inp in tqdm(fit_inp)])
+        fit_subset = [*self.__class__.SCRATCH_SUBSETS, *self.__class__.PUBLIC_SUBSETS]
+        trans_subset = [*self.__class__.PRIVATE_SUBSETS]
 
-        # initialize and fit manifold learning reducer
-        reducer = DimensionalityReducer(fit_arr)
-        embedding = reducer.fit_transform(method, **kwargs)
+        assert not set(fit_subset).intersection(set(trans_subset)), "Unexpected overlap"
+
+        # compute vectors and keep track which where to slice the array for fitting
+        feature_inp = []
+        for _key in fit_subset:
+            feature_inp += self.dfs[_key][self.__class__.FEATURE_KEY].tolist()
+        fit_num = len(feature_inp)
+        for _key in trans_subset:
+            feature_inp += self.dfs[_key][self.__class__.FEATURE_KEY].tolist()
+        trans_arr = np.array([vectorizer(_inp) for _inp in tqdm(feature_inp)])
+
+        # initialize and fit manifold learning reducer using specified subarray
+        self._info(f"Fit-transforming {method.upper()} on {fit_num} samples...")
+        reducer = DimensionalityReducer(trans_arr[:fit_num])
+        fit_embedding = reducer.fit_transform(method, **kwargs)
+
+        # compute embedding of the whole dataset
+        self._info(f"Transforming {method.upper()} on {trans_arr.shape[0]} samples...")
+        trans_embedding = reducer.transform(trans_arr[fit_num:], method)
 
         # assign x and y coordinates to dataset
         start_idx = 0
-        for _key in subset:
-            _df = self.dfs[_key]
-            _length = _df.shape[0]
-            _df["x"] = pd.Series(embedding[start_idx : (start_idx + _length), 0])
-            _df["y"] = pd.Series(embedding[start_idx : (start_idx + _length), 1])
-            start_idx += _length
+        for _subset, _embedding in [
+            (fit_subset, fit_embedding),
+            (trans_subset, trans_embedding),
+        ]:
+            for _key in _subset:
+                _length = self.dfs[_key].shape[0]
+                self.dfs[_key]["x"] = pd.Series(
+                    _embedding[start_idx : (start_idx + _length), 0]
+                )
+                self.dfs[_key]["y"] = pd.Series(
+                    _embedding[start_idx : (start_idx + _length), 1]
+                )
+                start_idx += _length
 
         return reducer
 
