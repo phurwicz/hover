@@ -354,6 +354,23 @@ class BokehForLabeledText(Loggable, ABC):
         cmap = "Category10_10" if len(labels) <= 10 else "Category20_20"
         return labels, cmap
 
+    def auto_legend_correction(self):
+        """
+        Find legend items and deduplicate by label.
+        """
+        if not hasattr(self.figure, "legend"):
+            self._fail(f"Attempting auto_legend_correction when there is no legend")
+            return
+        items = self.figure.legend.items[:]
+        seen = set()
+        self.figure.legend.items.clear()
+        for _item in items:
+            _label = _item.label.get("value", "")
+            if not _label in seen:
+                self.figure.legend.items.append(_item)
+                seen.add(_label)
+        return
+
 
 class BokehCorpusExplorer(BokehForLabeledText):
     """
@@ -528,10 +545,12 @@ class BokehCorpusAnnotator(BokehCorpusExplorer):
                 "y",
                 name=_key,
                 color=factor_cmap("label", cmap, labels),
-                legend_field="label",
+                legend_group="label",
                 source=_source,
                 **self.glyph_kwargs[_key],
             )
+
+        self.auto_legend_correction()
 
 
 class BokehSoftLabelExplorer(BokehCorpusExplorer):
