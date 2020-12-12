@@ -1,6 +1,7 @@
 """Interactive explorers mostly based on Bokeh."""
 import numpy as np
 import pandas as pd
+from collections import OrderedDict
 from bokeh.plotting import figure
 from bokeh.models import CustomJS, ColumnDataSource, CDSView, IndexFilter
 from bokeh.layouts import column, row
@@ -362,14 +363,22 @@ class BokehForLabeledText(Loggable, ABC):
         if not hasattr(self.figure, "legend"):
             self._fail(f"Attempting auto_legend_correction when there is no legend")
             return
+        # extract all items and start over
         items = self.figure.legend.items[:]
-        seen = set()
         self.figure.legend.items.clear()
+
+        # use one item to hold all renderers matching its label
+        label_to_item = OrderedDict()
+
         for _item in items:
             _label = _item.label.get("value", "")
-            if not _label in seen:
-                self.figure.legend.items.append(_item)
-                seen.add(_label)
+            if not _label in label_to_item.keys():
+                label_to_item[_label] = _item
+            else:
+                label_to_item[_label].renderers.extend(_item.renderers)
+
+        # assign deduplicated items back to the legend
+        self.figure.legend.items = list(label_to_item.values())
         return
 
 
@@ -613,7 +622,7 @@ class BokehSoftLabelExplorer(BokehCorpusExplorer):
         for _key, _source in self.sources.items():
             # prepare plot settings
             preset_kwargs = {
-                "legend_field": self.label_col,
+                "legend_group": self.label_col,
                 "color": factor_cmap(self.label_col, cmap, labels),
                 "fill_alpha": self.score_col,
             }
