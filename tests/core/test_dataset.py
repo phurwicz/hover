@@ -60,12 +60,6 @@ class TestSupervisableTextDataset:
             pytest.fail(
                 "The raw subset managed to produce a loader, which should not happen"
             )
-        except KeyError:
+        except ValueError:
             loader = dataset.loader("dev", dummy_vectorizer, smoothing_coeff=0.1)
             assert isinstance(loader, DataLoader)
-
-    @staticmethod
-    def test_loader(mini_supervisable_text_dataset, dummy_vectorizer):
-        from torch.utils.data import DataLoader
-
-        dataset = mini_supervisable_text_dataset

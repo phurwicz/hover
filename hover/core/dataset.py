@@ -448,6 +448,11 @@ class SupervisableDataset(Loggable):
         # take the slice that has a meaningful label
         df = self.dfs[key][self.dfs[key]["label"] != module_config.ABSTAIN_DECODED]
 
+        # edge case: valid slice is too small
+        if df.shape[0] < 1:
+            raise ValueError(f"Subset {key} has too few samples ({df.shape[0]})")
+        batch_size = min(batch_size, df.shape[0])
+
         labels = df["label"].apply(lambda x: self.label_encoder[x]).tolist()
         features = df[self.__class__.FEATURE_KEY].tolist()
         output_vectors = one_hot(labels, num_classes=len(self.classes))
