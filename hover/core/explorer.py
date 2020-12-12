@@ -170,9 +170,13 @@ class BokehForLabeledText(Loggable, ABC):
         for _key, _df in df_dict.items():
             if _key in expected_keys:
                 for _col in self.__class__.MANDATORY_COLUMNS:
-                    assert (
-                        _col in _df.columns
-                    ), f"Missing column '{_col}' from DataFrame: found {_df.columns}"
+                    if not _col in _df.columns:
+                        # edge case: DataFrame has zero rows
+                        assert (
+                            _df.shape[0] == 0
+                        ), f"Missing column '{_col}' from non-empty DataFrame: found {list(_df.columns)}"
+                        _df[_col] = None
+
                 self.dfs[_key] = _df.copy() if copy else _df
 
     def _setup_sources(self):
@@ -640,43 +644,38 @@ class BokehMarginExplorer(BokehCorpusExplorer):
         Plot the margins about a single label.
         """
 
-        # prepare plot settings
-        axes = ("x", "y")
-        eff_kwargs = self.glyph_kwargs["raw"].copy()
-        eff_kwargs.update(kwargs)
-        eff_kwargs["legend_label"] = f"{label}"
+        for _key, _source in self.sources.items():
+            # prepare plot settings
+            eff_kwargs = self.glyph_kwargs[_key].copy()
+            eff_kwargs.update(kwargs)
+            eff_kwargs["legend_label"] = f"{label}"
 
-        # create agreement/increment/decrement subsets
-        col_a_pos = np.where(self.dfs["raw"][self.label_col_a] == label)[0].tolist()
-        col_a_neg = np.where(self.dfs["raw"][self.label_col_a] != label)[0].tolist()
-        col_b_pos = np.where(self.dfs["raw"][self.label_col_b] == label)[0].tolist()
-        col_b_neg = np.where(self.dfs["raw"][self.label_col_b] != label)[0].tolist()
-        agreement_view = CDSView(
-            source=self.sources["raw"],
-            filters=[IndexFilter(col_a_pos), IndexFilter(col_b_pos)],
-        )
-        increment_view = CDSView(
-            source=self.sources["raw"],
-            filters=[IndexFilter(col_a_neg), IndexFilter(col_b_pos)],
-        )
-        decrement_view = CDSView(
-            source=self.sources["raw"],
-            filters=[IndexFilter(col_a_pos), IndexFilter(col_b_neg)],
-        )
-
-        to_plot = [
-            {"view": agreement_view, "marker": self.figure.square},
-            {"view": increment_view, "marker": self.figure.x},
-            {"view": decrement_view, "marker": self.figure.cross},
-        ]
-
-        # plot created subsets
-        for _dict in to_plot:
-            _view = _dict["view"]
-            _marker = _dict["marker"]
-            _marker(
-                *axes, name="raw", source=self.sources["raw"], view=_view, **eff_kwargs
+            # create agreement/increment/decrement subsets
+            col_a_pos = np.where(self.dfs[_key][self.label_col_a] == label)[0].tolist()
+            col_a_neg = np.where(self.dfs[_key][self.label_col_a] != label)[0].tolist()
+            col_b_pos = np.where(self.dfs[_key][self.label_col_b] == label)[0].tolist()
+            col_b_neg = np.where(self.dfs[_key][self.label_col_b] != label)[0].tolist()
+            agreement_view = CDSView(
+                source=_source, filters=[IndexFilter(col_a_pos), IndexFilter(col_b_pos)]
             )
+            increment_view = CDSView(
+                source=_source, filters=[IndexFilter(col_a_neg), IndexFilter(col_b_pos)]
+            )
+            decrement_view = CDSView(
+                source=_source, filters=[IndexFilter(col_a_pos), IndexFilter(col_b_neg)]
+            )
+
+            to_plot = [
+                {"view": agreement_view, "marker": self.figure.square},
+                {"view": increment_view, "marker": self.figure.x},
+                {"view": decrement_view, "marker": self.figure.cross},
+            ]
+
+            # plot created subsets
+            for _dict in to_plot:
+                _view = _dict["view"]
+                _marker = _dict["marker"]
+                _marker(*axes, name=_key, source=_source, view=_view, **eff_kwargs)
 
 
 class BokehSnorkelExplorer(BokehCorpusExplorer):
