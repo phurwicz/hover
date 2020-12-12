@@ -145,9 +145,6 @@ def active_learning(dataset, vectorizer, vecnet_callback, height=600, width=600)
     """
     Place a VectorNet in the loop.
 
-    TODO: this workflow, along with SoftLabelExplorer, should accept raw/train/dev
-    and allow any of them to be empty at any point.
-
     Layout:
 
     sidebar | [inspect soft labels here] | [annotate here] | [search here]
