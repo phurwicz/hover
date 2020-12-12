@@ -6,7 +6,6 @@ import re
 import pandas as pd
 from hover.utils.datasets import newsgroups_dictl, newsgroups_reduced_dictl
 from hover.core.dataset import SupervisableTextDataset
-from copy import deepcopy
 
 fake_en = faker.Faker("en")
 
