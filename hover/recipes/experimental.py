@@ -209,6 +209,8 @@ def active_learning(dataset, vectorizer, vecnet_callback, height=600, width=600)
             """
             Callback function.
             """
+            model_retrainer.disabled = True
+            logger.info("Start training...")
             dataset.setup_label_coding()
             model = vecnet_callback()
 
@@ -230,6 +232,7 @@ def active_learning(dataset, vectorizer, vecnet_callback, height=600, width=600)
             softlabel_explorer._update_sources()
             softlabel_explorer.plot()
             logger.good("Callback 2/2: updated predictions")
+            model_retrainer.disabled = False
 
         model_retrainer.on_click(retrain_model)
         return model_retrainer, epochs_slider
