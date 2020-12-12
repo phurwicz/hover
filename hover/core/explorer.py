@@ -694,7 +694,7 @@ class BokehMarginExplorer(BokehCorpusExplorer):
             for _dict in to_plot:
                 _view = _dict["view"]
                 _marker = _dict["marker"]
-                _marker(*axes, name=_key, source=_source, view=_view, **eff_kwargs)
+                _marker("x", "y", name=_key, source=_source, view=_view, **eff_kwargs)
 
 
 class BokehSnorkelExplorer(BokehCorpusExplorer):
