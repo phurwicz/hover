@@ -209,7 +209,7 @@ class SupervisableDataset(Loggable):
                 selected_idx = explorer.sources[sub_v].selected.indices
                 if not selected_idx:
                     self._warn(
-                        "Attempting data commit: did not select any data points."
+                        f"Attempting data commit: did not select any data points in subset {sub_v}."
                     )
                     return
 
@@ -227,10 +227,14 @@ class SupervisableDataset(Loggable):
                     sort=False,
                     ignore_index=True,
                 )
+                size_mid = self.dfs[sub_to].shape[0]
+                self.dfs[sub_to].drop_duplicates(
+                    subset=[self.__class__.FEATURE_KEY], keep="last", inplace=True
+                )
                 size_after = self.dfs[sub_to].shape[0]
 
                 self._info(
-                    f"Committed {valid_slice.shape[0]} (valid out of {sel_slice.shape[0]} selected) entries from {sub_k} to {sub_to} ({size_before} -> {size_after})."
+                    f"Committed {valid_slice.shape[0]} (valid out of {sel_slice.shape[0]} selected) entries from {sub_k} to {sub_to} ({size_before} -> {size_after} with {size_mid-size_after} overwrites)."
                 )
 
         self.data_committer.on_click(callback_commit)
