@@ -24,7 +24,7 @@ Check out [@phurwicz/hover-binder](https://github.com/phurwicz/hover-binder) for
 
 ## :flags: Latest Announcements
 
--   **Dec 10** We are working to bundle up common usage workflows in `hover.recipes`. Stay tuned!
+-   **Dec 12** Common usage workflows are now available in `hover.recipes`. Much cleaner code!
 -   **Dec 6** Video tutorials coming soon! The first one is projected to be available by Dec 15.
 
 ## :flight_departure: Quick Start
