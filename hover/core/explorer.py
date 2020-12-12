@@ -490,7 +490,9 @@ class BokehCorpusAnnotator(BokehCorpusExplorer):
             label = self.annotator_input.value
             selected_idx = self.sources["raw"].selected.indices
             if not selected_idx:
-                self._warn("Attempting annotation: did not select any data points.")
+                self._warn(
+                    "Attempting annotation: did not select any data points. Eligible subset is 'raw'."
+                )
                 return
             example_old = self.dfs["raw"].at[selected_idx[0], "label"]
             self.dfs["raw"].at[selected_idx, "label"] = label
