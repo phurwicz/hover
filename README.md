@@ -29,29 +29,61 @@ Check out [@phurwicz/hover-binder](https://github.com/phurwicz/hover-binder) for
 
 ## :flight_departure: Quick Start
 
-`Hover` uses [`bokeh`](https://bokeh.org) to build its annotation interface:
+> Step 0: load your dataset and compute its 2-d embedding
 
 ```python
-# app-annotator.py
+from hover.core.dataset import SupervisableTextDataset
 
-from hover.core.explorer import BokehCorpusAnnotator
+dataset = SupervisableTextDataset(
+    # 'raw' contains the data to be supervised
+    raw_dictl=[{"content": "this is great"}],
+    # train/dev/test sets can be empty
+    # train_dictl=[],
+    dev_dictl=[{"content": "this is awesome", "mark": "POSITIVE"}],
+    test_dictl=[{"content": "this is meh", "mark": "NEGATIVE"}],
+    # specify feature/label keys
+    feature_key="content",
+    label_key="mark",
+)
+
+# define a vectorizer for your feature, then call dimensionality reduction
+nlp = spacy.load('en')
+vectorizer = lambda text: nlp(text).vector
+dataset.compute_2d_embedding(vectorizer, "umap")
+```
+
+> Step 1: choose a recipe (or create your own with [`examples`](hover/recipes/experimental.py))
+
+```Python
+from hover.recipes.experimental import (
+    simple_annotator,
+    active_learning,
+    snorkel_crosscheck,
+)
+
+handle = simple_annotator(dataset)
+```
+
+> Step 2: fire it up
+
+`Hover` uses [`bokeh`](https://bokeh.org) to deliver its annotation interface:
+
+```Python
+# Option 1: in Jupyter
+from bokeh.io import show, output_notebook
+output_notebook()
+show(handle)
+
+# Option 2: in app.py (`bokeh serve app.py` in the command line)
 from bokeh.io import curdoc
+doc = curdoc()
+handle(doc)
 
-# df is a pandas dataframe with 2D embedding
-# which hover can help you compute
-
-annotator = BokehCorpusAnnotator({"raw": df})
-annotator.plot()
-
-curdoc().add_root(annotator.view())
-curdoc().title = "Simple-Annotator"
+# Option 3: elsewhere as an embedded app
+from bokeh.server.server import Server
+server = Server({'my-app': handle})
+server.start()
 ```
-
-```bash
-bokeh serve app-annotator.py
-```
-
-The most exciting features of `Hover` employ lots of Python callbacks, for which [`bokeh serve`](https://docs.bokeh.org/en/latest/docs/user_guide/server.html) comes into play.
 
 ## :package: Installation
 
