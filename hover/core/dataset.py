@@ -421,6 +421,14 @@ class SupervisableDataset(Loggable):
             (fit_subset, fit_embedding),
             (trans_subset, trans_embedding),
         ]:
+            # edge case: embedding is too small
+            print(_embedding.shape)
+            if _embedding.shape[0] < 1:
+                for _key in _subset:
+                    assert (
+                        self.dfs[_key].shape[0] == 0
+                    ), "Expected empty df due to empty embedding"
+                continue
             for _key in _subset:
                 _length = self.dfs[_key].shape[0]
                 self.dfs[_key]["x"] = pd.Series(

@@ -4,6 +4,7 @@ Linker data structure which ties (potentially multiple) dimensionality reducers 
 The point is to make it clear which reduction is in reference to which array.
 Icing on the cake: unify the syntax across different kinds of reducers.
 """
+import numpy as np
 
 
 class DimensionalityReducer(object):
@@ -45,6 +46,10 @@ class DimensionalityReducer(object):
         :type array: np.ndarray
         """
         assert method in ["umap", "ivis"], self.method_error_msg
+        assert isinstance(array, np.ndarray), f"Expected np.ndarray, got {type(array)}"
+        # edge case: array is too small
+        if array.shape[0] < 1:
+            return np.array([])
 
         reducer = getattr(self, method)
         return reducer.transform(array)
