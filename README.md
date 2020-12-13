@@ -35,7 +35,7 @@ Check out [@phurwicz/hover-binder](https://github.com/phurwicz/hover-binder) for
 from hover.core.dataset import SupervisableTextDataset
 
 dataset = SupervisableTextDataset(
-    raw_dictl=[{"content": "this is great"}],                  # 'raw' contains the data to be supervised
+    raw_dictl=[{"content": "this is great"}],                  # the raw data to be supervised
     # train_dictl=[],                                          # train/dev/test sets can be empty
     dev_dictl=[{"content": "this is awesome", "mark": "A"}],
     test_dictl=[{"content": "this is meh", "mark": "B"}],
@@ -46,7 +46,7 @@ dataset = SupervisableTextDataset(
 # define a vectorizer for your feature, then call dimensionality reduction
 import spacy
 nlp = spacy.load('en')
-vectorizer = lambda text: nlp(text).vector
+vectorizer = lambda text: nlp(text).vector # we recommend wrapping a @lru_cache around this
 dataset.compute_2d_embedding(vectorizer, "umap")
 ```
 
@@ -64,7 +64,7 @@ handle = simple_annotator(dataset)
 
 `Hover` uses [`bokeh`](https://bokeh.org) to deliver its annotation interface:
 
-> Option 1: in Jupyter
+> option 1: in Jupyter
 
 ```Python
 from bokeh.io import show, output_notebook
@@ -72,7 +72,7 @@ output_notebook()
 show(handle)
 ```
 
-> Option 2: with [`bokeh serve`](https://docs.bokeh.org/en/latest/docs/user_guide/server.html)
+> option 2: with [`bokeh serve`](https://docs.bokeh.org/en/latest/docs/user_guide/server.html)
 
 ```Python
 from bokeh.io import curdoc
@@ -80,7 +80,7 @@ doc = curdoc()
 handle(doc)
 ```
 
-> Option 3: elsewhere as an [embedded app](https://docs.bokeh.org/en/latest/docs/user_guide/server.html#embedding-bokeh-server-as-a-library)
+> option 3: elsewhere as an [embedded app](https://docs.bokeh.org/en/latest/docs/user_guide/server.html#embedding-bokeh-server-as-a-library)
 
 ```Python
 from bokeh.server.server import Server
@@ -130,6 +130,13 @@ Hardcore usage | exploit `hover.core` templates        | custom @prodigy.recipe 
 
 -   Contains API references of the most crucial components.
 -   A lot more is on the way! (video tutorials, for example)
+
+## :bell: Remarks
+
+### Shoutouts
+
+-   Thanks to [`Bokeh`](https://bokeh.org) because `hover` would not exist without linked plots and callbacks.
+-   Thanks to [Philip Vollet](https://de.linkedin.com/in/philipvollet) for sharing `hover` with the community!
 
 ### Dependencies
 
