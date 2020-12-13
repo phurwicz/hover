@@ -29,57 +29,60 @@ Check out [@phurwicz/hover-binder](https://github.com/phurwicz/hover-binder) for
 
 ## :flight_departure: Quick Start
 
-> Step 0: load your dataset and compute its 2-d embedding
+> ### Step 0: load your dataset
 
 ```python
 from hover.core.dataset import SupervisableTextDataset
 
 dataset = SupervisableTextDataset(
-    # 'raw' contains the data to be supervised
-    raw_dictl=[{"content": "this is great"}],
-    # train/dev/test sets can be empty
-    # train_dictl=[],
-    dev_dictl=[{"content": "this is awesome", "mark": "POSITIVE"}],
-    test_dictl=[{"content": "this is meh", "mark": "NEGATIVE"}],
-    # specify feature/label keys
-    feature_key="content",
+    raw_dictl=[{"content": "this is great"}],                  # the raw data to be supervised
+    # train_dictl=[],                                          # train/dev/test sets can be empty
+    dev_dictl=[{"content": "this is awesome", "mark": "A"}],
+    test_dictl=[{"content": "this is meh", "mark": "B"}],
+    feature_key="content",                                     # specify feature/label keys
     label_key="mark",
 )
 
 # define a vectorizer for your feature, then call dimensionality reduction
+import spacy
 nlp = spacy.load('en')
-vectorizer = lambda text: nlp(text).vector
+vectorizer = lambda text: nlp(text).vector # we recommend wrapping a @lru_cache around this
 dataset.compute_2d_embedding(vectorizer, "umap")
 ```
 
-> Step 1: choose a recipe (or create your own with [`examples`](hover/recipes/experimental.py))
+> ### Step 1: choose a recipe
+> 
+> (or create your own with [`examples`](hover/recipes/experimental.py))
 
 ```Python
-from hover.recipes.experimental import (
-    simple_annotator,
-    active_learning,
-    snorkel_crosscheck,
-)
+from hover.recipes.experimental import simple_annotator
 
 handle = simple_annotator(dataset)
 ```
 
-> Step 2: fire it up
+> ### Step 2: fire it up
 
 `Hover` uses [`bokeh`](https://bokeh.org) to deliver its annotation interface:
 
+> option 1: in Jupyter
+
 ```Python
-# Option 1: in Jupyter
 from bokeh.io import show, output_notebook
 output_notebook()
 show(handle)
+```
 
-# Option 2: in app.py (`bokeh serve app.py` in the command line)
+> option 2: with [`bokeh serve`](https://docs.bokeh.org/en/latest/docs/user_guide/server.html)
+
+```Python
 from bokeh.io import curdoc
 doc = curdoc()
 handle(doc)
+```
 
-# Option 3: elsewhere as an embedded app
+> option 3: elsewhere as an [embedded app](https://docs.bokeh.org/en/latest/docs/user_guide/server.html#embedding-bokeh-server-as-a-library)
+
+```Python
 from bokeh.server.server import Server
 server = Server({'my-app': handle})
 server.start()
@@ -127,6 +130,13 @@ Hardcore usage | exploit `hover.core` templates        | custom @prodigy.recipe 
 
 -   Contains API references of the most crucial components.
 -   A lot more is on the way! (video tutorials, for example)
+
+## :bell: Remarks
+
+### Shoutouts
+
+-   Thanks to [`Bokeh`](https://bokeh.org) because `hover` would not exist without linked plots and callbacks.
+-   Thanks to [Philip Vollet](https://de.linkedin.com/in/philipvollet) for sharing `hover` with the community!
 
 ### Dependencies
 
