@@ -422,7 +422,6 @@ class SupervisableDataset(Loggable):
             (trans_subset, trans_embedding),
         ]:
             # edge case: embedding is too small
-            print(_embedding.shape)
             if _embedding.shape[0] < 1:
                 for _key in _subset:
                     assert (
