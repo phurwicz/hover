@@ -12,6 +12,8 @@ from hover.core.explorer import (
     BokehSnorkelExplorer,
 )
 from hover.utils.bokeh_helper import servable
+from wasabi import msg as logger
+import pandas as pd
 
 
 @servable(title="Simple Annotator")
@@ -210,7 +212,7 @@ def active_learning(dataset, vectorizer, vecnet_callback, height=600, width=600)
             Callback function.
             """
             model_retrainer.disabled = True
-            logger.info("Start training...")
+            logger.info("Start training... button will be disabled temporarily.")
             dataset.setup_label_coding()
             model = vecnet_callback()
 
@@ -218,9 +220,9 @@ def active_learning(dataset, vectorizer, vecnet_callback, height=600, width=600)
             dev_loader = dataset.loader("dev", vectorizer)
 
             _ = model.train(train_loader, dev_loader, epochs=epochs_slider.value)
-            logger.good("Callback 1/2: retrained model")
+            logger.good("-- 1/2: retrained model")
 
-            for _key in ["raw", "dev"]:
+            for _key in ["raw", "train", "dev"]:
                 _probs = model.predict_proba(dataset.dfs[_key]["text"].tolist())
                 _labels = [
                     dataset.label_decoder[_val] for _val in _probs.argmax(axis=-1)
@@ -231,8 +233,8 @@ def active_learning(dataset, vectorizer, vecnet_callback, height=600, width=600)
 
             softlabel_explorer._update_sources()
             softlabel_explorer.plot()
-            logger.good("Callback 2/2: updated predictions")
             model_retrainer.disabled = False
+            logger.good("-- 2/2: updated predictions. Training button is re-enabled.")
 
         model_retrainer.on_click(retrain_model)
         return model_retrainer, epochs_slider
