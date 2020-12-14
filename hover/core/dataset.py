@@ -8,6 +8,7 @@ from tqdm import tqdm
 from hover import module_config
 from hover.core import Loggable
 from bokeh.models import Button, Dropdown, ColumnDataSource, DataTable, TableColumn
+from .local_config import dataset_help_widget
 
 
 class SupervisableDataset(Loggable):
@@ -167,6 +168,8 @@ class SupervisableDataset(Loggable):
         self.data_committer.on_click(commit_base_callback)
         self.dedup_trigger.on_click(dedup_base_callback)
 
+        self.help_div = dataset_help_widget()
+
     def view(self):
         """
         Defines the layout of bokeh models.
@@ -175,6 +178,7 @@ class SupervisableDataset(Loggable):
         from bokeh.layouts import row, column
 
         return column(
+            self.help_div,
             row(self.update_pusher, self.data_committer, self.dedup_trigger),
             self.pop_table,
         )
@@ -244,7 +248,7 @@ class SupervisableDataset(Loggable):
             f"Subscribed {explorer.__class__.__name__} to dataset commits: {subset_mapping}"
         )
 
-    def setup_label_coding(self):
+    def setup_label_coding(self, verbose=True, debug=False):
         """
         Auto-determine labels in the dataset, then create encoder/decoder in lexical order.
         Add ABSTAIN as a no-label placeholder.
@@ -264,8 +268,12 @@ class SupervisableDataset(Loggable):
         }
         self.label_decoder = {_v: _k for _k, _v in self.label_encoder.items()}
 
-        self._good(f"Set up label encoder/decoder with {len(self.classes)} classes.")
-        self.validate_labels()
+        if verbose:
+            self._good(
+                f"Set up label encoder/decoder with {len(self.classes)} classes."
+            )
+        if debug:
+            self.validate_labels()
 
     def validate_labels(self, raise_exception=True):
         """
@@ -306,11 +314,12 @@ class SupervisableDataset(Loggable):
             self.setup_label_coding()
 
             # re-compute label population
-            pop_data = dict(label=self.classes)
+            eff_labels = [module_config.ABSTAIN_DECODED, *self.classes]
+            pop_data = dict(label=eff_labels)
             for _subset in subsets:
                 _subpop = self.dfs[_subset]["label"].value_counts()
                 pop_data[f"count_{_subset}"] = [
-                    _subpop.get(_label, 0) for _label in self.classes
+                    _subpop.get(_label, 0) for _label in eff_labels
                 ]
 
             # push results to bokeh data source
@@ -321,7 +330,8 @@ class SupervisableDataset(Loggable):
             )
 
         update_population()
-        self.update_pusher.on_click(update_population)
+        self.data_committer.on_click(update_population)
+        self.dedup_trigger.on_click(update_population)
 
     def df_deduplicate(self):
         """
