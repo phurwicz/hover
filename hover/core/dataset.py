@@ -53,6 +53,7 @@ class SupervisableDataset(Loggable):
         - param feature_key: key in each piece of dict mapping to the feature.
         - param label_key: key in each piece of dict mapping to the ground truth in STRING form.
         """
+        self._info("Initializing...")
 
         def dictl_transform(dictl, labels=True):
             """
@@ -96,6 +97,7 @@ class SupervisableDataset(Loggable):
         self.setup_widgets()
         # self.setup_label_coding() # redundant if setup_pop_table() immediately calls this again
         self.setup_pop_table(width_policy="fit", height_policy="fit")
+        self._good("Finished initialization.")
 
     def copy(self, use_df=True):
         """
