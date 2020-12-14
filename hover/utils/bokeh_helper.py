@@ -45,9 +45,13 @@ def servable(title=None):
     def wrapper(func):
         @wraps(func)
         def wrapped(*args, **kwargs):
-            bokeh_model = func(*args, **kwargs)
-
             def handle(doc):
+                """
+                Note that the handle must create a brand new bokeh model every time it is called.
+
+                Reference: https://github.com/bokeh/bokeh/issues/8579
+                """
+                bokeh_model = func(*args, **kwargs)
                 doc.add_root(bokeh_model)
                 doc.title = title or func.__name__
 
