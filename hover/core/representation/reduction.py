@@ -8,6 +8,9 @@ import numpy as np
 
 
 class DimensionalityReducer(object):
+    AVAILABLE_METHODS = {"umap", "ivis"}
+    METHOD_ERROR_MSG = "Expected 'umap' or 'ivis' as reduction method"
+
     def __init__(self, array):
         """Link self to the shared input array for reduction methods.
 
@@ -15,7 +18,6 @@ class DimensionalityReducer(object):
         :type array: np.ndarray
         """
         self.reference_array = array
-        self.method_error_msg = "Expected 'umap' or 'ivis' as reduction method"
 
     def fit_transform(self, method, *args, **kwargs):
         """Fit and transform an array and store the reducer.
@@ -25,15 +27,25 @@ class DimensionalityReducer(object):
         :param *args: positional parameters for the reducer.
         :param **kwargs: keyword parameters for the reducer.
         """
-        assert method in ["umap", "ivis"], self.method_error_msg
         if method == "umap":
-            import umap
+            try:
+                import umap
 
-            reducer = umap.UMAP(*args, **kwargs)
+                reducer = umap.UMAP(*args, **kwargs)
+            except ModuleNotFoundError:
+                raise ModuleNotFoundError("Please install umap-learn via pip.")
+
         elif method == "ivis":
-            import ivis
+            try:
+                import ivis
 
-            reducer = ivis.Ivis(*args, **kwargs)
+                reducer = ivis.Ivis(*args, **kwargs)
+            except ModuleNotFoundError:
+                raise ModuleNotFoundError(
+                    "Please install ivis[cpu] or ivis[gpu] via pip."
+                )
+        else:
+            raise ValueError(self.__class__.METHOD_ERROR_MSG)
 
         embedding = reducer.fit_transform(self.reference_array)
         setattr(self, method, reducer)
