@@ -199,16 +199,15 @@ class BokehForLabeledText(Loggable, ABC):
         """
         for _key in self.dfs.keys():
             self.sources[_key].data = self.dfs[_key]
-        self._activate_search_builtin()
+        self._activate_search_builtin(verbose=False)
 
-    def _activate_search_builtin(self):
+    def _activate_search_builtin(self, verbose=True):
         """
         Typically called once during initialization.
         Highlight positive search results and mute negative search results.
 
         Note that this is a template method which heavily depends on class attributes.
         """
-        self._info("Activating built-in search")
         for _key, _dict in self.__class__.DATA_KEY_TO_KWARGS.items():
             if _key in self.sources.keys():
                 _responding = list(_dict["search"].keys())
@@ -218,9 +217,10 @@ class BokehForLabeledText(Loggable, ABC):
                         self.glyph_kwargs[_key],
                         altered_param=_params,
                     )
-                self._info(
-                    f"Activated {_responding} on subset {_key} to respond to the search widgets."
-                )
+                if verbose:
+                    self._info(
+                        f"Activated {_responding} on subset {_key} to respond to the search widgets."
+                    )
 
     def activate_search(self, source, kwargs, altered_param=("size", 10, 5, 7)):
         """
@@ -497,7 +497,7 @@ class BokehCorpusAnnotator(BokehCorpusExplorer):
             example_old = self.dfs["raw"].at[selected_idx[0], "label"]
             self.dfs["raw"].at[selected_idx, "label"] = label
             example_new = self.dfs["raw"].at[selected_idx[0], "label"]
-            self._good(f"Updated DataFrame, e.g. {example_old} -> {example_new}")
+            self._good(f"Applied {len(selected_idx)} annotations: {example_new}")
 
             self._update_sources()
             self.plot()
