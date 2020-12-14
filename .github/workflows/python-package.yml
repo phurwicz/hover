@@ -18,7 +18,9 @@ jobs:
     strategy:
       matrix:
         python-version: ['3.6', '3.7', '3.8']
-        os: [macos-10.15, ubuntu-latest]
+        os: [ubuntu-latest]
+        # 12/14/2020: disabling macos during builds, but it should install ok
+        #os: [macos-10.15, ubuntu-latest]
 
     steps:
     - uses: actions/checkout@v2
