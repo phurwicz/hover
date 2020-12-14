@@ -8,14 +8,17 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
-
+  schedule:
+    - cron: "0 0 * * *"
+    
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         python-version: ['3.6', '3.7', '3.8']
+        os: [macos-10.15, ubuntu-latest]
 
     steps:
     - uses: actions/checkout@v2
@@ -25,8 +28,8 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Get installation dependencies
       run: |
-        python -m pip install --upgrade pip setuptools wheel cython numpy
-        pip install pip-tools
+        python -m pip install --upgrade pip 
+        pip install pip-tools setuptools wheel cython numpy
         pip-compile
         pip install -r requirements.txt
     - name: Install hover
