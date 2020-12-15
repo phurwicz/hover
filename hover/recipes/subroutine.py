@@ -3,6 +3,12 @@ Functions commonly used by classes in this submodule.
 
 Note that functions which are also used outside this submodule should be moved up.
 """
+from hover.core.explorer import (
+    BokehCorpusExplorer,
+    BokehCorpusAnnotator,
+    BokehSoftLabelExplorer,
+    BokehSnorkelExplorer,
+)
 
 
 def standard_annotator(dataset, **kwargs):
@@ -37,8 +43,7 @@ def standard_explorer(dataset, **kwargs):
         dataset,
         {_k: _k for _k in ["raw", "train", "dev", "test"]},
         title="Corpus: use the search widget for highlights",
-        height=height,
-        width=width,
+        **kwargs
     )
     corpus_explorer.plot()
 
@@ -58,8 +63,7 @@ def standard_snorkel(dataset, **kwargs):
         dataset,
         {"raw": "raw", "dev": "labeled"},
         title="Snorkel: square for correct, x for incorrect, + for missed, o for hit; click on legends to hide or show LF",
-        height=height,
-        width=width,
+        **kwargs
     )
     snorkel_explorer.plot()
 
@@ -79,8 +83,7 @@ def standard_softlabel(dataset, **kwargs):
         "pred_label",
         "pred_score",
         title="Prediction Visualizer: retrain model and locate confusions",
-        height=height,
-        width=width,
+        **kwargs
     )
     softlabel_explorer.plot()
 

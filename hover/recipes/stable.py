@@ -2,8 +2,6 @@
 Stable recipes whose function signatures should almost never change in the future.
 """
 from bokeh.layouts import row, column
-from hover.core.dataset import SupervisableDataset
-from hover.core.explorer import BokehCorpusExplorer, BokehCorpusAnnotator
 from hover.utils.bokeh_helper import servable
 from .subroutine import standard_annotator, standard_explorer
 
@@ -38,7 +36,7 @@ def linked_annotator(dataset, height=600, width=600):
 
     # link coordinates and selections
     explorer.link_xy_range(annotator)
-    explorer.link_selection("raw", explorer, "raw")
+    explorer.link_selection("raw", annotator, "raw")
 
     sidebar = dataset.view()
     layout = row(sidebar, explorer.view(), annotator.view())

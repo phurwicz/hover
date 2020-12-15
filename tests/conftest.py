@@ -6,6 +6,8 @@ import re
 import pandas as pd
 from hover.utils.datasets import newsgroups_dictl, newsgroups_reduced_dictl
 from hover.core.dataset import SupervisableTextDataset
+from hover.utils.snorkel_helper import labeling_function
+from hover import module_config
 
 fake_en = faker.Faker("en")
 
@@ -28,6 +30,34 @@ def dummy_vectorizer(spacy_en_md):
     assert trial_vector.shape == (300,)
 
     return vectorizer
+
+
+@pytest.fixture(scope="module")
+def dummy_vecnet_callback():
+    def callback(dataset, vectorizer):
+        vecnet = VectorNet(
+            vectorizer, LogisticRegression, ".model.test.pt", dataset.classes
+        )
+        return vecnet
+
+    return callback
+
+
+@pytest.fixture(scope="module")
+def dummy_labeling_function_list():
+    @labeling_function(targets=["rec.autos"])
+    def auto_keywords(row):
+        flag = re.search(r"(wheel|diesel|gasoline|automobile|vehicle)", row.text)
+        return "rec.autos" if flag else module_config.ABSTAIN_DECODED
+
+    @labeling_function(targets=["rec.sport.baseball"])
+    def baseball_keywords(row):
+        flag = re.search(r"(baseball|stadium|\ bat\ |\ base\ )", row.text)
+        return "rec.sport.baseball" if flag else module_config.ABSTAIN_DECODED
+
+    lf_list = [auto_keywords, baseball_keywords]
+
+    return lf_list
 
 
 @pytest.fixture(scope="module")

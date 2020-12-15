@@ -29,15 +29,15 @@ def snorkel_crosscheck(dataset, lf_list, height=600, width=600):
 
     # plot labeling functions
     for _lf in lf_list:
-        snorkel_explorer.plot_lf(_lf)
-    snorkel_explorer.figure.legend.click_policy = "hide"
+        snorkel.plot_lf(_lf)
+    snorkel.figure.legend.click_policy = "hide"
 
     # link coordinates and selections
-    snorkel_explorer.link_xy_range(corpus_annotator)
-    snorkel_explorer.link_selection("raw", corpus_annotator, "raw")
+    snorkel.link_xy_range(annotator)
+    snorkel.link_selection("raw", annotator, "raw")
 
     sidebar = dataset.view()
-    layout = row(sidebar, snorkel_explorer.view(), annotator.view())
+    layout = row(sidebar, snorkel.view(), annotator.view())
     return layout
 
 
@@ -73,7 +73,7 @@ def active_learning(dataset, vectorizer, vecnet_callback, height=600, width=600)
             model_retrainer.disabled = True
             logger.info("Start training... button will be disabled temporarily.")
             dataset.setup_label_coding()
-            model = vecnet_callback()
+            model = vecnet_callback(dataset, vectorizer)
 
             train_loader = dataset.loader("train", vectorizer, smoothing_coeff=0.2)
             dev_loader = dataset.loader("dev", vectorizer)
