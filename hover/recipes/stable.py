@@ -17,10 +17,10 @@ def simple_annotator(dataset, height=600, width=600):
 
     sidebar | [annotate here]
     """
-    annotator = standard_annotator(dataset, height, width)
+    annotator = standard_annotator(dataset, height=height, width=width)
 
     sidebar = dataset.view()
-    layout = row(sidebar, corpus_annotator.view())
+    layout = row(sidebar, annotator.view())
     return layout
 
 
@@ -33,13 +33,13 @@ def linked_annotator(dataset, height=600, width=600):
 
     sidebar | [search here] | [annotate here]
     """
-    explorer = standard_explorer(dataset, height, width)
-    annotator = standard_annotator(dataset, height, width)
+    explorer = standard_explorer(dataset, height=height, width=width)
+    annotator = standard_annotator(dataset, height=height, width=width)
 
     # link coordinates and selections
     explorer.link_xy_range(annotator)
     explorer.link_selection("raw", explorer, "raw")
 
     sidebar = dataset.view()
-    layout = row(sidebar, corpus_explorer.view(), corpus_annotator.view())
+    layout = row(sidebar, explorer.view(), annotator.view())
     return layout

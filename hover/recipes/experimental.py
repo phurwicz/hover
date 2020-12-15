@@ -3,12 +3,11 @@ Experimental recipes whose function signatures might change significantly in the
 """
 from bokeh.layouts import row, column
 from bokeh.models import Button, Slider
-from hover.core.dataset import SupervisableDataset
-from hover.core.explorer import (
-    BokehCorpusExplorer,
-    BokehCorpusAnnotator,
-    BokehSoftLabelExplorer,
-    BokehSnorkelExplorer,
+from .subroutine import (
+    standard_annotator,
+    standard_explorer,
+    standard_snorkel,
+    standard_softlabel,
 )
 from hover.utils.bokeh_helper import servable
 from wasabi import msg as logger
@@ -24,42 +23,21 @@ def snorkel_crosscheck(dataset, lf_list, height=600, width=600):
 
     sidebar | [inspect LFs here] | [annotate here]
     """
-    # create explorers, setting up the first plots
-    snorkel_explorer = BokehSnorkelExplorer.from_dataset(
-        dataset,
-        {"raw": "raw", "dev": "labeled"},
-        title="Snorkel: square for correct, x for incorrect, + for missed, o for hit; click on legends to hide or show LF",
-        height=height,
-        width=width,
-    )
+    # building-block subroutines
+    snorkel = standard_snorkel(dataset, height=height, width=width)
+    annotator = standard_annotator(dataset, height=height, width=width)
 
-    corpus_annotator = BokehCorpusAnnotator.from_dataset(
-        dataset,
-        {_k: _k for _k in ["raw", "train", "dev", "test"]},
-        title="Annotator: apply labels to the selected points",
-        height=height,
-        width=width,
-    )
-
-    snorkel_explorer.plot()
+    # plot labeling functions
     for _lf in lf_list:
         snorkel_explorer.plot_lf(_lf)
     snorkel_explorer.figure.legend.click_policy = "hide"
-    corpus_annotator.plot()
 
     # link coordinates and selections
     snorkel_explorer.link_xy_range(corpus_annotator)
     snorkel_explorer.link_selection("raw", corpus_annotator, "raw")
 
-    # subscribe to dataset widgets
-    dataset.subscribe_update_push(snorkel_explorer, {"raw": "raw", "dev": "labeled"})
-    dataset.subscribe_update_push(
-        corpus_annotator, {_k: _k for _k in ["raw", "train", "dev", "test"]}
-    )
-    dataset.subscribe_data_commit(corpus_annotator, {"raw": "raw"})
-
     sidebar = dataset.view()
-    layout = row(sidebar, snorkel_explorer.view(), corpus_annotator.view())
+    layout = row(sidebar, snorkel_explorer.view(), annotator.view())
     return layout
 
 
@@ -72,56 +50,16 @@ def active_learning(dataset, vectorizer, vecnet_callback, height=600, width=600)
 
     sidebar | [inspect soft labels here] | [annotate here] | [search here]
     """
-    # create explorers, setting up the first plots
-    # link coordinates and selections
-    # subscribe to dataset widgets
-    softlabel_explorer = BokehSoftLabelExplorer.from_dataset(
-        dataset,
-        {_k: _k for _k in ["raw", "train", "dev"]},
-        "pred_label",
-        "pred_score",
-        title="Prediction Visualizer: retrain model and locate confusions",
-        height=height,
-        width=width,
-    )
-
-    corpus_annotator = BokehCorpusAnnotator.from_dataset(
-        dataset,
-        {_k: _k for _k in ["raw", "train", "dev", "test"]},
-        title="Annotator: apply labels to the selected points",
-        height=height,
-        width=width,
-    )
-
-    corpus_explorer = BokehCorpusExplorer.from_dataset(
-        dataset,
-        {_k: _k for _k in ["raw", "train", "dev", "test"]},
-        title="Corpus: use the search widget for highlights",
-        height=height,
-        width=width,
-    )
-
-    softlabel_explorer.plot()
-    corpus_annotator.plot()
-    corpus_explorer.plot()
+    # building-block subroutines
+    softlabel = standard_softlabel(dataset, height=height, width=width)
+    annotator = standard_annotator(dataset, height=height, width=width)
+    explorer = standard_explorer(dataset, height=height, width=width)
 
     # link coordinates and selections
-    softlabel_explorer.link_xy_range(corpus_annotator)
-    softlabel_explorer.link_xy_range(corpus_explorer)
-    softlabel_explorer.link_selection("raw", corpus_annotator, "raw")
-    softlabel_explorer.link_selection("raw", corpus_explorer, "raw")
-
-    # subscribe to dataset widgets
-    dataset.subscribe_update_push(
-        softlabel_explorer, {_k: _k for _k in ["raw", "train", "dev"]}
-    )
-    dataset.subscribe_update_push(
-        corpus_annotator, {_k: _k for _k in ["raw", "train", "dev", "test"]}
-    )
-    dataset.subscribe_update_push(
-        corpus_explorer, {_k: _k for _k in ["raw", "train", "dev", "test"]}
-    )
-    dataset.subscribe_data_commit(corpus_annotator, {"raw": "raw"})
+    softlabel.link_xy_range(annotator)
+    softlabel.link_xy_range(explorer)
+    softlabel.link_selection("raw", annotator, "raw")
+    softlabel.link_selection("raw", explorer, "raw")
 
     # recipe-specific widget
     def setup_model_retrainer():
@@ -152,8 +90,8 @@ def active_learning(dataset, vectorizer, vecnet_callback, height=600, width=600)
                 dataset.dfs[_key]["pred_label"] = pd.Series(_labels)
                 dataset.dfs[_key]["pred_score"] = pd.Series(_scores)
 
-            softlabel_explorer._update_sources()
-            softlabel_explorer.plot()
+            softlabel._update_sources()
+            softlabel.plot()
             model_retrainer.disabled = False
             logger.good("-- 2/2: updated predictions. Training button is re-enabled.")
 
@@ -162,11 +100,5 @@ def active_learning(dataset, vectorizer, vecnet_callback, height=600, width=600)
 
     model_retrainer, epochs_slider = setup_model_retrainer()
     sidebar = column(model_retrainer, epochs_slider, dataset.view())
-    layout = row(
-        sidebar,
-        *[
-            _plot.view()
-            for _plot in [softlabel_explorer, corpus_annotator, corpus_explorer]
-        ]
-    )
+    layout = row(sidebar, *[_plot.view() for _plot in [softlabel, annotator, explorer]])
     return layout
