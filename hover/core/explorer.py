@@ -172,7 +172,7 @@ class BokehForLabeledText(Loggable, ABC):
         for _key, _df in df_dict.items():
             if _key in expected_keys:
                 for _col in self.__class__.MANDATORY_COLUMNS:
-                    if not _col in _df.columns:
+                    if _col not in _df.columns:
                         # edge case: DataFrame has zero rows
                         assert (
                             _df.shape[0] == 0
@@ -361,7 +361,7 @@ class BokehForLabeledText(Loggable, ABC):
         Find legend items and deduplicate by label.
         """
         if not hasattr(self.figure, "legend"):
-            self._fail(f"Attempting auto_legend_correction when there is no legend")
+            self._fail("Attempting auto_legend_correction when there is no legend")
             return
         # extract all items and start over
         items = self.figure.legend.items[:]
@@ -372,7 +372,7 @@ class BokehForLabeledText(Loggable, ABC):
 
         for _item in items:
             _label = _item.label.get("value", "")
-            if not _label in label_to_item.keys():
+            if _label not in label_to_item.keys():
                 label_to_item[_label] = _item
             else:
                 label_to_item[_label].renderers.extend(_item.renderers)
@@ -497,7 +497,9 @@ class BokehCorpusAnnotator(BokehCorpusExplorer):
             example_old = self.dfs["raw"].at[selected_idx[0], "label"]
             self.dfs["raw"].at[selected_idx, "label"] = label
             example_new = self.dfs["raw"].at[selected_idx[0], "label"]
-            self._good(f"Applied {len(selected_idx)} annotations: {example_new}")
+            self._good(
+                f"Applied {len(selected_idx)} annotations: {label} (e.g. {example_old} -> {example_new}"
+            )
 
             self._update_sources()
             self.plot()
@@ -612,9 +614,9 @@ class BokehSoftLabelExplorer(BokehCorpusExplorer):
         super()._setup_dfs(df_dict, **kwargs)
 
         for _key, _df in self.dfs.items():
-            if not self.label_col in _df.columns:
+            if self.label_col not in _df.columns:
                 _df[self.label_col] = module_config.ABSTAIN_DECODED
-            if not self.score_col in _df.columns:
+            if self.score_col not in _df.columns:
                 _df[self.score_col] = 0.5
 
     def plot(self, **kwargs):

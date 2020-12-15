@@ -6,8 +6,6 @@ import re
 import pandas as pd
 from hover.utils.datasets import newsgroups_dictl, newsgroups_reduced_dictl
 from hover.core.dataset import SupervisableTextDataset
-from hover.utils.snorkel_helper import labeling_function
-from hover import module_config
 
 fake_en = faker.Faker("en")
 
@@ -34,6 +32,9 @@ def dummy_vectorizer(spacy_en_md):
 
 @pytest.fixture(scope="module")
 def dummy_vecnet_callback():
+    from hover.core.neural import VectorNet
+    from hover.utils.common_nn import LogisticRegression
+
     def callback(dataset, vectorizer):
         vecnet = VectorNet(
             vectorizer, LogisticRegression, ".model.test.pt", dataset.classes
@@ -45,15 +46,18 @@ def dummy_vecnet_callback():
 
 @pytest.fixture(scope="module")
 def dummy_labeling_function_list():
+    from hover.utils.snorkel_helper import labeling_function
+    from hover.module_config import ABSTAIN_DECODED
+
     @labeling_function(targets=["rec.autos"])
     def auto_keywords(row):
         flag = re.search(r"(wheel|diesel|gasoline|automobile|vehicle)", row.text)
-        return "rec.autos" if flag else module_config.ABSTAIN_DECODED
+        return "rec.autos" if flag else ABSTAIN_DECODED
 
     @labeling_function(targets=["rec.sport.baseball"])
     def baseball_keywords(row):
         flag = re.search(r"(baseball|stadium|\ bat\ |\ base\ )", row.text)
-        return "rec.sport.baseball" if flag else module_config.ABSTAIN_DECODED
+        return "rec.sport.baseball" if flag else ABSTAIN_DECODED
 
     lf_list = [auto_keywords, baseball_keywords]
 

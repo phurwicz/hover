@@ -1,7 +1,7 @@
 """
 Stable recipes whose function signatures should almost never change in the future.
 """
-from bokeh.layouts import row, column
+from bokeh.layouts import row
 from hover.utils.bokeh_helper import servable
 from .subroutine import standard_annotator, standard_explorer
 
