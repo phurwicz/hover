@@ -51,7 +51,7 @@ dataset.compute_2d_embedding(vectorizer, "umap")
 ```
 
 > ### Step 1: choose a recipe
-> 
+>
 > (or create your own with [`examples`](hover/recipes/experimental.py))
 
 ```Python
@@ -140,5 +140,4 @@ Hardcore usage | exploit `hover.core` templates        | custom @prodigy.recipe 
 
 ### Dependencies
 
--   `./requirements-test.txt` lists additional dependencies for the test suite.
 -   `./requirements-dev.txt` lists recommended packages for developers.
