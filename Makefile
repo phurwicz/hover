@@ -1,5 +1,3 @@
-TEST_MODULE_PATH=./hover
-
 clean:
 	@echo "Cleaning package build files.."
 	@rm -rf build
@@ -12,6 +10,3 @@ publish:
 	@twine check dist/*
 	@twine upload dist/*
 	@echo "Done."
-coverage:
-	@coverage run --source=$(TEST_MODULE_PATH) -m pytest
-	@coverage xml -o cobertura.xml
