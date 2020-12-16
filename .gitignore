@@ -1,6 +1,7 @@
 *ipynb_checkpoints*
 *pycache*
 .*.pkl
+.tox
 .coverage
 cobertura.xml
 .DS_Store
