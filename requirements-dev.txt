@@ -3,4 +3,5 @@ jupyterlab
 tox
 mkdocs
 mkdocs-material
+mkdocstrings
 pre-commit
