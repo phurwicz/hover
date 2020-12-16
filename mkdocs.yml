@@ -1,4 +1,9 @@
-site_name: Docs - Hover
+site_name: Hover
+site_description: "Hover over and label data rapidly."
+site_url: "https://phurwicz.github.io/hover"
+repo_url: "https://github.com/phurwicz/hover"
+repo_name: "phurwicz/hover"
+
 theme:
     name: material
     icon:
@@ -11,12 +16,20 @@ theme:
       - navigation.expand
       - toc.integrate
       - search.suggest
+
 nav:
     - Home: 'index.md'
     - 'API Reference':
         - 'hover.core.dataset': 'reference/core-dataset.md'
         - 'hover.core.explorer': 'reference/core-explorer.md'
         - 'hover.core.neural': 'reference/core-neural.md'
+
+markdown_extensions:
+  - admonition
+  - markdown_include.include
+  - pymdownx.details
+  - pymdownx.superfences
+
 plugins:
 - search:
 - mkdocstrings:

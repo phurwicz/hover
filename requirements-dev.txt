@@ -1,7 +1,11 @@
-jupyter
-jupyterlab
+# automation
 tox
+pre-commit
+# documentation
 mkdocs
 mkdocs-material
 mkdocstrings
-pre-commit
+markdown-include
+# interactive development
+jupyter
+jupyterlab
