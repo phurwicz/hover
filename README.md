@@ -1,4 +1,4 @@
-![# Hover](docs/images/hover-logo-title.png)
+![Hover](docs/images/hover-logo-title.png)
 
 > Imagine editing a picture layer by layer, not pixel by pixel, nor by splashing paint.
 >
@@ -10,7 +10,7 @@
 [![Codacy Grade](https://img.shields.io/codacy/grade/689827d9077b43ac8721c7658d122d1a?style=for-the-badge)](https://www.codacy.com)
 [![Codacy Coverage](https://img.shields.io/codacy/coverage/689827d9077b43ac8721c7658d122d1a/main?style=for-the-badge)](https://www.codacy.com)
 
-![## :art: Demo](docs/images/app-active-learning.gif)
+![Demo](docs/images/app-active-learning.gif)
 
 ----
 
@@ -25,8 +25,8 @@ Check out [@phurwicz/hover-binder](https://github.com/phurwicz/hover-binder) for
 ## :flags: Latest Announcements
 
 -   **Dec 16** We decided to make notebook tutorials instead of videos, because
-  - `hover` is now embeddable in Jupyter notebooks, and
-  - active development tends to outdate video tutorials rather quickly.
+    - `hover` is now embeddable in Jupyter notebooks, and
+    - active development tends to outdate video tutorials rather quickly.
 
 -   **Dec 12** Common usage workflows are now available in `hover.recipes`. Much cleaner code!
 
