@@ -59,7 +59,7 @@ dataset.compute_2d_embedding(vectorizer, "umap")
 > (or create your own with [`examples`](hover/recipes/experimental.py))
 
 ```Python
-from hover.recipes.experimental import simple_annotator
+from hover.recipes import simple_annotator
 
 handle = simple_annotator(dataset)
 ```
