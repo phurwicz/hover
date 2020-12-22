@@ -4,6 +4,7 @@
     selection:
       members:
         - __init__
+        - from_module
         - save
         - predict_proba
         - train

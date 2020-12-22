@@ -72,16 +72,17 @@ class VectorNet(object):
         self._dynamic_params = {"optimizer": {"lr": 0.01, "betas": (0.9, 0.999)}}
 
     @classmethod
-    def from_module(cls, model_module_name, labels):
+    def from_module(cls, model_module, labels):
         """
         Create a VectorNet model, or of its child class.
 
-        - param model_module_name(str): path to a local Python module in the working directory whose __init__.py file contains a get_vectorizer() callable, get_architecture() callable, and a get_state_dict_path() callable.
+        - param model_module(module or str): (path to) a local Python module in the working directory whose __init__.py file contains a get_vectorizer() callable, get_architecture() callable, and a get_state_dict_path() callable.
         - param labels(list of str): the classification labels, e.g. ["POSITIVE", "NEGATIVE"].
         """
-        from importlib import import_module
+        if isinstance(model_module, str):
+            from importlib import import_module
 
-        model_module = import_module(model_module_name)
+            model_module = import_module(model_module)
 
         # Load the model by retrieving the inp-to-vec function, architecture, and state dict
         model = cls(
