@@ -20,6 +20,7 @@ theme:
 nav:
     - Home: 'index.md'
     - 'API Reference':
+        - 'hover.recipes': 'reference/recipes.md'
         - 'hover.core.dataset': 'reference/core-dataset.md'
         - 'hover.core.explorer': 'reference/core-explorer.md'
         - 'hover.core.neural': 'reference/core-neural.md'
@@ -37,7 +38,7 @@ plugins:
     handlers:
       python:
         rendering:
-          show_root_heading: false
+          show_root_heading: true
           show_source: true
     watch:
       - hover

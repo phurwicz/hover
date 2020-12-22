@@ -133,7 +133,7 @@ Hardcore usage | exploit `hover.core` templates        | custom @prodigy.recipe 
 ### [Documentation](https://phurwicz.github.io/hover/)
 
 -   Contains API references of the most crucial components.
--   A lot more is on the way! (video tutorials, for example)
+-   A lot more is on the way!
 
 ## :bell: Remarks
 
