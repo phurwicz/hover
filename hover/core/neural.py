@@ -1,6 +1,7 @@
 import torch
 import torch.nn.functional as F
 from datetime import datetime
+from deprecated import deprecated
 from hover.utils.metrics import classification_accuracy
 from wasabi import msg as logger
 from sklearn.metrics import confusion_matrix
@@ -8,27 +9,15 @@ from snorkel.classification import cross_entropy_with_probs
 import numpy as np
 
 
+@deprecated(
+    version="0.3.3",
+    reason="will be removed in a future version; please use VectorNet.from_module() instead.",
+)
 def create_vector_net_from_module(specific_class, model_module_name, labels):
     """
-    Create a TextVectorNet model, or of its child class.
-
-    - param specific_class(class): TextVectorNet or its child class.
-    - param model_module_name(str): path to a local Python module in the working directory whose __init__.py file contains a get_vectorizer() callable, get_architecture() callable, and a get_state_dict_path() callable.
-    - param labels(list of str): the classification labels, e.g. ["POSITIVE", "NEGATIVE"].
+    Deprecated into a trivial invocation of VectorNet's class method.
     """
-    from importlib import import_module
-
-    model_module = import_module(model_module_name)
-
-    # Load the model by retrieving the inp-to-vec function, architecture, and state dict
-    model = specific_class(
-        model_module.get_vectorizer(),
-        model_module.get_architecture(),
-        model_module.get_state_dict_path(),
-        labels,
-    )
-
-    return model
+    return specific_class.from_module(model_module_name, labels)
 
 
 class VectorNet(object):
@@ -81,6 +70,28 @@ class VectorNet(object):
         # initialize an optimizer object and a dict to hold dynamic parameters
         self.nn_optimizer = torch.optim.Adam(self.nn.parameters())
         self._dynamic_params = {"optimizer": {"lr": 0.01, "betas": (0.9, 0.999)}}
+
+    @classmethod
+    def from_module(cls, model_module_name, labels):
+        """
+        Create a VectorNet model, or of its child class.
+
+        - param model_module_name(str): path to a local Python module in the working directory whose __init__.py file contains a get_vectorizer() callable, get_architecture() callable, and a get_state_dict_path() callable.
+        - param labels(list of str): the classification labels, e.g. ["POSITIVE", "NEGATIVE"].
+        """
+        from importlib import import_module
+
+        model_module = import_module(model_module_name)
+
+        # Load the model by retrieving the inp-to-vec function, architecture, and state dict
+        model = cls(
+            model_module.get_vectorizer(),
+            model_module.get_architecture(),
+            model_module.get_state_dict_path(),
+            labels,
+        )
+
+        return model
 
     def save(self, save_path=None):
         """
