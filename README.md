@@ -88,7 +88,7 @@ handle(doc)
 
 ```Python
 from bokeh.server.server import Server
-server = Server({'my-app': handle})
+server = Server({'/my-app': handle})
 server.start()
 ```
 
