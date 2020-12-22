@@ -36,9 +36,10 @@ setuptools.setup(
         "scipy>=1.3.2",
         # utilities
         "tqdm>=4.0",
+        "rich>=9.2.0",
         "wasabi>=0.4.0",
         "wrappy>=0.2.6",
-        "rich>=9.2.0",
+        "deprecated",
         # optional: dimensionality reduction
         # "umap-learn>=0.3.10",
         # "ivis[cpu]>=1.7",
