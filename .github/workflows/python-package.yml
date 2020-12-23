@@ -39,7 +39,7 @@ jobs:
     - name: Get testing dependencies
       run: pip install tox tox-gh-actions
     - name: Test and make coverage report
-      run: tox
+      run: tox -e test_api
     - name: Codacy Coverage Reporter
       uses: codacy/codacy-coverage-reporter-action@master
       with:
