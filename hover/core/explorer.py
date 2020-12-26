@@ -150,8 +150,10 @@ class BokehBaseExplorer(Loggable, ABC):
                     _renderer.visible = _renderer.name in visible_keys
 
         # store the callback (useful, for example, during automated tests) and link it
-        self.update_data_key_display = update_data_key_display
-        self.data_key_button_group.on_click(self.update_data_key_display)
+        self._callback_subset_display = lambda: update_data_key_display(
+            self.data_key_button_group.active
+        )
+        self.data_key_button_group.on_click(update_data_key_display)
 
     def _setup_dfs(self, df_dict, copy=False):
         """
@@ -483,15 +485,6 @@ class BokehDataAnnotator(BokehBaseExplorer):
         for _key in ["raw", "train", "dev", "test"]
     }
 
-    def _layout_widgets(self):
-        """Define the layout of widgets."""
-        layout_rows = (
-            row(self.search_pos, self.search_neg),
-            row(self.data_key_button_group),
-            row(self.annotator_input, self.annotator_apply, self.annotator_export),
-        )
-        return column(*layout_rows)
-
     def _setup_widgets(self):
         """
         Create annotator widgets and assign Python callbacks.
@@ -577,6 +570,7 @@ class BokehDataAnnotator(BokehBaseExplorer):
 
         # assign callbacks
         self.annotator_apply.on_click(self._callback_apply)
+        self.annotator_apply.on_click(self._callback_subset_display)
         self.annotator_export.on_click(self._callback_export)
 
     def plot(self):
@@ -922,7 +916,7 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
         return view
 
 
-class BokehCorpusFinder(BokehForCorpus, BokehDataFinder):
+class BokehCorpusFinder(BokehDataFinder, BokehForCorpus):
     """The text flavor of BokehDataFinder."""
 
     TOOLTIP_KWARGS = BokehForCorpus.TOOLTIP_KWARGS
@@ -930,15 +924,24 @@ class BokehCorpusFinder(BokehForCorpus, BokehDataFinder):
     SUBSET_GLYPH_KWARGS = BokehDataFinder.SUBSET_GLYPH_KWARGS
 
 
-class BokehCorpusAnnotator(BokehForCorpus, BokehDataAnnotator):
+class BokehCorpusAnnotator(BokehDataAnnotator, BokehForCorpus):
     """The text flavor of BokehDataAnnotator."""
 
     TOOLTIP_KWARGS = BokehForCorpus.TOOLTIP_KWARGS
     MANDATORY_COLUMNS = BokehForCorpus.MANDATORY_COLUMNS
     SUBSET_GLYPH_KWARGS = BokehDataAnnotator.SUBSET_GLYPH_KWARGS
 
+    def _layout_widgets(self):
+        """Define the layout of widgets."""
+        layout_rows = (
+            row(self.search_pos, self.search_neg),
+            row(self.data_key_button_group),
+            row(self.annotator_input, self.annotator_apply, self.annotator_export),
+        )
+        return column(*layout_rows)
 
-class BokehCorpusSoftLabel(BokehForCorpus, BokehSoftLabelExplorer):
+
+class BokehCorpusSoftLabel(BokehSoftLabelExplorer, BokehForCorpus):
     """The text flavor of BokehSoftLabelExplorer."""
 
     TOOLTIP_KWARGS = BokehForCorpus.TOOLTIP_KWARGS
@@ -946,7 +949,7 @@ class BokehCorpusSoftLabel(BokehForCorpus, BokehSoftLabelExplorer):
     SUBSET_GLYPH_KWARGS = BokehSoftLabelExplorer.SUBSET_GLYPH_KWARGS
 
 
-class BokehCorpusMargin(BokehForCorpus, BokehMarginExplorer):
+class BokehCorpusMargin(BokehMarginExplorer, BokehForCorpus):
     """The text flavor of BokehMarginExplorer."""
 
     TOOLTIP_KWARGS = BokehForCorpus.TOOLTIP_KWARGS
@@ -954,7 +957,7 @@ class BokehCorpusMargin(BokehForCorpus, BokehMarginExplorer):
     SUBSET_GLYPH_KWARGS = BokehMarginExplorer.SUBSET_GLYPH_KWARGS
 
 
-class BokehCorpusSnorkel(BokehForCorpus, BokehSnorkelExplorer):
+class BokehCorpusSnorkel(BokehSnorkelExplorer, BokehForCorpus):
     """The text flavor of BokehSnorkelExplorer."""
 
     TOOLTIP_KWARGS = BokehForCorpus.TOOLTIP_KWARGS
