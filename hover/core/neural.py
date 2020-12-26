@@ -10,7 +10,7 @@ import numpy as np
 
 
 @deprecated(
-    version="0.3.3",
+    version="0.4.0",
     reason="will be removed in a future version; please use VectorNet.from_module() instead.",
 )
 def create_vector_net_from_module(specific_class, model_module_name, labels):
