@@ -34,24 +34,24 @@ def standard_annotator(dataset, **kwargs):
     return corpus_annotator
 
 
-def standard_explorer(dataset, **kwargs):
+def standard_finder(dataset, **kwargs):
     """
-    Standard CorpusExplorer and its interaction with a dataset.
+    Standard CorpusFinder and its interaction with a dataset.
     """
     # first "static" version of the plot
-    corpus_explorer = BokehCorpusFinder.from_dataset(
+    corpus_finder = BokehCorpusFinder.from_dataset(
         dataset,
         {_k: _k for _k in ["raw", "train", "dev", "test"]},
         title="Corpus: use the search widget for highlights",
         **kwargs
     )
-    corpus_explorer.plot()
+    corpus_finder.plot()
 
     # subscribe for df updates
     dataset.subscribe_update_push(
-        corpus_explorer, {_k: _k for _k in ["raw", "train", "dev", "test"]}
+        corpus_finder, {_k: _k for _k in ["raw", "train", "dev", "test"]}
     )
-    return corpus_explorer
+    return corpus_finder
 
 
 def standard_snorkel(dataset, **kwargs):
@@ -59,17 +59,17 @@ def standard_snorkel(dataset, **kwargs):
     Standard SnorkelExplorer and its interaction with a dataset.
     """
     # first "static" version of the plot
-    snorkel_explorer = BokehCorpusSnorkel.from_dataset(
+    corpus_snorkel = BokehCorpusSnorkel.from_dataset(
         dataset,
         {"raw": "raw", "dev": "labeled"},
         title="Snorkel: square for correct, x for incorrect, + for missed, o for hit; click on legends to hide or show LF",
         **kwargs
     )
-    snorkel_explorer.plot()
+    corpus_snorkel.plot()
 
     # subscribe to dataset widgets
-    dataset.subscribe_update_push(snorkel_explorer, {"raw": "raw", "dev": "labeled"})
-    return snorkel_explorer
+    dataset.subscribe_update_push(corpus_snorkel, {"raw": "raw", "dev": "labeled"})
+    return corpus_snorkel
 
 
 def standard_softlabel(dataset, **kwargs):
@@ -77,7 +77,7 @@ def standard_softlabel(dataset, **kwargs):
     Standard SoftLabelExplorer and its interaction with a dataset.
     """
     # first "static" version of the plot
-    softlabel_explorer = BokehCorpusSoftLabel.from_dataset(
+    corpus_softlabel = BokehCorpusSoftLabel.from_dataset(
         dataset,
         {_k: _k for _k in ["raw", "train", "dev"]},
         "pred_label",
@@ -85,10 +85,10 @@ def standard_softlabel(dataset, **kwargs):
         title="Prediction Visualizer: retrain model and locate confusions",
         **kwargs
     )
-    softlabel_explorer.plot()
+    corpus_softlabel.plot()
 
     # subscribe to dataset widgets
     dataset.subscribe_update_push(
-        softlabel_explorer, {_k: _k for _k in ["raw", "train", "dev"]}
+        corpus_softlabel, {_k: _k for _k in ["raw", "train", "dev"]}
     )
-    return softlabel_explorer
+    return corpus_softlabel

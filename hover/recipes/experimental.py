@@ -5,7 +5,7 @@ from bokeh.layouts import row, column
 from bokeh.models import Button, Slider
 from .subroutine import (
     standard_annotator,
-    standard_explorer,
+    standard_finder,
     standard_snorkel,
     standard_softlabel,
 )
@@ -53,13 +53,13 @@ def active_learning(dataset, vectorizer, vecnet_callback, height=600, width=600)
     # building-block subroutines
     softlabel = standard_softlabel(dataset, height=height, width=width)
     annotator = standard_annotator(dataset, height=height, width=width)
-    explorer = standard_explorer(dataset, height=height, width=width)
+    finder = standard_finder(dataset, height=height, width=width)
 
     # link coordinates and selections
     softlabel.link_xy_range(annotator)
-    softlabel.link_xy_range(explorer)
+    softlabel.link_xy_range(finder)
     softlabel.link_selection("raw", annotator, "raw")
-    softlabel.link_selection("raw", explorer, "raw")
+    softlabel.link_selection("raw", finder, "raw")
 
     # recipe-specific widget
     def setup_model_retrainer():
@@ -100,5 +100,5 @@ def active_learning(dataset, vectorizer, vecnet_callback, height=600, width=600)
 
     model_retrainer, epochs_slider = setup_model_retrainer()
     sidebar = column(model_retrainer, epochs_slider, dataset.view())
-    layout = row(sidebar, *[_plot.view() for _plot in [softlabel, annotator, explorer]])
+    layout = row(sidebar, *[_plot.view() for _plot in [softlabel, annotator, finder]])
     return layout
