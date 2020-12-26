@@ -2,7 +2,13 @@ from bokeh.models import Div
 
 
 def bokeh_hover_tooltip(
-    label=False, text=False, image=False, coords=True, index=True, custom=None
+    label=False,
+    text=False,
+    image=False,
+    audio=False,
+    coords=True,
+    index=True,
+    custom=None,
 ):
     """
     Create a Bokeh hover tooltip from a template.
@@ -14,13 +20,20 @@ def bokeh_hover_tooltip(
     :param index: whether to show indices in the dataset.
     :param custom: {display: column} mapping of additional (text) tooltips.
     """
+    # initialize mutable default value
     custom = custom or dict()
-    prefix = """<div>\n"""
-    suffix = """</div>\n"""
 
-    tooltip = prefix
+    # prepare encapsulation of a div box and an associated script
+    divbox_prefix = """<div class="out tooltip">\n"""
+    divbox_suffix = """</div>\n"""
+    script_prefix = """<script>\n"""
+    script_suffix = """</script>\n"""
+
+    # dynamically add contents to the div box and the script
+    divbox = divbox_prefix
+    script = script_prefix
     if label:
-        tooltip += """
+        divbox += """
         <div>
             <span style="font-size: 16px; color: #966;">
                 Label: @label
@@ -28,7 +41,7 @@ def bokeh_hover_tooltip(
         </div>
         """
     if text:
-        tooltip += """
+        divbox += """
         <div style="word-wrap: break-word; width: 95%; text-overflow: ellipsis; line-height: 90%">
             <span style="font-size: 11px;">
                 Text: @text
@@ -36,17 +49,34 @@ def bokeh_hover_tooltip(
         </div>
         """
     if image:
-        tooltip += """
+        divbox += """
         <div>
             <img
-                src="@imgs" height="60" alt="@imgs" width="60"
+                src="@image" height="60" alt="@image" width="60"
                 style="float: left; margin: 0px 5px 5px 0px;"
                 border="2"
             ></img>
         </div>
         """
+    if audio:
+        divbox += """
+        <audio id="sound" controls preload="auto">
+            <source src="@audio" controls>
+            </source>
+        </audio>
+        """
+        script += """
+        var audioclip = $("#sound")[0];
+        $( "div.tooltip" )
+          .mouseenter(function() {
+            audioclip.play();
+          })
+          .mouseleave(function() {
+            audioclip.pause();
+          });
+        """
     if coords:
-        tooltip += """
+        divbox += """
         <div>
             <span style="font-size: 12px; color: #060;">
                 Coordinates: ($x, $y)
@@ -54,7 +84,7 @@ def bokeh_hover_tooltip(
         </div>
         """
     if index:
-        tooltip += """
+        divbox += """
         <div>
             <span style="font-size: 12px; color: #066;">
                 Index: [$index]
@@ -62,15 +92,16 @@ def bokeh_hover_tooltip(
         </div>
         """
     for _key, _field in custom.items():
-        tooltip += f"""
+        divbox += f"""
         <div>
             <span style="font-size: 12px; color: #606;">
                 {_key}: @{_field}
             </span>
         </div>
         """
-    tooltip += suffix
-    return tooltip
+    divbox += divbox_suffix
+    script += script_suffix
+    return divbox + script
 
 
 dataset_help_html = """Hover - dataset visual elements<br>
