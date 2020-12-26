@@ -2,8 +2,8 @@ import torch
 import torch.nn.functional as F
 from datetime import datetime
 from deprecated import deprecated
+from hover.core import Loggable
 from hover.utils.metrics import classification_accuracy
-from wasabi import msg as logger
 from sklearn.metrics import confusion_matrix
 from snorkel.classification import cross_entropy_with_probs
 import numpy as np
@@ -20,7 +20,7 @@ def create_vector_net_from_module(specific_class, model_module_name, labels):
     return specific_class.from_module(model_module_name, labels)
 
 
-class VectorNet(object):
+class VectorNet(Loggable):
 
     """
     Simple transfer learning model: a user-supplied vectorizer followed by a neural net.
@@ -57,7 +57,7 @@ class VectorNet(object):
             try:
                 self.nn.load_state_dict(torch.load(state_dict_path))
             except Exception as e:
-                logger.warn(f"Load VectorNet state path failed with {type(e)}: e")
+                self._warn(f"Load VectorNet state path failed with {type(e)}: e")
 
             state_dict_backup_path = (
                 f"{state_dict_path}.{datetime.now().strftime('%Y%m%d%H%M%S')}"
@@ -188,7 +188,7 @@ class VectorNet(object):
         if verbose > 0:
             log_info = dict(self._dynamic_params)
             log_info["performance"] = "Acc {0:.3f}".format(accuracy)
-            logger.info(
+            self._info(
                 "{0: <80}".format(
                     "Eval: Epoch {epoch} {performance}".format(**log_info)
                 )
@@ -242,7 +242,7 @@ class VectorNet(object):
         if verbose > 0:
             log_info = dict(self._dynamic_params)
             log_info["performance"] = "Loss {0:.3f}".format(loss)
-            print(
+            self._print(
                 "{0: <80}".format(
                     "Train: Epoch {epoch} Batch {batch} {performance}".format(
                         **log_info
