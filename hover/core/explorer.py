@@ -13,50 +13,43 @@ from hover.core import Loggable
 from hover.utils.misc import current_time
 from .local_config import bokeh_hover_tooltip
 
+STANDARD_PLOT_TOOLS = [
+    # change the scope
+    "pan",
+    "wheel_zoom",
+    # make selections
+    "tap",
+    "poly_select",
+    "lasso_select",
+    # make inspections
+    "hover",
+    # navigate changes
+    "undo",
+    "redo",
+]
 
-class BokehForLabeledText(Loggable, ABC):
+
+class BokehBaseExplorer(Loggable, ABC):
     """
-    Base class that keeps template explorer settings.
+    Base class for exploring data.
 
     Assumes:
 
     - in supplied dataframes
-      - (always) text data in a `text` column
-      - (always) xy coordinates in `x` and `y` columns
-      - (always) an index for the rows
-      - (likely) classification label in a `label` column
+      - (always) xy coordinates in `x` and `y` columns;
+      - (always) an index for the rows;
+      - (always) classification label (or ABSTAIN) in a `label` column.
 
     Does not assume:
 
-    - what the explorer serves to do.
+    - a specific form of data;
+    - what the map serves to do.
     """
 
-    DEFAULT_FIGURE_KWARGS = {
-        "tools": [
-            # change the scope
-            "pan",
-            "wheel_zoom",
-            # make selections
-            "tap",
-            "poly_select",
-            "lasso_select",
-            # make inspections
-            "hover",
-            # navigate changes
-            "undo",
-            "redo",
-        ],
-        # inspection details
-        "tooltips": bokeh_hover_tooltip(
-            label=True, text=True, image=False, audio=False, coords=True, index=True
-        ),
-        # bokeh recommends webgl for scalability
-        "output_backend": "webgl",
-    }
+    SUBSET_GLYPH_KWARGS = {}
 
-    DATA_KEY_TO_KWARGS = {}
-
-    MANDATORY_COLUMNS = ["text", "label", "x", "y"]
+    MANDATORY_COLUMNS = ["label", "x", "y"]
+    TOOLTIP_KWARGS = {"label": True, "coords": True, "index": True}
 
     def __init__(self, df_dict, **kwargs):
         """
@@ -69,18 +62,23 @@ class BokehForLabeledText(Loggable, ABC):
         - activate builtin search callbacks depending on the child class.
         - create a (typically) blank figure under such settings
         """
-        self.figure_kwargs = self.__class__.DEFAULT_FIGURE_KWARGS.copy()
+        self.figure_kwargs = {
+            "tools": STANDARD_PLOT_TOOLS,
+            "tooltips": self._build_tooltip(),
+            # bokeh recommends webgl for scalability
+            "output_backend": "webgl",
+        }
         self.figure_kwargs.update(kwargs)
         self.glyph_kwargs = {
             _key: _dict["constant"].copy()
-            for _key, _dict in self.__class__.DATA_KEY_TO_KWARGS.items()
+            for _key, _dict in self.__class__.SUBSET_GLYPH_KWARGS.items()
         }
         self._setup_widgets()
         self._setup_dfs(df_dict)
         self._setup_sources()
         self._activate_search_builtin()
         self.figure = figure(**self.figure_kwargs)
-        self.reset_figure()
+        # self.reset_figure() # experimental: should be able to drop this from __init__
 
     @classmethod
     def from_dataset(cls, dataset, subset_mapping, *args, **kwargs):
@@ -94,6 +92,19 @@ class BokehForLabeledText(Loggable, ABC):
         df_dict = {_v: dataset.dfs[_k] for _k, _v in subset_mapping.items()}
         return cls(df_dict, *args, **kwargs)
 
+    def view(self):
+        """Define the layout of the whole explorer."""
+        return column(self._layout_widgets(), self.figure)
+
+    def _build_tooltip(self):
+        """
+        Define a windowed tooltip which shows inspection details.
+
+        Note that this is a method rather than a class attribute because
+        child classes may involve instance attributes in the tooltip.
+        """
+        return bokeh_hover_tooltip(**{self.__class__.TOOLTIP_KWARGS})
+
     def reset_figure(self):
         """Start over on the figure."""
         self._info("Resetting figure")
@@ -105,22 +116,27 @@ class BokehForLabeledText(Loggable, ABC):
 
         Create positive/negative text search boxes.
         """
-        from bokeh.models import TextInput, CheckboxButtonGroup
-
-        # set up text search widgets, without assigning callbacks yet
-        # to provide more flexibility with callbacks
         self._info("Setting up widgets")
-        self.search_pos = TextInput(
-            title="Text contains (plain text, or /pattern/flag for regex):",
-            width_policy="fit",
-            height_policy="fit",
-        )
-        self.search_neg = TextInput(
-            title="Text does not contain:", width_policy="fit", height_policy="fit"
-        )
+        self._setup_search_highlight()
+        self._setup_subset_toggle()
 
-        # set up subset display toggles which do have clearly defined callbacks
-        data_keys = list(self.__class__.DATA_KEY_TO_KWARGS.keys())
+    @abstractmethod
+    def _layout_widgets(self):
+        """Define the layout of widgets."""
+        pass
+
+    @abstractmethod
+    def _setup_search_highlight(self):
+        """Left to child classes that have a specific data format."""
+        pass
+
+    def _setup_subset_toggle(self):
+        """
+        Widgets for toggling which data subsets to show.
+        """
+        from bokeh.models import CheckboxButtonGroup
+
+        data_keys = list(self.__class__.SUBSET_GLYPH_KWARGS.keys())
         self.data_key_button_group = CheckboxButtonGroup(
             labels=data_keys, active=list(range(len(data_keys)))
         )
@@ -129,20 +145,12 @@ class BokehForLabeledText(Loggable, ABC):
             visible_keys = {self.data_key_button_group.labels[idx] for idx in active}
             for _renderer in self.figure.renderers:
                 # if the renderer has a name "on the list", update its visibility
-                if _renderer.name in self.__class__.DATA_KEY_TO_KWARGS.keys():
+                if _renderer.name in self.__class__.SUBSET_GLYPH_KWARGS.keys():
                     _renderer.visible = _renderer.name in visible_keys
 
         # store the callback (useful, for example, during automated tests) and link it
         self.update_data_key_display = update_data_key_display
         self.data_key_button_group.on_click(self.update_data_key_display)
-
-    def _layout_widgets(self):
-        """Define the layout of widgets."""
-        return column(self.search_pos, self.search_neg, self.data_key_button_group)
-
-    def view(self):
-        """Define the layout of the whole explorer."""
-        return column(self._layout_widgets(), self.figure)
 
     def _setup_dfs(self, df_dict, copy=False):
         """
@@ -152,7 +160,7 @@ class BokehForLabeledText(Loggable, ABC):
         """
         self._info("Setting up DataFrames")
         supplied_keys = set(df_dict.keys())
-        expected_keys = set(self.__class__.DATA_KEY_TO_KWARGS.keys())
+        expected_keys = set(self.__class__.SUBSET_GLYPH_KWARGS.keys())
 
         # perform high-level df key checks
         supplied_not_expected = supplied_keys.difference(expected_keys)
@@ -203,12 +211,12 @@ class BokehForLabeledText(Loggable, ABC):
 
     def _activate_search_builtin(self, verbose=True):
         """
+        Assign Highlighting callbacks to search results in a manner built into the class.
         Typically called once during initialization.
-        Highlight positive search results and mute negative search results.
 
         Note that this is a template method which heavily depends on class attributes.
         """
-        for _key, _dict in self.__class__.DATA_KEY_TO_KWARGS.items():
+        for _key, _dict in self.__class__.SUBSET_GLYPH_KWARGS.items():
             if _key in self.sources.keys():
                 _responding = list(_dict["search"].keys())
                 for _flag, _params in _dict["search"].items():
@@ -221,6 +229,122 @@ class BokehForLabeledText(Loggable, ABC):
                     self._info(
                         f"Activated {_responding} on subset {_key} to respond to the search widgets."
                     )
+
+    @abstractmethod
+    def activate_search(self, source, kwargs, altered_param=("size", 10, 5, 7)):
+        """Left to child classes that have a specific data format."""
+        pass
+
+    def _prelink_check(self, other):
+        """
+        Sanity check before linking two explorers.
+        """
+        assert other is not self, "Self-loops are fordidden"
+        assert isinstance(other, BokehBaseExplorer), "Must link to BokehBaseExplorer"
+
+    def link_selection(self, key, other, other_key):
+        """
+        Sync the selected indices between specified sources.
+        """
+        self._prelink_check(other)
+        # link selection in a bidirectional manner
+        sl, sr = self.sources[key], other.sources[other_key]
+        sl.selected.js_link("indices", sr.selected, "indices")
+        sr.selected.js_link("indices", sl.selected, "indices")
+
+    def link_xy_range(self, other):
+        """
+        Sync plotting ranges on the xy-plane.
+        """
+        self._prelink_check(other)
+        # link coordinate ranges in a bidirectional manner
+        for _attr in ["start", "end"]:
+            self.figure.x_range.js_link(_attr, other.figure.x_range, _attr)
+            self.figure.y_range.js_link(_attr, other.figure.y_range, _attr)
+            other.figure.x_range.js_link(_attr, self.figure.x_range, _attr)
+            other.figure.y_range.js_link(_attr, self.figure.y_range, _attr)
+
+    @abstractmethod
+    def plot(self, *args, **kwargs):
+        """
+        Plot something onto the figure.
+        """
+        pass
+
+    def auto_labels_cmap(self):
+        """
+        Find all labels and an appropriate color map.
+        """
+        labels = set()
+        for _key in self.dfs.keys():
+            labels = labels.union(set(self.dfs[_key]["label"].values))
+        labels.discard(module_config.ABSTAIN_DECODED)
+        labels = sorted(labels, reverse=True)
+
+        assert len(labels) <= 20, "Too many labels to support (max at 20)"
+        cmap = "Category10_10" if len(labels) <= 10 else "Category20_20"
+        return labels, cmap
+
+    def auto_legend_correction(self):
+        """
+        Find legend items and deduplicate by label.
+        """
+        if not hasattr(self.figure, "legend"):
+            self._fail("Attempting auto_legend_correction when there is no legend")
+            return
+        # extract all items and start over
+        items = self.figure.legend.items[:]
+        self.figure.legend.items.clear()
+
+        # use one item to hold all renderers matching its label
+        label_to_item = OrderedDict()
+
+        for _item in items:
+            _label = _item.label.get("value", "")
+            if _label not in label_to_item.keys():
+                label_to_item[_label] = _item
+            else:
+                label_to_item[_label].renderers.extend(_item.renderers)
+
+        # assign deduplicated items back to the legend
+        self.figure.legend.items = list(label_to_item.values())
+        return
+
+
+class BokehForCorpus(BokehBaseExplorer):
+    """
+    Assumes on top of its parent class:
+
+    - in supplied dataframes
+      - (always) text data in a `text` column
+
+    Does not assume:
+
+    - what the explorer serves to do.
+    """
+
+    MANDATORY_COLUMNS = ["text", "label", "x", "y"]
+    TOOLTIP_KWARGS = {"label": True, "text": True, "coords": True, "index": True}
+
+    def _setup_search_highlight(self):
+        """Create positive/negative text search boxes."""
+        from bokeh.models import TextInput
+
+        # set up text search widgets, without assigning callbacks yet
+        # to provide more flexibility with callbacks
+        self._info("Setting up widgets")
+        self.search_pos = TextInput(
+            title="Text contains (plain text, or /pattern/flag for regex):",
+            width_policy="fit",
+            height_policy="fit",
+        )
+        self.search_neg = TextInput(
+            title="Text does not contain:", width_policy="fit", height_policy="fit"
+        )
+
+    def _layout_widgets(self):
+        """Define the layout of widgets."""
+        return column(self.search_pos, self.search_neg, self.data_key_button_group)
 
     def activate_search(self, source, kwargs, altered_param=("size", 10, 5, 7)):
         """
@@ -306,92 +430,17 @@ class BokehForLabeledText(Loggable, ABC):
         self.search_neg.js_on_change("value", search_callback)
         return updated_kwargs
 
-    def _prelink_check(self, other):
-        """
-        Sanity check before linking two explorers.
-        """
-        assert other is not self, "Self-loops are fordidden"
-        assert isinstance(other, BokehForLabeledText), "Must link to BokehForLabelText"
 
-    def link_selection(self, key, other, other_key):
-        """
-        Sync the selected indices between specified sources.
-        """
-        self._prelink_check(other)
-        # link selection in a bidirectional manner
-        sl, sr = self.sources[key], other.sources[other_key]
-        sl.selected.js_link("indices", sr.selected, "indices")
-        sr.selected.js_link("indices", sl.selected, "indices")
-
-    def link_xy_range(self, other):
-        """
-        Sync plotting ranges on the xy-plane.
-        """
-        self._prelink_check(other)
-        # link coordinate ranges in a bidirectional manner
-        for _attr in ["start", "end"]:
-            self.figure.x_range.js_link(_attr, other.figure.x_range, _attr)
-            self.figure.y_range.js_link(_attr, other.figure.y_range, _attr)
-            other.figure.x_range.js_link(_attr, self.figure.x_range, _attr)
-            other.figure.y_range.js_link(_attr, self.figure.y_range, _attr)
-
-    @abstractmethod
-    def plot(self, *args, **kwargs):
-        """
-        Plot something onto the figure.
-        """
-        pass
-
-    def auto_labels_cmap(self):
-        """
-        Find all labels and an appropriate color map.
-        """
-        labels = set()
-        for _key in self.dfs.keys():
-            labels = labels.union(set(self.dfs[_key]["label"].values))
-        labels.discard(module_config.ABSTAIN_DECODED)
-        labels = sorted(labels, reverse=True)
-
-        assert len(labels) <= 20, "Too many labels to support (max at 20)"
-        cmap = "Category10_10" if len(labels) <= 10 else "Category20_20"
-        return labels, cmap
-
-    def auto_legend_correction(self):
-        """
-        Find legend items and deduplicate by label.
-        """
-        if not hasattr(self.figure, "legend"):
-            self._fail("Attempting auto_legend_correction when there is no legend")
-            return
-        # extract all items and start over
-        items = self.figure.legend.items[:]
-        self.figure.legend.items.clear()
-
-        # use one item to hold all renderers matching its label
-        label_to_item = OrderedDict()
-
-        for _item in items:
-            _label = _item.label.get("value", "")
-            if _label not in label_to_item.keys():
-                label_to_item[_label] = _item
-            else:
-                label_to_item[_label].renderers.extend(_item.renderers)
-
-        # assign deduplicated items back to the legend
-        self.figure.legend.items = list(label_to_item.values())
-        return
-
-
-class BokehCorpusExplorer(BokehForLabeledText):
+class BokehDataFinder(BokehBaseExplorer):
     """
-    Plot unlabeled, 2D-vectorized text data points in a corpus.
+    Plot data points in grey ('gainsboro') and highlight search positives in coral.
 
     Features:
 
     - the search widgets will highlight the results through a change of color, which is arguably the best visual effect.
     """
 
-    DATA_KEY_TO_KWARGS = {
+    SUBSET_GLYPH_KWARGS = {
         _key: {
             "constant": {"line_alpha": 0.4},
             "search": {
@@ -403,20 +452,8 @@ class BokehCorpusExplorer(BokehForLabeledText):
         for _key in ["raw", "train", "dev", "test"]
     }
 
-    def __init__(self, df_dict, **kwargs):
-        """
-        Requires the input dataframe to contain:
-
-        (1) "x" and "y" columns for coordinates;
-        (2) a "text" column for data point tooltips.
-        """
-        super().__init__(df_dict, **kwargs)
-
     def plot(self, *args, **kwargs):
-        """
-        (Re)-plot the corpus.
-        Called just once per instance most of the time.
-        """
+        """Plot the data map."""
         for _key, _source in self.sources.items():
             self.figure.circle(
                 "x", "y", name=_key, source=_source, **self.glyph_kwargs[_key]
@@ -424,9 +461,9 @@ class BokehCorpusExplorer(BokehForLabeledText):
             self._good(f"Plotted subset {_key} with {self.dfs[_key].shape[0]} points")
 
 
-class BokehCorpusAnnotator(BokehCorpusExplorer):
+class BokehDataAnnotator(BokehBaseExplorer):
     """
-    Annoate text data points via callbacks.
+    Annoate data points via callbacks.
 
     Features:
 
@@ -434,7 +471,7 @@ class BokehCorpusAnnotator(BokehCorpusExplorer):
     - **SERVER ONLY**: only works in a setting that allows Python callbacks.
     """
 
-    DATA_KEY_TO_KWARGS = {
+    SUBSET_GLYPH_KWARGS = {
         _key: {
             "constant": {"line_alpha": 0.3},
             "search": {
@@ -444,10 +481,6 @@ class BokehCorpusAnnotator(BokehCorpusExplorer):
         }
         for _key in ["raw", "train", "dev", "test"]
     }
-
-    def __init__(self, df_dict, **kwargs):
-        """Conceptually the same as the parent method."""
-        super().__init__(df_dict, **kwargs)
 
     def _layout_widgets(self):
         """Define the layout of widgets."""
@@ -569,9 +602,9 @@ class BokehCorpusAnnotator(BokehCorpusExplorer):
         self.auto_legend_correction()
 
 
-class BokehSoftLabelExplorer(BokehCorpusExplorer):
+class BokehSoftLabelExplorer(BokehBaseExplorer):
     """
-    Plot text data points according to their labels and confidence scores.
+    Plot data points according to their labels and confidence scores.
 
     Features:
 
@@ -580,7 +613,7 @@ class BokehSoftLabelExplorer(BokehCorpusExplorer):
     - currently not considering multi-label scenarios.
     """
 
-    DATA_KEY_TO_KWARGS = {
+    SUBSET_GLYPH_KWARGS = {
         _key: {"constant": {"line_alpha": 0.5}, "search": {"size": ("size", 10, 5, 7)}}
         for _key in ["raw", "train", "dev"]
     }
@@ -595,19 +628,14 @@ class BokehSoftLabelExplorer(BokehCorpusExplorer):
         assert label_col != "label", "'label' field is reserved"
         self.label_col = label_col
         self.score_col = score_col
-        kwargs.update(
-            {
-                "tooltips": bokeh_hover_tooltip(
-                    label=True,
-                    text=True,
-                    image=False,
-                    coords=True,
-                    index=True,
-                    custom={"Soft Label": self.label_col, "Soft Score": self.score_col},
-                )
-            }
-        )
         super().__init__(df_dict, **kwargs)
+
+    def _build_tooltip(self):
+        """Extending from the parent method."""
+        return bokeh_hover_tooltip(
+            **{self.__class__.TOOLTIP_KWARGS},
+            custom={"Soft Label": self.label_col, "Soft Score": self.score_col},
+        )
 
     def _setup_dfs(self, df_dict, **kwargs):
         """Extending from the parent method."""
@@ -642,9 +670,9 @@ class BokehSoftLabelExplorer(BokehCorpusExplorer):
         self.auto_legend_correction()
 
 
-class BokehMarginExplorer(BokehCorpusExplorer):
+class BokehMarginExplorer(BokehBaseExplorer):
     """
-    Plot text data points along with two versions of labels.
+    Plot data points along with two versions of labels.
     Could be useful for A/B tests.
 
     Features:
@@ -653,7 +681,7 @@ class BokehMarginExplorer(BokehCorpusExplorer):
     - currently not considering multi-label scenarios.
     """
 
-    DATA_KEY_TO_KWARGS = {
+    SUBSET_GLYPH_KWARGS = {
         _key: {
             "constant": {"color": "gainsboro", "line_alpha": 0.5, "fill_alpha": 0.0},
             "search": {"size": ("size", 10, 5, 7)},
@@ -674,10 +702,11 @@ class BokehMarginExplorer(BokehCorpusExplorer):
 
     def _setup_dfs(self, df_dict, **kwargs):
         """Extending from the parent method."""
-        for _key in [self.label_col_a, self.label_col_b]:
-            assert _key in df_dict["raw"].columns
-
         super()._setup_dfs(df_dict, **kwargs)
+
+        for _key, _df in self.dfs.items():
+            assert self.label_col_a not in _df.columns
+            assert self.label_col_b not in _df.columns
 
     def plot(self, label, **kwargs):
         """
@@ -718,9 +747,9 @@ class BokehMarginExplorer(BokehCorpusExplorer):
                 _marker("x", "y", name=_key, source=_source, view=_view, **eff_kwargs)
 
 
-class BokehSnorkelExplorer(BokehCorpusExplorer):
+class BokehSnorkelExplorer(BokehBaseExplorer):
     """
-    Plot text data points along with labeling function (LF) outputs.
+    Plot data points along with labeling function (LF) outputs.
 
     Features:
 
@@ -732,7 +761,7 @@ class BokehSnorkelExplorer(BokehCorpusExplorer):
       - 'hit': the LF made a prediction on a point in the 'raw' set.
     """
 
-    DATA_KEY_TO_KWARGS = {
+    SUBSET_GLYPH_KWARGS = {
         "raw": {
             "constant": {"line_alpha": 1.0, "color": "gainsboro"},
             "search": {
@@ -758,10 +787,6 @@ class BokehSnorkelExplorer(BokehCorpusExplorer):
         # initialize a list to keep track of plotted LFs
         self.lfs = []
         self.palette = Category20[20]
-
-    def _setup_dfs(self, df_dict, **kwargs):
-        """Extending from the parent method."""
-        super()._setup_dfs(df_dict, **kwargs)
 
     def plot(self, *args, **kwargs):
         """
@@ -892,3 +917,11 @@ class BokehSnorkelExplorer(BokehCorpusExplorer):
         indices = np.where(L_raw != module_config.ABSTAIN_DECODED)[0].tolist()
         view = CDSView(source=self.sources["raw"], filters=[IndexFilter(indices)])
         return view
+
+
+class BokehCorpusExplorer(BokehForCorpus, BokehDataFinder):
+    """The text flavor of BokehDataFinder."""
+
+    TOOLTIP_KWARGS = BokehForCorpus.TOOLTIP_KWARGS
+    MANDATORY_COLUMNS = BokehForCorpus.MANDATORY_COLUMNS
+    SUBSET_GLYPH_KWARGS = BokehDataFinder.SUBSET_GLYPH_KWARGS
