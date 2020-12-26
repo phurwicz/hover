@@ -190,9 +190,9 @@ class SupervisableDataset(Loggable):
         Note: the reason we need this is due to `self.dfs[key] = ...`-like assignments. If DF operations were all in-place, then the explorers could directly access the updates through their `self.dfs` references.
         """
         # local import to avoid import cycles
-        from hover.core.explorer import BokehForLabeledText
+        from hover.core.explorer import BokehBaseExplorer
 
-        assert isinstance(explorer, BokehForLabeledText)
+        assert isinstance(explorer, BokehBaseExplorer)
 
         def callback_push():
             df_dict = {_v: self.dfs[_k] for _k, _v in subset_mapping.items()}
@@ -283,7 +283,7 @@ class SupervisableDataset(Loggable):
             _invalid_indices = None
             assert "label" in self.dfs[_key].columns
             _mask = self.dfs[_key]["label"].apply(lambda x: x in self.label_encoder)
-            _invalid_indices = np.where(_mask == False)[0].tolist()
+            _invalid_indices = np.where(_mask is False)[0].tolist()
             if _invalid_indices:
                 self._fail(f"Subset {_key} has invalid labels:")
                 self._print({self.dfs[_key].loc[_invalid_indices]})
