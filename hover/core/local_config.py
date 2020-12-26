@@ -51,6 +51,9 @@ def bokeh_hover_tooltip(
     if image:
         divbox += """
         <div>
+            <span style="font-size: 10px;">
+                Image: @image
+            </span>
             <img
                 src="@image" height="60" alt="@image" width="60"
                 style="float: left; margin: 0px 0px 0px 0px;"
@@ -61,6 +64,9 @@ def bokeh_hover_tooltip(
     if audio:
         divbox += """
         <div>
+            <span style="font-size: 10px;">
+                Audio: @audio
+            </span>
             <audio autoplay preload="auto" src="@audio">
             </audio>
         </div>
