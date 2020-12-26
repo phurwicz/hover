@@ -1,6 +1,7 @@
 """
 Useful subroutines for working with bokeh in general.
 """
+import warnings
 from functools import wraps
 from traceback import format_exc
 from bokeh.models import PreText
@@ -66,8 +67,10 @@ def servable(title=None):
                         # remove spinner and its update
                         try:
                             doc.remove_periodic_callback(progress)
-                        except Exception:
-                            pass
+                        except Exception as e:
+                            warnings.warn(
+                                f"@servable: trying to remove periodic callback, got {type(e)}: {e}"
+                            )
                         layout.children.append(bokeh_model)
                         layout.children.pop(0)
                     except Exception as e:
