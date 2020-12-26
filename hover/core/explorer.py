@@ -8,6 +8,7 @@ from bokeh.layouts import column, row
 from bokeh.palettes import Category20
 from bokeh.transform import factor_cmap
 from abc import ABC, abstractmethod
+from deprecated import deprecated
 from hover import module_config
 from hover.core import Loggable
 from hover.utils.misc import current_time
@@ -959,3 +960,11 @@ class BokehCorpusSnorkel(BokehForCorpus, BokehSnorkelExplorer):
     TOOLTIP_KWARGS = BokehForCorpus.TOOLTIP_KWARGS
     MANDATORY_COLUMNS = BokehForCorpus.MANDATORY_COLUMNS
     SUBSET_GLYPH_KWARGS = BokehSnorkelExplorer.SUBSET_GLYPH_KWARGS
+
+
+@deprecated(
+    version="0.4.0",
+    reason="will be removed in a future version; please use BokehCorpusFinder instead.",
+)
+class BokehCorpusExplorer(BokehCorpusFinder):
+    pass
