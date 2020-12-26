@@ -103,7 +103,7 @@ class BokehBaseExplorer(Loggable, ABC):
         Note that this is a method rather than a class attribute because
         child classes may involve instance attributes in the tooltip.
         """
-        return bokeh_hover_tooltip(**{self.__class__.TOOLTIP_KWARGS})
+        return bokeh_hover_tooltip(**self.__class__.TOOLTIP_KWARGS)
 
     def reset_figure(self):
         """Start over on the figure."""
@@ -633,7 +633,7 @@ class BokehSoftLabelExplorer(BokehBaseExplorer):
     def _build_tooltip(self):
         """Extending from the parent method."""
         return bokeh_hover_tooltip(
-            **{self.__class__.TOOLTIP_KWARGS},
+            **self.__class__.TOOLTIP_KWARGS,
             custom={"Soft Label": self.label_col, "Soft Score": self.score_col},
         )
 
@@ -705,8 +705,10 @@ class BokehMarginExplorer(BokehBaseExplorer):
         super()._setup_dfs(df_dict, **kwargs)
 
         for _key, _df in self.dfs.items():
-            assert self.label_col_a not in _df.columns
-            assert self.label_col_b not in _df.columns
+            for _col in [self.label_col_a, self.label_col_b]:
+                assert (
+                    _col in _df.columns
+                ), f"Expected column {_col} among {list(_df.columns)}"
 
     def plot(self, label, **kwargs):
         """
@@ -925,3 +927,35 @@ class BokehCorpusExplorer(BokehForCorpus, BokehDataFinder):
     TOOLTIP_KWARGS = BokehForCorpus.TOOLTIP_KWARGS
     MANDATORY_COLUMNS = BokehForCorpus.MANDATORY_COLUMNS
     SUBSET_GLYPH_KWARGS = BokehDataFinder.SUBSET_GLYPH_KWARGS
+
+
+class BokehCorpusAnnotator(BokehForCorpus, BokehDataAnnotator):
+    """The text flavor of BokehDataAnnotator."""
+
+    TOOLTIP_KWARGS = BokehForCorpus.TOOLTIP_KWARGS
+    MANDATORY_COLUMNS = BokehForCorpus.MANDATORY_COLUMNS
+    SUBSET_GLYPH_KWARGS = BokehDataAnnotator.SUBSET_GLYPH_KWARGS
+
+
+class BokehCorpusSoftLabel(BokehForCorpus, BokehSoftLabelExplorer):
+    """The text flavor of BokehSoftLabelExplorer."""
+
+    TOOLTIP_KWARGS = BokehForCorpus.TOOLTIP_KWARGS
+    MANDATORY_COLUMNS = BokehForCorpus.MANDATORY_COLUMNS
+    SUBSET_GLYPH_KWARGS = BokehSoftLabelExplorer.SUBSET_GLYPH_KWARGS
+
+
+class BokehCorpusMargin(BokehForCorpus, BokehMarginExplorer):
+    """The text flavor of BokehMarginExplorer."""
+
+    TOOLTIP_KWARGS = BokehForCorpus.TOOLTIP_KWARGS
+    MANDATORY_COLUMNS = BokehForCorpus.MANDATORY_COLUMNS
+    SUBSET_GLYPH_KWARGS = BokehMarginExplorer.SUBSET_GLYPH_KWARGS
+
+
+class BokehCorpusSnorkel(BokehForCorpus, BokehSnorkelExplorer):
+    """The text flavor of BokehSnorkelExplorer."""
+
+    TOOLTIP_KWARGS = BokehForCorpus.TOOLTIP_KWARGS
+    MANDATORY_COLUMNS = BokehForCorpus.MANDATORY_COLUMNS
+    SUBSET_GLYPH_KWARGS = BokehSnorkelExplorer.SUBSET_GLYPH_KWARGS

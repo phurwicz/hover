@@ -6,17 +6,25 @@ from hover import module_config
 from hover.core.explorer import (
     BokehCorpusExplorer,
     BokehCorpusAnnotator,
-    BokehSoftLabelExplorer,
-    BokehMarginExplorer,
-    BokehSnorkelExplorer,
+    BokehCorpusSoftLabel,
+    BokehCorpusMargin,
+    BokehCorpusSnorkel,
 )
 from hover.utils.snorkel_helper import labeling_function
 import pytest
 import random
 
 PSEUDO_LABELS = ["A", "B"]
-RANDOM_LABEL = lambda x: random.choice(PSEUDO_LABELS)
-RANDOM_SCORE = lambda x: random.uniform(0.2, 1.0)
+
+
+def RANDOM_LABEL(row):
+    return random.choice(PSEUDO_LABELS)
+
+
+def RANDOM_SCORE(row):
+    return random.uniform(0.2, 1.0)
+
+
 RANDOM_LABEL_LF = labeling_function(targets=PSEUDO_LABELS)(RANDOM_LABEL)
 
 
@@ -108,10 +116,10 @@ class TestBokehCorpusAnnotator:
 
 
 @pytest.mark.core
-class TestBokehSoftLabelExplorer:
+class TestBokehCorpusSoftLabel:
     @staticmethod
     def test_init(example_soft_label_df):
-        explorer = BokehSoftLabelExplorer(
+        explorer = BokehCorpusSoftLabel(
             {"raw": example_soft_label_df, "train": example_soft_label_df.copy()},
             "pred_label",
             "pred_score",
@@ -121,20 +129,20 @@ class TestBokehSoftLabelExplorer:
 
 
 @pytest.mark.core
-class TestBokehMarginExplorer:
+class TestBokehCorpusMargin:
     @staticmethod
     def test_init(example_margin_df):
-        explorer = BokehMarginExplorer({"raw": example_margin_df}, "label_1", "label_2")
+        explorer = BokehCorpusMargin({"raw": example_margin_df}, "label_1", "label_2")
         explorer.plot("A")
         explorer.plot("B")
         _ = explorer.view()
 
 
 @pytest.mark.core
-class TestBokehSnorkelExplorer:
+class TestBokehCorpusSnorkel:
     @staticmethod
     def test_init(example_raw_df, example_dev_df):
-        explorer = BokehSnorkelExplorer(
+        explorer = BokehCorpusSnorkel(
             {"raw": example_raw_df, "labeled": example_dev_df}
         )
         explorer.plot()
