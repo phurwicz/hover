@@ -53,27 +53,17 @@ def bokeh_hover_tooltip(
         <div>
             <img
                 src="@image" height="60" alt="@image" width="60"
-                style="float: left; margin: 0px 5px 5px 0px;"
+                style="float: left; margin: 0px 0px 0px 0px;"
                 border="2"
             ></img>
         </div>
         """
     if audio:
         divbox += """
-        <audio id="sound" controls preload="auto">
-            <source src="@audio" controls>
-            </source>
-        </audio>
-        """
-        script += """
-        var audioclip = $("#sound")[0];
-        $( "div.tooltip" )
-          .mouseenter(function() {
-            audioclip.play();
-          })
-          .mouseleave(function() {
-            audioclip.pause();
-          });
+        <div>
+            <audio autoplay preload="auto" src="@audio">
+            </audio>
+        </div>
         """
     if coords:
         divbox += """
@@ -99,6 +89,7 @@ def bokeh_hover_tooltip(
             </span>
         </div>
         """
+
     divbox += divbox_suffix
     script += script_suffix
     return divbox + script

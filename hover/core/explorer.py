@@ -48,7 +48,7 @@ class BokehForLabeledText(Loggable, ABC):
         ],
         # inspection details
         "tooltips": bokeh_hover_tooltip(
-            label=True, text=True, image=False, coords=True, index=True
+            label=True, text=True, image=False, audio=False, coords=True, index=True
         ),
         # bokeh recommends webgl for scalability
         "output_backend": "webgl",
