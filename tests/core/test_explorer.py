@@ -4,7 +4,7 @@ Note that the whole point of explorers is to allow interaction, for which this f
 
 from hover import module_config
 from hover.core.explorer import (
-    BokehCorpusExplorer,
+    BokehCorpusFinder,
     BokehCorpusAnnotator,
     BokehCorpusSoftLabel,
     BokehCorpusMargin,
@@ -59,7 +59,7 @@ def example_dev_df(generate_text_df_with_coords):
 
 
 @pytest.mark.core
-class TestBokehCorpusExplorer:
+class TestBokehCorpusFinder:
     @staticmethod
     def test_comprehensive(example_raw_df, example_dev_df):
         """
@@ -69,7 +69,7 @@ class TestBokehCorpusExplorer:
         """
 
         def subroutine(df_dict):
-            explorer = BokehCorpusExplorer(df_dict)
+            explorer = BokehCorpusFinder(df_dict)
             annotator = BokehCorpusAnnotator(df_dict)
 
             explorer.reset_figure()

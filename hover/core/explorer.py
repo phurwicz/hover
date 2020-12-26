@@ -921,7 +921,7 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
         return view
 
 
-class BokehCorpusExplorer(BokehForCorpus, BokehDataFinder):
+class BokehCorpusFinder(BokehForCorpus, BokehDataFinder):
     """The text flavor of BokehDataFinder."""
 
     TOOLTIP_KWARGS = BokehForCorpus.TOOLTIP_KWARGS
