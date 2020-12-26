@@ -4,8 +4,8 @@ Can be useful for improved interpretability of neural nets.
 """
 from .reduction import DimensionalityReducer
 from tqdm import tqdm
-from wasabi import msg as logger
 from scipy.spatial import procrustes
+from hover.core import Loggable
 
 DEFAULT_UMAP_PARAMS = {
     "n_components": 2,
@@ -17,7 +17,7 @@ DEFAULT_UMAP_PARAMS = {
 }
 
 
-class LayerwiseManifold(object):
+class LayerwiseManifold(Loggable):
     """
     Takes a sequence of arrays (each row of the array is a vector) and does the following:
         (1) unfold vectors into lower dimensions, typically 2D or 3D;
@@ -44,7 +44,7 @@ class LayerwiseManifold(object):
         self.n_vecs = self.arrays[0].shape[0]
         for _arr in self.arrays:
             assert _arr.shape[0] == self.n_vecs
-        logger.good("Validated dimensions of input arrays")
+        self._good("Validated dimensions of input arrays")
 
     def standardize(self):
         """
@@ -58,7 +58,7 @@ class LayerwiseManifold(object):
             return matrix
 
         self.arrays = [transform(_arr) for _arr in self.arrays]
-        logger.good("Standardized input arrays")
+        self._good("Standardized input arrays")
 
     def unfold(self, method="umap", reducer_kwargs=None):
         """
@@ -73,12 +73,12 @@ class LayerwiseManifold(object):
             reducer_kwargs = reducer_kwargs or dict()
 
         self.manifolds = []
-        logger.info(f"Running {method}...")
+        self._info(f"Running {method}...")
         for _arr in tqdm(self.arrays, total=len(self.arrays)):
             _reducer = DimensionalityReducer(_arr)
             _manifold = _reducer.fit_transform(method, **reducer_kwargs)
             self.manifolds.append(_manifold)
-        logger.good("Successfully unfolded arrays into manifolds")
+        self._good("Successfully unfolded arrays into manifolds")
 
     def procrustes(self, arrays=None):
         """
@@ -99,5 +99,5 @@ class LayerwiseManifold(object):
             disparities.append(_disparity)
             fit_arrays.append(_matrix)
 
-        logger.good("Successfully carried out Procrustes analysis")
+        self._good("Successfully carried out Procrustes analysis")
         return fit_arrays, disparities
