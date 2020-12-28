@@ -1,0 +1,54 @@
+/* Basic CodeMirror styles and default Theme */
+@import 'codemirror.css';
+
+/* Minimal Juniper style */
+.juniper-cell {
+    font-family: Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-size: 1em;
+    line-height: 2;
+    border: 1px solid #ccc;
+    position: relative;
+}
+
+.juniper-output {
+    background: #222;
+    color: #eee;
+    padding: 2em;
+    white-space: pre-wrap;
+}
+
+.juniper-button {
+    font-size: 1em;
+    position: absolute;
+    top: 20px;
+    right: 25px;
+}
+
+.CodeMirror {
+    padding: 3em 2em 2em;
+    font: inherit;
+    height: auto;
+}
+
+.jp-OutputArea-output pre {
+    font: inherit;
+    margin: 0;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    direction: ltr;
+}
+
+.jp-OutputArea-prompt {
+    /* prompts like Out[2]: */
+    float: left;
+    color: #999;
+    margin-right: 0.5em;
+}
+
+/* Ansi Colors for terminal output */
+.jp-OutputArea-output .ansi-green-fg  { color: #88ec8e }
+.jp-OutputArea-output .ansi-red-fg    { color: #ef6f61 }
+.jp-OutputArea-output .ansi-cyan-fg   { color: #a8e9fc }
+.jp-OutputArea-output .ansi-yellow-fg { color: #f6f4a0 }
+.jp-OutputArea-output .ansi-blue-fg   { color: #6cc6fc }
+.jp-OutputArea-output .ansi-purple-fg { color: #ee81c2 }

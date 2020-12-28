@@ -1,0 +1,46 @@
+<style type="text/css">   @import url("../../styles/monokai.css"); </style>
+<style type="text/css">   @import url("../../styles/juniper.css"); </style>
+
+<div>
+Start by loading a dataset:
+</div>
+<pre data-executable data-theme="monokai">
+from hover.core.dataset import SupervisableTextDataset
+
+dataset = SupervisableTextDataset(
+    raw_dictl=[{"content": "this is great"}],
+    # train_dictl=[],
+    dev_dictl=[{"content": "this is awesome", "mark": "A"}],
+    test_dictl=[{"content": "this is meh", "mark": "B"}],
+    feature_key="content",
+    label_key="mark",
+)
+</pre>
+
+<div>
+Define a vectorizer and use it to cast the dataset to 2D:
+</div>
+<pre data-executable>
+import spacy
+import re
+
+nlp = spacy.load("en_core_web_md")
+
+def vectorizer(text):
+    clean_text = re.sub(r"[\s]+", r" ", text)
+    return nlp(clean_text, disable=nlp.pipe_names).vector
+
+vec = vectorizer("Winter is coming.")
+print(f"Shape: {vec.shape}")
+print(f"Vector: {vec}")
+</pre>
+
+
+
+<script src="../../plugins/juniper.min.js"></script>
+<script>
+    new Juniper({
+        repo: 'phurwicz/hover-binder',
+        isolateCells: false,
+    })
+</script>
