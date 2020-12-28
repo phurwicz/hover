@@ -12,7 +12,9 @@ class Loggable:
     """
     Base class that provides consistently templated logging.
 
-    Inspired by wasabi's good/info/warn/fail methods.
+    Inspired by `wasabi`'s `good`/`info`/`warn`/`fail` methods.
+
+    [`Rich` style guide](https://rich.readthedocs.io/en/latest/style.html)
     """
 
     CONSOLE = Console()
@@ -22,20 +24,22 @@ class Loggable:
 
     def _good(self, message):
         self.__class__.CONSOLE.print(
-            f":green_circle: {self.__class__.__name__}: {message}", style="green"
+            f":green_circle: {self.__class__.__name__}: {message}",
+            style="white on green",
         )
 
     def _info(self, message):
         self.__class__.CONSOLE.print(
-            f":blue_circle: {self.__class__.__name__}: {message}", style="blue"
+            f":blue_circle: {self.__class__.__name__}: {message}", style="white on blue"
         )
 
     def _warn(self, message):
         self.__class__.CONSOLE.print(
-            f":yellow_circle: {self.__class__.__name__}: {message}", style="yellow"
+            f":yellow_circle: {self.__class__.__name__}: {message}",
+            style="white on yellow",
         )
 
     def _fail(self, message):
         self.__class__.CONSOLE.print(
-            f":red_circle: {self.__class__.__name__}: {message}", style="red"
+            f":red_circle: {self.__class__.__name__}: {message}", style="white on red"
         )
