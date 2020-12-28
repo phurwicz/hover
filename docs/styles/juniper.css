@@ -3,28 +3,35 @@
 
 /* Minimal Juniper style */
 .juniper-cell {
-    font-family: Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-    font-size: 1em;
-    line-height: 2;
-    border: 1px solid #ccc;
     position: relative;
+    font-family: Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-size: 0.8em;
+    line-height: 1.5;
 }
 
 .juniper-output {
-    background: #222;
-    color: #eee;
-    padding: 2em;
-    white-space: pre-wrap;
+    border: 1px groove #222;
+    padding: 0.5em 2em 2em;
+    background: #fff;
+    color: #222;
+    font-size: 1.0em;
+    line-height: 1.5;
+    white-space: normal;
 }
 
 .juniper-button {
-    font-size: 1em;
     position: absolute;
     top: 20px;
     right: 25px;
+    border: 1px outset #c0c;
+    border-radius: 3px;
+    color: #ff0;
+    font: inherit;
+    font-size: 1em;
 }
 
 .CodeMirror {
+    border: 1px groove #222;
     padding: 3em 2em 2em;
     font: inherit;
     height: auto;
