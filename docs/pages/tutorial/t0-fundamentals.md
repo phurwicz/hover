@@ -12,4 +12,4 @@ Resources:
 -   [Preloading binder with Juniper](https://github.com/ines/juniper/issues/7)
 -   [Loading BokehJS in JupyterLab](https://github.com/bokeh/jupyter_bokeh)
 
-{!docs/tutorial/t0.html!}
+{!docs/pages/tutorial/t0.html!}

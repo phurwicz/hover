@@ -18,14 +18,14 @@ theme:
       - search.suggest
 
 nav:
-    - Home: 'index.md'
+    - Home: 'pages/index.md'
     - 'Tutorial':
-        - 'Fundamentals': 'tutorial/t0-fundamentals.md'
+        - 'Fundamentals': 'pages/tutorial/t0-fundamentals.md'
     - 'API Reference':
-        - 'hover.recipes': 'reference/recipes.md'
-        - 'hover.core.dataset': 'reference/core-dataset.md'
-        - 'hover.core.explorer': 'reference/core-explorer.md'
-        - 'hover.core.neural': 'reference/core-neural.md'
+        - 'hover.recipes': 'pages/reference/recipes.md'
+        - 'hover.core.dataset': 'pages/reference/core-dataset.md'
+        - 'hover.core.explorer': 'pages/reference/core-explorer.md'
+        - 'hover.core.neural': 'pages/reference/core-neural.md'
 
 markdown_extensions:
   - admonition
