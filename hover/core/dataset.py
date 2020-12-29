@@ -190,7 +190,7 @@ class SupervisableDataset(Loggable):
         Note: the reason we need this is due to `self.dfs[key] = ...`-like assignments. If DF operations were all in-place, then the explorers could directly access the updates through their `self.dfs` references.
         """
         # local import to avoid import cycles
-        from hover.core.explorer import BokehBaseExplorer
+        from hover.core.explorer.base import BokehBaseExplorer
 
         assert isinstance(explorer, BokehBaseExplorer)
 
