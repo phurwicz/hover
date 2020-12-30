@@ -1,4 +1,4 @@
-# Hover - Documentation
+# Hover - 0.4.0 Documentation
 
 ![Demo](../images/app-active-learning.gif)
 
