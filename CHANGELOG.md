@@ -13,7 +13,7 @@
 
 ### :book: Documentation
 
--   **Working** tutorials which use the awesome [`Juniper`](https://github.com/ines/juniper) to enable Binder-backed code blocks right in the documentation. Here are the materials coming up:
+-   :hourglass: **Upcoming** tutorials which use the awesome [`Juniper`](https://github.com/ines/juniper) to enable Binder-backed code blocks right in the documentation. Here are the materials coming up:
     -   tutorial 0: for the absolute beginner
     -   tutorial 1: vectorizer: what, why & how
     -   tutorial 2: 2d embedding: customization & resources
