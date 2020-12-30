@@ -5,7 +5,8 @@
 
 -   Added loading text before each `hover.recipes.<recipe>` renders in BokehJS.
     -   displays an additional dot every a few (5) seconds.
-    -   this can be useful for visiting a remote Bokeh server.
+    -   **potential security concern** displays traceback information if something breaks in the scope of the recipe.
+    -   this can be useful, for example, when you are visiting a remote Bokeh server with no access to the logs.
 -   **Partial** towards image data support
     -   `hover.core.explorer.<explorer>` tooltips are now capable of displaying images from the `image` field (`http://url/to/image.png` or `file:///path/to/image.jpg`) of your `DataFrame`.
 -   **Partial** towards audio data support
