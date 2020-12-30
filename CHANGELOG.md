@@ -3,7 +3,7 @@
 
 ### :tada: Features
 
--   Added loading text before each `hover.recipes.<recipe>` renders in BokehJS.
+-   [Added loading text](https://github.com/phurwicz/hover/commit/ee692e0dddfe186261e07c8008a6066b1a1fcd16) before each `hover.recipes.<recipe>` renders in BokehJS.
     -   displays an additional dot every a few (5) seconds.
     -   **potential security concern** displays traceback information if something breaks in the scope of the recipe.
     -   this can be useful, for example, when you are visiting a remote Bokeh server with no access to the logs.
