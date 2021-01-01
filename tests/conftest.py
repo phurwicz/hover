@@ -65,21 +65,23 @@ def dummy_labeling_function_list():
 
 
 @pytest.fixture(scope="module")
-def generate_text_df_with_coords():
-    def random_text_df_with_coords(size=300):
+def generate_df_with_coords():
+    def random_df_with_coords(size=300):
         df = pd.DataFrame(
             [
                 {
                     "text": fake_en.paragraph(3),
+                    "audio": "https://www.soundjay.com/button/beep-01a.mp3",
+                    "image": "https://docs.chainer.org/en/stable/_images/5.png",
                     "x": random.uniform(-1.0, 1.0),
                     "y": random.uniform(-1.0, 1.0),
                 }
-                for i in range(300)
+                for i in range(size)
             ]
         )
         return df
 
-    return random_text_df_with_coords
+    return random_df_with_coords
 
 
 @pytest.fixture(scope="module")

@@ -4,9 +4,11 @@ Note that the whole point of explorers is to allow interaction, for which this f
 
 from hover import module_config
 from hover.utils.snorkel_helper import labeling_function
-import hover.core.explorer as hovex
+from hover.recipes.subroutine import get_explorer_class
 import pytest
 import random
+
+MAIN_FEATURES = ["text", "image", "audio"]
 
 PSEUDO_LABELS = ["A", "B"]
 
@@ -23,8 +25,8 @@ RANDOM_LABEL_LF = labeling_function(targets=PSEUDO_LABELS)(RANDOM_LABEL)
 
 
 @pytest.fixture
-def example_raw_df(generate_text_df_with_coords):
-    df = generate_text_df_with_coords(300)
+def example_raw_df(generate_df_with_coords):
+    df = generate_df_with_coords(300)
     df["label"] = module_config.ABSTAIN_DECODED
     return df
 
@@ -46,14 +48,14 @@ def example_margin_df(example_raw_df):
 
 
 @pytest.fixture
-def example_dev_df(generate_text_df_with_coords):
-    df = generate_text_df_with_coords(100)
+def example_dev_df(generate_df_with_coords):
+    df = generate_df_with_coords(100)
     df["label"] = df.apply(RANDOM_LABEL, axis=1)
     return df
 
 
 @pytest.mark.core
-class TestBokehTextFinder:
+class TestBokehBaseExplorer:
     @staticmethod
     def test_comprehensive(example_raw_df, example_dev_df):
         """
@@ -63,16 +65,12 @@ class TestBokehTextFinder:
         """
 
         def subroutine(df_dict):
-            explorer = hovex.BokehTextFinder(df_dict)
-            annotator = hovex.BokehTextAnnotator(df_dict)
-
-            explorer.reset_figure()
+            explorer = get_explorer_class("finder", "text")(df_dict)
+            annotator = get_explorer_class("annotator", "text")(df_dict)
 
             explorer.plot()
 
-            explorer.dfs["raw"] = example_dev_df
-            explorer._update_sources()
-            explorer.dfs["raw"] = example_raw_df
+            explorer.dfs["raw"] = example_raw_df.copy()
             explorer._update_sources()
 
             explorer.link_selection("raw", annotator, "raw")
@@ -93,54 +91,60 @@ class TestBokehTextFinder:
 
 
 @pytest.mark.core
-class TestBokehTextAnnotator:
+class TestBokehDataAnnotator:
     @staticmethod
     def test_annotation(example_raw_df):
         from bokeh.events import MenuItemClick
 
-        explorer = hovex.BokehTextAnnotator({"raw": example_raw_df})
-        explorer.plot()
-        _ = explorer.view()
+        # test most methods for the class corresponding to each kind of feature
+        for _feature in MAIN_FEATURES:
+            _cls = get_explorer_class("annotator", _feature)
+            _explorer = _cls({"raw": example_raw_df})
+            _explorer.plot()
+            _ = _explorer.view()
 
-        explorer._callback_apply()
+            _explorer._callback_apply()
 
+        # it should be sufficient to test export for just one class
         for _item in ["Excel", "CSV", "JSON", "pickle"]:
-            _event = MenuItemClick(explorer.annotator_export, item=_item)
-            explorer._callback_export(_event)
+            _event = MenuItemClick(_explorer.annotator_export, item=_item)
+            _explorer._callback_export(_event)
 
 
 @pytest.mark.core
 class TestBokehTextSoftLabel:
     @staticmethod
     def test_init(example_soft_label_df):
-        explorer = hovex.BokehTextSoftLabel(
-            {"raw": example_soft_label_df, "train": example_soft_label_df.copy()},
-            "pred_label",
-            "pred_score",
-        )
-        explorer.plot()
-        _ = explorer.view()
+        for _feature in MAIN_FEATURES:
+            _cls = get_explorer_class("softlabel", _feature)
+            _explorer = _cls(
+                {"raw": example_soft_label_df, "train": example_soft_label_df.copy()},
+                "pred_label",
+                "pred_score",
+            )
+            _explorer.plot()
+            _ = _explorer.view()
 
 
 @pytest.mark.core
 class TestBokehTextMargin:
     @staticmethod
     def test_init(example_margin_df):
-        explorer = hovex.BokehTextMargin(
-            {"raw": example_margin_df}, "label_1", "label_2"
-        )
-        explorer.plot("A")
-        explorer.plot("B")
-        _ = explorer.view()
+        for _feature in MAIN_FEATURES:
+            _cls = get_explorer_class("margin", _feature)
+            _explorer = _cls({"raw": example_margin_df}, "label_1", "label_2")
+            _explorer.plot("A")
+            _explorer.plot("B")
+            _ = _explorer.view()
 
 
 @pytest.mark.core
 class TestBokehTextSnorkel:
     @staticmethod
     def test_init(example_raw_df, example_dev_df):
-        explorer = hovex.BokehTextSnorkel(
-            {"raw": example_raw_df, "labeled": example_dev_df}
-        )
-        explorer.plot()
-        explorer.plot_lf(RANDOM_LABEL_LF, include=("C", "I", "M", "H"))
-        _ = explorer.view()
+        for _feature in MAIN_FEATURES:
+            _cls = get_explorer_class("snorkel", _feature)
+            _explorer = _cls({"raw": example_raw_df, "labeled": example_dev_df})
+            _explorer.plot()
+            _explorer.plot_lf(RANDOM_LABEL_LF, include=("C", "I", "M", "H"))
+            _ = _explorer.view()
