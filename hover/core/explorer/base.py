@@ -71,7 +71,6 @@ class BokehBaseExplorer(Loggable, ABC):
         self._setup_sources()
         self._activate_search_builtin()
         self.figure = figure(**self.figure_kwargs)
-        # self.reset_figure() # experimental: should be able to drop this from __init__
 
     @classmethod
     def from_dataset(cls, dataset, subset_mapping, *args, **kwargs):
@@ -99,11 +98,6 @@ class BokehBaseExplorer(Loggable, ABC):
         child classes may involve instance attributes in the tooltip.
         """
         return bokeh_hover_tooltip(**self.__class__.TOOLTIP_KWARGS)
-
-    def reset_figure(self):
-        """Start over on the figure."""
-        self._info("Resetting figure")
-        self.figure.renderers.clear()
 
     def _setup_widgets(self):
         """
