@@ -1,9 +1,9 @@
-"""Intermediate classes based on the data medium."""
+"""Intermediate classes based on the main feature."""
 from bokeh.models import CustomJS, ColumnDataSource
 from .base import BokehBaseExplorer
 
 
-class BokehForCorpus(BokehBaseExplorer):
+class BokehForText(BokehBaseExplorer):
     """
     Assumes on top of its parent class:
 
@@ -22,9 +22,6 @@ class BokehForCorpus(BokehBaseExplorer):
         """Create positive/negative text search boxes."""
         from bokeh.models import TextInput
 
-        # set up text search widgets, without assigning callbacks yet
-        # to provide more flexibility with callbacks
-        self._info("Setting up widgets")
         self.search_pos = TextInput(
             title="Text contains (plain text, or /pattern/flag for regex):",
             width_policy="fit",
@@ -45,6 +42,7 @@ class BokehForCorpus(BokehBaseExplorer):
         Enables string/regex search-and-highlight mechanism.
 
         Modifies the plotting source in-place.
+        Using a JS callback (instead of Python) so that it also works in standalone HTML.
         """
         assert isinstance(source, ColumnDataSource)
         assert isinstance(kwargs, dict)
@@ -123,3 +121,63 @@ class BokehForCorpus(BokehBaseExplorer):
         self.search_pos.js_on_change("value", search_callback)
         self.search_neg.js_on_change("value", search_callback)
         return updated_kwargs
+
+
+class BokehForAudio(BokehBaseExplorer):
+    """
+    Assumes on top of its parent class:
+
+    - in supplied dataframes
+      - (always) audio urls in an `audio` column
+
+    Does not assume:
+
+    - what the explorer serves to do.
+    """
+
+    MANDATORY_COLUMNS = ["audio", "label", "x", "y"]
+    TOOLTIP_KWARGS = {"label": True, "audio": True, "coords": True, "index": True}
+
+    def _setup_search_highlight(self):
+        """Trivial implementation until we decide how to search audios."""
+        self._warn("no search highlight available.")
+
+    def _layout_widgets(self):
+        """Define the layout of widgets."""
+
+        return self.data_key_button_group
+
+    def activate_search(self, source, kwargs, altered_param=("size", 10, 5, 7)):
+        """Trivial implementation until we decide how to search audios."""
+        self._warn("no search highlight available.")
+        return kwargs
+
+
+class BokehForImage(BokehBaseExplorer):
+    """
+    Assumes on top of its parent class:
+
+    - in supplied dataframes
+      - (always) image urls in an `image` column
+
+    Does not assume:
+
+    - what the explorer serves to do.
+    """
+
+    MANDATORY_COLUMNS = ["image", "label", "x", "y"]
+    TOOLTIP_KWARGS = {"label": True, "image": True, "coords": True, "index": True}
+
+    def _setup_search_highlight(self):
+        """Trivial implementation until we decide how to search images."""
+        self._warn("no search highlight available.")
+
+    def _layout_widgets(self):
+        """Define the layout of widgets."""
+
+        return self.data_key_button_group
+
+    def activate_search(self, source, kwargs, altered_param=("size", 10, 5, 7)):
+        """Trivial implementation until we decide how to search images."""
+        self._warn("no search highlight available.")
+        return kwargs
