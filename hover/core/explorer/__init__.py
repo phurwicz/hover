@@ -81,7 +81,6 @@ class BokehAudioAnnotator(BokehDataAnnotator, BokehForAudio):
         from bokeh.layouts import column, row
 
         layout_rows = (
-            row(self.search_pos, self.search_neg),
             row(self.data_key_button_group),
             row(self.annotator_input, self.annotator_apply, self.annotator_export),
         )
@@ -132,7 +131,6 @@ class BokehImageAnnotator(BokehDataAnnotator, BokehForImage):
         from bokeh.layouts import column, row
 
         layout_rows = (
-            row(self.search_pos, self.search_neg),
             row(self.data_key_button_group),
             row(self.annotator_input, self.annotator_apply, self.annotator_export),
         )
