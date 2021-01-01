@@ -3,14 +3,8 @@ Note that the whole point of explorers is to allow interaction, for which this f
 """
 
 from hover import module_config
-from hover.core.explorer import (
-    BokehCorpusFinder,
-    BokehCorpusAnnotator,
-    BokehCorpusSoftLabel,
-    BokehCorpusMargin,
-    BokehCorpusSnorkel,
-)
 from hover.utils.snorkel_helper import labeling_function
+import hover.core.explorer as hovex
 import pytest
 import random
 
@@ -59,7 +53,7 @@ def example_dev_df(generate_text_df_with_coords):
 
 
 @pytest.mark.core
-class TestBokehCorpusFinder:
+class TestBokehTextFinder:
     @staticmethod
     def test_comprehensive(example_raw_df, example_dev_df):
         """
@@ -69,8 +63,8 @@ class TestBokehCorpusFinder:
         """
 
         def subroutine(df_dict):
-            explorer = BokehCorpusFinder(df_dict)
-            annotator = BokehCorpusAnnotator(df_dict)
+            explorer = hovex.BokehTextFinder(df_dict)
+            annotator = hovex.BokehTextAnnotator(df_dict)
 
             explorer.reset_figure()
 
@@ -99,12 +93,12 @@ class TestBokehCorpusFinder:
 
 
 @pytest.mark.core
-class TestBokehCorpusAnnotator:
+class TestBokehTextAnnotator:
     @staticmethod
     def test_annotation(example_raw_df):
         from bokeh.events import MenuItemClick
 
-        explorer = BokehCorpusAnnotator({"raw": example_raw_df})
+        explorer = hovex.BokehTextAnnotator({"raw": example_raw_df})
         explorer.plot()
         _ = explorer.view()
 
@@ -116,10 +110,10 @@ class TestBokehCorpusAnnotator:
 
 
 @pytest.mark.core
-class TestBokehCorpusSoftLabel:
+class TestBokehTextSoftLabel:
     @staticmethod
     def test_init(example_soft_label_df):
-        explorer = BokehCorpusSoftLabel(
+        explorer = hovex.BokehTextSoftLabel(
             {"raw": example_soft_label_df, "train": example_soft_label_df.copy()},
             "pred_label",
             "pred_score",
@@ -129,20 +123,22 @@ class TestBokehCorpusSoftLabel:
 
 
 @pytest.mark.core
-class TestBokehCorpusMargin:
+class TestBokehTextMargin:
     @staticmethod
     def test_init(example_margin_df):
-        explorer = BokehCorpusMargin({"raw": example_margin_df}, "label_1", "label_2")
+        explorer = hovex.BokehTextMargin(
+            {"raw": example_margin_df}, "label_1", "label_2"
+        )
         explorer.plot("A")
         explorer.plot("B")
         _ = explorer.view()
 
 
 @pytest.mark.core
-class TestBokehCorpusSnorkel:
+class TestBokehTextSnorkel:
     @staticmethod
     def test_init(example_raw_df, example_dev_df):
-        explorer = BokehCorpusSnorkel(
+        explorer = hovex.BokehTextSnorkel(
             {"raw": example_raw_df, "labeled": example_dev_df}
         )
         explorer.plot()
