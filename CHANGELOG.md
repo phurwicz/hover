@@ -25,11 +25,12 @@
 
 -   [`hover.recipes.experimental.active_learning`](https://github.com/phurwicz/hover/blob/e5ef551445f99e7c2eae759066962d28fd48dbf1/hover/recipes/experimental.py#L45): signature change of an argument: [`vecnet_callback()` becomes `vecnet_callback(dataset, vectorizer)`](https://github.com/phurwicz/hover/commit/8391d76100870a13201c6a4be855fc178436b971#diff-b45bf51d118b093c078e2b2333eadd1c03d07a0801de85ecb40bc268b0a13288R76) for more flexibility
 
-### :warning: Deprecation
+### :warning: Deprecation / Naming Changes
 
--   `hover.core.explorer.BokehCorpusExplorer`: please use [`hover.core.explorer.BokehCorpusFinder`](https://github.com/phurwicz/hover/blob/e5ef551445f99e7c2eae759066962d28fd48dbf1/hover/core/explorer/__init__.py#L13) instead.
+-   `hover.core.explorer.BokehCorpusExplorer`: please use `hover.core.explorer.BokehTextFinder` instead.
     -   This is a naming change for consistency; the class functionality stays the same.
     -   The original class name will be removed in a future version.
+-   `hover.core.explorer.BokehCorpus<XXX>`: renamed to `hover.core.explorer.BokehText<XXX>` for consistency with `text/audio/image` features.
 -   `hover.core.neural.create_vector_net_from_module`: this makes more sense as a [class method of `hover.core.neural.VectorNet`](https://github.com/phurwicz/hover/commit/8fcba7a46a69b3ae9c9dcadb4387cc9eaa711a09).
     -   The original function will be removed in a future version.
     -   The class method now takes either a loaded module or a string representing it. It (or the predecessor function) used to accept only the string form.
