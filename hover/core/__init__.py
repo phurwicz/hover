@@ -25,21 +25,21 @@ class Loggable:
     def _good(self, message):
         self.__class__.CONSOLE.print(
             f":green_circle: {self.__class__.__name__}: {message}",
-            style="white on green",
+            style="green",
         )
 
     def _info(self, message):
         self.__class__.CONSOLE.print(
-            f":blue_circle: {self.__class__.__name__}: {message}", style="white on blue"
+            f":blue_circle: {self.__class__.__name__}: {message}", style="blue"
         )
 
     def _warn(self, message):
         self.__class__.CONSOLE.print(
             f":yellow_circle: {self.__class__.__name__}: {message}",
-            style="white on yellow",
+            style="yellow",
         )
 
     def _fail(self, message):
         self.__class__.CONSOLE.print(
-            f":red_circle: {self.__class__.__name__}: {message}", style="white on red"
+            f":red_circle: {self.__class__.__name__}: {message}", style="red"
         )
