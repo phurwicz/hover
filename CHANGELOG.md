@@ -38,6 +38,9 @@
 
 ### :hammer: Fixes
 
+-   [Legend](https://docs.bokeh.org/en/latest/docs/user_guide/annotations.html#legends) icons used to be broken when a legend item corresponded to multiple glyphs. This is now [resolved](https://github.com/phurwicz/hover/commit/e8ad3ff896585fc838bfd0da9cd7bd9ec1b6a17d) at the cost of dropping renderer references from the legend item.
+    -   the context is that a `Bokeh` legend item shows its own icon by combining the glyphs of its renderers. The combined icon can be confusing when the glyphs' filling colors add up this way, even if they are the same color.
+-   [Active learning](https://github.com/phurwicz/hover/commits/main/hover/recipes/experimental.py): [added a `model.save()` step](https://github.com/phurwicz/hover/commit/f926ac0f0cdfbbc554047a769768fb0673ec28ed) in the training callback so that the model resumes its progress on each callback, rather than starting over
 -   Cleaned up inconsistent logging format in the `hover.core` module.
     -   every class in `hover.core` now adopts `rich` and specifically [`hover.core.Loggable`](https://github.com/phurwicz/hover/commits/main/hover/core/__init__.py) for logging.
         -   [specified both foreground and background colors](https://github.com/phurwicz/hover/commit/0477e6774176894e27b62e8c3c32c18352aad624#diff-802028d3406d84b35d490c3c0109000d83f883c18bea1d9719666fcd9a72f03a) so that the text display clearly regardless of terminal settings.
