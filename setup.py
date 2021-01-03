@@ -13,7 +13,7 @@ def get_description():
 
 setuptools.setup(
     name="hover",
-    version="0.3.2",
+    version="0.4.0",
     description="Data annotation done right: easy, fun, hyper-productive, and inducing insight.",
     long_description=get_description(),
     long_description_content_type="text/markdown",
