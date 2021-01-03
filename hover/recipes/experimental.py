@@ -79,6 +79,7 @@ def active_learning(dataset, vectorizer, vecnet_callback, height=600, width=600)
             dev_loader = dataset.loader("dev", vectorizer)
 
             _ = model.train(train_loader, dev_loader, epochs=epochs_slider.value)
+            model.save()
             logger.good("-- 1/2: retrained model")
 
             for _key in ["raw", "train", "dev"]:
