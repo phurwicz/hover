@@ -2,6 +2,7 @@
 from abc import ABC, abstractmethod
 from bokeh.plotting import figure
 from bokeh.models import ColumnDataSource
+from bokeh.palettes import Category10, Category20
 from hover import module_config
 from hover.core import Loggable
 from .local_config import bokeh_hover_tooltip
@@ -262,7 +263,7 @@ class BokehBaseExplorer(Loggable, ABC):
         """
         pass
 
-    def auto_labels_cmap(self):
+    def auto_labels_palette(self):
         """
         Find all labels and an appropriate color map.
         """
@@ -273,12 +274,14 @@ class BokehBaseExplorer(Loggable, ABC):
         labels = sorted(labels, reverse=True)
 
         assert len(labels) <= 20, "Too many labels to support (max at 20)"
-        cmap = "Category10_10" if len(labels) <= 10 else "Category20_20"
-        return labels, cmap
+        palette = Category10[10] if len(labels) <= 10 else Category20[20]
+        return labels, palette
 
     def auto_legend_correction(self):
         """
-        Find legend items and deduplicate by label.
+        Find legend items and deduplicate by label, keeping the last glyph / legend item of each label.
+
+        This is to resolve duplicate legend items due to automatic legend_group and incremental plotting.
         """
         from collections import OrderedDict
 
@@ -292,13 +295,39 @@ class BokehBaseExplorer(Loggable, ABC):
         # use one item to hold all renderers matching its label
         label_to_item = OrderedDict()
 
+        # deduplication
         for _item in items:
             _label = _item.label.get("value", "")
-            if _label not in label_to_item.keys():
-                label_to_item[_label] = _item
-            else:
-                label_to_item[_label].renderers.extend(_item.renderers)
+            label_to_item[_label] = _item
 
-        # assign deduplicated items back to the legend
+            # WARNING: the current implementation discards renderer references.
+            # This could be for the best because renderers add up their glyphs to the legend item.
+            # To keep renderer references, see this example:
+            # if _label not in label_to_item.keys():
+            #    label_to_item[_label] = _item
+            # else:
+            #    label_to_item[_label].renderers.extend(_item.renderers)
+
         self.figure.legend.items = list(label_to_item.values())
+
         return
+
+    @staticmethod
+    def auto_legend(method):
+        """
+        Decorator that enforces the legend after each call of the decorated method.
+        """
+        from functools import wraps
+
+        @wraps(method)
+        def wrapped(ref, *args, **kwargs):
+            if hasattr(ref.figure, "legend"):
+                if hasattr(ref.figure.legend, "items"):
+                    ref.figure.legend.items.clear()
+
+            retval = method(ref, *args, **kwargs)
+
+            ref.auto_legend_correction()
+            return retval
+
+        return wrapped

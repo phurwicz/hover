@@ -54,7 +54,7 @@ class BokehDataAnnotator(BokehBaseExplorer):
             "constant": {"line_alpha": 0.3},
             "search": {
                 "size": ("size", 10, 5, 7),
-                "fill_alpha": ("fill_alpha", 0.3, 0.1, 0.2),
+                "fill_alpha": ("fill_alpha", 0.5, 0.1, 0.4),
             },
         }
         for _key in ["raw", "train", "dev", "test"]
@@ -150,6 +150,7 @@ class BokehDataAnnotator(BokehBaseExplorer):
         self.annotator_apply.on_click(self._callback_subset_display)
         self.annotator_export.on_click(self._callback_export)
 
+    @BokehBaseExplorer.auto_legend
     def plot(self):
         """
         Re-plot with the new labels.
@@ -157,21 +158,19 @@ class BokehDataAnnotator(BokehBaseExplorer):
         Overrides the parent method.
         Determines the label->color mapping dynamically.
         """
-        labels, cmap = self.auto_labels_cmap()
+        labels, palette = self.auto_labels_palette()
 
         for _key, _source in self.sources.items():
             self.figure.circle(
                 "x",
                 "y",
                 name=_key,
-                color=factor_cmap("label", cmap, labels),
+                color=factor_cmap("label", palette=palette, factors=labels),
                 legend_group="label",
                 source=_source,
                 **self.glyph_kwargs[_key],
             )
             self._good(f"Plotted subset {_key} with {self.dfs[_key].shape[0]} points")
-
-        self.auto_legend_correction()
 
 
 class BokehSoftLabelExplorer(BokehBaseExplorer):
@@ -219,17 +218,18 @@ class BokehSoftLabelExplorer(BokehBaseExplorer):
             if self.score_col not in _df.columns:
                 _df[self.score_col] = 0.5
 
+    @BokehBaseExplorer.auto_legend
     def plot(self, **kwargs):
         """
         Plot the confidence map.
         """
-        labels, cmap = self.auto_labels_cmap()
+        labels, palette = self.auto_labels_palette()
 
         for _key, _source in self.sources.items():
             # prepare plot settings
             preset_kwargs = {
                 "legend_group": self.label_col,
-                "color": factor_cmap(self.label_col, cmap, labels),
+                "color": factor_cmap(self.label_col, palette=palette, factors=labels),
                 "fill_alpha": self.score_col,
             }
             eff_kwargs = self.glyph_kwargs[_key].copy()
@@ -238,8 +238,6 @@ class BokehSoftLabelExplorer(BokehBaseExplorer):
 
             self.figure.circle("x", "y", name=_key, source=_source, **eff_kwargs)
             self._good(f"Plotted subset {_key} with {self.dfs[_key].shape[0]} points")
-
-        self.auto_legend_correction()
 
 
 class BokehMarginExplorer(BokehBaseExplorer):
