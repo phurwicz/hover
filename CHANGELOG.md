@@ -1,7 +1,7 @@
-:tada: 0.4.0 - Jan 3, 2021
+0.4.0 - Jan 3, 2021
 ==================
 
-### :sparkles: Features
+### :tada: Features
 
 -   [Added loading text](https://github.com/phurwicz/hover/commit/ee692e0dddfe186261e07c8008a6066b1a1fcd16) before each `hover.recipes.<recipe>` renders in BokehJS.
     -   displays an additional dot every a few (5) seconds.
