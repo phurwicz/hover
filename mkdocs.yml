@@ -20,7 +20,8 @@ theme:
 nav:
     - Home: 'index.md'
     - 'Tutorial':
-        - 'Fundamentals': 'pages/tutorial/t0-fundamentals.md'
+        - 'Quickstart': 'pages/tutorial/t0-quickstart.md'
+        - 'Dataset': 'pages/tutorial/t1-dataset.md'
     - 'API Reference':
         - 'hover.recipes': 'pages/reference/recipes.md'
         - 'hover.core.dataset': 'pages/reference/core-dataset.md'

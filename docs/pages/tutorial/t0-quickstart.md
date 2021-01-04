@@ -1,11 +1,11 @@
-<style type="text/css">
-    @import url("../../../styles/monokai.css");
-    @import url("../../../styles/juniper.css");
-</style>
+> Welcome to the minimal guide of `hover`!
+>
+> :sunglasses: Let's label some data and call it a day.
 
-<div>
-    Suppose that we have a list of data entries, each in the form of a dictionary:
-</div>
+{!docs/pages/tutorial/snippet-stylesheet.html!}
+
+Suppose that we have a list of data entries, each in the form of a dictionary:
+
 <pre data-executable>
 from hover.core.dataset import SupervisableTextDataset
 from faker import Faker
@@ -40,10 +40,10 @@ dataset = SupervisableTextDataset(
 dataset.dfs["raw"].head(5)
 </pre><br>
 
-<div>
-    To put our dataset sensibly on a 2-D "map", we will use a vectorizer for feature extraction, and then perform dimensionality reduction.<br>
-    Here's one way to define a vectorizer:
-</div>
+To put our dataset sensibly on a 2-D "map", we will use a vectorizer for feature extraction, and then perform dimensionality reduction.<br>
+
+Here's one way to define a vectorizer:
+
 <pre data-executable>
 import spacy
 import re
@@ -61,10 +61,10 @@ print(f"Vector shape: {vec.shape}")
 
 </pre><br>
 
-<div>
-    The dataset has built-in support for dimensionality reduction. <br>
-    Currently we can use "umap" or "ivis"; however, the corresponding libraries do not ship with hover by default, and we may need to install them.
-</div>
+
+The dataset has built-in support for dimensionality reduction. <br>
+Currently we can use "umap" or "ivis"; however, the corresponding libraries do not ship with hover by default, and we may need to install them.
+
 <pre data-executable>
 # any kwargs will be passed onto the corresponding method
 dataset.compute_2d_embedding(vectorizer, "umap")
@@ -74,9 +74,9 @@ dataset.compute_2d_embedding(vectorizer, "umap")
 dataset.dfs["raw"].head(5)
 </pre><br>
 
-<div>
+
 Now we are ready to visualize and annotate!
-</div>
+
 <pre data-executable>
 from hover.recipes import simple_annotator
 from bokeh.io import show, output_notebook
@@ -88,11 +88,4 @@ output_notebook()
 show(handle)
 </pre><br>
 
-<script src="../../../plugins/juniper.min.js"></script>
-<script>
-    new Juniper({
-        repo: 'phurwicz/hover-binder',
-        isolateCells: false,
-        theme: 'monokai'
-    })
-</script>
+{!docs/pages/tutorial/snippet-juniper.html!}
