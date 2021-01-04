@@ -10,20 +10,22 @@
       
       
       
+        <link rel="canonical" href="https://phurwicz.github.io/hover/pages/tutorial/t0-fundamentals/">
       
-      <link rel="shortcut icon" href="/hover/images/favicon.png">
+      
+      <link rel="shortcut icon" href="../../../images/favicon.png">
       <meta name="generator" content="mkdocs-1.1, mkdocs-material-6.1.6">
     
     
       
-        <title>Hover</title>
+        <title>Fundamentals - Hover</title>
       
     
     
-      <link rel="stylesheet" href="/hover/assets/stylesheets/main.6910b76c.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.6910b76c.min.css">
       
         
-        <link rel="stylesheet" href="/hover/assets/stylesheets/palette.196e0c26.min.css">
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.196e0c26.min.css">
         
       
     
@@ -58,6 +60,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#fundamentals" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -84,7 +91,7 @@
           </span>
           <span class="md-header-nav__topic md-ellipsis">
             
-              
+              Fundamentals
             
           </span>
         </div>
@@ -184,7 +191,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/hover/." class="md-nav__link">
+    <a href="../../.." class="md-nav__link">
       Home
     </a>
   </li>
@@ -194,10 +201,12 @@
       
       
 
+  
 
-  <li class="md-nav__item md-nav__item--nested">
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
     
-    <input class="md-nav__toggle md-toggle" data-md-toggle="nav-2" type="checkbox" id="nav-2" >
+    <input class="md-nav__toggle md-toggle" data-md-toggle="nav-2" type="checkbox" id="nav-2" checked>
     <label class="md-nav__link" for="nav-2">
       Tutorial
       <span class="md-nav__icon md-icon"></span>
@@ -214,11 +223,20 @@
           
           
 
+  
 
-  <li class="md-nav__item">
-    <a href="/hover/pages/tutorial/t0-fundamentals/" class="md-nav__link">
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+    <a href="./" class="md-nav__link md-nav__link--active">
       Fundamentals
     </a>
+    
   </li>
 
         
@@ -253,7 +271,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/hover/pages/reference/recipes/" class="md-nav__link">
+    <a href="../../reference/recipes/" class="md-nav__link">
       hover.recipes
     </a>
   </li>
@@ -265,7 +283,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/hover/pages/reference/core-dataset/" class="md-nav__link">
+    <a href="../../reference/core-dataset/" class="md-nav__link">
       hover.core.dataset
     </a>
   </li>
@@ -277,7 +295,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/hover/pages/reference/core-explorer/" class="md-nav__link">
+    <a href="../../reference/core-explorer/" class="md-nav__link">
       hover.core.explorer
     </a>
   </li>
@@ -289,7 +307,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/hover/pages/reference/core-neural/" class="md-nav__link">
+    <a href="../../reference/core-neural/" class="md-nav__link">
       hover.core.neural
     </a>
   </li>
@@ -307,12 +325,145 @@
               </div>
             
             
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
           
           <div class="md-content">
             <article class="md-content__inner md-typeset">
               
-  <h1>404 - Not found</h1>
+                
+                  <a href="https://github.com/phurwicz/hover/edit/master/docs/pages/tutorial/t0-fundamentals.md" title="Edit this page" class="md-content__button md-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
+                  </a>
+                
+                
+                <h1 id="fundamentals">Fundamentals</h1>
+<blockquote>
+<p>Welcome to the minimal guide of <code>hover</code>!</p>
+<p><img alt="😎" class="emojione" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.2.7/assets/png/1f60e.png" title=":sunglasses:" /> Let's label some data and call it a day.</p>
+</blockquote>
+<style type="text/css">
+    @import url("../../../styles/monokai.css");
+    @import url("../../../styles/juniper.css");
+</style>
 
+<div>
+    Suppose that we have a list of data entries, each in the form of a dictionary:
+</div>
+
+<pre data-executable>
+from hover.core.dataset import SupervisableTextDataset
+from faker import Faker
+import random
+
+# ---- fake data for illustation ----
+fake_en = Faker("en")
+
+def random_text():
+    return fake_en.paragraph(3)
+
+def random_raw_data():
+    return {"content": random_text()}
+
+def random_labeled_data():
+    return {"content": random_text(), "mark": random.choice(["A", "B"])}
+# -----------------------------------
+
+dataset = SupervisableTextDataset(
+    # raw data which do not have labels
+    raw_dictl=[random_raw_data() for i in range(500)],
+    # train / dev / test sets are optional
+    train_dictl=[],
+    dev_dictl=[random_labeled_data() for i in range(50)],
+    test_dictl=[random_labeled_data() for i in range(50)],
+    # adjust feature_key and label_key to your data
+    feature_key="content",
+    label_key="mark",
+)
+
+# each subset is stored in its own DataFrame
+dataset.dfs["raw"].head(5)
+</pre>
+
+<p><br></p>
+<div>
+    To put our dataset sensibly on a 2-D "map", we will use a vectorizer for feature extraction, and then perform dimensionality reduction.<br>
+    Here's one way to define a vectorizer:
+</div>
+
+<pre data-executable>
+import spacy
+import re
+
+nlp = spacy.load("en_core_web_md")
+
+def vectorizer(text):
+    clean_text = re.sub(r"[\s]+", r" ", text)
+    return nlp(clean_text, disable=nlp.pipe_names).vector
+
+text = dataset.dfs["raw"].loc[0, "text"]
+vec = vectorizer(text)
+print(f"Text: {text}")
+print(f"Vector shape: {vec.shape}")
+
+</pre>
+
+<p><br></p>
+<div>
+    The dataset has built-in support for dimensionality reduction. <br>
+    Currently we can use "umap" or "ivis"; however, the corresponding libraries do not ship with hover by default, and we may need to install them.
+</div>
+
+<pre data-executable>
+# any kwargs will be passed onto the corresponding method
+dataset.compute_2d_embedding(vectorizer, "umap")
+
+# What we did adds 'x' and 'y' columns to the DataFrames in dataset.dfs
+# One could alternatively pre-compute these columns using any method
+dataset.dfs["raw"].head(5)
+</pre>
+
+<p><br></p>
+<div>
+Now we are ready to visualize and annotate!
+</div>
+
+<pre data-executable>
+from hover.recipes import simple_annotator
+from bokeh.io import show, output_notebook
+
+# 'handle' is a function that renders elements in bokeh documents
+handle = simple_annotator(dataset)
+
+output_notebook()
+show(handle)
+</pre>
+
+<p><br></p>
+<script src="../../../plugins/juniper.min.js"></script>
+
+<script>
+    new Juniper({
+        repo: 'phurwicz/hover-binder',
+        isolateCells: false,
+        theme: 'monokai'
+    })
+</script>
+                
+              
               
                 
 
@@ -325,6 +476,41 @@
       
         
 <footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
+        
+          <a href="../../.." class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+            </div>
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                Home
+              </div>
+            </div>
+          </a>
+        
+        
+          <a href="../../reference/recipes/" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                hover.recipes
+              </div>
+            </div>
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
   
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">
@@ -342,15 +528,15 @@
       
     </div>
     
-      <script src="/hover/assets/javascripts/vendor.fd16492e.min.js"></script>
-      <script src="/hover/assets/javascripts/bundle.7836ba4d.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}</script>
+      <script src="../../../assets/javascripts/vendor.fd16492e.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.7836ba4d.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}</script>
       
       <script>
         app = initialize({
-          base: "/hover",
+          base: "../../..",
           features: ['navigation.expand', 'toc.integrate', 'search.suggest'],
           search: Object.assign({
-            worker: "/hover/assets/javascripts/worker/search.4ac00218.min.js"
+            worker: "../../../assets/javascripts/worker/search.4ac00218.min.js"
           }, typeof search !== "undefined" && search)
         })
       </script>

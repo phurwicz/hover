@@ -6,12 +6,12 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width,initial-scale=1" name="viewport"/>
 <meta content="Hover over and label data rapidly." name="description"/>
-<link href="https://phurwicz.github.io/hover/reference/recipes/" rel="canonical"/>
-<link href="../../images/favicon.png" rel="shortcut icon"/>
+<link href="https://phurwicz.github.io/hover/pages/reference/recipes/" rel="canonical"/>
+<link href="../../../images/favicon.png" rel="shortcut icon"/>
 <meta content="mkdocs-1.1, mkdocs-material-6.1.6" name="generator"/>
 <title>hover.recipes - Hover</title>
-<link href="../../assets/stylesheets/main.6910b76c.min.css" rel="stylesheet"/>
-<link href="../../assets/stylesheets/palette.196e0c26.min.css" rel="stylesheet"/>
+<link href="../../../assets/stylesheets/main.6910b76c.min.css" rel="stylesheet"/>
+<link href="../../../assets/stylesheets/palette.196e0c26.min.css" rel="stylesheet"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&amp;display=fallback" rel="stylesheet"/>
 <style>body,input{font-family:"Roboto",-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono",SFMono-Regular,Consolas,Menlo,monospace}</style>
@@ -112,18 +112,38 @@
 </div>
 <ul class="md-nav__list" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="../..">
+<a class="md-nav__link" href="../../..">
       Home
     </a>
 </li>
-<li class="md-nav__item md-nav__item--active md-nav__item--nested">
-<input checked="" class="md-nav__toggle md-toggle" data-md-toggle="nav-2" id="nav-2" type="checkbox"/>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" data-md-toggle="nav-2" id="nav-2" type="checkbox"/>
 <label class="md-nav__link" for="nav-2">
+      Tutorial
+      <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="Tutorial" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="nav-2">
+<span class="md-nav__icon md-icon"></span>
+        Tutorial
+      </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../tutorial/t0-fundamentals/">
+      Fundamentals
+    </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--active md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" data-md-toggle="nav-3" id="nav-3" type="checkbox"/>
+<label class="md-nav__link" for="nav-3">
       API Reference
       <span class="md-nav__icon md-icon"></span>
 </label>
 <nav aria-label="API Reference" class="md-nav" data-md-level="1">
-<label class="md-nav__title" for="nav-2">
+<label class="md-nav__title" for="nav-3">
 <span class="md-nav__icon md-icon"></span>
         API Reference
       </label>
@@ -193,8 +213,8 @@
   </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#hover.recipes.subroutine.standard_explorer">
-    standard_explorer()
+<a class="md-nav__link" href="#hover.recipes.subroutine.standard_finder">
+    standard_finder()
   </a>
 </li>
 <li class="md-nav__item">
@@ -295,8 +315,8 @@
   </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#hover.recipes.subroutine.standard_explorer">
-    standard_explorer()
+<a class="md-nav__link" href="#hover.recipes.subroutine.standard_finder">
+    standard_finder()
   </a>
 </li>
 <li class="md-nav__item">
@@ -319,7 +339,7 @@
 </div>
 <div class="md-content">
 <article class="md-content__inner md-typeset">
-<a class="md-content__button md-icon" href="https://github.com/phurwicz/hover/edit/master/docs/reference/recipes.md" title="Edit this page">
+<a class="md-content__button md-icon" href="https://github.com/phurwicz/hover/edit/master/docs/pages/reference/recipes.md" title="Edit this page">
 <svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"></path></svg>
 </a>
 <h1 id="hoverrecipes"><code>hover.recipes</code></h1>
@@ -338,7 +358,7 @@
 linked_annotator<span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">600</span><span class="p">)</span> </code>
 </h3>
 <div class="doc doc-contents">
-<p>Leveraging CorpusExplorer which has the best search highlights.</p>
+<p>Leveraging CorpusFinder which has the best search highlights.</p>
 <p>Layout:</p>
 <p>sidebar | [search here] | [annotate here]</p>
 <details class="quote">
@@ -347,21 +367,21 @@ linked_annotator<span class="p">(</span><span class="n">dataset</span><span clas
 <pre><span></span><code><span class="nd">@servable</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">"Linked Annotator"</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">linked_annotator</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">600</span><span class="p">):</span>
     <span class="sd">"""</span>
-<span class="sd">    Leveraging CorpusExplorer which has the best search highlights.</span>
+<span class="sd">    Leveraging CorpusFinder which has the best search highlights.</span>
 
 <span class="sd">    Layout:</span>
 
 <span class="sd">    sidebar | [search here] | [annotate here]</span>
 <span class="sd">    """</span>
-    <span class="n">explorer</span> <span class="o">=</span> <span class="n">standard_explorer</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">)</span>
+    <span class="n">finder</span> <span class="o">=</span> <span class="n">standard_finder</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">)</span>
     <span class="n">annotator</span> <span class="o">=</span> <span class="n">standard_annotator</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">)</span>
 
     <span class="c1"># link coordinates and selections</span>
-    <span class="n">explorer</span><span class="o">.</span><span class="n">link_xy_range</span><span class="p">(</span><span class="n">annotator</span><span class="p">)</span>
-    <span class="n">explorer</span><span class="o">.</span><span class="n">link_selection</span><span class="p">(</span><span class="s2">"raw"</span><span class="p">,</span> <span class="n">annotator</span><span class="p">,</span> <span class="s2">"raw"</span><span class="p">)</span>
+    <span class="n">finder</span><span class="o">.</span><span class="n">link_xy_range</span><span class="p">(</span><span class="n">annotator</span><span class="p">)</span>
+    <span class="n">finder</span><span class="o">.</span><span class="n">link_selection</span><span class="p">(</span><span class="s2">"raw"</span><span class="p">,</span> <span class="n">annotator</span><span class="p">,</span> <span class="s2">"raw"</span><span class="p">)</span>
 
     <span class="n">sidebar</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">view</span><span class="p">()</span>
-    <span class="n">layout</span> <span class="o">=</span> <span class="n">row</span><span class="p">(</span><span class="n">sidebar</span><span class="p">,</span> <span class="n">explorer</span><span class="o">.</span><span class="n">view</span><span class="p">(),</span> <span class="n">annotator</span><span class="o">.</span><span class="n">view</span><span class="p">())</span>
+    <span class="n">layout</span> <span class="o">=</span> <span class="n">row</span><span class="p">(</span><span class="n">sidebar</span><span class="p">,</span> <span class="n">finder</span><span class="o">.</span><span class="n">view</span><span class="p">(),</span> <span class="n">annotator</span><span class="o">.</span><span class="n">view</span><span class="p">())</span>
     <span class="k">return</span> <span class="n">layout</span>
 </code></pre>
 </div>
@@ -438,13 +458,13 @@ active_learning<span class="p">(</span><span class="n">dataset</span><span class
     <span class="c1"># building-block subroutines</span>
     <span class="n">softlabel</span> <span class="o">=</span> <span class="n">standard_softlabel</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">)</span>
     <span class="n">annotator</span> <span class="o">=</span> <span class="n">standard_annotator</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">)</span>
-    <span class="n">explorer</span> <span class="o">=</span> <span class="n">standard_explorer</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">)</span>
+    <span class="n">finder</span> <span class="o">=</span> <span class="n">standard_finder</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">)</span>
 
     <span class="c1"># link coordinates and selections</span>
     <span class="n">softlabel</span><span class="o">.</span><span class="n">link_xy_range</span><span class="p">(</span><span class="n">annotator</span><span class="p">)</span>
-    <span class="n">softlabel</span><span class="o">.</span><span class="n">link_xy_range</span><span class="p">(</span><span class="n">explorer</span><span class="p">)</span>
+    <span class="n">softlabel</span><span class="o">.</span><span class="n">link_xy_range</span><span class="p">(</span><span class="n">finder</span><span class="p">)</span>
     <span class="n">softlabel</span><span class="o">.</span><span class="n">link_selection</span><span class="p">(</span><span class="s2">"raw"</span><span class="p">,</span> <span class="n">annotator</span><span class="p">,</span> <span class="s2">"raw"</span><span class="p">)</span>
-    <span class="n">softlabel</span><span class="o">.</span><span class="n">link_selection</span><span class="p">(</span><span class="s2">"raw"</span><span class="p">,</span> <span class="n">explorer</span><span class="p">,</span> <span class="s2">"raw"</span><span class="p">)</span>
+    <span class="n">softlabel</span><span class="o">.</span><span class="n">link_selection</span><span class="p">(</span><span class="s2">"raw"</span><span class="p">,</span> <span class="n">finder</span><span class="p">,</span> <span class="s2">"raw"</span><span class="p">)</span>
 
     <span class="c1"># recipe-specific widget</span>
     <span class="k">def</span> <span class="nf">setup_model_retrainer</span><span class="p">():</span>
@@ -464,6 +484,7 @@ active_learning<span class="p">(</span><span class="n">dataset</span><span class
             <span class="n">dev_loader</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">loader</span><span class="p">(</span><span class="s2">"dev"</span><span class="p">,</span> <span class="n">vectorizer</span><span class="p">)</span>
 
             <span class="n">_</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">train_loader</span><span class="p">,</span> <span class="n">dev_loader</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="n">epochs_slider</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+            <span class="n">model</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">good</span><span class="p">(</span><span class="s2">"-- 1/2: retrained model"</span><span class="p">)</span>
 
             <span class="k">for</span> <span class="n">_key</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"raw"</span><span class="p">,</span> <span class="s2">"train"</span><span class="p">,</span> <span class="s2">"dev"</span><span class="p">]:</span>
@@ -485,7 +506,7 @@ active_learning<span class="p">(</span><span class="n">dataset</span><span class
 
     <span class="n">model_retrainer</span><span class="p">,</span> <span class="n">epochs_slider</span> <span class="o">=</span> <span class="n">setup_model_retrainer</span><span class="p">()</span>
     <span class="n">sidebar</span> <span class="o">=</span> <span class="n">column</span><span class="p">(</span><span class="n">model_retrainer</span><span class="p">,</span> <span class="n">epochs_slider</span><span class="p">,</span> <span class="n">dataset</span><span class="o">.</span><span class="n">view</span><span class="p">())</span>
-    <span class="n">layout</span> <span class="o">=</span> <span class="n">row</span><span class="p">(</span><span class="n">sidebar</span><span class="p">,</span> <span class="o">*</span><span class="p">[</span><span class="n">_plot</span><span class="o">.</span><span class="n">view</span><span class="p">()</span> <span class="k">for</span> <span class="n">_plot</span> <span class="ow">in</span> <span class="p">[</span><span class="n">softlabel</span><span class="p">,</span> <span class="n">annotator</span><span class="p">,</span> <span class="n">explorer</span><span class="p">]])</span>
+    <span class="n">layout</span> <span class="o">=</span> <span class="n">row</span><span class="p">(</span><span class="n">sidebar</span><span class="p">,</span> <span class="o">*</span><span class="p">[</span><span class="n">_plot</span><span class="o">.</span><span class="n">view</span><span class="p">()</span> <span class="k">for</span> <span class="n">_plot</span> <span class="ow">in</span> <span class="p">[</span><span class="n">softlabel</span><span class="p">,</span> <span class="n">annotator</span><span class="p">,</span> <span class="n">finder</span><span class="p">]])</span>
     <span class="k">return</span> <span class="n">layout</span>
 </code></pre>
 </div>
@@ -556,64 +577,70 @@ snorkel_crosscheck<span class="p">(</span><span class="n">dataset</span><span cl
 standard_annotator<span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> </code>
 </h3>
 <div class="doc doc-contents">
-<p>Standard CorpusAnnotator and its interaction with a dataset.</p>
+<p>Standard TextAnnotator and its interaction with a dataset.</p>
 <details class="quote">
 <summary>Source code in <code>hover/recipes/subroutine.py</code></summary>
 <div class="highlight">
 <pre><span></span><code><span class="k">def</span> <span class="nf">standard_annotator</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">"""</span>
-<span class="sd">    Standard CorpusAnnotator and its interaction with a dataset.</span>
+<span class="sd">    Standard TextAnnotator and its interaction with a dataset.</span>
 <span class="sd">    """</span>
+    <span class="c1"># auto-detect the (main) feature to use</span>
+    <span class="n">feature</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">FEATURE_KEY</span>
+    <span class="n">explorer_cls</span> <span class="o">=</span> <span class="n">get_explorer_class</span><span class="p">(</span><span class="s2">"annotator"</span><span class="p">,</span> <span class="n">feature</span><span class="p">)</span>
+
     <span class="c1"># first "static" version of the plot</span>
-    <span class="n">corpus_annotator</span> <span class="o">=</span> <span class="n">BokehCorpusAnnotator</span><span class="o">.</span><span class="n">from_dataset</span><span class="p">(</span>
+    <span class="n">subsets</span> <span class="o">=</span> <span class="n">explorer_cls</span><span class="o">.</span><span class="n">SUBSET_GLYPH_KWARGS</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+    <span class="n">annotator</span> <span class="o">=</span> <span class="n">explorer_cls</span><span class="o">.</span><span class="n">from_dataset</span><span class="p">(</span>
         <span class="n">dataset</span><span class="p">,</span>
-        <span class="p">{</span><span class="n">_k</span><span class="p">:</span> <span class="n">_k</span> <span class="k">for</span> <span class="n">_k</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"raw"</span><span class="p">,</span> <span class="s2">"train"</span><span class="p">,</span> <span class="s2">"dev"</span><span class="p">,</span> <span class="s2">"test"</span><span class="p">]},</span>
+        <span class="p">{</span><span class="n">_k</span><span class="p">:</span> <span class="n">_k</span> <span class="k">for</span> <span class="n">_k</span> <span class="ow">in</span> <span class="n">subsets</span><span class="p">},</span>
         <span class="n">title</span><span class="o">=</span><span class="s2">"Annotator: apply labels to the selected points"</span><span class="p">,</span>
-        <span class="o">**</span><span class="n">kwargs</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
     <span class="p">)</span>
-    <span class="n">corpus_annotator</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+    <span class="n">annotator</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 
     <span class="c1"># subscribe for df updates</span>
-    <span class="n">dataset</span><span class="o">.</span><span class="n">subscribe_update_push</span><span class="p">(</span>
-        <span class="n">corpus_annotator</span><span class="p">,</span> <span class="p">{</span><span class="n">_k</span><span class="p">:</span> <span class="n">_k</span> <span class="k">for</span> <span class="n">_k</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"raw"</span><span class="p">,</span> <span class="s2">"train"</span><span class="p">,</span> <span class="s2">"dev"</span><span class="p">,</span> <span class="s2">"test"</span><span class="p">]}</span>
-    <span class="p">)</span>
+    <span class="n">dataset</span><span class="o">.</span><span class="n">subscribe_update_push</span><span class="p">(</span><span class="n">annotator</span><span class="p">,</span> <span class="p">{</span><span class="n">_k</span><span class="p">:</span> <span class="n">_k</span> <span class="k">for</span> <span class="n">_k</span> <span class="ow">in</span> <span class="n">subsets</span><span class="p">})</span>
 
     <span class="c1"># annotators can commit to a dataset</span>
-    <span class="n">dataset</span><span class="o">.</span><span class="n">subscribe_data_commit</span><span class="p">(</span><span class="n">corpus_annotator</span><span class="p">,</span> <span class="p">{</span><span class="s2">"raw"</span><span class="p">:</span> <span class="s2">"raw"</span><span class="p">})</span>
-    <span class="k">return</span> <span class="n">corpus_annotator</span>
+    <span class="n">dataset</span><span class="o">.</span><span class="n">subscribe_data_commit</span><span class="p">(</span><span class="n">annotator</span><span class="p">,</span> <span class="p">{</span><span class="s2">"raw"</span><span class="p">:</span> <span class="s2">"raw"</span><span class="p">})</span>
+    <span class="k">return</span> <span class="n">annotator</span>
 </code></pre>
 </div>
 </details>
 </div>
 </div>
 <div class="doc doc-object doc-function">
-<h3 class="doc doc-heading" id="hover.recipes.subroutine.standard_explorer">
+<h3 class="doc doc-heading" id="hover.recipes.subroutine.standard_finder">
 <code class="highlight language-python">
-standard_explorer<span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> </code>
+standard_finder<span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> </code>
 </h3>
 <div class="doc doc-contents">
-<p>Standard CorpusExplorer and its interaction with a dataset.</p>
+<p>Standard TextFinder and its interaction with a dataset.</p>
 <details class="quote">
 <summary>Source code in <code>hover/recipes/subroutine.py</code></summary>
 <div class="highlight">
-<pre><span></span><code><span class="k">def</span> <span class="nf">standard_explorer</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<pre><span></span><code><span class="k">def</span> <span class="nf">standard_finder</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">"""</span>
-<span class="sd">    Standard CorpusExplorer and its interaction with a dataset.</span>
+<span class="sd">    Standard TextFinder and its interaction with a dataset.</span>
 <span class="sd">    """</span>
+    <span class="c1"># auto-detect the (main) feature to use</span>
+    <span class="n">feature</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">FEATURE_KEY</span>
+    <span class="n">explorer_cls</span> <span class="o">=</span> <span class="n">get_explorer_class</span><span class="p">(</span><span class="s2">"finder"</span><span class="p">,</span> <span class="n">feature</span><span class="p">)</span>
+
     <span class="c1"># first "static" version of the plot</span>
-    <span class="n">corpus_explorer</span> <span class="o">=</span> <span class="n">BokehCorpusExplorer</span><span class="o">.</span><span class="n">from_dataset</span><span class="p">(</span>
+    <span class="n">subsets</span> <span class="o">=</span> <span class="n">explorer_cls</span><span class="o">.</span><span class="n">SUBSET_GLYPH_KWARGS</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+    <span class="n">finder</span> <span class="o">=</span> <span class="n">explorer_cls</span><span class="o">.</span><span class="n">from_dataset</span><span class="p">(</span>
         <span class="n">dataset</span><span class="p">,</span>
-        <span class="p">{</span><span class="n">_k</span><span class="p">:</span> <span class="n">_k</span> <span class="k">for</span> <span class="n">_k</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"raw"</span><span class="p">,</span> <span class="s2">"train"</span><span class="p">,</span> <span class="s2">"dev"</span><span class="p">,</span> <span class="s2">"test"</span><span class="p">]},</span>
-        <span class="n">title</span><span class="o">=</span><span class="s2">"Corpus: use the search widget for highlights"</span><span class="p">,</span>
-        <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">{</span><span class="n">_k</span><span class="p">:</span> <span class="n">_k</span> <span class="k">for</span> <span class="n">_k</span> <span class="ow">in</span> <span class="n">subsets</span><span class="p">},</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">"Text: use the search widget for highlights"</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
     <span class="p">)</span>
-    <span class="n">corpus_explorer</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+    <span class="n">finder</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 
     <span class="c1"># subscribe for df updates</span>
-    <span class="n">dataset</span><span class="o">.</span><span class="n">subscribe_update_push</span><span class="p">(</span>
-        <span class="n">corpus_explorer</span><span class="p">,</span> <span class="p">{</span><span class="n">_k</span><span class="p">:</span> <span class="n">_k</span> <span class="k">for</span> <span class="n">_k</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"raw"</span><span class="p">,</span> <span class="s2">"train"</span><span class="p">,</span> <span class="s2">"dev"</span><span class="p">,</span> <span class="s2">"test"</span><span class="p">]}</span>
-    <span class="p">)</span>
-    <span class="k">return</span> <span class="n">corpus_explorer</span>
+    <span class="n">dataset</span><span class="o">.</span><span class="n">subscribe_update_push</span><span class="p">(</span><span class="n">finder</span><span class="p">,</span> <span class="p">{</span><span class="n">_k</span><span class="p">:</span> <span class="n">_k</span> <span class="k">for</span> <span class="n">_k</span> <span class="ow">in</span> <span class="n">subsets</span><span class="p">})</span>
+    <span class="k">return</span> <span class="n">finder</span>
 </code></pre>
 </div>
 </details>
@@ -633,18 +660,22 @@ standard_snorkel<span class="p">(</span><span class="n">dataset</span><span clas
     <span class="sd">"""</span>
 <span class="sd">    Standard SnorkelExplorer and its interaction with a dataset.</span>
 <span class="sd">    """</span>
+    <span class="c1"># auto-detect the (main) feature to use</span>
+    <span class="n">feature</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">FEATURE_KEY</span>
+    <span class="n">explorer_cls</span> <span class="o">=</span> <span class="n">get_explorer_class</span><span class="p">(</span><span class="s2">"snorkel"</span><span class="p">,</span> <span class="n">feature</span><span class="p">)</span>
+
     <span class="c1"># first "static" version of the plot</span>
-    <span class="n">snorkel_explorer</span> <span class="o">=</span> <span class="n">BokehSnorkelExplorer</span><span class="o">.</span><span class="n">from_dataset</span><span class="p">(</span>
+    <span class="n">snorkel</span> <span class="o">=</span> <span class="n">explorer_cls</span><span class="o">.</span><span class="n">from_dataset</span><span class="p">(</span>
         <span class="n">dataset</span><span class="p">,</span>
         <span class="p">{</span><span class="s2">"raw"</span><span class="p">:</span> <span class="s2">"raw"</span><span class="p">,</span> <span class="s2">"dev"</span><span class="p">:</span> <span class="s2">"labeled"</span><span class="p">},</span>
         <span class="n">title</span><span class="o">=</span><span class="s2">"Snorkel: square for correct, x for incorrect, + for missed, o for hit; click on legends to hide or show LF"</span><span class="p">,</span>
-        <span class="o">**</span><span class="n">kwargs</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
     <span class="p">)</span>
-    <span class="n">snorkel_explorer</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+    <span class="n">snorkel</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 
     <span class="c1"># subscribe to dataset widgets</span>
-    <span class="n">dataset</span><span class="o">.</span><span class="n">subscribe_update_push</span><span class="p">(</span><span class="n">snorkel_explorer</span><span class="p">,</span> <span class="p">{</span><span class="s2">"raw"</span><span class="p">:</span> <span class="s2">"raw"</span><span class="p">,</span> <span class="s2">"dev"</span><span class="p">:</span> <span class="s2">"labeled"</span><span class="p">})</span>
-    <span class="k">return</span> <span class="n">snorkel_explorer</span>
+    <span class="n">dataset</span><span class="o">.</span><span class="n">subscribe_update_push</span><span class="p">(</span><span class="n">snorkel</span><span class="p">,</span> <span class="p">{</span><span class="s2">"raw"</span><span class="p">:</span> <span class="s2">"raw"</span><span class="p">,</span> <span class="s2">"dev"</span><span class="p">:</span> <span class="s2">"labeled"</span><span class="p">})</span>
+    <span class="k">return</span> <span class="n">snorkel</span>
 </code></pre>
 </div>
 </details>
@@ -664,22 +695,25 @@ standard_softlabel<span class="p">(</span><span class="n">dataset</span><span cl
     <span class="sd">"""</span>
 <span class="sd">    Standard SoftLabelExplorer and its interaction with a dataset.</span>
 <span class="sd">    """</span>
+    <span class="c1"># auto-detect the (main) feature to use</span>
+    <span class="n">feature</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">FEATURE_KEY</span>
+    <span class="n">explorer_cls</span> <span class="o">=</span> <span class="n">get_explorer_class</span><span class="p">(</span><span class="s2">"softlabel"</span><span class="p">,</span> <span class="n">feature</span><span class="p">)</span>
+
     <span class="c1"># first "static" version of the plot</span>
-    <span class="n">softlabel_explorer</span> <span class="o">=</span> <span class="n">BokehSoftLabelExplorer</span><span class="o">.</span><span class="n">from_dataset</span><span class="p">(</span>
+    <span class="n">subsets</span> <span class="o">=</span> <span class="n">explorer_cls</span><span class="o">.</span><span class="n">SUBSET_GLYPH_KWARGS</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+    <span class="n">softlabel</span> <span class="o">=</span> <span class="n">explorer_cls</span><span class="o">.</span><span class="n">from_dataset</span><span class="p">(</span>
         <span class="n">dataset</span><span class="p">,</span>
-        <span class="p">{</span><span class="n">_k</span><span class="p">:</span> <span class="n">_k</span> <span class="k">for</span> <span class="n">_k</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"raw"</span><span class="p">,</span> <span class="s2">"train"</span><span class="p">,</span> <span class="s2">"dev"</span><span class="p">]},</span>
+        <span class="p">{</span><span class="n">_k</span><span class="p">:</span> <span class="n">_k</span> <span class="k">for</span> <span class="n">_k</span> <span class="ow">in</span> <span class="n">subsets</span><span class="p">},</span>
         <span class="s2">"pred_label"</span><span class="p">,</span>
         <span class="s2">"pred_score"</span><span class="p">,</span>
         <span class="n">title</span><span class="o">=</span><span class="s2">"Prediction Visualizer: retrain model and locate confusions"</span><span class="p">,</span>
-        <span class="o">**</span><span class="n">kwargs</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
     <span class="p">)</span>
-    <span class="n">softlabel_explorer</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+    <span class="n">softlabel</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 
     <span class="c1"># subscribe to dataset widgets</span>
-    <span class="n">dataset</span><span class="o">.</span><span class="n">subscribe_update_push</span><span class="p">(</span>
-        <span class="n">softlabel_explorer</span><span class="p">,</span> <span class="p">{</span><span class="n">_k</span><span class="p">:</span> <span class="n">_k</span> <span class="k">for</span> <span class="n">_k</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"raw"</span><span class="p">,</span> <span class="s2">"train"</span><span class="p">,</span> <span class="s2">"dev"</span><span class="p">]}</span>
-    <span class="p">)</span>
-    <span class="k">return</span> <span class="n">softlabel_explorer</span>
+    <span class="n">dataset</span><span class="o">.</span><span class="n">subscribe_update_push</span><span class="p">(</span><span class="n">softlabel</span><span class="p">,</span> <span class="p">{</span><span class="n">_k</span><span class="p">:</span> <span class="n">_k</span> <span class="k">for</span> <span class="n">_k</span> <span class="ow">in</span> <span class="n">subsets</span><span class="p">})</span>
+    <span class="k">return</span> <span class="n">softlabel</span>
 </code></pre>
 </div>
 </details>
@@ -697,7 +731,7 @@ standard_softlabel<span class="p">(</span><span class="n">dataset</span><span cl
 <footer class="md-footer">
 <div class="md-footer-nav">
 <nav aria-label="Footer" class="md-footer-nav__inner md-grid">
-<a class="md-footer-nav__link md-footer-nav__link--prev" href="../.." rel="prev">
+<a class="md-footer-nav__link md-footer-nav__link--prev" href="../../tutorial/t0-fundamentals/" rel="prev">
 <div class="md-footer-nav__button md-icon">
 <svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"></path></svg>
 </div>
@@ -706,7 +740,7 @@ standard_softlabel<span class="p">(</span><span class="n">dataset</span><span cl
 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                Home
+                Fundamentals
               </div>
 </div>
 </a>
@@ -738,14 +772,14 @@ standard_softlabel<span class="p">(</span><span class="n">dataset</span><span cl
 </div>
 </footer>
 </div>
-<script src="../../assets/javascripts/vendor.fd16492e.min.js"></script>
-<script src="../../assets/javascripts/bundle.7836ba4d.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}</script>
+<script src="../../../assets/javascripts/vendor.fd16492e.min.js"></script>
+<script src="../../../assets/javascripts/bundle.7836ba4d.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}</script>
 <script>
         app = initialize({
-          base: "../..",
+          base: "../../..",
           features: ['navigation.expand', 'toc.integrate', 'search.suggest'],
           search: Object.assign({
-            worker: "../../assets/javascripts/worker/search.4ac00218.min.js"
+            worker: "../../../assets/javascripts/worker/search.4ac00218.min.js"
           }, typeof search !== "undefined" && search)
         })
       </script>

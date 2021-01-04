@@ -6,12 +6,12 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width,initial-scale=1" name="viewport"/>
 <meta content="Hover over and label data rapidly." name="description"/>
-<link href="https://phurwicz.github.io/hover/reference/core-dataset/" rel="canonical"/>
-<link href="../../images/favicon.png" rel="shortcut icon"/>
+<link href="https://phurwicz.github.io/hover/pages/reference/core-dataset/" rel="canonical"/>
+<link href="../../../images/favicon.png" rel="shortcut icon"/>
 <meta content="mkdocs-1.1, mkdocs-material-6.1.6" name="generator"/>
 <title>hover.core.dataset - Hover</title>
-<link href="../../assets/stylesheets/main.6910b76c.min.css" rel="stylesheet"/>
-<link href="../../assets/stylesheets/palette.196e0c26.min.css" rel="stylesheet"/>
+<link href="../../../assets/stylesheets/main.6910b76c.min.css" rel="stylesheet"/>
+<link href="../../../assets/stylesheets/palette.196e0c26.min.css" rel="stylesheet"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&amp;display=fallback" rel="stylesheet"/>
 <style>body,input{font-family:"Roboto",-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono",SFMono-Regular,Consolas,Menlo,monospace}</style>
@@ -112,18 +112,38 @@
 </div>
 <ul class="md-nav__list" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="../..">
+<a class="md-nav__link" href="../../..">
       Home
     </a>
 </li>
-<li class="md-nav__item md-nav__item--active md-nav__item--nested">
-<input checked="" class="md-nav__toggle md-toggle" data-md-toggle="nav-2" id="nav-2" type="checkbox"/>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" data-md-toggle="nav-2" id="nav-2" type="checkbox"/>
 <label class="md-nav__link" for="nav-2">
+      Tutorial
+      <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="Tutorial" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="nav-2">
+<span class="md-nav__icon md-icon"></span>
+        Tutorial
+      </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../tutorial/t0-fundamentals/">
+      Fundamentals
+    </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--active md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" data-md-toggle="nav-3" id="nav-3" type="checkbox"/>
+<label class="md-nav__link" for="nav-3">
       API Reference
       <span class="md-nav__icon md-icon"></span>
 </label>
 <nav aria-label="API Reference" class="md-nav" data-md-level="1">
-<label class="md-nav__title" for="nav-2">
+<label class="md-nav__title" for="nav-3">
 <span class="md-nav__icon md-icon"></span>
         API Reference
       </label>
@@ -150,10 +170,9 @@
 <ul class="md-nav__list" data-md-scrollfix="">
 <li class="md-nav__item">
 <a class="md-nav__link" href="#hover.core.dataset">
-    dataset
+    hover.core.dataset
   </a>
-<nav aria-label="dataset" class="md-nav">
-<ul class="md-nav__list">
+</li>
 <li class="md-nav__item">
 <a class="md-nav__link" href="#hover.core.dataset.SupervisableDataset">
     SupervisableDataset
@@ -232,9 +251,6 @@
 <a class="md-nav__link" href="#hover.core.dataset.SupervisableTextDataset">
     SupervisableTextDataset
   </a>
-</li>
-</ul>
-</nav>
 </li>
 </ul>
 </nav>
@@ -268,10 +284,9 @@
 <ul class="md-nav__list" data-md-scrollfix="">
 <li class="md-nav__item">
 <a class="md-nav__link" href="#hover.core.dataset">
-    dataset
+    hover.core.dataset
   </a>
-<nav aria-label="dataset" class="md-nav">
-<ul class="md-nav__list">
+</li>
 <li class="md-nav__item">
 <a class="md-nav__link" href="#hover.core.dataset.SupervisableDataset">
     SupervisableDataset
@@ -353,32 +368,28 @@
 </li>
 </ul>
 </nav>
-</li>
-</ul>
-</nav>
 </div>
 </div>
 </div>
 <div class="md-content">
 <article class="md-content__inner md-typeset">
-<a class="md-content__button md-icon" href="https://github.com/phurwicz/hover/edit/master/docs/reference/core-dataset.md" title="Edit this page">
+<a class="md-content__button md-icon" href="https://github.com/phurwicz/hover/edit/master/docs/pages/reference/core-dataset.md" title="Edit this page">
 <svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"></path></svg>
 </a>
 <h1>hover.core.dataset</h1>
 <ul>
 <li>
 <div class="doc doc-object doc-module">
-<h2 class="doc doc-heading" id="hover.core.dataset">
-<code>hover.core.dataset</code>
+<h2 class="hidden-toc" href="#hover.core.dataset" id="hover.core.dataset" style="visibility: hidden; position: absolute;">
 </h2>
 <div class="doc doc-contents first">
 <p>Dataset objects which extend beyond DataFrames.
 Specifically, we need a collection of DataFrames where rows can be transferred cleanly and columns can be transformed easily.</p>
 <div class="doc doc-children">
 <div class="doc doc-object doc-class">
-<h3 class="doc doc-heading" id="hover.core.dataset.SupervisableDataset">
+<h2 class="doc doc-heading" id="hover.core.dataset.SupervisableDataset">
 <code>SupervisableDataset</code>
-</h3>
+</h2>
 <div class="doc doc-contents">
 <p>Feature-agnostic class for a dataset open to supervision.
 Raw -- piecewise annoatation -&gt; Gold -&gt; Dev/Test
@@ -389,13 +400,13 @@ Raw -- batch annotation -&gt; Noisy -&gt; Train</p>
 - synchronization between the two forms should be called sparingly.</p>
 <div class="doc doc-children">
 <div class="doc doc-object doc-method">
-<h4 class="doc doc-heading" id="hover.core.dataset.SupervisableDataset.__init__">
+<h3 class="doc doc-heading" id="hover.core.dataset.SupervisableDataset.__init__">
 <code class="highlight language-python">
 __init__<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">raw_dictl</span><span class="p">,</span> <span class="n">train_dictl</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dev_dictl</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">test_dictl</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">feature_key</span><span class="o">=</span><span class="s1">'feature'</span><span class="p">,</span> <span class="n">label_key</span><span class="o">=</span><span class="s1">'label'</span><span class="p">)</span> </code>
 <span class="doc doc-properties">
 <small class="doc doc-property doc-property-special"><code>special</code></small>
 </span>
-</h4>
+</h3>
 <div class="doc doc-contents">
 <p>Initialize the dataset with dictl and df forms; initialize the mapping between categorical-int and string labels.</p>
 <ul>
@@ -479,10 +490,10 @@ __init__<span class="p">(</span><span class="bp">self</span><span class="p">,</s
 </div>
 </div>
 <div class="doc doc-object doc-method">
-<h4 class="doc doc-heading" id="hover.core.dataset.SupervisableDataset.compute_2d_embedding">
+<h3 class="doc doc-heading" id="hover.core.dataset.SupervisableDataset.compute_2d_embedding">
 <code class="highlight language-python">
 compute_2d_embedding<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vectorizer</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> </code>
-</h4>
+</h3>
 <div class="doc doc-contents">
 <p>Get embeddings in the xy-plane and return the reducer.</p>
 <details class="quote">
@@ -550,10 +561,10 @@ compute_2d_embedding<span class="p">(</span><span class="bp">self</span><span cl
 </div>
 </div>
 <div class="doc doc-object doc-method">
-<h4 class="doc doc-heading" id="hover.core.dataset.SupervisableDataset.copy">
+<h3 class="doc doc-heading" id="hover.core.dataset.SupervisableDataset.copy">
 <code class="highlight language-python">
 copy<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">use_df</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> </code>
-</h4>
+</h3>
 <div class="doc doc-contents">
 <p>Create another instance, carrying over the data entries.</p>
 <details class="quote">
@@ -579,10 +590,10 @@ copy<span class="p">(</span><span class="bp">self</span><span class="p">,</span>
 </div>
 </div>
 <div class="doc doc-object doc-method">
-<h4 class="doc doc-heading" id="hover.core.dataset.SupervisableDataset.df_deduplicate">
+<h3 class="doc doc-heading" id="hover.core.dataset.SupervisableDataset.df_deduplicate">
 <code class="highlight language-python">
 df_deduplicate<span class="p">(</span><span class="bp">self</span><span class="p">)</span> </code>
-</h4>
+</h3>
 <div class="doc doc-contents">
 <p>Cross-deduplicate data entries by feature between subsets.</p>
 <details class="quote">
@@ -632,10 +643,10 @@ df_deduplicate<span class="p">(</span><span class="bp">self</span><span class="p
 </div>
 </div>
 <div class="doc doc-object doc-method">
-<h4 class="doc doc-heading" id="hover.core.dataset.SupervisableDataset.loader">
+<h3 class="doc doc-heading" id="hover.core.dataset.SupervisableDataset.loader">
 <code class="highlight language-python">
 loader<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">vectorizer</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">smoothing_coeff</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span> </code>
-</h4>
+</h3>
 <div class="doc doc-contents">
 <p>Prepare a Torch Dataloader for training or evaluation.</p>
 <ul>
@@ -689,10 +700,10 @@ loader<span class="p">(</span><span class="bp">self</span><span class="p">,</spa
 </div>
 </div>
 <div class="doc doc-object doc-method">
-<h4 class="doc doc-heading" id="hover.core.dataset.SupervisableDataset.setup_label_coding">
+<h3 class="doc doc-heading" id="hover.core.dataset.SupervisableDataset.setup_label_coding">
 <code class="highlight language-python">
 setup_label_coding<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> </code>
-</h4>
+</h3>
 <div class="doc doc-contents">
 <p>Auto-determine labels in the dataset, then create encoder/decoder in lexical order.
 Add ABSTAIN as a no-label placeholder.</p>
@@ -731,10 +742,10 @@ Add ABSTAIN as a no-label placeholder.</p>
 </div>
 </div>
 <div class="doc doc-object doc-method">
-<h4 class="doc doc-heading" id="hover.core.dataset.SupervisableDataset.setup_widgets">
+<h3 class="doc doc-heading" id="hover.core.dataset.SupervisableDataset.setup_widgets">
 <code class="highlight language-python">
 setup_widgets<span class="p">(</span><span class="bp">self</span><span class="p">)</span> </code>
-</h4>
+</h3>
 <div class="doc doc-contents">
 <p>Critical widgets for interactive data management.</p>
 <details class="quote">
@@ -800,10 +811,10 @@ setup_widgets<span class="p">(</span><span class="bp">self</span><span class="p"
 </div>
 </div>
 <div class="doc doc-object doc-method">
-<h4 class="doc doc-heading" id="hover.core.dataset.SupervisableDataset.subscribe_data_commit">
+<h3 class="doc doc-heading" id="hover.core.dataset.SupervisableDataset.subscribe_data_commit">
 <code class="highlight language-python">
 subscribe_data_commit<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">explorer</span><span class="p">,</span> <span class="n">subset_mapping</span><span class="p">)</span> </code>
-</h4>
+</h3>
 <div class="doc doc-contents">
 <p>Enable committing data across subsets, specified by a selection in an explorer and a dropdown widget of the dataset.</p>
 <details class="quote">
@@ -858,10 +869,10 @@ subscribe_data_commit<span class="p">(</span><span class="bp">self</span><span c
 </div>
 </div>
 <div class="doc doc-object doc-method">
-<h4 class="doc doc-heading" id="hover.core.dataset.SupervisableDataset.subscribe_update_push">
+<h3 class="doc doc-heading" id="hover.core.dataset.SupervisableDataset.subscribe_update_push">
 <code class="highlight language-python">
 subscribe_update_push<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">explorer</span><span class="p">,</span> <span class="n">subset_mapping</span><span class="p">)</span> </code>
-</h4>
+</h3>
 <div class="doc doc-contents">
 <p>Enable pushing updated DataFrames to explorers that depend on them.</p>
 <p>Note: the reason we need this is due to <code>self.dfs[key] = ...</code>-like assignments. If DF operations were all in-place, then the explorers could directly access the updates through their <code>self.dfs</code> references.</p>
@@ -875,9 +886,9 @@ subscribe_update_push<span class="p">(</span><span class="bp">self</span><span c
 <span class="sd">    Note: the reason we need this is due to `self.dfs[key] = ...`-like assignments. If DF operations were all in-place, then the explorers could directly access the updates through their `self.dfs` references.</span>
 <span class="sd">    """</span>
     <span class="c1"># local import to avoid import cycles</span>
-    <span class="kn">from</span> <span class="nn">hover.core.explorer</span> <span class="kn">import</span> <span class="n">BokehForLabeledText</span>
+    <span class="kn">from</span> <span class="nn">hover.core.explorer.base</span> <span class="kn">import</span> <span class="n">BokehBaseExplorer</span>
 
-    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">explorer</span><span class="p">,</span> <span class="n">BokehForLabeledText</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">explorer</span><span class="p">,</span> <span class="n">BokehBaseExplorer</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">callback_push</span><span class="p">():</span>
         <span class="n">df_dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">_v</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">dfs</span><span class="p">[</span><span class="n">_k</span><span class="p">]</span> <span class="k">for</span> <span class="n">_k</span><span class="p">,</span> <span class="n">_v</span> <span class="ow">in</span> <span class="n">subset_mapping</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
@@ -894,10 +905,10 @@ subscribe_update_push<span class="p">(</span><span class="bp">self</span><span c
 </div>
 </div>
 <div class="doc doc-object doc-method">
-<h4 class="doc doc-heading" id="hover.core.dataset.SupervisableDataset.synchronize_df_to_dictl">
+<h3 class="doc doc-heading" id="hover.core.dataset.SupervisableDataset.synchronize_df_to_dictl">
 <code class="highlight language-python">
 synchronize_df_to_dictl<span class="p">(</span><span class="bp">self</span><span class="p">)</span> </code>
-</h4>
+</h3>
 <div class="doc doc-contents">
 <p>Re-make lists of dictionaries from dataframes.</p>
 <details class="quote">
@@ -916,10 +927,10 @@ synchronize_df_to_dictl<span class="p">(</span><span class="bp">self</span><span
 </div>
 </div>
 <div class="doc doc-object doc-method">
-<h4 class="doc doc-heading" id="hover.core.dataset.SupervisableDataset.synchronize_dictl_to_df">
+<h3 class="doc doc-heading" id="hover.core.dataset.SupervisableDataset.synchronize_dictl_to_df">
 <code class="highlight language-python">
 synchronize_dictl_to_df<span class="p">(</span><span class="bp">self</span><span class="p">)</span> </code>
-</h4>
+</h3>
 <div class="doc doc-contents">
 <p>Re-make dataframes from lists of dictionaries.</p>
 <details class="quote">
@@ -945,10 +956,10 @@ synchronize_dictl_to_df<span class="p">(</span><span class="bp">self</span><span
 </div>
 </div>
 <div class="doc doc-object doc-method">
-<h4 class="doc doc-heading" id="hover.core.dataset.SupervisableDataset.validate_labels">
+<h3 class="doc doc-heading" id="hover.core.dataset.SupervisableDataset.validate_labels">
 <code class="highlight language-python">
 validate_labels<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">raise_exception</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> </code>
-</h4>
+</h3>
 <div class="doc doc-contents">
 <p>Check that every label is in the encoder.</p>
 <details class="quote">
@@ -962,7 +973,7 @@ validate_labels<span class="p">(</span><span class="bp">self</span><span class="
         <span class="n">_invalid_indices</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">assert</span> <span class="s2">"label"</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dfs</span><span class="p">[</span><span class="n">_key</span><span class="p">]</span><span class="o">.</span><span class="n">columns</span>
         <span class="n">_mask</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dfs</span><span class="p">[</span><span class="n">_key</span><span class="p">][</span><span class="s2">"label"</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">label_encoder</span><span class="p">)</span>
-        <span class="n">_invalid_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">_mask</span> <span class="o">==</span> <span class="kc">False</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="n">_invalid_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">_mask</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">_invalid_indices</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_fail</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Subset </span><span class="si">{</span><span class="n">_key</span><span class="si">}</span><span class="s2"> has invalid labels:"</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_print</span><span class="p">({</span><span class="bp">self</span><span class="o">.</span><span class="n">dfs</span><span class="p">[</span><span class="n">_key</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">_invalid_indices</span><span class="p">]})</span>
@@ -974,10 +985,10 @@ validate_labels<span class="p">(</span><span class="bp">self</span><span class="
 </div>
 </div>
 <div class="doc doc-object doc-method">
-<h4 class="doc doc-heading" id="hover.core.dataset.SupervisableDataset.view">
+<h3 class="doc doc-heading" id="hover.core.dataset.SupervisableDataset.view">
 <code class="highlight language-python">
 view<span class="p">(</span><span class="bp">self</span><span class="p">)</span> </code>
-</h4>
+</h3>
 <div class="doc doc-contents">
 <p>Defines the layout of bokeh models.</p>
 <details class="quote">
@@ -1004,9 +1015,9 @@ view<span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </div>
 </div>
 <div class="doc doc-object doc-class">
-<h3 class="doc doc-heading" id="hover.core.dataset.SupervisableTextDataset">
+<h2 class="doc doc-heading" id="hover.core.dataset.SupervisableTextDataset">
 <code>SupervisableTextDataset</code>
-</h3>
+</h2>
 <div class="doc doc-contents">
 <p>Can add text-specific methods.</p>
 <div class="doc doc-children">
@@ -1066,14 +1077,14 @@ view<span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </div>
 </footer>
 </div>
-<script src="../../assets/javascripts/vendor.fd16492e.min.js"></script>
-<script src="../../assets/javascripts/bundle.7836ba4d.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}</script>
+<script src="../../../assets/javascripts/vendor.fd16492e.min.js"></script>
+<script src="../../../assets/javascripts/bundle.7836ba4d.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}</script>
 <script>
         app = initialize({
-          base: "../..",
+          base: "../../..",
           features: ['navigation.expand', 'toc.integrate', 'search.suggest'],
           search: Object.assign({
-            worker: "../../assets/javascripts/worker/search.4ac00218.min.js"
+            worker: "../../../assets/javascripts/worker/search.4ac00218.min.js"
           }, typeof search !== "undefined" && search)
         })
       </script>
