@@ -13,14 +13,14 @@ from .local_config import dataset_help_widget
 
 class SupervisableDataset(Loggable):
     """
-    Feature-agnostic class for a dataset open to supervision.
-    Raw -- piecewise annoatation -> Gold -> Dev/Test
-    Raw -- batch annotation -> Noisy -> Train
+    ???+ info "Docstring"
+        Feature-agnostic class for a dataset open to supervision.
 
-    Keeping a DataFrame form and a list-of-dicts ("dictl") form, with the intention that
-    - the DataFrame form supports most kinds of operations;
-    - the list-of-dicts form could be useful for manipulations outside the scope of pandas;
-    - synchronization between the two forms should be called sparingly.
+        Keeping a DataFrame form and a list-of-dicts ("dictl") form, with the intention that
+
+        - the DataFrame form supports most kinds of operations;
+        - the list-of-dicts form could be useful for manipulations outside the scope of pandas;
+        - synchronization between the two forms should be called sparingly.
     """
 
     # 'scratch': intended to be directly editable by other objects, i.e. Explorers
@@ -45,14 +45,15 @@ class SupervisableDataset(Loggable):
         label_key="label",
     ):
         """
-        Initialize the dataset with dictl and df forms; initialize the mapping between categorical-int and string labels.
+        ???+ info "Docstring"
+            Initialize the dataset with dictl and df forms; initialize the mapping between categorical-int and string labels.
 
-        - param raw_dictl: a list of dicts holding the raw data that DO NOT have annotation.
-        - param train_dictl: a list of dicts holding the batch-annotated noisy train set.
-        - param dev_dictl: a list of dicts holding the gold dev set.
-        - param test_dictl: a list of dicts holding the gold test set.
-        - param feature_key: key in each piece of dict mapping to the feature.
-        - param label_key: key in each piece of dict mapping to the ground truth in STRING form.
+            - raw_dictl: a list of dicts holding the raw data that DO NOT have annotation.
+            - train_dictl: a list of dicts holding the train set.
+            - dev_dictl: a list of dicts holding the dev set.
+            - test_dictl: a list of dicts holding the test set.
+            - feature_key: key in each piece of dict mapping to the feature.
+            - label_key: key in each piece of dict mapping to the label in STRING form.
         """
         self._info("Initializing...")
 
@@ -102,7 +103,8 @@ class SupervisableDataset(Loggable):
 
     def copy(self, use_df=True):
         """
-        Create another instance, carrying over the data entries.
+        ???+ info "Docstring"
+            Create another instance, carrying over the data entries.
         """
         if use_df:
             self.synchronize_df_to_dictl()
@@ -117,7 +119,8 @@ class SupervisableDataset(Loggable):
 
     def setup_widgets(self):
         """
-        Critical widgets for interactive data management.
+        ???+ info "Docstring"
+            Critical widgets for interactive data management.
         """
         self.update_pusher = Button(
             label="Push", button_type="success", height_policy="fit", width_policy="min"
@@ -172,7 +175,8 @@ class SupervisableDataset(Loggable):
 
     def view(self):
         """
-        Defines the layout of bokeh models.
+        ???+ info "Docstring"
+            Defines the layout of bokeh models.
         """
         # local import to avoid naming confusion/conflicts
         from bokeh.layouts import row, column
@@ -185,9 +189,10 @@ class SupervisableDataset(Loggable):
 
     def subscribe_update_push(self, explorer, subset_mapping):
         """
-        Enable pushing updated DataFrames to explorers that depend on them.
+        ???+ info "Docstring"
+            Enable pushing updated DataFrames to explorers that depend on them.
 
-        Note: the reason we need this is due to `self.dfs[key] = ...`-like assignments. If DF operations were all in-place, then the explorers could directly access the updates through their `self.dfs` references.
+            Note: the reason we need this is due to `self.dfs[key] = ...`-like assignments. If DF operations were all in-place, then the explorers could directly access the updates through their `self.dfs` references.
         """
         # local import to avoid import cycles
         from hover.core.explorer.base import BokehBaseExplorer
@@ -206,7 +211,8 @@ class SupervisableDataset(Loggable):
 
     def subscribe_data_commit(self, explorer, subset_mapping):
         """
-        Enable committing data across subsets, specified by a selection in an explorer and a dropdown widget of the dataset.
+        ???+ info "Docstring"
+            Enable committing data across subsets, specified by a selection in an explorer and a dropdown widget of the dataset.
         """
 
         def callback_commit(event):
@@ -250,8 +256,9 @@ class SupervisableDataset(Loggable):
 
     def setup_label_coding(self, verbose=True, debug=False):
         """
-        Auto-determine labels in the dataset, then create encoder/decoder in lexical order.
-        Add ABSTAIN as a no-label placeholder.
+        ???+ info "Docstring"
+            Auto-determine labels in the dataset, then create encoder/decoder in lexical order.
+            Add ABSTAIN as a no-label placeholder.
         """
         all_labels = set()
         for _key in [*self.__class__.PUBLIC_SUBSETS, *self.__class__.PRIVATE_SUBSETS]:
@@ -277,7 +284,8 @@ class SupervisableDataset(Loggable):
 
     def validate_labels(self, raise_exception=True):
         """
-        Check that every label is in the encoder.
+        ???+ info "Docstring"
+            Check that every label is in the encoder.
         """
         for _key in [*self.__class__.PUBLIC_SUBSETS, *self.__class__.PRIVATE_SUBSETS]:
             _invalid_indices = None
@@ -291,6 +299,10 @@ class SupervisableDataset(Loggable):
                     raise ValueError("invalid labels")
 
     def setup_pop_table(self, **kwargs):
+        """
+        ???+ info "Docstring"
+            Set up a table widget for subset data populations.
+        """
         subsets = [
             *self.__class__.SCRATCH_SUBSETS,
             *self.__class__.PUBLIC_SUBSETS,
@@ -335,7 +347,8 @@ class SupervisableDataset(Loggable):
 
     def df_deduplicate(self):
         """
-        Cross-deduplicate data entries by feature between subsets.
+        ???+ info "Docstring"
+            Cross-deduplicate data entries by feature between subsets.
         """
         self._info("Deduplicating...")
         # for data entry accounting
@@ -374,7 +387,8 @@ class SupervisableDataset(Loggable):
 
     def synchronize_dictl_to_df(self):
         """
-        Re-make dataframes from lists of dictionaries.
+        ???+ info "Docstring"
+            Re-make dataframes from lists of dictionaries.
         """
         self.dfs = dict()
         for _key, _dictl in self.dictls.items():
@@ -389,7 +403,8 @@ class SupervisableDataset(Loggable):
 
     def synchronize_df_to_dictl(self):
         """
-        Re-make lists of dictionaries from dataframes.
+        ???+ info "Docstring"
+            Re-make lists of dictionaries from dataframes.
         """
         self.dictls = dict()
         for _key, _df in self.dfs.items():
@@ -397,7 +412,8 @@ class SupervisableDataset(Loggable):
 
     def compute_2d_embedding(self, vectorizer, method, **kwargs):
         """
-        Get embeddings in the xy-plane and return the reducer.
+        ???+ info "Docstring"
+            Get embeddings in the xy-plane and return the reducer.
         """
         from hover.core.representation.reduction import DimensionalityReducer
 
@@ -454,12 +470,12 @@ class SupervisableDataset(Loggable):
 
     def loader(self, key, vectorizer, batch_size=64, smoothing_coeff=0.0):
         """
-        Prepare a Torch Dataloader for training or evaluation.
+        ???+ info "Docstring"
+            Prepare a Torch Dataloader for training or evaluation.
 
-        - param key(str): the subset of dataset to use.
-        - param vectorizer(callable): callable that turns a string into a vector.
-        - param smoothing_coeff: the smoothing coeffient for soft labels.
-          - type smoothing_coeff: float
+            - key(str): the subset of dataset to use.
+            - vectorizer(callable): callable that turns a string into a vector.
+            - smoothing_coeff(float): the smoothing coeffient for soft labels.
         """
         # lazy import: missing torch should not break the rest of the class
         from hover.utils.torch_helper import vector_dataloader, one_hot, label_smoothing
@@ -492,7 +508,8 @@ class SupervisableDataset(Loggable):
 
 class SupervisableTextDataset(SupervisableDataset):
     """
-    Can add text-specific methods.
+    ???+ info "Docstring"
+        Can add text-specific methods.
     """
 
     FEATURE_KEY = "text"
