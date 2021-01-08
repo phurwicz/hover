@@ -338,7 +338,7 @@ class SupervisableDataset(Loggable):
             pop_source.data = pop_data
 
             self._good(
-                f"Pop updater: latest population with {len(self.classes)} classes"
+                f"Pop updater: latest population with {len(self.classes)} classes."
             )
 
         update_population()
