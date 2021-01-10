@@ -129,8 +129,8 @@
       </label>
 <ul class="md-nav__list" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../tutorial/t0-fundamentals/">
-      Fundamentals
+<a class="md-nav__link" href="../../tutorial/t0-quickstart/">
+      Quickstart
     </a>
 </li>
 </ul>
@@ -207,6 +207,11 @@
 <li class="md-nav__item">
 <a class="md-nav__link" href="#hover.core.dataset.SupervisableDataset.setup_label_coding">
     setup_label_coding()
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#hover.core.dataset.SupervisableDataset.setup_pop_table">
+    setup_pop_table()
   </a>
 </li>
 <li class="md-nav__item">
@@ -324,6 +329,11 @@
   </a>
 </li>
 <li class="md-nav__item">
+<a class="md-nav__link" href="#hover.core.dataset.SupervisableDataset.setup_pop_table">
+    setup_pop_table()
+  </a>
+</li>
+<li class="md-nav__item">
 <a class="md-nav__link" href="#hover.core.dataset.SupervisableDataset.setup_widgets">
     setup_widgets()
   </a>
@@ -391,13 +401,14 @@ Specifically, we need a collection of DataFrames where rows can be transferred c
 <code>SupervisableDataset</code>
 </h2>
 <div class="doc doc-contents">
-<p>Feature-agnostic class for a dataset open to supervision.
-Raw -- piecewise annoatation -&gt; Gold -&gt; Dev/Test
-Raw -- batch annotation -&gt; Noisy -&gt; Train</p>
-<p>Keeping a DataFrame form and a list-of-dicts ("dictl") form, with the intention that
-- the DataFrame form supports most kinds of operations;
-- the list-of-dicts form could be useful for manipulations outside the scope of pandas;
-- synchronization between the two forms should be called sparingly.</p>
+<details class="info" open="open"><summary>Docstring</summary><p>Feature-agnostic class for a dataset open to supervision.</p>
+<p>Keeping a DataFrame form and a list-of-dicts ("dictl") form, with the intention that</p>
+<ul>
+<li>the DataFrame form supports most kinds of operations;</li>
+<li>the list-of-dicts form could be useful for manipulations outside the scope of pandas;</li>
+<li>synchronization between the two forms should be called sparingly.</li>
+</ul>
+</details>
 <div class="doc doc-children">
 <div class="doc doc-object doc-method">
 <h3 class="doc doc-heading" id="hover.core.dataset.SupervisableDataset.__init__">
@@ -408,15 +419,16 @@ __init__<span class="p">(</span><span class="bp">self</span><span class="p">,</s
 </span>
 </h3>
 <div class="doc doc-contents">
-<p>Initialize the dataset with dictl and df forms; initialize the mapping between categorical-int and string labels.</p>
+<details class="info" open="open"><summary>Docstring</summary><p>Initialize the dataset with dictl and df forms; initialize the mapping between categorical-int and string labels.</p>
 <ul>
-<li>param raw_dictl: a list of dicts holding the raw data that DO NOT have annotation.</li>
-<li>param train_dictl: a list of dicts holding the batch-annotated noisy train set.</li>
-<li>param dev_dictl: a list of dicts holding the gold dev set.</li>
-<li>param test_dictl: a list of dicts holding the gold test set.</li>
-<li>param feature_key: key in each piece of dict mapping to the feature.</li>
-<li>param label_key: key in each piece of dict mapping to the ground truth in STRING form.</li>
+<li>raw_dictl: a list of dicts holding the raw data that DO NOT have annotation.</li>
+<li>train_dictl: a list of dicts holding the train set.</li>
+<li>dev_dictl: a list of dicts holding the dev set.</li>
+<li>test_dictl: a list of dicts holding the test set.</li>
+<li>feature_key: key in each piece of dict mapping to the feature.</li>
+<li>label_key: key in each piece of dict mapping to the label in STRING form.</li>
 </ul>
+</details>
 <details class="quote">
 <summary>Source code in <code>hover/core/dataset.py</code></summary>
 <div class="highlight">
@@ -430,14 +442,15 @@ __init__<span class="p">(</span><span class="bp">self</span><span class="p">,</s
     <span class="n">label_key</span><span class="o">=</span><span class="s2">"label"</span><span class="p">,</span>
 <span class="p">):</span>
     <span class="sd">"""</span>
-<span class="sd">    Initialize the dataset with dictl and df forms; initialize the mapping between categorical-int and string labels.</span>
+<span class="sd">    ???+ info "Docstring"</span>
+<span class="sd">        Initialize the dataset with dictl and df forms; initialize the mapping between categorical-int and string labels.</span>
 
-<span class="sd">    - param raw_dictl: a list of dicts holding the raw data that DO NOT have annotation.</span>
-<span class="sd">    - param train_dictl: a list of dicts holding the batch-annotated noisy train set.</span>
-<span class="sd">    - param dev_dictl: a list of dicts holding the gold dev set.</span>
-<span class="sd">    - param test_dictl: a list of dicts holding the gold test set.</span>
-<span class="sd">    - param feature_key: key in each piece of dict mapping to the feature.</span>
-<span class="sd">    - param label_key: key in each piece of dict mapping to the ground truth in STRING form.</span>
+<span class="sd">        - raw_dictl: a list of dicts holding the raw data that DO NOT have annotation.</span>
+<span class="sd">        - train_dictl: a list of dicts holding the train set.</span>
+<span class="sd">        - dev_dictl: a list of dicts holding the dev set.</span>
+<span class="sd">        - test_dictl: a list of dicts holding the test set.</span>
+<span class="sd">        - feature_key: key in each piece of dict mapping to the feature.</span>
+<span class="sd">        - label_key: key in each piece of dict mapping to the label in STRING form.</span>
 <span class="sd">    """</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_info</span><span class="p">(</span><span class="s2">"Initializing..."</span><span class="p">)</span>
 
@@ -495,13 +508,15 @@ __init__<span class="p">(</span><span class="bp">self</span><span class="p">,</s
 compute_2d_embedding<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vectorizer</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> </code>
 </h3>
 <div class="doc doc-contents">
-<p>Get embeddings in the xy-plane and return the reducer.</p>
+<details class="info" open="open"><summary>Docstring</summary><p>Get embeddings in the xy-plane and return the reducer.</p>
+</details>
 <details class="quote">
 <summary>Source code in <code>hover/core/dataset.py</code></summary>
 <div class="highlight">
 <pre><span></span><code><span class="k">def</span> <span class="nf">compute_2d_embedding</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vectorizer</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">"""</span>
-<span class="sd">    Get embeddings in the xy-plane and return the reducer.</span>
+<span class="sd">    ???+ info "Docstring"</span>
+<span class="sd">        Get embeddings in the xy-plane and return the reducer.</span>
 <span class="sd">    """</span>
     <span class="kn">from</span> <span class="nn">hover.core.representation.reduction</span> <span class="kn">import</span> <span class="n">DimensionalityReducer</span>
 
@@ -566,13 +581,15 @@ compute_2d_embedding<span class="p">(</span><span class="bp">self</span><span cl
 copy<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">use_df</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> </code>
 </h3>
 <div class="doc doc-contents">
-<p>Create another instance, carrying over the data entries.</p>
+<details class="info" open="open"><summary>Docstring</summary><p>Create another instance, carrying over the data entries.</p>
+</details>
 <details class="quote">
 <summary>Source code in <code>hover/core/dataset.py</code></summary>
 <div class="highlight">
 <pre><span></span><code><span class="k">def</span> <span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">use_df</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
     <span class="sd">"""</span>
-<span class="sd">    Create another instance, carrying over the data entries.</span>
+<span class="sd">    ???+ info "Docstring"</span>
+<span class="sd">        Create another instance, carrying over the data entries.</span>
 <span class="sd">    """</span>
     <span class="k">if</span> <span class="n">use_df</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">synchronize_df_to_dictl</span><span class="p">()</span>
@@ -595,13 +612,15 @@ copy<span class="p">(</span><span class="bp">self</span><span class="p">,</span>
 df_deduplicate<span class="p">(</span><span class="bp">self</span><span class="p">)</span> </code>
 </h3>
 <div class="doc doc-contents">
-<p>Cross-deduplicate data entries by feature between subsets.</p>
+<details class="info" open="open"><summary>Docstring</summary><p>Cross-deduplicate data entries by feature between subsets.</p>
+</details>
 <details class="quote">
 <summary>Source code in <code>hover/core/dataset.py</code></summary>
 <div class="highlight">
 <pre><span></span><code><span class="k">def</span> <span class="nf">df_deduplicate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="sd">"""</span>
-<span class="sd">    Cross-deduplicate data entries by feature between subsets.</span>
+<span class="sd">    ???+ info "Docstring"</span>
+<span class="sd">        Cross-deduplicate data entries by feature between subsets.</span>
 <span class="sd">    """</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_info</span><span class="p">(</span><span class="s2">"Deduplicating..."</span><span class="p">)</span>
     <span class="c1"># for data entry accounting</span>
@@ -648,24 +667,24 @@ df_deduplicate<span class="p">(</span><span class="bp">self</span><span class="p
 loader<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">vectorizer</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">smoothing_coeff</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span> </code>
 </h3>
 <div class="doc doc-contents">
-<p>Prepare a Torch Dataloader for training or evaluation.</p>
+<details class="info" open="open"><summary>Docstring</summary><p>Prepare a Torch Dataloader for training or evaluation.</p>
 <ul>
-<li>param key(str): the subset of dataset to use.</li>
-<li>param vectorizer(callable): callable that turns a string into a vector.</li>
-<li>param smoothing_coeff: the smoothing coeffient for soft labels.</li>
-<li>type smoothing_coeff: float</li>
+<li>key(str): the subset of dataset to use.</li>
+<li>vectorizer(callable): callable that turns a string into a vector.</li>
+<li>smoothing_coeff(float): the smoothing coeffient for soft labels.</li>
 </ul>
+</details>
 <details class="quote">
 <summary>Source code in <code>hover/core/dataset.py</code></summary>
 <div class="highlight">
 <pre><span></span><code><span class="k">def</span> <span class="nf">loader</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">vectorizer</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">smoothing_coeff</span><span class="o">=</span><span class="mf">0.0</span><span class="p">):</span>
     <span class="sd">"""</span>
-<span class="sd">    Prepare a Torch Dataloader for training or evaluation.</span>
+<span class="sd">    ???+ info "Docstring"</span>
+<span class="sd">        Prepare a Torch Dataloader for training or evaluation.</span>
 
-<span class="sd">    - param key(str): the subset of dataset to use.</span>
-<span class="sd">    - param vectorizer(callable): callable that turns a string into a vector.</span>
-<span class="sd">    - param smoothing_coeff: the smoothing coeffient for soft labels.</span>
-<span class="sd">      - type smoothing_coeff: float</span>
+<span class="sd">        - key(str): the subset of dataset to use.</span>
+<span class="sd">        - vectorizer(callable): callable that turns a string into a vector.</span>
+<span class="sd">        - smoothing_coeff(float): the smoothing coeffient for soft labels.</span>
 <span class="sd">    """</span>
     <span class="c1"># lazy import: missing torch should not break the rest of the class</span>
     <span class="kn">from</span> <span class="nn">hover.utils.torch_helper</span> <span class="kn">import</span> <span class="n">vector_dataloader</span><span class="p">,</span> <span class="n">one_hot</span><span class="p">,</span> <span class="n">label_smoothing</span>
@@ -705,15 +724,17 @@ loader<span class="p">(</span><span class="bp">self</span><span class="p">,</spa
 setup_label_coding<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> </code>
 </h3>
 <div class="doc doc-contents">
-<p>Auto-determine labels in the dataset, then create encoder/decoder in lexical order.
+<details class="info" open="open"><summary>Docstring</summary><p>Auto-determine labels in the dataset, then create encoder/decoder in lexical order.
 Add ABSTAIN as a no-label placeholder.</p>
+</details>
 <details class="quote">
 <summary>Source code in <code>hover/core/dataset.py</code></summary>
 <div class="highlight">
 <pre><span></span><code><span class="k">def</span> <span class="nf">setup_label_coding</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">"""</span>
-<span class="sd">    Auto-determine labels in the dataset, then create encoder/decoder in lexical order.</span>
-<span class="sd">    Add ABSTAIN as a no-label placeholder.</span>
+<span class="sd">    ???+ info "Docstring"</span>
+<span class="sd">        Auto-determine labels in the dataset, then create encoder/decoder in lexical order.</span>
+<span class="sd">        Add ABSTAIN as a no-label placeholder.</span>
 <span class="sd">    """</span>
     <span class="n">all_labels</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
     <span class="k">for</span> <span class="n">_key</span> <span class="ow">in</span> <span class="p">[</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">PUBLIC_SUBSETS</span><span class="p">,</span> <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">PRIVATE_SUBSETS</span><span class="p">]:</span>
@@ -742,18 +763,82 @@ Add ABSTAIN as a no-label placeholder.</p>
 </div>
 </div>
 <div class="doc doc-object doc-method">
+<h3 class="doc doc-heading" id="hover.core.dataset.SupervisableDataset.setup_pop_table">
+<code class="highlight language-python">
+setup_pop_table<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> </code>
+</h3>
+<div class="doc doc-contents">
+<details class="info" open="open"><summary>Docstring</summary><p>Set up a table widget for subset data populations.</p>
+</details>
+<details class="quote">
+<summary>Source code in <code>hover/core/dataset.py</code></summary>
+<div class="highlight">
+<pre><span></span><code><span class="k">def</span> <span class="nf">setup_pop_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    ???+ info "Docstring"</span>
+<span class="sd">        Set up a table widget for subset data populations.</span>
+<span class="sd">    """</span>
+    <span class="n">subsets</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">SCRATCH_SUBSETS</span><span class="p">,</span>
+        <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">PUBLIC_SUBSETS</span><span class="p">,</span>
+        <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">PRIVATE_SUBSETS</span><span class="p">,</span>
+    <span class="p">]</span>
+    <span class="n">pop_source</span> <span class="o">=</span> <span class="n">ColumnDataSource</span><span class="p">(</span><span class="nb">dict</span><span class="p">())</span>
+    <span class="n">pop_columns</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">TableColumn</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="s2">"label"</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">"label"</span><span class="p">),</span>
+        <span class="o">*</span><span class="p">[</span>
+            <span class="n">TableColumn</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="sa">f</span><span class="s2">"count_</span><span class="si">{</span><span class="n">_subset</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">_subset</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">_subset</span> <span class="ow">in</span> <span class="n">subsets</span>
+        <span class="p">],</span>
+    <span class="p">]</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">pop_table</span> <span class="o">=</span> <span class="n">DataTable</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="n">pop_source</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">pop_columns</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">update_population</span><span class="p">():</span>
+        <span class="sd">"""</span>
+<span class="sd">        Callback function.</span>
+<span class="sd">        """</span>
+        <span class="c1"># make sure that the label coding is correct</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setup_label_coding</span><span class="p">()</span>
+
+        <span class="c1"># re-compute label population</span>
+        <span class="n">eff_labels</span> <span class="o">=</span> <span class="p">[</span><span class="n">module_config</span><span class="o">.</span><span class="n">ABSTAIN_DECODED</span><span class="p">,</span> <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">classes</span><span class="p">]</span>
+        <span class="n">pop_data</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="n">eff_labels</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">_subset</span> <span class="ow">in</span> <span class="n">subsets</span><span class="p">:</span>
+            <span class="n">_subpop</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dfs</span><span class="p">[</span><span class="n">_subset</span><span class="p">][</span><span class="s2">"label"</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span>
+            <span class="n">pop_data</span><span class="p">[</span><span class="sa">f</span><span class="s2">"count_</span><span class="si">{</span><span class="n">_subset</span><span class="si">}</span><span class="s2">"</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">_subpop</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">_label</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">_label</span> <span class="ow">in</span> <span class="n">eff_labels</span>
+            <span class="p">]</span>
+
+        <span class="c1"># push results to bokeh data source</span>
+        <span class="n">pop_source</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">pop_data</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_good</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">"Pop updater: latest population with </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">classes</span><span class="p">)</span><span class="si">}</span><span class="s2"> classes."</span>
+        <span class="p">)</span>
+
+    <span class="n">update_population</span><span class="p">()</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">data_committer</span><span class="o">.</span><span class="n">on_click</span><span class="p">(</span><span class="n">update_population</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">dedup_trigger</span><span class="o">.</span><span class="n">on_click</span><span class="p">(</span><span class="n">update_population</span><span class="p">)</span>
+</code></pre>
+</div>
+</details>
+</div>
+</div>
+<div class="doc doc-object doc-method">
 <h3 class="doc doc-heading" id="hover.core.dataset.SupervisableDataset.setup_widgets">
 <code class="highlight language-python">
 setup_widgets<span class="p">(</span><span class="bp">self</span><span class="p">)</span> </code>
 </h3>
 <div class="doc doc-contents">
-<p>Critical widgets for interactive data management.</p>
+<details class="info" open="open"><summary>Docstring</summary><p>Critical widgets for interactive data management.</p>
+</details>
 <details class="quote">
 <summary>Source code in <code>hover/core/dataset.py</code></summary>
 <div class="highlight">
 <pre><span></span><code><span class="k">def</span> <span class="nf">setup_widgets</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="sd">"""</span>
-<span class="sd">    Critical widgets for interactive data management.</span>
+<span class="sd">    ???+ info "Docstring"</span>
+<span class="sd">        Critical widgets for interactive data management.</span>
 <span class="sd">    """</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">update_pusher</span> <span class="o">=</span> <span class="n">Button</span><span class="p">(</span>
         <span class="n">label</span><span class="o">=</span><span class="s2">"Push"</span><span class="p">,</span> <span class="n">button_type</span><span class="o">=</span><span class="s2">"success"</span><span class="p">,</span> <span class="n">height_policy</span><span class="o">=</span><span class="s2">"fit"</span><span class="p">,</span> <span class="n">width_policy</span><span class="o">=</span><span class="s2">"min"</span>
@@ -816,13 +901,15 @@ setup_widgets<span class="p">(</span><span class="bp">self</span><span class="p"
 subscribe_data_commit<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">explorer</span><span class="p">,</span> <span class="n">subset_mapping</span><span class="p">)</span> </code>
 </h3>
 <div class="doc doc-contents">
-<p>Enable committing data across subsets, specified by a selection in an explorer and a dropdown widget of the dataset.</p>
+<details class="info" open="open"><summary>Docstring</summary><p>Enable committing data across subsets, specified by a selection in an explorer and a dropdown widget of the dataset.</p>
+</details>
 <details class="quote">
 <summary>Source code in <code>hover/core/dataset.py</code></summary>
 <div class="highlight">
 <pre><span></span><code><span class="k">def</span> <span class="nf">subscribe_data_commit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">explorer</span><span class="p">,</span> <span class="n">subset_mapping</span><span class="p">):</span>
     <span class="sd">"""</span>
-<span class="sd">    Enable committing data across subsets, specified by a selection in an explorer and a dropdown widget of the dataset.</span>
+<span class="sd">    ???+ info "Docstring"</span>
+<span class="sd">        Enable committing data across subsets, specified by a selection in an explorer and a dropdown widget of the dataset.</span>
 <span class="sd">    """</span>
 
     <span class="k">def</span> <span class="nf">callback_commit</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
@@ -874,16 +961,18 @@ subscribe_data_commit<span class="p">(</span><span class="bp">self</span><span c
 subscribe_update_push<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">explorer</span><span class="p">,</span> <span class="n">subset_mapping</span><span class="p">)</span> </code>
 </h3>
 <div class="doc doc-contents">
-<p>Enable pushing updated DataFrames to explorers that depend on them.</p>
+<details class="info" open="open"><summary>Docstring</summary><p>Enable pushing updated DataFrames to explorers that depend on them.</p>
 <p>Note: the reason we need this is due to <code>self.dfs[key] = ...</code>-like assignments. If DF operations were all in-place, then the explorers could directly access the updates through their <code>self.dfs</code> references.</p>
+</details>
 <details class="quote">
 <summary>Source code in <code>hover/core/dataset.py</code></summary>
 <div class="highlight">
 <pre><span></span><code><span class="k">def</span> <span class="nf">subscribe_update_push</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">explorer</span><span class="p">,</span> <span class="n">subset_mapping</span><span class="p">):</span>
     <span class="sd">"""</span>
-<span class="sd">    Enable pushing updated DataFrames to explorers that depend on them.</span>
+<span class="sd">    ???+ info "Docstring"</span>
+<span class="sd">        Enable pushing updated DataFrames to explorers that depend on them.</span>
 
-<span class="sd">    Note: the reason we need this is due to `self.dfs[key] = ...`-like assignments. If DF operations were all in-place, then the explorers could directly access the updates through their `self.dfs` references.</span>
+<span class="sd">        Note: the reason we need this is due to `self.dfs[key] = ...`-like assignments. If DF operations were all in-place, then the explorers could directly access the updates through their `self.dfs` references.</span>
 <span class="sd">    """</span>
     <span class="c1"># local import to avoid import cycles</span>
     <span class="kn">from</span> <span class="nn">hover.core.explorer.base</span> <span class="kn">import</span> <span class="n">BokehBaseExplorer</span>
@@ -910,13 +999,15 @@ subscribe_update_push<span class="p">(</span><span class="bp">self</span><span c
 synchronize_df_to_dictl<span class="p">(</span><span class="bp">self</span><span class="p">)</span> </code>
 </h3>
 <div class="doc doc-contents">
-<p>Re-make lists of dictionaries from dataframes.</p>
+<details class="info" open="open"><summary>Docstring</summary><p>Re-make lists of dictionaries from dataframes.</p>
+</details>
 <details class="quote">
 <summary>Source code in <code>hover/core/dataset.py</code></summary>
 <div class="highlight">
 <pre><span></span><code><span class="k">def</span> <span class="nf">synchronize_df_to_dictl</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="sd">"""</span>
-<span class="sd">    Re-make lists of dictionaries from dataframes.</span>
+<span class="sd">    ???+ info "Docstring"</span>
+<span class="sd">        Re-make lists of dictionaries from dataframes.</span>
 <span class="sd">    """</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">dictls</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
     <span class="k">for</span> <span class="n">_key</span><span class="p">,</span> <span class="n">_df</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dfs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
@@ -932,13 +1023,15 @@ synchronize_df_to_dictl<span class="p">(</span><span class="bp">self</span><span
 synchronize_dictl_to_df<span class="p">(</span><span class="bp">self</span><span class="p">)</span> </code>
 </h3>
 <div class="doc doc-contents">
-<p>Re-make dataframes from lists of dictionaries.</p>
+<details class="info" open="open"><summary>Docstring</summary><p>Re-make dataframes from lists of dictionaries.</p>
+</details>
 <details class="quote">
 <summary>Source code in <code>hover/core/dataset.py</code></summary>
 <div class="highlight">
 <pre><span></span><code><span class="k">def</span> <span class="nf">synchronize_dictl_to_df</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="sd">"""</span>
-<span class="sd">    Re-make dataframes from lists of dictionaries.</span>
+<span class="sd">    ???+ info "Docstring"</span>
+<span class="sd">        Re-make dataframes from lists of dictionaries.</span>
 <span class="sd">    """</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">dfs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
     <span class="k">for</span> <span class="n">_key</span><span class="p">,</span> <span class="n">_dictl</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dictls</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
@@ -961,13 +1054,15 @@ synchronize_dictl_to_df<span class="p">(</span><span class="bp">self</span><span
 validate_labels<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">raise_exception</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> </code>
 </h3>
 <div class="doc doc-contents">
-<p>Check that every label is in the encoder.</p>
+<details class="info" open="open"><summary>Docstring</summary><p>Check that every label is in the encoder.</p>
+</details>
 <details class="quote">
 <summary>Source code in <code>hover/core/dataset.py</code></summary>
 <div class="highlight">
 <pre><span></span><code><span class="k">def</span> <span class="nf">validate_labels</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">raise_exception</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
     <span class="sd">"""</span>
-<span class="sd">    Check that every label is in the encoder.</span>
+<span class="sd">    ???+ info "Docstring"</span>
+<span class="sd">        Check that every label is in the encoder.</span>
 <span class="sd">    """</span>
     <span class="k">for</span> <span class="n">_key</span> <span class="ow">in</span> <span class="p">[</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">PUBLIC_SUBSETS</span><span class="p">,</span> <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">PRIVATE_SUBSETS</span><span class="p">]:</span>
         <span class="n">_invalid_indices</span> <span class="o">=</span> <span class="kc">None</span>
@@ -990,13 +1085,15 @@ validate_labels<span class="p">(</span><span class="bp">self</span><span class="
 view<span class="p">(</span><span class="bp">self</span><span class="p">)</span> </code>
 </h3>
 <div class="doc doc-contents">
-<p>Defines the layout of bokeh models.</p>
+<details class="info" open="open"><summary>Docstring</summary><p>Defines the layout of bokeh models.</p>
+</details>
 <details class="quote">
 <summary>Source code in <code>hover/core/dataset.py</code></summary>
 <div class="highlight">
 <pre><span></span><code><span class="k">def</span> <span class="nf">view</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="sd">"""</span>
-<span class="sd">    Defines the layout of bokeh models.</span>
+<span class="sd">    ???+ info "Docstring"</span>
+<span class="sd">        Defines the layout of bokeh models.</span>
 <span class="sd">    """</span>
     <span class="c1"># local import to avoid naming confusion/conflicts</span>
     <span class="kn">from</span> <span class="nn">bokeh.layouts</span> <span class="kn">import</span> <span class="n">row</span><span class="p">,</span> <span class="n">column</span>
@@ -1019,7 +1116,8 @@ view<span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 <code>SupervisableTextDataset</code>
 </h2>
 <div class="doc doc-contents">
-<p>Can add text-specific methods.</p>
+<details class="info" open="open"><summary>Docstring</summary><p>Can add text-specific methods.</p>
+</details>
 <div class="doc doc-children">
 </div>
 </div>

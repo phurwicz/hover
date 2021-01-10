@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url>
      <loc>https://phurwicz.github.io/hover/</loc>
-     <lastmod>2021-01-04</lastmod>
+     <lastmod>2021-01-10</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
-     <loc>https://phurwicz.github.io/hover/pages/tutorial/t0-fundamentals/</loc>
-     <lastmod>2021-01-04</lastmod>
+     <loc>https://phurwicz.github.io/hover/pages/tutorial/t0-quickstart/</loc>
+     <lastmod>2021-01-10</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://phurwicz.github.io/hover/pages/reference/recipes/</loc>
-     <lastmod>2021-01-04</lastmod>
+     <lastmod>2021-01-10</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://phurwicz.github.io/hover/pages/reference/core-dataset/</loc>
-     <lastmod>2021-01-04</lastmod>
+     <lastmod>2021-01-10</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://phurwicz.github.io/hover/pages/reference/core-explorer/</loc>
-     <lastmod>2021-01-04</lastmod>
+     <lastmod>2021-01-10</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://phurwicz.github.io/hover/pages/reference/core-neural/</loc>
-     <lastmod>2021-01-04</lastmod>
+     <lastmod>2021-01-10</lastmod>
      <changefreq>daily</changefreq>
     </url>
 </urlset>
