@@ -27,13 +27,6 @@ Check out [@phurwicz/hover-binder](https://github.com/phurwicz/hover-binder) for
 
 -   **Jan 3, 2021** 0.4.0 is now available. Check out the [changelog](CHANGELOG.md) for details :hugs:
 
--   **Dec 26, 2020** Major update coming soon:
-    -    Low-level APIs in `bokeh.core.explorer` will undergo significant refacorization. Watch out if you've been using them directly!
-    -    There will be a change log :sunglasses:
-
--   **Dec 16, 2020** We decided to make notebook tutorials instead of videos, because
-    -   `hover` is now embeddable in Jupyter notebooks, and
-    -   active development tends to outdate video tutorials rather quickly.
 
 ## :flight_departure: Quick Start
 
