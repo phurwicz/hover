@@ -2,44 +2,14 @@
 >
 > :sunglasses: Let's label some data and call it a day.
 
-{!docs/pages/tutorial/snippet-stylesheet.html!}
+{!docs/pages/tutorial/html-snippets/stylesheet.html!}
 
 ## **Ingredient 1 / 3: Some Data**
 
 Suppose that we have a list of data entries, each in the form of a dictionary:
 
 <pre data-executable>
-from hover.core.dataset import SupervisableTextDataset
-from faker import Faker
-import random
-
-# ---- fake data for illustation ----
-fake_en = Faker("en")
-
-def random_text():
-    return fake_en.paragraph(3)
-
-def random_raw_data():
-    return {"content": random_text()}
-
-def random_labeled_data():
-    return {"content": random_text(), "mark": random.choice(["A", "B"])}
-# -----------------------------------
-
-dataset = SupervisableTextDataset(
-    # raw data which do not have labels
-    raw_dictl=[random_raw_data() for i in range(500)],
-    # train / dev / test sets are optional
-    train_dictl=[],
-    dev_dictl=[random_labeled_data() for i in range(50)],
-    test_dictl=[random_labeled_data() for i in range(50)],
-    # adjust feature_key and label_key to your data
-    feature_key="content",
-    label_key="mark",
-)
-
-# each subset is stored in its own DataFrame
-dataset.dfs["raw"].head(5)
+{!docs/pages/tutorial/py-snippets/t0-0-dataset-text.txt!}
 </pre><br>
 
 
@@ -50,20 +20,7 @@ To put our dataset sensibly on a 2-D "map", we will use a vectorizer for feature
 Here's one way to define a vectorizer:
 
 <pre data-executable>
-import spacy
-import re
-
-nlp = spacy.load("en_core_web_md")
-
-def vectorizer(text):
-    clean_text = re.sub(r"[\s]+", r" ", text)
-    return nlp(clean_text, disable=nlp.pipe_names).vector
-
-text = dataset.dfs["raw"].loc[0, "text"]
-vec = vectorizer(text)
-print(f"Text: {text}")
-print(f"Vector shape: {vec.shape}")
-
+{!docs/pages/tutorial/py-snippets/t0-1-vectorizer.txt!}
 </pre><br>
 
 
@@ -81,14 +38,7 @@ Currently we can use [umap](https://umap-learn.readthedocs.io/en/latest/) or [iv
     `umap-learn` is installed in this demo environment.
 
 <pre data-executable>
-# any kwargs will be passed onto the corresponding reduction
-# for umap: https://umap-learn.readthedocs.io/en/latest/parameters.html
-# for ivis: https://bering-ivis.readthedocs.io/en/latest/api.html
-dataset.compute_2d_embedding(vectorizer, "umap")
-
-# What we did adds 'x' and 'y' columns to the DataFrames in dataset.dfs
-# One could alternatively pre-compute these columns using any approach
-dataset.dfs["raw"].head(5)
+{!docs/pages/tutorial/py-snippets/t0-2-reduction.txt!}
 </pre><br>
 
 
@@ -119,15 +69,35 @@ Now we are ready to visualize and annotate!
     -   the search widget might turn out useful.
         -    note that it does not select points but highlights them.
 
+??? warning "Known issue"
+    {== If you are running this code block on this documentation page: ==}
+
+    -   JavaScript output (which contains the visualization) will fail to render due to JupyterLab's security restrictions.
+    -   please run this tutorial locally to view the output.
+
+    ??? help "Advanced: help wanted"
+        Some context:
+
+        -   the code blocks here are embedded using [Juniper](https://github.com/ines/juniper).
+        -   the environment is configured in the [Binder repo](https://github.com/phurwicz/hover-binder).
+
+        What we've tried:
+
+        -   1 [Bokeh's extension with JupyterLab](https://github.com/bokeh/jupyter_bokeh)
+            -   1.1 cannot render the Bokeh plots remotely with `show(handle)`, with or without the extension
+                -   1.1.1 JavaScript console suggests that `bokeh.main.js` would fail to load.
+        -   2 [JavaScript magic cell](https://ipython.readthedocs.io/en/stable/interactive/magics.html#cellmagic-javascript)
+            -   2.1 such magic is functional in a custom notebook on the Jupyter server.
+            -   2.2 such magic is blocked by JupyterLab if ran on the documentation page.
+
+        Tentative clues:
+
+        -   2.1 & 2.2 suggests that somehow JupyterLab behaves differently between Binder itself and Juniper.
+        -   Juniper by default [trusts the cells](https://ipython.readthedocs.io/en/stable/interactive/magics.html#cellmagic-javascript).
+        -   making Javascript magic work on this documentation page would be a great step.
+
 <pre data-executable>
-from hover.recipes import simple_annotator
-from bokeh.io import show, output_notebook
-
-# 'handle' is a function that renders elements in bokeh documents
-handle = simple_annotator(dataset)
-
-output_notebook()
-show(handle)
+{!docs/pages/tutorial/py-snippets/t0-3-simple-annotator.txt!}
 </pre><br>
 
-{!docs/pages/tutorial/snippet-juniper.html!}
+{!docs/pages/tutorial/html-snippets/juniper.html!}
