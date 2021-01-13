@@ -451,14 +451,19 @@ import random
 # ---- fake data for illustation ----
 fake_en = Faker("en")
 
+
 def random_text():
     return fake_en.paragraph(3)
+
 
 def random_raw_data():
     return {"content": random_text()}
 
+
 def random_labeled_data():
     return {"content": random_text(), "mark": random.choice(["A", "B"])}
+
+
 # -----------------------------------
 
 dataset = SupervisableTextDataset(
@@ -487,15 +492,16 @@ import re
 
 nlp = spacy.load("en_core_web_md")
 
+
 def vectorizer(text):
     clean_text = re.sub(r"[\s]+", r" ", text)
     return nlp(clean_text, disable=nlp.pipe_names).vector
+
 
 text = dataset.dfs["raw"].loc[0, "text"]
 vec = vectorizer(text)
 print(f"Text: {text}")
 print(f"Vector shape: {vec.shape}")
-
 </pre>
 
 <p><br></p>
@@ -523,11 +529,7 @@ dataset.dfs["raw"].head(5)
 <p><br></p>
 <h2 id="apply-labels"><img alt="✨" class="emojione" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.2.7/assets/png/2728.png" title=":sparkles:" /> <strong>Apply Labels</strong></h2>
 <p>Now we are ready to visualize and annotate!</p>
-<details class="tip" open="open"><summary>Basic tips</summary><p>When the cell below is executed, there should be in the output a visualization with</p>
-<ul>
-<li>a <code>SupervisableDataset</code> board on the left.</li>
-<li>an <code>BokehDataAnnotator</code> on the right.</li>
-</ul>
+<details class="tip" open="open"><summary>Basic tips</summary><p>There should be a <code>SupervisableDataset</code> board on the left and an <code>BokehDataAnnotator</code> on the right.</p>
 <p>The <code>SupervisableDataset</code> comes with a few buttons:</p>
 <ul>
 <li><code>push</code>: push <code>Dataset</code> updates to the bokeh plots.</li>
@@ -551,10 +553,38 @@ dataset.dfs["raw"].head(5)
 </li>
 </ul>
 </details>
-<details class="warning"><summary>Known issue</summary><mark class="critic block">
-<p>If you are running this code block on the documentation page, JupyterLab might fail to load/transmit <a href="https://docs.bokeh.org/en/latest/docs/dev_guide/bokehjs.html">BokehJS</a>, and consequently the visualization might not show up.</p>
-<p>In that event, please run this tutorial locally.</p>
-</mark>
+<details class="warning"><summary>Known issue</summary><p><mark class="critic"> If you are running this code block on this documentation page: </mark></p>
+<ul>
+<li>JavaScript output (which contains the visualization) will fail to render due to JupyterLab's security restrictions.</li>
+<li>please run this tutorial locally to view the output.</li>
+</ul>
+<details class="help"><summary>Advanced: help wanted</summary><p>Some context:</p>
+<ul>
+<li>the code blocks here are embedded using <a href="https://github.com/ines/juniper">Juniper</a>.</li>
+<li>the environment is configured in the <a href="https://github.com/phurwicz/hover-binder">Binder repo</a>.</li>
+</ul>
+<p>What we've tried:</p>
+<ul>
+<li>1 <a href="https://github.com/bokeh/jupyter_bokeh">Bokeh's extension with JupyterLab</a><ul>
+<li>1.1 cannot render the Bokeh plots remotely with <code>show(handle)</code>, with or without the extension<ul>
+<li>1.1.1 JavaScript console suggests that <code>bokeh.main.js</code> would fail to load.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>2 <a href="https://ipython.readthedocs.io/en/stable/interactive/magics.html#cellmagic-javascript">JavaScript magic cell</a><ul>
+<li>2.1 such magic is functional in a custom notebook on the Jupyter server.</li>
+<li>2.2 such magic is blocked by JupyterLab if ran on the documentation page.</li>
+</ul>
+</li>
+</ul>
+<p>Tentative clues:</p>
+<ul>
+<li>2.1 &amp; 2.2 suggests that somehow JupyterLab behaves differently between Binder itself and Juniper.</li>
+<li>Juniper by default <a href="https://ipython.readthedocs.io/en/stable/interactive/magics.html#cellmagic-javascript">trusts the cells</a>.</li>
+<li>making Javascript magic work on this documentation page would be a great step.</li>
+</ul>
+</details>
 </details>
 <pre data-executable>
 from hover.recipes import simple_annotator

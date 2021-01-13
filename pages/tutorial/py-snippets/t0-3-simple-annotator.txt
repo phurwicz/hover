@@ -1,0 +1,8 @@
+from hover.recipes import simple_annotator
+from bokeh.io import show, output_notebook
+
+# 'handle' is a function that renders elements in bokeh documents
+handle = simple_annotator(dataset)
+
+output_notebook()
+show(handle)

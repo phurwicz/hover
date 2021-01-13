@@ -585,9 +585,10 @@
 
       </h2>
 <div class="doc doc-contents ">
-<p>Simple transfer learning model: a user-supplied vectorizer followed by a neural net.</p>
+<details class="info" open="open"><summary>Docstring</summary><p>Simple transfer learning model: a user-supplied vectorizer followed by a neural net.</p>
 <p>This is a parent class whose children may use different training schemes.</p>
 <p>Please refer to hover.utils.torch_helper.VectorDataset and vector_dataloader for more info.</p>
+</details>
 <div class="doc doc-children">
 <div class="doc doc-object doc-method">
 <h3 class="doc doc-heading" id="hover.core.neural.VectorNet.__init__">
@@ -601,21 +602,23 @@ __init__<span class="p">(</span><span class="bp">self</span><span class="p">,</s
 
       </h3>
 <div class="doc doc-contents ">
-<ul>
-<li>param vectorizer(callable): a function that converts any string to a NumPy 1-D array.</li>
-<li>param architecture(class): a <code>torch.nn.Module</code> child class to be instantiated into a neural net.</li>
-<li>param state_dict_path(str): path to a PyTorch state dict that matches the architecture.</li>
-<li>param labels(list of str): the classification labels, e.g. ["POSITIVE", "NEGATIVE"].</li>
+<details class="info" open="open"><summary>Docstring</summary><ul>
+<li>vectorizer(callable): a function that converts any string to a NumPy 1-D array.</li>
+<li>architecture(class): a <code>torch.nn.Module</code> child class to be instantiated into a neural net.</li>
+<li>state_dict_path(str): path to a PyTorch state dict that matches the architecture.</li>
+<li>labels(list of str): the classification labels, e.g. ["POSITIVE", "NEGATIVE"].</li>
 </ul>
+</details>
 <details class="quote">
           <summary>Source code in <code>hover/core/neural.py</code></summary>
           <div class="highlight">
 <pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vectorizer</span><span class="p">,</span> <span class="n">architecture</span><span class="p">,</span> <span class="n">state_dict_path</span><span class="p">,</span> <span class="n">labels</span><span class="p">):</span>
     <span class="sd">"""</span>
-<span class="sd">    - param vectorizer(callable): a function that converts any string to a NumPy 1-D array.</span>
-<span class="sd">    - param architecture(class): a `torch.nn.Module` child class to be instantiated into a neural net.</span>
-<span class="sd">    - param state_dict_path(str): path to a PyTorch state dict that matches the architecture.</span>
-<span class="sd">    - param labels(list of str): the classification labels, e.g. ["POSITIVE", "NEGATIVE"].</span>
+<span class="sd">    ???+ info "Docstring"</span>
+<span class="sd">        - vectorizer(callable): a function that converts any string to a NumPy 1-D array.</span>
+<span class="sd">        - architecture(class): a `torch.nn.Module` child class to be instantiated into a neural net.</span>
+<span class="sd">        - state_dict_path(str): path to a PyTorch state dict that matches the architecture.</span>
+<span class="sd">        - labels(list of str): the classification labels, e.g. ["POSITIVE", "NEGATIVE"].</span>
 <span class="sd">    """</span>
 
     <span class="c1"># set up label conversion</span>
@@ -664,18 +667,20 @@ adjust_optimizer_params<span class="p">(</span><span class="bp">self</span><span
 
       </h3>
 <div class="doc doc-contents ">
-<p>Dynamically change parameters of the neural net optimizer.</p>
+<details class="info" open="open"><summary>Docstring</summary><p>Dynamically change parameters of the neural net optimizer.</p>
 <ul>
 <li>Intended to be polymorphic in child classes and to be called per epoch.</li>
 </ul>
+</details>
 <details class="quote">
           <summary>Source code in <code>hover/core/neural.py</code></summary>
           <div class="highlight">
 <pre><span></span><code><span class="k">def</span> <span class="nf">adjust_optimizer_params</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="sd">"""</span>
-<span class="sd">    Dynamically change parameters of the neural net optimizer.</span>
+<span class="sd">    ???+ info "Docstring"</span>
+<span class="sd">        Dynamically change parameters of the neural net optimizer.</span>
 
-<span class="sd">    - Intended to be polymorphic in child classes and to be called per epoch.</span>
+<span class="sd">        - Intended to be polymorphic in child classes and to be called per epoch.</span>
 <span class="sd">    """</span>
     <span class="k">for</span> <span class="n">_group</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">nn_optimizer</span><span class="o">.</span><span class="n">param_groups</span><span class="p">:</span>
         <span class="n">_group</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dynamic_params</span><span class="p">[</span><span class="s2">"optimizer"</span><span class="p">])</span>
@@ -693,13 +698,15 @@ evaluate<span class="p">(</span><span class="bp">self</span><span class="p">,</s
 
       </h3>
 <div class="doc doc-contents ">
-<p>Evaluate the neural network against a dev set.</p>
+<details class="info" open="open"><summary>Docstring</summary><p>Evaluate the neural network against a dev set.</p>
+</details>
 <details class="quote">
           <summary>Source code in <code>hover/core/neural.py</code></summary>
           <div class="highlight">
 <pre><span></span><code><span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dev_loader</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
     <span class="sd">"""</span>
-<span class="sd">    Evaluate the neural network against a dev set.</span>
+<span class="sd">    ???+ info "Docstring"</span>
+<span class="sd">        Evaluate the neural network against a dev set.</span>
 <span class="sd">    """</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
     <span class="n">true</span> <span class="o">=</span> <span class="p">[]</span>
@@ -745,21 +752,23 @@ from_module<span class="p">(</span><span class="n">model_module</span><span clas
 
       </h3>
 <div class="doc doc-contents ">
-<p>Create a VectorNet model, or of its child class.</p>
+<details class="info" open="open"><summary>Docstring</summary><p>Create a VectorNet model, or of its child class.</p>
 <ul>
-<li>param model_module(module or str): (path to) a local Python module in the working directory whose <strong>init</strong>.py file contains a get_vectorizer() callable, get_architecture() callable, and a get_state_dict_path() callable.</li>
-<li>param labels(list of str): the classification labels, e.g. ["POSITIVE", "NEGATIVE"].</li>
+<li>model_module(module or str): (path to) a local Python module in the working directory whose <strong>init</strong>.py file contains a get_vectorizer() callable, get_architecture() callable, and a get_state_dict_path() callable.</li>
+<li>labels(list of str): the classification labels, e.g. ["POSITIVE", "NEGATIVE"].</li>
 </ul>
+</details>
 <details class="quote">
           <summary>Source code in <code>hover/core/neural.py</code></summary>
           <div class="highlight">
 <pre><span></span><code><span class="nd">@classmethod</span>
 <span class="k">def</span> <span class="nf">from_module</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">model_module</span><span class="p">,</span> <span class="n">labels</span><span class="p">):</span>
     <span class="sd">"""</span>
-<span class="sd">    Create a VectorNet model, or of its child class.</span>
+<span class="sd">    ???+ info "Docstring"</span>
+<span class="sd">        Create a VectorNet model, or of its child class.</span>
 
-<span class="sd">    - param model_module(module or str): (path to) a local Python module in the working directory whose __init__.py file contains a get_vectorizer() callable, get_architecture() callable, and a get_state_dict_path() callable.</span>
-<span class="sd">    - param labels(list of str): the classification labels, e.g. ["POSITIVE", "NEGATIVE"].</span>
+<span class="sd">        - model_module(module or str): (path to) a local Python module in the working directory whose __init__.py file contains a get_vectorizer() callable, get_architecture() callable, and a get_state_dict_path() callable.</span>
+<span class="sd">        - labels(list of str): the classification labels, e.g. ["POSITIVE", "NEGATIVE"].</span>
 <span class="sd">    """</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model_module</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
         <span class="kn">from</span> <span class="nn">importlib</span> <span class="kn">import</span> <span class="n">import_module</span>
@@ -789,7 +798,7 @@ manifold_trajectory<span class="p">(</span><span class="bp">self</span><span cla
 
       </h3>
 <div class="doc doc-contents ">
-<p>TODO: need a clean way to pass kwargs to dimensionality reduction.</p>
+<details class="info" open="open"><summary>Docstring</summary><p>TODO: need a clean way to pass kwargs to dimensionality reduction.</p>
 <ol>
 <li>vectorize inps</li>
 <li>forward propagate, keeping intermediates</li>
@@ -799,23 +808,25 @@ manifold_trajectory<span class="p">(</span><span class="bp">self</span><span cla
 <p>fit shapes to trajectory splines</p>
 </li>
 <li>
-<p>param inps(list): input to calculate the manifold profile from.</p>
+<p>inps(list): input to calculate the manifold profile from.</p>
 </li>
 </ol>
+</details>
 <details class="quote">
           <summary>Source code in <code>hover/core/neural.py</code></summary>
           <div class="highlight">
 <pre><span></span><code><span class="k">def</span> <span class="nf">manifold_trajectory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inps</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">"umap"</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">"""</span>
-<span class="sd">    TODO: need a clean way to pass kwargs to dimensionality reduction.</span>
+<span class="sd">    ???+ info "Docstring"</span>
+<span class="sd">        TODO: need a clean way to pass kwargs to dimensionality reduction.</span>
 
-<span class="sd">    1. vectorize inps</span>
-<span class="sd">    2. forward propagate, keeping intermediates</span>
-<span class="sd">    3. fit intermediates to 2D manifolds</span>
-<span class="sd">    4. fit manifolds using Procrustes shape analysis</span>
-<span class="sd">    5. fit shapes to trajectory splines</span>
+<span class="sd">        1. vectorize inps</span>
+<span class="sd">        2. forward propagate, keeping intermediates</span>
+<span class="sd">        3. fit intermediates to 2D manifolds</span>
+<span class="sd">        4. fit manifolds using Procrustes shape analysis</span>
+<span class="sd">        5. fit shapes to trajectory splines</span>
 
-<span class="sd">    - param inps(list): input to calculate the manifold profile from.</span>
+<span class="sd">        - inps(list): input to calculate the manifold profile from.</span>
 <span class="sd">    """</span>
     <span class="kn">from</span> <span class="nn">hover.core.representation.manifold</span> <span class="kn">import</span> <span class="n">LayerwiseManifold</span>
     <span class="kn">from</span> <span class="nn">hover.core.representation.trajectory</span> <span class="kn">import</span> <span class="n">manifold_spline</span>
@@ -850,13 +861,15 @@ predict_proba<span class="p">(</span><span class="bp">self</span><span class="p"
 
       </h3>
 <div class="doc doc-contents ">
-<p>End-to-end single/multi-piece prediction from inp to class probabilities.</p>
+<details class="info" open="open"><summary>Docstring</summary><p>End-to-end single/multi-piece prediction from inp to class probabilities.</p>
+</details>
 <details class="quote">
           <summary>Source code in <code>hover/core/neural.py</code></summary>
           <div class="highlight">
 <pre><span></span><code><span class="k">def</span> <span class="nf">predict_proba</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inps</span><span class="p">):</span>
     <span class="sd">"""</span>
-<span class="sd">    End-to-end single/multi-piece prediction from inp to class probabilities.</span>
+<span class="sd">    ???+ info "Docstring"</span>
+<span class="sd">        End-to-end single/multi-piece prediction from inp to class probabilities.</span>
 <span class="sd">    """</span>
     <span class="c1"># if the input is a single piece of inp, cast it to a list</span>
     <span class="n">FLAG_SINGLE</span> <span class="o">=</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">inps</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
@@ -888,13 +901,15 @@ save<span class="p">(</span><span class="bp">self</span><span class="p">,</span>
 
       </h3>
 <div class="doc doc-contents ">
-<p>Save the current state dict with authorization to overwrite.</p>
+<details class="info" open="open"><summary>Docstring</summary><p>Save the current state dict with authorization to overwrite.</p>
+</details>
 <details class="quote">
           <summary>Source code in <code>hover/core/neural.py</code></summary>
           <div class="highlight">
 <pre><span></span><code><span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">save_path</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">"""</span>
-<span class="sd">    Save the current state dict with authorization to overwrite.</span>
+<span class="sd">    ???+ info "Docstring"</span>
+<span class="sd">        Save the current state dict with authorization to overwrite.</span>
 <span class="sd">    """</span>
     <span class="k">if</span> <span class="n">save_path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">save_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nn_update_path</span>
@@ -913,20 +928,22 @@ train<span class="p">(</span><span class="bp">self</span><span class="p">,</span
 
       </h3>
 <div class="doc doc-contents ">
-<p>Train the neural network.</p>
+<details class="info" open="open"><summary>Docstring</summary><p>Train the neural network.</p>
 <ul>
 <li>This method is a vanilla template and is intended to be overridden in child classes.</li>
 <li>Also intended to be coupled with self.train_batch().</li>
 </ul>
+</details>
 <details class="quote">
           <summary>Source code in <code>hover/core/neural.py</code></summary>
           <div class="highlight">
 <pre><span></span><code><span class="k">def</span> <span class="nf">train</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">train_loader</span><span class="p">,</span> <span class="n">dev_loader</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
     <span class="sd">"""</span>
-<span class="sd">    Train the neural network.</span>
+<span class="sd">    ???+ info "Docstring"</span>
+<span class="sd">        Train the neural network.</span>
 
-<span class="sd">    - This method is a vanilla template and is intended to be overridden in child classes.</span>
-<span class="sd">    - Also intended to be coupled with self.train_batch().</span>
+<span class="sd">        - This method is a vanilla template and is intended to be overridden in child classes.</span>
+<span class="sd">        - Also intended to be coupled with self.train_batch().</span>
 <span class="sd">    """</span>
     <span class="n">train_info</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">epoch_idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">epochs</span><span class="p">):</span>
@@ -950,13 +967,15 @@ train_batch<span class="p">(</span><span class="bp">self</span><span class="p">,
 
       </h3>
 <div class="doc doc-contents ">
-<p>Train the neural network for one batch.</p>
+<details class="info" open="open"><summary>Docstring</summary><p>Train the neural network for one batch.</p>
+</details>
 <details class="quote">
           <summary>Source code in <code>hover/core/neural.py</code></summary>
           <div class="highlight">
 <pre><span></span><code><span class="k">def</span> <span class="nf">train_batch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">loaded_input</span><span class="p">,</span> <span class="n">loaded_output</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
     <span class="sd">"""</span>
-<span class="sd">    Train the neural network for one batch.</span>
+<span class="sd">    ???+ info "Docstring"</span>
+<span class="sd">        Train the neural network for one batch.</span>
 <span class="sd">    """</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
     <span class="n">input_tensor</span> <span class="o">=</span> <span class="n">loaded_input</span><span class="o">.</span><span class="n">float</span><span class="p">()</span>
@@ -995,18 +1014,20 @@ train_epoch<span class="p">(</span><span class="bp">self</span><span class="p">,
 
       </h3>
 <div class="doc doc-contents ">
-<p>Train the neural network for one epoch.</p>
+<details class="info" open="open"><summary>Docstring</summary><p>Train the neural network for one epoch.</p>
 <ul>
 <li>Supports flexible args and kwargs for child classes that may implement self.train() and self.train_batch() differently.</li>
 </ul>
+</details>
 <details class="quote">
           <summary>Source code in <code>hover/core/neural.py</code></summary>
           <div class="highlight">
 <pre><span></span><code><span class="k">def</span> <span class="nf">train_epoch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">train_loader</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">"""</span>
-<span class="sd">    Train the neural network for one epoch.</span>
+<span class="sd">    ???+ info "Docstring"</span>
+<span class="sd">        Train the neural network for one epoch.</span>
 
-<span class="sd">    - Supports flexible args and kwargs for child classes that may implement self.train() and self.train_batch() differently.</span>
+<span class="sd">        - Supports flexible args and kwargs for child classes that may implement self.train() and self.train_batch() differently.</span>
 <span class="sd">    """</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">adjust_optimizer_params</span><span class="p">()</span>
     <span class="k">for</span> <span class="n">batch_idx</span><span class="p">,</span> <span class="p">(</span><span class="n">loaded_input</span><span class="p">,</span> <span class="n">loaded_output</span><span class="p">,</span> <span class="n">_</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">train_loader</span><span class="p">):</span>
@@ -1029,7 +1050,8 @@ create_vector_net_from_module<span class="p">(</span><span class="n">specific_cl
 
       </h2>
 <div class="doc doc-contents ">
-<p>Deprecated into a trivial invocation of VectorNet's class method.</p>
+<details class="info" open="open"><summary>Docstring</summary><p>Deprecated into a trivial invocation of VectorNet's class method.</p>
+</details>
 <details class="quote">
           <summary>Source code in <code>hover/core/neural.py</code></summary>
           <div class="highlight">
@@ -1039,7 +1061,8 @@ create_vector_net_from_module<span class="p">(</span><span class="n">specific_cl
 <span class="p">)</span>
 <span class="k">def</span> <span class="nf">create_vector_net_from_module</span><span class="p">(</span><span class="n">specific_class</span><span class="p">,</span> <span class="n">model_module_name</span><span class="p">,</span> <span class="n">labels</span><span class="p">):</span>
     <span class="sd">"""</span>
-<span class="sd">    Deprecated into a trivial invocation of VectorNet's class method.</span>
+<span class="sd">    ???+ info "Docstring"</span>
+<span class="sd">        Deprecated into a trivial invocation of VectorNet's class method.</span>
 <span class="sd">    """</span>
     <span class="k">return</span> <span class="n">specific_class</span><span class="o">.</span><span class="n">from_module</span><span class="p">(</span><span class="n">model_module_name</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span>
 </code></pre>

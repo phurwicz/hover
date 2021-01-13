@@ -208,6 +208,11 @@
 <nav aria-label="subroutine" class="md-nav">
 <ul class="md-nav__list">
 <li class="md-nav__item">
+<a class="md-nav__link" href="#hover.recipes.subroutine.get_explorer_class">
+    get_explorer_class()
+  </a>
+</li>
+<li class="md-nav__item">
 <a class="md-nav__link" href="#hover.recipes.subroutine.standard_annotator">
     standard_annotator()
   </a>
@@ -310,6 +315,11 @@
 <nav aria-label="subroutine" class="md-nav">
 <ul class="md-nav__list">
 <li class="md-nav__item">
+<a class="md-nav__link" href="#hover.recipes.subroutine.get_explorer_class">
+    get_explorer_class()
+  </a>
+</li>
+<li class="md-nav__item">
 <a class="md-nav__link" href="#hover.recipes.subroutine.standard_annotator">
     standard_annotator()
   </a>
@@ -350,7 +360,8 @@
 <code>hover.recipes.stable</code>
 </h2>
 <div class="doc doc-contents first">
-<p>Stable recipes whose function signatures should almost never change in the future.</p>
+<details class="info" open="open"><summary>Docstring</summary><p>Stable recipes whose function signatures should almost never change in the future.</p>
+</details>
 <div class="doc doc-children">
 <div class="doc doc-object doc-function">
 <h3 class="doc doc-heading" id="hover.recipes.stable.linked_annotator">
@@ -358,20 +369,22 @@
 linked_annotator<span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">600</span><span class="p">)</span> </code>
 </h3>
 <div class="doc doc-contents">
-<p>Leveraging CorpusFinder which has the best search highlights.</p>
+<details class="info" open="open"><summary>Docstring</summary><p>Leveraging <code>BokehDataFinder</code> which has the best search highlights.</p>
 <p>Layout:</p>
 <p>sidebar | [search here] | [annotate here]</p>
+</details>
 <details class="quote">
 <summary>Source code in <code>hover/recipes/stable.py</code></summary>
 <div class="highlight">
 <pre><span></span><code><span class="nd">@servable</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">"Linked Annotator"</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">linked_annotator</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">600</span><span class="p">):</span>
     <span class="sd">"""</span>
-<span class="sd">    Leveraging CorpusFinder which has the best search highlights.</span>
+<span class="sd">    ???+ info "Docstring"</span>
+<span class="sd">        Leveraging `BokehDataFinder` which has the best search highlights.</span>
 
-<span class="sd">    Layout:</span>
+<span class="sd">        Layout:</span>
 
-<span class="sd">    sidebar | [search here] | [annotate here]</span>
+<span class="sd">        sidebar | [search here] | [annotate here]</span>
 <span class="sd">    """</span>
     <span class="n">finder</span> <span class="o">=</span> <span class="n">standard_finder</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">)</span>
     <span class="n">annotator</span> <span class="o">=</span> <span class="n">standard_annotator</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">)</span>
@@ -394,20 +407,22 @@ linked_annotator<span class="p">(</span><span class="n">dataset</span><span clas
 simple_annotator<span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">600</span><span class="p">)</span> </code>
 </h3>
 <div class="doc doc-contents">
-<p>The most basic recipe, which nonetheless can be useful with decent 2-d embedding.</p>
+<details class="info" open="open"><summary>Docstring</summary><p>The most basic recipe, which nonetheless can be useful with decent 2-d embedding.</p>
 <p>Layout:</p>
 <p>sidebar | [annotate here]</p>
+</details>
 <details class="quote">
 <summary>Source code in <code>hover/recipes/stable.py</code></summary>
 <div class="highlight">
 <pre><span></span><code><span class="nd">@servable</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">"Simple Annotator"</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">simple_annotator</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">600</span><span class="p">):</span>
     <span class="sd">"""</span>
-<span class="sd">    The most basic recipe, which nonetheless can be useful with decent 2-d embedding.</span>
+<span class="sd">    ???+ info "Docstring"</span>
+<span class="sd">        The most basic recipe, which nonetheless can be useful with decent 2-d embedding.</span>
 
-<span class="sd">    Layout:</span>
+<span class="sd">        Layout:</span>
 
-<span class="sd">    sidebar | [annotate here]</span>
+<span class="sd">        sidebar | [annotate here]</span>
 <span class="sd">    """</span>
     <span class="n">annotator</span> <span class="o">=</span> <span class="n">standard_annotator</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">)</span>
 
@@ -432,7 +447,8 @@ simple_annotator<span class="p">(</span><span class="n">dataset</span><span clas
 <code>hover.recipes.experimental</code>
 </h2>
 <div class="doc doc-contents first">
-<p>Experimental recipes whose function signatures might change significantly in the future. Use with caution.</p>
+<details class="info" open="open"><summary>Docstring</summary><p>Experimental recipes whose function signatures might change significantly in the future. Use with caution.</p>
+</details>
 <div class="doc doc-children">
 <div class="doc doc-object doc-function">
 <h3 class="doc doc-heading" id="hover.recipes.experimental.active_learning">
@@ -440,20 +456,22 @@ simple_annotator<span class="p">(</span><span class="n">dataset</span><span clas
 active_learning<span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">vectorizer</span><span class="p">,</span> <span class="n">vecnet_callback</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">600</span><span class="p">)</span> </code>
 </h3>
 <div class="doc doc-contents">
-<p>Place a VectorNet in the loop.</p>
+<details class="info" open="open"><summary>Docstring</summary><p>Place a VectorNet in the loop.</p>
 <p>Layout:</p>
 <p>sidebar | [inspect soft labels here] | [annotate here] | [search here]</p>
+</details>
 <details class="quote">
 <summary>Source code in <code>hover/recipes/experimental.py</code></summary>
 <div class="highlight">
 <pre><span></span><code><span class="nd">@servable</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">"Active Learning"</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">active_learning</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">vectorizer</span><span class="p">,</span> <span class="n">vecnet_callback</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">600</span><span class="p">):</span>
     <span class="sd">"""</span>
-<span class="sd">    Place a VectorNet in the loop.</span>
+<span class="sd">    ???+ info "Docstring"</span>
+<span class="sd">        Place a VectorNet in the loop.</span>
 
-<span class="sd">    Layout:</span>
+<span class="sd">        Layout:</span>
 
-<span class="sd">    sidebar | [inspect soft labels here] | [annotate here] | [search here]</span>
+<span class="sd">        sidebar | [inspect soft labels here] | [annotate here] | [search here]</span>
 <span class="sd">    """</span>
     <span class="c1"># building-block subroutines</span>
     <span class="n">softlabel</span> <span class="o">=</span> <span class="n">standard_softlabel</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">)</span>
@@ -519,20 +537,22 @@ active_learning<span class="p">(</span><span class="n">dataset</span><span class
 snorkel_crosscheck<span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">lf_list</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">600</span><span class="p">)</span> </code>
 </h3>
 <div class="doc doc-contents">
-<p>Use the dev set to check labeling functions; use the labeling functions to hint at potential annotation.</p>
+<details class="info" open="open"><summary>Docstring</summary><p>Use the dev set to check labeling functions; use the labeling functions to hint at potential annotation.</p>
 <p>Layout:</p>
 <p>sidebar | [inspect LFs here] | [annotate here]</p>
+</details>
 <details class="quote">
 <summary>Source code in <code>hover/recipes/experimental.py</code></summary>
 <div class="highlight">
 <pre><span></span><code><span class="nd">@servable</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">"Snorkel Crosscheck"</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">snorkel_crosscheck</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">lf_list</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">600</span><span class="p">):</span>
     <span class="sd">"""</span>
-<span class="sd">    Use the dev set to check labeling functions; use the labeling functions to hint at potential annotation.</span>
+<span class="sd">    ???+ info "Docstring"</span>
+<span class="sd">        Use the dev set to check labeling functions; use the labeling functions to hint at potential annotation.</span>
 
-<span class="sd">    Layout:</span>
+<span class="sd">        Layout:</span>
 
-<span class="sd">    sidebar | [inspect LFs here] | [annotate here]</span>
+<span class="sd">        sidebar | [inspect LFs here] | [annotate here]</span>
 <span class="sd">    """</span>
     <span class="c1"># building-block subroutines</span>
     <span class="n">snorkel</span> <span class="o">=</span> <span class="n">standard_snorkel</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">)</span>
@@ -568,22 +588,49 @@ snorkel_crosscheck<span class="p">(</span><span class="n">dataset</span><span cl
 <code>hover.recipes.subroutine</code>
 </h2>
 <div class="doc doc-contents first">
-<p>Functions commonly used by classes in this submodule.</p>
+<details class="info" open="open"><summary>Docstring</summary><p>Functions commonly used by classes in this submodule.</p>
 <p>Note that functions which are also used outside this submodule should be moved up.</p>
+</details>
 <div class="doc doc-children">
+<div class="doc doc-object doc-function">
+<h3 class="doc doc-heading" id="hover.recipes.subroutine.get_explorer_class">
+<code class="highlight language-python">
+get_explorer_class<span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="n">feature</span><span class="p">)</span> </code>
+</h3>
+<div class="doc doc-contents">
+<details class="info" open="open"><summary>Docstring</summary><p>Get the right explorer class given a task and a feature.</p>
+</details>
+<details class="quote">
+<summary>Source code in <code>hover/recipes/subroutine.py</code></summary>
+<div class="highlight">
+<pre><span></span><code><span class="k">def</span> <span class="nf">get_explorer_class</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="n">feature</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    ???+ info "Docstring"</span>
+<span class="sd">        Get the right explorer class given a task and a feature.</span>
+<span class="sd">    """</span>
+    <span class="k">assert</span> <span class="n">task</span> <span class="ow">in</span> <span class="n">EXPLORER_CATALOG</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"Invalid task: </span><span class="si">{</span><span class="n">task</span><span class="si">}</span><span class="s2">"</span>
+    <span class="k">assert</span> <span class="n">feature</span> <span class="ow">in</span> <span class="n">EXPLORER_CATALOG</span><span class="p">[</span><span class="n">task</span><span class="p">],</span> <span class="sa">f</span><span class="s2">"Invalid feature: </span><span class="si">{</span><span class="n">feature</span><span class="si">}</span><span class="s2">"</span>
+    <span class="k">return</span> <span class="n">EXPLORER_CATALOG</span><span class="p">[</span><span class="n">task</span><span class="p">][</span><span class="n">feature</span><span class="p">]</span>
+</code></pre>
+</div>
+</details>
+</div>
+</div>
 <div class="doc doc-object doc-function">
 <h3 class="doc doc-heading" id="hover.recipes.subroutine.standard_annotator">
 <code class="highlight language-python">
 standard_annotator<span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> </code>
 </h3>
 <div class="doc doc-contents">
-<p>Standard TextAnnotator and its interaction with a dataset.</p>
+<details class="info" open="open"><summary>Docstring</summary><p>Standard DataAnnotator and its interaction with a dataset.</p>
+</details>
 <details class="quote">
 <summary>Source code in <code>hover/recipes/subroutine.py</code></summary>
 <div class="highlight">
 <pre><span></span><code><span class="k">def</span> <span class="nf">standard_annotator</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">"""</span>
-<span class="sd">    Standard TextAnnotator and its interaction with a dataset.</span>
+<span class="sd">    ???+ info "Docstring"</span>
+<span class="sd">        Standard DataAnnotator and its interaction with a dataset.</span>
 <span class="sd">    """</span>
     <span class="c1"># auto-detect the (main) feature to use</span>
     <span class="n">feature</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">FEATURE_KEY</span>
@@ -616,13 +663,15 @@ standard_annotator<span class="p">(</span><span class="n">dataset</span><span cl
 standard_finder<span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> </code>
 </h3>
 <div class="doc doc-contents">
-<p>Standard TextFinder and its interaction with a dataset.</p>
+<details class="info" open="open"><summary>Docstring</summary><p>Standard DataFinder and its interaction with a dataset.</p>
+</details>
 <details class="quote">
 <summary>Source code in <code>hover/recipes/subroutine.py</code></summary>
 <div class="highlight">
 <pre><span></span><code><span class="k">def</span> <span class="nf">standard_finder</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">"""</span>
-<span class="sd">    Standard TextFinder and its interaction with a dataset.</span>
+<span class="sd">    ???+ info "Docstring"</span>
+<span class="sd">        Standard DataFinder and its interaction with a dataset.</span>
 <span class="sd">    """</span>
     <span class="c1"># auto-detect the (main) feature to use</span>
     <span class="n">feature</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">FEATURE_KEY</span>
@@ -633,7 +682,7 @@ standard_finder<span class="p">(</span><span class="n">dataset</span><span class
     <span class="n">finder</span> <span class="o">=</span> <span class="n">explorer_cls</span><span class="o">.</span><span class="n">from_dataset</span><span class="p">(</span>
         <span class="n">dataset</span><span class="p">,</span>
         <span class="p">{</span><span class="n">_k</span><span class="p">:</span> <span class="n">_k</span> <span class="k">for</span> <span class="n">_k</span> <span class="ow">in</span> <span class="n">subsets</span><span class="p">},</span>
-        <span class="n">title</span><span class="o">=</span><span class="s2">"Text: use the search widget for highlights"</span><span class="p">,</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">"Finder: use the search widget for highlights"</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">finder</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
@@ -652,13 +701,15 @@ standard_finder<span class="p">(</span><span class="n">dataset</span><span class
 standard_snorkel<span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> </code>
 </h3>
 <div class="doc doc-contents">
-<p>Standard SnorkelExplorer and its interaction with a dataset.</p>
+<details class="info" open="open"><summary>Docstring</summary><p>Standard SnorkelExplorer and its interaction with a dataset.</p>
+</details>
 <details class="quote">
 <summary>Source code in <code>hover/recipes/subroutine.py</code></summary>
 <div class="highlight">
 <pre><span></span><code><span class="k">def</span> <span class="nf">standard_snorkel</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">"""</span>
-<span class="sd">    Standard SnorkelExplorer and its interaction with a dataset.</span>
+<span class="sd">    ???+ info "Docstring"</span>
+<span class="sd">        Standard SnorkelExplorer and its interaction with a dataset.</span>
 <span class="sd">    """</span>
     <span class="c1"># auto-detect the (main) feature to use</span>
     <span class="n">feature</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">FEATURE_KEY</span>
@@ -687,13 +738,15 @@ standard_snorkel<span class="p">(</span><span class="n">dataset</span><span clas
 standard_softlabel<span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> </code>
 </h3>
 <div class="doc doc-contents">
-<p>Standard SoftLabelExplorer and its interaction with a dataset.</p>
+<details class="info" open="open"><summary>Docstring</summary><p>Standard SoftLabelExplorer and its interaction with a dataset.</p>
+</details>
 <details class="quote">
 <summary>Source code in <code>hover/recipes/subroutine.py</code></summary>
 <div class="highlight">
 <pre><span></span><code><span class="k">def</span> <span class="nf">standard_softlabel</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">"""</span>
-<span class="sd">    Standard SoftLabelExplorer and its interaction with a dataset.</span>
+<span class="sd">    ???+ info "Docstring"</span>
+<span class="sd">        Standard SoftLabelExplorer and its interaction with a dataset.</span>
 <span class="sd">    """</span>
     <span class="c1"># auto-detect the (main) feature to use</span>
     <span class="n">feature</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">FEATURE_KEY</span>
@@ -706,7 +759,7 @@ standard_softlabel<span class="p">(</span><span class="n">dataset</span><span cl
         <span class="p">{</span><span class="n">_k</span><span class="p">:</span> <span class="n">_k</span> <span class="k">for</span> <span class="n">_k</span> <span class="ow">in</span> <span class="n">subsets</span><span class="p">},</span>
         <span class="s2">"pred_label"</span><span class="p">,</span>
         <span class="s2">"pred_score"</span><span class="p">,</span>
-        <span class="n">title</span><span class="o">=</span><span class="s2">"Prediction Visualizer: retrain model and locate confusions"</span><span class="p">,</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">"SoftLabel: inspect predictions and scores"</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">softlabel</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>

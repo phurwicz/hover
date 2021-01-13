@@ -1,0 +1,36 @@
+from hover.core.dataset import SupervisableTextDataset
+from faker import Faker
+import random
+
+# ---- fake data for illustation ----
+fake_en = Faker("en")
+
+
+def random_text():
+    return fake_en.paragraph(3)
+
+
+def random_raw_data():
+    return {"content": random_text()}
+
+
+def random_labeled_data():
+    return {"content": random_text(), "mark": random.choice(["A", "B"])}
+
+
+# -----------------------------------
+
+dataset = SupervisableTextDataset(
+    # raw data which do not have labels
+    raw_dictl=[random_raw_data() for i in range(500)],
+    # train / dev / test sets are optional
+    train_dictl=[],
+    dev_dictl=[random_labeled_data() for i in range(50)],
+    test_dictl=[random_labeled_data() for i in range(50)],
+    # adjust feature_key and label_key to your data
+    feature_key="content",
+    label_key="mark",
+)
+
+# each subset is stored in its own DataFrame
+dataset.dfs["raw"].head(5)
