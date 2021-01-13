@@ -1,4 +1,7 @@
-"""Intermediate classes based on the functionality."""
+"""
+???+ info "Docstring"
+    Intermediate classes based on the functionality.
+"""
 import numpy as np
 from bokeh.models import CDSView, IndexFilter
 from bokeh.palettes import Category20
@@ -11,11 +14,12 @@ from .base import BokehBaseExplorer
 
 class BokehDataFinder(BokehBaseExplorer):
     """
-    Plot data points in grey ('gainsboro') and highlight search positives in coral.
+    ???+ info "Docstring"
+        Plot data points in grey ('gainsboro') and highlight search positives in coral.
 
-    Features:
+        Features:
 
-    - the search widgets will highlight the results through a change of color, which is arguably the best visual effect.
+        - the search widgets will highlight the results through a change of color, which is arguably the best visual effect.
     """
 
     SUBSET_GLYPH_KWARGS = {
@@ -31,7 +35,10 @@ class BokehDataFinder(BokehBaseExplorer):
     }
 
     def plot(self, *args, **kwargs):
-        """Plot the data map."""
+        """
+        ???+ info "Docstring"
+            Plot the data map.
+        """
         for _key, _source in self.sources.items():
             self.figure.circle(
                 "x", "y", name=_key, source=_source, **self.glyph_kwargs[_key]
@@ -41,12 +48,13 @@ class BokehDataFinder(BokehBaseExplorer):
 
 class BokehDataAnnotator(BokehBaseExplorer):
     """
-    Annoate data points via callbacks.
+    ???+ info "Docstring"
+        Annoate data points via callbacks.
 
-    Features:
+        Features:
 
-    - alter values in the 'label' column through the widgets.
-    - **SERVER ONLY**: only works in a setting that allows Python callbacks.
+        - alter values in the 'label' column through the widgets.
+        - **SERVER ONLY**: only works in a setting that allows Python callbacks.
     """
 
     SUBSET_GLYPH_KWARGS = {
@@ -62,7 +70,8 @@ class BokehDataAnnotator(BokehBaseExplorer):
 
     def _setup_widgets(self):
         """
-        Create annotator widgets and assign Python callbacks.
+        ???+ info "Docstring"
+            Create annotator widgets and assign Python callbacks.
         """
         from bokeh.models import TextInput, Button, Dropdown
 
@@ -153,10 +162,11 @@ class BokehDataAnnotator(BokehBaseExplorer):
     @BokehBaseExplorer.auto_legend
     def plot(self):
         """
-        Re-plot with the new labels.
+        ???+ info "Docstring"
+            Re-plot with the new labels.
 
-        Overrides the parent method.
-        Determines the label->color mapping dynamically.
+            Overrides the parent method.
+            Determines the label->color mapping dynamically.
         """
         labels, palette = self.auto_labels_palette()
 
@@ -175,13 +185,14 @@ class BokehDataAnnotator(BokehBaseExplorer):
 
 class BokehSoftLabelExplorer(BokehBaseExplorer):
     """
-    Plot data points according to their labels and confidence scores.
+    ???+ info "Docstring"
+        Plot data points according to their labels and confidence scores.
 
-    Features:
+        Features:
 
-    - the predicted label will correspond to fill_color.
-    - the confidence score, assumed to be a float between 0.0 and 1.0, will be reflected through fill_alpha.
-    - currently not considering multi-label scenarios.
+        - the predicted label will correspond to fill_color.
+        - the confidence score, assumed to be a float between 0.0 and 1.0, will be reflected through fill_alpha.
+        - currently not considering multi-label scenarios.
     """
 
     SUBSET_GLYPH_KWARGS = {
@@ -191,10 +202,11 @@ class BokehSoftLabelExplorer(BokehBaseExplorer):
 
     def __init__(self, df_dict, label_col, score_col, **kwargs):
         """
-        On top of the requirements of the parent class,
-        the input dataframe should contain:
+        ???+ info "Docstring"
+            On top of the requirements of the parent class,
+            the input dataframe should contain:
 
-        (1) label_col and score_col for "soft predictions".
+            (1) label_col and score_col for "soft predictions".
         """
         assert label_col != "label", "'label' field is reserved"
         self.label_col = label_col
@@ -202,14 +214,20 @@ class BokehSoftLabelExplorer(BokehBaseExplorer):
         super().__init__(df_dict, **kwargs)
 
     def _build_tooltip(self):
-        """Extending from the parent method."""
+        """
+        ???+ info "Docstring"
+            On top of the parent method, add two fields to the tooltip.
+        """
         return bokeh_hover_tooltip(
             **self.__class__.TOOLTIP_KWARGS,
             custom={"Soft Label": self.label_col, "Soft Score": self.score_col},
         )
 
     def _setup_dfs(self, df_dict, **kwargs):
-        """Extending from the parent method."""
+        """
+        ???+ info "Docstring"
+            On top of the parent method, add fillers to required columns.
+        """
         super()._setup_dfs(df_dict, **kwargs)
 
         for _key, _df in self.dfs.items():
@@ -221,7 +239,8 @@ class BokehSoftLabelExplorer(BokehBaseExplorer):
     @BokehBaseExplorer.auto_legend
     def plot(self, **kwargs):
         """
-        Plot the confidence map.
+        ???+ info "Docstring"
+            Plot the confidence map.
         """
         labels, palette = self.auto_labels_palette()
 
@@ -242,13 +261,14 @@ class BokehSoftLabelExplorer(BokehBaseExplorer):
 
 class BokehMarginExplorer(BokehBaseExplorer):
     """
-    Plot data points along with two versions of labels.
-    Could be useful for A/B tests.
+    ???+ info "Docstring"
+        Plot data points along with two versions of labels.
+        Could be useful for A/B tests.
 
-    Features:
+        Features:
 
-    - can choose to only plot the margins about specific labels.
-    - currently not considering multi-label scenarios.
+        - can choose to only plot the margins about specific labels.
+        - currently not considering multi-label scenarios.
     """
 
     SUBSET_GLYPH_KWARGS = {
@@ -261,17 +281,21 @@ class BokehMarginExplorer(BokehBaseExplorer):
 
     def __init__(self, df_dict, label_col_a, label_col_b, **kwargs):
         """
-        On top of the requirements of the parent class,
-        the input dataframe should contain:
+        ???+ info "Docstring"
+            On top of the requirements of the parent class,
+            the input dataframe should contain:
 
-        (1) label_col_a and label_col_b for "label margins".
+            (1) label_col_a and label_col_b for "label margins".
         """
         self.label_col_a = label_col_a
         self.label_col_b = label_col_b
         super().__init__(df_dict, **kwargs)
 
     def _setup_dfs(self, df_dict, **kwargs):
-        """Extending from the parent method."""
+        """
+        ???+ info "Docstring"
+            On top of the parent method, add column checks.
+        """
         super()._setup_dfs(df_dict, **kwargs)
 
         for _key, _df in self.dfs.items():
@@ -282,7 +306,8 @@ class BokehMarginExplorer(BokehBaseExplorer):
 
     def plot(self, label, **kwargs):
         """
-        Plot the margins about a single label.
+        ???+ info "Docstring"
+            Plot the margins about a single label.
         """
 
         for _key, _source in self.sources.items():
@@ -321,16 +346,17 @@ class BokehMarginExplorer(BokehBaseExplorer):
 
 class BokehSnorkelExplorer(BokehBaseExplorer):
     """
-    Plot data points along with labeling function (LF) outputs.
+    ???+ info "Docstring"
+        Plot data points along with labeling function (LF) outputs.
 
-    Features:
+        Features:
 
-    - each labeling function corresponds to its own line_color.
-    - uses a different marker for each type of predictions: square for 'correct', x for 'incorrect', cross for 'missed', circle for 'hit'.
-      - 'correct': the LF made a correct prediction on a point in the 'labeled' set.
-      - 'incorrect': the LF made an incorrect prediction on a point in the 'labeled' set.
-      - 'missed': the LF is capable of predicting the target class, but did not make such prediction on the particular point.
-      - 'hit': the LF made a prediction on a point in the 'raw' set.
+        - each labeling function corresponds to its own line_color.
+        - uses a different marker for each type of predictions: square for 'correct', x for 'incorrect', cross for 'missed', circle for 'hit'.
+          - 'correct': the LF made a correct prediction on a point in the 'labeled' set.
+          - 'incorrect': the LF made an incorrect prediction on a point in the 'labeled' set.
+          - 'missed': the LF is capable of predicting the target class, but did not make such prediction on the particular point.
+          - 'hit': the LF made a prediction on a point in the 'raw' set.
     """
 
     SUBSET_GLYPH_KWARGS = {
@@ -349,10 +375,11 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
 
     def __init__(self, df_dict, **kwargs):
         """
-        On top of the requirements of the parent class,
-        the df_labeled input dataframe should contain:
+        ???+ info "Docstring"
+            On top of the requirements of the parent class,
+            the df_labeled input dataframe should contain:
 
-        (1) a "label" column for "ground truths".
+            (1) a "label" column for "ground truths".
         """
         super().__init__(df_dict, **kwargs)
 
@@ -362,9 +389,10 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
 
     def plot(self, *args, **kwargs):
         """
-        Overriding the parent method.
+        ???+ info "Docstring"
+            Overriding the parent method.
 
-        Plot only the raw subset.
+            Plot only the raw subset.
         """
         self.figure.circle(
             "x", "y", name="raw", source=self.sources["raw"], **self.glyph_kwargs["raw"]
@@ -375,12 +403,13 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
         self, lf, L_raw=None, L_labeled=None, include=("C", "I", "M"), **kwargs
     ):
         """
-        Plot a single labeling function.
+        ???+ info "Docstring"
+            Plot a single labeling function.
 
-        - param lf: labeling function decorated by @hover.utils.snorkel_helper.labeling_function()
-        - param L_raw: labeling function predictions, in decoded labels, on the raw df.
-        - param L_labeled: labeling function predictions, in decoded labels, on the labeled df.
-        - param include: subsets to show, which can be correct(C)/incorrect(I)/missed(M)/hit(H).
+            - lf: labeling function decorated by `@labeling_function()` from `hover.utils.snorkel_helper`
+            - L_raw: labeling function predictions, in decoded labels, on the raw df.
+            - L_labeled: labeling function predictions, in decoded labels, on the labeled df.
+            - include: subsets to show, which can be correct(C)/incorrect(I)/missed(M)/hit(H).
         """
         # keep track of added LF
         self.lfs.append(lf)
@@ -454,7 +483,8 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
 
     def _view_correct(self, L_labeled):
         """
-        Determine the subset correctly labeled by a labeling function.
+        ???+ info "Docstring"
+            Determine the subset correctly labeled by a labeling function.
         """
         agreed = self.dfs["labeled"]["label"].values == L_labeled
         attempted = L_labeled != module_config.ABSTAIN_DECODED
@@ -464,7 +494,8 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
 
     def _view_incorrect(self, L_labeled):
         """
-        Determine the subset incorrectly labeled by a labeling function.
+        ???+ info "Docstring"
+            Determine the subset incorrectly labeled by a labeling function.
         """
         disagreed = self.dfs["labeled"]["label"].values != L_labeled
         attempted = L_labeled != module_config.ABSTAIN_DECODED
@@ -474,7 +505,8 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
 
     def _view_missed(self, L_labeled, targets):
         """
-        Determine the subset missed by a labeling function.
+        ???+ info "Docstring"
+            Determine the subset missed by a labeling function.
         """
         targetable = np.isin(self.dfs["labeled"]["label"], targets)
         abstained = L_labeled == module_config.ABSTAIN_DECODED
@@ -484,7 +516,8 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
 
     def _view_hit(self, L_raw):
         """
-        Determine the subset hit by a labeling function.
+        ???+ info "Docstring"
+            Determine the subset hit by a labeling function.
         """
         indices = np.where(L_raw != module_config.ABSTAIN_DECODED)[0].tolist()
         view = CDSView(source=self.sources["raw"], filters=[IndexFilter(indices)])

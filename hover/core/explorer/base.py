@@ -1,4 +1,7 @@
-"""Base class(es) for ALL explorer implementations."""
+"""
+???+ info "Docstring"
+    Base class(es) for ALL explorer implementations.
+"""
 from abc import ABC, abstractmethod
 from bokeh.plotting import figure
 from bokeh.models import ColumnDataSource
@@ -25,19 +28,20 @@ STANDARD_PLOT_TOOLS = [
 
 class BokehBaseExplorer(Loggable, ABC):
     """
-    Base class for exploring data.
+    ???+ info "Docstring"
+        Base class for exploring data.
 
-    Assumes:
+        Assumes:
 
-    - in supplied dataframes
-      - (always) xy coordinates in `x` and `y` columns;
-      - (always) an index for the rows;
-      - (always) classification label (or ABSTAIN) in a `label` column.
+        - in supplied dataframes
+          - (always) xy coordinates in `x` and `y` columns;
+          - (always) an index for the rows;
+          - (always) classification label (or ABSTAIN) in a `label` column.
 
-    Does not assume:
+        Does not assume:
 
-    - a specific form of data;
-    - what the map serves to do.
+        - a specific form of data;
+        - what the map serves to do.
     """
 
     SUBSET_GLYPH_KWARGS = {}
@@ -47,14 +51,15 @@ class BokehBaseExplorer(Loggable, ABC):
 
     def __init__(self, df_dict, **kwargs):
         """
-        Operations shared by all child classes.
+        ???+ info "Docstring"
+            Operations shared by all child classes.
 
-        - settle the figure settings by using child class defaults & kwargs overrides
-        - settle the glyph settings by using child class defaults
-        - create widgets that child classes can override
-        - create data sources the correspond to class-specific data subsets.
-        - activate builtin search callbacks depending on the child class.
-        - create a (typically) blank figure under such settings
+            - settle the figure settings by using child class defaults & kwargs overrides
+            - settle the glyph settings by using child class defaults
+            - create widgets that child classes can override
+            - create data sources the correspond to class-specific data subsets.
+            - activate builtin search callbacks depending on the child class.
+            - create a (typically) blank figure under such settings
         """
         self.figure_kwargs = {
             "tools": STANDARD_PLOT_TOOLS,
@@ -76,7 +81,8 @@ class BokehBaseExplorer(Loggable, ABC):
     @classmethod
     def from_dataset(cls, dataset, subset_mapping, *args, **kwargs):
         """
-        Construct from a SupervisableDataset.
+        ???+ info "Docstring"
+            Construct from a SupervisableDataset.
         """
         # local import to avoid import cycles
         from hover.core.dataset import SupervisableDataset
@@ -86,25 +92,30 @@ class BokehBaseExplorer(Loggable, ABC):
         return cls(df_dict, *args, **kwargs)
 
     def view(self):
-        """Define the layout of the whole explorer."""
+        """
+        ???+ info "Docstring"
+            Define the layout of the whole explorer.
+        """
         from bokeh.layouts import column
 
         return column(self._layout_widgets(), self.figure)
 
     def _build_tooltip(self):
         """
-        Define a windowed tooltip which shows inspection details.
+        ???+ info "Docstring"
+            Define a windowed tooltip which shows inspection details.
 
-        Note that this is a method rather than a class attribute because
-        child classes may involve instance attributes in the tooltip.
+            Note that this is a method rather than a class attribute because
+            child classes may involve instance attributes in the tooltip.
         """
         return bokeh_hover_tooltip(**self.__class__.TOOLTIP_KWARGS)
 
     def _setup_widgets(self):
         """
-        Prepare widgets for interactive functionality.
+        ???+ info "Docstring"
+            Prepare widgets for interactive functionality.
 
-        Create positive/negative text search boxes.
+            Create positive/negative text search boxes.
         """
         self._info("Setting up widgets")
         self._setup_search_highlight()
@@ -112,17 +123,24 @@ class BokehBaseExplorer(Loggable, ABC):
 
     @abstractmethod
     def _layout_widgets(self):
-        """Define the layout of widgets."""
+        """
+        ???+ info "Docstring"
+            Define the layout of widgets.
+        """
         pass
 
     @abstractmethod
     def _setup_search_highlight(self):
-        """Left to child classes that have a specific data format."""
+        """
+        ???+ info "Docstring"
+            Left to child classes that have a specific data format.
+        """
         pass
 
     def _setup_subset_toggle(self):
         """
-        Widgets for toggling which data subsets to show.
+        ???+ info "Docstring"
+            Widgets for toggling which data subsets to show.
         """
         from bokeh.models import CheckboxButtonGroup
 
@@ -146,9 +164,10 @@ class BokehBaseExplorer(Loggable, ABC):
 
     def _setup_dfs(self, df_dict, copy=False):
         """
-        Check and store DataFrames BY REFERENCE BY DEFAULT.
+        ???+ info "Docstring"
+            Check and store DataFrames BY REFERENCE BY DEFAULT.
 
-        Intended to be extended in child classes for pre/post processing.
+            Intended to be extended in child classes for pre/post processing.
         """
         self._info("Setting up DataFrames")
         supplied_keys = set(df_dict.keys())
@@ -183,19 +202,21 @@ class BokehBaseExplorer(Loggable, ABC):
 
     def _setup_sources(self):
         """
-        Create (NOT UPDATE) ColumnDataSource objects.
+        ???+ info "Docstring"
+            Create (NOT UPDATE) ColumnDataSource objects.
 
-        Intended to be extended in child classes for pre/post processing.
+            Intended to be extended in child classes for pre/post processing.
         """
         self._info("Setting up sources")
         self.sources = {_key: ColumnDataSource(_df) for _key, _df in self.dfs.items()}
 
     def _update_sources(self):
         """
-        Update the sources with the corresponding dfs.
+        ???+ info "Docstring"
+            Update the sources with the corresponding dfs.
 
-        Note that it seems mandatory to re-activate the search widgets.
-        This is because the source loses plotting kwargs.
+            Note that it seems mandatory to re-activate the search widgets.
+            This is because the source loses plotting kwargs.
         """
         for _key in self.dfs.keys():
             self.sources[_key].data = self.dfs[_key]
@@ -203,10 +224,11 @@ class BokehBaseExplorer(Loggable, ABC):
 
     def _activate_search_builtin(self, verbose=True):
         """
-        Assign Highlighting callbacks to search results in a manner built into the class.
-        Typically called once during initialization.
+        ???+ info "Docstring"
+            Assign Highlighting callbacks to search results in a manner built into the class.
+            Typically called once during initialization.
 
-        Note that this is a template method which heavily depends on class attributes.
+            Note that this is a template method which heavily depends on class attributes.
         """
         for _key, _dict in self.__class__.SUBSET_GLYPH_KWARGS.items():
             if _key in self.sources.keys():
@@ -224,19 +246,24 @@ class BokehBaseExplorer(Loggable, ABC):
 
     @abstractmethod
     def activate_search(self, source, kwargs, altered_param=("size", 10, 5, 7)):
-        """Left to child classes that have a specific data format."""
+        """
+        ???+ info "Docstring"
+            Left to child classes that have a specific data format.
+        """
         pass
 
     def _prelink_check(self, other):
         """
-        Sanity check before linking two explorers.
+        ???+ info "Docstring"
+            Sanity check before linking two explorers.
         """
         assert other is not self, "Self-loops are fordidden"
         assert isinstance(other, BokehBaseExplorer), "Must link to BokehBaseExplorer"
 
     def link_selection(self, key, other, other_key):
         """
-        Sync the selected indices between specified sources.
+        ???+ info "Docstring"
+            Sync the selected indices between specified sources.
         """
         self._prelink_check(other)
         # link selection in a bidirectional manner
@@ -246,7 +273,8 @@ class BokehBaseExplorer(Loggable, ABC):
 
     def link_xy_range(self, other):
         """
-        Sync plotting ranges on the xy-plane.
+        ???+ info "Docstring"
+            Sync plotting ranges on the xy-plane.
         """
         self._prelink_check(other)
         # link coordinate ranges in a bidirectional manner
@@ -259,13 +287,15 @@ class BokehBaseExplorer(Loggable, ABC):
     @abstractmethod
     def plot(self, *args, **kwargs):
         """
-        Plot something onto the figure.
+        ???+ info "Docstring"
+            Plot something onto the figure.
         """
         pass
 
     def auto_labels_palette(self):
         """
-        Find all labels and an appropriate color map.
+        ???+ info "Docstring"
+            Find all labels and an appropriate color map.
         """
         labels = set()
         for _key in self.dfs.keys():
@@ -279,9 +309,10 @@ class BokehBaseExplorer(Loggable, ABC):
 
     def auto_legend_correction(self):
         """
-        Find legend items and deduplicate by label, keeping the last glyph / legend item of each label.
+        ???+ info "Docstring"
+            Find legend items and deduplicate by label, keeping the last glyph / legend item of each label.
 
-        This is to resolve duplicate legend items due to automatic legend_group and incremental plotting.
+            This is to resolve duplicate legend items due to automatic legend_group and incremental plotting.
         """
         from collections import OrderedDict
 
@@ -315,7 +346,8 @@ class BokehBaseExplorer(Loggable, ABC):
     @staticmethod
     def auto_legend(method):
         """
-        Decorator that enforces the legend after each call of the decorated method.
+        ???+ info "Docstring"
+            Decorator that enforces the legend after each call of the decorated method.
         """
         from functools import wraps
 

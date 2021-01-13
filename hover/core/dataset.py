@@ -1,6 +1,7 @@
 """
-Dataset objects which extend beyond DataFrames.
-Specifically, we need a collection of DataFrames where rows can be transferred cleanly and columns can be transformed easily.
+???+ info "Docstring"
+    Dataset objects which extend beyond DataFrames.
+    Specifically, we need a collection of DataFrames where rows can be transferred cleanly and columns can be transformed easily.
 """
 import pandas as pd
 import numpy as np

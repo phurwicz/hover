@@ -1,5 +1,6 @@
 """
-Experimental recipes whose function signatures might change significantly in the future. Use with caution.
+???+ info "Docstring"
+    Experimental recipes whose function signatures might change significantly in the future. Use with caution.
 """
 from bokeh.layouts import row, column
 from bokeh.models import Button, Slider
@@ -17,11 +18,12 @@ import pandas as pd
 @servable(title="Snorkel Crosscheck")
 def snorkel_crosscheck(dataset, lf_list, height=600, width=600):
     """
-    Use the dev set to check labeling functions; use the labeling functions to hint at potential annotation.
+    ???+ info "Docstring"
+        Use the dev set to check labeling functions; use the labeling functions to hint at potential annotation.
 
-    Layout:
+        Layout:
 
-    sidebar | [inspect LFs here] | [annotate here]
+        sidebar | [inspect LFs here] | [annotate here]
     """
     # building-block subroutines
     snorkel = standard_snorkel(dataset, height=height, width=width)
@@ -44,11 +46,12 @@ def snorkel_crosscheck(dataset, lf_list, height=600, width=600):
 @servable(title="Active Learning")
 def active_learning(dataset, vectorizer, vecnet_callback, height=600, width=600):
     """
-    Place a VectorNet in the loop.
+    ???+ info "Docstring"
+        Place a VectorNet in the loop.
 
-    Layout:
+        Layout:
 
-    sidebar | [inspect soft labels here] | [annotate here] | [search here]
+        sidebar | [inspect soft labels here] | [annotate here] | [search here]
     """
     # building-block subroutines
     softlabel = standard_softlabel(dataset, height=height, width=width)

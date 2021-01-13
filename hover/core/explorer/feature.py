@@ -1,25 +1,32 @@
-"""Intermediate classes based on the main feature."""
+"""
+???+ info "Docstring"
+    Intermediate classes based on the main feature.
+"""
 from bokeh.models import CustomJS, ColumnDataSource
 from .base import BokehBaseExplorer
 
 
 class BokehForText(BokehBaseExplorer):
     """
-    Assumes on top of its parent class:
+    ???+ info "Docstring"
+        Assumes on top of its parent class:
 
-    - in supplied dataframes
-      - (always) text data in a `text` column
+        - in supplied dataframes
+          - (always) text data in a `text` column
 
-    Does not assume:
+        Does not assume:
 
-    - what the explorer serves to do.
+        - what the explorer serves to do.
     """
 
     MANDATORY_COLUMNS = ["text", "label", "x", "y"]
     TOOLTIP_KWARGS = {"label": True, "text": True, "coords": True, "index": True}
 
     def _setup_search_highlight(self):
-        """Create positive/negative text search boxes."""
+        """
+        ???+ info "Docstring"
+            Create positive/negative text search boxes.
+        """
         from bokeh.models import TextInput
 
         self.search_pos = TextInput(
@@ -32,17 +39,21 @@ class BokehForText(BokehBaseExplorer):
         )
 
     def _layout_widgets(self):
-        """Define the layout of widgets."""
+        """
+        ???+ info "Docstring"
+            Define the layout of widgets.
+        """
         from bokeh.layouts import column
 
         return column(self.search_pos, self.search_neg, self.data_key_button_group)
 
     def activate_search(self, source, kwargs, altered_param=("size", 10, 5, 7)):
         """
-        Enables string/regex search-and-highlight mechanism.
+        ???+ info "Docstring"
+            Enables string/regex search-and-highlight mechanism.
 
-        Modifies the plotting source in-place.
-        Using a JS callback (instead of Python) so that it also works in standalone HTML.
+            Modifies the plotting source in-place.
+            Using a JS callback (instead of Python) so that it also works in standalone HTML.
         """
         assert isinstance(source, ColumnDataSource)
         assert isinstance(kwargs, dict)
@@ -125,21 +136,25 @@ class BokehForText(BokehBaseExplorer):
 
 class BokehForAudio(BokehBaseExplorer):
     """
-    Assumes on top of its parent class:
+    ???+ info "Docstring"
+        Assumes on top of its parent class:
 
-    - in supplied dataframes
-      - (always) audio urls in an `audio` column
+        - in supplied dataframes
+          - (always) audio urls in an `audio` column
 
-    Does not assume:
+        Does not assume:
 
-    - what the explorer serves to do.
+        - what the explorer serves to do.
     """
 
     MANDATORY_COLUMNS = ["audio", "label", "x", "y"]
     TOOLTIP_KWARGS = {"label": True, "audio": True, "coords": True, "index": True}
 
     def _setup_search_highlight(self):
-        """Trivial implementation until we decide how to search audios."""
+        """
+        ???+ info "Docstring"
+            Trivial implementation until we decide how to search audios.
+        """
         self._warn("no search highlight available.")
 
     def _layout_widgets(self):
@@ -148,21 +163,27 @@ class BokehForAudio(BokehBaseExplorer):
         return self.data_key_button_group
 
     def activate_search(self, source, kwargs, altered_param=("size", 10, 5, 7)):
-        """Trivial implementation until we decide how to search audios."""
+        """
+        ???+ help "Help wanted"
+            Trivial implementation until we figure out how to search audios.
+
+            [Create an issue](https://github.com/phurwicz/hover/issues/new) if you have an idea :)
+        """
         self._warn("no search highlight available.")
         return kwargs
 
 
 class BokehForImage(BokehBaseExplorer):
     """
-    Assumes on top of its parent class:
+    ???+ info "Docstring"
+        Assumes on top of its parent class:
 
-    - in supplied dataframes
-      - (always) image urls in an `image` column
+        - in supplied dataframes
+          - (always) image urls in an `image` column
 
-    Does not assume:
+        Does not assume:
 
-    - what the explorer serves to do.
+        - what the explorer serves to do.
     """
 
     MANDATORY_COLUMNS = ["image", "label", "x", "y"]
@@ -178,6 +199,11 @@ class BokehForImage(BokehBaseExplorer):
         return self.data_key_button_group
 
     def activate_search(self, source, kwargs, altered_param=("size", 10, 5, 7)):
-        """Trivial implementation until we decide how to search images."""
+        """
+        ???+ help "Help wanted"
+            Trivial implementation until we figure out how to search images.
+
+            [Create an issue](https://github.com/phurwicz/hover/issues/new) if you have an idea :)
+        """
         self._warn("no search highlight available.")
         return kwargs

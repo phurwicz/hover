@@ -1,5 +1,6 @@
 """
-Stable recipes whose function signatures should almost never change in the future.
+???+ info "Docstring"
+    Stable recipes whose function signatures should almost never change in the future.
 """
 from bokeh.layouts import row
 from hover.utils.bokeh_helper import servable
@@ -9,11 +10,12 @@ from .subroutine import standard_annotator, standard_finder
 @servable(title="Simple Annotator")
 def simple_annotator(dataset, height=600, width=600):
     """
-    The most basic recipe, which nonetheless can be useful with decent 2-d embedding.
+    ???+ info "Docstring"
+        The most basic recipe, which nonetheless can be useful with decent 2-d embedding.
 
-    Layout:
+        Layout:
 
-    sidebar | [annotate here]
+        sidebar | [annotate here]
     """
     annotator = standard_annotator(dataset, height=height, width=width)
 
@@ -25,11 +27,12 @@ def simple_annotator(dataset, height=600, width=600):
 @servable(title="Linked Annotator")
 def linked_annotator(dataset, height=600, width=600):
     """
-    Leveraging CorpusFinder which has the best search highlights.
+    ???+ info "Docstring"
+        Leveraging `BokehDataFinder` which has the best search highlights.
 
-    Layout:
+        Layout:
 
-    sidebar | [search here] | [annotate here]
+        sidebar | [search here] | [annotate here]
     """
     finder = standard_finder(dataset, height=height, width=width)
     annotator = standard_annotator(dataset, height=height, width=width)

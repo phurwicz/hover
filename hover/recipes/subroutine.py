@@ -1,7 +1,8 @@
 """
-Functions commonly used by classes in this submodule.
+???+ info "Docstring"
+    Functions commonly used by classes in this submodule.
 
-Note that functions which are also used outside this submodule should be moved up.
+    Note that functions which are also used outside this submodule should be moved up.
 """
 import hover.core.explorer as hovex
 
@@ -36,6 +37,10 @@ EXPLORER_CATALOG = {
 
 
 def get_explorer_class(task, feature):
+    """
+    ???+ info "Docstring"
+        Get the right explorer class given a task and a feature.
+    """
     assert task in EXPLORER_CATALOG, f"Invalid task: {task}"
     assert feature in EXPLORER_CATALOG[task], f"Invalid feature: {feature}"
     return EXPLORER_CATALOG[task][feature]
@@ -43,7 +48,8 @@ def get_explorer_class(task, feature):
 
 def standard_annotator(dataset, **kwargs):
     """
-    Standard TextAnnotator and its interaction with a dataset.
+    ???+ info "Docstring"
+        Standard DataAnnotator and its interaction with a dataset.
     """
     # auto-detect the (main) feature to use
     feature = dataset.__class__.FEATURE_KEY
@@ -69,7 +75,8 @@ def standard_annotator(dataset, **kwargs):
 
 def standard_finder(dataset, **kwargs):
     """
-    Standard TextFinder and its interaction with a dataset.
+    ???+ info "Docstring"
+        Standard DataFinder and its interaction with a dataset.
     """
     # auto-detect the (main) feature to use
     feature = dataset.__class__.FEATURE_KEY
@@ -80,7 +87,7 @@ def standard_finder(dataset, **kwargs):
     finder = explorer_cls.from_dataset(
         dataset,
         {_k: _k for _k in subsets},
-        title="Text: use the search widget for highlights",
+        title="Finder: use the search widget for highlights",
         **kwargs,
     )
     finder.plot()
@@ -92,7 +99,8 @@ def standard_finder(dataset, **kwargs):
 
 def standard_snorkel(dataset, **kwargs):
     """
-    Standard SnorkelExplorer and its interaction with a dataset.
+    ???+ info "Docstring"
+        Standard SnorkelExplorer and its interaction with a dataset.
     """
     # auto-detect the (main) feature to use
     feature = dataset.__class__.FEATURE_KEY
@@ -114,7 +122,8 @@ def standard_snorkel(dataset, **kwargs):
 
 def standard_softlabel(dataset, **kwargs):
     """
-    Standard SoftLabelExplorer and its interaction with a dataset.
+    ???+ info "Docstring"
+        Standard SoftLabelExplorer and its interaction with a dataset.
     """
     # auto-detect the (main) feature to use
     feature = dataset.__class__.FEATURE_KEY
@@ -127,7 +136,7 @@ def standard_softlabel(dataset, **kwargs):
         {_k: _k for _k in subsets},
         "pred_label",
         "pred_score",
-        title="Prediction Visualizer: retrain model and locate confusions",
+        title="SoftLabel: inspect predictions and scores",
         **kwargs,
     )
     softlabel.plot()
