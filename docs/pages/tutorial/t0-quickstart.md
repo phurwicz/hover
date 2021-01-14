@@ -2,14 +2,14 @@
 >
 > :sunglasses: Let's label some data and call it a day.
 
-{!docs/pages/tutorial/html-snippets/stylesheet.html!}
+{!docs/snippets/html/stylesheet.html!}
 
 ## **Ingredient 1 / 3: Some Data**
 
 Suppose that we have a list of data entries, each in the form of a dictionary:
 
 <pre data-executable>
-{!docs/pages/tutorial/py-snippets/t0-0-dataset-text.txt!}
+{!docs/snippets/py/t0-0-dataset-text.txt!}
 </pre><br>
 
 
@@ -20,7 +20,7 @@ To put our dataset sensibly on a 2-D "map", we will use a vectorizer for feature
 Here's one way to define a vectorizer:
 
 <pre data-executable>
-{!docs/pages/tutorial/py-snippets/t0-1-vectorizer.txt!}
+{!docs/snippets/py/t0-1-vectorizer.txt!}
 </pre><br>
 
 
@@ -38,7 +38,7 @@ Currently we can use [umap](https://umap-learn.readthedocs.io/en/latest/) or [iv
     `umap-learn` is installed in this demo environment.
 
 <pre data-executable>
-{!docs/pages/tutorial/py-snippets/t0-2-reduction.txt!}
+{!docs/snippets/py/t0-2-reduction.txt!}
 </pre><br>
 
 
@@ -97,7 +97,7 @@ Now we are ready to visualize and annotate!
         -   making Javascript magic work on this documentation page would be a great step.
 
 <pre data-executable>
-{!docs/pages/tutorial/py-snippets/t0-3-simple-annotator.txt!}
+{!docs/snippets/py/t0-3-simple-annotator.txt!}
 </pre><br>
 
-{!docs/pages/tutorial/html-snippets/juniper.html!}
+{!docs/snippets/html/juniper.html!}

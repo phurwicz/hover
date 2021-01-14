@@ -2,10 +2,10 @@
 >
 > Here we walk through some basic behaviors and interactions that can turn out useful.
 
-{!docs/pages/tutorial/html-snippets/stylesheet.html!}
+{!docs/snippets/html/stylesheet.html!}
 
 <pre data-executable>
-{!docs/pages/tutorial/py-snippets/t1-0-dataset-duplicates.txt!}
+{!docs/snippets/py/dataset-duplicates.txt!}
 </pre><br>
 
-{!docs/pages/tutorial/html-snippets/juniper.html!}
+{!docs/snippets/html/juniper.html!}

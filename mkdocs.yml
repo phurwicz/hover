@@ -21,7 +21,8 @@ nav:
     - Home: 'index.md'
     - 'Tutorial':
         - 'Quickstart': 'pages/tutorial/t0-quickstart.md'
-        - 'Dataset': 'pages/tutorial/t1-dataset.md'
+    - 'Topics':
+        - 'Dataset': 'pages/topics/dataset.md'
     - 'API Reference':
         - 'hover.recipes': 'pages/reference/recipes.md'
         - 'hover.core.dataset': 'pages/reference/core-dataset.md'
