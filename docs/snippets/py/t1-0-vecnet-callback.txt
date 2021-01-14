@@ -1,0 +1,11 @@
+from hover.core.neural import VectorNet
+from hover.utils.common_nn import LogisticRegression
+
+def vecnet_callback(dataset, vectorizer):
+    """
+    Create a model with vectorizer-NN architecture.
+    """
+    # model.pt will point to a PyTorch state dict (to be created)
+    # which gets cumulatively updated when we train the model
+    vecnet = VectorNet(vectorizer, LogisticRegression, "model.pt", dataset.classes)
+    return vecnet

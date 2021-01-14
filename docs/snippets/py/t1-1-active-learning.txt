@@ -1,0 +1,7 @@
+from hover.recipes.experimental import active_learning
+from bokeh.io import show, output_notebook
+
+handle = active_learning(dataset, vectorizer, vecnet_callback)
+
+output_notebook()
+show(handle)

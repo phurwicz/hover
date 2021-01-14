@@ -21,6 +21,7 @@ nav:
     - Home: 'index.md'
     - 'Tutorial':
         - 'Quickstart': 'pages/tutorial/t0-quickstart.md'
+        - 'Active Learning': 'pages/tutorial/t1-active-learning.md'
     - 'Topics':
         - 'Dataset': 'pages/topics/dataset.md'
     - 'API Reference':
