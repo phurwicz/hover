@@ -27,9 +27,9 @@ Check out [@phurwicz/hover-binder](https://github.com/phurwicz/hover-binder) for
 
 -   **Jan 3, 2021** 0.4.0 is now available. Check out the [changelog](CHANGELOG.md) for details.
 
-## :flight_departure: [Quickstart]
+## :flight_departure: [Quickstart](https://phurwicz.github.io/hover/pages/tutorial/t0-quickstart/)
 
-:partying_face: [Tutorials](https://phurwicz.github.io/hover/pages/tutorial/t0-quickstart/) are now available.
+:partying_face: Tutorials are now available.
 
 -   you can find all (and run most) of the starter codes here!
 
@@ -46,6 +46,15 @@ pip install hover
 ```
 
 Installation through `conda` is not yet available. Please open an issue if you would like `conda` or `conda-forge` support.
+
+## :book: Resources
+
+Re-collecting the most relevant resources:
+
+-   [Binder repo](https://github.com/phurwicz/hover-binder)
+-   [Changelog](CHANGELOG.md)
+-   [Documentation](https://phurwicz.github.io/hover/)
+-   [Tutorials](https://phurwicz.github.io/hover/pages/tutorial/t0-quickstart/)
 
 ## :flamingo: Features
 
@@ -68,13 +77,6 @@ Hardcore usage | exploit `hover.core` templates        | custom @prodigy.recipe 
 -   the flexibility to use, or not use, any technique beyond annotating on a "map";
 -   the speed, or coarseness, of annotation being _literally at your fingertips_;
 -   the interaction between multiple "maps" that each serves a different but connected purpose.
-
-## :book: Resources
-
-### [Documentation](https://phurwicz.github.io/hover/)
-
--   Contains API references of the most crucial components.
--   A lot more is on the way!
 
 ## :bell: Remarks
 
