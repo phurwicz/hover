@@ -286,6 +286,18 @@
   </li>
 
         
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../t1-active-learning/" class="md-nav__link">
+      Active Learning
+    </a>
+  </li>
+
+        
       </ul>
     </nav>
   </li>
@@ -300,11 +312,48 @@
     
     <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3" >
     <label class="md-nav__link" for="nav-3">
+      Topics
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="Topics" data-md-level="1">
+      <label class="md-nav__title" for="nav-3">
+        <span class="md-nav__icon md-icon"></span>
+        Topics
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../topics/dataset/" class="md-nav__link">
+      Dataset
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+    <input class="md-nav__toggle md-toggle" data-md-toggle="nav-4" type="checkbox" id="nav-4" >
+    <label class="md-nav__link" for="nav-4">
       API Reference
       <span class="md-nav__icon md-icon"></span>
     </label>
     <nav class="md-nav" aria-label="API Reference" data-md-level="1">
-      <label class="md-nav__title" for="nav-3">
+      <label class="md-nav__title" for="nav-4">
         <span class="md-nav__icon md-icon"></span>
         API Reference
       </label>
@@ -451,18 +500,14 @@ import random
 # ---- fake data for illustation ----
 fake_en = Faker("en")
 
-
 def random_text():
     return fake_en.paragraph(3)
-
 
 def random_raw_data():
     return {"content": random_text()}
 
-
 def random_labeled_data():
     return {"content": random_text(), "mark": random.choice(["A", "B"])}
-
 
 # -----------------------------------
 
@@ -492,11 +537,9 @@ import re
 
 nlp = spacy.load("en_core_web_md")
 
-
 def vectorizer(text):
     clean_text = re.sub(r"[\s]+", r" ", text)
     return nlp(clean_text, disable=nlp.pipe_names).vector
-
 
 text = dataset.dfs["raw"].loc[0, "text"]
 vec = vectorizer(text)
@@ -640,13 +683,13 @@ show(handle)
           </a>
         
         
-          <a href="../../reference/recipes/" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../t1-active-learning/" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-footer-nav__title">
               <div class="md-ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                hover.recipes
+                Active Learning
               </div>
             </div>
             <div class="md-footer-nav__button md-icon">

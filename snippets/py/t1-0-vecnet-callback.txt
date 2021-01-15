@@ -1,0 +1,18 @@
+from hover.core.neural import VectorNet
+from hover.utils.common_nn import LogisticRegression
+
+def vecnet_callback(dataset, vectorizer):
+    """
+    Create a model with vectorizer-NN architecture.
+    """
+    # model.pt will point to a PyTorch state dict (to be created)
+    # which gets cumulatively updated when we train the model
+    vecnet = VectorNet(vectorizer, LogisticRegression, "model.pt", dataset.classes)
+    return vecnet
+
+vecnet = vecnet_callback(dataset, vectorizer)
+
+# predict_proba accepts individual strings or list
+# text -> vector -> class probabilities
+print(vecnet.predict_proba(text))
+print(vecnet.predict_proba([text]))

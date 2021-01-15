@@ -5,18 +5,14 @@ import random
 # ---- fake data for illustation ----
 fake_en = Faker("en")
 
-
 def random_text():
     return fake_en.paragraph(3)
-
 
 def random_raw_data():
     return {"content": random_text()}
 
-
 def random_labeled_data():
     return {"content": random_text(), "mark": random.choice(["A", "B"])}
-
 
 # -----------------------------------
 
