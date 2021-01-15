@@ -6,7 +6,9 @@
 
 ## **Ingredient 1 / 3: Some Data**
 
-Suppose that we have a list of data entries, each in the form of a dictionary:
+Suppose that we have a list of data entries, each in the form of a dictionary.
+
+We can first create a [`SupervisableDataset`](../../reference/core-dataset/#hover.core.dataset.SupervisableDataset) based on those entries:
 
 <pre data-executable>
 {!docs/snippets/py/t0-0-dataset-text.txt!}
