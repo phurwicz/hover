@@ -21,76 +21,17 @@
 -   [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/phurwicz/hover-binder/master?urlpath=/proxy/5006/app-active-learning) :ferris_wheel: throw a model in the loop and exploit active learning
 -   [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/phurwicz/hover-binder/master?urlpath=/proxy/5006/app-snorkel-annotator) :whale: cross-check with Snorkel-based distant supervision
 
-Check out
-
--   [our tutorials](https://phurwicz.github.io/hover/pages/tutorial/t0-quickstart/) on the documentation site.
--   [@phurwicz/hover-binder](https://github.com/phurwicz/hover-binder) for a complete list of demo apps.
+Check out [@phurwicz/hover-binder](https://github.com/phurwicz/hover-binder) for a complete list of demo apps.
 
 ## :flags: Latest Announcements
 
--   **Jan 3, 2021** 0.4.0 is now available. Check out the [changelog](CHANGELOG.md) for details :hugs:
+-   **Jan 3, 2021** 0.4.0 is now available. Check out the [changelog](CHANGELOG.md) for details.
 
+## :flight_departure: [Quickstart]
 
-## :flight_departure: Quick Start
+:partying_face: [Tutorials](https://phurwicz.github.io/hover/pages/tutorial/t0-quickstart/) are now available.
 
-> ### Step 0: load your dataset
-
-```python
-from hover.core.dataset import SupervisableTextDataset
-
-dataset = SupervisableTextDataset(
-    raw_dictl=[{"content": "this is great"}],                  # the raw data to be supervised
-    # train_dictl=[],                                          # train/dev/test sets can be empty
-    dev_dictl=[{"content": "this is awesome", "mark": "A"}],
-    test_dictl=[{"content": "this is meh", "mark": "B"}],
-    feature_key="content",                                     # specify feature/label keys
-    label_key="mark",
-)
-
-# define a vectorizer for your feature, then call dimensionality reduction
-import spacy
-nlp = spacy.load('en')
-vectorizer = lambda text: nlp(text).vector # we recommend wrapping a @lru_cache around this
-dataset.compute_2d_embedding(vectorizer, "umap")
-```
-
-> ### Step 1: choose a recipe
->
-> (or create your own with [`examples`](hover/recipes/experimental.py))
-
-```Python
-from hover.recipes import simple_annotator
-
-handle = simple_annotator(dataset)
-```
-
-> ### Step 2: fire it up
-
-`Hover` uses [`bokeh`](https://bokeh.org) to deliver its annotation interface:
-
-> option 1: in Jupyter
-
-```Python
-from bokeh.io import show, output_notebook
-output_notebook()
-show(handle)
-```
-
-> option 2: with [`bokeh serve`](https://docs.bokeh.org/en/latest/docs/user_guide/server.html)
-
-```Python
-from bokeh.io import curdoc
-doc = curdoc()
-handle(doc)
-```
-
-> option 3: elsewhere as an [embedded app](https://docs.bokeh.org/en/latest/docs/user_guide/server.html#embedding-bokeh-server-as-a-library)
-
-```Python
-from bokeh.server.server import Server
-server = Server({'/my-app': handle})
-server.start()
-```
+-   you can find all (and run most) of the starter codes here!
 
 ## :package: Installation
 
