@@ -1,4 +1,4 @@
-> `hover` offers more powerful built-in recipes.
+> `hover` offers a few powerful built-in recipes.
 >
 > :ferris_wheel: Let's explore an active learning example.
 
@@ -23,7 +23,11 @@ This is exactly the same as in the [quickstart](../t0-quickstart/):
 
 ## **Ingredient 4 / 4: Model Callback**
 
-To utilize active learning, we need to specify how to get a model in the loop:
+To utilize active learning, we need to specify how to get a model in the loop.
+
+`hover` considers the `vectorizer` as a "frozen" embedding and follows up with a neural network, which infers its own dimensionality from the vectorizer and the output classes.
+
+-   This architecture named [`VectorNet`](../../reference/core-neural/#hover.core.neural.VectorNet) is the (default) basis of active learning in `hover`.
 
 ??? info "Custom models"
     It is possible to use a model other than `VectorNet` or its subclass.
@@ -37,6 +41,8 @@ To utilize active learning, we need to specify how to get a model in the loop:
 <pre data-executable>
 {!docs/snippets/py/t1-0-vecnet-callback.txt!}
 </pre><br>
+
+Note how the callback dynamically takes `dataset.classes`, which means the model architecture will adapt when we add classes during annotation.
 
 
 ## :sparkles: **Recipe time**
