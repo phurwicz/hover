@@ -18,7 +18,7 @@ This is exactly the same as in the [quickstart](../t0-quickstart/):
 
 <pre data-executable>
 {!docs/snippets/py/t0-2-reduction.txt!}
-</pre><br>
+</pre>
 
 
 ## **Ingredient 4 / 4: Model Callback**
@@ -40,7 +40,7 @@ To utilize active learning, we need to specify how to get a model in the loop.
 
 <pre data-executable>
 {!docs/snippets/py/t1-0-vecnet-callback.txt!}
-</pre><br>
+</pre>
 
 Note how the callback dynamically takes `dataset.classes`, which means the model architecture will adapt when we add classes during annotation.
 
