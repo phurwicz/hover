@@ -22,7 +22,7 @@ nav:
     - 'Tutorial':
         - 'Quickstart': 'pages/tutorial/t0-quickstart.md'
         - 'Active Learning': 'pages/tutorial/t1-active-learning.md'
-        - 'Embedding Bokeh': 'pages/tutorial/t2-bokeh-app.md'
+        - 'Serving Options': 'pages/tutorial/t2-bokeh-app.md'
     - 'Topics':
         - 'Dataset (under work)': 'pages/topics/dataset.md'
     - 'API Reference':
