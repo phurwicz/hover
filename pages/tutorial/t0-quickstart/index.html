@@ -305,7 +305,7 @@
 
   <li class="md-nav__item">
     <a href="../t2-bokeh-app/" class="md-nav__link">
-      Embedding Bokeh
+      Serving Options
     </a>
   </li>
 
@@ -540,9 +540,26 @@ dataset = SupervisableTextDataset(
 dataset.dfs["raw"].head(5)
 </pre>
 
-<p><br></p>
+<details class="info" open="open"><summary>FAQ</summary><details class="help"><summary>What if I have multiple features?</summary><p><code>feature_key</code> refers to the field that will be vectorized later on, which can be a JSON that encloses multiple features.</p>
+<p>For example, suppose our data entries look like this:
+<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="s2">&quot;f1&quot;</span><span class="p">:</span> <span class="s2">&quot;foo&quot;</span><span class="p">,</span> <span class="s2">&quot;f2&quot;</span><span class="p">:</span> <span class="s2">&quot;bar&quot;</span><span class="p">,</span> <span class="s2">&quot;non_feature&quot;</span><span class="p">:</span> <span class="s2">&quot;abc&quot;</span><span class="p">}</span>
+</code></pre></div></p>
+<p>We can put <code>f1</code> and <code>f2</code> in a JSON and convert the entries like this:
+<div class="highlight"><pre><span></span><code><span class="c1"># could also keep f1 and f2 around</span>
+<span class="p">{</span><span class="s1">&#39;feature&#39;</span><span class="p">:</span> <span class="s1">&#39;{&quot;f1&quot;: &quot;foo&quot;, &quot;f2&quot;: &quot;bar&quot;}&#39;</span><span class="p">,</span> <span class="s1">&#39;non_feature&#39;</span><span class="p">:</span> <span class="s1">&#39;abc&#39;</span><span class="p">}</span>
+</code></pre></div></p>
+</details>
+<details class="help"><summary>Can I use audio or image data?</summary><p>In the not-too-far future, yes!</p>
+<p>Some mechanisms can get tricky with audios/images, but we are working on it:</p>
+<ul>
+<li>display tooltips: as of 0.4.0, <a href="https://github.com/phurwicz/hover/blob/main/hover/core/explorer/local_config.py">tooltips are supported in the low-level APIs</a>.</li>
+<li><a href="../../reference/core-explorer/#hover.core.explorer.feature.BokehForAudio.activate_search">search and highlight</a>: pending (and open to contributions!)</li>
+<li>high-level API like <code>SupervisableImageDataset</code>: pending</li>
+</ul>
+</details>
+</details>
 <h2 id="ingredient-2-3-vectorizer"><strong>Ingredient 2 / 3: Vectorizer</strong></h2>
-<p>To put our dataset sensibly on a 2-D "map", we will use a vectorizer for feature extraction, and then perform dimensionality reduction.<br></p>
+<p>To put our dataset sensibly on a 2-D "map", we will use a vectorizer for feature extraction, and then perform dimensionality reduction.</p>
 <p>Here's one way to define a vectorizer:</p>
 <pre data-executable>
 import spacy
@@ -560,10 +577,49 @@ print(f"Text: {text}")
 print(f"Vector shape: {vec.shape}")
 </pre>
 
-<p><br></p>
+<details class="tip" open="open"><summary>Tips</summary><details class="example"><summary>Caching</summary><p><code>hover</code> by itself stores the original features but not the corresponding vectors.</p>
+<p>To avoid vectorizing the same feature again and again, we could simply do:
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">cache</span>
+
+<span class="nd">@cache</span>
+<span class="k">def</span> <span class="nf">vectorizer</span><span class="p">(</span><span class="n">feature</span><span class="p">):</span>
+    <span class="c1"># put code here</span>
+</code></pre></div></p>
+<p>If you'd like to limit the size of the cache, something like <code>@lru_cache(maxsize=10000)</code> could help.</p>
+<p>Check out <a href="https://docs.python.org/3/library/functools.html">functools</a> for more options.</p>
+</details>
+<details class="example"><summary>Vectorizing multiple features</summary><p>Suppose we have multiple features enclosed in a JSON:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># could also keep f1 and f2 around</span>
+<span class="p">{</span><span class="s1">&#39;feature&#39;</span><span class="p">:</span> <span class="s1">&#39;{&quot;f1&quot;: &quot;foo&quot;, &quot;f2&quot;: &quot;bar&quot;}&#39;</span><span class="p">,</span> <span class="s1">&#39;non_feature&#39;</span><span class="p">:</span> <span class="s1">&#39;abc&#39;</span><span class="p">}</span>
+</code></pre></div>
+
+<p>Also, suppose we have individual vectorizers likes this:
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">vectorizer_1</span><span class="p">(</span><span class="n">feature_1</span><span class="p">):</span>
+    <span class="c1"># put code here</span>
+
+<span class="k">def</span> <span class="nf">vectorizer_2</span><span class="p">(</span><span class="n">feature_2</span><span class="p">):</span>
+    <span class="c1"># put code here</span>
+</code></pre></div></p>
+<p>Then we can define a composite vectorizer:
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="k">def</span> <span class="nf">vectorizer</span><span class="p">(</span><span class="n">feature_json</span><span class="p">):</span>
+    <span class="n">data_dict</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">feature_json</span><span class="p">)</span>
+    <span class="n">vectors</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">field</span><span class="p">,</span> <span class="n">func</span> <span class="ow">in</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s2">&quot;f1&quot;</span><span class="p">,</span> <span class="n">vectorizer_1</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;f2&quot;</span><span class="p">,</span> <span class="n">vectorizer_2</span><span class="p">),</span>
+    <span class="p">]:</span>
+        <span class="n">vectors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">func</span><span class="p">(</span><span class="n">data_dict</span><span class="p">[</span><span class="n">field</span><span class="p">]))</span>
+
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">vectors</span><span class="p">)</span>
+</code></pre></div></p>
+</details>
+</details>
 <h2 id="ingredient-3-3-reduction"><strong>Ingredient 3 / 3: Reduction</strong></h2>
-<p>The dataset has built-in high-level support for dimensionality reduction. <br>
-Currently we can use <a href="https://umap-learn.readthedocs.io/en/latest/">umap</a> or <a href="https://bering-ivis.readthedocs.io/en/latest/">ivis</a>.</p>
+<p>The dataset has built-in high-level support for dimensionality reduction.</p>
+<p>Currently we can use <a href="https://umap-learn.readthedocs.io/en/latest/">umap</a> or <a href="https://bering-ivis.readthedocs.io/en/latest/">ivis</a>.</p>
 <details class="info"><summary>Optional dependencies</summary><p>The corresponding libraries do not ship with hover by default, and may need to be installed:</p>
 <ul>
 <li>for umap: <code>pip install umap-learn</code></li>
@@ -582,7 +638,6 @@ dataset.compute_2d_embedding(vectorizer, "umap")
 dataset.dfs["raw"].head(5)
 </pre>
 
-<p><br></p>
 <h2 id="apply-labels"><img alt="✨" class="emojione" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.2.7/assets/png/2728.png" title=":sparkles:" /> <strong>Apply Labels</strong></h2>
 <p>Now we are ready to visualize and annotate!</p>
 <details class="tip" open="open"><summary>Basic tips</summary><p>There should be a <code>SupervisableDataset</code> board on the left and an <code>BokehDataAnnotator</code> on the right.</p>
