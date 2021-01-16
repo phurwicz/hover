@@ -2,8 +2,9 @@
 
 ![Demo](images/app-active-learning.gif)
 
-This site hosts the tutorials and API references of the [`Hover`](https://github.com/phurwicz/hover-binder) package.
+This site hosts the tutorials and API references of the [`Hover`](https://github.com/phurwicz/hover) package.
 
 Other resources beyond:
 
 -   [the Binder repo](https://github.com/phurwicz/hover-binder)
+-   [the PyPI page](https://pypi.org/project/hover/)
