@@ -15,8 +15,7 @@ import numpy as np
 )
 def create_vector_net_from_module(specific_class, model_module_name, labels):
     """
-    ???+ info "Docstring"
-        Deprecated into a trivial invocation of VectorNet's class method.
+    ???+ warning "Deprecated into a trivial invocation of VectorNet's class method."
     """
     return specific_class.from_module(model_module_name, labels)
 
@@ -24,21 +23,24 @@ def create_vector_net_from_module(specific_class, model_module_name, labels):
 class VectorNet(Loggable):
 
     """
-    ???+ info "Docstring"
-        Simple transfer learning model: a user-supplied vectorizer followed by a neural net.
-
+    ???+ note "Simple transfer learning model: a user-supplied vectorizer followed by a neural net."
         This is a parent class whose children may use different training schemes.
 
-        Please refer to hover.utils.torch_helper.VectorDataset and vector_dataloader for more info.
+        Coupled with:
+
+        -   `hover.utils.torch_helper.VectorDataset`
+        -   `hover.utils.torch_helper.vector_dataloader`
     """
 
     def __init__(self, vectorizer, architecture, state_dict_path, labels):
         """
-        ???+ info "Docstring"
-            - vectorizer(callable): a function that converts any string to a NumPy 1-D array.
-            - architecture(class): a `torch.nn.Module` child class to be instantiated into a neural net.
-            - state_dict_path(str): path to a PyTorch state dict that matches the architecture.
-            - labels(list of str): the classification labels, e.g. ["POSITIVE", "NEGATIVE"].
+        ???+ note "Constructor"
+            | Param             | Type       | Description                          |
+            | :---------------- | :--------- | :----------------------------------- |
+            | `vectorizer`      | `callable` | the feature -> vector function       |
+            | `architecture`    | `class`    | a `torch.nn.Module` child class      |
+            | `state_dict_path` | `str`      | path to a (could-be-empty) `torch` state dict |
+            | `labels`          | `list`     | list of `str` classification labels  |
         """
 
         # set up label conversion
@@ -77,11 +79,12 @@ class VectorNet(Loggable):
     @classmethod
     def from_module(cls, model_module, labels):
         """
-        ???+ info "Docstring"
-            Create a VectorNet model, or of its child class.
+        ???+ note "Create a VectorNet model from a loadable module."
 
-            - model_module(module or str): (path to) a local Python module in the working directory whose __init__.py file contains a get_vectorizer() callable, get_architecture() callable, and a get_state_dict_path() callable.
-            - labels(list of str): the classification labels, e.g. ["POSITIVE", "NEGATIVE"].
+            | Param          | Type       | Description                          |
+            | :------------- | :--------- | :----------------------------------- |
+            | `model_module` | `module` or `str` | (path to) a local Python workspace module which contains a get_vectorizer() callable, get_architecture() callable, and a get_state_dict_path() callable |
+            | `labels`       | `list`     | list of `str` classification labels  |
         """
         if isinstance(model_module, str):
             from importlib import import_module
@@ -100,8 +103,10 @@ class VectorNet(Loggable):
 
     def save(self, save_path=None):
         """
-        ???+ info "Docstring"
-            Save the current state dict with authorization to overwrite.
+        ???+ note "Save the current state dict with authorization to overwrite."
+            | Param       | Type  | Description                           |
+            | :---------- | :---- | :------------------------------------ |
+            | `save_path` | `str` | option alternative path to state dict |
         """
         if save_path is None:
             save_path = self.nn_update_path
@@ -109,8 +114,7 @@ class VectorNet(Loggable):
 
     def adjust_optimizer_params(self):
         """
-        ???+ info "Docstring"
-            Dynamically change parameters of the neural net optimizer.
+        ???+ note "Dynamically change parameters of the neural net optimizer."
 
             - Intended to be polymorphic in child classes and to be called per epoch.
         """
@@ -119,11 +123,13 @@ class VectorNet(Loggable):
 
     def predict_proba(self, inps):
         """
-        ???+ info "Docstring"
-            End-to-end single/multi-piece prediction from inp to class probabilities.
+        ???+ note "End-to-end single/multi-piece prediction from inp to class probabilities."
+            | Param  | Type    | Description                          |
+            | :----- | :------ | :----------------------------------- |
+            | `inps` | dynamic | (a list of) input features to vectorize |
         """
         # if the input is a single piece of inp, cast it to a list
-        FLAG_SINGLE = isinstance(inps, str)
+        FLAG_SINGLE = not isinstance(inps, list)
         if FLAG_SINGLE:
             inps = [inps]
 
@@ -141,8 +147,8 @@ class VectorNet(Loggable):
 
     def manifold_trajectory(self, inps, method="umap", **kwargs):
         """
-        ???+ info "Docstring"
-            TODO: need a clean way to pass kwargs to dimensionality reduction.
+        ???+ note "**UPCOMING**"
+            Compute a trajectory of manifold propagation through the neural net.
 
             1. vectorize inps
             2. forward propagate, keeping intermediates
@@ -150,7 +156,11 @@ class VectorNet(Loggable):
             4. fit manifolds using Procrustes shape analysis
             5. fit shapes to trajectory splines
 
-            - inps(list): input to calculate the manifold profile from.
+            | Param    | Type    | Description                          |
+            | :------- | :------ | :----------------------------------- |
+            | `inps`   | dynamic | (a list of) input features to vectorize |
+            | `method` | `str`   | reduction method: `"umap"` or `"ivis"`  |
+            | `**kwargs` | | kwargs to forward to dimensionality reduction |
         """
         from hover.core.representation.manifold import LayerwiseManifold
         from hover.core.representation.trajectory import manifold_spline
@@ -174,8 +184,12 @@ class VectorNet(Loggable):
 
     def evaluate(self, dev_loader, verbose=1):
         """
-        ???+ info "Docstring"
-            Evaluate the neural network against a dev set.
+        ???+ note "Evaluate the VecNet against a dev set."
+
+            | Param        | Type         | Description                |
+            | :----------- | :----------- | :------------------------- |
+            | `dev_loader` | `torch.utils.data.DataLoader` | dev set   |
+            | `verbose`    | `int`        | verbosity for logging      |
         """
         self.nn.eval()
         true = []
@@ -207,11 +221,17 @@ class VectorNet(Loggable):
 
     def train(self, train_loader, dev_loader=None, epochs=1, verbose=1):
         """
-        ???+ info "Docstring"
-            Train the neural network.
+        ???+ note "Train the neural network part of the VecNet."
 
             - This method is a vanilla template and is intended to be overridden in child classes.
             - Also intended to be coupled with self.train_batch().
+
+            | Param          | Type         | Description                |
+            | :------------- | :----------- | :------------------------- |
+            | `train_loader` | `torch.utils.data.DataLoader` | train set |
+            | `dev_loader`   | `torch.utils.data.DataLoader` | dev set   |
+            | `epochs`       | `int`        | number of epochs to train  |
+            | `verbose`      | `int`        | verbosity for logging      |
         """
         train_info = []
         for epoch_idx in range(epochs):
@@ -224,10 +244,17 @@ class VectorNet(Loggable):
 
     def train_epoch(self, train_loader, *args, **kwargs):
         """
-        ???+ info "Docstring"
-            Train the neural network for one epoch.
+        ???+ note "Train the neural network for one epoch."
 
             - Supports flexible args and kwargs for child classes that may implement self.train() and self.train_batch() differently.
+
+            | Param          | Type         | Description                |
+            | :------------- | :----------- | :------------------------- |
+            | `train_loader` | `torch.utils.data.DataLoader` | train set |
+            | `dev_loader`   | `torch.utils.data.DataLoader` | dev set   |
+            | `verbose`      | `int`        | verbosity for logging      |
+            | `*args`        | | arguments to forward to `train_batch`   |
+            | `**kwargs`     | | kwargs to forward to `train_batch`      |
         """
         self.adjust_optimizer_params()
         for batch_idx, (loaded_input, loaded_output, _) in enumerate(train_loader):
@@ -236,8 +263,13 @@ class VectorNet(Loggable):
 
     def train_batch(self, loaded_input, loaded_output, verbose=1):
         """
-        ???+ info "Docstring"
-            Train the neural network for one batch.
+        ???+ note "Train the neural network for one batch."
+
+            | Param           | Type           | Description           |
+            | :-------------- | :------------- | :-------------------- |
+            | `loaded_input`  | `torch.Tensor` | input tensor          |
+            | `loaded_output` | `torch.Tensor` | output tensor         |
+            | `verbose`       | `int`          | verbosity for logging |
         """
         self.nn.train()
         input_tensor = loaded_input.float()

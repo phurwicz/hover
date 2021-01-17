@@ -1,5 +1,5 @@
 """
-???+ info "Docstring"
+???+ note "High-level functions to produce an interactive annotation interface."
     Experimental recipes whose function signatures might change significantly in the future. Use with caution.
 """
 from bokeh.layouts import row, column
@@ -18,12 +18,21 @@ import pandas as pd
 @servable(title="Snorkel Crosscheck")
 def snorkel_crosscheck(dataset, lf_list, height=600, width=600):
     """
-    ???+ info "Docstring"
+    ???+ note "Cross-check labeling functions with annotations."
         Use the dev set to check labeling functions; use the labeling functions to hint at potential annotation.
 
-        Layout:
+        | Param     | Type     | Description                          |
+        | :-------- | :------- | :----------------------------------- |
+        | `dataset` | `SupervisableDataset` | the dataset to link to  |
+        | `lf_list` | `list`   | a list of callables decorated by `@hover.utils.snorkel_helper.labeling_function` |
+        | `height`  | `int`    | height of each Bokeh explorer plot   |
+        | `width`   | `int`    | width of each Bokeh explorer plot    |
 
-        sidebar | [inspect LFs here] | [annotate here]
+        Expected visual layout:
+
+        | SupervisableDataset | BokehSnorkelExplorer       | BokehDataAnnotator |
+        | :------------------ | :------------------------- | :----------------- |
+        | manage data subsets | inspect labeling functions | make annotations   |
     """
     # building-block subroutines
     snorkel = standard_snorkel(dataset, height=height, width=width)
@@ -46,12 +55,22 @@ def snorkel_crosscheck(dataset, lf_list, height=600, width=600):
 @servable(title="Active Learning")
 def active_learning(dataset, vectorizer, vecnet_callback, height=600, width=600):
     """
-    ???+ info "Docstring"
-        Place a VectorNet in the loop.
+    ???+ note "Put a model in the loop and iterate."
+        Currently works most smoothly with `VectorNet`.
 
-        Layout:
+        | Param     | Type     | Description                          |
+        | :-------- | :------- | :----------------------------------- |
+        | `dataset` | `SupervisableDataset` | the dataset to link to  |
+        | `vectorizer` | `callable` | the feature -> vector function  |
+        | `vecnet_callback` | `callable` | the (dataset, vectorizer) -> `VecNet` function|
+        | `height`  | `int`    | height of each Bokeh explorer plot   |
+        | `width`   | `int`    | width of each Bokeh explorer plot    |
 
-        sidebar | [inspect soft labels here] | [annotate here] | [search here]
+        Expected visual layout:
+
+        | SupervisableDataset | BokehSoftLabelExplorer    | BokehDataAnnotator | BokehDataFinder     |
+        | :------------------ | :------------------------ | :----------------- | :------------------ |
+        | manage data subsets | inspect model predictions | make annotations   | search -> highlight |
     """
     # building-block subroutines
     softlabel = standard_softlabel(dataset, height=height, width=width)
