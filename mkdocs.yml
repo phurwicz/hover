@@ -14,8 +14,9 @@ theme:
       code: Roboto Mono
     features:
       - navigation.expand
-      - toc.integrate
+      - navigation.tabs
       - search.suggest
+      - toc.integrate
 
 nav:
     - Home: 'index.md'

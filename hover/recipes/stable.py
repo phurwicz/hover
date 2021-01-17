@@ -1,6 +1,5 @@
 """
-???+ info "Docstring"
-    Stable recipes whose function signatures should almost never change in the future.
+???+ info "Stable recipes whose function signatures should almost never change in the future."
 """
 from bokeh.layouts import row
 from hover.utils.bokeh_helper import servable
@@ -10,12 +9,18 @@ from .subroutine import standard_annotator, standard_finder
 @servable(title="Simple Annotator")
 def simple_annotator(dataset, height=600, width=600):
     """
-    ???+ info "Docstring"
-        The most basic recipe, which nonetheless can be useful with decent 2-d embedding.
+    ???+ info "Display the dataset with on a 2D map for annotation."
 
-        Layout:
 
-        sidebar | [annotate here]
+        | Arg       | Type     | Description                          |
+        | :-------- | :------- | :----------------------------------- |
+        | `dataset` | `SupervisableDataset` | the dataset to link to  |
+
+        Expected visual layout:
+
+        | SupervisableDataset | BokehDataAnnotator |
+        | :------------------ | :----------------- |
+        | manage data subsets | make annotations   |
     """
     annotator = standard_annotator(dataset, height=height, width=width)
 
@@ -27,12 +32,17 @@ def simple_annotator(dataset, height=600, width=600):
 @servable(title="Linked Annotator")
 def linked_annotator(dataset, height=600, width=600):
     """
-    ???+ info "Docstring"
-        Leveraging `BokehDataFinder` which has the best search highlights.
+    ???+ info "Leveraging `BokehDataFinder` which has the best search highlights."
 
-        Layout:
+        | Arg       | Type     | Description                          |
+        | :-------- | :------- | :----------------------------------- |
+        | `dataset` | `SupervisableDataset` | the dataset to link to  |
 
-        sidebar | [search here] | [annotate here]
+        Expected visual layout:
+
+        | SupervisableDataset | BokehDataFinder    | BokehDataAnnotator |
+        | :------------------ | :----------------- | :----------------- |
+        | manage data subsets | search->highlight  | make annotations   |
     """
     finder = standard_finder(dataset, height=height, width=width)
     annotator = standard_annotator(dataset, height=height, width=width)

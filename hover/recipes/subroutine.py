@@ -1,8 +1,9 @@
 """
-???+ info "Docstring"
-    Functions commonly used by classes in this submodule.
+???+ info "Building blocks of high-level recipes."
 
-    Note that functions which are also used outside this submodule should be moved up.
+    Includes the following:
+
+    -   functions for creating individual standard explorers appropriate for a dataset.
 """
 import hover.core.explorer as hovex
 
@@ -38,8 +39,20 @@ EXPLORER_CATALOG = {
 
 def get_explorer_class(task, feature):
     """
-    ???+ info "Docstring"
-        Get the right explorer class given a task and a feature.
+    ???+ info "Get the right `hover.core.explorer` class given a task and a feature."
+
+        Can be useful for dynamically creating explorers without knowing the feature in advance.
+
+        | Arg       | Type     | Description                          |
+        | :-------- | :------- | :----------------------------------- |
+        | `task`    | `str`    | name of the task, which can be `"finder"`, `"annotator"`, `"margin"`, `"softlabel"`, or `"snorkel"` |
+        | `feature` | `str`    | name of the main feature, which can be `"text"`, `"audio"` or `"image"` |
+
+        Example:
+        ```python
+        # this creates an instance of BokehTextFinder
+        explorer = get_explorer_class("finder", "text")(*args, **kwargs)
+        ```
     """
     assert task in EXPLORER_CATALOG, f"Invalid task: {task}"
     assert feature in EXPLORER_CATALOG[task], f"Invalid feature: {feature}"
@@ -48,8 +61,19 @@ def get_explorer_class(task, feature):
 
 def standard_annotator(dataset, **kwargs):
     """
-    ???+ info "Docstring"
-        Standard DataAnnotator and its interaction with a dataset.
+    ???+ info "Set up a `BokehDataAnnotator` for a `SupervisableDataset`."
+
+        The annotator has a few standard interactions with the dataset:
+
+        -   read all subsets of the dataset
+        -   subscribe to all updates in the dataset
+        -   can commit annotations through selections in the "raw" subset
+
+        | Arg       | Type     | Description                          |
+        | :-------- | :------- | :----------------------------------- |
+        | `dataset` | `SupervisableDataset` | the dataset to link to  |
+
+        Keyword arguments are passed to the created `BokehDataAnnotator` instance.
     """
     # auto-detect the (main) feature to use
     feature = dataset.__class__.FEATURE_KEY
@@ -75,8 +99,18 @@ def standard_annotator(dataset, **kwargs):
 
 def standard_finder(dataset, **kwargs):
     """
-    ???+ info "Docstring"
-        Standard DataFinder and its interaction with a dataset.
+    ???+ info "Set up a `BokehDataFinder` for a `SupervisableDataset`."
+
+        The finder has a few standard interactions with the dataset:
+
+        -   read all subsets of the dataset
+        -   subscribe to all updates in the dataset
+
+        | Arg       | Type     | Description                          |
+        | :-------- | :------- | :----------------------------------- |
+        | `dataset` | `SupervisableDataset` | the dataset to link to  |
+
+        Keyword arguments are passed to the created `BokehDataFinder` instance.
     """
     # auto-detect the (main) feature to use
     feature = dataset.__class__.FEATURE_KEY
@@ -99,8 +133,18 @@ def standard_finder(dataset, **kwargs):
 
 def standard_snorkel(dataset, **kwargs):
     """
-    ???+ info "Docstring"
-        Standard SnorkelExplorer and its interaction with a dataset.
+    ???+ info "Set up a `BokehSnorkelExplorer` for a `SupervisableDataset`."
+
+        The snorkel explorer has a few standard interactions with the dataset:
+
+        -   read "raw" and "dev" subsets of the dataset, interpreting "dev" as "labeled"
+        -   subscribe to all updates in those subsets
+
+        | Arg       | Type     | Description                          |
+        | :-------- | :------- | :----------------------------------- |
+        | `dataset` | `SupervisableDataset` | the dataset to link to  |
+
+        Keyword arguments are passed to the created `BokehSnorkelExplorer` instance.
     """
     # auto-detect the (main) feature to use
     feature = dataset.__class__.FEATURE_KEY
@@ -122,8 +166,18 @@ def standard_snorkel(dataset, **kwargs):
 
 def standard_softlabel(dataset, **kwargs):
     """
-    ???+ info "Docstring"
-        Standard SoftLabelExplorer and its interaction with a dataset.
+    ???+ info "Set up a `BokehSoftLabelExplorer` for a `SupervisableDataset`."
+
+        The soft label explorer has a few standard interactions with the dataset:
+
+        -   read all subsets of the dataset
+        -   subscribe to all updates in the dataset
+
+        | Arg       | Type     | Description                          |
+        | :-------- | :------- | :----------------------------------- |
+        | `dataset` | `SupervisableDataset` | the dataset to link to  |
+
+        Keyword arguments are passed to the created `BokehSoftLabelExplorer` instance.
     """
     # auto-detect the (main) feature to use
     feature = dataset.__class__.FEATURE_KEY
