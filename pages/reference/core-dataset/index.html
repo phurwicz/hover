@@ -88,6 +88,32 @@
 </nav>
 </header>
 <div class="md-container" data-md-component="container">
+<nav aria-label="Tabs" class="md-tabs md-tabs--active" data-md-component="tabs">
+<div class="md-tabs__inner md-grid">
+<ul class="md-tabs__list">
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../../..">
+      Home
+    </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../../tutorial/t0-quickstart/">
+        Tutorial
+      </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../../topics/dataset/">
+        Topics
+      </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link md-tabs__link--active" href="../recipes/">
+        API Reference
+      </a>
+</li>
+</ul>
+</div>
+</nav>
 <main class="md-main" data-md-component="main">
 <div class="md-main__inner md-grid">
 <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
@@ -300,6 +326,11 @@
       hover.core.neural
     </a>
 </li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../core-representation/">
+      hover.core.representation
+    </a>
+</li>
 </ul>
 </nav>
 </li>
@@ -423,8 +454,15 @@
 <h2 class="hidden-toc" href="#hover.core.dataset" id="hover.core.dataset" style="visibility: hidden; position: absolute;">
 </h2>
 <div class="doc doc-contents first">
-<details class="info" open="open"><summary>Docstring</summary><p>Dataset objects which extend beyond DataFrames.
-Specifically, we need a collection of DataFrames where rows can be transferred cleanly and columns can be transformed easily.</p>
+<details class="note" open="open"><summary>Dataset classes which extend beyond DataFrames.</summary><p>When we supervise a collection of data, these operations need to be simple:</p>
+<ul>
+<li>managing <code>raw</code>/<code>train</code>/<code>dev</code>/<code>test</code> subsets</li>
+<li>transferring data points between subsets</li>
+<li>pulling updates from annotation interfaces</li>
+<li>pushing updates to annotation interfaces</li>
+<li>getting a 2D embedding</li>
+<li>loading data for training models</li>
+</ul>
 </details>
 <div class="doc doc-children">
 <div class="doc doc-object doc-class">
@@ -432,8 +470,7 @@ Specifically, we need a collection of DataFrames where rows can be transferred c
 <code>SupervisableDataset</code>
 </h2>
 <div class="doc doc-contents">
-<details class="info" open="open"><summary>Docstring</summary><p>Feature-agnostic class for a dataset open to supervision.</p>
-<p>Keeping a DataFrame form and a list-of-dicts ("dictl") form, with the intention that</p>
+<details class="note" open="open"><summary>Feature-agnostic class for a dataset open to supervision.</summary><p>Keeping a DataFrame form and a list-of-dicts ("dictl") form, with the intention that</p>
 <ul>
 <li>the DataFrame form supports most kinds of operations;</li>
 <li>the list-of-dicts form could be useful for manipulations outside the scope of pandas;</li>
@@ -450,15 +487,47 @@ __init__<span class="p">(</span><span class="bp">self</span><span class="p">,</s
 </span>
 </h3>
 <div class="doc doc-contents">
-<details class="info" open="open"><summary>Docstring</summary><p>Initialize the dataset with dictl and df forms; initialize the mapping between categorical-int and string labels.</p>
-<ul>
-<li>raw_dictl: a list of dicts holding the raw data that DO NOT have annotation.</li>
-<li>train_dictl: a list of dicts holding the train set.</li>
-<li>dev_dictl: a list of dicts holding the dev set.</li>
-<li>test_dictl: a list of dicts holding the test set.</li>
-<li>feature_key: key in each piece of dict mapping to the feature.</li>
-<li>label_key: key in each piece of dict mapping to the label in STRING form.</li>
-</ul>
+<details class="note" open="open"><summary>Create (1) dictl and df forms and (2) the mapping between categorical and string labels.</summary><table>
+<thead>
+<tr>
+<th align="left">Param</th>
+<th align="left">Type</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code>raw_dictl</code></td>
+<td align="left"><code>list</code></td>
+<td align="left">list of dicts holding the <strong>to-be-supervised</strong> raw data</td>
+</tr>
+<tr>
+<td align="left"><code>train_dictl</code></td>
+<td align="left"><code>list</code></td>
+<td align="left">list of dicts holding any <strong>supervised</strong> train data</td>
+</tr>
+<tr>
+<td align="left"><code>dev_dictl</code></td>
+<td align="left"><code>list</code></td>
+<td align="left">list of dicts holding any <strong>supervised</strong> dev data</td>
+</tr>
+<tr>
+<td align="left"><code>test_dictl</code></td>
+<td align="left"><code>list</code></td>
+<td align="left">list of dicts holding any <strong>supervised</strong> test data</td>
+</tr>
+<tr>
+<td align="left"><code>feature_key</code></td>
+<td align="left"><code>str</code></td>
+<td align="left">the key for the feature in each piece of data</td>
+</tr>
+<tr>
+<td align="left"><code>label_key</code></td>
+<td align="left"><code>str</code></td>
+<td align="left">the key for the <code>**str**</code> label in supervised data</td>
+</tr>
+</tbody>
+</table>
 </details>
 <details class="quote">
 <summary>Source code in <code>hover/core/dataset.py</code></summary>
@@ -473,15 +542,15 @@ __init__<span class="p">(</span><span class="bp">self</span><span class="p">,</s
     <span class="n">label_key</span><span class="o">=</span><span class="s2">"label"</span><span class="p">,</span>
 <span class="p">):</span>
     <span class="sd">"""</span>
-<span class="sd">    ???+ info "Docstring"</span>
-<span class="sd">        Initialize the dataset with dictl and df forms; initialize the mapping between categorical-int and string labels.</span>
-
-<span class="sd">        - raw_dictl: a list of dicts holding the raw data that DO NOT have annotation.</span>
-<span class="sd">        - train_dictl: a list of dicts holding the train set.</span>
-<span class="sd">        - dev_dictl: a list of dicts holding the dev set.</span>
-<span class="sd">        - test_dictl: a list of dicts holding the test set.</span>
-<span class="sd">        - feature_key: key in each piece of dict mapping to the feature.</span>
-<span class="sd">        - label_key: key in each piece of dict mapping to the label in STRING form.</span>
+<span class="sd">    ???+ note "Create (1) dictl and df forms and (2) the mapping between categorical and string labels."</span>
+<span class="sd">        | Param         | Type   | Description                          |</span>
+<span class="sd">        | :------------ | :----- | :----------------------------------- |</span>
+<span class="sd">        | `raw_dictl`   | `list` | list of dicts holding the **to-be-supervised** raw data |</span>
+<span class="sd">        | `train_dictl` | `list` | list of dicts holding any **supervised** train data |</span>
+<span class="sd">        | `dev_dictl`   | `list` | list of dicts holding any **supervised** dev data   |</span>
+<span class="sd">        | `test_dictl`  | `list` | list of dicts holding any **supervised** test data  |</span>
+<span class="sd">        | `feature_key` | `str`  | the key for the feature in each piece of data |</span>
+<span class="sd">        | `label_key`   | `str`  | the key for the `**str**` label in supervised data |</span>
 <span class="sd">    """</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_info</span><span class="p">(</span><span class="s2">"Initializing..."</span><span class="p">)</span>
 
@@ -539,15 +608,47 @@ __init__<span class="p">(</span><span class="bp">self</span><span class="p">,</s
 compute_2d_embedding<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vectorizer</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> </code>
 </h3>
 <div class="doc doc-contents">
-<details class="info" open="open"><summary>Docstring</summary><p>Get embeddings in the xy-plane and return the reducer.</p>
+<details class="note" open="open"><summary>Get embeddings in the xy-plane and return the dimensionality reducer.</summary><p>Reference: <a href="https://github.com/phurwicz/hover/blob/main/hover/core/representation/reduction.py"><code>DimensionalityReducer</code></a></p>
+<table>
+<thead>
+<tr>
+<th align="left">Param</th>
+<th align="left">Type</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code>vectorizer</code></td>
+<td align="left"><code>callable</code></td>
+<td align="left">the feature -&gt; vector function</td>
+</tr>
+<tr>
+<td align="left"><code>method</code></td>
+<td align="left"><code>str</code></td>
+<td align="left">arg for <code>DimensionalityReducer</code></td>
+</tr>
+<tr>
+<td align="left"><code>**kwargs</code></td>
+<td align="left"></td>
+<td align="left">kwargs for <code>DimensionalityReducer</code></td>
+</tr>
+</tbody>
+</table>
 </details>
 <details class="quote">
 <summary>Source code in <code>hover/core/dataset.py</code></summary>
 <div class="highlight">
 <pre><span></span><code><span class="k">def</span> <span class="nf">compute_2d_embedding</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vectorizer</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">"""</span>
-<span class="sd">    ???+ info "Docstring"</span>
-<span class="sd">        Get embeddings in the xy-plane and return the reducer.</span>
+<span class="sd">    ???+ note "Get embeddings in the xy-plane and return the dimensionality reducer."</span>
+<span class="sd">        Reference: [`DimensionalityReducer`](https://github.com/phurwicz/hover/blob/main/hover/core/representation/reduction.py)</span>
+
+<span class="sd">        | Param        | Type       | Description                        |</span>
+<span class="sd">        | :----------- | :--------- | :--------------------------------- |</span>
+<span class="sd">        | `vectorizer` | `callable` | the feature -&gt; vector function     |</span>
+<span class="sd">        | `method`     | `str`      | arg for `DimensionalityReducer`    |</span>
+<span class="sd">        | `**kwargs`   |            | kwargs for `DimensionalityReducer` |</span>
 <span class="sd">    """</span>
     <span class="kn">from</span> <span class="nn">hover.core.representation.reduction</span> <span class="kn">import</span> <span class="n">DimensionalityReducer</span>
 
@@ -612,15 +713,32 @@ compute_2d_embedding<span class="p">(</span><span class="bp">self</span><span cl
 copy<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">use_df</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> </code>
 </h3>
 <div class="doc doc-contents">
-<details class="info" open="open"><summary>Docstring</summary><p>Create another instance, carrying over the data entries.</p>
+<details class="note" open="open"><summary>Create another instance, copying over the data entries.</summary><table>
+<thead>
+<tr>
+<th align="left">Param</th>
+<th align="left">Type</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code>use_df</code></td>
+<td align="left"><code>bool</code></td>
+<td align="left">whether to use the df or dictl form</td>
+</tr>
+</tbody>
+</table>
 </details>
 <details class="quote">
 <summary>Source code in <code>hover/core/dataset.py</code></summary>
 <div class="highlight">
 <pre><span></span><code><span class="k">def</span> <span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">use_df</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
     <span class="sd">"""</span>
-<span class="sd">    ???+ info "Docstring"</span>
-<span class="sd">        Create another instance, carrying over the data entries.</span>
+<span class="sd">    ???+ note "Create another instance, copying over the data entries."</span>
+<span class="sd">        | Param    | Type   | Description                          |</span>
+<span class="sd">        | :------- | :----- | :----------------------------------- |</span>
+<span class="sd">        | `use_df` | `bool` | whether to use the df or dictl form |</span>
 <span class="sd">    """</span>
     <span class="k">if</span> <span class="n">use_df</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">synchronize_df_to_dictl</span><span class="p">()</span>
@@ -643,15 +761,13 @@ copy<span class="p">(</span><span class="bp">self</span><span class="p">,</span>
 df_deduplicate<span class="p">(</span><span class="bp">self</span><span class="p">)</span> </code>
 </h3>
 <div class="doc doc-contents">
-<details class="info" open="open"><summary>Docstring</summary><p>Cross-deduplicate data entries by feature between subsets.</p>
-</details>
+<details class="note" open="open"><summary>Cross-deduplicate data entries by feature between subsets.</summary></details>
 <details class="quote">
 <summary>Source code in <code>hover/core/dataset.py</code></summary>
 <div class="highlight">
 <pre><span></span><code><span class="k">def</span> <span class="nf">df_deduplicate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="sd">"""</span>
-<span class="sd">    ???+ info "Docstring"</span>
-<span class="sd">        Cross-deduplicate data entries by feature between subsets.</span>
+<span class="sd">    ???+ note "Cross-deduplicate data entries by feature between subsets."</span>
 <span class="sd">    """</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_info</span><span class="p">(</span><span class="s2">"Deduplicating..."</span><span class="p">)</span>
     <span class="c1"># for data entry accounting</span>
@@ -698,24 +814,50 @@ df_deduplicate<span class="p">(</span><span class="bp">self</span><span class="p
 loader<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">vectorizer</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">smoothing_coeff</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span> </code>
 </h3>
 <div class="doc doc-contents">
-<details class="info" open="open"><summary>Docstring</summary><p>Prepare a Torch Dataloader for training or evaluation.</p>
-<ul>
-<li>key(str): the subset of dataset to use.</li>
-<li>vectorizer(callable): callable that turns a string into a vector.</li>
-<li>smoothing_coeff(float): the smoothing coeffient for soft labels.</li>
-</ul>
+<details class="note" open="open"><summary>Prepare a torch <code>Dataloader</code> for training or evaluation.</summary><table>
+<thead>
+<tr>
+<th align="left">Param</th>
+<th align="left">Type</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code>key</code></td>
+<td align="left"><code>str</code></td>
+<td align="left">subset of data, e.g. <code>"train"</code></td>
+</tr>
+<tr>
+<td align="left"><code>vectorizer</code></td>
+<td align="left"><code>callable</code></td>
+<td align="left">the feature -&gt; vector function</td>
+</tr>
+<tr>
+<td align="left"><code>batch_size</code></td>
+<td align="left"><code>int</code></td>
+<td align="left">size per batch</td>
+</tr>
+<tr>
+<td align="left"><code>smoothing_coeff</code></td>
+<td align="left"><code>float</code></td>
+<td align="left">portion of probability to equally split between classes</td>
+</tr>
+</tbody>
+</table>
 </details>
 <details class="quote">
 <summary>Source code in <code>hover/core/dataset.py</code></summary>
 <div class="highlight">
 <pre><span></span><code><span class="k">def</span> <span class="nf">loader</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">vectorizer</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">smoothing_coeff</span><span class="o">=</span><span class="mf">0.0</span><span class="p">):</span>
     <span class="sd">"""</span>
-<span class="sd">    ???+ info "Docstring"</span>
-<span class="sd">        Prepare a Torch Dataloader for training or evaluation.</span>
-
-<span class="sd">        - key(str): the subset of dataset to use.</span>
-<span class="sd">        - vectorizer(callable): callable that turns a string into a vector.</span>
-<span class="sd">        - smoothing_coeff(float): the smoothing coeffient for soft labels.</span>
+<span class="sd">    ???+ note "Prepare a torch `Dataloader` for training or evaluation."</span>
+<span class="sd">        | Param        | Type       | Description                        |</span>
+<span class="sd">        | :----------- | :--------- | :--------------------------------- |</span>
+<span class="sd">        | `key`        | `str`      | subset of data, e.g. `"train"`     |</span>
+<span class="sd">        | `vectorizer` | `callable` | the feature -&gt; vector function     |</span>
+<span class="sd">        | `batch_size` | `int`      | size per batch                     |</span>
+<span class="sd">        | `smoothing_coeff` | `float` | portion of probability to equally split between classes |</span>
 <span class="sd">    """</span>
     <span class="c1"># lazy import: missing torch should not break the rest of the class</span>
     <span class="kn">from</span> <span class="nn">hover.utils.torch_helper</span> <span class="kn">import</span> <span class="n">vector_dataloader</span><span class="p">,</span> <span class="n">one_hot</span><span class="p">,</span> <span class="n">label_smoothing</span>
@@ -755,17 +897,41 @@ loader<span class="p">(</span><span class="bp">self</span><span class="p">,</spa
 setup_label_coding<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> </code>
 </h3>
 <div class="doc doc-contents">
-<details class="info" open="open"><summary>Docstring</summary><p>Auto-determine labels in the dataset, then create encoder/decoder in lexical order.
-Add ABSTAIN as a no-label placeholder.</p>
+<details class="note" open="open"><summary>Auto-determine labels in the dataset, then create encoder/decoder in lexical order.</summary><p>Add <code>"ABSTAIN"</code> as a no-label placeholder which gets ignored categorically.</p>
+<table>
+<thead>
+<tr>
+<th align="left">Param</th>
+<th align="left">Type</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code>verbose</code></td>
+<td align="left"><code>bool</code></td>
+<td align="left">whether to log verbosely</td>
+</tr>
+<tr>
+<td align="left"><code>debug</code></td>
+<td align="left"><code>bool</code></td>
+<td align="left">whether to enable label validation</td>
+</tr>
+</tbody>
+</table>
 </details>
 <details class="quote">
 <summary>Source code in <code>hover/core/dataset.py</code></summary>
 <div class="highlight">
 <pre><span></span><code><span class="k">def</span> <span class="nf">setup_label_coding</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">"""</span>
-<span class="sd">    ???+ info "Docstring"</span>
-<span class="sd">        Auto-determine labels in the dataset, then create encoder/decoder in lexical order.</span>
-<span class="sd">        Add ABSTAIN as a no-label placeholder.</span>
+<span class="sd">    ???+ note "Auto-determine labels in the dataset, then create encoder/decoder in lexical order."</span>
+<span class="sd">        Add `"ABSTAIN"` as a no-label placeholder which gets ignored categorically.</span>
+
+<span class="sd">        | Param     | Type   | Description                        |</span>
+<span class="sd">        | :-------- | :----- | :--------------------------------- |</span>
+<span class="sd">        | `verbose` | `bool` | whether to log verbosely           |</span>
+<span class="sd">        | `debug`   | `bool` | whether to enable label validation |</span>
 <span class="sd">    """</span>
     <span class="n">all_labels</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
     <span class="k">for</span> <span class="n">_key</span> <span class="ow">in</span> <span class="p">[</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">PUBLIC_SUBSETS</span><span class="p">,</span> <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">PRIVATE_SUBSETS</span><span class="p">]:</span>
@@ -799,15 +965,33 @@ Add ABSTAIN as a no-label placeholder.</p>
 setup_pop_table<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> </code>
 </h3>
 <div class="doc doc-contents">
-<details class="info" open="open"><summary>Docstring</summary><p>Set up a table widget for subset data populations.</p>
+<details class="note" open="open"><summary>Set up a bokeh <code>DataTable</code> widget for monitoring subset data populations.</summary><table>
+<thead>
+<tr>
+<th align="left">Param</th>
+<th align="left">Type</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code>**kwargs</code></td>
+<td align="left"></td>
+<td align="left">forwarded to the <code>DataTable</code></td>
+</tr>
+</tbody>
+</table>
 </details>
 <details class="quote">
 <summary>Source code in <code>hover/core/dataset.py</code></summary>
 <div class="highlight">
 <pre><span></span><code><span class="k">def</span> <span class="nf">setup_pop_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">"""</span>
-<span class="sd">    ???+ info "Docstring"</span>
-<span class="sd">        Set up a table widget for subset data populations.</span>
+<span class="sd">    ???+ note "Set up a bokeh `DataTable` widget for monitoring subset data populations."</span>
+
+<span class="sd">        | Param      | Type   | Description                  |</span>
+<span class="sd">        | :--------- | :----- | :--------------------------- |</span>
+<span class="sd">        | `**kwargs` |        | forwarded to the `DataTable` |</span>
 <span class="sd">    """</span>
     <span class="n">subsets</span> <span class="o">=</span> <span class="p">[</span>
         <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">SCRATCH_SUBSETS</span><span class="p">,</span>
@@ -861,15 +1045,13 @@ setup_pop_table<span class="p">(</span><span class="bp">self</span><span class="
 setup_widgets<span class="p">(</span><span class="bp">self</span><span class="p">)</span> </code>
 </h3>
 <div class="doc doc-contents">
-<details class="info" open="open"><summary>Docstring</summary><p>Critical widgets for interactive data management.</p>
-</details>
+<details class="note" open="open"><summary>Create <code>bokeh</code> widgets for interactive data management.</summary></details>
 <details class="quote">
 <summary>Source code in <code>hover/core/dataset.py</code></summary>
 <div class="highlight">
 <pre><span></span><code><span class="k">def</span> <span class="nf">setup_widgets</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="sd">"""</span>
-<span class="sd">    ???+ info "Docstring"</span>
-<span class="sd">        Critical widgets for interactive data management.</span>
+<span class="sd">    ???+ note "Create `bokeh` widgets for interactive data management."</span>
 <span class="sd">    """</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">update_pusher</span> <span class="o">=</span> <span class="n">Button</span><span class="p">(</span>
         <span class="n">label</span><span class="o">=</span><span class="s2">"Push"</span><span class="p">,</span> <span class="n">button_type</span><span class="o">=</span><span class="s2">"success"</span><span class="p">,</span> <span class="n">height_policy</span><span class="o">=</span><span class="s2">"fit"</span><span class="p">,</span> <span class="n">width_policy</span><span class="o">=</span><span class="s2">"min"</span>
@@ -932,15 +1114,38 @@ setup_widgets<span class="p">(</span><span class="bp">self</span><span class="p"
 subscribe_data_commit<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">explorer</span><span class="p">,</span> <span class="n">subset_mapping</span><span class="p">)</span> </code>
 </h3>
 <div class="doc doc-contents">
-<details class="info" open="open"><summary>Docstring</summary><p>Enable committing data across subsets, specified by a selection in an explorer and a dropdown widget of the dataset.</p>
+<details class="note" open="open"><summary>Enable committing data across subsets, specified by a selection in an explorer and a dropdown widget of the dataset.</summary><table>
+<thead>
+<tr>
+<th align="left">Param</th>
+<th align="left">Type</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code>explorer</code></td>
+<td align="left"><code>BokehBaseExplorer</code></td>
+<td align="left">the explorer to register</td>
+</tr>
+<tr>
+<td align="left"><code>subset_mapping</code></td>
+<td align="left"><code>dict</code></td>
+<td align="left"><code>dataset</code> -&gt; <code>explorer</code> subset mapping</td>
+</tr>
+</tbody>
+</table>
 </details>
 <details class="quote">
 <summary>Source code in <code>hover/core/dataset.py</code></summary>
 <div class="highlight">
 <pre><span></span><code><span class="k">def</span> <span class="nf">subscribe_data_commit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">explorer</span><span class="p">,</span> <span class="n">subset_mapping</span><span class="p">):</span>
     <span class="sd">"""</span>
-<span class="sd">    ???+ info "Docstring"</span>
-<span class="sd">        Enable committing data across subsets, specified by a selection in an explorer and a dropdown widget of the dataset.</span>
+<span class="sd">    ???+ note "Enable committing data across subsets, specified by a selection in an explorer and a dropdown widget of the dataset."</span>
+<span class="sd">        | Param            | Type   | Description                            |</span>
+<span class="sd">        | :--------------- | :----- | :------------------------------------- |</span>
+<span class="sd">        | `explorer`       | `BokehBaseExplorer` | the explorer to register  |</span>
+<span class="sd">        | `subset_mapping` | `dict` | `dataset` -&gt; `explorer` subset mapping |</span>
 <span class="sd">    """</span>
 
     <span class="k">def</span> <span class="nf">callback_commit</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
@@ -992,7 +1197,27 @@ subscribe_data_commit<span class="p">(</span><span class="bp">self</span><span c
 subscribe_update_push<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">explorer</span><span class="p">,</span> <span class="n">subset_mapping</span><span class="p">)</span> </code>
 </h3>
 <div class="doc doc-contents">
-<details class="info" open="open"><summary>Docstring</summary><p>Enable pushing updated DataFrames to explorers that depend on them.</p>
+<details class="note" open="open"><summary>Enable pushing updated DataFrames to explorers that depend on them.</summary><table>
+<thead>
+<tr>
+<th align="left">Param</th>
+<th align="left">Type</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code>explorer</code></td>
+<td align="left"><code>BokehBaseExplorer</code></td>
+<td align="left">the explorer to register</td>
+</tr>
+<tr>
+<td align="left"><code>subset_mapping</code></td>
+<td align="left"><code>dict</code></td>
+<td align="left"><code>dataset</code> -&gt; <code>explorer</code> subset mapping</td>
+</tr>
+</tbody>
+</table>
 <p>Note: the reason we need this is due to <code>self.dfs[key] = ...</code>-like assignments. If DF operations were all in-place, then the explorers could directly access the updates through their <code>self.dfs</code> references.</p>
 </details>
 <details class="quote">
@@ -1000,8 +1225,11 @@ subscribe_update_push<span class="p">(</span><span class="bp">self</span><span c
 <div class="highlight">
 <pre><span></span><code><span class="k">def</span> <span class="nf">subscribe_update_push</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">explorer</span><span class="p">,</span> <span class="n">subset_mapping</span><span class="p">):</span>
     <span class="sd">"""</span>
-<span class="sd">    ???+ info "Docstring"</span>
-<span class="sd">        Enable pushing updated DataFrames to explorers that depend on them.</span>
+<span class="sd">    ???+ note "Enable pushing updated DataFrames to explorers that depend on them."</span>
+<span class="sd">        | Param            | Type   | Description                            |</span>
+<span class="sd">        | :--------------- | :----- | :------------------------------------- |</span>
+<span class="sd">        | `explorer`       | `BokehBaseExplorer` | the explorer to register  |</span>
+<span class="sd">        | `subset_mapping` | `dict` | `dataset` -&gt; `explorer` subset mapping |</span>
 
 <span class="sd">        Note: the reason we need this is due to `self.dfs[key] = ...`-like assignments. If DF operations were all in-place, then the explorers could directly access the updates through their `self.dfs` references.</span>
 <span class="sd">    """</span>
@@ -1030,15 +1258,13 @@ subscribe_update_push<span class="p">(</span><span class="bp">self</span><span c
 synchronize_df_to_dictl<span class="p">(</span><span class="bp">self</span><span class="p">)</span> </code>
 </h3>
 <div class="doc doc-contents">
-<details class="info" open="open"><summary>Docstring</summary><p>Re-make lists of dictionaries from dataframes.</p>
-</details>
+<details class="note" open="open"><summary>Re-make lists of dictionaries from dataframes.</summary></details>
 <details class="quote">
 <summary>Source code in <code>hover/core/dataset.py</code></summary>
 <div class="highlight">
 <pre><span></span><code><span class="k">def</span> <span class="nf">synchronize_df_to_dictl</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="sd">"""</span>
-<span class="sd">    ???+ info "Docstring"</span>
-<span class="sd">        Re-make lists of dictionaries from dataframes.</span>
+<span class="sd">    ???+ note "Re-make lists of dictionaries from dataframes."</span>
 <span class="sd">    """</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">dictls</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
     <span class="k">for</span> <span class="n">_key</span><span class="p">,</span> <span class="n">_df</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dfs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
@@ -1054,15 +1280,13 @@ synchronize_df_to_dictl<span class="p">(</span><span class="bp">self</span><span
 synchronize_dictl_to_df<span class="p">(</span><span class="bp">self</span><span class="p">)</span> </code>
 </h3>
 <div class="doc doc-contents">
-<details class="info" open="open"><summary>Docstring</summary><p>Re-make dataframes from lists of dictionaries.</p>
-</details>
+<details class="note" open="open"><summary>Re-make dataframes from lists of dictionaries.</summary></details>
 <details class="quote">
 <summary>Source code in <code>hover/core/dataset.py</code></summary>
 <div class="highlight">
 <pre><span></span><code><span class="k">def</span> <span class="nf">synchronize_dictl_to_df</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="sd">"""</span>
-<span class="sd">    ???+ info "Docstring"</span>
-<span class="sd">        Re-make dataframes from lists of dictionaries.</span>
+<span class="sd">    ???+ note "Re-make dataframes from lists of dictionaries."</span>
 <span class="sd">    """</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">dfs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
     <span class="k">for</span> <span class="n">_key</span><span class="p">,</span> <span class="n">_dictl</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dictls</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
@@ -1085,15 +1309,33 @@ synchronize_dictl_to_df<span class="p">(</span><span class="bp">self</span><span
 validate_labels<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">raise_exception</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> </code>
 </h3>
 <div class="doc doc-contents">
-<details class="info" open="open"><summary>Docstring</summary><p>Check that every label is in the encoder.</p>
+<details class="note" open="open"><summary>Assert that every label is in the encoder.</summary><table>
+<thead>
+<tr>
+<th align="left">Param</th>
+<th align="left">Type</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code>raise_exception</code></td>
+<td align="left"><code>bool</code></td>
+<td align="left">whether to raise errors when failed</td>
+</tr>
+</tbody>
+</table>
 </details>
 <details class="quote">
 <summary>Source code in <code>hover/core/dataset.py</code></summary>
 <div class="highlight">
 <pre><span></span><code><span class="k">def</span> <span class="nf">validate_labels</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">raise_exception</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
     <span class="sd">"""</span>
-<span class="sd">    ???+ info "Docstring"</span>
-<span class="sd">        Check that every label is in the encoder.</span>
+<span class="sd">    ???+ note "Assert that every label is in the encoder."</span>
+
+<span class="sd">        | Param             | Type   | Description                         |</span>
+<span class="sd">        | :---------------- | :----- | :---------------------------------- |</span>
+<span class="sd">        | `raise_exception` | `bool` | whether to raise errors when failed |</span>
 <span class="sd">    """</span>
     <span class="k">for</span> <span class="n">_key</span> <span class="ow">in</span> <span class="p">[</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">PUBLIC_SUBSETS</span><span class="p">,</span> <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">PRIVATE_SUBSETS</span><span class="p">]:</span>
         <span class="n">_invalid_indices</span> <span class="o">=</span> <span class="kc">None</span>
@@ -1116,15 +1358,13 @@ validate_labels<span class="p">(</span><span class="bp">self</span><span class="
 view<span class="p">(</span><span class="bp">self</span><span class="p">)</span> </code>
 </h3>
 <div class="doc doc-contents">
-<details class="info" open="open"><summary>Docstring</summary><p>Defines the layout of bokeh models.</p>
-</details>
+<details class="note" open="open"><summary>Defines the layout of <code>bokeh</code> objects when visualized.</summary></details>
 <details class="quote">
 <summary>Source code in <code>hover/core/dataset.py</code></summary>
 <div class="highlight">
 <pre><span></span><code><span class="k">def</span> <span class="nf">view</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="sd">"""</span>
-<span class="sd">    ???+ info "Docstring"</span>
-<span class="sd">        Defines the layout of bokeh models.</span>
+<span class="sd">    ???+ note "Defines the layout of `bokeh` objects when visualized."</span>
 <span class="sd">    """</span>
     <span class="c1"># local import to avoid naming confusion/conflicts</span>
     <span class="kn">from</span> <span class="nn">bokeh.layouts</span> <span class="kn">import</span> <span class="n">row</span><span class="p">,</span> <span class="n">column</span>
@@ -1147,8 +1387,7 @@ view<span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 <code>SupervisableTextDataset</code>
 </h2>
 <div class="doc doc-contents">
-<details class="info" open="open"><summary>Docstring</summary><p>Can add text-specific methods.</p>
-</details>
+<details class="note" open="open"><summary>Can add text-specific methods.</summary></details>
 <div class="doc doc-children">
 </div>
 </div>
@@ -1211,7 +1450,7 @@ view<span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 <script>
         app = initialize({
           base: "../../..",
-          features: ['navigation.expand', 'toc.integrate', 'search.suggest'],
+          features: ['navigation.expand', 'navigation.tabs', 'search.suggest', 'toc.integrate'],
           search: Object.assign({
             worker: "../../../assets/javascripts/worker/search.4ac00218.min.js"
           }, typeof search !== "undefined" && search)

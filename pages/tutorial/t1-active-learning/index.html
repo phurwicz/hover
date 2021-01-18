@@ -149,6 +149,69 @@
       
       
         
+          
+
+  
+
+<nav class="md-tabs md-tabs--active" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-tabs__inner md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  <li class="md-tabs__item">
+    
+    
+    <a href="../../.." class="md-tabs__link">
+      Home
+    </a>
+  </li>
+
+      
+        
+  
+  
+    <li class="md-tabs__item">
+      
+      
+        
+      
+      <a href="../t0-quickstart/" class="md-tabs__link md-tabs__link--active">
+        Tutorial
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+    <li class="md-tabs__item">
+      
+      
+      <a href="../../topics/dataset/" class="md-tabs__link">
+        Topics
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+    <li class="md-tabs__item">
+      
+      
+      <a href="../../reference/recipes/" class="md-tabs__link">
+        API Reference
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+        
       
       <main class="md-main" data-md-component="main">
         <div class="md-main__inner md-grid">
@@ -413,6 +476,18 @@
   </li>
 
         
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../reference/core-representation/" class="md-nav__link">
+      hover.core.representation
+    </a>
+  </li>
+
+        
       </ul>
     </nav>
   </li>
@@ -554,7 +629,6 @@ dataset.compute_2d_embedding(vectorizer, "umap")
 dataset.dfs["raw"].head(5)
 </pre>
 
-<p><br></p>
 <h2 id="ingredient-4-4-model-callback"><strong>Ingredient 4 / 4: Model Callback</strong></h2>
 <p>To utilize active learning, we need to specify how to get a model in the loop.</p>
 <p><code>hover</code> considers the <code>vectorizer</code> as a "frozen" embedding and follows up with a neural network, which infers its own dimensionality from the vectorizer and the output classes.</p>
@@ -590,7 +664,6 @@ print(vecnet.predict_proba(text))
 print(vecnet.predict_proba([text]))
 </pre>
 
-<p><br></p>
 <p>Note how the callback dynamically takes <code>dataset.classes</code>, which means the model architecture will adapt when we add classes during annotation.</p>
 <h2 id="recipe-time"><img alt="✨" class="emojione" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.2.7/assets/png/2728.png" title=":sparkles:" /> <strong>Recipe Time</strong></h2>
 <p>Now we invoke the <code>active_learning</code> recipe.</p>
@@ -725,7 +798,7 @@ show(handle)
       <script>
         app = initialize({
           base: "../../..",
-          features: ['navigation.expand', 'toc.integrate', 'search.suggest'],
+          features: ['navigation.expand', 'navigation.tabs', 'search.suggest', 'toc.integrate'],
           search: Object.assign({
             worker: "../../../assets/javascripts/worker/search.4ac00218.min.js"
           }, typeof search !== "undefined" && search)

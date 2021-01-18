@@ -142,6 +142,67 @@
       
       
         
+          
+
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-tabs__inner md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  <li class="md-tabs__item">
+    
+    
+      
+    
+    <a href="/hover/." class="md-tabs__link md-tabs__link--active">
+      Home
+    </a>
+  </li>
+
+      
+        
+  
+  
+    <li class="md-tabs__item">
+      
+      
+      <a href="/hover/pages/tutorial/t0-quickstart/" class="md-tabs__link">
+        Tutorial
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+    <li class="md-tabs__item">
+      
+      
+      <a href="/hover/pages/topics/dataset/" class="md-tabs__link">
+        Topics
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+    <li class="md-tabs__item">
+      
+      
+      <a href="/hover/pages/reference/recipes/" class="md-tabs__link">
+        API Reference
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+        
       
       <main class="md-main" data-md-component="main">
         <div class="md-main__inner md-grid">
@@ -356,6 +417,18 @@
   </li>
 
         
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="/hover/pages/reference/core-representation/" class="md-nav__link">
+      hover.core.representation
+    </a>
+  </li>
+
+        
       </ul>
     </nav>
   </li>
@@ -409,7 +482,7 @@
       <script>
         app = initialize({
           base: "/hover",
-          features: ['navigation.expand', 'toc.integrate', 'search.suggest'],
+          features: ['navigation.expand', 'navigation.tabs', 'search.suggest', 'toc.integrate'],
           search: Object.assign({
             worker: "/hover/assets/javascripts/worker/search.4ac00218.min.js"
           }, typeof search !== "undefined" && search)

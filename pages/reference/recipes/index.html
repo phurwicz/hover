@@ -88,6 +88,32 @@
 </nav>
 </header>
 <div class="md-container" data-md-component="container">
+<nav aria-label="Tabs" class="md-tabs md-tabs--active" data-md-component="tabs">
+<div class="md-tabs__inner md-grid">
+<ul class="md-tabs__list">
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../../..">
+      Home
+    </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../../tutorial/t0-quickstart/">
+        Tutorial
+      </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../../topics/dataset/">
+        Topics
+      </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link md-tabs__link--active" href="./">
+        API Reference
+      </a>
+</li>
+</ul>
+</div>
+</nav>
 <main class="md-main" data-md-component="main">
 <div class="md-main__inner md-grid">
 <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
@@ -283,6 +309,11 @@
       hover.core.neural
     </a>
 </li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../core-representation/">
+      hover.core.representation
+    </a>
+</li>
 </ul>
 </nav>
 </li>
@@ -390,7 +421,7 @@
 <code>hover.recipes.stable</code>
 </h2>
 <div class="doc doc-contents first">
-<details class="info" open="open"><summary>Docstring</summary><p>Stable recipes whose function signatures should almost never change in the future.</p>
+<details class="note" open="open"><summary>High-level functions to produce an interactive annotation interface.</summary><p>Stable recipes whose function signatures should almost never change in the future.</p>
 </details>
 <div class="doc doc-children">
 <div class="doc doc-object doc-function">
@@ -399,9 +430,49 @@
 linked_annotator<span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">600</span><span class="p">)</span> </code>
 </h3>
 <div class="doc doc-contents">
-<details class="info" open="open"><summary>Docstring</summary><p>Leveraging <code>BokehDataFinder</code> which has the best search highlights.</p>
-<p>Layout:</p>
-<p>sidebar | [search here] | [annotate here]</p>
+<details class="note" open="open"><summary>Display the dataset on a 2D map in two views, one for search and one for annotation.</summary><table>
+<thead>
+<tr>
+<th align="left">Param</th>
+<th align="left">Type</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code>dataset</code></td>
+<td align="left"><code>SupervisableDataset</code></td>
+<td align="left">the dataset to link to</td>
+</tr>
+<tr>
+<td align="left"><code>height</code></td>
+<td align="left"><code>int</code></td>
+<td align="left">height of each Bokeh explorer plot</td>
+</tr>
+<tr>
+<td align="left"><code>width</code></td>
+<td align="left"><code>int</code></td>
+<td align="left">width of each Bokeh explorer plot</td>
+</tr>
+</tbody>
+</table>
+<p>Expected visual layout:</p>
+<table>
+<thead>
+<tr>
+<th align="left">SupervisableDataset</th>
+<th align="left">BokehDataFinder</th>
+<th align="left">BokehDataAnnotator</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">manage data subsets</td>
+<td align="left">search -&gt; highlight</td>
+<td align="left">make annotations</td>
+</tr>
+</tbody>
+</table>
 </details>
 <details class="quote">
 <summary>Source code in <code>hover/recipes/stable.py</code></summary>
@@ -409,12 +480,19 @@ linked_annotator<span class="p">(</span><span class="n">dataset</span><span clas
 <pre><span></span><code><span class="nd">@servable</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">"Linked Annotator"</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">linked_annotator</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">600</span><span class="p">):</span>
     <span class="sd">"""</span>
-<span class="sd">    ???+ info "Docstring"</span>
-<span class="sd">        Leveraging `BokehDataFinder` which has the best search highlights.</span>
+<span class="sd">    ???+ note "Display the dataset on a 2D map in two views, one for search and one for annotation."</span>
 
-<span class="sd">        Layout:</span>
+<span class="sd">        | Param     | Type     | Description                          |</span>
+<span class="sd">        | :-------- | :------- | :----------------------------------- |</span>
+<span class="sd">        | `dataset` | `SupervisableDataset` | the dataset to link to  |</span>
+<span class="sd">        | `height`  | `int`    | height of each Bokeh explorer plot   |</span>
+<span class="sd">        | `width`   | `int`    | width of each Bokeh explorer plot    |</span>
 
-<span class="sd">        sidebar | [search here] | [annotate here]</span>
+<span class="sd">        Expected visual layout:</span>
+
+<span class="sd">        | SupervisableDataset | BokehDataFinder     | BokehDataAnnotator |</span>
+<span class="sd">        | :------------------ | :------------------ | :----------------- |</span>
+<span class="sd">        | manage data subsets | search -&gt; highlight | make annotations   |</span>
 <span class="sd">    """</span>
     <span class="n">finder</span> <span class="o">=</span> <span class="n">standard_finder</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">)</span>
     <span class="n">annotator</span> <span class="o">=</span> <span class="n">standard_annotator</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">)</span>
@@ -437,9 +515,47 @@ linked_annotator<span class="p">(</span><span class="n">dataset</span><span clas
 simple_annotator<span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">600</span><span class="p">)</span> </code>
 </h3>
 <div class="doc doc-contents">
-<details class="info" open="open"><summary>Docstring</summary><p>The most basic recipe, which nonetheless can be useful with decent 2-d embedding.</p>
-<p>Layout:</p>
-<p>sidebar | [annotate here]</p>
+<details class="note" open="open"><summary>Display the dataset with on a 2D map for annotation.</summary><table>
+<thead>
+<tr>
+<th align="left">Param</th>
+<th align="left">Type</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code>dataset</code></td>
+<td align="left"><code>SupervisableDataset</code></td>
+<td align="left">the dataset to link to</td>
+</tr>
+<tr>
+<td align="left"><code>height</code></td>
+<td align="left"><code>int</code></td>
+<td align="left">height of each Bokeh explorer plot</td>
+</tr>
+<tr>
+<td align="left"><code>width</code></td>
+<td align="left"><code>int</code></td>
+<td align="left">width of each Bokeh explorer plot</td>
+</tr>
+</tbody>
+</table>
+<p>Expected visual layout:</p>
+<table>
+<thead>
+<tr>
+<th align="left">SupervisableDataset</th>
+<th align="left">BokehDataAnnotator</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">manage data subsets</td>
+<td align="left">make annotations</td>
+</tr>
+</tbody>
+</table>
 </details>
 <details class="quote">
 <summary>Source code in <code>hover/recipes/stable.py</code></summary>
@@ -447,12 +563,19 @@ simple_annotator<span class="p">(</span><span class="n">dataset</span><span clas
 <pre><span></span><code><span class="nd">@servable</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">"Simple Annotator"</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">simple_annotator</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">600</span><span class="p">):</span>
     <span class="sd">"""</span>
-<span class="sd">    ???+ info "Docstring"</span>
-<span class="sd">        The most basic recipe, which nonetheless can be useful with decent 2-d embedding.</span>
+<span class="sd">    ???+ note "Display the dataset with on a 2D map for annotation."</span>
 
-<span class="sd">        Layout:</span>
+<span class="sd">        | Param     | Type     | Description                          |</span>
+<span class="sd">        | :-------- | :------- | :----------------------------------- |</span>
+<span class="sd">        | `dataset` | `SupervisableDataset` | the dataset to link to  |</span>
+<span class="sd">        | `height`  | `int`    | height of each Bokeh explorer plot   |</span>
+<span class="sd">        | `width`   | `int`    | width of each Bokeh explorer plot    |</span>
 
-<span class="sd">        sidebar | [annotate here]</span>
+<span class="sd">        Expected visual layout:</span>
+
+<span class="sd">        | SupervisableDataset | BokehDataAnnotator |</span>
+<span class="sd">        | :------------------ | :----------------- |</span>
+<span class="sd">        | manage data subsets | make annotations   |</span>
 <span class="sd">    """</span>
     <span class="n">annotator</span> <span class="o">=</span> <span class="n">standard_annotator</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">)</span>
 
@@ -477,7 +600,7 @@ simple_annotator<span class="p">(</span><span class="n">dataset</span><span clas
 <code>hover.recipes.experimental</code>
 </h2>
 <div class="doc doc-contents first">
-<details class="info" open="open"><summary>Docstring</summary><p>Experimental recipes whose function signatures might change significantly in the future. Use with caution.</p>
+<details class="note" open="open"><summary>High-level functions to produce an interactive annotation interface.</summary><p>Experimental recipes whose function signatures might change significantly in the future. Use with caution.</p>
 </details>
 <div class="doc doc-children">
 <div class="doc doc-object doc-function">
@@ -486,9 +609,62 @@ simple_annotator<span class="p">(</span><span class="n">dataset</span><span clas
 active_learning<span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">vectorizer</span><span class="p">,</span> <span class="n">vecnet_callback</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">600</span><span class="p">)</span> </code>
 </h3>
 <div class="doc doc-contents">
-<details class="info" open="open"><summary>Docstring</summary><p>Place a VectorNet in the loop.</p>
-<p>Layout:</p>
-<p>sidebar | [inspect soft labels here] | [annotate here] | [search here]</p>
+<details class="note" open="open"><summary>Display the dataset for annotation, putting a classification model in the loop.</summary><p>Currently works most smoothly with <code>VectorNet</code>.</p>
+<table>
+<thead>
+<tr>
+<th align="left">Param</th>
+<th align="left">Type</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code>dataset</code></td>
+<td align="left"><code>SupervisableDataset</code></td>
+<td align="left">the dataset to link to</td>
+</tr>
+<tr>
+<td align="left"><code>vectorizer</code></td>
+<td align="left"><code>callable</code></td>
+<td align="left">the feature -&gt; vector function</td>
+</tr>
+<tr>
+<td align="left"><code>vecnet_callback</code></td>
+<td align="left"><code>callable</code></td>
+<td align="left">the (dataset, vectorizer) -&gt; <code>VecNet</code> function</td>
+</tr>
+<tr>
+<td align="left"><code>height</code></td>
+<td align="left"><code>int</code></td>
+<td align="left">height of each Bokeh explorer plot</td>
+</tr>
+<tr>
+<td align="left"><code>width</code></td>
+<td align="left"><code>int</code></td>
+<td align="left">width of each Bokeh explorer plot</td>
+</tr>
+</tbody>
+</table>
+<p>Expected visual layout:</p>
+<table>
+<thead>
+<tr>
+<th align="left">SupervisableDataset</th>
+<th align="left">BokehSoftLabelExplorer</th>
+<th align="left">BokehDataAnnotator</th>
+<th align="left">BokehDataFinder</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">manage data subsets</td>
+<td align="left">inspect model predictions</td>
+<td align="left">make annotations</td>
+<td align="left">search -&gt; highlight</td>
+</tr>
+</tbody>
+</table>
 </details>
 <details class="quote">
 <summary>Source code in <code>hover/recipes/experimental.py</code></summary>
@@ -496,12 +672,22 @@ active_learning<span class="p">(</span><span class="n">dataset</span><span class
 <pre><span></span><code><span class="nd">@servable</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">"Active Learning"</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">active_learning</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">vectorizer</span><span class="p">,</span> <span class="n">vecnet_callback</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">600</span><span class="p">):</span>
     <span class="sd">"""</span>
-<span class="sd">    ???+ info "Docstring"</span>
-<span class="sd">        Place a VectorNet in the loop.</span>
+<span class="sd">    ???+ note "Display the dataset for annotation, putting a classification model in the loop."</span>
+<span class="sd">        Currently works most smoothly with `VectorNet`.</span>
 
-<span class="sd">        Layout:</span>
+<span class="sd">        | Param     | Type     | Description                          |</span>
+<span class="sd">        | :-------- | :------- | :----------------------------------- |</span>
+<span class="sd">        | `dataset` | `SupervisableDataset` | the dataset to link to  |</span>
+<span class="sd">        | `vectorizer` | `callable` | the feature -&gt; vector function  |</span>
+<span class="sd">        | `vecnet_callback` | `callable` | the (dataset, vectorizer) -&gt; `VecNet` function|</span>
+<span class="sd">        | `height`  | `int`    | height of each Bokeh explorer plot   |</span>
+<span class="sd">        | `width`   | `int`    | width of each Bokeh explorer plot    |</span>
 
-<span class="sd">        sidebar | [inspect soft labels here] | [annotate here] | [search here]</span>
+<span class="sd">        Expected visual layout:</span>
+
+<span class="sd">        | SupervisableDataset | BokehSoftLabelExplorer    | BokehDataAnnotator | BokehDataFinder     |</span>
+<span class="sd">        | :------------------ | :------------------------ | :----------------- | :------------------ |</span>
+<span class="sd">        | manage data subsets | inspect model predictions | make annotations   | search -&gt; highlight |</span>
 <span class="sd">    """</span>
     <span class="c1"># building-block subroutines</span>
     <span class="n">softlabel</span> <span class="o">=</span> <span class="n">standard_softlabel</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">)</span>
@@ -567,9 +753,55 @@ active_learning<span class="p">(</span><span class="n">dataset</span><span class
 snorkel_crosscheck<span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">lf_list</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">600</span><span class="p">)</span> </code>
 </h3>
 <div class="doc doc-contents">
-<details class="info" open="open"><summary>Docstring</summary><p>Use the dev set to check labeling functions; use the labeling functions to hint at potential annotation.</p>
-<p>Layout:</p>
-<p>sidebar | [inspect LFs here] | [annotate here]</p>
+<details class="note" open="open"><summary>Display the dataset for annotation, cross-checking with labeling functions.</summary><p>Use the dev set to check labeling functions; use the labeling functions to hint at potential annotation.</p>
+<table>
+<thead>
+<tr>
+<th align="left">Param</th>
+<th align="left">Type</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code>dataset</code></td>
+<td align="left"><code>SupervisableDataset</code></td>
+<td align="left">the dataset to link to</td>
+</tr>
+<tr>
+<td align="left"><code>lf_list</code></td>
+<td align="left"><code>list</code></td>
+<td align="left">a list of callables decorated by <code>@hover.utils.snorkel_helper.labeling_function</code></td>
+</tr>
+<tr>
+<td align="left"><code>height</code></td>
+<td align="left"><code>int</code></td>
+<td align="left">height of each Bokeh explorer plot</td>
+</tr>
+<tr>
+<td align="left"><code>width</code></td>
+<td align="left"><code>int</code></td>
+<td align="left">width of each Bokeh explorer plot</td>
+</tr>
+</tbody>
+</table>
+<p>Expected visual layout:</p>
+<table>
+<thead>
+<tr>
+<th align="left">SupervisableDataset</th>
+<th align="left">BokehSnorkelExplorer</th>
+<th align="left">BokehDataAnnotator</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">manage data subsets</td>
+<td align="left">inspect labeling functions</td>
+<td align="left">make annotations</td>
+</tr>
+</tbody>
+</table>
 </details>
 <details class="quote">
 <summary>Source code in <code>hover/recipes/experimental.py</code></summary>
@@ -577,12 +809,21 @@ snorkel_crosscheck<span class="p">(</span><span class="n">dataset</span><span cl
 <pre><span></span><code><span class="nd">@servable</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">"Snorkel Crosscheck"</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">snorkel_crosscheck</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">lf_list</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">600</span><span class="p">):</span>
     <span class="sd">"""</span>
-<span class="sd">    ???+ info "Docstring"</span>
+<span class="sd">    ???+ note "Display the dataset for annotation, cross-checking with labeling functions."</span>
 <span class="sd">        Use the dev set to check labeling functions; use the labeling functions to hint at potential annotation.</span>
 
-<span class="sd">        Layout:</span>
+<span class="sd">        | Param     | Type     | Description                          |</span>
+<span class="sd">        | :-------- | :------- | :----------------------------------- |</span>
+<span class="sd">        | `dataset` | `SupervisableDataset` | the dataset to link to  |</span>
+<span class="sd">        | `lf_list` | `list`   | a list of callables decorated by `@hover.utils.snorkel_helper.labeling_function` |</span>
+<span class="sd">        | `height`  | `int`    | height of each Bokeh explorer plot   |</span>
+<span class="sd">        | `width`   | `int`    | width of each Bokeh explorer plot    |</span>
 
-<span class="sd">        sidebar | [inspect LFs here] | [annotate here]</span>
+<span class="sd">        Expected visual layout:</span>
+
+<span class="sd">        | SupervisableDataset | BokehSnorkelExplorer       | BokehDataAnnotator |</span>
+<span class="sd">        | :------------------ | :------------------------- | :----------------- |</span>
+<span class="sd">        | manage data subsets | inspect labeling functions | make annotations   |</span>
 <span class="sd">    """</span>
     <span class="c1"># building-block subroutines</span>
     <span class="n">snorkel</span> <span class="o">=</span> <span class="n">standard_snorkel</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">)</span>
@@ -618,8 +859,10 @@ snorkel_crosscheck<span class="p">(</span><span class="n">dataset</span><span cl
 <code>hover.recipes.subroutine</code>
 </h2>
 <div class="doc doc-contents first">
-<details class="info" open="open"><summary>Docstring</summary><p>Functions commonly used by classes in this submodule.</p>
-<p>Note that functions which are also used outside this submodule should be moved up.</p>
+<details class="note" open="open"><summary>Building blocks of high-level recipes.</summary><p>Includes the following:</p>
+<ul>
+<li>functions for creating individual standard explorers appropriate for a dataset.</li>
+</ul>
 </details>
 <div class="doc doc-children">
 <div class="doc doc-object doc-function">
@@ -628,15 +871,55 @@ snorkel_crosscheck<span class="p">(</span><span class="n">dataset</span><span cl
 get_explorer_class<span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="n">feature</span><span class="p">)</span> </code>
 </h3>
 <div class="doc doc-contents">
-<details class="info" open="open"><summary>Docstring</summary><p>Get the right explorer class given a task and a feature.</p>
+<details class="note" open="open"><summary>Get the right <code>hover.core.explorer</code> class given a task and a feature.</summary><p>Can be useful for dynamically creating explorers without knowing the feature in advance.</p>
+<table>
+<thead>
+<tr>
+<th align="left">Param</th>
+<th align="left">Type</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code>task</code></td>
+<td align="left"><code>str</code></td>
+<td align="left">name of the task, which can be <code>"finder"</code>, <code>"annotator"</code>, <code>"margin"</code>, <code>"softlabel"</code>, or <code>"snorkel"</code></td>
+</tr>
+<tr>
+<td align="left"><code>feature</code></td>
+<td align="left"><code>str</code></td>
+<td align="left">name of the main feature, which can be <code>"text"</code>, <code>"audio"</code> or <code>"image"</code></td>
+</tr>
+</tbody>
+</table>
+<p>Usage:
+<div class="highlight">
+<pre><span></span><code><span class="c1"># this creates an instance of BokehTextFinder</span>
+<span class="n">explorer</span> <span class="o">=</span> <span class="n">get_explorer_class</span><span class="p">(</span><span class="s2">"finder"</span><span class="p">,</span> <span class="s2">"text"</span><span class="p">)(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</code></pre>
+</div>
+</p>
 </details>
 <details class="quote">
 <summary>Source code in <code>hover/recipes/subroutine.py</code></summary>
 <div class="highlight">
 <pre><span></span><code><span class="k">def</span> <span class="nf">get_explorer_class</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="n">feature</span><span class="p">):</span>
     <span class="sd">"""</span>
-<span class="sd">    ???+ info "Docstring"</span>
-<span class="sd">        Get the right explorer class given a task and a feature.</span>
+<span class="sd">    ???+ note "Get the right `hover.core.explorer` class given a task and a feature."</span>
+
+<span class="sd">        Can be useful for dynamically creating explorers without knowing the feature in advance.</span>
+
+<span class="sd">        | Param     | Type  | Description                          |</span>
+<span class="sd">        | :-------- | :---- | :----------------------------------- |</span>
+<span class="sd">        | `task`    | `str` | name of the task, which can be `"finder"`, `"annotator"`, `"margin"`, `"softlabel"`, or `"snorkel"` |</span>
+<span class="sd">        | `feature` | `str` | name of the main feature, which can be `"text"`, `"audio"` or `"image"` |</span>
+
+<span class="sd">        Usage:</span>
+<span class="sd">        ```python</span>
+<span class="sd">        # this creates an instance of BokehTextFinder</span>
+<span class="sd">        explorer = get_explorer_class("finder", "text")(*args, **kwargs)</span>
+<span class="sd">        ```</span>
 <span class="sd">    """</span>
     <span class="k">assert</span> <span class="n">task</span> <span class="ow">in</span> <span class="n">EXPLORER_CATALOG</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"Invalid task: </span><span class="si">{</span><span class="n">task</span><span class="si">}</span><span class="s2">"</span>
     <span class="k">assert</span> <span class="n">feature</span> <span class="ow">in</span> <span class="n">EXPLORER_CATALOG</span><span class="p">[</span><span class="n">task</span><span class="p">],</span> <span class="sa">f</span><span class="s2">"Invalid feature: </span><span class="si">{</span><span class="n">feature</span><span class="si">}</span><span class="s2">"</span>
@@ -652,15 +935,51 @@ get_explorer_class<span class="p">(</span><span class="n">task</span><span class
 standard_annotator<span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> </code>
 </h3>
 <div class="doc doc-contents">
-<details class="info" open="open"><summary>Docstring</summary><p>Standard DataAnnotator and its interaction with a dataset.</p>
+<details class="note" open="open"><summary>Set up a <code>BokehDataAnnotator</code> for a <code>SupervisableDataset</code>.</summary><p>The annotator has a few standard interactions with the dataset:</p>
+<ul>
+<li>read all subsets of the dataset</li>
+<li>subscribe to all updates in the dataset</li>
+<li>can commit annotations through selections in the "raw" subset</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="left">Param</th>
+<th align="left">Type</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code>dataset</code></td>
+<td align="left"><code>SupervisableDataset</code></td>
+<td align="left">the dataset to link to</td>
+</tr>
+<tr>
+<td align="left"><code>**kwargs</code></td>
+<td align="left"></td>
+<td align="left">kwargs to forward to the <code>BokehDataAnnotator</code></td>
+</tr>
+</tbody>
+</table>
 </details>
 <details class="quote">
 <summary>Source code in <code>hover/recipes/subroutine.py</code></summary>
 <div class="highlight">
 <pre><span></span><code><span class="k">def</span> <span class="nf">standard_annotator</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">"""</span>
-<span class="sd">    ???+ info "Docstring"</span>
-<span class="sd">        Standard DataAnnotator and its interaction with a dataset.</span>
+<span class="sd">    ???+ note "Set up a `BokehDataAnnotator` for a `SupervisableDataset`."</span>
+
+<span class="sd">        The annotator has a few standard interactions with the dataset:</span>
+
+<span class="sd">        -   read all subsets of the dataset</span>
+<span class="sd">        -   subscribe to all updates in the dataset</span>
+<span class="sd">        -   can commit annotations through selections in the "raw" subset</span>
+
+<span class="sd">        | Param      | Type     | Description                          |</span>
+<span class="sd">        | :--------- | :------- | :----------------------------------- |</span>
+<span class="sd">        | `dataset`  | `SupervisableDataset` | the dataset to link to  |</span>
+<span class="sd">        | `**kwargs` | | kwargs to forward to the `BokehDataAnnotator` |</span>
 <span class="sd">    """</span>
     <span class="c1"># auto-detect the (main) feature to use</span>
     <span class="n">feature</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">FEATURE_KEY</span>
@@ -693,15 +1012,49 @@ standard_annotator<span class="p">(</span><span class="n">dataset</span><span cl
 standard_finder<span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> </code>
 </h3>
 <div class="doc doc-contents">
-<details class="info" open="open"><summary>Docstring</summary><p>Standard DataFinder and its interaction with a dataset.</p>
+<details class="note" open="open"><summary>Set up a <code>BokehDataFinder</code> for a <code>SupervisableDataset</code>.</summary><p>The finder has a few standard interactions with the dataset:</p>
+<ul>
+<li>read all subsets of the dataset</li>
+<li>subscribe to all updates in the dataset</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="left">Param</th>
+<th align="left">Type</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code>dataset</code></td>
+<td align="left"><code>SupervisableDataset</code></td>
+<td align="left">the dataset to link to</td>
+</tr>
+<tr>
+<td align="left"><code>**kwargs</code></td>
+<td align="left"></td>
+<td align="left">kwargs to forward to the <code>BokehDataFinder</code></td>
+</tr>
+</tbody>
+</table>
 </details>
 <details class="quote">
 <summary>Source code in <code>hover/recipes/subroutine.py</code></summary>
 <div class="highlight">
 <pre><span></span><code><span class="k">def</span> <span class="nf">standard_finder</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">"""</span>
-<span class="sd">    ???+ info "Docstring"</span>
-<span class="sd">        Standard DataFinder and its interaction with a dataset.</span>
+<span class="sd">    ???+ note "Set up a `BokehDataFinder` for a `SupervisableDataset`."</span>
+
+<span class="sd">        The finder has a few standard interactions with the dataset:</span>
+
+<span class="sd">        -   read all subsets of the dataset</span>
+<span class="sd">        -   subscribe to all updates in the dataset</span>
+
+<span class="sd">        | Param      | Type     | Description                          |</span>
+<span class="sd">        | :--------- | :------- | :----------------------------------- |</span>
+<span class="sd">        | `dataset`  | `SupervisableDataset` | the dataset to link to  |</span>
+<span class="sd">        | `**kwargs` | | kwargs to forward to the `BokehDataFinder` |</span>
 <span class="sd">    """</span>
     <span class="c1"># auto-detect the (main) feature to use</span>
     <span class="n">feature</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">FEATURE_KEY</span>
@@ -731,15 +1084,49 @@ standard_finder<span class="p">(</span><span class="n">dataset</span><span class
 standard_snorkel<span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> </code>
 </h3>
 <div class="doc doc-contents">
-<details class="info" open="open"><summary>Docstring</summary><p>Standard SnorkelExplorer and its interaction with a dataset.</p>
+<details class="note" open="open"><summary>Set up a <code>BokehSnorkelExplorer</code> for a <code>SupervisableDataset</code>.</summary><p>The snorkel explorer has a few standard interactions with the dataset:</p>
+<ul>
+<li>read "raw" and "dev" subsets of the dataset, interpreting "dev" as "labeled"</li>
+<li>subscribe to all updates in those subsets</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="left">Param</th>
+<th align="left">Type</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code>dataset</code></td>
+<td align="left"><code>SupervisableDataset</code></td>
+<td align="left">the dataset to link to</td>
+</tr>
+<tr>
+<td align="left"><code>**kwargs</code></td>
+<td align="left"></td>
+<td align="left">kwargs to forward to the <code>BokehSnorkelExplorer</code></td>
+</tr>
+</tbody>
+</table>
 </details>
 <details class="quote">
 <summary>Source code in <code>hover/recipes/subroutine.py</code></summary>
 <div class="highlight">
 <pre><span></span><code><span class="k">def</span> <span class="nf">standard_snorkel</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">"""</span>
-<span class="sd">    ???+ info "Docstring"</span>
-<span class="sd">        Standard SnorkelExplorer and its interaction with a dataset.</span>
+<span class="sd">    ???+ note "Set up a `BokehSnorkelExplorer` for a `SupervisableDataset`."</span>
+
+<span class="sd">        The snorkel explorer has a few standard interactions with the dataset:</span>
+
+<span class="sd">        -   read "raw" and "dev" subsets of the dataset, interpreting "dev" as "labeled"</span>
+<span class="sd">        -   subscribe to all updates in those subsets</span>
+
+<span class="sd">        | Param      | Type     | Description                          |</span>
+<span class="sd">        | :--------- | :------- | :----------------------------------- |</span>
+<span class="sd">        | `dataset`  | `SupervisableDataset` | the dataset to link to  |</span>
+<span class="sd">        | `**kwargs` | | kwargs to forward to the `BokehSnorkelExplorer` |</span>
 <span class="sd">    """</span>
     <span class="c1"># auto-detect the (main) feature to use</span>
     <span class="n">feature</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">FEATURE_KEY</span>
@@ -768,15 +1155,49 @@ standard_snorkel<span class="p">(</span><span class="n">dataset</span><span clas
 standard_softlabel<span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> </code>
 </h3>
 <div class="doc doc-contents">
-<details class="info" open="open"><summary>Docstring</summary><p>Standard SoftLabelExplorer and its interaction with a dataset.</p>
+<details class="note" open="open"><summary>Set up a <code>BokehSoftLabelExplorer</code> for a <code>SupervisableDataset</code>.</summary><p>The soft label explorer has a few standard interactions with the dataset:</p>
+<ul>
+<li>read all subsets of the dataset</li>
+<li>subscribe to all updates in the dataset</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="left">Param</th>
+<th align="left">Type</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code>dataset</code></td>
+<td align="left"><code>SupervisableDataset</code></td>
+<td align="left">the dataset to link to</td>
+</tr>
+<tr>
+<td align="left"><code>**kwargs</code></td>
+<td align="left"></td>
+<td align="left">kwargs to forward to the <code>BokehSoftLabelExplorer</code></td>
+</tr>
+</tbody>
+</table>
 </details>
 <details class="quote">
 <summary>Source code in <code>hover/recipes/subroutine.py</code></summary>
 <div class="highlight">
 <pre><span></span><code><span class="k">def</span> <span class="nf">standard_softlabel</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">"""</span>
-<span class="sd">    ???+ info "Docstring"</span>
-<span class="sd">        Standard SoftLabelExplorer and its interaction with a dataset.</span>
+<span class="sd">    ???+ note "Set up a `BokehSoftLabelExplorer` for a `SupervisableDataset`."</span>
+
+<span class="sd">        The soft label explorer has a few standard interactions with the dataset:</span>
+
+<span class="sd">        -   read all subsets of the dataset</span>
+<span class="sd">        -   subscribe to all updates in the dataset</span>
+
+<span class="sd">        | Param      | Type     | Description                          |</span>
+<span class="sd">        | :--------- | :------- | :----------------------------------- |</span>
+<span class="sd">        | `dataset`  | `SupervisableDataset` | the dataset to link to  |</span>
+<span class="sd">        | `**kwargs` | | kwargs to forward to the `BokehSoftLabelExplorer` |</span>
 <span class="sd">    """</span>
     <span class="c1"># auto-detect the (main) feature to use</span>
     <span class="n">feature</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">FEATURE_KEY</span>
@@ -860,7 +1281,7 @@ standard_softlabel<span class="p">(</span><span class="n">dataset</span><span cl
 <script>
         app = initialize({
           base: "../../..",
-          features: ['navigation.expand', 'toc.integrate', 'search.suggest'],
+          features: ['navigation.expand', 'navigation.tabs', 'search.suggest', 'toc.integrate'],
           search: Object.assign({
             worker: "../../../assets/javascripts/worker/search.4ac00218.min.js"
           }, typeof search !== "undefined" && search)
