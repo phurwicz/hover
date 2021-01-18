@@ -1,8 +1,9 @@
 """
-Linker data structure which ties (potentially multiple) dimensionality reducers to arrays.
+???+ note "Linker data structures which tie (potentially multiple) dimensionality reducers to arrays."
 
-The point is to make it clear which reduction is in reference to which array.
-Icing on the cake: unify the syntax across different kinds of reducers.
+    The point is to make it clear which reduction is in reference to which array.
+
+    Icing on the cake: unify the syntax across different kinds of reducers.
 """
 import numpy as np
 
@@ -12,20 +13,22 @@ class DimensionalityReducer(object):
     METHOD_ERROR_MSG = "Expected 'umap' or 'ivis' as reduction method"
 
     def __init__(self, array):
-        """Link self to the shared input array for reduction methods.
-
-        :param array: the input array to be transformed.
-        :type array: np.ndarray
+        """
+        ???+ note "Link self to the shared input array for reduction methods."
+            | Param   | Type         | Description                   |
+            | :------ | :----------- | :---------------------------- |
+            | `array` | `np.ndarray` | the input array to fit on     |
         """
         self.reference_array = array
 
     def fit_transform(self, method, *args, **kwargs):
-        """Fit and transform an array and store the reducer.
-
-        :param method: the dimensionality reduction method to use.
-        :type method: str, "umap" or "ivis"
-        :param *args: positional parameters for the reducer.
-        :param **kwargs: keyword parameters for the reducer.
+        """
+        ???+ note "Fit and transform an array and store the reducer."
+            | Param      | Type   | Description              |
+            | :--------- | :----- | :----------------------- |
+            | `method`   | `str`  | `"umap"` or `"ivis"`     |
+            | `*args`    |        | forwarded to the reducer |
+            | `**kwargs` |        | forwarded to the reducer |
         """
         if method == "umap":
             try:
@@ -52,10 +55,12 @@ class DimensionalityReducer(object):
         return embedding
 
     def transform(self, array, method):
-        """Transform an array with a prepared reducer.
-
-        :param array: the input array to be transformed.
-        :type array: np.ndarray
+        """
+        ???+ note "Transform an array with a already-fitted reducer."
+            | Param      | Type         | Description              |
+            | :--------- | :----------- | :----------------------- |
+            | `array`    | `np.ndarray` | the array to transform   |
+            | `method`   | `str`        | `"umap"` or `"ivis"`     |
         """
         assert method in ["umap", "ivis"], self.method_error_msg
         assert isinstance(array, np.ndarray), f"Expected np.ndarray, got {type(array)}"

@@ -31,6 +31,7 @@ nav:
         - 'hover.core.dataset': 'pages/reference/core-dataset.md'
         - 'hover.core.explorer': 'pages/reference/core-explorer.md'
         - 'hover.core.neural': 'pages/reference/core-neural.md'
+        - 'hover.core.representation': 'pages/reference/core-representation.md'
 
 markdown_extensions:
   - admonition
