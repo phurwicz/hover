@@ -1,3 +1,8 @@
+"""
+???+ note "Neural network components."
+
+    `torch`-based template classes for implementing neural nets that work the most smoothly with `hover`
+"""
 import torch
 import torch.nn.functional as F
 from datetime import datetime
@@ -34,7 +39,7 @@ class VectorNet(Loggable):
 
     def __init__(self, vectorizer, architecture, state_dict_path, labels):
         """
-        ???+ note "Constructor"
+        ???+ note "Create the `VectorNet`, loading parameters if available."
             | Param             | Type       | Description                          |
             | :---------------- | :--------- | :----------------------------------- |
             | `vectorizer`      | `callable` | the feature -> vector function       |

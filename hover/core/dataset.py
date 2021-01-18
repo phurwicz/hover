@@ -1,7 +1,14 @@
 """
-???+ info "Docstring"
-    Dataset objects which extend beyond DataFrames.
-    Specifically, we need a collection of DataFrames where rows can be transferred cleanly and columns can be transformed easily.
+???+ note "Dataset classes which extend beyond DataFrames."
+
+    When we supervise a collection of data, these operations need to be simple:
+
+    -   managing `raw`/`train`/`dev`/`test` subsets
+    -   transferring data points between subsets
+    -   pulling updates from annotation interfaces
+    -   pushing updates to annotation interfaces
+    -   getting a 2D embedding
+    -   loading data for training models
 """
 import pandas as pd
 import numpy as np
@@ -14,8 +21,7 @@ from .local_config import dataset_help_widget
 
 class SupervisableDataset(Loggable):
     """
-    ???+ info "Docstring"
-        Feature-agnostic class for a dataset open to supervision.
+    ???+ note "Feature-agnostic class for a dataset open to supervision."
 
         Keeping a DataFrame form and a list-of-dicts ("dictl") form, with the intention that
 
@@ -46,15 +52,15 @@ class SupervisableDataset(Loggable):
         label_key="label",
     ):
         """
-        ???+ info "Docstring"
-            Initialize the dataset with dictl and df forms; initialize the mapping between categorical-int and string labels.
-
-            - raw_dictl: a list of dicts holding the raw data that DO NOT have annotation.
-            - train_dictl: a list of dicts holding the train set.
-            - dev_dictl: a list of dicts holding the dev set.
-            - test_dictl: a list of dicts holding the test set.
-            - feature_key: key in each piece of dict mapping to the feature.
-            - label_key: key in each piece of dict mapping to the label in STRING form.
+        ???+ note "Create (1) dictl and df forms and (2) the mapping between categorical and string labels."
+            | Param         | Type   | Description                          |
+            | :------------ | :----- | :----------------------------------- |
+            | `raw_dictl`   | `list` | list of dicts holding the **to-be-supervised** raw data |
+            | `train_dictl` | `list` | list of dicts holding any **supervised** train data |
+            | `dev_dictl`   | `list` | list of dicts holding any **supervised** dev data   |
+            | `test_dictl`  | `list` | list of dicts holding any **supervised** test data  |
+            | `feature_key` | `str`  | the key for the feature in each piece of data |
+            | `label_key`   | `str`  | the key for the `**str**` label in supervised data |
         """
         self._info("Initializing...")
 
@@ -104,8 +110,10 @@ class SupervisableDataset(Loggable):
 
     def copy(self, use_df=True):
         """
-        ???+ info "Docstring"
-            Create another instance, carrying over the data entries.
+        ???+ note "Create another instance, copying over the data entries."
+            | Param    | Type   | Description                          |
+            | :------- | :----- | :----------------------------------- |
+            | `use_df` | `bool` | whether to use the df or dictl form |
         """
         if use_df:
             self.synchronize_df_to_dictl()
@@ -120,8 +128,7 @@ class SupervisableDataset(Loggable):
 
     def setup_widgets(self):
         """
-        ???+ info "Docstring"
-            Critical widgets for interactive data management.
+        ???+ note "Create `bokeh` widgets for interactive data management."
         """
         self.update_pusher = Button(
             label="Push", button_type="success", height_policy="fit", width_policy="min"
@@ -176,8 +183,7 @@ class SupervisableDataset(Loggable):
 
     def view(self):
         """
-        ???+ info "Docstring"
-            Defines the layout of bokeh models.
+        ???+ note "Defines the layout of `bokeh` objects when visualized."
         """
         # local import to avoid naming confusion/conflicts
         from bokeh.layouts import row, column
@@ -190,8 +196,11 @@ class SupervisableDataset(Loggable):
 
     def subscribe_update_push(self, explorer, subset_mapping):
         """
-        ???+ info "Docstring"
-            Enable pushing updated DataFrames to explorers that depend on them.
+        ???+ note "Enable pushing updated DataFrames to explorers that depend on them."
+            | Param            | Type   | Description                            |
+            | :--------------- | :----- | :------------------------------------- |
+            | `explorer`       | `BokehBaseExplorer` | the explorer to register  |
+            | `subset_mapping` | `dict` | `dataset` -> `explorer` subset mapping |
 
             Note: the reason we need this is due to `self.dfs[key] = ...`-like assignments. If DF operations were all in-place, then the explorers could directly access the updates through their `self.dfs` references.
         """
@@ -212,8 +221,11 @@ class SupervisableDataset(Loggable):
 
     def subscribe_data_commit(self, explorer, subset_mapping):
         """
-        ???+ info "Docstring"
-            Enable committing data across subsets, specified by a selection in an explorer and a dropdown widget of the dataset.
+        ???+ note "Enable committing data across subsets, specified by a selection in an explorer and a dropdown widget of the dataset."
+            | Param            | Type   | Description                            |
+            | :--------------- | :----- | :------------------------------------- |
+            | `explorer`       | `BokehBaseExplorer` | the explorer to register  |
+            | `subset_mapping` | `dict` | `dataset` -> `explorer` subset mapping |
         """
 
         def callback_commit(event):
@@ -257,9 +269,13 @@ class SupervisableDataset(Loggable):
 
     def setup_label_coding(self, verbose=True, debug=False):
         """
-        ???+ info "Docstring"
-            Auto-determine labels in the dataset, then create encoder/decoder in lexical order.
-            Add ABSTAIN as a no-label placeholder.
+        ???+ note "Auto-determine labels in the dataset, then create encoder/decoder in lexical order."
+            Add `"ABSTAIN"` as a no-label placeholder which gets ignored categorically.
+
+            | Param     | Type   | Description                        |
+            | :-------- | :----- | :--------------------------------- |
+            | `verbose` | `bool` | whether to log verbosely           |
+            | `debug`   | `bool` | whether to enable label validation |
         """
         all_labels = set()
         for _key in [*self.__class__.PUBLIC_SUBSETS, *self.__class__.PRIVATE_SUBSETS]:
@@ -285,8 +301,11 @@ class SupervisableDataset(Loggable):
 
     def validate_labels(self, raise_exception=True):
         """
-        ???+ info "Docstring"
-            Check that every label is in the encoder.
+        ???+ note "Assert that every label is in the encoder."
+
+            | Param             | Type   | Description                         |
+            | :---------------- | :----- | :---------------------------------- |
+            | `raise_exception` | `bool` | whether to raise errors when failed |
         """
         for _key in [*self.__class__.PUBLIC_SUBSETS, *self.__class__.PRIVATE_SUBSETS]:
             _invalid_indices = None
@@ -301,8 +320,11 @@ class SupervisableDataset(Loggable):
 
     def setup_pop_table(self, **kwargs):
         """
-        ???+ info "Docstring"
-            Set up a table widget for subset data populations.
+        ???+ note "Set up a bokeh `DataTable` widget for monitoring subset data populations."
+
+            | Param      | Type   | Description                  |
+            | :--------- | :----- | :--------------------------- |
+            | `**kwargs` |        | forwarded to the `DataTable` |
         """
         subsets = [
             *self.__class__.SCRATCH_SUBSETS,
@@ -348,8 +370,7 @@ class SupervisableDataset(Loggable):
 
     def df_deduplicate(self):
         """
-        ???+ info "Docstring"
-            Cross-deduplicate data entries by feature between subsets.
+        ???+ note "Cross-deduplicate data entries by feature between subsets."
         """
         self._info("Deduplicating...")
         # for data entry accounting
@@ -388,8 +409,7 @@ class SupervisableDataset(Loggable):
 
     def synchronize_dictl_to_df(self):
         """
-        ???+ info "Docstring"
-            Re-make dataframes from lists of dictionaries.
+        ???+ note "Re-make dataframes from lists of dictionaries."
         """
         self.dfs = dict()
         for _key, _dictl in self.dictls.items():
@@ -404,8 +424,7 @@ class SupervisableDataset(Loggable):
 
     def synchronize_df_to_dictl(self):
         """
-        ???+ info "Docstring"
-            Re-make lists of dictionaries from dataframes.
+        ???+ note "Re-make lists of dictionaries from dataframes."
         """
         self.dictls = dict()
         for _key, _df in self.dfs.items():
@@ -413,8 +432,14 @@ class SupervisableDataset(Loggable):
 
     def compute_2d_embedding(self, vectorizer, method, **kwargs):
         """
-        ???+ info "Docstring"
-            Get embeddings in the xy-plane and return the reducer.
+        ???+ note "Get embeddings in the xy-plane and return the dimensionality reducer."
+            Reference: [`DimensionalityReducer`](https://github.com/phurwicz/hover/blob/main/hover/core/representation/reduction.py)
+
+            | Param        | Type       | Description                        |
+            | :----------- | :--------- | :--------------------------------- |
+            | `vectorizer` | `callable` | the feature -> vector function     |
+            | `method`     | `str`      | arg for `DimensionalityReducer`    |
+            | `**kwargs`   |            | kwargs for `DimensionalityReducer` |
         """
         from hover.core.representation.reduction import DimensionalityReducer
 
@@ -471,12 +496,13 @@ class SupervisableDataset(Loggable):
 
     def loader(self, key, vectorizer, batch_size=64, smoothing_coeff=0.0):
         """
-        ???+ info "Docstring"
-            Prepare a Torch Dataloader for training or evaluation.
-
-            - key(str): the subset of dataset to use.
-            - vectorizer(callable): callable that turns a string into a vector.
-            - smoothing_coeff(float): the smoothing coeffient for soft labels.
+        ???+ note "Prepare a torch `Dataloader` for training or evaluation."
+            | Param        | Type       | Description                        |
+            | :----------- | :--------- | :--------------------------------- |
+            | `key`        | `str`      | subset of data, e.g. `"train"`     |
+            | `vectorizer` | `callable` | the feature -> vector function     |
+            | `batch_size` | `int`      | size per batch                     |
+            | `smoothing_coeff` | `float` | portion of probability to equally split between classes |
         """
         # lazy import: missing torch should not break the rest of the class
         from hover.utils.torch_helper import vector_dataloader, one_hot, label_smoothing
@@ -509,8 +535,7 @@ class SupervisableDataset(Loggable):
 
 class SupervisableTextDataset(SupervisableDataset):
     """
-    ???+ info "Docstring"
-        Can add text-specific methods.
+    ???+ note "Can add text-specific methods."
     """
 
     FEATURE_KEY = "text"

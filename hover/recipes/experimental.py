@@ -18,7 +18,7 @@ import pandas as pd
 @servable(title="Snorkel Crosscheck")
 def snorkel_crosscheck(dataset, lf_list, height=600, width=600):
     """
-    ???+ note "Cross-check labeling functions with annotations."
+    ???+ note "Display the dataset for annotation, cross-checking with labeling functions."
         Use the dev set to check labeling functions; use the labeling functions to hint at potential annotation.
 
         | Param     | Type     | Description                          |
@@ -55,7 +55,7 @@ def snorkel_crosscheck(dataset, lf_list, height=600, width=600):
 @servable(title="Active Learning")
 def active_learning(dataset, vectorizer, vecnet_callback, height=600, width=600):
     """
-    ???+ note "Put a model in the loop and iterate."
+    ???+ note "Display the dataset for annotation, putting a classification model in the loop."
         Currently works most smoothly with `VectorNet`.
 
         | Param     | Type     | Description                          |

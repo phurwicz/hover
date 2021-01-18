@@ -34,7 +34,7 @@ def simple_annotator(dataset, height=600, width=600):
 @servable(title="Linked Annotator")
 def linked_annotator(dataset, height=600, width=600):
     """
-    ???+ note "Leveraging `BokehDataFinder` which has the best search highlights."
+    ???+ note "Display the dataset on a 2D map in two views, one for search and one for annotation."
 
         | Param     | Type     | Description                          |
         | :-------- | :------- | :----------------------------------- |
