@@ -28,13 +28,19 @@ nav:
         - 'Dataset (under work)': 'pages/topics/dataset.md'
     - 'API Reference':
         - 'hover.recipes': 'pages/reference/recipes.md'
-        - 'hover.core.dataset': 'pages/reference/core-dataset.md'
-        - 'hover.core.explorer': 'pages/reference/core-explorer.md'
-        - 'hover.core.neural': 'pages/reference/core-neural.md'
-        - 'hover.core.representation': 'pages/reference/core-representation.md'
+        - 'hover.core':
+            - 'hover.core.dataset': 'pages/reference/core-dataset.md'
+            - 'hover.core.explorer':
+                - '.base': 'pages/reference/core-explorer-base.md'
+                - '.feature': 'pages/reference/core-explorer-feature.md'
+                - '.functionality': 'pages/reference/core-explorer-functionality.md'
+                - '.specialization': 'pages/reference/core-explorer-specialization.md'
+            - 'hover.core.neural': 'pages/reference/core-neural.md'
+            - 'hover.core.representation': 'pages/reference/core-representation.md'
 
 markdown_extensions:
   - admonition
+  - def_list
   - markdown_include.include
   - pymdownx.critic
   - pymdownx.details

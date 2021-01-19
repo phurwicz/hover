@@ -1,6 +1,5 @@
 """
-???+ info "Docstring"
-    Intermediate classes based on the main feature.
+???+ note "Intermediate classes based on the main feature."
 """
 from bokeh.models import CustomJS, ColumnDataSource
 from .base import BokehBaseExplorer
@@ -8,7 +7,7 @@ from .base import BokehBaseExplorer
 
 class BokehForText(BokehBaseExplorer):
     """
-    ???+ info "Docstring"
+    ???+ note "`BokehBaseExplorer` with `text` (`str`) as the main feature."
         Assumes on top of its parent class:
 
         - in supplied dataframes
@@ -24,8 +23,7 @@ class BokehForText(BokehBaseExplorer):
 
     def _setup_search_highlight(self):
         """
-        ???+ info "Docstring"
-            Create positive/negative text search boxes.
+        ???+ note "Create positive/negative text search boxes."
         """
         from bokeh.models import TextInput
 
@@ -40,8 +38,7 @@ class BokehForText(BokehBaseExplorer):
 
     def _layout_widgets(self):
         """
-        ???+ info "Docstring"
-            Define the layout of widgets.
+        ???+ note "Define the layout of widgets."
         """
         from bokeh.layouts import column
 
@@ -49,11 +46,15 @@ class BokehForText(BokehBaseExplorer):
 
     def activate_search(self, source, kwargs, altered_param=("size", 10, 5, 7)):
         """
-        ???+ info "Docstring"
-            Enables string/regex search-and-highlight mechanism.
-
+        ???+ note "Enables string/regex search-and-highlight mechanism."
             Modifies the plotting source in-place.
             Using a JS callback (instead of Python) so that it also works in standalone HTML.
+
+            | Param           | Type    | Description                   |
+            | :-------------- | :------ | :---------------------------  |
+            | `source`        | `bool`  | the `ColumnDataSource` to use |
+            | `kwargs`        | `bool`  | kwargs for the plot to add to |
+            | `altered_param` | `tuple` | (attribute, positive, negative, default) |
         """
         assert isinstance(source, ColumnDataSource)
         assert isinstance(kwargs, dict)
@@ -136,7 +137,7 @@ class BokehForText(BokehBaseExplorer):
 
 class BokehForAudio(BokehBaseExplorer):
     """
-    ???+ info "Docstring"
+    ???+ note "`BokehBaseExplorer` with `audio` (path like `"http://"` or `"file:///"`) as the main feature."
         Assumes on top of its parent class:
 
         - in supplied dataframes
@@ -152,14 +153,15 @@ class BokehForAudio(BokehBaseExplorer):
 
     def _setup_search_highlight(self):
         """
-        ???+ info "Docstring"
-            Trivial implementation until we decide how to search audios.
+        ???+ help "Help wanted"
+            Trivial implementation until we figure out how to search audios.
         """
         self._warn("no search highlight available.")
 
     def _layout_widgets(self):
-        """Define the layout of widgets."""
-
+        """
+        ???+ note "Define the layout of widgets."
+        """
         return self.data_key_button_group
 
     def activate_search(self, source, kwargs, altered_param=("size", 10, 5, 7)):
@@ -168,6 +170,12 @@ class BokehForAudio(BokehBaseExplorer):
             Trivial implementation until we figure out how to search audios.
 
             [Create an issue](https://github.com/phurwicz/hover/issues/new) if you have an idea :)
+
+            | Param           | Type    | Description                   |
+            | :-------------- | :------ | :---------------------------  |
+            | `source`        | `bool`  | the `ColumnDataSource` to use |
+            | `kwargs`        | `bool`  | kwargs for the plot to add to |
+            | `altered_param` | `tuple` | (attribute, positive, negative, default) |
         """
         self._warn("no search highlight available.")
         return kwargs
@@ -175,7 +183,7 @@ class BokehForAudio(BokehBaseExplorer):
 
 class BokehForImage(BokehBaseExplorer):
     """
-    ???+ info "Docstring"
+    ???+ note "`BokehBaseExplorer` with `image` (path like `"http://"` or `"file:///"`) as the main feature."
         Assumes on top of its parent class:
 
         - in supplied dataframes
@@ -190,12 +198,16 @@ class BokehForImage(BokehBaseExplorer):
     TOOLTIP_KWARGS = {"label": True, "image": True, "coords": True, "index": True}
 
     def _setup_search_highlight(self):
-        """Trivial implementation until we decide how to search images."""
+        """
+        ???+ help "Help wanted"
+            Trivial implementation until we figure out how to search images.
+        """
         self._warn("no search highlight available.")
 
     def _layout_widgets(self):
-        """Define the layout of widgets."""
-
+        """
+        ???+ note "Define the layout of widgets."
+        """
         return self.data_key_button_group
 
     def activate_search(self, source, kwargs, altered_param=("size", 10, 5, 7)):
@@ -204,6 +216,12 @@ class BokehForImage(BokehBaseExplorer):
             Trivial implementation until we figure out how to search images.
 
             [Create an issue](https://github.com/phurwicz/hover/issues/new) if you have an idea :)
+
+            | Param           | Type    | Description                   |
+            | :-------------- | :------ | :---------------------------  |
+            | `source`        | `bool`  | the `ColumnDataSource` to use |
+            | `kwargs`        | `bool`  | kwargs for the plot to add to |
+            | `altered_param` | `tuple` | (attribute, positive, negative, default) |
         """
         self._warn("no search highlight available.")
         return kwargs
