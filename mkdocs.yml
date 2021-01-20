@@ -25,7 +25,8 @@ nav:
         - 'Active Learning': 'pages/tutorial/t1-active-learning.md'
         - 'Serving Options': 'pages/tutorial/t2-bokeh-app.md'
     - 'Topics':
-        - 'Dataset (under work)': 'pages/topics/dataset.md'
+        - 'What Makes Hover Unique': 'pages/topics/what-hover-is.md'
+        - 'Managing Data (under work)': 'pages/topics/dataset.md'
     - 'API Reference':
         - 'hover.recipes': 'pages/reference/recipes.md'
         - 'hover.core':
