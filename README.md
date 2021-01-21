@@ -1,8 +1,8 @@
 ![Hover](docs/images/hover-logo-title.png)
 
-> Imagine editing a picture layer by layer, not pixel by pixel, nor by splashing paint.
->
-> We can apply this idea to datasets.
+> Apply labels at arbitrary scale in an informed manner.
+> 
+> Just _hover_ your mouse.
 
 [![PyPI Version](https://img.shields.io/pypi/v/hover?logo=pypi&logoColor=white)](https://pypi.org/project/hover/)
 [![PyPI Stage](https://img.shields.io/pypi/status/hover?logo=pypi&logoColor=white)](https://pypi.org/project/hover/)
