@@ -1,6 +1,6 @@
 ![Hover](docs/images/hover-logo-title.png)
 
-> Apply labels at arbitrary scale and stay informed.
+> Apply labels at any scale with informed precision.
 > 
 > In Jupyter, in the browser, or even on your phone.
 
