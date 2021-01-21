@@ -1,8 +1,8 @@
 ![Hover](docs/images/hover-logo-title.png)
 
-> Apply labels at arbitrary scale in an informed manner.
+> Apply labels at arbitrary scale and stay informed.
 > 
-> Just _hover_ your mouse.
+> In Jupyter, in the browser, or even on your phone.
 
 [![PyPI Version](https://img.shields.io/pypi/v/hover?logo=pypi&logoColor=white)](https://pypi.org/project/hover/)
 [![PyPI Stage](https://img.shields.io/pypi/status/hover?logo=pypi&logoColor=white)](https://pypi.org/project/hover/)
@@ -66,7 +66,7 @@ Re-collecting the most relevant resources:
 
 ### Shoutouts
 
--   Thanks to [`Bokeh`](https://bokeh.org) because `hover` would not exist without linked plots and callbacks.
+-   Thanks to [`Bokeh`](https://bokeh.org) because `hover` would not exist without linked plots and callbacks, or be nearly as good without embeddable server apps.
 -   Thanks to [Philip Vollet](https://de.linkedin.com/in/philipvollet) for sharing `hover` with the community even when it was really green.
 
 ### Contributing
