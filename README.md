@@ -1,8 +1,8 @@
 ![Hover](docs/images/hover-logo-title.png)
 
-> Imagine editing a picture layer by layer, not pixel by pixel, nor by splashing paint.
->
-> We can apply this idea to datasets.
+> Apply labels at any scale with informed precision.
+> 
+> In Jupyter, in the browser, or even on your phone.
 
 [![PyPI Version](https://img.shields.io/pypi/v/hover?logo=pypi&logoColor=white)](https://pypi.org/project/hover/)
 [![PyPI Stage](https://img.shields.io/pypi/status/hover?logo=pypi&logoColor=white)](https://pypi.org/project/hover/)
@@ -15,9 +15,9 @@
 
 ----
 
-`Hover` is a **machine teaching** library that enables intuitive and effecient supervision. In other words, it provides a map where you _hover_ over and label your data... differently. For instance, you can:
+`Hover` is a **machine teaching** library for making intuitive and effecient annotations. For instance, you can:
 
--   [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/phurwicz/hover-binder/master?urlpath=/proxy/5006/app-simple-annotator) :seedling: annotate an intuitively selected group of data points at a time
+-   [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/phurwicz/hover-binder/master?urlpath=/proxy/5006/app-simple-annotator) :seedling: annotate an inspectable cluster of points at a time
 -   [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/phurwicz/hover-binder/master?urlpath=/proxy/5006/app-active-learning) :ferris_wheel: throw a model in the loop and exploit active learning
 -   [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/phurwicz/hover-binder/master?urlpath=/proxy/5006/app-snorkel-annotator) :whale: cross-check with Snorkel-based distant supervision
 
@@ -66,7 +66,7 @@ Re-collecting the most relevant resources:
 
 ### Shoutouts
 
--   Thanks to [`Bokeh`](https://bokeh.org) because `hover` would not exist without linked plots and callbacks.
+-   Thanks to [`Bokeh`](https://bokeh.org) because `hover` would not exist without linked plots and callbacks, or be nearly as good without embeddable server apps.
 -   Thanks to [Philip Vollet](https://de.linkedin.com/in/philipvollet) for sharing `hover` with the community even when it was really green.
 
 ### Contributing
