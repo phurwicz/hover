@@ -1,6 +1,6 @@
 ![Hover](docs/images/hover-logo-title.png)
 
-> You don't paint a picture pixel by pixel. So why label a dataset piece by piece?
+> We don't paint a picture pixel by pixel. So why label a dataset piece by piece?
 > 
 > Welcome to sub-O(n) annotation.
 
