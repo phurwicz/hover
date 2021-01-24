@@ -5,4 +5,4 @@ from bokeh.io import show, output_notebook
 handle = simple_annotator(dataset)
 
 output_notebook()
-show(handle)
+show(handle, notebook_url='http://localhost:8888')
