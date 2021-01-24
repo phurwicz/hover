@@ -66,8 +66,6 @@ Feel free to [open an issue](https://github.com/phurwicz/hover/issues/new) if yo
 
 ## :book: Resources
 
-Re-collecting the most relevant resources:
-
 -   [Binder repo](https://github.com/phurwicz/hover-binder)
 -   [Changelog](CHANGELOG.md)
 -   [Documentation](https://phurwicz.github.io/hover/)
