@@ -25,7 +25,7 @@ nav:
         - 'Active Learning': 'pages/tutorial/t1-active-learning.md'
         - 'Serving Options': 'pages/tutorial/t2-bokeh-app.md'
     - 'Topics':
-        - 'What Makes Hover Unique': 'pages/topics/what-hover-is.md'
+        - 'Why Hover': 'pages/topics/what-hover-is.md'
         - 'Managing Data (under work)': 'pages/topics/dataset.md'
     - 'API Reference':
         - 'hover.recipes': 'pages/reference/recipes.md'
@@ -49,13 +49,14 @@ markdown_extensions:
   - pymdownx.superfences
 
 plugins:
-- search:
-- mkdocstrings:
-    default_handler: python
-    handlers:
-      python:
-        rendering:
-          show_root_heading: true
-          show_source: true
-    watch:
-      - hover
+  - macros
+  - search:
+  - mkdocstrings:
+      default_handler: python
+      handlers:
+        python:
+          rendering:
+            show_root_heading: true
+            show_source: true
+      watch:
+        - hover
