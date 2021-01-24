@@ -1,8 +1,10 @@
 ![Hover](docs/images/hover-logo-title.png)
 
-> Apply labels at any scale with informed precision.
+> Plot your dataset in 2D with tooltips. Identify & label clusters of any shape and any scale.
+>
+> Search, filter, confidence, rules -- intuitive tools to narrow down surgically on tricky cases.
 > 
-> In Jupyter, in the browser, or even on your phone.
+> Welcome to sub-O(n) annotation.
 
 [![PyPI Version](https://img.shields.io/pypi/v/hover?logo=pypi&logoColor=white)](https://pypi.org/project/hover/)
 [![PyPI Stage](https://img.shields.io/pypi/status/hover?logo=pypi&logoColor=white)](https://pypi.org/project/hover/)
