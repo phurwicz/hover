@@ -38,7 +38,7 @@ Check out [@phurwicz/hover-binder](https://github.com/phurwicz/hover-binder) for
 
 -   **Jan 3, 2021** 0.4.0 is now available. Check out the [changelog](CHANGELOG.md) for details :partying_face:
 
-## :flight_departure: Quickstart
+## :rocket: Quickstart
 
 Try `hover` without installing anything!
 
