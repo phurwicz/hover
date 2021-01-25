@@ -17,7 +17,7 @@
 
 `Hover` makes data annotation blazing fast especially for engineers. You get:
 
--   A bird's eye view: plot your dataset in 2D with tooltips
+-   A bird's-eye view: plot your dataset in 2D with tooltips
     -   Explore the dataset "from above" while being able to inspect every detail.
     -   Know how much data has been labeled for each category, and where they are in the whole picture.
 
