@@ -1,21 +1,19 @@
 > `hover` creates a [`bokeh` server app](https://docs.bokeh.org/en/latest/docs/user_guide/server.html) to deliver its annotation interface.
 >
-> :rocket: Let's go over a few ways to run this app.
+> :rocket: This app can be served flexibly based on your needs.
 
 {!docs/snippets/html/stylesheet.html!}
 
 ## **Prerequisites**
 
-Suppose that we've already created a `handle` like in the [quickstart](../t0-quickstart/#apply-labels).
+Suppose that we've already used a `recipe` to create a `handle` function like in the [quickstart](../t0-quickstart/#apply-labels).
 
-This is our app which can be placed flexibly.
-
-??? info "Extended resources"
+??? info "Recap from the tutorials before"
     -   the `handle` is a function which renders plot elements on a [`bokeh` document](https://docs.bokeh.org/en/latest/docs/reference/document.html).
 
 ## **Option 1: Jupyter**
 
-We've seen this in the tutorials before:
+We are probably familiar with this now:
 
 ```Python
 from bokeh.io import show, output_notebook
@@ -30,7 +28,7 @@ show(handle) # notebook_url='http://localhost:8888'
 
 ## **Option 2: Command Line**
 
-[`bokeh serve`](https://docs.bokeh.org/en/latest/docs/user_guide/server.html) starts an explicit `Tornado` server from the command line:
+[`bokeh serve`](https://docs.bokeh.org/en/latest/docs/user_guide/server.html) starts an explicit `tornado` server from the command line:
 
 ```bash
 bokeh serve my-app.py
