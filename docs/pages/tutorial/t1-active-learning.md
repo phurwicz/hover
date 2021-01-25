@@ -1,6 +1,6 @@
-> `hover` offers a few powerful built-in recipes.
+> The most common usage of `hover` is through built-in "recipes" like in the quickstart.
 >
-> :ferris_wheel: Let's explore an active learning example.
+> :ferris_wheel: Let's explore another `recipe` -- an active learning example.
 
 {!docs/snippets/html/stylesheet.html!}
 
@@ -48,6 +48,12 @@ Note how the callback dynamically takes `dataset.classes`, which means the model
 ## :sparkles: **Recipe Time**
 
 Now we invoke the `active_learning` recipe.
+
+> In general, a "recipe" is a function which takes a `SupervisableDataset` and other arguments based on what the recipe does.
+>
+> -   Note how `active_learning` takes more arguments than `simple_annotator` due to, well, active learning.
+>
+> The recipe returns a "handle" function which `bokeh` can use to visualize an annotation interface in multiple settings.
 
 ???+ tip "Basic tips"
     Inspecting model predictions allows us to
