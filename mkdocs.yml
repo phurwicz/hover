@@ -22,8 +22,8 @@ nav:
     - Home: 'index.md'
     - 'Tutorial':
         - 'Quickstart': 'pages/tutorial/t0-quickstart.md'
-        - 'Active Learning': 'pages/tutorial/t1-active-learning.md'
-        - 'Serving Options': 'pages/tutorial/t2-bokeh-app.md'
+        - 'Using Recipes': 'pages/tutorial/t1-active-learning.md'
+        - 'Server Options': 'pages/tutorial/t2-bokeh-app.md'
     - 'Topics':
         - 'Why Hover': 'pages/topics/what-hover-is.md'
         - 'Managing Data (under work)': 'pages/topics/dataset.md'
