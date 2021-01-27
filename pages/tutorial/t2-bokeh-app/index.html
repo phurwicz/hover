@@ -593,6 +593,55 @@
   </li>
 
         
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+    <input class="md-nav__toggle md-toggle" data-md-toggle="nav-4-3" type="checkbox" id="nav-4-3" >
+    <label class="md-nav__link" for="nav-4-3">
+      hover.utils
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="hover.utils" data-md-level="2">
+      <label class="md-nav__title" for="nav-4-3">
+        <span class="md-nav__icon md-icon"></span>
+        hover.utils
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../reference/utils-bokeh_helper/" class="md-nav__link">
+      hover.utils.bokeh_helper
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../reference/utils-snorkel_helper/" class="md-nav__link">
+      hover.utils.snorkel_helper
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
       </ul>
     </nav>
   </li>
@@ -668,7 +717,7 @@
                 
                 <blockquote>
 <p><code>hover</code> creates a <a href="https://docs.bokeh.org/en/latest/docs/user_guide/server.html"><code>bokeh</code> server app</a> to deliver its annotation interface.</p>
-<p><img alt="🚀" class="emojione" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.2.7/assets/png/1f680.png" title=":rocket:" /> Let's go over a few ways to run this app.</p>
+<p><img alt="🚀" class="emojione" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.2.7/assets/png/1f680.png" title=":rocket:" /> This app can be served flexibly based on your needs.</p>
 </blockquote>
 <style type="text/css">
     @import url("../../../styles/monokai.css");
@@ -676,24 +725,23 @@
 </style>
 
 <h2 id="prerequisites"><strong>Prerequisites</strong></h2>
-<p>Suppose that we've already created a <code>handle</code> like in the <a href="../t0-quickstart/#apply-labels">quickstart</a>.</p>
-<p>This is our app which can be placed flexibly.</p>
-<details class="info"><summary>Extended resources</summary><ul>
+<p>Suppose that we've already used a <code>recipe</code> to create a <code>handle</code> function like in the <a href="../t0-quickstart/#apply-labels">quickstart</a>.</p>
+<details class="info"><summary>Recap from the tutorials before</summary><ul>
 <li>the <code>handle</code> is a function which renders plot elements on a <a href="https://docs.bokeh.org/en/latest/docs/reference/document.html"><code>bokeh</code> document</a>.</li>
 </ul>
 </details>
 <h2 id="option-1-jupyter"><strong>Option 1: Jupyter</strong></h2>
-<p>We've seen this in the tutorials before:</p>
+<p>We are probably familiar with this now:</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">bokeh.io</span> <span class="kn">import</span> <span class="n">show</span><span class="p">,</span> <span class="n">output_notebook</span>
 <span class="n">output_notebook</span><span class="p">()</span>
 <span class="n">show</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span> <span class="c1"># notebook_url=&#39;http://localhost:8888&#39;</span>
 </code></pre></div>
 
-<details class="tip" open="open"><summary>Pros &amp; Cons</summary><p>This inline Jupyter mode can integrate particularly well with your workflow. For example, when we are done with the annotation interface, the <code>SupervisableDataset</code> can be accessed directly in the notebook, rather than exported to a file and loaded back.</p>
-<p>The inline mode works like a charm locally, but can have trouble loading JS libraries or finding implicit <code>bokeh server</code> ports with a remote Jupyter server.</p>
+<details class="tip" open="open"><summary>Pros &amp; Cons</summary><p>This inline Jupyter mode can integrate particularly well with your notebook workflow. For example, when your are (tentatively) done with annotation, the <code>SupervisableDataset</code> can be accessed directly in the notebook, rather than exported to a file and loaded back.</p>
+<p>The inline mode is highly recommended for local usage. However, with a remote Jupyter server, it has trouble loading JS libraries or accessing implicit <code>bokeh server</code> ports.</p>
 </details>
 <h2 id="option-2-command-line"><strong>Option 2: Command Line</strong></h2>
-<p><a href="https://docs.bokeh.org/en/latest/docs/user_guide/server.html"><code>bokeh serve</code></a> starts an explicit <code>Tornado</code> server from the command line:</p>
+<p><a href="https://docs.bokeh.org/en/latest/docs/user_guide/server.html"><code>bokeh serve</code></a> starts an explicit <code>tornado</code> server from the command line:</p>
 <div class="highlight"><pre><span></span><code>bokeh serve my-app.py
 </code></pre></div>
 
@@ -706,22 +754,20 @@
 <span class="n">handle</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span>
 </code></pre></div>
 
-<details class="tip" open="open"><summary>Pros &amp; Cons</summary><p>This is the classical approach to run a <code>bokeh</code> server. Remote access is simple through parameters <a href="https://docs.bokeh.org/en/latest/docs/reference/command/subcommands/serve.html"><strong>specified here</strong></a>. The bokeh plot tools are mobile-friendly too -- this means you can host a server, such as a cloud virtual machine, and annotate from a tablet.</p>
-<p>The command line mode is less interactive as Python objects in the server do not persist like in Jupyter.</p>
+<details class="tip" open="open"><summary>Pros &amp; Cons</summary><p>This is the "classic" approach to run a <code>bokeh</code> server. Remote access is simple through parameters <a href="https://docs.bokeh.org/en/latest/docs/reference/command/subcommands/serve.html"><strong>specified here</strong></a>. The bokeh plot tools are mobile-friendly too -- this means you can host a server, e.g. an http-enabled cloud virtual machine, and annotate from a tablet.</p>
+<p>The command line mode is less interactive, since Python objects in the script cannot be accessed on the fly.</p>
 </details>
 <h2 id="option-3-anywhere-in-python"><strong>Option 3: Anywhere in Python</strong></h2>
-<p>It is also possible to <a href="https://docs.bokeh.org/en/latest/docs/user_guide/server.html#embedding-bokeh-server-as-a-library">embedded an app</a> into regular Python:</p>
+<p>It is possible to <a href="https://docs.bokeh.org/en/latest/docs/user_guide/server.html#embedding-bokeh-server-as-a-library">embed the app</a> in regular Python:</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">bokeh.server.server</span> <span class="kn">import</span> <span class="n">Server</span>
 <span class="n">server</span> <span class="o">=</span> <span class="n">Server</span><span class="p">({</span><span class="s1">&#39;/my-app&#39;</span><span class="p">:</span> <span class="n">handle</span><span class="p">})</span>
 <span class="n">server</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
 </code></pre></div>
 
-<details class="tip" open="open"><summary>Pros &amp; Cons</summary><p>This embedded mode is a go-to for serving within a greater application. The various parameters in the command line mode are also available here, per <code>bokeh</code>'s documentation:</p>
-<blockquote>
-<p>Also note that most every command line argument for bokeh serve has a corresponding keyword argument to Server.</p>
-<p>For instance, setting the <code>--allow-websocket-origin</code> command line argument is equivalent to passing <code>allow_websocket_origin</code> as a parameter.</p>
-</blockquote>
-<p>The embedded mode can seem a bit sophisticated, but is well justified by its flexibility.</p>
+<details class="tip" open="open"><summary>Pros &amp; Cons</summary><p>This embedded mode is a go-to for serving within a greater application.</p>
+<p>Also note that each command line argument for <code>bokeh serve</code> has a corresponding keyword argument to <code>Server()</code>.</p>
+<p>For instance, <code>bokeh serve &lt;args&gt; --allow-websocket-origin=*</code> in the command line mirrors <code>Server(*args, allow_websocket_origin='*')</code> in Python.</p>
+<p>The embedded mode gives you the most control of your server.</p>
 </details>
                 
               
