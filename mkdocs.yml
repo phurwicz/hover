@@ -38,6 +38,9 @@ nav:
                 - '.specialization': 'pages/reference/core-explorer-specialization.md'
             - 'hover.core.neural': 'pages/reference/core-neural.md'
             - 'hover.core.representation': 'pages/reference/core-representation.md'
+        - 'hover.utils':
+            - 'hover.utils.bokeh_helper': 'pages/reference/utils-bokeh_helper.md'
+            - 'hover.utils.snorkel_helper': 'pages/reference/utils-snorkel_helper.md'
 
 markdown_extensions:
   - admonition

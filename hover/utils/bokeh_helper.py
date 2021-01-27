@@ -1,5 +1,5 @@
 """
-Useful subroutines for working with bokeh in general.
+???+ note "Useful subroutines for working with bokeh in general."
 """
 import warnings
 from functools import wraps
@@ -10,40 +10,54 @@ from bokeh.layouts import column
 
 def servable(title=None):
     """
-    Parametrizes a decorator which returns a document handle to be passed to bokeh.
+    ???+ note "Create a decorator which returns an app (or "handle" function) to be passed to bokeh."
 
-    Search "embed server" on bokeh.org to find more context.
+        Usage:
 
-    Example:
+        First wrap a function that creates bokeh plot elements:
 
-    ```python
-    @servable()
-    def dummy(*args, **kwargs):
-        from hover.core.explorer import BokehCorpusAnnotator
-        annotator = BokehCorpusAnnotator(*args, **kwargs)
-        annotator.plot()
+        ```python
+        @servable()
+        def dummy(*args, **kwargs):
+            from hover.core.explorer import BokehCorpusAnnotator
+            annotator = BokehCorpusAnnotator(*args, **kwargs)
+            annotator.plot()
 
-        return annotator.view()
+            return annotator.view()
+        ```
 
-    # in Jupyter
-    from bokeh.io import show, output_notebook
-    output_notebook()
-    show(dummy(*args, **kwargs))
+        Then serve the app in your preferred setting:
 
-    # in <your-bokeh-app-dir>/main.py
-    from bokeh.io import curdoc
-    doc = curdoc()
-    dummy(*args, **kwargs)(doc)
+        === "inline"
+            ```python
+            # in a Jupyter cell
 
-    # embedding a bokeh server
-    from bokeh.server.server import Server
-    app_dict = {
-        'my-app': dummy(*args, **kwargs),
-        'my-other-app': dummy(*args, **kwargs),
-    }
-    server = Server(app_dict)
-    server.start()
-    ```
+            from bokeh.io import show, output_notebook
+            output_notebook()
+            show(dummy(*args, **kwargs))
+            ```
+
+        === "bokeh serve"
+            ```python
+            # in <your-bokeh-app-dir>/main.py
+
+            from bokeh.io import curdoc
+            doc = curdoc()
+            dummy(*args, **kwargs)(doc)
+            ```
+
+        === "embedded app"
+            ```python
+            # anywhere in your use case
+
+            from bokeh.server.server import Server
+            app_dict = {
+                'my-app': dummy(*args, **kwargs),
+                'my-other-app': dummy(*args, **kwargs),
+            }
+            server = Server(app_dict)
+            server.start()
+            ```
     """
 
     def wrapper(func):

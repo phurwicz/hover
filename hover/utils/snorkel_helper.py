@@ -7,18 +7,18 @@ import uuid
 
 def labeling_function(targets, label_encoder=None, **kwargs):
     """
-    Hover's flavor of the Snorkel labeling_function decorator.
+    ???+ note "Hover's flavor of the Snorkel labeling_function decorator."
+        However, due to the dynamic label encoding nature of hover,
+        the decorated function should return the original string label, not its encoding integer.
 
-    However, due to the dynamic label encoding nature of hover,
-    the decorated function should return the original string label, not its encoding integer.
+        - assigns a UUID for easy identification
+        - keeps track of LF targets
 
-    (1) assigns a UUID for easy identification;
-    (2) keeps track of LF targets.
-
-    - param targets(list of str): labels that the labeling function is intended to create.
-
-    - param label_encoder(dict): {decoded_label -> encoded_label} mapping.
-      - this can be omitted if you do NOT need a linked snorkel-style labeling function.
+        | Param           | Type   | Description                          |
+        | :-------------- | :----- | :----------------------------------- |
+        | `targets`       | `list` of `str` | labels that the labeling function is intended to create |
+        | `label_encoder` | `dict` | {decoded_label -> encoded_label} mapping, if you also want an original snorkel-style labeling function linked as a `.snorkel` attribute |
+        | `**kwargs`      |        | forwarded to `snorkel`'s `labeling_function()` |
     """
 
     def wrapper(func):
@@ -36,7 +36,10 @@ def labeling_function(targets, label_encoder=None, **kwargs):
         # link a snorkel-style labeling function if applicable
         if label_encoder:
             lf.label_encoder = label_encoder
-            snorkel_style_func = lambda x: lf.label_encoder[func(x)]
+
+            def snorkel_style_func(x):
+                return lf.label_encoder[func(x)]
+
             lf.snorkel = snorkel_lf(**kwargs)(snorkel_style_func)
         else:
             lf.label_encoder = None
