@@ -1,6 +1,6 @@
 > Welcome to the minimal guide of `hover`!
 >
-> :sunglasses: Let's label some data and call it a day.
+> :sunglasses: Let's say we want to label some data and call it a day.
 
 {!docs/snippets/html/stylesheet.html!}
 

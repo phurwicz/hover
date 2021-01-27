@@ -22,9 +22,9 @@ show(handle) # notebook_url='http://localhost:8888'
 ```
 
 ???+ tip "Pros & Cons"
-    This inline Jupyter mode can integrate particularly well with your workflow. For example, when we are done with the annotation interface, the `SupervisableDataset` can be accessed directly in the notebook, rather than exported to a file and loaded back.
+    This inline Jupyter mode can integrate particularly well with your notebook workflow. For example, when your are (tentatively) done with annotation, the `SupervisableDataset` can be accessed directly in the notebook, rather than exported to a file and loaded back.
 
-    The inline mode works like a charm locally, but can have trouble loading JS libraries or finding implicit `bokeh server` ports with a remote Jupyter server.
+    The inline mode is highly recommended for local usage. However, with a remote Jupyter server, it has trouble loading JS libraries or accessing implicit `bokeh server` ports.
 
 ## **Option 2: Command Line**
 
@@ -45,13 +45,13 @@ handle(doc)
 ```
 
 ???+ tip "Pros & Cons"
-    This is the classical approach to run a `bokeh` server. Remote access is simple through parameters [**specified here**](https://docs.bokeh.org/en/latest/docs/reference/command/subcommands/serve.html). The bokeh plot tools are mobile-friendly too -- this means you can host a server, such as a cloud virtual machine, and annotate from a tablet.
+    This is the "classic" approach to run a `bokeh` server. Remote access is simple through parameters [**specified here**](https://docs.bokeh.org/en/latest/docs/reference/command/subcommands/serve.html). The bokeh plot tools are mobile-friendly too -- this means you can host a server, e.g. an http-enabled cloud virtual machine, and annotate from a tablet.
 
-    The command line mode is less interactive as Python objects in the server do not persist like in Jupyter.
+    The command line mode is less interactive, since Python objects in the script cannot be accessed on the fly.
 
 ## **Option 3: Anywhere in Python**
 
-It is also possible to [embedded an app](https://docs.bokeh.org/en/latest/docs/user_guide/server.html#embedding-bokeh-server-as-a-library) into regular Python:
+It is possible to [embed the app](https://docs.bokeh.org/en/latest/docs/user_guide/server.html#embedding-bokeh-server-as-a-library) in regular Python:
 
 ```Python
 from bokeh.server.server import Server
@@ -60,10 +60,10 @@ server.start()
 ```
 
 ???+ tip "Pros & Cons"
-    This embedded mode is a go-to for serving within a greater application. The various parameters in the command line mode are also available here, per `bokeh`'s documentation:
+    This embedded mode is a go-to for serving within a greater application.
 
-    > Also note that most every command line argument for bokeh serve has a corresponding keyword argument to Server.
-    >
-    > For instance, setting the `--allow-websocket-origin` command line argument is equivalent to passing `allow_websocket_origin` as a parameter.
+    Also note that each command line argument for `bokeh serve` has a corresponding keyword argument to `Server()`.
 
-    The embedded mode can seem a bit sophisticated, but is well justified by its flexibility.
+    For instance, `bokeh serve <args> --allow-websocket-origin=*` in the command line mirrors `Server(*args, allow_websocket_origin='*')` in Python.
+
+    The embedded mode gives you the most control of your server.

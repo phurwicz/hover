@@ -49,17 +49,38 @@ Note how the callback dynamically takes `dataset.classes`, which means the model
 
 Now we invoke the `active_learning` recipe.
 
-> In general, a "recipe" is a function which takes a `SupervisableDataset` and other arguments based on what the recipe does.
->
-> -   Note how `active_learning` takes more arguments than `simple_annotator` due to, well, active learning.
->
-> The recipe returns a "handle" function which `bokeh` can use to visualize an annotation interface in multiple settings.
+Inspecting model predictions allows us to
+
+-   get an idea of how the current set of annotations will likely teach the model.
+-   locate the most valuable samples for further annotation.
 
 ???+ tip "Basic tips"
-    Inspecting model predictions allows us to
+    In general, a `recipe` is a function taking a `SupervisableDataset` and other arguments based on its functionality.
 
-    -   get an idea of how the current set of annotations will likely teach the model.
-    -   locate the most valuable samples for further annotation.
+    Here are the most recommended recipes::
+
+    === "active_learning"
+        ::: hover.recipes.experimental.active_learning
+            rendering:
+              show_root_heading: true
+              show_root_toc_entry: false
+              heading_level: 4
+
+    === "simple_annotator"
+        ::: hover.recipes.stable.simple_annotator
+            rendering:
+              show_root_heading: true
+              show_root_toc_entry: false
+              heading_level: 4
+
+    === "snorkel_crosscheck"
+        ::: hover.recipes.experimental.snorkel_crosscheck
+            rendering:
+              show_root_heading: true
+              show_root_toc_entry: false
+              heading_level: 4
+
+    The recipe returns a `handle` function which `bokeh` can use to visualize an annotation interface in multiple settings.
 
 {!docs/snippets/markdown/jupyterlab-js-issue.md!}
 
