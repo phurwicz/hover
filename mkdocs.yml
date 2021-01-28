@@ -22,11 +22,18 @@ nav:
     - Home: 'index.md'
     - 'Tutorial':
         - 'Quickstart': 'pages/tutorial/t0-quickstart.md'
-        - 'Active Learning': 'pages/tutorial/t1-active-learning.md'
-        - 'Serving Options': 'pages/tutorial/t2-bokeh-app.md'
+        - 'Using Recipes': 'pages/tutorial/t1-active-learning.md'
+        - 'Server Options': 'pages/tutorial/t2-bokeh-app.md'
     - 'Topics':
-        - 'Why Hover': 'pages/topics/what-hover-is.md'
-        - 'Managing Data (under work)': 'pages/topics/dataset.md'
+        #- 'Why Hover': 'pages/topics/what-hover-is.md'
+        - 'Managing Data (under work)': 'pages/topics/managing-data.md' # ideas & best practices around SupervisableDataset
+        - 'Active Learning (under work)': 'pages/topics/active-learning.md' # video walkthrough showcasing the active_learning recipe
+        - 'Distant Supervision (under work)': 'pages/topics/distant-supervision.md' # video walkthrough showcasing the snorkel_crosscheck recipe
+        #- 'Customized Usage':
+        #    - 'API Levels': 'pages/topics/api-levels.md' # discuss the interaction between recipe / dataset / explorer
+        #    - 'Custom Recipe': 'pages/topics/custom-recipe.md' # discuss the caveats when making a recipe
+        #    - 'Subclassing Dataset': 'pages/topics/custom-dataset.md' # discuss the caveats when subclassing a SupervisableDataset
+        #    - 'Subclassing Explorer': 'pages/topics/custom-explorer.md' # discuss the caveats when subclassing a BokehBaseExplorer
     - 'API Reference':
         - 'hover.recipes': 'pages/reference/recipes.md'
         - 'hover.core':

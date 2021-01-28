@@ -1,4 +1,4 @@
-> The most common usage of `hover` is through built-in "recipes" like in the quickstart.
+> The most common usage of `hover` is through built-in `recipe`s like in the quickstart.
 >
 > :ferris_wheel: Let's explore another `recipe` -- an active learning example.
 
