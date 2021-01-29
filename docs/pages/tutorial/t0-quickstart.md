@@ -1,4 +1,4 @@
-> Welcome to the minimal guide of `hover`!
+> Welcome to the simplest use case of `hover`!
 >
 > :sunglasses: Let's say we want to label some data and call it a day.
 
@@ -44,7 +44,7 @@ We can first create a [`SupervisableDataset`](../../reference/core-dataset/#hove
 
 To put our dataset sensibly on a 2-D "map", we will use a vectorizer for feature extraction, and then perform dimensionality reduction.
 
-Here's one way to define a vectorizer:
+Here's one of many ways to define a vectorizer:
 
 <pre data-executable>
 {!docs/snippets/py/t0-1-vectorizer.txt!}
@@ -52,7 +52,7 @@ Here's one way to define a vectorizer:
 
 ???+ tip "Tips"
     ??? example "Caching"
-        `hover` by itself stores the original features but not the corresponding vectors.
+        `dataset` by itself stores the original features but not the corresponding vectors.
 
         To avoid vectorizing the same feature again and again, we could simply do:
         ```python
@@ -132,16 +132,16 @@ Now we are ready to visualize and annotate!
 
     -   `push`: push `Dataset` updates to the bokeh plots.
     -   `commit`: add data entries selected in the `Annotator` to a specified subset.
-    -   `dedup`: deduplicate across subsets (keep the last entry).
+    -   `dedup`: deduplicate across subsets by `feature` (last in gets kept).
 
     The `BokehDataAnnotator` comes with a few buttons:
 
-    -   `raw`/`train`/`dev`/`test`: choose which subsets to display.
+    -   `raw`/`train`/`dev`/`test`: choose which subsets to display or hide.
     -   `apply`: apply the `label` input to the selected points in the `raw` subset only.
     -   `export`: save your data (all subsets) in a specified format.
 
 ??? info "Best practices"
-    We've essentially put the data into neighborboods based on the vectorizer, but the quality, or the homogeneity of labels, of such neighborhoods can vary.
+    We've essentially put the data into neighborboods based on the vectorizer, but the quality (homogeneity of labels) of such neighborhoods can vary.
 
     -   hover over any data point to see its tooltip.
     -   take advantage of different selection tools to apply labels at appropriate scales.
