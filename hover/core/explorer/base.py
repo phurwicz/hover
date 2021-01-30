@@ -4,8 +4,6 @@
 from abc import ABC, abstractmethod
 from bokeh.plotting import figure
 from bokeh.models import ColumnDataSource
-from bokeh.palettes import Category10, Category20
-from hover import module_config
 from hover.core import Loggable
 from .local_config import bokeh_hover_tooltip
 
@@ -317,19 +315,17 @@ class BokehBaseExplorer(Loggable, ABC):
         """
         pass
 
-    def auto_labels_palette(self):
+    def auto_color_mapping(self):
         """
-        ???+ note "Find all labels and an appropriate color map."
+        ???+ note "Find all labels and an appropriate color for each."
         """
+        from hover.utils.bokeh_helper import auto_label_color
+
         labels = set()
         for _key in self.dfs.keys():
             labels = labels.union(set(self.dfs[_key]["label"].values))
-        labels.discard(module_config.ABSTAIN_DECODED)
-        labels = sorted(labels, reverse=False)
 
-        assert len(labels) <= 20, "Too many labels to support (max at 20)"
-        palette = Category10[10] if len(labels) <= 10 else Category20[20]
-        return labels, palette
+        return auto_label_color(labels)
 
     # def auto_legend_correction(self):
     #    """

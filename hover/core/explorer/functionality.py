@@ -71,11 +71,7 @@ class BokehDataAnnotator(BokehBaseExplorer):
         ???+ note "Infer glyph colors from the label dynamically."
         """
         # infer glyph color from labels
-        labels, palette = self.auto_labels_palette()
-        assert len(labels) <= len(
-            palette
-        ), f"More labels than the palette can support: can take {len(palette)}, got {len(labels)}"
-        color_dict = {_l: _c for _l, _c in zip(labels, palette)}
+        color_dict = self.auto_color_mapping()
 
         def get_color(label):
             return color_dict.get(label, "gainsboro")
@@ -179,8 +175,6 @@ class BokehDataAnnotator(BokehBaseExplorer):
             Overrides the parent method.
             Determines the label -> color mapping dynamically.
         """
-        labels, palette = self.auto_labels_palette()
-
         for _key, _source in self.sources.items():
             self.figure.circle(
                 "x",
@@ -259,11 +253,7 @@ class BokehSoftLabelExplorer(BokehBaseExplorer):
         ???+ note "Infer glyph colors from the label dynamically."
         """
         # infer glyph color from labels
-        labels, palette = self.auto_labels_palette()
-        assert len(labels) <= len(
-            palette
-        ), f"More labels than the palette can support: can take {len(palette)}, got {len(labels)}"
-        color_dict = {_l: _c for _l, _c in zip(labels, palette)}
+        color_dict = self.auto_color_mapping()
 
         def get_color(label):
             return color_dict.get(label, "gainsboro")

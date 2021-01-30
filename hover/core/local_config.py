@@ -1,7 +1,13 @@
 from bokeh.models import Div
 
 
-dataset_help_html = """Hover - dataset visual elements<br>
+COLOR_GLYPH_TEMPLATE = """
+<p style="color:<%= value %>;">
+    <%= "&#9608;" %>
+</p>
+"""
+
+DATASET_HELP_HTML = """Hover - dataset visual elements<br>
 <br>
 Buttons:<br>
 - Push: "dataset -> plots" push of data points;<br>
@@ -14,4 +20,4 @@ Table:<br>
 
 
 def dataset_help_widget():
-    return Div(text=dataset_help_html)
+    return Div(text=DATASET_HELP_HTML)

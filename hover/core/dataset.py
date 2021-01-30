@@ -15,8 +15,16 @@ import numpy as np
 from tqdm import tqdm
 from hover import module_config
 from hover.core import Loggable
-from bokeh.models import Button, Dropdown, ColumnDataSource, DataTable, TableColumn
-from .local_config import dataset_help_widget
+from hover.utils.bokeh_helper import auto_label_color
+from bokeh.models import (
+    Button,
+    Dropdown,
+    ColumnDataSource,
+    DataTable,
+    TableColumn,
+    HTMLTemplateFormatter,
+)
+from .local_config import dataset_help_widget, COLOR_GLYPH_TEMPLATE
 
 
 class SupervisableDataset(Loggable):
@@ -261,6 +269,8 @@ class SupervisableDataset(Loggable):
                 self._info(
                     f"Committed {valid_slice.shape[0]} (valid out of {sel_slice.shape[0]} selected) entries from {sub_k} to {sub_to} ({size_before} -> {size_after} with {size_mid-size_after} overwrites)."
                 )
+            # chain another callback
+            self._callback_update_population()
 
         self.data_committer.on_click(callback_commit)
         self._good(
@@ -338,6 +348,11 @@ class SupervisableDataset(Loggable):
                 TableColumn(field=f"count_{_subset}", title=_subset)
                 for _subset in subsets
             ],
+            TableColumn(
+                field="color",
+                title="color",
+                formatter=HTMLTemplateFormatter(template=COLOR_GLYPH_TEMPLATE),
+            ),
         ]
         self.pop_table = DataTable(source=pop_source, columns=pop_columns, **kwargs)
 
@@ -350,7 +365,10 @@ class SupervisableDataset(Loggable):
 
             # re-compute label population
             eff_labels = [module_config.ABSTAIN_DECODED, *self.classes]
-            pop_data = dict(label=eff_labels)
+            color_dict = auto_label_color(self.classes)
+            eff_colors = [color_dict[_label] for _label in eff_labels]
+
+            pop_data = dict(color=eff_colors, label=eff_labels)
             for _subset in subsets:
                 _subpop = self.dfs[_subset]["label"].value_counts()
                 pop_data[f"count_{_subset}"] = [
@@ -365,8 +383,10 @@ class SupervisableDataset(Loggable):
             )
 
         update_population()
-        self.data_committer.on_click(update_population)
         self.dedup_trigger.on_click(update_population)
+
+        # store the callback so that it can be referenced by other methods
+        self._callback_update_population = update_population
 
     def df_deduplicate(self):
         """
