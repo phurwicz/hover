@@ -36,7 +36,7 @@ Check out [@phurwicz/hover-binder](https://github.com/phurwicz/hover-binder) for
 
 ## :flags: Project News
 
--   **Jan 3, 2021** 0.4.0 is now available. Check out the [changelog](https://github.com/phurwicz/hover/blob/main/CHANGELOG.md) for details :partying_face:
+-   **Jan 31, 2021** 0.4.1 is now available. Check out the [changelog](https://github.com/phurwicz/hover/blob/main/CHANGELOG.md) for details :partying_face:
 
 ## :rocket: Quickstart
 
