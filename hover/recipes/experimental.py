@@ -114,7 +114,6 @@ def active_learning(dataset, vectorizer, vecnet_callback, height=600, width=600)
                 dataset.dfs[_key]["pred_score"] = pd.Series(_scores)
 
             softlabel._update_sources()
-            softlabel.plot()
             model_retrainer.disabled = False
             logger.good("-- 2/2: updated predictions. Training button is re-enabled.")
 

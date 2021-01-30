@@ -286,14 +286,12 @@ class BokehSoftLabelExplorer(BokehBaseExplorer):
             | :--------- | :----- | :--------------------------- |
             | `**kwargs` |        | forwarded to plotting markers |
         """
-        labels, palette = self.auto_labels_palette()
-
         for _key, _source in self.sources.items():
             # prepare plot settings
             preset_kwargs = {
                 "legend_group": self.label_col,
                 "color": SOURCE_COLOR_FIELD,
-                "fill_alpha": self.score_col,
+                "fill_alpha": SOURCE_ALPHA_FIELD,
             }
             eff_kwargs = self.glyph_kwargs[_key].copy()
             eff_kwargs.update(preset_kwargs)
