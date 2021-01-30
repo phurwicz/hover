@@ -75,13 +75,13 @@ class BokehDataAnnotator(BokehBaseExplorer):
         assert len(labels) <= len(
             palette
         ), f"More labels than the palette can support: can take {len(palette)}, got {len(labels)}"
-        label_to_color = {_l: _c for _l, _c in zip(labels, palette)}
+        color_dict = {_l: _c for _l, _c in zip(labels, palette)}
+
+        def get_color(label):
+            return color_dict.get(label, "gainsboro")
+
         for _key, _df in self.dfs.items():
-            _color = (
-                _df["label"]
-                .apply(lambda x: label_to_color.get(x, "gainsboro"))
-                .tolist()
-            )
+            _color = _df["label"].apply(get_color).tolist()
             self.sources[_key].add(_color, SOURCE_COLOR_FIELD)
 
     def _setup_widgets(self):
@@ -265,16 +265,30 @@ class BokehSoftLabelExplorer(BokehBaseExplorer):
         assert len(labels) <= len(
             palette
         ), f"More labels than the palette can support: can take {len(palette)}, got {len(labels)}"
-        label_to_color = {_l: _c for _l, _c in zip(labels, palette)}
+        color_dict = {_l: _c for _l, _c in zip(labels, palette)}
+
+        def get_color(label):
+            return color_dict.get(label, "gainsboro")
+
+        # infer glyph alpha from pseudo-percentile of soft label scores
+        scores = np.concatenate(
+            [_df[self.score_col].tolist() for _df in self.dfs.values()]
+        )
+        scores_mean = scores.mean()
+        scores_std = scores.std() + 1e-4
+
+        def pseudo_percentile(confidence, lower=0.1, upper=0.9):
+            # pretend that 2*std on each side covers everything
+            unit_shift = upper - lower / 4
+            # shift = unit_shift * z_score
+            shift = unit_shift * (confidence - scores_mean) / scores_std
+            percentile = 0.5 + shift
+            return min(upper, max(lower, percentile))
 
         # infer alpha from score percentiles
         for _key, _df in self.dfs.items():
-            _color = (
-                _df[self.label_col]
-                .apply(lambda x: label_to_color.get(x, "gainsboro"))
-                .tolist()
-            )
-            _alpha = _df[self.score_col].tolist()
+            _color = _df[self.label_col].apply(get_color).tolist()
+            _alpha = _df[self.score_col].apply(pseudo_percentile).tolist()
             self.sources[_key].add(_color, SOURCE_COLOR_FIELD)
             self.sources[_key].add(_alpha, SOURCE_ALPHA_FIELD)
 
