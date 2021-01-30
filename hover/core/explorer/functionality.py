@@ -4,10 +4,9 @@
 import numpy as np
 from bokeh.models import CDSView, IndexFilter
 from bokeh.palettes import Category20
-from bokeh.transform import factor_cmap
 from hover import module_config
 from hover.utils.misc import current_time
-from .local_config import bokeh_hover_tooltip
+from .local_config import bokeh_hover_tooltip, SOURCE_COLOR_FIELD, SOURCE_ALPHA_FIELD
 from .base import BokehBaseExplorer
 
 
@@ -67,6 +66,24 @@ class BokehDataAnnotator(BokehBaseExplorer):
         for _key in ["raw", "train", "dev", "test"]
     }
 
+    def _postprocess_sources(self):
+        """
+        ???+ note "Infer glyph colors from the label dynamically."
+        """
+        # infer glyph color from labels
+        labels, palette = self.auto_labels_palette()
+        assert len(labels) <= len(
+            palette
+        ), f"More labels than the palette can support: can take {len(palette)}, got {len(labels)}"
+        label_to_color = {_l: _c for _l, _c in zip(labels, palette)}
+        for _key, _df in self.dfs.items():
+            _color = (
+                _df["label"]
+                .apply(lambda x: label_to_color.get(x, "gainsboro"))
+                .tolist()
+            )
+            self.sources[_key].add(_color, SOURCE_COLOR_FIELD)
+
     def _setup_widgets(self):
         """
         ???+ note "Create annotator widgets and assign Python callbacks."
@@ -107,11 +124,10 @@ class BokehDataAnnotator(BokehBaseExplorer):
             self.dfs["raw"].at[selected_idx, "label"] = label
             example_new = self.dfs["raw"].at[selected_idx[0], "label"]
             self._good(
-                f"Applied {len(selected_idx)} annotations: {label} (e.g. {example_old} -> {example_new}"
+                f"Applied {len(selected_idx)} annotations: {label} (e.g. {example_old} -> {example_new})"
             )
 
             self._update_sources()
-            self.plot()
             self._good(f"Updated annotator plot at {current_time()}")
 
         def callback_export(event, path_root=None):
@@ -171,7 +187,7 @@ class BokehDataAnnotator(BokehBaseExplorer):
                 "x",
                 "y",
                 name=_key,
-                color=factor_cmap("label", palette=palette, factors=labels),
+                color=SOURCE_COLOR_FIELD,
                 legend_group="label",
                 source=_source,
                 **self.glyph_kwargs[_key],
@@ -240,6 +256,28 @@ class BokehSoftLabelExplorer(BokehBaseExplorer):
             if self.score_col not in _df.columns:
                 _df[self.score_col] = 0.5
 
+    def _postprocess_sources(self):
+        """
+        ???+ note "Infer glyph colors from the label dynamically."
+        """
+        # infer glyph color from labels
+        labels, palette = self.auto_labels_palette()
+        assert len(labels) <= len(
+            palette
+        ), f"More labels than the palette can support: can take {len(palette)}, got {len(labels)}"
+        label_to_color = {_l: _c for _l, _c in zip(labels, palette)}
+
+        # infer alpha from score percentiles
+        for _key, _df in self.dfs.items():
+            _color = (
+                _df[self.label_col]
+                .apply(lambda x: label_to_color.get(x, "gainsboro"))
+                .tolist()
+            )
+            _alpha = _df[self.score_col].tolist()
+            self.sources[_key].add(_color, SOURCE_COLOR_FIELD)
+            self.sources[_key].add(_alpha, SOURCE_ALPHA_FIELD)
+
     @BokehBaseExplorer.auto_legend
     def plot(self, **kwargs):
         """
@@ -254,7 +292,7 @@ class BokehSoftLabelExplorer(BokehBaseExplorer):
             # prepare plot settings
             preset_kwargs = {
                 "legend_group": self.label_col,
-                "color": factor_cmap(self.label_col, palette=palette, factors=labels),
+                "color": SOURCE_COLOR_FIELD,
                 "fill_alpha": self.score_col,
             }
             eff_kwargs = self.glyph_kwargs[_key].copy()

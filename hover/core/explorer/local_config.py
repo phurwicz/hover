@@ -1,3 +1,7 @@
+SOURCE_COLOR_FIELD = "__COLOR__"
+SOURCE_ALPHA_FIELD = "__ALPHA__"
+
+
 def bokeh_hover_tooltip(
     label=False,
     text=False,
@@ -8,15 +12,15 @@ def bokeh_hover_tooltip(
     custom=None,
 ):
     """
-    Create a Bokeh hover tooltip from a template.
+    ???+ note "Create a Bokeh hover tooltip from a template."
 
-    - param label: whether to expect and show a "label" field.
-    - param text: whether to expect and show a "text" field.
-    - param image: whether to expect and show an "image" (url/path) field.
-    - param audio: whether to expect and show an "audio" (url/path) field.
-    - param coords: whether to show xy-coordinates.
-    - param index: whether to show indices in the dataset.
-    - param custom: {display: column} mapping of additional (text) tooltips.
+        - param label: whether to expect and show a "label" field.
+        - param text: whether to expect and show a "text" field.
+        - param image: whether to expect and show an "image" (url/path) field.
+        - param audio: whether to expect and show an "audio" (url/path) field.
+        - param coords: whether to show xy-coordinates.
+        - param index: whether to show indices in the dataset.
+        - param custom: {display: column} mapping of additional (text) tooltips.
     """
     # initialize mutable default value
     custom = custom or dict()

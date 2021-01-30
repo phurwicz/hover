@@ -208,6 +208,7 @@ class BokehBaseExplorer(Loggable, ABC):
         """
         self._info("Setting up sources")
         self.sources = {_key: ColumnDataSource(_df) for _key, _df in self.dfs.items()}
+        self._postprocess_sources()
 
     def _update_sources(self):
         """
@@ -217,7 +218,15 @@ class BokehBaseExplorer(Loggable, ABC):
         """
         for _key in self.dfs.keys():
             self.sources[_key].data = self.dfs[_key]
+        self._postprocess_sources()
         self._activate_search_builtin(verbose=False)
+
+    def _postprocess_sources(self):
+        """
+        ???+ note "Infer source attributes from the dfs, without altering the dfs."
+            Useful for assigning dynamic glyph attributes, similarly to `activate_search()`.
+        """
+        pass
 
     def _activate_search_builtin(self, verbose=True):
         """
@@ -316,7 +325,7 @@ class BokehBaseExplorer(Loggable, ABC):
         for _key in self.dfs.keys():
             labels = labels.union(set(self.dfs[_key]["label"].values))
         labels.discard(module_config.ABSTAIN_DECODED)
-        labels = sorted(labels, reverse=True)
+        labels = sorted(labels, reverse=False)
 
         assert len(labels) <= 20, "Too many labels to support (max at 20)"
         palette = Category10[10] if len(labels) <= 10 else Category20[20]
@@ -359,7 +368,7 @@ class BokehBaseExplorer(Loggable, ABC):
     @staticmethod
     def auto_legend(method):
         """
-        ???+ note "Decorator that wraps `auto_legend_correction` around the decorated method."
+        ???+ note "Decorator that handles legend pre/post-processing issues."
             Usage:
 
             ```python
@@ -382,6 +391,7 @@ class BokehBaseExplorer(Loggable, ABC):
             retval = method(ref, *args, **kwargs)
 
             ref.auto_legend_correction()
+
             return retval
 
         return wrapped
