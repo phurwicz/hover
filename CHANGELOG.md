@@ -1,6 +1,18 @@
 # CHANGELOG
 
-## 0.4.1 - UPCOMING
+## 0.4.1 - Projected Jan 31, 2021
+
+### :hammer: Fixes
+
+-   Label -> Glyph legends are removed from `BokehDataAnnotator` and `BokehSoftLabelExplorer`.
+    -   instead, `SupervisableDataset` now keeps track of labels and their corresponding colors consistently with explorers which use colors based on labels.
+    -   context for those who might be interested: [the tie between legends and renderers](https://docs.bokeh.org/en/latest/docs/user_guide/annotations.html#legends) makes legends hard to read when its renderer's glyphs vary a lot. `BokehDataAnnotator` and `BokehSoftLabelExplorer` dynamically update glyphs and fall into this scenario.
+
+-   `BokehSoftLabelExplorer` now "smartly" calculates `fill_alpha`.
+    -   it does so through the mean value and standard deviation of soft scores. For example, before this change, `score = 0.3` would mean `fill_alpha = 0.5`, but now it is more like `score is 0/1/2 std below average` -> `fill_alpha = 0.1/0.3/0.5 respectively`.
+
+-   Clicking the `Commit` button on the interface of `SupervisableDataset` used to fail to reflect changes in the population table when a new class shows up.
+    -   this is now resolved. Clicking either `Commit` or `Dedup` will reflect any population changes.
 
 ## 0.4.0 - Jan 3, 2021
 
