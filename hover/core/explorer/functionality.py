@@ -173,7 +173,6 @@ class BokehDataAnnotator(BokehBaseExplorer):
         self.annotator_apply.on_click(self._callback_subset_display)
         self.annotator_export.on_click(self._callback_export)
 
-    @BokehBaseExplorer.auto_legend
     def plot(self):
         """
         ???+ note "Re-plot all data points with the new labels."
@@ -188,7 +187,6 @@ class BokehDataAnnotator(BokehBaseExplorer):
                 "y",
                 name=_key,
                 color=SOURCE_COLOR_FIELD,
-                legend_group="label",
                 source=_source,
                 **self.glyph_kwargs[_key],
             )
@@ -292,7 +290,6 @@ class BokehSoftLabelExplorer(BokehBaseExplorer):
             self.sources[_key].add(_color, SOURCE_COLOR_FIELD)
             self.sources[_key].add(_alpha, SOURCE_ALPHA_FIELD)
 
-    @BokehBaseExplorer.auto_legend
     def plot(self, **kwargs):
         """
         ???+ note "Plot all data points, setting color alpha based on the soft score."
@@ -303,7 +300,6 @@ class BokehSoftLabelExplorer(BokehBaseExplorer):
         for _key, _source in self.sources.items():
             # prepare plot settings
             preset_kwargs = {
-                "legend_group": self.label_col,
                 "color": SOURCE_COLOR_FIELD,
                 "fill_alpha": SOURCE_ALPHA_FIELD,
             }

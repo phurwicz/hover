@@ -331,67 +331,67 @@ class BokehBaseExplorer(Loggable, ABC):
         palette = Category10[10] if len(labels) <= 10 else Category20[20]
         return labels, palette
 
-    def auto_legend_correction(self):
-        """
-        ???+ note "Find legend items and deduplicate by label, keeping the last glyph / legend item of each label."
-            This is to resolve duplicate legend items due to automatic legend_group and incremental plotting.
-        """
-        from collections import OrderedDict
-
-        if not hasattr(self.figure, "legend"):
-            self._fail("Attempting auto_legend_correction when there is no legend")
-            return
-        # extract all items and start over
-        items = self.figure.legend.items[:]
-        self.figure.legend.items.clear()
-
-        # use one item to hold all renderers matching its label
-        label_to_item = OrderedDict()
-
-        # deduplication
-        for _item in items:
-            _label = _item.label.get("value", "")
-            label_to_item[_label] = _item
-
-            # WARNING: the current implementation discards renderer references.
-            # This could be for the best because renderers add up their glyphs to the legend item.
-            # To keep renderer references, see this example:
-            # if _label not in label_to_item.keys():
-            #    label_to_item[_label] = _item
-            # else:
-            #    label_to_item[_label].renderers.extend(_item.renderers)
-
-        self.figure.legend.items = list(label_to_item.values())
-
-        return
-
-    @staticmethod
-    def auto_legend(method):
-        """
-        ???+ note "Decorator that handles legend pre/post-processing issues."
-            Usage:
-
-            ```python
-            # in a child class
-
-            @BokehBaseExplorer.auto_legend
-            def plot(self, *args, **kwargs):
-                # put code here
-                pass
-            ```
-        """
-        from functools import wraps
-
-        @wraps(method)
-        def wrapped(ref, *args, **kwargs):
-            if hasattr(ref.figure, "legend"):
-                if hasattr(ref.figure.legend, "items"):
-                    ref.figure.legend.items.clear()
-
-            retval = method(ref, *args, **kwargs)
-
-            ref.auto_legend_correction()
-
-            return retval
-
-        return wrapped
+    # def auto_legend_correction(self):
+    #    """
+    #    ???+ note "Find legend items and deduplicate by label, keeping the last glyph / legend item of each label."
+    #        This is to resolve duplicate legend items due to automatic legend_group and incremental plotting.
+    #    """
+    #    from collections import OrderedDict
+    #
+    #    if not hasattr(self.figure, "legend"):
+    #        self._fail("Attempting auto_legend_correction when there is no legend")
+    #        return
+    #    # extract all items and start over
+    #    items = self.figure.legend.items[:]
+    #    self.figure.legend.items.clear()
+    #
+    #    # use one item to hold all renderers matching its label
+    #    label_to_item = OrderedDict()
+    #
+    #    # deduplication
+    #    for _item in items:
+    #        _label = _item.label.get("value", "")
+    #        label_to_item[_label] = _item
+    #
+    #        # WARNING: the current implementation discards renderer references.
+    #        # This could be for the best because renderers add up their glyphs to the legend item.
+    #        # To keep renderer references, see this example:
+    #        # if _label not in label_to_item.keys():
+    #        #    label_to_item[_label] = _item
+    #        # else:
+    #        #    label_to_item[_label].renderers.extend(_item.renderers)
+    #
+    #    self.figure.legend.items = list(label_to_item.values())
+    #
+    #    return
+    #
+    # @staticmethod
+    # def auto_legend(method):
+    #    """
+    #    ???+ note "Decorator that handles legend pre/post-processing issues."
+    #        Usage:
+    #
+    #        ```python
+    #        # in a child class
+    #
+    #        @BokehBaseExplorer.auto_legend
+    #        def plot(self, *args, **kwargs):
+    #            # put code here
+    #            pass
+    #        ```
+    #    """
+    #    from functools import wraps
+    #
+    #    @wraps(method)
+    #    def wrapped(ref, *args, **kwargs):
+    #        if hasattr(ref.figure, "legend"):
+    #            if hasattr(ref.figure.legend, "items"):
+    #                ref.figure.legend.items.clear()
+    #
+    #        retval = method(ref, *args, **kwargs)
+    #
+    #        ref.auto_legend_correction()
+    #
+    #        return retval
+    #
+    #    return wrapped
