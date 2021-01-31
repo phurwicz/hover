@@ -102,7 +102,7 @@
       </a>
 </li>
 <li class="md-tabs__item">
-<a class="md-tabs__link" href="../../topics/what-hover-is/">
+<a class="md-tabs__link" href="../../topics/managing-data/">
         Topics
       </a>
 </li>
@@ -161,12 +161,12 @@
 </li>
 <li class="md-nav__item">
 <a class="md-nav__link" href="../../tutorial/t1-active-learning/">
-      Active Learning
+      Using Recipes
     </a>
 </li>
 <li class="md-nav__item">
 <a class="md-nav__link" href="../../tutorial/t2-bokeh-app/">
-      Serving Options
+      Server Options
     </a>
 </li>
 </ul>
@@ -185,12 +185,7 @@
       </label>
 <ul class="md-nav__list" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../topics/what-hover-is/">
-      Why Hover
-    </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../../topics/dataset/">
+<a class="md-nav__link" href="../../topics/managing-data/">
       Managing Data (under work)
     </a>
 </li>
@@ -1080,6 +1075,11 @@ setup_pop_table<span class="p">(</span><span class="bp">self</span><span class="
             <span class="n">TableColumn</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="sa">f</span><span class="s2">"count_</span><span class="si">{</span><span class="n">_subset</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">_subset</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">_subset</span> <span class="ow">in</span> <span class="n">subsets</span>
         <span class="p">],</span>
+        <span class="n">TableColumn</span><span class="p">(</span>
+            <span class="n">field</span><span class="o">=</span><span class="s2">"color"</span><span class="p">,</span>
+            <span class="n">title</span><span class="o">=</span><span class="s2">"color"</span><span class="p">,</span>
+            <span class="n">formatter</span><span class="o">=</span><span class="n">HTMLTemplateFormatter</span><span class="p">(</span><span class="n">template</span><span class="o">=</span><span class="n">COLOR_GLYPH_TEMPLATE</span><span class="p">),</span>
+        <span class="p">),</span>
     <span class="p">]</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">pop_table</span> <span class="o">=</span> <span class="n">DataTable</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="n">pop_source</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">pop_columns</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
@@ -1092,7 +1092,10 @@ setup_pop_table<span class="p">(</span><span class="bp">self</span><span class="
 
         <span class="c1"># re-compute label population</span>
         <span class="n">eff_labels</span> <span class="o">=</span> <span class="p">[</span><span class="n">module_config</span><span class="o">.</span><span class="n">ABSTAIN_DECODED</span><span class="p">,</span> <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">classes</span><span class="p">]</span>
-        <span class="n">pop_data</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="n">eff_labels</span><span class="p">)</span>
+        <span class="n">color_dict</span> <span class="o">=</span> <span class="n">auto_label_color</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">classes</span><span class="p">)</span>
+        <span class="n">eff_colors</span> <span class="o">=</span> <span class="p">[</span><span class="n">color_dict</span><span class="p">[</span><span class="n">_label</span><span class="p">]</span> <span class="k">for</span> <span class="n">_label</span> <span class="ow">in</span> <span class="n">eff_labels</span><span class="p">]</span>
+
+        <span class="n">pop_data</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="n">eff_colors</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">eff_labels</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">_subset</span> <span class="ow">in</span> <span class="n">subsets</span><span class="p">:</span>
             <span class="n">_subpop</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dfs</span><span class="p">[</span><span class="n">_subset</span><span class="p">][</span><span class="s2">"label"</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span>
             <span class="n">pop_data</span><span class="p">[</span><span class="sa">f</span><span class="s2">"count_</span><span class="si">{</span><span class="n">_subset</span><span class="si">}</span><span class="s2">"</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
@@ -1107,8 +1110,10 @@ setup_pop_table<span class="p">(</span><span class="bp">self</span><span class="
         <span class="p">)</span>
 
     <span class="n">update_population</span><span class="p">()</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">data_committer</span><span class="o">.</span><span class="n">on_click</span><span class="p">(</span><span class="n">update_population</span><span class="p">)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">dedup_trigger</span><span class="o">.</span><span class="n">on_click</span><span class="p">(</span><span class="n">update_population</span><span class="p">)</span>
+
+    <span class="c1"># store the callback so that it can be referenced by other methods</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_callback_update_population</span> <span class="o">=</span> <span class="n">update_population</span>
 </code></pre>
 </div>
 </details>
@@ -1256,6 +1261,8 @@ subscribe_data_commit<span class="p">(</span><span class="bp">self</span><span c
             <span class="bp">self</span><span class="o">.</span><span class="n">_info</span><span class="p">(</span>
                 <span class="sa">f</span><span class="s2">"Committed </span><span class="si">{</span><span class="n">valid_slice</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> (valid out of </span><span class="si">{</span><span class="n">sel_slice</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> selected) entries from </span><span class="si">{</span><span class="n">sub_k</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">sub_to</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">size_before</span><span class="si">}</span><span class="s2"> -&gt; </span><span class="si">{</span><span class="n">size_after</span><span class="si">}</span><span class="s2"> with </span><span class="si">{</span><span class="n">size_mid</span><span class="o">-</span><span class="n">size_after</span><span class="si">}</span><span class="s2"> overwrites)."</span>
             <span class="p">)</span>
+        <span class="c1"># chain another callback</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_callback_update_population</span><span class="p">()</span>
 
     <span class="bp">self</span><span class="o">.</span><span class="n">data_committer</span><span class="o">.</span><span class="n">on_click</span><span class="p">(</span><span class="n">callback_commit</span><span class="p">)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_good</span><span class="p">(</span>

@@ -102,7 +102,7 @@
       </a>
 </li>
 <li class="md-tabs__item">
-<a class="md-tabs__link" href="../../topics/what-hover-is/">
+<a class="md-tabs__link" href="../../topics/managing-data/">
         Topics
       </a>
 </li>
@@ -161,12 +161,12 @@
 </li>
 <li class="md-nav__item">
 <a class="md-nav__link" href="../../tutorial/t1-active-learning/">
-      Active Learning
+      Using Recipes
     </a>
 </li>
 <li class="md-nav__item">
 <a class="md-nav__link" href="../../tutorial/t2-bokeh-app/">
-      Serving Options
+      Server Options
     </a>
 </li>
 </ul>
@@ -185,12 +185,7 @@
       </label>
 <ul class="md-nav__list" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../topics/what-hover-is/">
-      Why Hover
-    </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../../topics/dataset/">
+<a class="md-nav__link" href="../../topics/managing-data/">
       Managing Data (under work)
     </a>
 </li>
@@ -280,18 +275,8 @@
   </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#hover.core.explorer.base.BokehBaseExplorer.auto_labels_palette">
-    auto_labels_palette()
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.core.explorer.base.BokehBaseExplorer.auto_legend">
-    auto_legend()
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.core.explorer.base.BokehBaseExplorer.auto_legend_correction">
-    auto_legend_correction()
+<a class="md-nav__link" href="#hover.core.explorer.base.BokehBaseExplorer.auto_color_mapping">
+    auto_color_mapping()
   </a>
 </li>
 <li class="md-nav__item">
@@ -420,18 +405,8 @@
   </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#hover.core.explorer.base.BokehBaseExplorer.auto_labels_palette">
-    auto_labels_palette()
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.core.explorer.base.BokehBaseExplorer.auto_legend">
-    auto_legend()
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.core.explorer.base.BokehBaseExplorer.auto_legend_correction">
-    auto_legend_correction()
+<a class="md-nav__link" href="#hover.core.explorer.base.BokehBaseExplorer.auto_color_mapping">
+    auto_color_mapping()
   </a>
 </li>
 <li class="md-nav__item">
@@ -632,134 +607,26 @@ activate_search<span class="p">(</span><span class="bp">self</span><span class="
 </div>
 </div>
 <div class="doc doc-object doc-method">
-<h3 class="doc doc-heading" id="hover.core.explorer.base.BokehBaseExplorer.auto_labels_palette">
+<h3 class="doc doc-heading" id="hover.core.explorer.base.BokehBaseExplorer.auto_color_mapping">
 <code class="highlight language-python">
-auto_labels_palette<span class="p">(</span><span class="bp">self</span><span class="p">)</span> </code>
+auto_color_mapping<span class="p">(</span><span class="bp">self</span><span class="p">)</span> </code>
 </h3>
 <div class="doc doc-contents">
-<details class="note" open="open"><summary>Find all labels and an appropriate color map.</summary></details>
+<details class="note" open="open"><summary>Find all labels and an appropriate color for each.</summary></details>
 <details class="quote">
 <summary>Source code in <code>hover/core/explorer/base.py</code></summary>
 <div class="highlight">
-<pre><span></span><code><span class="k">def</span> <span class="nf">auto_labels_palette</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<pre><span></span><code><span class="k">def</span> <span class="nf">auto_color_mapping</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="sd">"""</span>
-<span class="sd">    ???+ note "Find all labels and an appropriate color map."</span>
+<span class="sd">    ???+ note "Find all labels and an appropriate color for each."</span>
 <span class="sd">    """</span>
+    <span class="kn">from</span> <span class="nn">hover.utils.bokeh_helper</span> <span class="kn">import</span> <span class="n">auto_label_color</span>
+
     <span class="n">labels</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
     <span class="k">for</span> <span class="n">_key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dfs</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
         <span class="n">labels</span> <span class="o">=</span> <span class="n">labels</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dfs</span><span class="p">[</span><span class="n">_key</span><span class="p">][</span><span class="s2">"label"</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">))</span>
-    <span class="n">labels</span><span class="o">.</span><span class="n">discard</span><span class="p">(</span><span class="n">module_config</span><span class="o">.</span><span class="n">ABSTAIN_DECODED</span><span class="p">)</span>
-    <span class="n">labels</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">20</span><span class="p">,</span> <span class="s2">"Too many labels to support (max at 20)"</span>
-    <span class="n">palette</span> <span class="o">=</span> <span class="n">Category10</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">10</span> <span class="k">else</span> <span class="n">Category20</span><span class="p">[</span><span class="mi">20</span><span class="p">]</span>
-    <span class="k">return</span> <span class="n">labels</span><span class="p">,</span> <span class="n">palette</span>
-</code></pre>
-</div>
-</details>
-</div>
-</div>
-<div class="doc doc-object doc-method">
-<h3 class="doc doc-heading" id="hover.core.explorer.base.BokehBaseExplorer.auto_legend">
-<code class="highlight language-python">
-auto_legend<span class="p">(</span><span class="n">method</span><span class="p">)</span> </code>
-<span class="doc doc-properties">
-<small class="doc doc-property doc-property-staticmethod"><code>staticmethod</code></small>
-</span>
-</h3>
-<div class="doc doc-contents">
-<details class="note" open="open"><summary>Decorator that wraps <code>auto_legend_correction</code> around the decorated method.</summary><p>Usage:</p>
-<div class="highlight">
-<pre><span></span><code><span class="c1"># in a child class</span>
-
-<span class="nd">@BokehBaseExplorer</span><span class="o">.</span><span class="n">auto_legend</span>
-<span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="c1"># put code here</span>
-    <span class="k">pass</span>
-</code></pre>
-</div>
-</details>
-<details class="quote">
-<summary>Source code in <code>hover/core/explorer/base.py</code></summary>
-<div class="highlight">
-<pre><span></span><code><span class="nd">@staticmethod</span>
-<span class="k">def</span> <span class="nf">auto_legend</span><span class="p">(</span><span class="n">method</span><span class="p">):</span>
-    <span class="sd">"""</span>
-<span class="sd">    ???+ note "Decorator that wraps `auto_legend_correction` around the decorated method."</span>
-<span class="sd">        Usage:</span>
-
-<span class="sd">        ```python</span>
-<span class="sd">        # in a child class</span>
-
-<span class="sd">        @BokehBaseExplorer.auto_legend</span>
-<span class="sd">        def plot(self, *args, **kwargs):</span>
-<span class="sd">            # put code here</span>
-<span class="sd">            pass</span>
-<span class="sd">        ```</span>
-<span class="sd">    """</span>
-    <span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">wraps</span>
-
-    <span class="nd">@wraps</span><span class="p">(</span><span class="n">method</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">wrapped</span><span class="p">(</span><span class="n">ref</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">ref</span><span class="o">.</span><span class="n">figure</span><span class="p">,</span> <span class="s2">"legend"</span><span class="p">):</span>
-            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">ref</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">legend</span><span class="p">,</span> <span class="s2">"items"</span><span class="p">):</span>
-                <span class="n">ref</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">legend</span><span class="o">.</span><span class="n">items</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
-
-        <span class="n">retval</span> <span class="o">=</span> <span class="n">method</span><span class="p">(</span><span class="n">ref</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-
-        <span class="n">ref</span><span class="o">.</span><span class="n">auto_legend_correction</span><span class="p">()</span>
-        <span class="k">return</span> <span class="n">retval</span>
-
-    <span class="k">return</span> <span class="n">wrapped</span>
-</code></pre>
-</div>
-</details>
-</div>
-</div>
-<div class="doc doc-object doc-method">
-<h3 class="doc doc-heading" id="hover.core.explorer.base.BokehBaseExplorer.auto_legend_correction">
-<code class="highlight language-python">
-auto_legend_correction<span class="p">(</span><span class="bp">self</span><span class="p">)</span> </code>
-</h3>
-<div class="doc doc-contents">
-<details class="note" open="open"><summary>Find legend items and deduplicate by label, keeping the last glyph / legend item of each label.</summary><p>This is to resolve duplicate legend items due to automatic legend_group and incremental plotting.</p>
-</details>
-<details class="quote">
-<summary>Source code in <code>hover/core/explorer/base.py</code></summary>
-<div class="highlight">
-<pre><span></span><code><span class="k">def</span> <span class="nf">auto_legend_correction</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="sd">"""</span>
-<span class="sd">    ???+ note "Find legend items and deduplicate by label, keeping the last glyph / legend item of each label."</span>
-<span class="sd">        This is to resolve duplicate legend items due to automatic legend_group and incremental plotting.</span>
-<span class="sd">    """</span>
-    <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">OrderedDict</span>
-
-    <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="p">,</span> <span class="s2">"legend"</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_fail</span><span class="p">(</span><span class="s2">"Attempting auto_legend_correction when there is no legend"</span><span class="p">)</span>
-        <span class="k">return</span>
-    <span class="c1"># extract all items and start over</span>
-    <span class="n">items</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">legend</span><span class="o">.</span><span class="n">items</span><span class="p">[:]</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">legend</span><span class="o">.</span><span class="n">items</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
-
-    <span class="c1"># use one item to hold all renderers matching its label</span>
-    <span class="n">label_to_item</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
-
-    <span class="c1"># deduplication</span>
-    <span class="k">for</span> <span class="n">_item</span> <span class="ow">in</span> <span class="n">items</span><span class="p">:</span>
-        <span class="n">_label</span> <span class="o">=</span> <span class="n">_item</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"value"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span>
-        <span class="n">label_to_item</span><span class="p">[</span><span class="n">_label</span><span class="p">]</span> <span class="o">=</span> <span class="n">_item</span>
-
-        <span class="c1"># WARNING: the current implementation discards renderer references.</span>
-        <span class="c1"># This could be for the best because renderers add up their glyphs to the legend item.</span>
-        <span class="c1"># To keep renderer references, see this example:</span>
-        <span class="c1"># if _label not in label_to_item.keys():</span>
-        <span class="c1">#    label_to_item[_label] = _item</span>
-        <span class="c1"># else:</span>
-        <span class="c1">#    label_to_item[_label].renderers.extend(_item.renderers)</span>
-
-    <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">legend</span><span class="o">.</span><span class="n">items</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">label_to_item</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
-
-    <span class="k">return</span>
+    <span class="k">return</span> <span class="n">auto_label_color</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span>
 </code></pre>
 </div>
 </details>

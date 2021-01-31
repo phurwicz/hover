@@ -188,7 +188,7 @@
     <li class="md-tabs__item">
       
       
-      <a href="../../topics/what-hover-is/" class="md-tabs__link">
+      <a href="../../topics/managing-data/" class="md-tabs__link">
         Topics
       </a>
     </li>
@@ -356,7 +356,7 @@
 
   <li class="md-nav__item">
     <a href="../t1-active-learning/" class="md-nav__link">
-      Active Learning
+      Using Recipes
     </a>
   </li>
 
@@ -368,7 +368,7 @@
 
   <li class="md-nav__item">
     <a href="../t2-bokeh-app/" class="md-nav__link">
-      Serving Options
+      Server Options
     </a>
   </li>
 
@@ -404,19 +404,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../topics/what-hover-is/" class="md-nav__link">
-      Why Hover
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../../topics/dataset/" class="md-nav__link">
+    <a href="../../topics/managing-data/" class="md-nav__link">
       Managing Data (under work)
     </a>
   </li>
@@ -716,7 +704,7 @@
                   <h1>Quickstart</h1>
                 
                 <blockquote>
-<p>Welcome to the minimal guide of <code>hover</code>!</p>
+<p>Welcome to the simplest use case of <code>hover</code>!</p>
 <p><img alt="😎" class="emojione" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.2.7/assets/png/1f60e.png" title=":sunglasses:" /> Let's say we want to label some data and call it a day.</p>
 </blockquote>
 <style type="text/css">
@@ -782,7 +770,7 @@ dataset.dfs["raw"].head(5)
 </details>
 <h2 id="ingredient-2-3-vectorizer"><strong>Ingredient 2 / 3: Vectorizer</strong></h2>
 <p>To put our dataset sensibly on a 2-D "map", we will use a vectorizer for feature extraction, and then perform dimensionality reduction.</p>
-<p>Here's one way to define a vectorizer:</p>
+<p>Here's one of many ways to define a vectorizer:</p>
 <pre data-executable>
 import spacy
 import re
@@ -799,7 +787,7 @@ print(f"Text: {text}")
 print(f"Vector shape: {vec.shape}")
 </pre>
 
-<details class="tip" open="open"><summary>Tips</summary><details class="example"><summary>Caching</summary><p><code>hover</code> by itself stores the original features but not the corresponding vectors.</p>
+<details class="tip" open="open"><summary>Tips</summary><details class="example"><summary>Caching</summary><p><code>dataset</code> by itself stores the original features but not the corresponding vectors.</p>
 <p>To avoid vectorizing the same feature again and again, we could simply do:
 <div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">cache</span>
 
@@ -862,30 +850,6 @@ dataset.dfs["raw"].head(5)
 
 <h2 id="apply-labels"><img alt="✨" class="emojione" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.2.7/assets/png/2728.png" title=":sparkles:" /> <strong>Apply Labels</strong></h2>
 <p>Now we are ready to visualize and annotate!</p>
-<details class="tip" open="open"><summary>Basic tips</summary><p>There should be a <code>SupervisableDataset</code> board on the left and an <code>BokehDataAnnotator</code> on the right.</p>
-<p>The <code>SupervisableDataset</code> comes with a few buttons:</p>
-<ul>
-<li><code>push</code>: push <code>Dataset</code> updates to the bokeh plots.</li>
-<li><code>commit</code>: add data entries selected in the <code>Annotator</code> to a specified subset.</li>
-<li><code>dedup</code>: deduplicate across subsets (keep the last entry).</li>
-</ul>
-<p>The <code>BokehDataAnnotator</code> comes with a few buttons:</p>
-<ul>
-<li><code>raw</code>/<code>train</code>/<code>dev</code>/<code>test</code>: choose which subsets to display.</li>
-<li><code>apply</code>: apply the <code>label</code> input to the selected points in the <code>raw</code> subset only.</li>
-<li><code>export</code>: save your data (all subsets) in a specified format.</li>
-</ul>
-</details>
-<details class="info"><summary>Best practices</summary><p>We've essentially put the data into neighborboods based on the vectorizer, but the quality, or the homogeneity of labels, of such neighborhoods can vary.</p>
-<ul>
-<li>hover over any data point to see its tooltip.</li>
-<li>take advantage of different selection tools to apply labels at appropriate scales.</li>
-<li>the search widget might turn out useful.<ul>
-<li>note that it does not select points but highlights them.</li>
-</ul>
-</li>
-</ul>
-</details>
 <details class="warning"><summary>Known issue</summary><p><mark class="critic"> If you are running this code block on this documentation page: </mark></p>
 <ul>
 <li>JavaScript output (which contains the visualization) will fail to render due to JupyterLab's security restrictions.</li>
@@ -930,7 +894,35 @@ output_notebook()
 show(handle, notebook_url='http://localhost:8888')
 </pre>
 
-<p><br></p>
+<details class="tip" open="open"><summary>Tips: annotation interface basics</summary><details class="example" open="open"><summary>Video guide</summary><p><iframe width="560" height="315" src="https://www.youtube.com/embed/WYN2WduzJWg" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></p>
+</details>
+<details class="info"><summary>Text guide</summary><p>There should be a <code>SupervisableDataset</code> board on the left and an <code>BokehDataAnnotator</code> on the right, each with a few buttons.</p>
+<div class="tabbed-set" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">SupervisableDataset</label><div class="tabbed-content">
+<ul>
+<li><code>push</code>: push <code>Dataset</code> updates to the bokeh plots.</li>
+<li><code>commit</code>: add data entries selected in the <code>Annotator</code> to a specified subset.</li>
+<li><code>dedup</code>: deduplicate across subsets by <code>feature</code> (last in gets kept).</li>
+</ul>
+</div>
+<input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><label for="__tabbed_1_2">BokehDataAnnotator</label><div class="tabbed-content">
+<ul>
+<li><code>raw</code>/<code>train</code>/<code>dev</code>/<code>test</code>: choose which subsets to display or hide.</li>
+<li><code>apply</code>: apply the <code>label</code> input to the selected points in the <code>raw</code> subset only.</li>
+<li><code>export</code>: save your data (all subsets) in a specified format.</li>
+</ul>
+</div>
+</div>
+<p>We've essentially put the data into neighborboods based on the vectorizer, but the quality (homogeneity of labels) of such neighborhoods can vary.</p>
+<ul>
+<li>hover over any data point to see its tooltip.</li>
+<li>take advantage of different selection tools to apply labels at appropriate scales.</li>
+<li>the search widget might turn out useful.<ul>
+<li>note that it does not select points but highlights them.</li>
+</ul>
+</li>
+</ul>
+</details>
+</details>
 <script src="../../../plugins/juniper.min.js"></script>
 
 <script>
@@ -979,7 +971,7 @@ show(handle, notebook_url='http://localhost:8888')
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                Active Learning
+                Using Recipes
               </div>
             </div>
             <div class="md-footer-nav__button md-icon">

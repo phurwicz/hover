@@ -102,7 +102,7 @@
       </a>
 </li>
 <li class="md-tabs__item">
-<a class="md-tabs__link" href="../../topics/what-hover-is/">
+<a class="md-tabs__link" href="../../topics/managing-data/">
         Topics
       </a>
 </li>
@@ -161,12 +161,12 @@
 </li>
 <li class="md-nav__item">
 <a class="md-nav__link" href="../../tutorial/t1-active-learning/">
-      Active Learning
+      Using Recipes
     </a>
 </li>
 <li class="md-nav__item">
 <a class="md-nav__link" href="../../tutorial/t2-bokeh-app/">
-      Serving Options
+      Server Options
     </a>
 </li>
 </ul>
@@ -185,12 +185,7 @@
       </label>
 <ul class="md-nav__list" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../topics/what-hover-is/">
-      Why Hover
-    </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../../topics/dataset/">
+<a class="md-nav__link" href="../../topics/managing-data/">
       Managing Data (under work)
     </a>
 </li>
@@ -566,22 +561,18 @@ Determines the label -&gt; color mapping dynamically.</p>
 <details class="quote">
 <summary>Source code in <code>hover/core/explorer/functionality.py</code></summary>
 <div class="highlight">
-<pre><span></span><code><span class="nd">@BokehBaseExplorer</span><span class="o">.</span><span class="n">auto_legend</span>
-<span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<pre><span></span><code><span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="sd">"""</span>
 <span class="sd">    ???+ note "Re-plot all data points with the new labels."</span>
 <span class="sd">        Overrides the parent method.</span>
 <span class="sd">        Determines the label -&gt; color mapping dynamically.</span>
 <span class="sd">    """</span>
-    <span class="n">labels</span><span class="p">,</span> <span class="n">palette</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">auto_labels_palette</span><span class="p">()</span>
-
     <span class="k">for</span> <span class="n">_key</span><span class="p">,</span> <span class="n">_source</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span>
             <span class="s2">"x"</span><span class="p">,</span>
             <span class="s2">"y"</span><span class="p">,</span>
             <span class="n">name</span><span class="o">=</span><span class="n">_key</span><span class="p">,</span>
-            <span class="n">color</span><span class="o">=</span><span class="n">factor_cmap</span><span class="p">(</span><span class="s2">"label"</span><span class="p">,</span> <span class="n">palette</span><span class="o">=</span><span class="n">palette</span><span class="p">,</span> <span class="n">factors</span><span class="o">=</span><span class="n">labels</span><span class="p">),</span>
-            <span class="n">legend_group</span><span class="o">=</span><span class="s2">"label"</span><span class="p">,</span>
+            <span class="n">color</span><span class="o">=</span><span class="n">SOURCE_COLOR_FIELD</span><span class="p">,</span>
             <span class="n">source</span><span class="o">=</span><span class="n">_source</span><span class="p">,</span>
             <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">glyph_kwargs</span><span class="p">[</span><span class="n">_key</span><span class="p">],</span>
         <span class="p">)</span>
@@ -1183,22 +1174,18 @@ plot<span class="p">(</span><span class="bp">self</span><span class="p">,</span>
 <details class="quote">
 <summary>Source code in <code>hover/core/explorer/functionality.py</code></summary>
 <div class="highlight">
-<pre><span></span><code><span class="nd">@BokehBaseExplorer</span><span class="o">.</span><span class="n">auto_legend</span>
-<span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<pre><span></span><code><span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">"""</span>
 <span class="sd">    ???+ note "Plot all data points, setting color alpha based on the soft score."</span>
 <span class="sd">        | Param      | Type   | Description                  |</span>
 <span class="sd">        | :--------- | :----- | :--------------------------- |</span>
 <span class="sd">        | `**kwargs` |        | forwarded to plotting markers |</span>
 <span class="sd">    """</span>
-    <span class="n">labels</span><span class="p">,</span> <span class="n">palette</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">auto_labels_palette</span><span class="p">()</span>
-
     <span class="k">for</span> <span class="n">_key</span><span class="p">,</span> <span class="n">_source</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="c1"># prepare plot settings</span>
         <span class="n">preset_kwargs</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">"legend_group"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">label_col</span><span class="p">,</span>
-            <span class="s2">"color"</span><span class="p">:</span> <span class="n">factor_cmap</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">label_col</span><span class="p">,</span> <span class="n">palette</span><span class="o">=</span><span class="n">palette</span><span class="p">,</span> <span class="n">factors</span><span class="o">=</span><span class="n">labels</span><span class="p">),</span>
-            <span class="s2">"fill_alpha"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">score_col</span><span class="p">,</span>
+            <span class="s2">"color"</span><span class="p">:</span> <span class="n">SOURCE_COLOR_FIELD</span><span class="p">,</span>
+            <span class="s2">"fill_alpha"</span><span class="p">:</span> <span class="n">SOURCE_ALPHA_FIELD</span><span class="p">,</span>
         <span class="p">}</span>
         <span class="n">eff_kwargs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">glyph_kwargs</span><span class="p">[</span><span class="n">_key</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="n">eff_kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">preset_kwargs</span><span class="p">)</span>

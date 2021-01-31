@@ -61,7 +61,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#hover.utils.bokeh_helper.servable" class="md-skip">
+        <a href="#hover.utils.bokeh_helper.auto_label_color" class="md-skip">
           Skip to content
         </a>
       
@@ -186,7 +186,7 @@
     <li class="md-tabs__item">
       
       
-      <a href="../../topics/what-hover-is/" class="md-tabs__link">
+      <a href="../../topics/managing-data/" class="md-tabs__link">
         Topics
       </a>
     </li>
@@ -299,7 +299,7 @@
 
   <li class="md-nav__item">
     <a href="../../tutorial/t1-active-learning/" class="md-nav__link">
-      Active Learning
+      Using Recipes
     </a>
   </li>
 
@@ -311,7 +311,7 @@
 
   <li class="md-nav__item">
     <a href="../../tutorial/t2-bokeh-app/" class="md-nav__link">
-      Serving Options
+      Server Options
     </a>
   </li>
 
@@ -347,19 +347,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../topics/what-hover-is/" class="md-nav__link">
-      Why Hover
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../../topics/dataset/" class="md-nav__link">
+    <a href="../../topics/managing-data/" class="md-nav__link">
       Managing Data (under work)
     </a>
   </li>
@@ -593,6 +581,13 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#hover.utils.bokeh_helper.auto_label_color" class="md-nav__link">
+    auto_label_color()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#hover.utils.bokeh_helper.servable" class="md-nav__link">
     servable()
   </a>
@@ -650,6 +645,13 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#hover.utils.bokeh_helper.auto_label_color" class="md-nav__link">
+    auto_label_color()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#hover.utils.bokeh_helper.servable" class="md-nav__link">
     servable()
   </a>
@@ -681,6 +683,39 @@
 <div class="doc doc-contents first">
 <details class="note" open="open"><summary>Useful subroutines for working with bokeh in general.</summary></details>
 <div class="doc doc-children">
+<div class="doc doc-object doc-function">
+<h3 class="doc doc-heading" id="hover.utils.bokeh_helper.auto_label_color">
+
+        <code class="highlight language-python">
+auto_label_color<span class="p">(</span><span class="n">labels</span><span class="p">)</span>        </code>
+
+
+      </h3>
+<div class="doc doc-contents ">
+<details class="note" open="open"><summary>Create a label-&gt;hex color mapping dict.</summary></details>
+<details class="quote">
+          <summary>Source code in <code>hover/utils/bokeh_helper.py</code></summary>
+          <div class="highlight">
+<pre><span></span><code><span class="k">def</span> <span class="nf">auto_label_color</span><span class="p">(</span><span class="n">labels</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    ???+ note "Create a label-&gt;hex color mapping dict."</span>
+<span class="sd">    """</span>
+    <span class="n">use_labels</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span>
+    <span class="n">use_labels</span><span class="o">.</span><span class="n">discard</span><span class="p">(</span><span class="n">module_config</span><span class="o">.</span><span class="n">ABSTAIN_DECODED</span><span class="p">)</span>
+    <span class="n">use_labels</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">use_labels</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">use_labels</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">20</span><span class="p">,</span> <span class="s2">"Too many labels to support (max at 20)"</span>
+    <span class="n">palette</span> <span class="o">=</span> <span class="n">Category10</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">use_labels</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">10</span> <span class="k">else</span> <span class="n">Category20</span><span class="p">[</span><span class="mi">20</span><span class="p">]</span>
+    <span class="n">color_dict</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">module_config</span><span class="o">.</span><span class="n">ABSTAIN_DECODED</span><span class="p">:</span> <span class="s2">"#dcdcdc"</span><span class="p">,</span>  <span class="c1"># gainsboro hex code</span>
+        <span class="o">**</span><span class="p">{</span><span class="n">_l</span><span class="p">:</span> <span class="n">_c</span> <span class="k">for</span> <span class="n">_l</span><span class="p">,</span> <span class="n">_c</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">use_labels</span><span class="p">,</span> <span class="n">palette</span><span class="p">)},</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">color_dict</span>
+</code></pre>
+</div>
+</details>
+</div>
+</div>
 <div class="doc doc-object doc-function">
 <h3 class="doc doc-heading" id="hover.utils.bokeh_helper.servable">
 
