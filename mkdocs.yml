@@ -27,9 +27,6 @@ nav:
     - 'Topics':
         #- 'Why Hover': 'pages/topics/what-hover-is.md'
         - 'Managing Data (under work)': 'pages/topics/managing-data.md' # jupyter illustration of ideas & best practices around SupervisableDataset
-        - 'Active Learning (under work)': 'pages/topics/active-learning.md' # video walkthrough showcasing the active_learning recipe
-        - 'Multiple Views (under work)': 'pages/topics/multiple-views.md' # video walkthrough showcasing the snorkel_crosscheck recipe
-        - 'Distant Supervision (under work)': 'pages/topics/distant-supervision.md' # video walkthrough showcasing the snorkel_crosscheck recipe
         #- 'Customized Usage':
         #    - 'API Levels': 'pages/topics/api-levels.md' # discuss the interaction between recipe / dataset / explorer
         #    - 'Custom Recipe': 'pages/topics/custom-recipe.md' # discuss the caveats when making a recipe

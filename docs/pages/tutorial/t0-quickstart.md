@@ -149,6 +149,9 @@ Now we are ready to visualize and annotate!
         -    note that it does not select points but highlights them.
 
 {!docs/snippets/markdown/jupyterlab-js-issue.md!}
+    ???+ example "Video Tutorial"
+        Alternatively, this video explains the annotation interface expected here:
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/TIwBlCH9YHw" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 <pre data-executable>
 {!docs/snippets/py/t0-3-simple-annotator.txt!}

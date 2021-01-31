@@ -57,28 +57,25 @@ Inspecting model predictions allows us to
 ???+ tip "Basic tips"
     In general, a `recipe` is a function taking a `SupervisableDataset` and other arguments based on its functionality.
 
-    Here are the most recommended recipes::
+    Here are a few common recipes:
 
     === "active_learning"
         ::: hover.recipes.experimental.active_learning
             rendering:
-              show_root_heading: true
+              show_root_heading: false
               show_root_toc_entry: false
-              heading_level: 4
 
     === "simple_annotator"
         ::: hover.recipes.stable.simple_annotator
             rendering:
-              show_root_heading: true
+              show_root_heading: false
               show_root_toc_entry: false
-              heading_level: 4
 
-    === "snorkel_crosscheck"
-        ::: hover.recipes.experimental.snorkel_crosscheck
+    === "linked_annotator"
+        ::: hover.recipes.stable.linked_annotator
             rendering:
-              show_root_heading: true
+              show_root_heading: false
               show_root_toc_entry: false
-              heading_level: 4
 
     The recipe returns a `handle` function which `bokeh` can use to visualize an annotation interface in multiple settings.
 
