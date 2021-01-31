@@ -49,12 +49,7 @@ Note how the callback dynamically takes `dataset.classes`, which means the model
 
 Now we invoke the `active_learning` recipe.
 
-Inspecting model predictions allows us to
-
--   get an idea of how the current set of annotations will likely teach the model.
--   locate the most valuable samples for further annotation.
-
-???+ tip "Basic tips"
+??? tip "Tips: how recipes work programmatically"
     In general, a `recipe` is a function taking a `SupervisableDataset` and other arguments based on its functionality.
 
     Here are a few common recipes:
@@ -83,6 +78,19 @@ Inspecting model predictions allows us to
 
 <pre data-executable>
 {!docs/snippets/py/t1-1-active-learning.txt!}
-</pre><br>
+</pre>
+
+???+ tip "Tips: annotation interface with multiple plots"
+    ??? example "Video guide: leveraging linked selection"
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/TIwBlCH9YHw" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+    ???+ example "Video guide: active learning"
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/hRIn3r7ovQ8" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+    ??? info "Text guide: active learning"
+        Inspecting model predictions allows us to
+
+        -   get an idea of how the current set of annotations will likely teach the model.
+        -   locate the most valuable samples for further annotation.
 
 {!docs/snippets/html/juniper.html!}

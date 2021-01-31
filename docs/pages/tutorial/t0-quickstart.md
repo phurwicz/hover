@@ -125,36 +125,34 @@ Currently we can use [umap](https://umap-learn.readthedocs.io/en/latest/) or [iv
 
 Now we are ready to visualize and annotate!
 
-???+ tip "Basic tips"
-    There should be a `SupervisableDataset` board on the left and an `BokehDataAnnotator` on the right.
-
-    The `SupervisableDataset` comes with a few buttons:
-
-    -   `push`: push `Dataset` updates to the bokeh plots.
-    -   `commit`: add data entries selected in the `Annotator` to a specified subset.
-    -   `dedup`: deduplicate across subsets by `feature` (last in gets kept).
-
-    The `BokehDataAnnotator` comes with a few buttons:
-
-    -   `raw`/`train`/`dev`/`test`: choose which subsets to display or hide.
-    -   `apply`: apply the `label` input to the selected points in the `raw` subset only.
-    -   `export`: save your data (all subsets) in a specified format.
-
-??? info "Best practices"
-    We've essentially put the data into neighborboods based on the vectorizer, but the quality (homogeneity of labels) of such neighborhoods can vary.
-
-    -   hover over any data point to see its tooltip.
-    -   take advantage of different selection tools to apply labels at appropriate scales.
-    -   the search widget might turn out useful.
-        -    note that it does not select points but highlights them.
-
 {!docs/snippets/markdown/jupyterlab-js-issue.md!}
-    ???+ example "Video Tutorial"
-        Alternatively, this video explains the annotation interface expected here:
-        <iframe width="560" height="315" src="https://www.youtube.com/embed/TIwBlCH9YHw" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 <pre data-executable>
 {!docs/snippets/py/t0-3-simple-annotator.txt!}
-</pre><br>
+</pre>
+
+???+ tip "Tips: annotation interface basics"
+    ???+ example "Video guide"
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/WYN2WduzJWg" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+    ??? info "Text guide"
+        There should be a `SupervisableDataset` board on the left and an `BokehDataAnnotator` on the right, each with a few buttons.
+
+        === "SupervisableDataset"
+            -   `push`: push `Dataset` updates to the bokeh plots.
+            -   `commit`: add data entries selected in the `Annotator` to a specified subset.
+            -   `dedup`: deduplicate across subsets by `feature` (last in gets kept).
+
+        === "BokehDataAnnotator"
+            -   `raw`/`train`/`dev`/`test`: choose which subsets to display or hide.
+            -   `apply`: apply the `label` input to the selected points in the `raw` subset only.
+            -   `export`: save your data (all subsets) in a specified format.
+
+        We've essentially put the data into neighborboods based on the vectorizer, but the quality (homogeneity of labels) of such neighborhoods can vary.
+
+        -   hover over any data point to see its tooltip.
+        -   take advantage of different selection tools to apply labels at appropriate scales.
+        -   the search widget might turn out useful.
+            -    note that it does not select points but highlights them.
 
 {!docs/snippets/html/juniper.html!}

@@ -1,3 +1,3 @@
-# Hover - 0.4.0 Documentation
+# Hover - 0.4.1 Documentation
 
 {!README.md!}
