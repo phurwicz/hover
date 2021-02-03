@@ -33,7 +33,8 @@ jobs:
         python -m pip install --upgrade pip
         pip install pip-tools setuptools wheel cython numpy
         pip-compile
-        pip install --no-binary :all: -r requirements.txt
+        pip install --no-binary :all: scikit-learn
+        pip install -r requirements.txt
     - name: Install hover
       run: python setup.py install
     - name: Get testing dependencies
