@@ -33,7 +33,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install pip-tools setuptools wheel cython numpy
         pip-compile
-        pip install -r requirements.txt
+        pip install --no-binary -r requirements.txt
     - name: Install hover
       run: python setup.py install
     - name: Get testing dependencies
