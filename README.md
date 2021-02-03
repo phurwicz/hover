@@ -1,8 +1,8 @@
 ![Hover](https://raw.githubusercontent.com/phurwicz/hover/main/docs/images/hover-logo-title.png)
 
-> We don't paint a picture pixel by pixel. So why label a dataset piece by piece?
->
-> Welcome to sub-O(n) annotation.
+> We paint a picture with a set of brushes, not pixel after pixel. 
+> 
+> So why label a dataset piece by piece?
 
 [![PyPI Version](https://img.shields.io/pypi/v/hover?logo=pypi&logoColor=white)](https://pypi.org/project/hover/)
 [![PyPI Stage](https://img.shields.io/pypi/status/hover?logo=pypi&logoColor=white)](https://pypi.org/project/hover/)
