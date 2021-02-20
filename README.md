@@ -40,7 +40,7 @@ Check out [@phurwicz/hover-binder](https://github.com/phurwicz/hover-binder) for
 
 ## :rocket: Quickstart
 
-Try `hover` without installing anything!
+You can try `hover` right in your browser.
 
 > Option 1: [notebook-like tutorials](https://phurwicz.github.io/hover/pages/tutorial/t0-quickstart/)
 >
