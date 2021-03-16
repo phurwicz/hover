@@ -16,8 +16,9 @@ jobs:
 
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
-        python-version: ['3.6', '3.7', '3.8']
+        python-version: ['3.6', '3.7', '3.8', '3.6.11', '3.7.10', '3.8.8']
         os: [ubuntu-latest]
         # 12/14/2020: disabling macos during builds, but it should install ok
         #os: [macos-10.15, ubuntu-latest]
@@ -31,8 +32,11 @@ jobs:
     - name: Get installation dependencies
       run: |
         python -m pip install --upgrade pip
+        # dependencies that could be involved in builds
         pip install pip-tools setuptools wheel cython numpy
+        # find dependencies based on setup.py
         pip-compile
+        # a few version of scikit-learn (e.x. 0.24) seem to require building from source
         pip install --no-binary :all: scikit-learn
         pip install -r requirements.txt
     - name: Install hover
