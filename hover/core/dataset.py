@@ -24,7 +24,11 @@ from bokeh.models import (
     TableColumn,
     HTMLTemplateFormatter,
 )
-from .local_config import dataset_help_widget, COLOR_GLYPH_TEMPLATE
+from .local_config import (
+    dataset_help_widget,
+    COLOR_GLYPH_TEMPLATE,
+    DATASET_SUBSET_FIELD,
+)
 
 
 class SupervisableDataset(Loggable):
@@ -121,7 +125,7 @@ class SupervisableDataset(Loggable):
         ???+ note "Create another instance, copying over the data entries."
             | Param    | Type   | Description                          |
             | :------- | :----- | :----------------------------------- |
-            | `use_df` | `bool` | whether to use the df or dictl form |
+            | `use_df` | `bool` | whether to use the df or dictl form  |
         """
         if use_df:
             self.synchronize_df_to_dictl()
@@ -132,6 +136,44 @@ class SupervisableDataset(Loggable):
             test_dictl=self.dictls["test"],
             feature_key=self.__class__.FEATURE_KEY,
             label_key="label",
+        )
+
+    def to_pandas(self, use_df=True):
+        """
+        ???+ note "Export to a pandas DataFrame."
+            | Param    | Type   | Description                          |
+            | :------- | :----- | :----------------------------------- |
+            | `use_df` | `bool` | whether to use the df or dictl form  |
+        """
+        if not use_df:
+            self.synchronize_dictl_to_df()
+        dfs = []
+        for _subset in ["raw", "train", "dev", "test"]:
+            _df = self.dfs[_subset].copy()
+            _df[DATASET_SUBSET_FIELD] = _subset
+            dfs.append(_df)
+
+        return pd.concat(dfs, axis=0)
+
+    @classmethod
+    def from_pandas(cls, df, **kwargs):
+        """
+        ???+ note "Import from a pandas DataFrame."
+            | Param    | Type   | Description                          |
+            | :------- | :----- | :----------------------------------- |
+            | `df` | `DataFrame` | with a "SUBSET" field dividing subsets |
+        """
+        dictls = {}
+        for _subset in ["raw", "train", "dev", "test"]:
+            dictls[_subset] = df[df[DATASET_SUBSET_FIELD] == _subset].to_dict(
+                orient="records"
+            )
+        return cls(
+            raw_dictl=dictls["raw"],
+            train_dictl=dictls["train"],
+            dev_dictl=dictls["dev"],
+            test_dictl=dictls["test"],
+            **kwargs,
         )
 
     def setup_widgets(self):

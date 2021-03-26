@@ -43,6 +43,14 @@ class TestSupervisableTextDataset:
         assert len(dataset.classes) == self.__class__.EFFECTIVE_CLASSES
 
     @staticmethod
+    def test_export_import(mini_supervisable_text_dataset):
+        dataset = mini_supervisable_text_dataset
+
+        df = dataset.to_pandas(use_df=True)
+        df = dataset.to_pandas(use_df=False)
+        dataset = SupervisableTextDataset.from_pandas(df)
+
+    @staticmethod
     def test_compute_2d_embedding(mini_supervisable_text_dataset, dummy_vectorizer):
         dataset = mini_supervisable_text_dataset
 
