@@ -16,7 +16,7 @@ import pandas as pd
 
 
 @servable(title="Snorkel Crosscheck")
-def snorkel_crosscheck(dataset, lf_list, height=600, width=600):
+def snorkel_crosscheck(dataset, lf_list, **kwargs):
     """
     ???+ note "Display the dataset for annotation, cross-checking with labeling functions."
         Use the dev set to check labeling functions; use the labeling functions to hint at potential annotation.
@@ -25,8 +25,7 @@ def snorkel_crosscheck(dataset, lf_list, height=600, width=600):
         | :-------- | :------- | :----------------------------------- |
         | `dataset` | `SupervisableDataset` | the dataset to link to  |
         | `lf_list` | `list`   | a list of callables decorated by `@hover.utils.snorkel_helper.labeling_function` |
-        | `height`  | `int`    | height of each Bokeh explorer plot   |
-        | `width`   | `int`    | width of each Bokeh explorer plot    |
+        | `**kwargs` |       | kwargs to forward to each Bokeh figure |
 
         Expected visual layout:
 
@@ -35,8 +34,8 @@ def snorkel_crosscheck(dataset, lf_list, height=600, width=600):
         | manage data subsets | inspect labeling functions | make annotations   |
     """
     # building-block subroutines
-    snorkel = standard_snorkel(dataset, height=height, width=width)
-    annotator = standard_annotator(dataset, height=height, width=width)
+    snorkel = standard_snorkel(dataset, **kwargs)
+    annotator = standard_annotator(dataset, **kwargs)
 
     # plot labeling functions
     for _lf in lf_list:
@@ -53,7 +52,7 @@ def snorkel_crosscheck(dataset, lf_list, height=600, width=600):
 
 
 @servable(title="Active Learning")
-def active_learning(dataset, vectorizer, vecnet_callback, height=600, width=600):
+def active_learning(dataset, vectorizer, vecnet_callback, **kwargs):
     """
     ???+ note "Display the dataset for annotation, putting a classification model in the loop."
         Currently works most smoothly with `VectorNet`.
@@ -63,8 +62,7 @@ def active_learning(dataset, vectorizer, vecnet_callback, height=600, width=600)
         | `dataset` | `SupervisableDataset` | the dataset to link to  |
         | `vectorizer` | `callable` | the feature -> vector function  |
         | `vecnet_callback` | `callable` | the (dataset, vectorizer) -> `VecNet` function|
-        | `height`  | `int`    | height of each Bokeh explorer plot   |
-        | `width`   | `int`    | width of each Bokeh explorer plot    |
+        | `**kwargs` |       | kwargs to forward to each Bokeh figure |
 
         Expected visual layout:
 
@@ -73,9 +71,9 @@ def active_learning(dataset, vectorizer, vecnet_callback, height=600, width=600)
         | manage data subsets | inspect model predictions | make annotations   | search -> highlight |
     """
     # building-block subroutines
-    softlabel = standard_softlabel(dataset, height=height, width=width)
-    annotator = standard_annotator(dataset, height=height, width=width)
-    finder = standard_finder(dataset, height=height, width=width)
+    softlabel = standard_softlabel(dataset, **kwargs)
+    annotator = standard_annotator(dataset, **kwargs)
+    finder = standard_finder(dataset, **kwargs)
 
     # link coordinates and selections
     softlabel.link_xy_range(annotator)
