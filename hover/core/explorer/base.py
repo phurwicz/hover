@@ -5,7 +5,7 @@ from abc import ABC, abstractmethod
 from bokeh.plotting import figure
 from bokeh.models import ColumnDataSource
 from hover.core import Loggable
-from .local_config import bokeh_hover_tooltip
+from hover.utils.bokeh_helper import bokeh_hover_tooltip
 
 STANDARD_PLOT_TOOLS = [
     # change the scope

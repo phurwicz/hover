@@ -6,7 +6,8 @@ from bokeh.models import CDSView, IndexFilter
 from bokeh.palettes import Category20
 from hover import module_config
 from hover.utils.misc import current_time
-from .local_config import bokeh_hover_tooltip, SOURCE_COLOR_FIELD, SOURCE_ALPHA_FIELD
+from hover.utils.bokeh_helper import bokeh_hover_tooltip
+from .local_config import SOURCE_COLOR_FIELD, SOURCE_ALPHA_FIELD
 from .base import BokehBaseExplorer
 
 
