@@ -93,6 +93,9 @@ def standard_annotator(dataset, **kwargs):
 
     # annotators can commit to a dataset
     dataset.subscribe_data_commit(annotator, {"raw": "raw"})
+
+    # annotators by default link the selection for preview
+    dataset.subscribe_selection_view(annotator, ["raw", "train", "dev", "test"])
     return annotator
 
 
