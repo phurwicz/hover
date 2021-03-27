@@ -118,6 +118,7 @@ class SupervisableDataset(Loggable):
         self.setup_widgets()
         # self.setup_label_coding() # redundant if setup_pop_table() immediately calls this again
         self.setup_pop_table(width_policy="fit", height_policy="fit")
+        self.setup_sel_table(width_policy="fit", height_policy="fit")
         self._good("Finished initialization.")
 
     def copy(self, use_df=True):
@@ -196,6 +197,12 @@ class SupervisableDataset(Loggable):
             height_policy="fit",
             width_policy="min",
         )
+        self.selection_viewer = Button(
+            label="View Selected",
+            button_type="primary",
+            height_policy="fit",
+            width_policy="min",
+        )
 
         def commit_base_callback():
             """
@@ -240,8 +247,14 @@ class SupervisableDataset(Loggable):
 
         return column(
             self.help_div,
-            row(self.update_pusher, self.data_committer, self.dedup_trigger),
+            row(
+                self.update_pusher,
+                self.data_committer,
+                self.dedup_trigger,
+                self.selection_viewer,
+            ),
             self.pop_table,
+            self.sel_table,
         )
 
     def subscribe_update_push(self, explorer, subset_mapping):
@@ -289,6 +302,11 @@ class SupervisableDataset(Loggable):
                     return
 
                 # take selected slice, ignoring ABSTAIN'ed rows
+                # CAUTION: applying selected_idx from explorer.source to self.df
+                #     this assumes that the source and the df have consistent entries.
+                # Consider this:
+                #    keep_cols = self.dfs[sub_k].columns
+                #    sel_slice = explorer.dfs[sub_v].iloc[selected_idx][keep_cols]
                 sel_slice = self.dfs[sub_k].iloc[selected_idx]
                 valid_slice = sel_slice[
                     sel_slice["label"] != module_config.ABSTAIN_DECODED
@@ -317,6 +335,35 @@ class SupervisableDataset(Loggable):
         self.data_committer.on_click(callback_commit)
         self._good(
             f"Subscribed {explorer.__class__.__name__} to dataset commits: {subset_mapping}"
+        )
+
+    def subscribe_selection_view(self, explorer, subsets):
+        """
+        ???+ note "Enable viewing groups of data entries, specified by a selection in an explorer."
+            | Param            | Type   | Description                            |
+            | :--------------- | :----- | :------------------------------------- |
+            | `explorer`       | `BokehBaseExplorer` | the explorer to register  |
+            | `subsets`        | `list` | subset selections to consider          |
+        """
+        assert (
+            isinstance(subsets, list) and len(subsets) > 0
+        ), "Expected a non-empty list of subsets"
+
+        def callback_view():
+            sel_slices = []
+            for subset in subsets:
+                selected_idx = explorer.sources[subset].selected.indices
+                sub_slice = explorer.dfs[subset].iloc[selected_idx]
+                sel_slices.append(sub_slice)
+
+            selected = pd.concat(sel_slices, axis=0)
+
+            # replace this with an actual display (and analysis)
+            self._callback_update_selection(selected)
+
+        self.selection_viewer.on_click(callback_view)
+        self._good(
+            f"Subscribed {explorer.__class__.__name__} to selection view: {subsets}"
         )
 
     def setup_label_coding(self, verbose=True, debug=False):
@@ -421,7 +468,7 @@ class SupervisableDataset(Loggable):
             pop_source.data = pop_data
 
             self._good(
-                f"Pop updater: latest population with {len(self.classes)} classes."
+                f"Population updater: latest population with {len(self.classes)} classes."
             )
 
         update_population()
@@ -429,6 +476,37 @@ class SupervisableDataset(Loggable):
 
         # store the callback so that it can be referenced by other methods
         self._callback_update_population = update_population
+
+    def setup_sel_table(self, **kwargs):
+        """
+        ???+ note "Set up a bokeh `DataTable` widget for viewing selected data points."
+
+            | Param      | Type   | Description                  |
+            | :--------- | :----- | :--------------------------- |
+            | `**kwargs` |        | forwarded to the `DataTable` |
+        """
+        sel_source = ColumnDataSource(dict())
+        sel_columns = [
+            TableColumn(
+                field=_col,
+                title=_col,
+            )
+            for _col in self.dfs["train"].columns
+        ]
+        self.sel_table = DataTable(source=sel_source, columns=sel_columns, **kwargs)
+
+        def update_selection(selected_df):
+            """
+            Callback function.
+            """
+            # push results to bokeh data source
+            sel_source.data = selected_df.to_dict(orient="list")
+
+            self._good(
+                f"Selection updater: latest selection with {selected_df.shape[0]} entries."
+            )
+
+        self._callback_update_selection = update_selection
 
     def df_deduplicate(self):
         """

@@ -15,9 +15,11 @@ Buttons:<br>
 - Push: "dataset -> plots" push of data points;<br>
 - Commit: "selected in plot -> selected subset" commit of data points;<br>
 - Dedup: "deduplication, keeping test -> dev -> train -> raw".<br>
+- View Selected: "view data entries selected in the explorer".<br>
 <br>
-Table:<br>
+Tables:<br>
 - a count of label populations, grouped by subset.<br>
+- a view of selected data points.<br>
 """
 
 
