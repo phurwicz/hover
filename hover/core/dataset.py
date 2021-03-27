@@ -119,7 +119,7 @@ class SupervisableDataset(Loggable):
         # self.setup_label_coding() # redundant if setup_pop_table() immediately calls this again
         self.setup_pop_table(width_policy="fit", height_policy="fit")
         self.setup_sel_table(width_policy="fit", height_policy="fit")
-        self._good("Finished initialization.")
+        self._good(f"{self.__class__.__name__}: finished initialization.")
 
     def copy(self, use_df=True):
         """
