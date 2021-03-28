@@ -10,6 +10,7 @@ from .functionality import (
     BokehSnorkelExplorer,
 )
 from .feature import BokehForText, BokehForAudio, BokehForImage
+from bokeh.layouts import column, row
 from deprecated import deprecated
 
 
@@ -34,12 +35,11 @@ class BokehTextAnnotator(BokehDataAnnotator, BokehForText):
 
     def _layout_widgets(self):
         """Define the layout of widgets."""
-        from bokeh.layouts import column, row
-
         layout_rows = (
             row(self.search_pos, self.search_neg),
             row(self.data_key_button_group),
             row(self.annotator_input, self.annotator_apply, self.annotator_export),
+            row(*self._dynamic_widgets.values()),
         )
         return column(*layout_rows)
 
@@ -95,11 +95,10 @@ class BokehAudioAnnotator(BokehDataAnnotator, BokehForAudio):
 
     def _layout_widgets(self):
         """Define the layout of widgets."""
-        from bokeh.layouts import column, row
-
         layout_rows = (
             row(self.data_key_button_group),
             row(self.annotator_input, self.annotator_apply, self.annotator_export),
+            row(*self._dynamic_widgets.values()),
         )
         return column(*layout_rows)
 
@@ -155,11 +154,10 @@ class BokehImageAnnotator(BokehDataAnnotator, BokehForImage):
 
     def _layout_widgets(self):
         """Define the layout of widgets."""
-        from bokeh.layouts import column, row
-
         layout_rows = (
             row(self.data_key_button_group),
             row(self.annotator_input, self.annotator_apply, self.annotator_export),
+            row(*self._dynamic_widgets.values()),
         )
         return column(*layout_rows)
 

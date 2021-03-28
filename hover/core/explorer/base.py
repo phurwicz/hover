@@ -2,8 +2,9 @@
 ???+ note "Base class(es) for ALL explorer implementations."
 """
 from abc import ABC, abstractmethod
+from collections import OrderedDict
 from bokeh.plotting import figure
-from bokeh.models import ColumnDataSource
+from bokeh.models import ColumnDataSource, Slider
 from hover.core import Loggable
 from hover.utils.bokeh_helper import bokeh_hover_tooltip
 
@@ -117,6 +118,8 @@ class BokehBaseExplorer(Loggable, ABC):
         self._info("Setting up widgets")
         self._setup_search_highlight()
         self._setup_subset_toggle()
+        self._dynamic_widgets = OrderedDict()
+        self._dynamic_callbacks = OrderedDict()
 
     @abstractmethod
     def _layout_widgets(self):
@@ -157,6 +160,68 @@ class BokehBaseExplorer(Loggable, ABC):
             self.data_key_button_group.active
         )
         self.data_key_button_group.on_click(update_data_key_display)
+
+    def value_patch(self, col_original, col_patch, **kwargs):
+        """
+        ???+ note "Allow source values to be dynamically patched through a slider."
+            | Param            | Type   | Description                  |
+            | :--------------- | :----- | :--------------------------- |
+            | `col_original`   | `str`  | column of values before the patch |
+            | `col_patch`      | `str`  | column of list of values to use as patches |
+            | `**kwargs`       |        | forwarded to the slider |
+
+            [Reference](https://github.com/bokeh/bokeh/blob/2.3.0/examples/howto/patch_app.py)
+        """
+        # add a patch slider to widgets, if none exist
+        if "patch_slider" not in self._dynamic_widgets:
+            slider = Slider(start=0, end=1, value=0, step=1, **kwargs)
+            slider.disabled = True
+            self._dynamic_widgets["patch_slider"] = slider
+        else:
+            slider = self._dynamic_widgets["patch_slider"]
+
+        # create a slider-adjusting callback exposed to the outside
+        def adjust_slider():
+            """
+            Infer slider length from the number of patch values.
+            """
+            num_patches = None
+            for _key, _df in self.dfs.items():
+                assert (
+                    col_patch in _df.columns
+                ), f"Subset {_key} expecting column {col_patch} among columns, got {_df.columns}"
+                # find all array lengths; note that the data subset can be empty
+                _num_patches_seen = _df[col_patch].apply(len).values
+                assert (
+                    len(set(_num_patches_seen)) <= 1
+                ), f"Expecting consistent number of patches, got {_num_patches_seen}"
+                _num_patches = _num_patches_seen[0] if _df.shape[0] > 0 else None
+
+                # if a previous subset has implied the number of patches, run a consistency check
+                if num_patches is None:
+                    num_patches = _num_patches
+                else:
+                    assert (
+                        num_patches == _num_patches
+                    ), f"Conflicting number of patches: {num_patches} vs {_num_patches}"
+
+            assert num_patches >= 2, f"Expecting at least 2 patches, got {num_patches}"
+            slider.end = num_patches - 1
+            slider.disabled = False
+
+        self._dynamic_callbacks["adjust_patch_slider"] = adjust_slider
+
+        # create the callback for patching values
+        def update_patch(attr, old, new):
+            for _key, _df in self.dfs.items():
+                # calculate the patch corresponding to slider value
+                _value = [_arr[new] for _arr in _df[col_patch].values]
+                _slice = slice(_df.shape[0])
+                _patch = {col_original: [(_slice, _value)]}
+                self.sources[_key].patch(_patch)
+
+        slider.on_change("value", update_patch)
+        self._good(f"Patching {col_original} using {col_patch}")
 
     def _setup_dfs(self, df_dict, copy=False):
         """

@@ -2,6 +2,7 @@
 ???+ note "Intermediate classes based on the main feature."
 """
 from bokeh.models import CustomJS, ColumnDataSource
+from bokeh.layouts import column, row
 from .base import BokehBaseExplorer
 
 
@@ -40,9 +41,12 @@ class BokehForText(BokehBaseExplorer):
         """
         ???+ note "Define the layout of widgets."
         """
-        from bokeh.layouts import column
-
-        return column(self.search_pos, self.search_neg, self.data_key_button_group)
+        return column(
+            self.search_pos,
+            self.search_neg,
+            self.data_key_button_group,
+            row(*self._dynamic_widgets.values()),
+        )
 
     def activate_search(self, source, kwargs, altered_param=("size", 10, 5, 7)):
         """
@@ -162,7 +166,10 @@ class BokehForAudio(BokehBaseExplorer):
         """
         ???+ note "Define the layout of widgets."
         """
-        return self.data_key_button_group
+        return column(
+            self.data_key_button_group,
+            row(*self._dynamic_widgets.values()),
+        )
 
     def activate_search(self, source, kwargs, altered_param=("size", 10, 5, 7)):
         """
@@ -208,7 +215,10 @@ class BokehForImage(BokehBaseExplorer):
         """
         ???+ note "Define the layout of widgets."
         """
-        return self.data_key_button_group
+        return column(
+            self.data_key_button_group,
+            row(*self._dynamic_widgets.values()),
+        )
 
     def activate_search(self, source, kwargs, altered_param=("size", 10, 5, 7)):
         """
