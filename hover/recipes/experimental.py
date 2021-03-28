@@ -45,6 +45,7 @@ def snorkel_crosscheck(dataset, lf_list, **kwargs):
     # link coordinates and selections
     snorkel.link_xy_range(annotator)
     snorkel.link_selection("raw", annotator, "raw")
+    snorkel.link_selection("labeled", annotator, "dev")
 
     sidebar = dataset.view()
     layout = row(sidebar, snorkel.view(), annotator.view())
@@ -75,10 +76,17 @@ def active_learning(dataset, vectorizer, vecnet_callback, **kwargs):
     annotator = standard_annotator(dataset, **kwargs)
     finder = standard_finder(dataset, **kwargs)
 
-    # link coordinates and selections
-    softlabel.link_selection("raw", annotator, "raw")
-    softlabel.link_selection("raw", finder, "raw")
-    softlabel.value_patch("x", "x_traj", title="Inference trajectory step")
+    # link coordinates, omitting the softlabel
+    finder.link_xy_range(annotator)
+
+    # link selections, noting that softlabel does not take "test"
+    for _key in ["raw", "train", "dev"]:
+        softlabel.link_selection(_key, annotator, _key)
+        softlabel.link_selection(_key, finder, _key)
+    finder.link_selection("test", annotator, "test")
+
+    # patch coordinates for representational similarity analysis
+    softlabel.value_patch("x", "x_traj", title="Manifold trajectory step")
     softlabel.value_patch("y", "y_traj")
 
     # recipe-specific widget
@@ -104,17 +112,15 @@ def active_learning(dataset, vectorizer, vecnet_callback, **kwargs):
 
             # combine inputs and compute outputs of all non-test subsets
             use_subsets = ("raw", "train", "dev")
-            inps, coords = [], []
+            inps = []
             for _key in use_subsets:
                 inps.extend(dataset.dfs[_key]["text"].tolist())
-                coords.extend(dataset.dfs[_key][["x", "y"]].values.tolist())
 
             probs = model.predict_proba(inps)
             labels = [dataset.label_decoder[_val] for _val in probs.argmax(axis=-1)]
             scores = probs.max(axis=-1).tolist()
             traj_arr, seq_arr, disparity_arr = model.manifold_trajectory(
                 inps,
-                starting_manifold=np.array(coords),
                 points_per_step=5,
             )
 
