@@ -281,6 +281,43 @@ class BokehSoftLabelExplorer(BokehBaseExplorer):
             self.sources[_key].add(_color, SOURCE_COLOR_FIELD)
             self.sources[_key].add(_alpha, SOURCE_ALPHA_FIELD)
 
+    def _setup_widgets(self):
+        """
+        ???+ note "Create score range slider that filters selections."
+        """
+        from bokeh.models import RangeSlider
+
+        super()._setup_widgets()
+
+        self.score_range = RangeSlider(
+            start=0.0,
+            end=1.0,
+            value=(0.0, 1.0),
+            step=0.01,
+            title="Score range (filters selection)",
+        )
+
+        def subroutine(df, lower, upper):
+            """
+            Calculate indices with score between lower/upper bounds.
+            """
+            keep_l = set(np.where(df[self.score_col] >= lower)[0])
+            keep_u = set(np.where(df[self.score_col] <= upper)[0])
+            kept = keep_l.intersection(keep_u)
+            return kept
+
+        def filter_by_score(attr, old, new):
+            """
+            Filter selection with slider range, triggered on new ranges.
+            """
+            for _key, _source in self.sources.items():
+                _in_range = subroutine(self.dfs[_key], *self.score_range.value)
+                _selected = self._last_selections[_key]
+                _to_keep = _in_range.intersection(_selected) if _selected else _in_range
+                _source.selected.indices = list(_to_keep)
+
+        self.score_range.on_change("value", filter_by_score)
+
     def plot(self, **kwargs):
         """
         ???+ note "Plot all data points, setting color alpha based on the soft score."
