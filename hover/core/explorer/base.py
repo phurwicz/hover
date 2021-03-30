@@ -67,6 +67,7 @@ class BokehBaseExplorer(Loggable, ABC):
             "output_backend": "webgl",
         }
         self.figure_kwargs.update(kwargs)
+        self.figure = figure(**self.figure_kwargs)
         self.glyph_kwargs = {
             _key: _dict["constant"].copy()
             for _key, _dict in self.__class__.SUBSET_GLYPH_KWARGS.items()
@@ -75,7 +76,6 @@ class BokehBaseExplorer(Loggable, ABC):
         self._setup_dfs(df_dict)
         self._setup_sources()
         self._activate_search_builtin()
-        self.figure = figure(**self.figure_kwargs)
 
     @classmethod
     def from_dataset(cls, dataset, subset_mapping, *args, **kwargs):
@@ -269,9 +269,30 @@ class BokehBaseExplorer(Loggable, ABC):
         ???+ note "Create, **(not update)**, `ColumnDataSource` objects."
             Intended to be extended in child classes for pre/post processing.
         """
+        from bokeh.events import SelectionGeometry
+
         self._info("Setting up sources")
         self.sources = {_key: ColumnDataSource(_df) for _key, _df in self.dfs.items()}
         self._postprocess_sources()
+
+        # initialize attributes that couple with sources
+        self._last_selections = {_key: set() for _key in self.sources.keys()}
+
+        def store_selection(event):
+            """
+            Keep track of the last manual selection.
+            """
+            # do nothing until action is complete
+            if not event.final:
+                return
+
+            # store selection indices
+            for _key, _source in self.sources.items():
+                _selected = _source.selected.indices
+                self._last_selections[_key].clear()
+                self._last_selections[_key].update(_selected)
+
+        self.figure.on_event(SelectionGeometry, store_selection)
 
     def _update_sources(self):
         """
@@ -283,6 +304,9 @@ class BokehBaseExplorer(Loggable, ABC):
             self.sources[_key].data = self.dfs[_key]
         self._postprocess_sources()
         self._activate_search_builtin(verbose=False)
+
+        # reset attributes that couple with sources
+        self._last_selections = {_key: set() for _key in self.sources.keys()}
 
     def _postprocess_sources(self):
         """
