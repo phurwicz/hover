@@ -53,6 +53,16 @@ class BokehTextSoftLabel(BokehSoftLabelExplorer, BokehForText):
     MANDATORY_COLUMNS = BokehForText.MANDATORY_COLUMNS
     SUBSET_GLYPH_KWARGS = BokehSoftLabelExplorer.SUBSET_GLYPH_KWARGS
 
+    def _layout_widgets(self):
+        """Define the layout of widgets."""
+        layout_rows = (
+            row(self.search_pos, self.search_neg),
+            row(self.data_key_button_group),
+            row(self.score_range),
+            row(*self._dynamic_widgets.values()),
+        )
+        return column(*layout_rows)
+
 
 class BokehTextMargin(BokehMarginExplorer, BokehForText):
     """
@@ -112,6 +122,15 @@ class BokehAudioSoftLabel(BokehSoftLabelExplorer, BokehForAudio):
     MANDATORY_COLUMNS = BokehForAudio.MANDATORY_COLUMNS
     SUBSET_GLYPH_KWARGS = BokehSoftLabelExplorer.SUBSET_GLYPH_KWARGS
 
+    def _layout_widgets(self):
+        """Define the layout of widgets."""
+        layout_rows = (
+            row(self.data_key_button_group),
+            row(self.score_range),
+            row(*self._dynamic_widgets.values()),
+        )
+        return column(*layout_rows)
+
 
 class BokehAudioMargin(BokehMarginExplorer, BokehForAudio):
     """
@@ -170,6 +189,15 @@ class BokehImageSoftLabel(BokehSoftLabelExplorer, BokehForImage):
     TOOLTIP_KWARGS = BokehForImage.TOOLTIP_KWARGS
     MANDATORY_COLUMNS = BokehForImage.MANDATORY_COLUMNS
     SUBSET_GLYPH_KWARGS = BokehSoftLabelExplorer.SUBSET_GLYPH_KWARGS
+
+    def _layout_widgets(self):
+        """Define the layout of widgets."""
+        layout_rows = (
+            row(self.data_key_button_group),
+            row(self.score_range),
+            row(*self._dynamic_widgets.values()),
+        )
+        return column(*layout_rows)
 
 
 class BokehImageMargin(BokehMarginExplorer, BokehForImage):
