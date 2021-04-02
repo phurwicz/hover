@@ -2,7 +2,7 @@
 ???+ note "Base class(es) for ALL explorer implementations."
 """
 from abc import ABC, abstractmethod
-from collections import OrderedDict
+from collections import OrderedDict, defaultdict
 from bokeh.plotting import figure
 from bokeh.models import ColumnDataSource, Slider
 from hover.core import Loggable
@@ -277,6 +277,8 @@ class BokehBaseExplorer(Loggable, ABC):
         self._postprocess_sources()
 
         # initialize attributes that couple with sources
+        # extra columns for dynamic plotting
+        self._extra_source_cols = defaultdict(dict)
         # store the last manual selections
         self._last_selections = {_key: set() for _key in self.sources.keys()}
         # store commutative, idempotent index filters
@@ -331,10 +333,16 @@ class BokehBaseExplorer(Loggable, ABC):
         self._postprocess_sources()
         self._activate_search_builtin(verbose=False)
 
-        # reset attribute values that couple with sources, but keep the references
+        # reset attribute values that couple with sources
         for _key in self.sources.keys():
+            _num_points = len(self.sources[_key].data["label"])
+            # add extra columns
+            for _col, _fill_value in self._extra_source_cols[_key].items():
+                self.sources[_key].add([_fill_value] * _num_points, _col)
+
+            # clear last selection but keep the set object
             self._last_selections[_key].clear()
-        # DON'T DO: self._last_selections = {_key: set() for _key in self.sources.keys()}
+            # DON'T DO: self._last_selections = {_key: set() for _key in self.sources.keys()}
 
     def _postprocess_sources(self):
         """
@@ -365,7 +373,7 @@ class BokehBaseExplorer(Loggable, ABC):
                 # make attributes respond to search
                 for _flag, _params in _dict["search"].items():
                     self.glyph_kwargs[_key] = self.activate_search(
-                        self.sources[_key],
+                        _key,
                         self.glyph_kwargs[_key],
                         altered_param=_params,
                     )
