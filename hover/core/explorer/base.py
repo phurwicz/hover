@@ -305,8 +305,10 @@ class BokehBaseExplorer(Loggable, ABC):
         self._postprocess_sources()
         self._activate_search_builtin(verbose=False)
 
-        # reset attributes that couple with sources
-        self._last_selections = {_key: set() for _key in self.sources.keys()}
+        # reset attribute values that couple with sources, but keep the references
+        for _key in self.sources.keys():
+            self._last_selections[_key].clear()
+        # DON'T DO: self._last_selections = {_key: set() for _key in self.sources.keys()}
 
     def _postprocess_sources(self):
         """
@@ -376,6 +378,9 @@ class BokehBaseExplorer(Loggable, ABC):
         sl, sr = self.sources[key], other.sources[other_key]
         sl.selected.js_link("indices", sr.selected, "indices")
         sr.selected.js_link("indices", sl.selected, "indices")
+        # link last manual selections (pointing to the same set)
+        other._last_selections[other_key] = self._last_selections[key]
+        self._last_selections[key] = other._last_selections[other_key]
 
     def link_xy_range(self, other):
         """
