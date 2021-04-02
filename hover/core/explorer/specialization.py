@@ -23,6 +23,15 @@ class BokehTextFinder(BokehDataFinder, BokehForText):
     MANDATORY_COLUMNS = BokehForText.MANDATORY_COLUMNS
     SUBSET_GLYPH_KWARGS = BokehDataFinder.SUBSET_GLYPH_KWARGS
 
+    def _layout_widgets(self):
+        """Define the layout of widgets."""
+        layout_rows = (
+            row(column(self.search_pos, self.search_neg), self.search_filter_box),
+            row(self.data_key_button_group),
+            row(*self._dynamic_widgets.values()),
+        )
+        return column(*layout_rows)
+
 
 class BokehTextAnnotator(BokehDataAnnotator, BokehForText):
     """
@@ -58,7 +67,7 @@ class BokehTextSoftLabel(BokehSoftLabelExplorer, BokehForText):
         layout_rows = (
             row(self.search_pos, self.search_neg),
             row(self.data_key_button_group),
-            row(self.score_range),
+            row(self.score_filter),
             row(*self._dynamic_widgets.values()),
         )
         return column(*layout_rows)
@@ -126,7 +135,7 @@ class BokehAudioSoftLabel(BokehSoftLabelExplorer, BokehForAudio):
         """Define the layout of widgets."""
         layout_rows = (
             row(self.data_key_button_group),
-            row(self.score_range),
+            row(self.score_filter),
             row(*self._dynamic_widgets.values()),
         )
         return column(*layout_rows)
@@ -194,7 +203,7 @@ class BokehImageSoftLabel(BokehSoftLabelExplorer, BokehForImage):
         """Define the layout of widgets."""
         layout_rows = (
             row(self.data_key_button_group),
-            row(self.score_range),
+            row(self.score_filter),
             row(*self._dynamic_widgets.values()),
         )
         return column(*layout_rows)

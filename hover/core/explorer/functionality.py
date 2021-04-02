@@ -4,10 +4,11 @@
 import numpy as np
 from bokeh.models import CDSView, IndexFilter
 from bokeh.palettes import Category20
+from bokeh.layouts import row
 from hover import module_config
 from hover.utils.misc import current_time
 from hover.utils.bokeh_helper import bokeh_hover_tooltip
-from .local_config import SOURCE_COLOR_FIELD, SOURCE_ALPHA_FIELD
+from .local_config import SOURCE_COLOR_FIELD, SOURCE_ALPHA_FIELD, SEARCH_SCORE_FIELD
 from .base import BokehBaseExplorer
 
 
@@ -31,6 +32,55 @@ class BokehDataFinder(BokehBaseExplorer):
         }
         for _key in ["raw", "train", "dev", "test"]
     }
+
+    def _setup_widgets(self):
+        """
+        ???+ note "Create score range slider that filters selections."
+        """
+        from bokeh.models import CheckboxGroup
+
+        super()._setup_widgets()
+
+        self.search_filter_box = CheckboxGroup(
+            labels=["use as selection filter"], active=[]
+        )
+
+        def activated():
+            return bool(0 in self.search_filter_box.active)
+
+        def filter_by_search(indices, subset):
+            """
+            Filter selection with search results on a subset.
+            """
+            search_scores = self.sources[subset].data[SEARCH_SCORE_FIELD]
+            matched = set(np.where(np.array(search_scores) > 0)[0])
+            return indices.intersection(matched)
+
+        for _key in self.sources.keys():
+            self._selection_filters[_key].add(
+                lambda indices, subset: filter_by_search(indices, subset)
+                if activated()
+                else indices
+            )
+
+        # when toggled as active, search changes trigger selection filter
+        self.search_pos.on_change(
+            "value",
+            lambda attr, old, new: self._trigger_selection_filters()
+            if activated()
+            else None,
+        )
+        self.search_neg.on_change(
+            "value",
+            lambda attr, old, new: self._trigger_selection_filters()
+            if activated()
+            else None,
+        )
+
+        # active toggles always trigger selection filter
+        self.search_filter_box.on_change(
+            "active", lambda attr, old, new: self._trigger_selection_filters()
+        )
 
     def plot(self, *args, **kwargs):
         """
@@ -285,7 +335,7 @@ class BokehSoftLabelExplorer(BokehBaseExplorer):
         """
         ???+ note "Create score range slider that filters selections."
         """
-        from bokeh.models import RangeSlider
+        from bokeh.models import RangeSlider, CheckboxGroup
 
         super()._setup_widgets()
 
@@ -294,8 +344,15 @@ class BokehSoftLabelExplorer(BokehBaseExplorer):
             end=1.0,
             value=(0.0, 1.0),
             step=0.01,
-            title="Score range (filters selection)",
+            title="Score range",
         )
+        self.score_filter_box = CheckboxGroup(
+            labels=["use as selection filter"], active=[]
+        )
+        self.score_filter = row(self.score_range, self.score_filter_box)
+
+        def activated():
+            return bool(0 in self.score_filter_box.active)
 
         def subroutine(df, lower, upper):
             """
@@ -306,17 +363,33 @@ class BokehSoftLabelExplorer(BokehBaseExplorer):
             kept = keep_l.intersection(keep_u)
             return kept
 
-        def filter_by_score(attr, old, new):
+        def filter_by_score(indices, subset):
             """
-            Filter selection with slider range, triggered on new ranges.
+            Filter selection with slider range on a subset.
             """
-            for _key, _source in self.sources.items():
-                _in_range = subroutine(self.dfs[_key], *self.score_range.value)
-                _selected = self._last_selections[_key]
-                _to_keep = _in_range.intersection(_selected) if _selected else _in_range
-                _source.selected.indices = list(_to_keep)
+            in_range = subroutine(self.dfs[subset], *self.score_range.value)
+            return indices.intersection(in_range)
 
-        self.score_range.on_change("value", filter_by_score)
+        # selection change triggers score filter on the changed subset IFF filter box is toggled
+        for _key in self.sources.keys():
+            self._selection_filters[_key].add(
+                lambda indices, subset: filter_by_score(indices, subset)
+                if activated()
+                else indices
+            )
+
+        # when toggled as active, score range change triggers selection filter
+        self.score_range.on_change(
+            "value",
+            lambda attr, old, new: self._trigger_selection_filters()
+            if activated()
+            else None,
+        )
+
+        # active toggles always trigger selection filter
+        self.score_filter_box.on_change(
+            "active", lambda attr, old, new: self._trigger_selection_filters()
+        )
 
     def plot(self, **kwargs):
         """
