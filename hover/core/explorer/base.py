@@ -7,6 +7,7 @@ from bokeh.plotting import figure
 from bokeh.models import ColumnDataSource, Slider
 from hover.core import Loggable
 from hover.utils.bokeh_helper import bokeh_hover_tooltip
+from .local_config import SEARCH_SCORE_FIELD
 
 STANDARD_PLOT_TOOLS = [
     # change the scope
@@ -72,9 +73,9 @@ class BokehBaseExplorer(Loggable, ABC):
             _key: _dict["constant"].copy()
             for _key, _dict in self.__class__.SUBSET_GLYPH_KWARGS.items()
         }
-        self._setup_widgets()
         self._setup_dfs(df_dict)
         self._setup_sources()
+        self._setup_widgets()
         self._activate_search_builtin()
 
     @classmethod
@@ -276,7 +277,10 @@ class BokehBaseExplorer(Loggable, ABC):
         self._postprocess_sources()
 
         # initialize attributes that couple with sources
+        # store the last manual selections
         self._last_selections = {_key: set() for _key in self.sources.keys()}
+        # store commutative, idempotent index filters
+        self._selection_filters = {_key: set() for _key in self.sources.keys()}
 
         def store_selection(event):
             """
@@ -292,7 +296,29 @@ class BokehBaseExplorer(Loggable, ABC):
                 self._last_selections[_key].clear()
                 self._last_selections[_key].update(_selected)
 
+        def trigger_selection_filters(subsets=None):
+            """
+            Filter selection indices on specified subsets.
+            """
+            if subsets is None:
+                subsets = self.sources.keys()
+            else:
+                assert set(subsets).issubset(
+                    self.sources.keys()
+                ), f"Expected subsets from {self.sources.keys()}"
+
+            for _key in subsets:
+                _selected = self._last_selections[_key]
+                for _func in self._selection_filters[_key]:
+                    _selected = _func(_selected, _key)
+                self.sources[_key].selected.indices = list(_selected)
+
+        self._trigger_selection_filters = trigger_selection_filters
         self.figure.on_event(SelectionGeometry, store_selection)
+        self.figure.on_event(
+            SelectionGeometry,
+            lambda event: self._trigger_selection_filters() if event.final else None,
+        )
 
     def _update_sources(self):
         """
@@ -329,7 +355,14 @@ class BokehBaseExplorer(Loggable, ABC):
         """
         for _key, _dict in self.__class__.SUBSET_GLYPH_KWARGS.items():
             if _key in self.sources.keys():
+                # determine responding attributes
                 _responding = list(_dict["search"].keys())
+
+                # create a field that holds search results that could be used elsewhere
+                _num_points = len(self.sources[_key].data["label"])
+                self.sources[_key].add([0] * _num_points, SEARCH_SCORE_FIELD)
+
+                # make attributes respond to search
                 for _flag, _params in _dict["search"].items():
                     self.glyph_kwargs[_key] = self.activate_search(
                         self.sources[_key],

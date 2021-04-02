@@ -1,9 +1,10 @@
 """
 ???+ note "Intermediate classes based on the main feature."
 """
-from bokeh.models import CustomJS, ColumnDataSource
+from bokeh.models import CustomJS, ColumnDataSource, TextInput
 from bokeh.layouts import column, row
 from .base import BokehBaseExplorer
+from .local_config import SEARCH_SCORE_FIELD
 
 
 class BokehForText(BokehBaseExplorer):
@@ -26,8 +27,6 @@ class BokehForText(BokehBaseExplorer):
         """
         ???+ note "Create positive/negative text search boxes."
         """
-        from bokeh.models import TextInput
-
         self.search_pos = TextInput(
             title="Text contains (plain text, or /pattern/flag for regex):",
             width_policy="fit",
@@ -83,7 +82,8 @@ class BokehForText(BokehBaseExplorer):
             code=f"""
             const data = source.data;
             const text = data['text'];
-            var arr = data['{param_key}'];
+            var highlight_arr = data['{param_key}'];
+            var score_arr = data['{SEARCH_SCORE_FIELD}'];
             """
             + """
             var search_pos = key_pos.value;
@@ -91,7 +91,7 @@ class BokehForText(BokehBaseExplorer):
             var valid_pos = (search_pos.length > 0);
             var valid_neg = (search_neg.length > 0);
 
-            function determineAttr(candidate)
+            function searchScore(candidate)
             {
                 var score = 0;
                 if (valid_pos) {
@@ -108,6 +108,12 @@ class BokehForText(BokehBaseExplorer):
                         score -= 2;
                     }
                 };
+                return score;
+            }
+
+            function scoreToAttr(score)
+            {
+                // return attribute
                 if (score > 0) {
                     return param_pos;
                 } else if (score < 0) {
@@ -124,10 +130,15 @@ class BokehForText(BokehBaseExplorer):
                 }
             }
 
+            // convert search input to regex
             if (valid_pos) {search_pos = toRegex(search_pos);}
             if (valid_neg) {search_neg = toRegex(search_neg);}
-            for (var i = 0; i < arr.length; i++) {
-                arr[i] = determineAttr(text[i]);
+
+            // search, store scores, and set highlight
+            for (var i = 0; i < highlight_arr.length; i++) {
+                var score = searchScore(text[i]);
+                score_arr[i] = score;
+                highlight_arr[i] = scoreToAttr(score);
             }
 
             source.change.emit()
@@ -160,7 +171,16 @@ class BokehForAudio(BokehBaseExplorer):
         ???+ help "Help wanted"
             Trivial implementation until we figure out how to search audios.
         """
-        self._warn("no search highlight available.")
+        self.search_pos = TextInput(
+            title="Placeholder search widget",
+            width_policy="fit",
+            height_policy="fit",
+        )
+        self.search_neg = TextInput(
+            title="Placeholder search widget",
+            width_policy="fit",
+            height_policy="fit",
+        )
 
     def _layout_widgets(self):
         """
@@ -209,7 +229,16 @@ class BokehForImage(BokehBaseExplorer):
         ???+ help "Help wanted"
             Trivial implementation until we figure out how to search images.
         """
-        self._warn("no search highlight available.")
+        self.search_pos = TextInput(
+            title="Placeholder search widget",
+            width_policy="fit",
+            height_policy="fit",
+        )
+        self.search_neg = TextInput(
+            title="Placeholder search widget",
+            width_policy="fit",
+            height_policy="fit",
+        )
 
     def _layout_widgets(self):
         """
