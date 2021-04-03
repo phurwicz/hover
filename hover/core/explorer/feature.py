@@ -29,7 +29,7 @@ class BokehForText(BokehBaseExplorer):
         ???+ note "Create positive/negative text search boxes."
         """
         self.search_pos = TextInput(
-            title="Text contains (plain text, or /pattern/flag for regex):",
+            title="Text contains: (python regex):",
             width_policy="fit",
             height_policy="fit",
         )
