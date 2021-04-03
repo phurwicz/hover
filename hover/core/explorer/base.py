@@ -325,13 +325,14 @@ class BokehBaseExplorer(Loggable, ABC):
     def _update_sources(self):
         """
         ???+ note "Update the sources with the corresponding dfs."
-            Note that it seems mandatory to re-activate the search widgets.
-            This is because assigning to `source.data` loses plotting kwargs.
+            Note that the shapes and fields of sources are overriden.
+            Thus supplementary fields (those that do not exist in the dfs), 
+            such as dynamic plotting kwargs, need to be re-assigned.
         """
         for _key in self.dfs.keys():
             self.sources[_key].data = self.dfs[_key]
         self._postprocess_sources()
-        self._activate_search_builtin(verbose=False)
+# self._activate_search_builtin(verbose=False)
 
         # reset attribute values that couple with sources
         for _key in self.sources.keys():
