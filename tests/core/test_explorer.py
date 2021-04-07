@@ -105,11 +105,6 @@ class TestBokehDataAnnotator:
 
             _explorer._callback_apply()
 
-        # it should be sufficient to test export for just one class
-        for _item in ["Excel", "CSV", "JSON", "pickle"]:
-            _event = MenuItemClick(_explorer.annotator_export, item=_item)
-            _explorer._callback_export(_event)
-
 
 @pytest.mark.core
 class TestBokehTextSoftLabel:

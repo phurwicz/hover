@@ -146,13 +146,6 @@ class BokehDataAnnotator(BokehBaseExplorer):
             height_policy="fit",
             width_policy="min",
         )
-        self.annotator_export = Dropdown(
-            label="Export",
-            button_type="warning",
-            menu=["Excel", "CSV", "JSON", "pickle"],
-            height_policy="fit",
-            width_policy="min",
-        )
 
         def callback_apply():
             """
@@ -177,48 +170,10 @@ class BokehDataAnnotator(BokehBaseExplorer):
             self._update_sources()
             self._good(f"Updated annotator plot at {current_time()}")
 
-        def callback_export(event, path_root=None):
-            """
-            A callback on clicking the 'self.annotator_export' button.
-
-            Saves the dataframe to a pickle.
-            """
-            import pandas as pd
-
-            export_format = event.item
-
-            # auto-determine the export path root
-            if path_root is None:
-                timestamp = current_time("%Y%m%d%H%M%S")
-                path_root = f"hover-annotated-df-{timestamp}"
-
-            export_df = pd.concat(self.dfs, axis=0, sort=False, ignore_index=True)
-
-            if export_format == "Excel":
-                export_path = f"{path_root}.xlsx"
-                export_df.to_excel(export_path, index=False)
-            elif export_format == "CSV":
-                export_path = f"{path_root}.csv"
-                export_df.to_csv(export_path, index=False)
-            elif export_format == "JSON":
-                export_path = f"{path_root}.json"
-                export_df.to_json(export_path, orient="records")
-            elif export_format == "pickle":
-                export_path = f"{path_root}.pkl"
-                export_df.to_pickle(export_path)
-            else:
-                raise ValueError(f"Unexpected export format {export_format}")
-
-            self._good(f"Saved DataFrame to {export_path}")
-
-        # keep the references to the callbacks
+        # assign the callback and keep the reference
         self._callback_apply = callback_apply
-        self._callback_export = callback_export
-
-        # assign callbacks
         self.annotator_apply.on_click(self._callback_apply)
         self.annotator_apply.on_click(self._callback_subset_display)
-        self.annotator_export.on_click(self._callback_export)
 
     def plot(self):
         """

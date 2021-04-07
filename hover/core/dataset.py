@@ -252,6 +252,7 @@ class SupervisableDataset(Loggable):
                 self.data_committer,
                 self.dedup_trigger,
                 self.selection_viewer,
+                self.file_exporter,
             ),
             self.pop_table,
             self.sel_table,
@@ -416,7 +417,53 @@ class SupervisableDataset(Loggable):
                 self._print({self.dfs[_key].loc[_invalid_indices]})
                 if raise_exception:
                     raise ValueError("invalid labels")
+            
+    def setup_file_export(self):
+        self.file_exporter = Dropdown(
+            label="Export",
+            button_type="warning",
+            menu=["Excel", "CSV", "JSON", "pickle"],
+            height_policy="fit",
+            width_policy="min",
+        )
+        
+        def callback_export(event, path_root=None):
+            """
+            A callback on clicking the 'self.annotator_export' button.
+            Saves the dataframe to a pickle.
+            """
+            import pandas as pd
 
+            export_format = event.item
+
+            # auto-determine the export path root
+            if path_root is None:
+                timestamp = current_time("%Y%m%d%H%M%S")
+                path_root = f"hover-dataset-export-{timestamp}"
+
+            export_df = self.to_pandas(use_df=True)
+
+            if export_format == "Excel":
+                export_path = f"{path_root}.xlsx"
+                export_df.to_excel(export_path, index=False)
+            elif export_format == "CSV":
+                export_path = f"{path_root}.csv"
+                export_df.to_csv(export_path, index=False)
+            elif export_format == "JSON":
+                export_path = f"{path_root}.json"
+                export_df.to_json(export_path, orient="records")
+            elif export_format == "pickle":
+                export_path = f"{path_root}.pkl"
+                export_df.to_pickle(export_path)
+            else:
+                raise ValueError(f"Unexpected export format {export_format}")
+
+            self._good(f"Saved DataFrame to {export_path}")
+
+        # assign the callback, keeping its reference
+        self._callback_export = callback_export
+        self.file_exporter.on_click(self._callback_export)
+        
     def setup_pop_table(self, **kwargs):
         """
         ???+ note "Set up a bokeh `DataTable` widget for monitoring subset data populations."

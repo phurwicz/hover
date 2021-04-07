@@ -47,7 +47,7 @@ class BokehTextAnnotator(BokehDataAnnotator, BokehForText):
         layout_rows = (
             row(self.search_pos, self.search_neg),
             row(self.data_key_button_group),
-            row(self.annotator_input, self.annotator_apply, self.annotator_export),
+            row(self.annotator_input, self.annotator_apply),
             row(*self._dynamic_widgets.values()),
         )
         return column(*layout_rows)
@@ -116,7 +116,7 @@ class BokehAudioAnnotator(BokehDataAnnotator, BokehForAudio):
         """Define the layout of widgets."""
         layout_rows = (
             row(self.data_key_button_group),
-            row(self.annotator_input, self.annotator_apply, self.annotator_export),
+            row(self.annotator_input, self.annotator_apply),
             row(*self._dynamic_widgets.values()),
         )
         return column(*layout_rows)
@@ -184,7 +184,7 @@ class BokehImageAnnotator(BokehDataAnnotator, BokehForImage):
         """Define the layout of widgets."""
         layout_rows = (
             row(self.data_key_button_group),
-            row(self.annotator_input, self.annotator_apply, self.annotator_export),
+            row(self.annotator_input, self.annotator_apply),
             row(*self._dynamic_widgets.values()),
         )
         return column(*layout_rows)

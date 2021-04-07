@@ -49,6 +49,10 @@ class TestSupervisableTextDataset:
         df = dataset.to_pandas(use_df=True)
         df = dataset.to_pandas(use_df=False)
         dataset = SupervisableTextDataset.from_pandas(df)
+        
+        for _item in ["Excel", "CSV", "JSON", "pickle"]:
+            _event = MenuItemClick(_explorer.annotator_export, item=_item)
+            dataset._callback_export(_event)
 
     @staticmethod
     def test_compute_2d_embedding(mini_supervisable_text_dataset, dummy_vectorizer):
