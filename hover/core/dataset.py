@@ -16,6 +16,7 @@ from tqdm import tqdm
 from hover import module_config
 from hover.core import Loggable
 from hover.utils.bokeh_helper import auto_label_color
+from hover.utils.misc import current_time
 from bokeh.models import (
     Button,
     Dropdown,
