@@ -117,6 +117,7 @@ class SupervisableDataset(Loggable):
         self.synchronize_df_to_dictl()
         self.setup_widgets()
         # self.setup_label_coding() # redundant if setup_pop_table() immediately calls this again
+        self.setup_file_export()
         self.setup_pop_table(width_policy="fit", height_policy="fit")
         self.setup_sel_table(width_policy="fit", height_policy="fit")
         self._good(f"{self.__class__.__name__}: finished initialization.")
