@@ -374,6 +374,7 @@ class BokehBaseExplorer(Loggable, ABC):
 
                 # create a field that holds search results that could be used elsewhere
                 _num_points = len(self.sources[_key].data["label"])
+                self._extra_source_cols[_key][SEARCH_SCORE_FIELD] = 0
                 self.sources[_key].add([0] * _num_points, SEARCH_SCORE_FIELD)
 
                 # make attributes respond to search
