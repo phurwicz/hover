@@ -63,7 +63,7 @@ class BokehBaseExplorer(Loggable, ABC):
         """
         self.figure_kwargs = {
             "tools": STANDARD_PLOT_TOOLS,
-            "tooltips": self._build_tooltip(kwargs.pop("tooltips", ""),
+            "tooltips": self._build_tooltip(kwargs.pop("tooltips", "")),
             # bokeh recommends webgl for scalability
             "output_backend": "webgl",
         }
