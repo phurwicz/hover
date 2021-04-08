@@ -63,7 +63,7 @@ class BokehBaseExplorer(Loggable, ABC):
         """
         self.figure_kwargs = {
             "tools": STANDARD_PLOT_TOOLS,
-            "tooltips": self._build_tooltip(),
+            "tooltips": self._build_tooltip(kwargs.pop("tooltips", ""),
             # bokeh recommends webgl for scalability
             "output_backend": "webgl",
         }
@@ -104,13 +104,18 @@ class BokehBaseExplorer(Loggable, ABC):
 
         return column(self._layout_widgets(), self.figure)
 
-    def _build_tooltip(self):
+    def _build_tooltip(self, extra):
         """
         ???+ note "Define a windowed tooltip which shows inspection details."
+            | Param            | Type   | Description                  |
+            | :--------------- | :----- | :--------------------------- |
+            | `extra`          | `str`  | user-supplied extra HTML |
+        
             Note that this is a method rather than a class attribute because
             child classes may involve instance attributes in the tooltip.
         """
-        return bokeh_hover_tooltip(**self.__class__.TOOLTIP_KWARGS)
+        standard = bokeh_hover_tooltip(**self.__class__.TOOLTIP_KWARGS)
+        return f"{standard}\n{extra}"
 
     def _setup_widgets(self):
         """

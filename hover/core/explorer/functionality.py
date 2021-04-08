@@ -229,15 +229,19 @@ class BokehSoftLabelExplorer(BokehBaseExplorer):
         self.score_col = score_col
         super().__init__(df_dict, **kwargs)
 
-    def _build_tooltip(self):
+    def _build_tooltip(self, extra):
         """
         ???+ note "On top of the parent method, add the soft label fields to the tooltip."
+            | Param            | Type   | Description                  |
+            | :--------------- | :----- | :--------------------------- |
+            | `extra`          | `str`  | user-supplied extra HTML |
         """
-        return bokeh_hover_tooltip(
+        standard = bokeh_hover_tooltip(
             **self.__class__.TOOLTIP_KWARGS,
             custom={"Soft Label": self.label_col, "Soft Score": self.score_col},
         )
-
+        return f"{standard}\n{extra}"
+        
     def _setup_dfs(self, df_dict, **kwargs):
         """
         ???+ note "On top of the parent method, add filler values to additional columns."
