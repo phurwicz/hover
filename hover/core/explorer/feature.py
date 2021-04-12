@@ -93,7 +93,7 @@ class BokehForText(BokehBaseExplorer):
             search_scores = list(map(regex_score, self.sources[subset].data["text"]))
             search_params = list(map(score_to_param, search_scores))
             self.sources[subset].patch(
-                {SEARCH_SCORE_FIELD: [(, search_scores)]}
+                {SEARCH_SCORE_FIELD: [(patch_slice, search_scores)]}
             )
             self.sources[subset].patch(
                 {param_key: [(patch_slice, search_params)]}
