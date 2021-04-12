@@ -167,7 +167,8 @@ class BokehDataAnnotator(BokehBaseExplorer):
                 f"Applied {len(selected_idx)} annotations: {label} (e.g. {example_old} -> {example_new})"
             )
 
-            self._update_sources()
+            for _idx in selected_idx:
+                self.sources["raw"].patch({"label": [(_idx, label)]})
             self._good(f"Updated annotator plot at {current_time()}")
 
         # assign the callback and keep the reference

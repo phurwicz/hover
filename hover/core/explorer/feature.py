@@ -65,8 +65,7 @@ class BokehForText(BokehBaseExplorer):
 
         param_key, param_pos, param_neg, param_default = altered_param
         num_points = len(self.sources[subset].data["text"])
-        default_param_list = [param_default] * num_points
-        self.sources[subset].add(default_param_list, f"{param_key}")
+        self.sources[subset].add([param_default] * num_points, f"{param_key}")
         self._extra_source_cols[subset][param_key] = param_default
 
         updated_kwargs[param_key] = param_key
@@ -90,13 +89,14 @@ class BokehForText(BokehBaseExplorer):
                 else:
                     return param_neg
 
+            patch_slice = slice(len(self.sources[subset].data["text"]))
             search_scores = list(map(regex_score, self.sources[subset].data["text"]))
             search_params = list(map(score_to_param, search_scores))
             self.sources[subset].patch(
-                {SEARCH_SCORE_FIELD: [(slice(num_points), search_scores)]}
+                {SEARCH_SCORE_FIELD: [(, search_scores)]}
             )
             self.sources[subset].patch(
-                {param_key: [(slice(num_points), search_params)]}
+                {param_key: [(patch_slice, search_params)]}
             )
 
             return
