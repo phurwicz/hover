@@ -94,8 +94,6 @@ class TestBokehBaseExplorer:
 class TestBokehDataAnnotator:
     @staticmethod
     def test_annotation(example_raw_df):
-        from bokeh.events import MenuItemClick
-
         # test most methods for the class corresponding to each kind of feature
         for _feature in MAIN_FEATURES:
             _cls = get_explorer_class("annotator", _feature)

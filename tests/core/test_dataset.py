@@ -44,6 +44,8 @@ class TestSupervisableTextDataset:
 
     @staticmethod
     def test_export_import(mini_supervisable_text_dataset):
+        from bokeh.events import MenuItemClick
+        
         dataset = mini_supervisable_text_dataset
 
         df = dataset.to_pandas(use_df=True)
