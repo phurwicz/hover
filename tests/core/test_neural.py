@@ -20,8 +20,8 @@ class TestVectorNet(object):
     def test_save_and_load(example_vecnet):
         default_path = example_vecnet.nn_update_path
         example_vecnet.save(f"{default_path}.test")
-        loaded_vecnet = create_vecnet(
-            VectorNet, "model_template", ["positive", "negative"]
+        loaded_vecnet = VectorNet.from_module(
+            "model_template", ["positive", "negative"]
         )
         loaded_vecnet.save()
 
