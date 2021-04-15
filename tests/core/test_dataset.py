@@ -53,7 +53,7 @@ class TestSupervisableTextDataset:
         dataset = SupervisableTextDataset.from_pandas(df)
         
         for _item in ["Excel", "CSV", "JSON", "pickle"]:
-            _event = MenuItemClick(_explorer.annotator_export, item=_item)
+            _event = MenuItemClick(dataset.file_exporter, item=_item)
             dataset._callback_export(_event)
 
     @staticmethod
