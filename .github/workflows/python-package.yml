@@ -29,9 +29,25 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: ${{ matrix.python-version }}
-    - name: Get installation dependencies
+
+    - name: Get pip cache dir
+      id: set-pip-cache
       run: |
         python -m pip install --upgrade pip
+        echo "::set-output name=dir::$(pip cache dir)"
+
+    - name: pip cache
+      id: use-pip-cache
+      uses: actions/cache@v2
+      with:
+        path: ${{ steps.set-pip-cache.outputs.dir }}
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/setup.py') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
+          
+    - name: Get installation dependencies
+      if: steps.use-pip-cache.outputs.cache-hit != 'true'
+      run: |
         # dependencies that could be involved in builds
         pip install pip-tools setuptools wheel cython numpy
         # find dependencies based on setup.py
@@ -39,12 +55,16 @@ jobs:
         # a few version of scikit-learn (e.x. 0.24) seem to require building from source
         pip install --no-binary :all: scikit-learn
         pip install -r requirements.txt
+        
     - name: Install hover
       run: python setup.py install
+      
     - name: Get testing dependencies
       run: pip install tox tox-gh-actions
+      
     - name: Test and make coverage report
       run: tox -e test_api
+      
     - name: Codacy Coverage Reporter
       uses: codacy/codacy-coverage-reporter-action@master
       with:
