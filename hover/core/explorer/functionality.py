@@ -52,12 +52,13 @@ class BokehDataFinder(BokehBaseExplorer):
             """
             Filter selection with search results on a subset.
             """
+            self._info(f"Filtering by search on subset {subset}")
             search_scores = self.sources[subset].data[SEARCH_SCORE_FIELD]
             matched = set(np.where(np.array(search_scores) > 0)[0])
             return indices.intersection(matched)
 
         for _key in self.sources.keys():
-            self._selection_filters[_key].add(
+            self._selection_filters[_key].data.add(
                 lambda indices, subset: filter_by_search(indices, subset)
                 if activated()
                 else indices
@@ -135,7 +136,7 @@ class BokehDataAnnotator(BokehBaseExplorer):
         """
         ???+ note "Create annotator widgets and assign Python callbacks."
         """
-        from bokeh.models import TextInput, Button, Dropdown
+        from bokeh.models import TextInput, Button
 
         super()._setup_widgets()
 
@@ -242,7 +243,7 @@ class BokehSoftLabelExplorer(BokehBaseExplorer):
             custom={"Soft Label": self.label_col, "Soft Score": self.score_col},
         )
         return f"{standard}\n{extra}"
-        
+
     def _setup_dfs(self, df_dict, **kwargs):
         """
         ???+ note "On top of the parent method, add filler values to additional columns."
@@ -327,12 +328,13 @@ class BokehSoftLabelExplorer(BokehBaseExplorer):
             """
             Filter selection with slider range on a subset.
             """
+            self._info(f"Filtering by score on subset {subset}")
             in_range = subroutine(self.dfs[subset], *self.score_range.value)
             return indices.intersection(in_range)
 
         # selection change triggers score filter on the changed subset IFF filter box is toggled
         for _key in self.sources.keys():
-            self._selection_filters[_key].add(
+            self._selection_filters[_key].data.add(
                 lambda indices, subset: filter_by_score(indices, subset)
                 if activated()
                 else indices

@@ -7,6 +7,7 @@ from bokeh.plotting import figure
 from bokeh.models import ColumnDataSource, Slider
 from hover.core import Loggable
 from hover.utils.bokeh_helper import bokeh_hover_tooltip
+from hover.utils.misc import RootUnionFind
 from .local_config import SEARCH_SCORE_FIELD
 
 STANDARD_PLOT_TOOLS = [
@@ -122,10 +123,10 @@ class BokehBaseExplorer(Loggable, ABC):
         ???+ note "High-level function creating widgets for interactive functionality."
         """
         self._info("Setting up widgets")
-        self._setup_search_highlight()
-        self._setup_subset_toggle()
         self._dynamic_widgets = OrderedDict()
         self._dynamic_callbacks = OrderedDict()
+        self._setup_search_highlight()
+        self._setup_subset_toggle()
 
     @abstractmethod
     def _layout_widgets(self):
@@ -285,9 +286,13 @@ class BokehBaseExplorer(Loggable, ABC):
         # extra columns for dynamic plotting
         self._extra_source_cols = defaultdict(dict)
         # store the last manual selections
-        self._last_selections = {_key: set() for _key in self.sources.keys()}
+        self._last_selections = {
+            _key: RootUnionFind(set()) for _key in self.sources.keys()
+        }
         # store commutative, idempotent index filters
-        self._selection_filters = {_key: set() for _key in self.sources.keys()}
+        self._selection_filters = {
+            _key: RootUnionFind(set()) for _key in self.sources.keys()
+        }
 
         def store_selection(event):
             """
@@ -301,8 +306,8 @@ class BokehBaseExplorer(Loggable, ABC):
             for _key, _source in self.sources.items():
                 _selected = _source.selected.indices
                 # use clear() and update() instead of assignment to keep clean references
-                self._last_selections[_key].clear()
-                self._last_selections[_key].update(_selected)
+                self._last_selections[_key].data.clear()
+                self._last_selections[_key].data.update(_selected)
 
         def trigger_selection_filters(subsets=None):
             """
@@ -316,8 +321,8 @@ class BokehBaseExplorer(Loggable, ABC):
                 ), f"Expected subsets from {self.sources.keys()}"
 
             for _key in subsets:
-                _selected = self._last_selections[_key]
-                for _func in self._selection_filters[_key]:
+                _selected = self._last_selections[_key].data
+                for _func in self._selection_filters[_key].data:
                     _selected = _func(_selected, _key)
                 self.sources[_key].selected.indices = list(_selected)
 
@@ -348,7 +353,7 @@ class BokehBaseExplorer(Loggable, ABC):
                 self.sources[_key].add([_fill_value] * _num_points, _col)
 
             # clear last selection but keep the set object
-            self._last_selections[_key].clear()
+            self._last_selections[_key].data.clear()
             # DON'T DO: self._last_selections = {_key: set() for _key in self.sources.keys()}
 
     def _postprocess_sources(self):
@@ -427,9 +432,15 @@ class BokehBaseExplorer(Loggable, ABC):
         sl, sr = self.sources[key], other.sources[other_key]
         sl.selected.js_link("indices", sr.selected, "indices")
         sr.selected.js_link("indices", sl.selected, "indices")
+
         # link last manual selections (pointing to the same set)
-        other._last_selections[other_key] = self._last_selections[key]
-        self._last_selections[key] = other._last_selections[other_key]
+        self._last_selections[key].union(other._last_selections[other_key])
+
+        # link selection filter functions (pointing to the same set)
+        self._selection_filters[key].data.update(
+            other._selection_filters[other_key].data
+        )
+        self._selection_filters[key].union(other._selection_filters[other_key])
 
     def link_xy_range(self, other):
         """

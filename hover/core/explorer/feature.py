@@ -37,6 +37,19 @@ class BokehForText(BokehBaseExplorer):
             title="Text does not contain:", width_policy="fit", height_policy="fit"
         )
 
+        # allow dynamically updated search response through dict element retrieval
+        self._dynamic_callbacks["search_response"] = dict()
+
+        def search_base_response(attr, old, new):
+            for _subset in self.sources.keys():
+                self._dynamic_callbacks["search_response"].get(
+                    _subset, lambda attr, old, new: None
+                )(attr, old, new)
+            return
+
+        self.search_pos.on_change("value", search_base_response)
+        self.search_neg.on_change("value", search_base_response)
+
     def _layout_widgets(self):
         """
         ???+ note "Define the layout of widgets."
@@ -70,7 +83,7 @@ class BokehForText(BokehBaseExplorer):
 
         updated_kwargs[param_key] = param_key
 
-        def search_callback(attr, old, new):
+        def search_response(attr, old, new):
             pos_regex, neg_regex = self.search_pos.value, self.search_neg.value
 
             def regex_score(text):
@@ -95,10 +108,7 @@ class BokehForText(BokehBaseExplorer):
             self.sources[subset].patch(
                 {SEARCH_SCORE_FIELD: [(patch_slice, search_scores)]}
             )
-            self.sources[subset].patch(
-                {param_key: [(patch_slice, search_params)]}
-            )
-
+            self.sources[subset].patch({param_key: [(patch_slice, search_params)]})
             return
 
         # js_callback = CustomJS(
@@ -176,10 +186,8 @@ class BokehForText(BokehBaseExplorer):
         #    """,
         # )
 
-        self.search_pos.on_change("value", search_callback)
-        self.search_neg.on_change("value", search_callback)
-        # self.search_pos.js_on_change("value", js_callback)
-        # self.search_neg.js_on_change("value", js_callback)
+        # assign dynamic callback
+        self._dynamic_callbacks["search_response"][subset] = search_response
         return updated_kwargs
 
 
