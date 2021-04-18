@@ -110,7 +110,7 @@ class BokehBaseExplorer(Loggable, ABC):
             | Param            | Type   | Description                  |
             | :--------------- | :----- | :--------------------------- |
             | `extra`          | `str`  | user-supplied extra HTML |
-        
+
             Note that this is a method rather than a class attribute because
             child classes may involve instance attributes in the tooltip.
         """
@@ -293,13 +293,14 @@ class BokehBaseExplorer(Loggable, ABC):
             """
             Keep track of the last manual selection.
             """
-            # do nothing until action is complete
+            # ensure that nothing happens until the selection event is complete
             if not event.final:
                 return
 
             # store selection indices
             for _key, _source in self.sources.items():
                 _selected = _source.selected.indices
+                # use clear() and update() instead of assignment to keep clean references
                 self._last_selections[_key].clear()
                 self._last_selections[_key].update(_selected)
 
@@ -331,13 +332,13 @@ class BokehBaseExplorer(Loggable, ABC):
         """
         ???+ note "Update the sources with the corresponding dfs."
             Note that the shapes and fields of sources are overriden.
-            Thus supplementary fields (those that do not exist in the dfs), 
+            Thus supplementary fields (those that do not exist in the dfs),
             such as dynamic plotting kwargs, need to be re-assigned.
         """
         for _key in self.dfs.keys():
             self.sources[_key].data = self.dfs[_key]
         self._postprocess_sources()
-# self._activate_search_builtin(verbose=False)
+        # self._activate_search_builtin(verbose=False)
 
         # reset attribute values that couple with sources
         for _key in self.sources.keys():
