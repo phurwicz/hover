@@ -30,23 +30,23 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
 
-    - name: Get pip cache dir
-      id: set-pip-cache
-      run: |
-        python -m pip install --upgrade pip
-        echo "::set-output name=dir::$(pip cache dir)"
+    #- name: Get pip cache dir
+    #  id: set-pip-cache
+    #  run: |
+    #    python -m pip install --upgrade pip
+    #    echo "::set-output name=dir::$(pip cache dir)"
 
-    - name: pip cache
-      id: use-pip-cache
-      uses: actions/cache@v2
-      with:
-        path: ${{ steps.set-pip-cache.outputs.dir }}
-        key: ${{ runner.os }}-pip-${{ hashFiles('**/setup.py') }}
-        restore-keys: |
-          ${{ runner.os }}-pip-
+    #- name: pip cache
+    #  id: use-pip-cache
+    #  uses: actions/cache@v2
+    #  with:
+    #    path: ${{ steps.set-pip-cache.outputs.dir }}
+    #    key: ${{ runner.os }}-pip-${{ hashFiles('**/setup.py') }}
+    #    restore-keys: |
+    #      ${{ runner.os }}-pip-
           
     - name: Get installation dependencies
-      if: steps.use-pip-cache.outputs.cache-hit != 'true'
+    #  if: steps.use-pip-cache.outputs.cache-hit != 'true'
       run: |
         # dependencies that could be involved in builds
         pip install pip-tools setuptools wheel cython numpy
