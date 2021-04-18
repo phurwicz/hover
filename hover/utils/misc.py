@@ -1,56 +1,67 @@
 """Mini-functions that do not belong elsewhere."""
 from datetime import datetime
+from abc import ABC, abstractmethod
 
 
 def current_time(template="%Y%m%d %H:%M:%S"):
     return datetime.now().strftime(template)
 
 
-class UnionFindNode:
+class BaseUnionFind(ABC):
     """
     ???+ note "Data attached to union-find."
     """
 
     def __init__(self, data):
-        self.__data = data
-        self.__parent = None
-        self.__count = 1
+        self._data = data
+        self._parent = None
+        self._count = 1
 
     def __repr__(self):
         return self.data.__repr__()
 
     @property
-    def data(self):
-        return self.__data
-
-    @data.setter
-    def data(self, data):
-        self.__data = data
-
-    @property
     def count(self):
         if self.parent is None:
-            return self.__count
+            return self._count
         return self.find().count
 
     @count.setter
     def count(self, count):
-        self.__count = count
+        self._count = count
 
     @property
     def parent(self):
-        return self.__parent
+        return self._parent
 
     @parent.setter
     def parent(self, other):
-        assert isinstance(other, UnionFindNode)
-        self.__parent = other
+        assert isinstance(other, BaseUnionFind)
+        self._parent = other
 
     def find(self):
         if self.parent:
             self.parent = self.parent.find()
             return self.parent
         return self
+
+    @abstractmethod
+    def union(self, other):
+        pass
+
+
+class NodeUnionFind(BaseUnionFind):
+    """
+    ???+ note "Each node keeps its own data."
+    """
+
+    @property
+    def data(self):
+        return self._data
+
+    @data.setter
+    def data(self, data):
+        self._data = data
 
     def union(self, other):
         root = self.find()
@@ -67,24 +78,30 @@ class UnionFindNode:
             other_root.parent = root
 
 
-class Alphabet:
-    def __init__(self, value):
-        self._value = value
+class RootUnionFind(BaseUnionFind):
+    """
+    ???+ note "Union always uses left as root. Each node looks up its root for data."
+    """
 
-    # getting the values
     @property
-    def value(self):
-        print("Getting value")
-        return self._value
+    def data(self):
+        root = self.find()
+        if self is root:
+            return self._data
+        return root.data
 
-    # setting the values
-    @value.setter
-    def value(self, value):
-        print("Setting value to " + value)
-        self._value = value
+    @data.setter
+    def data(self, data):
+        root = self.find()
+        if self is root:
+            self._data = data
+        root._data = data
 
-    # deleting the values
-    @value.deleter
-    def value(self):
-        print("Deleting value")
-        del self._value
+    def union(self, other):
+        root = self.find()
+        other_root = other.find()
+
+        # clear the data on the other root
+        other_root.data = None
+        root.count += other_root.count
+        other_root.parent = root
