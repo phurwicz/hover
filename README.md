@@ -1,8 +1,8 @@
 ![Hover](https://raw.githubusercontent.com/phurwicz/hover/main/docs/images/hover-logo-title.png)
 
-> We paint a picture with a set of brushes, not pixel after pixel. 
+> Imagine editing a picture layer by layer, not pixel by pixel, nor by splashing paint.
 > 
-> So why label a dataset piece by piece?
+> We can apply this idea to datasets.
 
 [![PyPI Version](https://img.shields.io/pypi/v/hover?logo=pypi&logoColor=white)](https://pypi.org/project/hover/)
 [![PyPI Stage](https://img.shields.io/pypi/status/hover?logo=pypi&logoColor=white)](https://pypi.org/project/hover/)
