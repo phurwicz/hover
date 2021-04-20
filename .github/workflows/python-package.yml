@@ -30,19 +30,25 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
 
-    - name: Get site packages dir
-      id: get-site-packages
-      run: |
-        echo "::set-output name=dir::$(python -c 'import site; print(site.getsitepackages()[0])')"
-
-    - name: Site packages cache
-      id: site-packages-cache
+    - name: Find cached env
+      id: find-venv
       uses: actions/cache@v2
       with:
-        path: ${{ steps.get-site-packages.outputs.dir }}
+        path: env
         key: ${{ runner.os }}-pip-${{ hashFiles('**/setup.py') }}
         restore-keys: |
           ${{ runner.os }}-pip-
+
+    - name: Create env
+      id: create-venv
+      if: steps.find-venv.outputs.cache-hit != 'true'
+      run: |
+        python -m venv env
+
+    - name: Activate env
+      id: activate-venv
+      run: |
+        source env/bin/activate
 
     - name: Get installation dependencies
       if: steps.site-packages-cache.outputs.cache-hit != 'true'
@@ -60,6 +66,7 @@ jobs:
       run: python setup.py install
 
     - name: Get testing dependencies
+      if: steps.site-packages-cache.outputs.cache-hit != 'true'
       run: pip install tox tox-gh-actions
 
     - name: Test and make coverage report
