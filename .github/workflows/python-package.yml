@@ -55,11 +55,9 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         # dependencies that could be involved in builds
-        pip install pip-tools setuptools wheel cython numpy
+        pip install pip-tools setuptools wheel cython
         # find dependencies based on setup.py
         pip-compile
-        # a few version of scikit-learn (e.x. 0.24) seem to require building from source
-        pip install --no-binary :all: scikit-learn
         pip install -r requirements.txt
 
     - name: Install hover
