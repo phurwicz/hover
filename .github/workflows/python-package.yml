@@ -4,10 +4,6 @@
 name: python-package
 
 on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
   schedule:
     - cron: "0 0 * * *"
 
@@ -18,10 +14,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ['3.6', '3.7', '3.8', '3.6.11', '3.7.10', '3.8.8']
+        python-version: ['3.6', '3.7', '3.8', '3.9', '3.6.11', '3.7.10', '3.8.8']
         os: [ubuntu-latest]
-        # 12/14/2020: disabling macos during builds, but it should install ok
-        #os: [macos-10.15, ubuntu-latest]
 
     steps:
     - uses: actions/checkout@v2
@@ -35,9 +29,9 @@ jobs:
       uses: actions/cache@v2
       with:
         path: env
-        key: ${{ runner.os }}-pip-${{ hashFiles('**/setup.py') }}
+        key: ${{ runner.os }}-${{ runner.python-version }}-venv-${{ hashFiles('**/setup.py') }}
         restore-keys: |
-          ${{ runner.os }}-pip-
+          ${{ runner.os }}-${{ runner.python-version }}-venv-
 
     - name: Create env
       id: create-venv
@@ -45,14 +39,10 @@ jobs:
       run: |
         python -m venv env
 
-    - name: Activate env
-      id: activate-venv
-      run: |
-        source env/bin/activate
-
-    - name: Get installation dependencies
+    - name: Get dependencies
       if: steps.find-venv.outputs.cache-hit != 'true'
       run: |
+        source env/bin/activate
         python -m pip install --upgrade pip
         # dependencies that could be involved in builds
         pip install pip-tools setuptools wheel cython
@@ -61,17 +51,6 @@ jobs:
         pip install -r requirements.txt
 
     - name: Install hover
-      run: python setup.py install
-
-    - name: Get testing dependencies
-      if: steps.find-venv.outputs.cache-hit != 'true'
-      run: pip install tox tox-gh-actions
-
-    - name: Test and make coverage report
-      run: tox -e test_api
-
-    - name: Codacy Coverage Reporter
-      uses: codacy/codacy-coverage-reporter-action@master
-      with:
-        project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
-        coverage-reports: cobertura.xml
+      run: |
+        source env/bin/activate
+        python setup.py install
