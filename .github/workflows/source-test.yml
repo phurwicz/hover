@@ -1,0 +1,71 @@
+# This workflow will install Python dependencies, run tests and lint with a single version of Python
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
+
+name: Python application
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.6', '3.7', '3.8', '3.9', '3.6.11', '3.7.10', '3.8.8']
+        os: [ubuntu-latest]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+  
+    - name: Find cached env
+      id: find-venv
+      uses: actions/cache@v2
+      with:
+        path: env
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/setup.py') }}
+        restore-keys: |
+          ${{ runner.os }}-venv-
+          
+    - name: Create env
+      id: create-venv
+      if: steps.find-venv.outputs.cache-hit != 'true'
+      run: |
+        python -m venv env
+        
+    - name: Get mandatory dependencies
+      if: steps.find-venv.outputs.cache-hit != 'true'
+      run: |
+        source env/bin/activate
+        python -m pip install --upgrade pip
+        # dependencies that could be involved in builds
+        pip install pip-tools setuptools wheel cython
+        # find dependencies based on setup.py
+        pip-compile
+        pip install -r requirements.txt
+
+    - name: Get testing dependencies
+      if: steps.find-venv.outputs.cache-hit != 'true'
+      run: |
+        source env/bin/activate
+        pip install tox tox-gh-actions
+
+    - name: Test and make coverage report
+      run: |
+        source env/bin/activate
+        tox -e test_api
+
+    - name: Codacy Coverage Reporter
+      uses: codacy/codacy-coverage-reporter-action@master
+      with:
+        project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
+        coverage-reports: cobertura.xml
+
