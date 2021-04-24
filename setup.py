@@ -44,7 +44,7 @@ setuptools.setup(
         # "umap-learn>=0.3.10",
         # "ivis[cpu]>=1.7",
     ],
-    python_requires=">=3.6, <3.9",
+    python_requires=">=3.6",
     classifiers=[
         "Programming Language :: Python :: 3",
         "Development Status :: 4 - Beta",
