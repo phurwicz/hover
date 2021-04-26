@@ -5,10 +5,10 @@
 """
 import torch
 import torch.nn.functional as F
-from datetime import datetime
 from deprecated import deprecated
 from hover.core import Loggable
 from hover.utils.metrics import classification_accuracy
+from hover.utils.misc import current_time
 from sklearn.metrics import confusion_matrix
 from snorkel.classification import cross_entropy_with_probs
 import numpy as np
@@ -16,7 +16,7 @@ import numpy as np
 
 @deprecated(
     version="0.4.0",
-    reason="will be removed in a future version; please use VectorNet.from_module() instead.",
+    reason="will be removed in a future version (planned 0.5.0); please use VectorNet.from_module() instead.",
 )
 def create_vector_net_from_module(specific_class, model_module_name, labels):
     """
@@ -37,7 +37,9 @@ class VectorNet(Loggable):
         -   `hover.utils.torch_helper.vector_dataloader`
     """
 
-    def __init__(self, vectorizer, architecture, state_dict_path, labels):
+    def __init__(
+        self, vectorizer, architecture, state_dict_path, labels, backup_state_dict=True
+    ):
         """
         ???+ note "Create the `VectorNet`, loading parameters if available."
             | Param             | Type       | Description                          |
@@ -46,6 +48,7 @@ class VectorNet(Loggable):
             | `architecture`    | `class`    | a `torch.nn.Module` child class      |
             | `state_dict_path` | `str`      | path to a (could-be-empty) `torch` state dict |
             | `labels`          | `list`     | list of `str` classification labels  |
+            | `backup_state_dict` | `bool`   | whether to backup the loaded state dict |
         """
 
         # set up label conversion
@@ -69,10 +72,11 @@ class VectorNet(Loggable):
             except Exception as e:
                 self._warn(f"Load VectorNet state path failed with {type(e)}: e")
 
-            state_dict_backup_path = (
-                f"{state_dict_path}.{datetime.now().strftime('%Y%m%d%H%M%S')}"
-            )
-            copyfile(state_dict_path, state_dict_backup_path)
+            if backup_state_dict:
+                state_dict_backup_path = (
+                    f"{state_dict_path}.{current_time('%Y%m%d%H%M%S')}"
+                )
+                copyfile(state_dict_path, state_dict_backup_path)
 
         # set a path to store updated parameters
         self.nn_update_path = state_dict_path
