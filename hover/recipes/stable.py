@@ -23,11 +23,21 @@ def simple_annotator(dataset, **kwargs):
         | :------------------ | :----------------- |
         | manage data subsets | make annotations   |
     """
+    layout, _ = _simple_annotator(dataset, **kwargs)
+    return layout
+
+
+def _simple_annotator(dataset, **kwargs):
+    """
+    ???+ note "Cousin of simple_annotator which exposes objects in the layout."
+    """
     annotator = standard_annotator(dataset, **kwargs)
 
     sidebar = dataset.view()
     layout = row(sidebar, annotator.view())
-    return layout
+
+    objects = {"dataset": dataset, "annotator": annotator, "sidebar": sidebar}
+    return layout, objects
 
 
 @servable(title="Linked Annotator")
@@ -46,6 +56,14 @@ def linked_annotator(dataset, **kwargs):
         | :------------------ | :------------------ | :----------------- |
         | manage data subsets | search -> highlight | make annotations   |
     """
+    layout, _ = _linked_annotator(dataset, **kwargs)
+    return layout
+
+
+def _linked_annotator(dataset, **kwargs):
+    """
+    ???+ note "Cousin of linked_annotator which exposes objects in the layout."
+    """
     finder = standard_finder(dataset, **kwargs)
     annotator = standard_annotator(dataset, **kwargs)
 
@@ -56,4 +74,11 @@ def linked_annotator(dataset, **kwargs):
 
     sidebar = dataset.view()
     layout = row(sidebar, finder.view(), annotator.view())
-    return layout
+
+    objects = {
+        "dataset": dataset,
+        "annotator": annotator,
+        "finder": finder,
+        "sidebar": sidebar,
+    }
+    return layout, objects
