@@ -1,6 +1,7 @@
 import pytest
 import os
 from hover.core.dataset import SupervisableTextDataset
+from bokeh.events import MenuItemClick
 
 
 @pytest.mark.core
@@ -45,8 +46,6 @@ class TestSupervisableTextDataset:
 
     @staticmethod
     def test_export_import(mini_supervisable_text_dataset):
-        from bokeh.events import MenuItemClick
-
         dataset = mini_supervisable_text_dataset
 
         df = dataset.to_pandas(use_df=True)
