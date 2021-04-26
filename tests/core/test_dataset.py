@@ -1,4 +1,5 @@
 import pytest
+import os
 from hover.core.dataset import SupervisableTextDataset
 
 
@@ -45,16 +46,25 @@ class TestSupervisableTextDataset:
     @staticmethod
     def test_export_import(mini_supervisable_text_dataset):
         from bokeh.events import MenuItemClick
-        
+
         dataset = mini_supervisable_text_dataset
 
         df = dataset.to_pandas(use_df=True)
         df = dataset.to_pandas(use_df=False)
         dataset = SupervisableTextDataset.from_pandas(df)
-        
-        for _item in ["Excel", "CSV", "JSON", "pickle"]:
+
+        # trigger callback through button click (UI behavior)
+        for _item, _ext in [
+            ("Excel", ".xlsx"),
+            ("CSV", ".csv"),
+            ("JSON", ".json"),
+            ("pickle", ".pkl"),
+        ]:
+            _f_old = [_path for _path in os.listdir(".") if _path.endswith(_ext)]
             _event = MenuItemClick(dataset.file_exporter, item=_item)
-            dataset._callback_export(_event)
+            dataset.file_exporter._trigger_event(_event)
+            _f_new = [_path for _path in os.listdir(".") if _path.endswith(_ext)]
+            assert len(_f_new) == len(_f_old) + 1
 
     @staticmethod
     def test_compute_2d_embedding(mini_supervisable_text_dataset, dummy_vectorizer):
