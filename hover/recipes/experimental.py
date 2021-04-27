@@ -33,6 +33,14 @@ def snorkel_crosscheck(dataset, lf_list, **kwargs):
         | :------------------ | :------------------------- | :----------------- |
         | manage data subsets | inspect labeling functions | make annotations   |
     """
+    layout, _ = _snorkel_crosscheck(dataset, lf_list, **kwargs)
+    return layout
+
+
+def _snorkel_crosscheck(dataset, lf_list, **kwargs):
+    """
+    ???+ note "Cousin of snorkel_crosscheck which exposes objects in the layout."
+    """
     # building-block subroutines
     snorkel = standard_snorkel(dataset, **kwargs)
     annotator = standard_annotator(dataset, **kwargs)
@@ -49,7 +57,14 @@ def snorkel_crosscheck(dataset, lf_list, **kwargs):
 
     sidebar = dataset.view()
     layout = row(sidebar, snorkel.view(), annotator.view())
-    return layout
+
+    objects = {
+        "dataset": dataset,
+        "annotator": annotator,
+        "snorkel": snorkel,
+        "sidebar": sidebar,
+    }
+    return layout, objects
 
 
 @servable(title="Active Learning")
@@ -70,6 +85,14 @@ def active_learning(dataset, vectorizer, vecnet_callback, **kwargs):
         | SupervisableDataset | BokehSoftLabelExplorer    | BokehDataAnnotator | BokehDataFinder     |
         | :------------------ | :------------------------ | :----------------- | :------------------ |
         | manage data subsets | inspect model predictions | make annotations   | search -> highlight |
+    """
+    layout, _ = _active_learning(dataset, vectorizer, vecnet_callback, **kwargs)
+    return layout
+
+
+def _active_learning(dataset, vectorizer, vecnet_callback, **kwargs):
+    """
+    ???+ note "Cousin of active_learning which exposes objects in the layout."
     """
     # building-block subroutines
     softlabel = standard_softlabel(dataset, **kwargs)
@@ -154,4 +177,14 @@ def active_learning(dataset, vectorizer, vecnet_callback, **kwargs):
     model_retrainer, epochs_slider = setup_model_retrainer()
     sidebar = column(model_retrainer, epochs_slider, dataset.view())
     layout = row(sidebar, *[_plot.view() for _plot in [softlabel, annotator, finder]])
-    return layout
+
+    objects = {
+        "dataset": dataset,
+        "annotator": annotator,
+        "finder": finder,
+        "sidebar": sidebar,
+        "softlabel": softlabel,
+        "model_retrainer": model_retrainer,
+        "epoches_slider": epochs_slider,
+    }
+    return layout, objects
