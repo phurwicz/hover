@@ -5,6 +5,7 @@ Note that the whole point of explorers is to allow interaction, for which this f
 from hover import module_config
 from hover.utils.snorkel_helper import labeling_function
 from hover.recipes.subroutine import get_explorer_class
+from bokeh.events import SelectionGeometry
 import pytest
 import random
 
@@ -91,9 +92,63 @@ class TestBokehBaseExplorer:
 
 
 @pytest.mark.core
+class TestBokehDataFinder:
+    @staticmethod
+    def test_init(example_raw_df):
+        for _feature in MAIN_FEATURES:
+            _cls = get_explorer_class("finder", _feature)
+            _explorer = _cls({"raw": example_raw_df})
+            _explorer.plot()
+            _ = _explorer.view()
+
+    @staticmethod
+    def test_filter_text(example_raw_df):
+        explorer = get_explorer_class("finder", "text")({"raw": example_raw_df})
+        explorer.plot()
+
+        # emulate user interface: select everything through a SelectionGeometry event
+        total_raw = explorer.dfs["raw"].shape[0]
+        initial_select = list(range(total_raw))
+        explorer.sources["raw"].selected.indices = initial_select[:]
+        box_select = SelectionGeometry(
+            explorer.figure,
+            geometry={
+                "type": "poly",
+                "sx": [-1e4, -1e4, 1e4, 1e4],
+                "sy": [-1e4, 1e4, 1e4, -1e4],
+                "x": [None, None, None, None],
+                "y": [None, None, None, None],
+            },
+        )
+        explorer.figure._trigger_event(box_select)
+        assert explorer.sources["raw"].selected.indices == initial_select[:]
+
+        # enter some search criterion without applying filter
+        explorer.search_pos.value = r"(?i)s[aeiou]\ "
+        assert explorer.sources["raw"].selected.indices == initial_select
+
+        # activate filter
+        explorer.search_filter_box.active = [0]
+        first_filter_select = explorer.sources["raw"].selected.indices[:]
+        assert first_filter_select != initial_select
+        assert set(first_filter_select).issubset(set(initial_select))
+
+        # enter more search criterion with filter active
+        explorer.search_neg.value = r"(?i)s[ae]\ "
+        second_filter_select = explorer.sources["raw"].selected.indices[:]
+        assert second_filter_select != first_filter_select
+        assert set(second_filter_select).issubset(set(first_filter_select))
+
+        # deactivate filter
+        explorer.search_filter_box.active = []
+        unfilter_select = explorer.sources["raw"].selected.indices[:]
+        assert unfilter_select == initial_select
+
+
+@pytest.mark.core
 class TestBokehDataAnnotator:
     @staticmethod
-    def test_annotation(example_raw_df):
+    def test_init(example_raw_df):
         # test most methods for the class corresponding to each kind of feature
         for _feature in MAIN_FEATURES:
             _cls = get_explorer_class("annotator", _feature)
