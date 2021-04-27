@@ -1,9 +1,12 @@
 from hover import module_config
-from hover.recipes.stable import _simple_annotator, _linked_annotator
+from hover.recipes.stable import (
+    _simple_annotator,
+    _linked_annotator,
+    simple_annotator,
+    linked_annotator,
+)
 from bokeh.events import ButtonClick, MenuItemClick
-
-# import time
-# from bokeh.document import Document
+from bokeh.document import Document
 
 
 def action_view_selection(dataset):
@@ -75,8 +78,9 @@ def test_linked_annotator(mini_supervisable_text_dataset_embedded):
     assert annotator.sources["raw"].selected.indices == [0, 1, 2]
 
 
-# def test_servable_simple_annotator(mini_supervisable_text_dataset_embedded):
-#    dataset = mini_supervisable_text_dataset_embedded.copy()
-#    doc = Document()
-#    handle = simple_annotator(dataset)
-#    handle(doc)
+def test_servable_stable(mini_supervisable_text_dataset_embedded):
+    for _recipe in [simple_annotator, linked_annotator]:
+        dataset = mini_supervisable_text_dataset_embedded.copy()
+        doc = Document()
+        handle = _recipe(dataset)
+        handle(doc)
