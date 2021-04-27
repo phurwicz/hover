@@ -430,8 +430,18 @@ class BokehBaseExplorer(Loggable, ABC):
         self._prelink_check(other)
         # link selection in a bidirectional manner
         sl, sr = self.sources[key], other.sources[other_key]
-        sl.selected.js_link("indices", sr.selected, "indices")
-        sr.selected.js_link("indices", sl.selected, "indices")
+
+        # deprecated: use js_link to sync attributes
+        # sl.selected.js_link("indices", sr.selected, "indices")
+        # sr.selected.js_link("indices", sl.selected, "indices")
+        def left_to_right(attr, old, new):
+            sr.selected.indices = sl.selected.indices[:]
+
+        def right_to_left(attr, old, new):
+            sl.selected.indices = sr.selected.indices[:]
+
+        sl.selected.on_change("indices", left_to_right)
+        sr.selected.on_change("indices", right_to_left)
 
         # link last manual selections (pointing to the same set)
         self._last_selections[key].union(other._last_selections[other_key])
