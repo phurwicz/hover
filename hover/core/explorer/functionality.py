@@ -83,13 +83,9 @@ class BokehDataFinder(BokehBaseExplorer):
             "active", lambda attr, old, new: self._trigger_selection_filters()
         )
 
-    def plot(self, *args, **kwargs):
+    def plot(self):
         """
         ???+ note "Plot all data points."
-            | Param      | Type  | Description           |
-            | :--------- | :---- | :-------------------- |
-            | `*args`    |       | for consistency       |
-            | `**kwargs` |       | for consistency       |
         """
         for _key, _source in self.sources.items():
             self.figure.circle(
