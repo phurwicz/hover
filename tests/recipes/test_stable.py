@@ -72,11 +72,7 @@ def test_linked_annotator(mini_supervisable_text_dataset_embedded):
     annotator, finder = objects["annotator"], objects["finder"]
     assert annotator.sources["raw"].selected.indices == []
     finder.sources["raw"].selected.indices = [0, 1, 2]
-
-    # TODO: selected indices are synchronized through js_link
-    # which seems to not propagate back to Python
-    # time.sleep(1)
-    # assert annotator.sources["raw"].selected.indices == [0, 1, 2]
+    assert annotator.sources["raw"].selected.indices == [0, 1, 2]
 
 
 # def test_servable_simple_annotator(mini_supervisable_text_dataset_embedded):
