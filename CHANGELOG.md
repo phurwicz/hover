@@ -1,6 +1,44 @@
 # CHANGELOG
 
-## 0.4.1 - Projected Jan 31, 2021
+## 0.5.0 - Apr 29, 2021
+
+### :tada: Features Added
+
+-   `SupervisableDataset`
+    -   Added [import/export from/to pandas dataframes](https://github.com/phurwicz/hover/commit/e4f1a27f66a79c031f0163f14896bc30bbaff567);
+    -   Added [a table for viewing selected data](https://github.com/phurwicz/hover/commit/2f442a51f8e8c04695ad6e185a90eea157f08689) to the visual interface.
+    -   Added an "Export" button -- this is taken from `BokehDataAnnotator`.
+
+-   `BokehDataFinder`
+    -   Search criteria can now be used to [filter data point selections through a checkbox toggle](https://github.com/phurwicz/hover/commit/5b8fb17f50a3c36726d4665d1cf1253ba4d5f2f9).
+
+-   `BokehSoftLabelExplorer`
+    -   Soft scores can now be used to [filter data point selections through a checkbox toggle](https://github.com/phurwicz/hover/commit/5b8fb17f50a3c36726d4665d1cf1253ba4d5f2f9).
+
+-   Intersecting Filters
+    -   The two filters mentioned above can be in effect simultaneously, taking a set intersection.
+
+-   Recipe: `active_learning`
+    -   Added an [interpolation of decision boundaries]((https://github.com/phurwicz/hover/commit/dc5851514799825a66911a266a9abb2066e92078)) between 2D embeddings of the input and output.
+
+-   `VectorNet`
+    -   It is now possible to [configure whether or not to backup the model state dict](https://github.com/phurwicz/hover/commit/fe150b34a89993e8d7df4c6c76a2b729ff411268).
+
+### :exclamation: Feature Removed
+
+-   A few JavaScript callbacks are converted to Python and will no longer work in static HTML:
+    -   search widget responses (i.e. glyph color/size changes) in all `explorer`s;
+    -   synchronization of data point selections between `explorer`s, e.g. in the `linked_annotator` recipe.
+
+-   `BokehDataAnnotator`
+    -   Removed the "Export" button -- it is now with `SupervisableDataset` instead.
+
+### :hammer: Fixes
+
+-   Keyword arguments to recipes (`simple_annotator`, for example) are now [correctly forwarded to Bokeh figures](https://github.com/phurwicz/hover/commit/5c4e6b46140fcbec974b0ee88a2dc2175f2f3c50).
+    -   Note that figure tooltips (the info box that show up upon mouse hover over data points) will *append to*, instead of replace, the built-in tooltips.
+
+## 0.4.1 - Jan 31, 2021
 
 ### :hammer: Fixes
 
