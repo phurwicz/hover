@@ -31,7 +31,7 @@ def test_active_learning(
     epochs_slider.value = 1
     model_retrainer._trigger_event(retrain_event)
     first_scores = dataset.dfs["raw"]["pred_score"].values.copy()
-    assert np.not_equal(first_scores, initial_scores).any()
+    assert not np.allclose(first_scores, initial_scores)
 
     # emulating user interaction: slide coords to view manifold trajectory
     for _value in range(1, min(coords_slider.end + 1, 4)):
@@ -40,7 +40,9 @@ def test_active_learning(
     # train for 1 more epoch
     model_retrainer._trigger_event(retrain_event)
     second_scores = dataset.dfs["raw"]["pred_score"].values
-    assert np.not_equal(second_scores, first_scores).any()
+    assert not np.allclose(second_scores, first_scores)
+    # take 25 and 75 percentiles of scores for later use
+    range_low, range_high = np.percentile(second_scores, [25, 75]).tolist()
 
     # emulate user interface: select everything through a SelectionGeometry event
     total_raw = softlabel.dfs["raw"].shape[0]
@@ -63,7 +65,7 @@ def test_active_learning(
 
     # check score filtering
     # nothing happens when filter is inactive
-    softlabel.score_range.value = (0.3, 0.7)
+    softlabel.score_range.value = (range_low, range_high)
     assert softlabel.sources["raw"].selected.indices == initial_select
     # activate score filter
     softlabel.score_filter_box.active = [0]
