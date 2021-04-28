@@ -17,6 +17,7 @@ from tests.recipes.local_helper import (
 def test_simple_annotator(mini_supervisable_text_dataset_embedded):
     dataset = mini_supervisable_text_dataset_embedded.copy()
     layout, objects = _simple_annotator(dataset)
+    assert layout.visible
 
     annotator = objects["annotator"]
     initial_sizes = {_key: _df.shape[0] for _key, _df in dataset.dfs.items()}
@@ -42,6 +43,7 @@ def test_simple_annotator(mini_supervisable_text_dataset_embedded):
 def test_linked_annotator(mini_supervisable_text_dataset_embedded):
     dataset = mini_supervisable_text_dataset_embedded.copy()
     layout, objects = _linked_annotator(dataset)
+    assert layout.visible
 
     annotator, finder = objects["annotator"], objects["finder"]
     assert annotator.sources["raw"].selected.indices == []

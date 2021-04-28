@@ -419,7 +419,7 @@ class SupervisableDataset(Loggable):
                 self._print({self.dfs[_key].loc[_invalid_indices]})
                 if raise_exception:
                     raise ValueError("invalid labels")
-            
+
     def setup_file_export(self):
         self.file_exporter = Dropdown(
             label="Export",
@@ -428,14 +428,12 @@ class SupervisableDataset(Loggable):
             height_policy="fit",
             width_policy="min",
         )
-        
+
         def callback_export(event, path_root=None):
             """
             A callback on clicking the 'self.annotator_export' button.
             Saves the dataframe to a pickle.
             """
-            import pandas as pd
-
             export_format = event.item
 
             # auto-determine the export path root
@@ -465,7 +463,7 @@ class SupervisableDataset(Loggable):
         # assign the callback, keeping its reference
         self._callback_export = callback_export
         self.file_exporter.on_click(self._callback_export)
-        
+
     def setup_pop_table(self, **kwargs):
         """
         ???+ note "Set up a bokeh `DataTable` widget for monitoring subset data populations."

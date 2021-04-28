@@ -396,13 +396,13 @@ class BokehBaseExplorer(Loggable, ABC):
                     )
 
     @abstractmethod
-    def activate_search(self, source, kwargs, altered_param=("size", 10, 5, 7)):
+    def activate_search(self, subset, kwargs, altered_param=("size", 10, 5, 7)):
         """
         ???+ note "Left to child classes that have a specific feature format."
 
             | Param           | Type    | Description                   |
             | :-------------- | :------ | :---------------------------  |
-            | `source`        | `bool`  | the `ColumnDataSource` to use |
+            | `subset`        | `str`   | the subset to activate search on |
             | `kwargs`        | `bool`  | kwargs for the plot to add to |
             | `altered_param` | `tuple` | (attribute, positive, negative, default) |
         """
