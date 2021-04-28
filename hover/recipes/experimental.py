@@ -185,6 +185,6 @@ def _active_learning(dataset, vectorizer, vecnet_callback, **kwargs):
         "sidebar": sidebar,
         "softlabel": softlabel,
         "model_retrainer": model_retrainer,
-        "epoches_slider": epochs_slider,
+        "epochs_slider": epochs_slider,
     }
     return layout, objects

@@ -101,7 +101,8 @@ def mini_supervisable_text_dataset():
     split_idx = int(0.05 * len(my_20ng["train"]))
     dataset = SupervisableTextDataset(
         raw_dictl=my_20ng["train"][:split_idx],
-        dev_dictl=my_20ng["train"][split_idx : int(split_idx * 1.2)],
+        train_dictl=my_20ng["train"][split_idx : int(split_idx * 1.2)],
+        dev_dictl=my_20ng["train"][int(split_idx * 1.2) : int(split_idx * 1.4)],
         test_dictl=my_20ng["test"][:split_idx],
     )
 
