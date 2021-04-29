@@ -52,7 +52,6 @@ class BokehDataFinder(BokehBaseExplorer):
             """
             Filter selection with search results on a subset.
             """
-            self._info(f"Filtering by search on subset {subset}")
             search_scores = self.sources[subset].data[SEARCH_SCORE_FIELD]
             matched = set(np.where(np.array(search_scores) > 0)[0])
             return indices.intersection(matched)
@@ -118,14 +117,14 @@ class BokehDataAnnotator(BokehBaseExplorer):
         """
         ???+ note "Infer glyph colors from the label dynamically."
         """
-        # infer glyph color from labels
         color_dict = self.auto_color_mapping()
 
-        def get_color(label):
-            return color_dict.get(label, "gainsboro")
-
         for _key, _df in self.dfs.items():
-            _color = _df["label"].apply(get_color).tolist()
+            _color = (
+                _df["label"]
+                .apply(lambda label: color_dict.get(label, "gainsboro"))
+                .tolist()
+            )
             self.sources[_key].add(_color, SOURCE_COLOR_FIELD)
 
     def _setup_widgets(self):
@@ -157,15 +156,26 @@ class BokehDataAnnotator(BokehBaseExplorer):
                     "Attempting annotation: did not select any data points. Eligible subset is 'raw'."
                 )
                 return
-            example_old = self.dfs["raw"].at[selected_idx[0], "label"]
-            self.dfs["raw"].at[selected_idx, "label"] = label
-            example_new = self.dfs["raw"].at[selected_idx[0], "label"]
-            self._good(
-                f"Applied {len(selected_idx)} annotations: {label} (e.g. {example_old} -> {example_new})"
-            )
 
+            self._info(f"Applying {len(selected_idx)} annotations: {label}")
+            # update label in both the df and the data source
+            self.dfs["raw"].at[selected_idx, "label"] = label
             for _idx in selected_idx:
+                _idx = int(_idx)
                 self.sources["raw"].patch({"label": [(_idx, label)]})
+            self._good(f"Applied {len(selected_idx)} annotations: {label}")
+
+            # infer glyph colors dynamically
+            color_dict = self.auto_color_mapping()
+
+            color_list = (
+                self.dfs["raw"]["label"]
+                .apply(lambda label: color_dict.get(label, "gainsboro"))
+                .tolist()
+            )
+            self.sources["raw"].patch(
+                {SOURCE_COLOR_FIELD: [(slice(len(color_list)), color_list)]}
+            )
             self._good(f"Updated annotator plot at {current_time()}")
 
         # assign the callback and keep the reference
@@ -324,7 +334,6 @@ class BokehSoftLabelExplorer(BokehBaseExplorer):
             """
             Filter selection with slider range on a subset.
             """
-            self._info(f"Filtering by score on subset {subset}")
             in_range = subroutine(self.dfs[subset], *self.score_range.value)
             return indices.intersection(in_range)
 
