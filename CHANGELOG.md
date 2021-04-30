@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## 0.5.0 - Apr 29, 2021
+## 0.5.0 - Apr 30, 2021
 
 ### :tada: Features Added
 
@@ -37,6 +37,8 @@
 
 -   Keyword arguments to recipes (`simple_annotator`, for example) are now [correctly forwarded to Bokeh figures](https://github.com/phurwicz/hover/commit/5c4e6b46140fcbec974b0ee88a2dc2175f2f3c50).
     -   Note that figure tooltips (the info box that show up upon mouse hover over data points) will *append to*, instead of replace, the built-in tooltips.
+
+-   `active_learning`'s dev set during model re-train will now [fall back to using the train set](https://github.com/phurwicz/hover/commit/fdc1217f3b7c3428e7fa831b1d003df368ab568f) if the dev set is empty.
 
 ## 0.4.1 - Jan 31, 2021
 
