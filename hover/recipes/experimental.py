@@ -127,7 +127,11 @@ def _active_learning(dataset, vectorizer, vecnet_callback, **kwargs):
             model = vecnet_callback(dataset, vectorizer)
 
             train_loader = dataset.loader("train", vectorizer, smoothing_coeff=0.2)
-            dev_loader = dataset.loader("dev", vectorizer)
+            if dataset.dfs["dev"].shape[0] > 0:
+                dev_loader = dataset.loader("dev", vectorizer)
+            else:
+                dataset._warn("Dev set is empty, borrowing train set for validation.")
+                dev_loader = train_loader
 
             _ = model.train(train_loader, dev_loader, epochs=epochs_slider.value)
             model.save()
@@ -175,7 +179,7 @@ def _active_learning(dataset, vectorizer, vecnet_callback, **kwargs):
         return model_retrainer, epochs_slider
 
     model_retrainer, epochs_slider = setup_model_retrainer()
-    sidebar = column(model_retrainer, epochs_slider, dataset.view())
+    sidebar = column(row(model_retrainer, epochs_slider), dataset.view())
     layout = row(sidebar, *[_plot.view() for _plot in [softlabel, annotator, finder]])
 
     objects = {
