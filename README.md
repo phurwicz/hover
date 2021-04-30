@@ -1,7 +1,7 @@
 ![Hover](https://raw.githubusercontent.com/phurwicz/hover/main/docs/images/hover-logo-title.png)
 
 > Imagine editing a picture layer by layer, not pixel by pixel, nor by splashing paint.
-> 
+>
 > We can apply this idea to datasets.
 
 [![PyPI Version](https://img.shields.io/pypi/v/hover?logo=pypi&logoColor=white)](https://pypi.org/project/hover/)
@@ -36,7 +36,9 @@ Check out [@phurwicz/hover-binder](https://github.com/phurwicz/hover-binder) for
 
 ## :flags: Project News
 
--   **Jan 31, 2021** 0.4.1 is now available. Check out the [changelog](https://github.com/phurwicz/hover/blob/main/CHANGELOG.md) for details :partying_face:
+-   **Apr 30, 2021** Version 0.5.0 is now available. Check out the [changelog](https://github.com/phurwicz/hover/blob/main/CHANGELOG.md) for details :partying_face:. Now some tl-dr for the impatient:
+    -   you can now filter selected data with search criteria, or soft label scores, or both!
+    -   active learning now includes an interpolation between input and output manifolds, helping you explore decision boundaries and their formation.
 
 ## :rocket: Quickstart
 
