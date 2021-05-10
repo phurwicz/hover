@@ -24,8 +24,7 @@ setuptools.setup(
     install_requires=[
         # interactive/static visualization
         "bokeh",
-        # distant supervision
-        "snorkel>=0.9.3",
+        # preprocessors
         "scikit-learn",
         # neural stuff
         "torch>=1.4.0",
@@ -43,6 +42,8 @@ setuptools.setup(
         # optional: dimensionality reduction
         # "umap-learn>=0.3.10",
         # "ivis[cpu]>=1.7",
+        # optional: distant supervision
+        # "snorkel>=0.9.3",
     ],
     python_requires=">=3.6",
     classifiers=[
