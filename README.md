@@ -11,7 +11,7 @@
 [![Codacy Coverage](https://img.shields.io/codacy/coverage/689827d9077b43ac8721c7658d122d1a/main?logo=codacy&logoColor=white)](https://app.codacy.com/gh/phurwicz/hover/dashboard)
 [![Discord](https://img.shields.io/discord/790112638456561665?label=discord&logo=discord&logoColor=white)](https://discord.gg/R5BwYgYZFD)
 
-![Demo](https://raw.githubusercontent.com/phurwicz/hover/main/docs/images/app-active-learning.gif)
+![Demo](https://raw.githubusercontent.com/phurwicz/hover-gallery/main/0.4.1/app-active-learning.gif)
 
 ----
 
