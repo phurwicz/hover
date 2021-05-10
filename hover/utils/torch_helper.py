@@ -55,7 +55,7 @@ def one_hot(encoded_labels, num_classes):
     return F.one_hot(torch.LongTensor(encoded_labels), num_classes=num_classes).float()
 
 
-def cross_entropy_with_probs(input, target, weight, reduction="mean"):
+def cross_entropy_with_probs(input, target, weight=None, reduction="mean"):
     """
     Cherry-picked from snorkel.classification. 
     Calculate cross-entropy loss when targets are probabilities (floats), not ints.
