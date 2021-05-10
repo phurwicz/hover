@@ -1,12 +1,12 @@
 import pytest
 import numpy as np
 from copy import deepcopy
-from hover.core.neural import create_vector_net_from_module as create_vecnet, VectorNet
+from hover.core.neural import VectorNet
 
 
 @pytest.fixture
 def example_vecnet():
-    model = create_vecnet(VectorNet, "model_template", ["positive", "negative"])
+    model = VectorNet.from_module("model_template", ["positive", "negative"])
     return model
 
 
