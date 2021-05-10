@@ -10,19 +10,8 @@ from hover.core import Loggable
 from hover.utils.metrics import classification_accuracy
 from hover.utils.misc import current_time
 from sklearn.metrics import confusion_matrix
-from snorkel.classification import cross_entropy_with_probs
+from hover.utils.torch_helper import cross_entropy_with_probs
 import numpy as np
-
-
-@deprecated(
-    version="0.4.0",
-    reason="will be removed in a future version (planned 0.5.0); please use VectorNet.from_module() instead.",
-)
-def create_vector_net_from_module(specific_class, model_module_name, labels):
-    """
-    ???+ warning "Deprecated into a trivial invocation of VectorNet's class method."
-    """
-    return specific_class.from_module(model_module_name, labels)
 
 
 class VectorNet(Loggable):
