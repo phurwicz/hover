@@ -532,14 +532,12 @@ class SupervisableDataset(Loggable):
             | :--------- | :----- | :--------------------------- |
             | `**kwargs` |        | forwarded to the `DataTable` |
         """
+
+        def auto_columns(df):
+            return [TableColumn(field=_col, title=_col) for _col in df.columns]
+
         sel_source = ColumnDataSource(dict())
-        sel_columns = [
-            TableColumn(
-                field=_col,
-                title=_col,
-            )
-            for _col in self.dfs["train"].columns
-        ]
+        sel_columns = auto_columns(self.dfs["train"])
         self.sel_table = DataTable(source=sel_source, columns=sel_columns, **kwargs)
 
         def update_selection(selected_df):
@@ -547,10 +545,11 @@ class SupervisableDataset(Loggable):
             Callback function.
             """
             # push results to bokeh data source
+            self.sel_table.columns = auto_columns(selected_df)
             sel_source.data = selected_df.to_dict(orient="list")
 
             self._good(
-                f"Selection updater: latest selection with {selected_df.shape[0]} entries."
+                f"Selection table: latest selection with {selected_df.shape[0]} entries."
             )
 
         self._callback_update_selection = update_selection
