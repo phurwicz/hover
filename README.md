@@ -30,7 +30,7 @@ Check out [@phurwicz/hover-binder](https://github.com/phurwicz/hover-binder) for
 
 ## :flags: Project News
 
--   **Apr 30, 2021** Version 0.5.0 is now available. Check out the [changelog](https://github.com/phurwicz/hover/blob/main/CHANGELOG.md) for details :partying_face:. Now some tl-dr for the impatient:
+-   **Apr 30, 2021** 0.5.0 is now available. Check out the [changelog](https://github.com/phurwicz/hover/blob/main/CHANGELOG.md) for details :partying_face:. Some tl-dr for the impatient:
     -   you can now filter selected data with search criteria, or soft label scores, or both!
     -   active learning now includes an interpolation between input and output manifolds, helping you explore decision boundaries and their formation.
 
