@@ -29,9 +29,9 @@ jobs:
       uses: actions/cache@v2
       with:
         path: env
-        key: ${{ runner.os }}-${{ runner.python-version }}-env-build-${{ hashFiles('**/setup.py') }}
+        key: ${{ runner.os }}-${{ runner.python-version }}-venv-build-${{ hashFiles('**/setup.py') }}
         restore-keys: |
-          ${{ runner.os }}-${{ runner.python-version }}-env-build-
+          ${{ runner.os }}-${{ runner.python-version }}-venv-build-
 
     - name: Create env
       id: create-venv
