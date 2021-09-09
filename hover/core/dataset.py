@@ -680,18 +680,23 @@ class SupervisableDataset(Loggable):
 
         return reducer
 
-    def loader(self, key, vectorizer, batch_size=64, smoothing_coeff=0.0):
+    def loader(self, key, *vectorizers, batch_size=64, smoothing_coeff=0.0):
         """
         ???+ note "Prepare a torch `Dataloader` for training or evaluation."
-            | Param        | Type       | Description                        |
-            | :----------- | :--------- | :--------------------------------- |
-            | `key`        | `str`      | subset of data, e.g. `"train"`     |
-            | `vectorizer` | `callable` | the feature -> vector function     |
-            | `batch_size` | `int`      | size per batch                     |
-            | `smoothing_coeff` | `float` | portion of probability to equally split between classes |
+            | Param         | Type          | Description                        |
+            | :------------ | :------------ | :--------------------------------- |
+            | `key`         | `str`         | subset of data, e.g. `"train"`     |
+            | `vectorizers` | `callable`(s) | the feature -> vector function(s)  |
+            | `batch_size`  | `int`         | size per batch                     |
+            | `smoothing_coeff` | `float`   | portion of probability to equally split between classes |
         """
         # lazy import: missing torch should not break the rest of the class
-        from hover.utils.torch_helper import VectorDataset, one_hot, label_smoothing
+        from hover.utils.torch_helper import (
+            VectorDataset,
+            MultiVectorDataset,
+            one_hot,
+            label_smoothing,
+        )
 
         # take the slice that has a meaningful label
         df = self.dfs[key][self.dfs[key]["label"] != module_config.ABSTAIN_DECODED]
@@ -701,22 +706,39 @@ class SupervisableDataset(Loggable):
             raise ValueError(f"Subset {key} has too few samples ({df.shape[0]})")
         batch_size = min(batch_size, df.shape[0])
 
+        # prepare output vectors
         labels = df["label"].apply(lambda x: self.label_encoder[x]).tolist()
-        features = df[self.__class__.FEATURE_KEY].tolist()
         output_vectors = one_hot(labels, num_classes=len(self.classes))
-
-        self._info(f"Preparing {key} input vectors...")
-        input_vectors = [vectorizer(_f) for _f in tqdm(features)]
         if smoothing_coeff > 0.0:
             output_vectors = label_smoothing(
                 output_vectors, coefficient=smoothing_coeff
             )
+
+        # prepare input vectors
+        assert len(vectorizers) > 0, "Expected at least one vectorizer"
+        multi_flag = len(vectorizers) > 1
+        features = df[self.__class__.FEATURE_KEY].tolist()
+
+        input_vector_lists = []
+        for _vec_func in vectorizers:
+            self._info(f"Preparing {key} input vectors...")
+            _input_vecs = [_vec_func(_f) for _f in tqdm(features)]
+            input_vector_lists.append(_input_vecs)
+
         self._info(f"Preparing {key} data loader...")
-        loader = VectorDataset(input_vectors, output_vectors).loader(
-            batch_size=batch_size
-        )
+        if multi_flag:
+            assert len(input_vector_lists) > 1, "Expected multiple lists of vectors"
+            loader = MultiVectorDataset(input_vector_lists, output_vectors).loader(
+                batch_size=batch_size
+            )
+        else:
+            assert len(input_vector_lists) == 1, "Expected only one list of vectors"
+            input_vectors = input_vector_lists[0]
+            loader = VectorDataset(input_vectors, output_vectors).loader(
+                batch_size=batch_size
+            )
         self._good(
-            f"Prepared {key} loader consisting of {len(features)} examples with batch size {batch_size}"
+            f"Prepared {key} loader with {len(features)} examples; {len(vectorizers)} vectors per feature, batch size {batch_size}"
         )
         return loader
 
