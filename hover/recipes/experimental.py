@@ -94,6 +94,8 @@ def _active_learning(dataset, vectorizer, vecnet_callback, **kwargs):
     """
     ???+ note "Cousin of active_learning which exposes objects in the layout."
     """
+    feature_key = dataset.__class__.FEATURE_KEY
+
     # building-block subroutines
     softlabel = standard_softlabel(dataset, **kwargs)
     annotator = standard_annotator(dataset, **kwargs)
@@ -141,7 +143,7 @@ def _active_learning(dataset, vectorizer, vecnet_callback, **kwargs):
             use_subsets = ("raw", "train", "dev")
             inps = []
             for _key in use_subsets:
-                inps.extend(dataset.dfs[_key]["text"].tolist())
+                inps.extend(dataset.dfs[_key][feature_key].tolist())
 
             probs = model.predict_proba(inps)
             labels = [dataset.label_decoder[_val] for _val in probs.argmax(axis=-1)]
