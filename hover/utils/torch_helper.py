@@ -55,7 +55,7 @@ class MultiVectorDataset(Dataset):
 
     def __len__(self):
         """Defines the length measure."""
-        return len(self.input_tensor)
+        return len(self.output_tensor)
 
     def loader(self, **kwargs):
         keyword_args = self.__class__.DEFAULT_LOADER_KWARGS.copy()
