@@ -691,7 +691,7 @@ class SupervisableDataset(Loggable):
             | `smoothing_coeff` | `float` | portion of probability to equally split between classes |
         """
         # lazy import: missing torch should not break the rest of the class
-        from hover.utils.torch_helper import vector_dataloader, one_hot, label_smoothing
+        from hover.utils.torch_helper import VectorDataset, one_hot, label_smoothing
 
         # take the slice that has a meaningful label
         df = self.dfs[key][self.dfs[key]["label"] != module_config.ABSTAIN_DECODED]
@@ -712,7 +712,9 @@ class SupervisableDataset(Loggable):
                 output_vectors, coefficient=smoothing_coeff
             )
         self._info(f"Preparing {key} data loader...")
-        loader = vector_dataloader(input_vectors, output_vectors, batch_size=batch_size)
+        loader = VectorDataset(input_vectors, output_vectors).loader(
+            batch_size=batch_size
+        )
         self._good(
             f"Prepared {key} loader consisting of {len(features)} examples with batch size {batch_size}"
         )
@@ -725,3 +727,11 @@ class SupervisableTextDataset(SupervisableDataset):
     """
 
     FEATURE_KEY = "text"
+
+
+class SupervisableImageDataset(SupervisableDataset):
+    """
+    ???+ note "Can add text-specific methods."
+    """
+
+    FEATURE_KEY = "image"
