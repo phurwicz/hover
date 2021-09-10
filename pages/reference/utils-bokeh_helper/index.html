@@ -588,6 +588,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#hover.utils.bokeh_helper.bokeh_hover_tooltip" class="md-nav__link">
+    bokeh_hover_tooltip()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#hover.utils.bokeh_helper.servable" class="md-nav__link">
     servable()
   </a>
@@ -652,6 +659,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#hover.utils.bokeh_helper.bokeh_hover_tooltip" class="md-nav__link">
+    bokeh_hover_tooltip()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#hover.utils.bokeh_helper.servable" class="md-nav__link">
     servable()
   </a>
@@ -711,6 +725,132 @@ auto_label_color<span class="p">(</span><span class="n">labels</span><span class
         <span class="o">**</span><span class="p">{</span><span class="n">_l</span><span class="p">:</span> <span class="n">_c</span> <span class="k">for</span> <span class="n">_l</span><span class="p">,</span> <span class="n">_c</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">use_labels</span><span class="p">,</span> <span class="n">palette</span><span class="p">)},</span>
     <span class="p">}</span>
     <span class="k">return</span> <span class="n">color_dict</span>
+</code></pre>
+</div>
+</details>
+</div>
+</div>
+<div class="doc doc-object doc-function">
+<h3 class="doc doc-heading" id="hover.utils.bokeh_helper.bokeh_hover_tooltip">
+
+        <code class="highlight language-python">
+bokeh_hover_tooltip<span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">image</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">audio</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">coords</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">custom</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>        </code>
+
+
+      </h3>
+<div class="doc doc-contents ">
+<details class="note" open="open"><summary>Create a Bokeh hover tooltip from a template.</summary><ul>
+<li>param label: whether to expect and show a "label" field.</li>
+<li>param text: whether to expect and show a "text" field.</li>
+<li>param image: whether to expect and show an "image" (url/path) field.</li>
+<li>param audio: whether to expect and show an "audio" (url/path) field.</li>
+<li>param coords: whether to show xy-coordinates.</li>
+<li>param index: whether to show indices in the dataset.</li>
+<li>param custom: {display: column} mapping of additional (text) tooltips.</li>
+</ul>
+</details>
+<details class="quote">
+          <summary>Source code in <code>hover/utils/bokeh_helper.py</code></summary>
+          <div class="highlight">
+<pre><span></span><code><span class="k">def</span> <span class="nf">bokeh_hover_tooltip</span><span class="p">(</span>
+    <span class="n">label</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">text</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">image</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">audio</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">coords</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">custom</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    ???+ note "Create a Bokeh hover tooltip from a template."</span>
+
+<span class="sd">        - param label: whether to expect and show a "label" field.</span>
+<span class="sd">        - param text: whether to expect and show a "text" field.</span>
+<span class="sd">        - param image: whether to expect and show an "image" (url/path) field.</span>
+<span class="sd">        - param audio: whether to expect and show an "audio" (url/path) field.</span>
+<span class="sd">        - param coords: whether to show xy-coordinates.</span>
+<span class="sd">        - param index: whether to show indices in the dataset.</span>
+<span class="sd">        - param custom: {display: column} mapping of additional (text) tooltips.</span>
+<span class="sd">    """</span>
+    <span class="c1"># initialize mutable default value</span>
+    <span class="n">custom</span> <span class="o">=</span> <span class="n">custom</span> <span class="ow">or</span> <span class="nb">dict</span><span class="p">()</span>
+
+    <span class="c1"># prepare encapsulation of a div box and an associated script</span>
+    <span class="n">divbox_prefix</span> <span class="o">=</span> <span class="s2">"""&lt;div class="out tooltip"&gt;</span><span class="se">\n</span><span class="s2">"""</span>
+    <span class="n">divbox_suffix</span> <span class="o">=</span> <span class="s2">"""&lt;/div&gt;</span><span class="se">\n</span><span class="s2">"""</span>
+    <span class="n">script_prefix</span> <span class="o">=</span> <span class="s2">"""&lt;script&gt;</span><span class="se">\n</span><span class="s2">"""</span>
+    <span class="n">script_suffix</span> <span class="o">=</span> <span class="s2">"""&lt;/script&gt;</span><span class="se">\n</span><span class="s2">"""</span>
+
+    <span class="c1"># dynamically add contents to the div box and the script</span>
+    <span class="n">divbox</span> <span class="o">=</span> <span class="n">divbox_prefix</span>
+    <span class="n">script</span> <span class="o">=</span> <span class="n">script_prefix</span>
+    <span class="k">if</span> <span class="n">label</span><span class="p">:</span>
+        <span class="n">divbox</span> <span class="o">+=</span> <span class="s2">"""</span>
+<span class="s2">        &lt;div&gt;</span>
+<span class="s2">            &lt;span style="font-size: 16px; color: #966;"&gt;</span>
+<span class="s2">                Label: @label</span>
+<span class="s2">            &lt;/span&gt;</span>
+<span class="s2">        &lt;/div&gt;</span>
+<span class="s2">        """</span>
+    <span class="k">if</span> <span class="n">text</span><span class="p">:</span>
+        <span class="n">divbox</span> <span class="o">+=</span> <span class="s2">"""</span>
+<span class="s2">        &lt;div style="word-wrap: break-word; width: 95%; text-overflow: ellipsis; line-height: 90%"&gt;</span>
+<span class="s2">            &lt;span style="font-size: 11px;"&gt;</span>
+<span class="s2">                Text: @text</span>
+<span class="s2">            &lt;/span&gt;</span>
+<span class="s2">        &lt;/div&gt;</span>
+<span class="s2">        """</span>
+    <span class="k">if</span> <span class="n">image</span><span class="p">:</span>
+        <span class="n">divbox</span> <span class="o">+=</span> <span class="s2">"""</span>
+<span class="s2">        &lt;div&gt;</span>
+<span class="s2">            &lt;span style="font-size: 10px;"&gt;</span>
+<span class="s2">                Image: @image</span>
+<span class="s2">            &lt;/span&gt;</span>
+<span class="s2">            &lt;img</span>
+<span class="s2">                src="@image" height="60" alt="@image" width="60"</span>
+<span class="s2">                style="float: left; margin: 0px 0px 0px 0px;"</span>
+<span class="s2">                border="2"</span>
+<span class="s2">            &gt;&lt;/img&gt;</span>
+<span class="s2">        &lt;/div&gt;</span>
+<span class="s2">        """</span>
+    <span class="k">if</span> <span class="n">audio</span><span class="p">:</span>
+        <span class="n">divbox</span> <span class="o">+=</span> <span class="s2">"""</span>
+<span class="s2">        &lt;div&gt;</span>
+<span class="s2">            &lt;span style="font-size: 10px;"&gt;</span>
+<span class="s2">                Audio: @audio</span>
+<span class="s2">            &lt;/span&gt;</span>
+<span class="s2">            &lt;audio autoplay preload="auto" src="@audio"&gt;</span>
+<span class="s2">            &lt;/audio&gt;</span>
+<span class="s2">        &lt;/div&gt;</span>
+<span class="s2">        """</span>
+    <span class="k">if</span> <span class="n">coords</span><span class="p">:</span>
+        <span class="n">divbox</span> <span class="o">+=</span> <span class="s2">"""</span>
+<span class="s2">        &lt;div&gt;</span>
+<span class="s2">            &lt;span style="font-size: 12px; color: #060;"&gt;</span>
+<span class="s2">                Coordinates: ($x, $y)</span>
+<span class="s2">            &lt;/span&gt;</span>
+<span class="s2">        &lt;/div&gt;</span>
+<span class="s2">        """</span>
+    <span class="k">if</span> <span class="n">index</span><span class="p">:</span>
+        <span class="n">divbox</span> <span class="o">+=</span> <span class="s2">"""</span>
+<span class="s2">        &lt;div&gt;</span>
+<span class="s2">            &lt;span style="font-size: 12px; color: #066;"&gt;</span>
+<span class="s2">                Index: [$index]</span>
+<span class="s2">            &lt;/span&gt;</span>
+<span class="s2">        &lt;/div&gt;</span>
+<span class="s2">        """</span>
+    <span class="k">for</span> <span class="n">_key</span><span class="p">,</span> <span class="n">_field</span> <span class="ow">in</span> <span class="n">custom</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">divbox</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">"""</span>
+<span class="s2">        &lt;div&gt;</span>
+<span class="s2">            &lt;span style="font-size: 12px; color: #606;"&gt;</span>
+<span class="s2">                </span><span class="si">{</span><span class="n">_key</span><span class="si">}</span><span class="s2">: @</span><span class="si">{</span><span class="n">_field</span><span class="si">}</span><span class="s2"></span>
+<span class="s2">            &lt;/span&gt;</span>
+<span class="s2">        &lt;/div&gt;</span>
+<span class="s2">        """</span>
+
+    <span class="n">divbox</span> <span class="o">+=</span> <span class="n">divbox_suffix</span>
+    <span class="n">script</span> <span class="o">+=</span> <span class="n">script_suffix</span>
+    <span class="k">return</span> <span class="n">divbox</span> <span class="o">+</span> <span class="n">script</span>
 </code></pre>
 </div>
 </details>

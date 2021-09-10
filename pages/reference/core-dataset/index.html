@@ -268,6 +268,11 @@
   </a>
 </li>
 <li class="md-nav__item">
+<a class="md-nav__link" href="#hover.core.dataset.SupervisableDataset.from_pandas">
+    from_pandas()
+  </a>
+</li>
+<li class="md-nav__item">
 <a class="md-nav__link" href="#hover.core.dataset.SupervisableDataset.loader">
     loader()
   </a>
@@ -283,6 +288,11 @@
   </a>
 </li>
 <li class="md-nav__item">
+<a class="md-nav__link" href="#hover.core.dataset.SupervisableDataset.setup_sel_table">
+    setup_sel_table()
+  </a>
+</li>
+<li class="md-nav__item">
 <a class="md-nav__link" href="#hover.core.dataset.SupervisableDataset.setup_widgets">
     setup_widgets()
   </a>
@@ -290,6 +300,11 @@
 <li class="md-nav__item">
 <a class="md-nav__link" href="#hover.core.dataset.SupervisableDataset.subscribe_data_commit">
     subscribe_data_commit()
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#hover.core.dataset.SupervisableDataset.subscribe_selection_view">
+    subscribe_selection_view()
   </a>
 </li>
 <li class="md-nav__item">
@@ -305,6 +320,11 @@
 <li class="md-nav__item">
 <a class="md-nav__link" href="#hover.core.dataset.SupervisableDataset.synchronize_dictl_to_df">
     synchronize_dictl_to_df()
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#hover.core.dataset.SupervisableDataset.to_pandas">
+    to_pandas()
   </a>
 </li>
 <li class="md-nav__item">
@@ -450,6 +470,11 @@
   </a>
 </li>
 <li class="md-nav__item">
+<a class="md-nav__link" href="#hover.core.dataset.SupervisableDataset.from_pandas">
+    from_pandas()
+  </a>
+</li>
+<li class="md-nav__item">
 <a class="md-nav__link" href="#hover.core.dataset.SupervisableDataset.loader">
     loader()
   </a>
@@ -465,6 +490,11 @@
   </a>
 </li>
 <li class="md-nav__item">
+<a class="md-nav__link" href="#hover.core.dataset.SupervisableDataset.setup_sel_table">
+    setup_sel_table()
+  </a>
+</li>
+<li class="md-nav__item">
 <a class="md-nav__link" href="#hover.core.dataset.SupervisableDataset.setup_widgets">
     setup_widgets()
   </a>
@@ -472,6 +502,11 @@
 <li class="md-nav__item">
 <a class="md-nav__link" href="#hover.core.dataset.SupervisableDataset.subscribe_data_commit">
     subscribe_data_commit()
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#hover.core.dataset.SupervisableDataset.subscribe_selection_view">
+    subscribe_selection_view()
   </a>
 </li>
 <li class="md-nav__item">
@@ -487,6 +522,11 @@
 <li class="md-nav__item">
 <a class="md-nav__link" href="#hover.core.dataset.SupervisableDataset.synchronize_dictl_to_df">
     synchronize_dictl_to_df()
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#hover.core.dataset.SupervisableDataset.to_pandas">
+    to_pandas()
   </a>
 </li>
 <li class="md-nav__item">
@@ -665,8 +705,10 @@ __init__<span class="p">(</span><span class="bp">self</span><span class="p">,</s
     <span class="bp">self</span><span class="o">.</span><span class="n">synchronize_df_to_dictl</span><span class="p">()</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">setup_widgets</span><span class="p">()</span>
     <span class="c1"># self.setup_label_coding() # redundant if setup_pop_table() immediately calls this again</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">setup_file_export</span><span class="p">()</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">setup_pop_table</span><span class="p">(</span><span class="n">width_policy</span><span class="o">=</span><span class="s2">"fit"</span><span class="p">,</span> <span class="n">height_policy</span><span class="o">=</span><span class="s2">"fit"</span><span class="p">)</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">_good</span><span class="p">(</span><span class="s2">"Finished initialization."</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">setup_sel_table</span><span class="p">(</span><span class="n">width_policy</span><span class="o">=</span><span class="s2">"fit"</span><span class="p">,</span> <span class="n">height_policy</span><span class="o">=</span><span class="s2">"fit"</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_good</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">: finished initialization."</span><span class="p">)</span>
 </code></pre>
 </div>
 </details>
@@ -808,7 +850,7 @@ copy<span class="p">(</span><span class="bp">self</span><span class="p">,</span>
 <span class="sd">    ???+ note "Create another instance, copying over the data entries."</span>
 <span class="sd">        | Param    | Type   | Description                          |</span>
 <span class="sd">        | :------- | :----- | :----------------------------------- |</span>
-<span class="sd">        | `use_df` | `bool` | whether to use the df or dictl form |</span>
+<span class="sd">        | `use_df` | `bool` | whether to use the df or dictl form  |</span>
 <span class="sd">    """</span>
     <span class="k">if</span> <span class="n">use_df</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">synchronize_df_to_dictl</span><span class="p">()</span>
@@ -873,6 +915,60 @@ df_deduplicate<span class="p">(</span><span class="bp">self</span><span class="p
         <span class="p">)[</span><span class="n">columns</span><span class="p">[</span><span class="n">_key</span><span class="p">]]</span>
         <span class="n">after</span><span class="p">[</span><span class="n">_key</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dfs</span><span class="p">[</span><span class="n">_key</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_info</span><span class="p">(</span><span class="sa">f</span><span class="s2">"--subset </span><span class="si">{</span><span class="n">_key</span><span class="si">}</span><span class="s2"> rows: </span><span class="si">{</span><span class="n">before</span><span class="p">[</span><span class="n">_key</span><span class="p">]</span><span class="si">}</span><span class="s2"> -&gt; </span><span class="si">{</span><span class="n">after</span><span class="p">[</span><span class="n">_key</span><span class="p">]</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
+</code></pre>
+</div>
+</details>
+</div>
+</div>
+<div class="doc doc-object doc-method">
+<h3 class="doc doc-heading" id="hover.core.dataset.SupervisableDataset.from_pandas">
+<code class="highlight language-python">
+from_pandas<span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> </code>
+<span class="doc doc-properties">
+<small class="doc doc-property doc-property-classmethod"><code>classmethod</code></small>
+</span>
+</h3>
+<div class="doc doc-contents">
+<details class="note" open="open"><summary>Import from a pandas DataFrame.</summary><table>
+<thead>
+<tr>
+<th align="left">Param</th>
+<th align="left">Type</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code>df</code></td>
+<td align="left"><code>DataFrame</code></td>
+<td align="left">with a "SUBSET" field dividing subsets</td>
+</tr>
+</tbody>
+</table>
+</details>
+<details class="quote">
+<summary>Source code in <code>hover/core/dataset.py</code></summary>
+<div class="highlight">
+<pre><span></span><code><span class="nd">@classmethod</span>
+<span class="k">def</span> <span class="nf">from_pandas</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    ???+ note "Import from a pandas DataFrame."</span>
+<span class="sd">        | Param    | Type   | Description                          |</span>
+<span class="sd">        | :------- | :----- | :----------------------------------- |</span>
+<span class="sd">        | `df` | `DataFrame` | with a "SUBSET" field dividing subsets |</span>
+<span class="sd">    """</span>
+    <span class="n">dictls</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">_subset</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"raw"</span><span class="p">,</span> <span class="s2">"train"</span><span class="p">,</span> <span class="s2">"dev"</span><span class="p">,</span> <span class="s2">"test"</span><span class="p">]:</span>
+        <span class="n">dictls</span><span class="p">[</span><span class="n">_subset</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="n">DATASET_SUBSET_FIELD</span><span class="p">]</span> <span class="o">==</span> <span class="n">_subset</span><span class="p">]</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(</span>
+            <span class="n">orient</span><span class="o">=</span><span class="s2">"records"</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
+        <span class="n">raw_dictl</span><span class="o">=</span><span class="n">dictls</span><span class="p">[</span><span class="s2">"raw"</span><span class="p">],</span>
+        <span class="n">train_dictl</span><span class="o">=</span><span class="n">dictls</span><span class="p">[</span><span class="s2">"train"</span><span class="p">],</span>
+        <span class="n">dev_dictl</span><span class="o">=</span><span class="n">dictls</span><span class="p">[</span><span class="s2">"dev"</span><span class="p">],</span>
+        <span class="n">test_dictl</span><span class="o">=</span><span class="n">dictls</span><span class="p">[</span><span class="s2">"test"</span><span class="p">],</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+    <span class="p">)</span>
 </code></pre>
 </div>
 </details>
@@ -1106,7 +1202,7 @@ setup_pop_table<span class="p">(</span><span class="bp">self</span><span class="
         <span class="n">pop_source</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">pop_data</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_good</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">"Pop updater: latest population with </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">classes</span><span class="p">)</span><span class="si">}</span><span class="s2"> classes."</span>
+            <span class="sa">f</span><span class="s2">"Population updater: latest population with </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">classes</span><span class="p">)</span><span class="si">}</span><span class="s2"> classes."</span>
         <span class="p">)</span>
 
     <span class="n">update_population</span><span class="p">()</span>
@@ -1114,6 +1210,66 @@ setup_pop_table<span class="p">(</span><span class="bp">self</span><span class="
 
     <span class="c1"># store the callback so that it can be referenced by other methods</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_callback_update_population</span> <span class="o">=</span> <span class="n">update_population</span>
+</code></pre>
+</div>
+</details>
+</div>
+</div>
+<div class="doc doc-object doc-method">
+<h3 class="doc doc-heading" id="hover.core.dataset.SupervisableDataset.setup_sel_table">
+<code class="highlight language-python">
+setup_sel_table<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> </code>
+</h3>
+<div class="doc doc-contents">
+<details class="note" open="open"><summary>Set up a bokeh <code>DataTable</code> widget for viewing selected data points.</summary><table>
+<thead>
+<tr>
+<th align="left">Param</th>
+<th align="left">Type</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code>**kwargs</code></td>
+<td align="left"></td>
+<td align="left">forwarded to the <code>DataTable</code></td>
+</tr>
+</tbody>
+</table>
+</details>
+<details class="quote">
+<summary>Source code in <code>hover/core/dataset.py</code></summary>
+<div class="highlight">
+<pre><span></span><code><span class="k">def</span> <span class="nf">setup_sel_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    ???+ note "Set up a bokeh `DataTable` widget for viewing selected data points."</span>
+
+<span class="sd">        | Param      | Type   | Description                  |</span>
+<span class="sd">        | :--------- | :----- | :--------------------------- |</span>
+<span class="sd">        | `**kwargs` |        | forwarded to the `DataTable` |</span>
+<span class="sd">    """</span>
+
+    <span class="k">def</span> <span class="nf">auto_columns</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">TableColumn</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="n">_col</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">_col</span><span class="p">)</span> <span class="k">for</span> <span class="n">_col</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span>
+
+    <span class="n">sel_source</span> <span class="o">=</span> <span class="n">ColumnDataSource</span><span class="p">(</span><span class="nb">dict</span><span class="p">())</span>
+    <span class="n">sel_columns</span> <span class="o">=</span> <span class="n">auto_columns</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dfs</span><span class="p">[</span><span class="s2">"train"</span><span class="p">])</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">sel_table</span> <span class="o">=</span> <span class="n">DataTable</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="n">sel_source</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">sel_columns</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">update_selection</span><span class="p">(</span><span class="n">selected_df</span><span class="p">):</span>
+        <span class="sd">"""</span>
+<span class="sd">        Callback function.</span>
+<span class="sd">        """</span>
+        <span class="c1"># push results to bokeh data source</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sel_table</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">auto_columns</span><span class="p">(</span><span class="n">selected_df</span><span class="p">)</span>
+        <span class="n">sel_source</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">selected_df</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(</span><span class="n">orient</span><span class="o">=</span><span class="s2">"list"</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_good</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">"Selection table: latest selection with </span><span class="si">{</span><span class="n">selected_df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> entries."</span>
+        <span class="p">)</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">_callback_update_selection</span> <span class="o">=</span> <span class="n">update_selection</span>
 </code></pre>
 </div>
 </details>
@@ -1146,6 +1302,12 @@ setup_widgets<span class="p">(</span><span class="bp">self</span><span class="p"
     <span class="bp">self</span><span class="o">.</span><span class="n">dedup_trigger</span> <span class="o">=</span> <span class="n">Button</span><span class="p">(</span>
         <span class="n">label</span><span class="o">=</span><span class="s2">"Dedup"</span><span class="p">,</span>
         <span class="n">button_type</span><span class="o">=</span><span class="s2">"warning"</span><span class="p">,</span>
+        <span class="n">height_policy</span><span class="o">=</span><span class="s2">"fit"</span><span class="p">,</span>
+        <span class="n">width_policy</span><span class="o">=</span><span class="s2">"min"</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">selection_viewer</span> <span class="o">=</span> <span class="n">Button</span><span class="p">(</span>
+        <span class="n">label</span><span class="o">=</span><span class="s2">"View Selected"</span><span class="p">,</span>
+        <span class="n">button_type</span><span class="o">=</span><span class="s2">"primary"</span><span class="p">,</span>
         <span class="n">height_policy</span><span class="o">=</span><span class="s2">"fit"</span><span class="p">,</span>
         <span class="n">width_policy</span><span class="o">=</span><span class="s2">"min"</span><span class="p">,</span>
     <span class="p">)</span>
@@ -1239,6 +1401,11 @@ subscribe_data_commit<span class="p">(</span><span class="bp">self</span><span c
                 <span class="k">return</span>
 
             <span class="c1"># take selected slice, ignoring ABSTAIN'ed rows</span>
+            <span class="c1"># CAUTION: applying selected_idx from explorer.source to self.df</span>
+            <span class="c1">#     this assumes that the source and the df have consistent entries.</span>
+            <span class="c1"># Consider this:</span>
+            <span class="c1">#    keep_cols = self.dfs[sub_k].columns</span>
+            <span class="c1">#    sel_slice = explorer.dfs[sub_v].iloc[selected_idx][keep_cols]</span>
             <span class="n">sel_slice</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dfs</span><span class="p">[</span><span class="n">sub_k</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">selected_idx</span><span class="p">]</span>
             <span class="n">valid_slice</span> <span class="o">=</span> <span class="n">sel_slice</span><span class="p">[</span>
                 <span class="n">sel_slice</span><span class="p">[</span><span class="s2">"label"</span><span class="p">]</span> <span class="o">!=</span> <span class="n">module_config</span><span class="o">.</span><span class="n">ABSTAIN_DECODED</span>
@@ -1267,6 +1434,70 @@ subscribe_data_commit<span class="p">(</span><span class="bp">self</span><span c
     <span class="bp">self</span><span class="o">.</span><span class="n">data_committer</span><span class="o">.</span><span class="n">on_click</span><span class="p">(</span><span class="n">callback_commit</span><span class="p">)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_good</span><span class="p">(</span>
         <span class="sa">f</span><span class="s2">"Subscribed </span><span class="si">{</span><span class="n">explorer</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> to dataset commits: </span><span class="si">{</span><span class="n">subset_mapping</span><span class="si">}</span><span class="s2">"</span>
+    <span class="p">)</span>
+</code></pre>
+</div>
+</details>
+</div>
+</div>
+<div class="doc doc-object doc-method">
+<h3 class="doc doc-heading" id="hover.core.dataset.SupervisableDataset.subscribe_selection_view">
+<code class="highlight language-python">
+subscribe_selection_view<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">explorer</span><span class="p">,</span> <span class="n">subsets</span><span class="p">)</span> </code>
+</h3>
+<div class="doc doc-contents">
+<details class="note" open="open"><summary>Enable viewing groups of data entries, specified by a selection in an explorer.</summary><table>
+<thead>
+<tr>
+<th align="left">Param</th>
+<th align="left">Type</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code>explorer</code></td>
+<td align="left"><code>BokehBaseExplorer</code></td>
+<td align="left">the explorer to register</td>
+</tr>
+<tr>
+<td align="left"><code>subsets</code></td>
+<td align="left"><code>list</code></td>
+<td align="left">subset selections to consider</td>
+</tr>
+</tbody>
+</table>
+</details>
+<details class="quote">
+<summary>Source code in <code>hover/core/dataset.py</code></summary>
+<div class="highlight">
+<pre><span></span><code><span class="k">def</span> <span class="nf">subscribe_selection_view</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">explorer</span><span class="p">,</span> <span class="n">subsets</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    ???+ note "Enable viewing groups of data entries, specified by a selection in an explorer."</span>
+<span class="sd">        | Param            | Type   | Description                            |</span>
+<span class="sd">        | :--------------- | :----- | :------------------------------------- |</span>
+<span class="sd">        | `explorer`       | `BokehBaseExplorer` | the explorer to register  |</span>
+<span class="sd">        | `subsets`        | `list` | subset selections to consider          |</span>
+<span class="sd">    """</span>
+    <span class="k">assert</span> <span class="p">(</span>
+        <span class="nb">isinstance</span><span class="p">(</span><span class="n">subsets</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">subsets</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span>
+    <span class="p">),</span> <span class="s2">"Expected a non-empty list of subsets"</span>
+
+    <span class="k">def</span> <span class="nf">callback_view</span><span class="p">():</span>
+        <span class="n">sel_slices</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">subset</span> <span class="ow">in</span> <span class="n">subsets</span><span class="p">:</span>
+            <span class="n">selected_idx</span> <span class="o">=</span> <span class="n">explorer</span><span class="o">.</span><span class="n">sources</span><span class="p">[</span><span class="n">subset</span><span class="p">]</span><span class="o">.</span><span class="n">selected</span><span class="o">.</span><span class="n">indices</span>
+            <span class="n">sub_slice</span> <span class="o">=</span> <span class="n">explorer</span><span class="o">.</span><span class="n">dfs</span><span class="p">[</span><span class="n">subset</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">selected_idx</span><span class="p">]</span>
+            <span class="n">sel_slices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sub_slice</span><span class="p">)</span>
+
+        <span class="n">selected</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">sel_slices</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="c1"># replace this with an actual display (and analysis)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_callback_update_selection</span><span class="p">(</span><span class="n">selected</span><span class="p">)</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">selection_viewer</span><span class="o">.</span><span class="n">on_click</span><span class="p">(</span><span class="n">callback_view</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_good</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">"Subscribed </span><span class="si">{</span><span class="n">explorer</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> to selection view: </span><span class="si">{</span><span class="n">subsets</span><span class="si">}</span><span class="s2">"</span>
     <span class="p">)</span>
 </code></pre>
 </div>
@@ -1386,6 +1617,53 @@ synchronize_dictl_to_df<span class="p">(</span><span class="bp">self</span><span
 </div>
 </div>
 <div class="doc doc-object doc-method">
+<h3 class="doc doc-heading" id="hover.core.dataset.SupervisableDataset.to_pandas">
+<code class="highlight language-python">
+to_pandas<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">use_df</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> </code>
+</h3>
+<div class="doc doc-contents">
+<details class="note" open="open"><summary>Export to a pandas DataFrame.</summary><table>
+<thead>
+<tr>
+<th align="left">Param</th>
+<th align="left">Type</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code>use_df</code></td>
+<td align="left"><code>bool</code></td>
+<td align="left">whether to use the df or dictl form</td>
+</tr>
+</tbody>
+</table>
+</details>
+<details class="quote">
+<summary>Source code in <code>hover/core/dataset.py</code></summary>
+<div class="highlight">
+<pre><span></span><code><span class="k">def</span> <span class="nf">to_pandas</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">use_df</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    ???+ note "Export to a pandas DataFrame."</span>
+<span class="sd">        | Param    | Type   | Description                          |</span>
+<span class="sd">        | :------- | :----- | :----------------------------------- |</span>
+<span class="sd">        | `use_df` | `bool` | whether to use the df or dictl form  |</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">use_df</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">synchronize_dictl_to_df</span><span class="p">()</span>
+    <span class="n">dfs</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">_subset</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"raw"</span><span class="p">,</span> <span class="s2">"train"</span><span class="p">,</span> <span class="s2">"dev"</span><span class="p">,</span> <span class="s2">"test"</span><span class="p">]:</span>
+        <span class="n">_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dfs</span><span class="p">[</span><span class="n">_subset</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">_df</span><span class="p">[</span><span class="n">DATASET_SUBSET_FIELD</span><span class="p">]</span> <span class="o">=</span> <span class="n">_subset</span>
+        <span class="n">dfs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_df</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">dfs</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</code></pre>
+</div>
+</details>
+</div>
+</div>
+<div class="doc doc-object doc-method">
 <h3 class="doc doc-heading" id="hover.core.dataset.SupervisableDataset.validate_labels">
 <code class="highlight language-python">
 validate_labels<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">raise_exception</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> </code>
@@ -1453,8 +1731,15 @@ view<span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">column</span><span class="p">(</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">help_div</span><span class="p">,</span>
-        <span class="n">row</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">update_pusher</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_committer</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dedup_trigger</span><span class="p">),</span>
+        <span class="n">row</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">update_pusher</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data_committer</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dedup_trigger</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">selection_viewer</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">file_exporter</span><span class="p">,</span>
+        <span class="p">),</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pop_table</span><span class="p">,</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sel_table</span><span class="p">,</span>
     <span class="p">)</span>
 </code></pre>
 </div>

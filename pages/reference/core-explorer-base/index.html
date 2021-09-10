@@ -300,6 +300,11 @@
   </a>
 </li>
 <li class="md-nav__item">
+<a class="md-nav__link" href="#hover.core.explorer.base.BokehBaseExplorer.value_patch">
+    value_patch()
+  </a>
+</li>
+<li class="md-nav__item">
 <a class="md-nav__link" href="#hover.core.explorer.base.BokehBaseExplorer.view">
     view()
   </a>
@@ -430,6 +435,11 @@
   </a>
 </li>
 <li class="md-nav__item">
+<a class="md-nav__link" href="#hover.core.explorer.base.BokehBaseExplorer.value_patch">
+    value_patch()
+  </a>
+</li>
+<li class="md-nav__item">
 <a class="md-nav__link" href="#hover.core.explorer.base.BokehBaseExplorer.view">
     view()
   </a>
@@ -534,20 +544,20 @@ __init__<span class="p">(</span><span class="bp">self</span><span class="p">,</s
 <span class="sd">    """</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">figure_kwargs</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">"tools"</span><span class="p">:</span> <span class="n">STANDARD_PLOT_TOOLS</span><span class="p">,</span>
-        <span class="s2">"tooltips"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_tooltip</span><span class="p">(),</span>
+        <span class="s2">"tooltips"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_tooltip</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">"tooltips"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)),</span>
         <span class="c1"># bokeh recommends webgl for scalability</span>
         <span class="s2">"output_backend"</span><span class="p">:</span> <span class="s2">"webgl"</span><span class="p">,</span>
     <span class="p">}</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">figure_kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">figure</span> <span class="o">=</span> <span class="n">figure</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">figure_kwargs</span><span class="p">)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">glyph_kwargs</span> <span class="o">=</span> <span class="p">{</span>
         <span class="n">_key</span><span class="p">:</span> <span class="n">_dict</span><span class="p">[</span><span class="s2">"constant"</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">_key</span><span class="p">,</span> <span class="n">_dict</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">SUBSET_GLYPH_KWARGS</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
     <span class="p">}</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">_setup_widgets</span><span class="p">()</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_setup_dfs</span><span class="p">(</span><span class="n">df_dict</span><span class="p">)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_setup_sources</span><span class="p">()</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_setup_widgets</span><span class="p">()</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_activate_search_builtin</span><span class="p">()</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">figure</span> <span class="o">=</span> <span class="n">figure</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">figure_kwargs</span><span class="p">)</span>
 </code></pre>
 </div>
 </details>
@@ -556,7 +566,7 @@ __init__<span class="p">(</span><span class="bp">self</span><span class="p">,</s
 <div class="doc doc-object doc-method">
 <h3 class="doc doc-heading" id="hover.core.explorer.base.BokehBaseExplorer.activate_search">
 <code class="highlight language-python">
-activate_search<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">,</span> <span class="n">altered_param</span><span class="o">=</span><span class="p">(</span><span class="s1">'size'</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span> </code>
+activate_search<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">subset</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">,</span> <span class="n">altered_param</span><span class="o">=</span><span class="p">(</span><span class="s1">'size'</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span> </code>
 </h3>
 <div class="doc doc-contents">
 <details class="note" open="open"><summary>Left to child classes that have a specific feature format.</summary><table>
@@ -569,9 +579,9 @@ activate_search<span class="p">(</span><span class="bp">self</span><span class="
 </thead>
 <tbody>
 <tr>
-<td align="left"><code>source</code></td>
-<td align="left"><code>bool</code></td>
-<td align="left">the <code>ColumnDataSource</code> to use</td>
+<td align="left"><code>subset</code></td>
+<td align="left"><code>str</code></td>
+<td align="left">the subset to activate search on</td>
 </tr>
 <tr>
 <td align="left"><code>kwargs</code></td>
@@ -590,13 +600,13 @@ activate_search<span class="p">(</span><span class="bp">self</span><span class="
 <summary>Source code in <code>hover/core/explorer/base.py</code></summary>
 <div class="highlight">
 <pre><span></span><code><span class="nd">@abstractmethod</span>
-<span class="k">def</span> <span class="nf">activate_search</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">,</span> <span class="n">altered_param</span><span class="o">=</span><span class="p">(</span><span class="s2">"size"</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">)):</span>
+<span class="k">def</span> <span class="nf">activate_search</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">subset</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">,</span> <span class="n">altered_param</span><span class="o">=</span><span class="p">(</span><span class="s2">"size"</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">)):</span>
     <span class="sd">"""</span>
 <span class="sd">    ???+ note "Left to child classes that have a specific feature format."</span>
 
 <span class="sd">        | Param           | Type    | Description                   |</span>
 <span class="sd">        | :-------------- | :------ | :---------------------------  |</span>
-<span class="sd">        | `source`        | `bool`  | the `ColumnDataSource` to use |</span>
+<span class="sd">        | `subset`        | `str`   | the subset to activate search on |</span>
 <span class="sd">        | `kwargs`        | `bool`  | kwargs for the plot to add to |</span>
 <span class="sd">        | `altered_param` | `tuple` | (attribute, positive, negative, default) |</span>
 <span class="sd">    """</span>
@@ -746,8 +756,27 @@ link_selection<span class="p">(</span><span class="bp">self</span><span class="p
     <span class="bp">self</span><span class="o">.</span><span class="n">_prelink_check</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
     <span class="c1"># link selection in a bidirectional manner</span>
     <span class="n">sl</span><span class="p">,</span> <span class="n">sr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">other</span><span class="o">.</span><span class="n">sources</span><span class="p">[</span><span class="n">other_key</span><span class="p">]</span>
-    <span class="n">sl</span><span class="o">.</span><span class="n">selected</span><span class="o">.</span><span class="n">js_link</span><span class="p">(</span><span class="s2">"indices"</span><span class="p">,</span> <span class="n">sr</span><span class="o">.</span><span class="n">selected</span><span class="p">,</span> <span class="s2">"indices"</span><span class="p">)</span>
-    <span class="n">sr</span><span class="o">.</span><span class="n">selected</span><span class="o">.</span><span class="n">js_link</span><span class="p">(</span><span class="s2">"indices"</span><span class="p">,</span> <span class="n">sl</span><span class="o">.</span><span class="n">selected</span><span class="p">,</span> <span class="s2">"indices"</span><span class="p">)</span>
+
+    <span class="c1"># deprecated: use js_link to sync attributes</span>
+    <span class="c1"># sl.selected.js_link("indices", sr.selected, "indices")</span>
+    <span class="c1"># sr.selected.js_link("indices", sl.selected, "indices")</span>
+    <span class="k">def</span> <span class="nf">left_to_right</span><span class="p">(</span><span class="n">attr</span><span class="p">,</span> <span class="n">old</span><span class="p">,</span> <span class="n">new</span><span class="p">):</span>
+        <span class="n">sr</span><span class="o">.</span><span class="n">selected</span><span class="o">.</span><span class="n">indices</span> <span class="o">=</span> <span class="n">sl</span><span class="o">.</span><span class="n">selected</span><span class="o">.</span><span class="n">indices</span><span class="p">[:]</span>
+
+    <span class="k">def</span> <span class="nf">right_to_left</span><span class="p">(</span><span class="n">attr</span><span class="p">,</span> <span class="n">old</span><span class="p">,</span> <span class="n">new</span><span class="p">):</span>
+        <span class="n">sl</span><span class="o">.</span><span class="n">selected</span><span class="o">.</span><span class="n">indices</span> <span class="o">=</span> <span class="n">sr</span><span class="o">.</span><span class="n">selected</span><span class="o">.</span><span class="n">indices</span><span class="p">[:]</span>
+
+    <span class="n">sl</span><span class="o">.</span><span class="n">selected</span><span class="o">.</span><span class="n">on_change</span><span class="p">(</span><span class="s2">"indices"</span><span class="p">,</span> <span class="n">left_to_right</span><span class="p">)</span>
+    <span class="n">sr</span><span class="o">.</span><span class="n">selected</span><span class="o">.</span><span class="n">on_change</span><span class="p">(</span><span class="s2">"indices"</span><span class="p">,</span> <span class="n">right_to_left</span><span class="p">)</span>
+
+    <span class="c1"># link last manual selections (pointing to the same set)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_last_selections</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">_last_selections</span><span class="p">[</span><span class="n">other_key</span><span class="p">])</span>
+
+    <span class="c1"># link selection filter functions (pointing to the same set)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_selection_filters</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+        <span class="n">other</span><span class="o">.</span><span class="n">_selection_filters</span><span class="p">[</span><span class="n">other_key</span><span class="p">]</span><span class="o">.</span><span class="n">data</span>
+    <span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_selection_filters</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">_selection_filters</span><span class="p">[</span><span class="n">other_key</span><span class="p">])</span>
 </code></pre>
 </div>
 </details>
@@ -824,6 +853,109 @@ plot<span class="p">(</span><span class="bp">self</span><span class="p">,</span>
 <span class="sd">        | `**kwargs` |       | left to child classes |</span>
 <span class="sd">    """</span>
     <span class="k">pass</span>
+</code></pre>
+</div>
+</details>
+</div>
+</div>
+<div class="doc doc-object doc-method">
+<h3 class="doc doc-heading" id="hover.core.explorer.base.BokehBaseExplorer.value_patch">
+<code class="highlight language-python">
+value_patch<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">col_original</span><span class="p">,</span> <span class="n">col_patch</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> </code>
+</h3>
+<div class="doc doc-contents">
+<details class="note" open="open"><summary>Allow source values to be dynamically patched through a slider.</summary><table>
+<thead>
+<tr>
+<th align="left">Param</th>
+<th align="left">Type</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code>col_original</code></td>
+<td align="left"><code>str</code></td>
+<td align="left">column of values before the patch</td>
+</tr>
+<tr>
+<td align="left"><code>col_patch</code></td>
+<td align="left"><code>str</code></td>
+<td align="left">column of list of values to use as patches</td>
+</tr>
+<tr>
+<td align="left"><code>**kwargs</code></td>
+<td align="left"></td>
+<td align="left">forwarded to the slider</td>
+</tr>
+</tbody>
+</table>
+<p><a href="https://github.com/bokeh/bokeh/blob/2.3.0/examples/howto/patch_app.py">Reference</a></p>
+</details>
+<details class="quote">
+<summary>Source code in <code>hover/core/explorer/base.py</code></summary>
+<div class="highlight">
+<pre><span></span><code><span class="k">def</span> <span class="nf">value_patch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">col_original</span><span class="p">,</span> <span class="n">col_patch</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    ???+ note "Allow source values to be dynamically patched through a slider."</span>
+<span class="sd">        | Param            | Type   | Description                  |</span>
+<span class="sd">        | :--------------- | :----- | :--------------------------- |</span>
+<span class="sd">        | `col_original`   | `str`  | column of values before the patch |</span>
+<span class="sd">        | `col_patch`      | `str`  | column of list of values to use as patches |</span>
+<span class="sd">        | `**kwargs`       |        | forwarded to the slider |</span>
+
+<span class="sd">        [Reference](https://github.com/bokeh/bokeh/blob/2.3.0/examples/howto/patch_app.py)</span>
+<span class="sd">    """</span>
+    <span class="c1"># add a patch slider to widgets, if none exist</span>
+    <span class="k">if</span> <span class="s2">"patch_slider"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dynamic_widgets</span><span class="p">:</span>
+        <span class="n">slider</span> <span class="o">=</span> <span class="n">Slider</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">slider</span><span class="o">.</span><span class="n">disabled</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dynamic_widgets</span><span class="p">[</span><span class="s2">"patch_slider"</span><span class="p">]</span> <span class="o">=</span> <span class="n">slider</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">slider</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dynamic_widgets</span><span class="p">[</span><span class="s2">"patch_slider"</span><span class="p">]</span>
+
+    <span class="c1"># create a slider-adjusting callback exposed to the outside</span>
+    <span class="k">def</span> <span class="nf">adjust_slider</span><span class="p">():</span>
+        <span class="sd">"""</span>
+<span class="sd">        Infer slider length from the number of patch values.</span>
+<span class="sd">        """</span>
+        <span class="n">num_patches</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">for</span> <span class="n">_key</span><span class="p">,</span> <span class="n">_df</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dfs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">assert</span> <span class="p">(</span>
+                <span class="n">col_patch</span> <span class="ow">in</span> <span class="n">_df</span><span class="o">.</span><span class="n">columns</span>
+            <span class="p">),</span> <span class="sa">f</span><span class="s2">"Subset </span><span class="si">{</span><span class="n">_key</span><span class="si">}</span><span class="s2"> expecting column </span><span class="si">{</span><span class="n">col_patch</span><span class="si">}</span><span class="s2"> among columns, got </span><span class="si">{</span><span class="n">_df</span><span class="o">.</span><span class="n">columns</span><span class="si">}</span><span class="s2">"</span>
+            <span class="c1"># find all array lengths; note that the data subset can be empty</span>
+            <span class="n">_num_patches_seen</span> <span class="o">=</span> <span class="n">_df</span><span class="p">[</span><span class="n">col_patch</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="nb">len</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>
+            <span class="k">assert</span> <span class="p">(</span>
+                <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">_num_patches_seen</span><span class="p">))</span> <span class="o">&lt;=</span> <span class="mi">1</span>
+            <span class="p">),</span> <span class="sa">f</span><span class="s2">"Expecting consistent number of patches, got </span><span class="si">{</span><span class="n">_num_patches_seen</span><span class="si">}</span><span class="s2">"</span>
+            <span class="n">_num_patches</span> <span class="o">=</span> <span class="n">_num_patches_seen</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="n">_df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="kc">None</span>
+
+            <span class="c1"># if a previous subset has implied the number of patches, run a consistency check</span>
+            <span class="k">if</span> <span class="n">num_patches</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">num_patches</span> <span class="o">=</span> <span class="n">_num_patches</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">assert</span> <span class="p">(</span>
+                    <span class="n">num_patches</span> <span class="o">==</span> <span class="n">_num_patches</span>
+                <span class="p">),</span> <span class="sa">f</span><span class="s2">"Conflicting number of patches: </span><span class="si">{</span><span class="n">num_patches</span><span class="si">}</span><span class="s2"> vs </span><span class="si">{</span><span class="n">_num_patches</span><span class="si">}</span><span class="s2">"</span>
+
+        <span class="k">assert</span> <span class="n">num_patches</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"Expecting at least 2 patches, got </span><span class="si">{</span><span class="n">num_patches</span><span class="si">}</span><span class="s2">"</span>
+        <span class="n">slider</span><span class="o">.</span><span class="n">end</span> <span class="o">=</span> <span class="n">num_patches</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="n">slider</span><span class="o">.</span><span class="n">disabled</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">_dynamic_callbacks</span><span class="p">[</span><span class="s2">"adjust_patch_slider"</span><span class="p">]</span> <span class="o">=</span> <span class="n">adjust_slider</span>
+
+    <span class="c1"># create the callback for patching values</span>
+    <span class="k">def</span> <span class="nf">update_patch</span><span class="p">(</span><span class="n">attr</span><span class="p">,</span> <span class="n">old</span><span class="p">,</span> <span class="n">new</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">_key</span><span class="p">,</span> <span class="n">_df</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dfs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="c1"># calculate the patch corresponding to slider value</span>
+            <span class="n">_value</span> <span class="o">=</span> <span class="p">[</span><span class="n">_arr</span><span class="p">[</span><span class="n">new</span><span class="p">]</span> <span class="k">for</span> <span class="n">_arr</span> <span class="ow">in</span> <span class="n">_df</span><span class="p">[</span><span class="n">col_patch</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">]</span>
+            <span class="n">_slice</span> <span class="o">=</span> <span class="nb">slice</span><span class="p">(</span><span class="n">_df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">_patch</span> <span class="o">=</span> <span class="p">{</span><span class="n">col_original</span><span class="p">:</span> <span class="p">[(</span><span class="n">_slice</span><span class="p">,</span> <span class="n">_value</span><span class="p">)]}</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">[</span><span class="n">_key</span><span class="p">]</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="n">_patch</span><span class="p">)</span>
+
+    <span class="n">slider</span><span class="o">.</span><span class="n">on_change</span><span class="p">(</span><span class="s2">"value"</span><span class="p">,</span> <span class="n">update_patch</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_good</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Patching </span><span class="si">{</span><span class="n">col_original</span><span class="si">}</span><span class="s2"> using </span><span class="si">{</span><span class="n">col_patch</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 </code></pre>
 </div>
 </details>

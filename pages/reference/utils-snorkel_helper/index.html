@@ -728,6 +728,11 @@ the decorated function should return the original string label, not its encoding
 <span class="sd">        | `label_encoder` | `dict` | {decoded_label -&gt; encoded_label} mapping, if you also want an original snorkel-style labeling function linked as a `.snorkel` attribute |</span>
 <span class="sd">        | `**kwargs`      |        | forwarded to `snorkel`'s `labeling_function()` |</span>
 <span class="sd">    """</span>
+    <span class="c1"># lazy import of optional dependency</span>
+    <span class="kn">from</span> <span class="nn">snorkel.labeling</span> <span class="kn">import</span> <span class="p">(</span>
+        <span class="n">labeling_function</span> <span class="k">as</span> <span class="n">snorkel_lf</span><span class="p">,</span>
+        <span class="n">LabelingFunction</span> <span class="k">as</span> <span class="n">SnorkelLF</span><span class="p">,</span>
+    <span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
         <span class="c1"># set up kwargs for Snorkel's LF</span>

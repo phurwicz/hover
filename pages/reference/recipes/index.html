@@ -497,7 +497,7 @@
 <div class="doc doc-object doc-function">
 <h3 class="doc doc-heading" id="hover.recipes.stable.linked_annotator">
 <code class="highlight language-python">
-linked_annotator<span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">600</span><span class="p">)</span> </code>
+linked_annotator<span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> </code>
 </h3>
 <div class="doc doc-contents">
 <details class="note" open="open"><summary>Display the dataset on a 2D map in two views, one for search and one for annotation.</summary><table>
@@ -515,14 +515,9 @@ linked_annotator<span class="p">(</span><span class="n">dataset</span><span clas
 <td align="left">the dataset to link to</td>
 </tr>
 <tr>
-<td align="left"><code>height</code></td>
-<td align="left"><code>int</code></td>
-<td align="left">height of each Bokeh explorer plot</td>
-</tr>
-<tr>
-<td align="left"><code>width</code></td>
-<td align="left"><code>int</code></td>
-<td align="left">width of each Bokeh explorer plot</td>
+<td align="left"><code>**kwargs</code></td>
+<td align="left"></td>
+<td align="left">kwargs to forward to each Bokeh figure</td>
 </tr>
 </tbody>
 </table>
@@ -548,15 +543,14 @@ linked_annotator<span class="p">(</span><span class="n">dataset</span><span clas
 <summary>Source code in <code>hover/recipes/stable.py</code></summary>
 <div class="highlight">
 <pre><span></span><code><span class="nd">@servable</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">"Linked Annotator"</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">linked_annotator</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">600</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">linked_annotator</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">"""</span>
 <span class="sd">    ???+ note "Display the dataset on a 2D map in two views, one for search and one for annotation."</span>
 
 <span class="sd">        | Param     | Type     | Description                          |</span>
 <span class="sd">        | :-------- | :------- | :----------------------------------- |</span>
 <span class="sd">        | `dataset` | `SupervisableDataset` | the dataset to link to  |</span>
-<span class="sd">        | `height`  | `int`    | height of each Bokeh explorer plot   |</span>
-<span class="sd">        | `width`   | `int`    | width of each Bokeh explorer plot    |</span>
+<span class="sd">        | `**kwargs` |       | kwargs to forward to each Bokeh figure |</span>
 
 <span class="sd">        Expected visual layout:</span>
 
@@ -564,15 +558,7 @@ linked_annotator<span class="p">(</span><span class="n">dataset</span><span clas
 <span class="sd">        | :------------------ | :------------------ | :----------------- |</span>
 <span class="sd">        | manage data subsets | search -&gt; highlight | make annotations   |</span>
 <span class="sd">    """</span>
-    <span class="n">finder</span> <span class="o">=</span> <span class="n">standard_finder</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">)</span>
-    <span class="n">annotator</span> <span class="o">=</span> <span class="n">standard_annotator</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">)</span>
-
-    <span class="c1"># link coordinates and selections</span>
-    <span class="n">finder</span><span class="o">.</span><span class="n">link_xy_range</span><span class="p">(</span><span class="n">annotator</span><span class="p">)</span>
-    <span class="n">finder</span><span class="o">.</span><span class="n">link_selection</span><span class="p">(</span><span class="s2">"raw"</span><span class="p">,</span> <span class="n">annotator</span><span class="p">,</span> <span class="s2">"raw"</span><span class="p">)</span>
-
-    <span class="n">sidebar</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">view</span><span class="p">()</span>
-    <span class="n">layout</span> <span class="o">=</span> <span class="n">row</span><span class="p">(</span><span class="n">sidebar</span><span class="p">,</span> <span class="n">finder</span><span class="o">.</span><span class="n">view</span><span class="p">(),</span> <span class="n">annotator</span><span class="o">.</span><span class="n">view</span><span class="p">())</span>
+    <span class="n">layout</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">_linked_annotator</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">layout</span>
 </code></pre>
 </div>
@@ -582,7 +568,7 @@ linked_annotator<span class="p">(</span><span class="n">dataset</span><span clas
 <div class="doc doc-object doc-function">
 <h3 class="doc doc-heading" id="hover.recipes.stable.simple_annotator">
 <code class="highlight language-python">
-simple_annotator<span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">600</span><span class="p">)</span> </code>
+simple_annotator<span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> </code>
 </h3>
 <div class="doc doc-contents">
 <details class="note" open="open"><summary>Display the dataset with on a 2D map for annotation.</summary><table>
@@ -600,14 +586,9 @@ simple_annotator<span class="p">(</span><span class="n">dataset</span><span clas
 <td align="left">the dataset to link to</td>
 </tr>
 <tr>
-<td align="left"><code>height</code></td>
-<td align="left"><code>int</code></td>
-<td align="left">height of each Bokeh explorer plot</td>
-</tr>
-<tr>
-<td align="left"><code>width</code></td>
-<td align="left"><code>int</code></td>
-<td align="left">width of each Bokeh explorer plot</td>
+<td align="left"><code>**kwargs</code></td>
+<td align="left"></td>
+<td align="left">kwargs to forward to each Bokeh figure</td>
 </tr>
 </tbody>
 </table>
@@ -631,15 +612,14 @@ simple_annotator<span class="p">(</span><span class="n">dataset</span><span clas
 <summary>Source code in <code>hover/recipes/stable.py</code></summary>
 <div class="highlight">
 <pre><span></span><code><span class="nd">@servable</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">"Simple Annotator"</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">simple_annotator</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">600</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">simple_annotator</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">"""</span>
 <span class="sd">    ???+ note "Display the dataset with on a 2D map for annotation."</span>
 
 <span class="sd">        | Param     | Type     | Description                          |</span>
 <span class="sd">        | :-------- | :------- | :----------------------------------- |</span>
 <span class="sd">        | `dataset` | `SupervisableDataset` | the dataset to link to  |</span>
-<span class="sd">        | `height`  | `int`    | height of each Bokeh explorer plot   |</span>
-<span class="sd">        | `width`   | `int`    | width of each Bokeh explorer plot    |</span>
+<span class="sd">        | `**kwargs` |       | kwargs to forward to each Bokeh figure |</span>
 
 <span class="sd">        Expected visual layout:</span>
 
@@ -647,10 +627,7 @@ simple_annotator<span class="p">(</span><span class="n">dataset</span><span clas
 <span class="sd">        | :------------------ | :----------------- |</span>
 <span class="sd">        | manage data subsets | make annotations   |</span>
 <span class="sd">    """</span>
-    <span class="n">annotator</span> <span class="o">=</span> <span class="n">standard_annotator</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">)</span>
-
-    <span class="n">sidebar</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">view</span><span class="p">()</span>
-    <span class="n">layout</span> <span class="o">=</span> <span class="n">row</span><span class="p">(</span><span class="n">sidebar</span><span class="p">,</span> <span class="n">annotator</span><span class="o">.</span><span class="n">view</span><span class="p">())</span>
+    <span class="n">layout</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">_simple_annotator</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">layout</span>
 </code></pre>
 </div>
@@ -676,7 +653,7 @@ simple_annotator<span class="p">(</span><span class="n">dataset</span><span clas
 <div class="doc doc-object doc-function">
 <h3 class="doc doc-heading" id="hover.recipes.experimental.active_learning">
 <code class="highlight language-python">
-active_learning<span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">vectorizer</span><span class="p">,</span> <span class="n">vecnet_callback</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">600</span><span class="p">)</span> </code>
+active_learning<span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">vectorizer</span><span class="p">,</span> <span class="n">vecnet_callback</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> </code>
 </h3>
 <div class="doc doc-contents">
 <details class="note" open="open"><summary>Display the dataset for annotation, putting a classification model in the loop.</summary><p>Currently works most smoothly with <code>VectorNet</code>.</p>
@@ -705,14 +682,9 @@ active_learning<span class="p">(</span><span class="n">dataset</span><span class
 <td align="left">the (dataset, vectorizer) -&gt; <code>VecNet</code> function</td>
 </tr>
 <tr>
-<td align="left"><code>height</code></td>
-<td align="left"><code>int</code></td>
-<td align="left">height of each Bokeh explorer plot</td>
-</tr>
-<tr>
-<td align="left"><code>width</code></td>
-<td align="left"><code>int</code></td>
-<td align="left">width of each Bokeh explorer plot</td>
+<td align="left"><code>**kwargs</code></td>
+<td align="left"></td>
+<td align="left">kwargs to forward to each Bokeh figure</td>
 </tr>
 </tbody>
 </table>
@@ -740,7 +712,7 @@ active_learning<span class="p">(</span><span class="n">dataset</span><span class
 <summary>Source code in <code>hover/recipes/experimental.py</code></summary>
 <div class="highlight">
 <pre><span></span><code><span class="nd">@servable</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">"Active Learning"</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">active_learning</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">vectorizer</span><span class="p">,</span> <span class="n">vecnet_callback</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">600</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">active_learning</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">vectorizer</span><span class="p">,</span> <span class="n">vecnet_callback</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">"""</span>
 <span class="sd">    ???+ note "Display the dataset for annotation, putting a classification model in the loop."</span>
 <span class="sd">        Currently works most smoothly with `VectorNet`.</span>
@@ -750,8 +722,7 @@ active_learning<span class="p">(</span><span class="n">dataset</span><span class
 <span class="sd">        | `dataset` | `SupervisableDataset` | the dataset to link to  |</span>
 <span class="sd">        | `vectorizer` | `callable` | the feature -&gt; vector function  |</span>
 <span class="sd">        | `vecnet_callback` | `callable` | the (dataset, vectorizer) -&gt; `VecNet` function|</span>
-<span class="sd">        | `height`  | `int`    | height of each Bokeh explorer plot   |</span>
-<span class="sd">        | `width`   | `int`    | width of each Bokeh explorer plot    |</span>
+<span class="sd">        | `**kwargs` |       | kwargs to forward to each Bokeh figure |</span>
 
 <span class="sd">        Expected visual layout:</span>
 
@@ -759,57 +730,7 @@ active_learning<span class="p">(</span><span class="n">dataset</span><span class
 <span class="sd">        | :------------------ | :------------------------ | :----------------- | :------------------ |</span>
 <span class="sd">        | manage data subsets | inspect model predictions | make annotations   | search -&gt; highlight |</span>
 <span class="sd">    """</span>
-    <span class="c1"># building-block subroutines</span>
-    <span class="n">softlabel</span> <span class="o">=</span> <span class="n">standard_softlabel</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">)</span>
-    <span class="n">annotator</span> <span class="o">=</span> <span class="n">standard_annotator</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">)</span>
-    <span class="n">finder</span> <span class="o">=</span> <span class="n">standard_finder</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">)</span>
-
-    <span class="c1"># link coordinates and selections</span>
-    <span class="n">softlabel</span><span class="o">.</span><span class="n">link_xy_range</span><span class="p">(</span><span class="n">annotator</span><span class="p">)</span>
-    <span class="n">softlabel</span><span class="o">.</span><span class="n">link_xy_range</span><span class="p">(</span><span class="n">finder</span><span class="p">)</span>
-    <span class="n">softlabel</span><span class="o">.</span><span class="n">link_selection</span><span class="p">(</span><span class="s2">"raw"</span><span class="p">,</span> <span class="n">annotator</span><span class="p">,</span> <span class="s2">"raw"</span><span class="p">)</span>
-    <span class="n">softlabel</span><span class="o">.</span><span class="n">link_selection</span><span class="p">(</span><span class="s2">"raw"</span><span class="p">,</span> <span class="n">finder</span><span class="p">,</span> <span class="s2">"raw"</span><span class="p">)</span>
-
-    <span class="c1"># recipe-specific widget</span>
-    <span class="k">def</span> <span class="nf">setup_model_retrainer</span><span class="p">():</span>
-        <span class="n">model_retrainer</span> <span class="o">=</span> <span class="n">Button</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s2">"Train model"</span><span class="p">,</span> <span class="n">button_type</span><span class="o">=</span><span class="s2">"primary"</span><span class="p">)</span>
-        <span class="n">epochs_slider</span> <span class="o">=</span> <span class="n">Slider</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">"# epochs"</span><span class="p">)</span>
-
-        <span class="k">def</span> <span class="nf">retrain_model</span><span class="p">():</span>
-            <span class="sd">"""</span>
-<span class="sd">            Callback function.</span>
-<span class="sd">            """</span>
-            <span class="n">model_retrainer</span><span class="o">.</span><span class="n">disabled</span> <span class="o">=</span> <span class="kc">True</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">"Start training... button will be disabled temporarily."</span><span class="p">)</span>
-            <span class="n">dataset</span><span class="o">.</span><span class="n">setup_label_coding</span><span class="p">()</span>
-            <span class="n">model</span> <span class="o">=</span> <span class="n">vecnet_callback</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">vectorizer</span><span class="p">)</span>
-
-            <span class="n">train_loader</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">loader</span><span class="p">(</span><span class="s2">"train"</span><span class="p">,</span> <span class="n">vectorizer</span><span class="p">,</span> <span class="n">smoothing_coeff</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
-            <span class="n">dev_loader</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">loader</span><span class="p">(</span><span class="s2">"dev"</span><span class="p">,</span> <span class="n">vectorizer</span><span class="p">)</span>
-
-            <span class="n">_</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">train_loader</span><span class="p">,</span> <span class="n">dev_loader</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="n">epochs_slider</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
-            <span class="n">model</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">good</span><span class="p">(</span><span class="s2">"-- 1/2: retrained model"</span><span class="p">)</span>
-
-            <span class="k">for</span> <span class="n">_key</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"raw"</span><span class="p">,</span> <span class="s2">"train"</span><span class="p">,</span> <span class="s2">"dev"</span><span class="p">]:</span>
-                <span class="n">_probs</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">dfs</span><span class="p">[</span><span class="n">_key</span><span class="p">][</span><span class="s2">"text"</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
-                <span class="n">_labels</span> <span class="o">=</span> <span class="p">[</span>
-                    <span class="n">dataset</span><span class="o">.</span><span class="n">label_decoder</span><span class="p">[</span><span class="n">_val</span><span class="p">]</span> <span class="k">for</span> <span class="n">_val</span> <span class="ow">in</span> <span class="n">_probs</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
-                <span class="p">]</span>
-                <span class="n">_scores</span> <span class="o">=</span> <span class="n">_probs</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
-                <span class="n">dataset</span><span class="o">.</span><span class="n">dfs</span><span class="p">[</span><span class="n">_key</span><span class="p">][</span><span class="s2">"pred_label"</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">_labels</span><span class="p">)</span>
-                <span class="n">dataset</span><span class="o">.</span><span class="n">dfs</span><span class="p">[</span><span class="n">_key</span><span class="p">][</span><span class="s2">"pred_score"</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">_scores</span><span class="p">)</span>
-
-            <span class="n">softlabel</span><span class="o">.</span><span class="n">_update_sources</span><span class="p">()</span>
-            <span class="n">model_retrainer</span><span class="o">.</span><span class="n">disabled</span> <span class="o">=</span> <span class="kc">False</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">good</span><span class="p">(</span><span class="s2">"-- 2/2: updated predictions. Training button is re-enabled."</span><span class="p">)</span>
-
-        <span class="n">model_retrainer</span><span class="o">.</span><span class="n">on_click</span><span class="p">(</span><span class="n">retrain_model</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">model_retrainer</span><span class="p">,</span> <span class="n">epochs_slider</span>
-
-    <span class="n">model_retrainer</span><span class="p">,</span> <span class="n">epochs_slider</span> <span class="o">=</span> <span class="n">setup_model_retrainer</span><span class="p">()</span>
-    <span class="n">sidebar</span> <span class="o">=</span> <span class="n">column</span><span class="p">(</span><span class="n">model_retrainer</span><span class="p">,</span> <span class="n">epochs_slider</span><span class="p">,</span> <span class="n">dataset</span><span class="o">.</span><span class="n">view</span><span class="p">())</span>
-    <span class="n">layout</span> <span class="o">=</span> <span class="n">row</span><span class="p">(</span><span class="n">sidebar</span><span class="p">,</span> <span class="o">*</span><span class="p">[</span><span class="n">_plot</span><span class="o">.</span><span class="n">view</span><span class="p">()</span> <span class="k">for</span> <span class="n">_plot</span> <span class="ow">in</span> <span class="p">[</span><span class="n">softlabel</span><span class="p">,</span> <span class="n">annotator</span><span class="p">,</span> <span class="n">finder</span><span class="p">]])</span>
+    <span class="n">layout</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">_active_learning</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">vectorizer</span><span class="p">,</span> <span class="n">vecnet_callback</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">layout</span>
 </code></pre>
 </div>
@@ -819,7 +740,7 @@ active_learning<span class="p">(</span><span class="n">dataset</span><span class
 <div class="doc doc-object doc-function">
 <h3 class="doc doc-heading" id="hover.recipes.experimental.snorkel_crosscheck">
 <code class="highlight language-python">
-snorkel_crosscheck<span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">lf_list</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">600</span><span class="p">)</span> </code>
+snorkel_crosscheck<span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">lf_list</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> </code>
 </h3>
 <div class="doc doc-contents">
 <details class="note" open="open"><summary>Display the dataset for annotation, cross-checking with labeling functions.</summary><p>Use the dev set to check labeling functions; use the labeling functions to hint at potential annotation.</p>
@@ -843,14 +764,9 @@ snorkel_crosscheck<span class="p">(</span><span class="n">dataset</span><span cl
 <td align="left">a list of callables decorated by <code>@hover.utils.snorkel_helper.labeling_function</code></td>
 </tr>
 <tr>
-<td align="left"><code>height</code></td>
-<td align="left"><code>int</code></td>
-<td align="left">height of each Bokeh explorer plot</td>
-</tr>
-<tr>
-<td align="left"><code>width</code></td>
-<td align="left"><code>int</code></td>
-<td align="left">width of each Bokeh explorer plot</td>
+<td align="left"><code>**kwargs</code></td>
+<td align="left"></td>
+<td align="left">kwargs to forward to each Bokeh figure</td>
 </tr>
 </tbody>
 </table>
@@ -876,7 +792,7 @@ snorkel_crosscheck<span class="p">(</span><span class="n">dataset</span><span cl
 <summary>Source code in <code>hover/recipes/experimental.py</code></summary>
 <div class="highlight">
 <pre><span></span><code><span class="nd">@servable</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">"Snorkel Crosscheck"</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">snorkel_crosscheck</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">lf_list</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">600</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">snorkel_crosscheck</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">lf_list</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">"""</span>
 <span class="sd">    ???+ note "Display the dataset for annotation, cross-checking with labeling functions."</span>
 <span class="sd">        Use the dev set to check labeling functions; use the labeling functions to hint at potential annotation.</span>
@@ -885,8 +801,7 @@ snorkel_crosscheck<span class="p">(</span><span class="n">dataset</span><span cl
 <span class="sd">        | :-------- | :------- | :----------------------------------- |</span>
 <span class="sd">        | `dataset` | `SupervisableDataset` | the dataset to link to  |</span>
 <span class="sd">        | `lf_list` | `list`   | a list of callables decorated by `@hover.utils.snorkel_helper.labeling_function` |</span>
-<span class="sd">        | `height`  | `int`    | height of each Bokeh explorer plot   |</span>
-<span class="sd">        | `width`   | `int`    | width of each Bokeh explorer plot    |</span>
+<span class="sd">        | `**kwargs` |       | kwargs to forward to each Bokeh figure |</span>
 
 <span class="sd">        Expected visual layout:</span>
 
@@ -894,21 +809,7 @@ snorkel_crosscheck<span class="p">(</span><span class="n">dataset</span><span cl
 <span class="sd">        | :------------------ | :------------------------- | :----------------- |</span>
 <span class="sd">        | manage data subsets | inspect labeling functions | make annotations   |</span>
 <span class="sd">    """</span>
-    <span class="c1"># building-block subroutines</span>
-    <span class="n">snorkel</span> <span class="o">=</span> <span class="n">standard_snorkel</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">)</span>
-    <span class="n">annotator</span> <span class="o">=</span> <span class="n">standard_annotator</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">)</span>
-
-    <span class="c1"># plot labeling functions</span>
-    <span class="k">for</span> <span class="n">_lf</span> <span class="ow">in</span> <span class="n">lf_list</span><span class="p">:</span>
-        <span class="n">snorkel</span><span class="o">.</span><span class="n">plot_lf</span><span class="p">(</span><span class="n">_lf</span><span class="p">)</span>
-    <span class="n">snorkel</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">legend</span><span class="o">.</span><span class="n">click_policy</span> <span class="o">=</span> <span class="s2">"hide"</span>
-
-    <span class="c1"># link coordinates and selections</span>
-    <span class="n">snorkel</span><span class="o">.</span><span class="n">link_xy_range</span><span class="p">(</span><span class="n">annotator</span><span class="p">)</span>
-    <span class="n">snorkel</span><span class="o">.</span><span class="n">link_selection</span><span class="p">(</span><span class="s2">"raw"</span><span class="p">,</span> <span class="n">annotator</span><span class="p">,</span> <span class="s2">"raw"</span><span class="p">)</span>
-
-    <span class="n">sidebar</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">view</span><span class="p">()</span>
-    <span class="n">layout</span> <span class="o">=</span> <span class="n">row</span><span class="p">(</span><span class="n">sidebar</span><span class="p">,</span> <span class="n">snorkel</span><span class="o">.</span><span class="n">view</span><span class="p">(),</span> <span class="n">annotator</span><span class="o">.</span><span class="n">view</span><span class="p">())</span>
+    <span class="n">layout</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">_snorkel_crosscheck</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">lf_list</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">layout</span>
 </code></pre>
 </div>
@@ -1069,6 +970,9 @@ standard_annotator<span class="p">(</span><span class="n">dataset</span><span cl
 
     <span class="c1"># annotators can commit to a dataset</span>
     <span class="n">dataset</span><span class="o">.</span><span class="n">subscribe_data_commit</span><span class="p">(</span><span class="n">annotator</span><span class="p">,</span> <span class="p">{</span><span class="s2">"raw"</span><span class="p">:</span> <span class="s2">"raw"</span><span class="p">})</span>
+
+    <span class="c1"># annotators by default link the selection for preview</span>
+    <span class="n">dataset</span><span class="o">.</span><span class="n">subscribe_selection_view</span><span class="p">(</span><span class="n">annotator</span><span class="p">,</span> <span class="p">[</span><span class="s2">"raw"</span><span class="p">,</span> <span class="s2">"train"</span><span class="p">,</span> <span class="s2">"dev"</span><span class="p">,</span> <span class="s2">"test"</span><span class="p">])</span>
     <span class="k">return</span> <span class="n">annotator</span>
 </code></pre>
 </div>

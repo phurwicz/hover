@@ -621,13 +621,6 @@
   
 </li>
       
-        <li class="md-nav__item">
-  <a href="#hover.core.neural.create_vector_net_from_module" class="md-nav__link">
-    create_vector_net_from_module()
-  </a>
-  
-</li>
-      
     </ul>
   
 </nav>
@@ -817,13 +810,6 @@
   
 </li>
       
-        <li class="md-nav__item">
-  <a href="#hover.core.neural.create_vector_net_from_module" class="md-nav__link">
-    create_vector_net_from_module()
-  </a>
-  
-</li>
-      
     </ul>
   
 </nav>
@@ -872,7 +858,7 @@
 <h3 class="doc doc-heading" id="hover.core.neural.VectorNet.__init__">
 
         <code class="highlight language-python">
-__init__<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vectorizer</span><span class="p">,</span> <span class="n">architecture</span><span class="p">,</span> <span class="n">state_dict_path</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span>        </code>
+__init__<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vectorizer</span><span class="p">,</span> <span class="n">architecture</span><span class="p">,</span> <span class="n">state_dict_path</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">backup_state_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>        </code>
 
   <span class="doc doc-properties">
       <small class="doc doc-property doc-property-special"><code>special</code></small>
@@ -909,13 +895,20 @@ __init__<span class="p">(</span><span class="bp">self</span><span class="p">,</s
 <td align="left"><code>list</code></td>
 <td align="left">list of <code>str</code> classification labels</td>
 </tr>
+<tr>
+<td align="left"><code>backup_state_dict</code></td>
+<td align="left"><code>bool</code></td>
+<td align="left">whether to backup the loaded state dict</td>
+</tr>
 </tbody>
 </table>
 </details>
 <details class="quote">
           <summary>Source code in <code>hover/core/neural.py</code></summary>
           <div class="highlight">
-<pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vectorizer</span><span class="p">,</span> <span class="n">architecture</span><span class="p">,</span> <span class="n">state_dict_path</span><span class="p">,</span> <span class="n">labels</span><span class="p">):</span>
+<pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span> <span class="n">vectorizer</span><span class="p">,</span> <span class="n">architecture</span><span class="p">,</span> <span class="n">state_dict_path</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">backup_state_dict</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">):</span>
     <span class="sd">"""</span>
 <span class="sd">    ???+ note "Create the `VectorNet`, loading parameters if available."</span>
 <span class="sd">        | Param             | Type       | Description                          |</span>
@@ -924,6 +917,7 @@ __init__<span class="p">(</span><span class="bp">self</span><span class="p">,</s
 <span class="sd">        | `architecture`    | `class`    | a `torch.nn.Module` child class      |</span>
 <span class="sd">        | `state_dict_path` | `str`      | path to a (could-be-empty) `torch` state dict |</span>
 <span class="sd">        | `labels`          | `list`     | list of `str` classification labels  |</span>
+<span class="sd">        | `backup_state_dict` | `bool`   | whether to backup the loaded state dict |</span>
 <span class="sd">    """</span>
 
     <span class="c1"># set up label conversion</span>
@@ -947,10 +941,11 @@ __init__<span class="p">(</span><span class="bp">self</span><span class="p">,</s
         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Load VectorNet state path failed with </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">: e"</span><span class="p">)</span>
 
-        <span class="n">state_dict_backup_path</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">state_dict_path</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">'%Y%m</span><span class="si">%d</span><span class="s1">%H%M%S'</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span>
-        <span class="p">)</span>
-        <span class="n">copyfile</span><span class="p">(</span><span class="n">state_dict_path</span><span class="p">,</span> <span class="n">state_dict_backup_path</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">backup_state_dict</span><span class="p">:</span>
+            <span class="n">state_dict_backup_path</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">state_dict_path</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">current_time</span><span class="p">(</span><span class="s1">'%Y%m</span><span class="si">%d</span><span class="s1">%H%M%S'</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span>
+            <span class="p">)</span>
+            <span class="n">copyfile</span><span class="p">(</span><span class="n">state_dict_path</span><span class="p">,</span> <span class="n">state_dict_backup_path</span><span class="p">)</span>
 
     <span class="c1"># set a path to store updated parameters</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">nn_update_path</span> <span class="o">=</span> <span class="n">state_dict_path</span>
@@ -1550,33 +1545,6 @@ train_epoch<span class="p">(</span><span class="bp">self</span><span class="p">,
 </div>
 </div>
 </div>
-</div>
-</div>
-<div class="doc doc-object doc-function">
-<h2 class="doc doc-heading" id="hover.core.neural.create_vector_net_from_module">
-
-        <code class="highlight language-python">
-create_vector_net_from_module<span class="p">(</span><span class="n">specific_class</span><span class="p">,</span> <span class="n">model_module_name</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span>        </code>
-
-
-      </h2>
-<div class="doc doc-contents ">
-<details class="warning" open="open"><summary>Deprecated into a trivial invocation of VectorNet's class method.</summary></details>
-<details class="quote">
-          <summary>Source code in <code>hover/core/neural.py</code></summary>
-          <div class="highlight">
-<pre><span></span><code><span class="nd">@deprecated</span><span class="p">(</span>
-    <span class="n">version</span><span class="o">=</span><span class="s2">"0.4.0"</span><span class="p">,</span>
-    <span class="n">reason</span><span class="o">=</span><span class="s2">"will be removed in a future version; please use VectorNet.from_module() instead."</span><span class="p">,</span>
-<span class="p">)</span>
-<span class="k">def</span> <span class="nf">create_vector_net_from_module</span><span class="p">(</span><span class="n">specific_class</span><span class="p">,</span> <span class="n">model_module_name</span><span class="p">,</span> <span class="n">labels</span><span class="p">):</span>
-    <span class="sd">"""</span>
-<span class="sd">    ???+ warning "Deprecated into a trivial invocation of VectorNet's class method."</span>
-<span class="sd">    """</span>
-    <span class="k">return</span> <span class="n">specific_class</span><span class="o">.</span><span class="n">from_module</span><span class="p">(</span><span class="n">model_module_name</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span>
-</code></pre>
-</div>
-</details>
 </div>
 </div>
 </div>

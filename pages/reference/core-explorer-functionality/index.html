@@ -599,41 +599,16 @@ Determines the label -&gt; color mapping dynamically.</p>
 <div class="doc doc-object doc-method">
 <h3 class="doc doc-heading" id="hover.core.explorer.functionality.BokehDataFinder.plot">
 <code class="highlight language-python">
-plot<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> </code>
+plot<span class="p">(</span><span class="bp">self</span><span class="p">)</span> </code>
 </h3>
 <div class="doc doc-contents">
-<details class="note" open="open"><summary>Plot all data points.</summary><table>
-<thead>
-<tr>
-<th align="left">Param</th>
-<th align="left">Type</th>
-<th align="left">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td align="left"><code>*args</code></td>
-<td align="left"></td>
-<td align="left">for consistency</td>
-</tr>
-<tr>
-<td align="left"><code>**kwargs</code></td>
-<td align="left"></td>
-<td align="left">for consistency</td>
-</tr>
-</tbody>
-</table>
-</details>
+<details class="note" open="open"><summary>Plot all data points.</summary></details>
 <details class="quote">
 <summary>Source code in <code>hover/core/explorer/functionality.py</code></summary>
 <div class="highlight">
-<pre><span></span><code><span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<pre><span></span><code><span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="sd">"""</span>
 <span class="sd">    ???+ note "Plot all data points."</span>
-<span class="sd">        | Param      | Type  | Description           |</span>
-<span class="sd">        | :--------- | :---- | :-------------------- |</span>
-<span class="sd">        | `*args`    |       | for consistency       |</span>
-<span class="sd">        | `**kwargs` |       | for consistency       |</span>
 <span class="sd">    """</span>
     <span class="k">for</span> <span class="n">_key</span><span class="p">,</span> <span class="n">_source</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span>
