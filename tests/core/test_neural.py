@@ -52,8 +52,8 @@ class TestVectorNet(object):
     def test_train_and_evaluate(example_vecnet, mini_supervisable_text_dataset):
         vecnet = deepcopy(example_vecnet)
         dataset = mini_supervisable_text_dataset
-        dev_loader = dataset.loader("dev", vectorizer=example_vecnet.vectorizer)
-        test_loader = dataset.loader("test", vectorizer=example_vecnet.vectorizer)
+        dev_loader = dataset.loader("dev", example_vecnet.vectorizer)
+        test_loader = dataset.loader("test", example_vecnet.vectorizer)
 
         train_info = vecnet.train(dev_loader, dev_loader, epochs=5)
         accuracy, conf_mat = vecnet.evaluate(test_loader)

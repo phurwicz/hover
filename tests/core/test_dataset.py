@@ -84,5 +84,11 @@ class TestSupervisableTextDataset:
                 "The raw subset managed to produce a loader, which should not happen"
             )
         except ValueError:
+            # single vectorizer
             loader = dataset.loader("dev", dummy_vectorizer, smoothing_coeff=0.1)
+            assert isinstance(loader, DataLoader)
+            # multiple vectorizers
+            loader = dataset.loader(
+                "dev", dummy_vectorizer, dummy_vectorizer, smoothing_coeff=0.1
+            )
             assert isinstance(loader, DataLoader)

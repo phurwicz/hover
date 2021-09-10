@@ -1,12 +1,23 @@
-from hover.utils.torch_helper import vector_dataloader, one_hot, label_smoothing
+from hover.utils.torch_helper import (
+    VectorDataset,
+    MultiVectorDataset,
+    one_hot,
+    label_smoothing,
+)
 import numpy as np
 
 
-def test_vector_dataloader(num_entries=100, dim_inp=128, dim_out=3):
+def test_vector_dataset(num_entries=100, dim_inp=128, dim_out=3):
     vec_inp = np.random.rand(num_entries, dim_inp)
     vec_out = np.random.rand(num_entries, dim_out)
-    loader = vector_dataloader(vec_inp, vec_out, batch_size=min(num_entries, 16))
-    # no further assertions; just checking that the vector_dataloader function does not crash
+    loader = VectorDataset(vec_inp, vec_out).loader(batch_size=min(num_entries, 16))
+    # no further assertions at the moment
+    assert loader
+
+    loader = MultiVectorDataset([vec_inp] * 2, vec_out).loader(
+        batch_size=min(num_entries, 16)
+    )
+    # no further assertions at the moment
     assert loader
 
 
