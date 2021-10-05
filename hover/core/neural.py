@@ -174,8 +174,7 @@ class VectorNet(Loggable):
 
     def manifold_trajectory(self, inps, method="umap", **kwargs):
         """
-        ???+ note "**UPCOMING**"
-            Compute a trajectory of manifold propagation through the neural net.
+        ???+ note "Compute a propagation trajectory of the dataset manifold through the neural net."
 
             1. vectorize inps
             2. forward propagate, keeping intermediates
@@ -394,8 +393,6 @@ class MultiVectorNet(Loggable):
             train_info.append(info_dict)
             self._dynamic_params["tail_head_teachers"] = adj_func(info_dict)
 
-            self._warn(self._dynamic_params["tail_head_teachers"])
-
         return train_info
 
     def adjust_optimizer_params(self):
@@ -408,9 +405,7 @@ class MultiVectorNet(Loggable):
 
     def train_epoch(self, train_loader):
         self.adjust_optimizer_params()
-        for batch_idx, (loaded_input_list, loaded_output, index) in enumerate(
-            train_loader
-        ):
+        for batch_idx, (loaded_input_list, loaded_output, _) in enumerate(train_loader):
             self._dynamic_params["batch"] = batch_idx + 1
             self.train_batch(loaded_input_list, loaded_output)
 
@@ -538,7 +533,7 @@ class MultiVectorNet(Loggable):
             true.append(_true_batch)
 
             _logits_sum = None
-            for i, (_net, _inp) in enumerate(net_inp_pairs):
+            for _net, _inp in net_inp_pairs:
                 _logits = _net.nn(_inp.float()).detach()
                 if _logits_sum is None:
                     _logits_sum = _logits.clone()

@@ -119,3 +119,28 @@ def mini_supervisable_text_dataset_embedded(
     dataset.synchronize_df_to_dictl()
 
     return dataset
+
+
+@pytest.fixture(scope="module")
+def noisy_supervisable_text_dataset():
+    my_20ng, _, _ = newsgroups_dictl()
+
+    split_idx = int(0.8 * len(my_20ng["train"]))
+    dataset = SupervisableTextDataset(
+        raw_dictl=[],
+        train_dictl=my_20ng["train"][:split_idx],
+        dev_dictl=my_20ng["train"][split_idx:],
+        test_dictl=my_20ng["test"],
+    )
+
+    def mutate(value, prob=0.5, pool=dataset.classes):
+        """
+        Up to prob, return a draw from the pool instead of the original value.
+        """
+        if random.uniform(0.0, 1.0) < prob:
+            return random.sample(pool, 1)[0]
+        return value
+
+    dataset.dfs["train"]["label"] = dataset.dfs["train"]["label"].apply(mutate)
+    dataset.synchronize_df_to_dictl()
+    return dataset
