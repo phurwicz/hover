@@ -2,7 +2,7 @@ import pytest
 import numpy as np
 from copy import deepcopy
 from hover.core.neural import VectorNet, MultiVectorNet
-from hover.utils.denoising import identity_adjacency, cyclic_except_last
+from hover.utils.denoising import identity_adjacency, cyclic_adjacency
 
 
 @pytest.fixture
@@ -18,27 +18,22 @@ def example_vecnet(example_vecnet_args):
     return model
 
 
-@pytest.fixture
-def example_new_multivecnet(noisy_supervisable_text_dataset):
-    target_labels = noisy_supervisable_text_dataset.classes[:]
+def create_new_multivecnet(target_labels):
     module_names = [
         "fixture_module.multi_vector_net.model1",
         "fixture_module.multi_vector_net.model2",
         "fixture_module.multi_vector_net.model3",
         "fixture_module.multi_vector_net.model4",
     ]
-
-    def callback():
-        return MultiVectorNet(
-            [VectorNet.from_module(_m, target_labels) for _m in module_names]
-        )
-
-    return callback
+    return MultiVectorNet(
+        [VectorNet.from_module(_m, target_labels) for _m in module_names]
+    )
 
 
 @pytest.fixture
-def example_multivecnet(example_new_multivecnet):
-    return example_new_multivecnet()
+def example_multivecnet(mini_supervisable_text_dataset):
+    target_labels = mini_supervisable_text_dataset.classes
+    return create_new_multivecnet(target_labels)
 
 
 @pytest.mark.core
@@ -59,12 +54,13 @@ class TestVectorNet(object):
         example_vecnet.adjust_optimizer_params()
 
     @staticmethod
-    def test_predict_proba(example_vecnet):
+    def test_predict_proba(example_vecnet, mini_supervisable_text_dataset):
+        num_classes = len(mini_supervisable_text_dataset.classes)
         proba_single = example_vecnet.predict_proba("hello")
-        assert proba_single.shape[0] == 2
+        assert proba_single.shape[0] == num_classes
         proba_multi = example_vecnet.predict_proba(["hello", "bye", "ciao"])
         assert proba_multi.shape[0] == 3
-        assert proba_multi.shape[1] == 2
+        assert proba_multi.shape[1] == num_classes
 
     @staticmethod
     def test_manifold_trajectory(example_vecnet, mini_df_text):
@@ -100,18 +96,14 @@ class TestMultiVectorNet(object):
     """
 
     @staticmethod
-    def test_adjust_optimier_params(example_multivecnet):
-        example_vecnet.adjust_optimizer_params()
-
-    @staticmethod
     def test_train_and_evaluate(example_multivecnet, noisy_supervisable_text_dataset):
         """
         Verify that MultiVectorNet can be used for denoising a noised dataset.
         """
         # create two MultiVectorNets with the same setup
-        multi_a = example_new_multivecnet()
-        multi_b = example_new_multivecnet()
         dataset = noisy_supervisable_text_dataset
+        multi_a = create_new_multivecnet(dataset.classes)
+        multi_b = create_new_multivecnet(dataset.classes)
 
         # prepare multi-vector loaders
         vectorizers = [_net.vectorizer for _net in multi_a.vector_nets]
@@ -133,7 +125,7 @@ class TestMultiVectorNet(object):
                 yield {
                     "forget_rate": forget_rate,
                     "optimizer": [{"lr": 0.01, "momentum": 0.9}] * 4,
-                    "adjacency_function": cyclic_except_last,
+                    "adjacency_function": cyclic_adjacency,
                 }
 
         param_a = get_params(warmup_epochs=5, coteach_epochs=10, forget_rate=0.5)
@@ -152,5 +144,5 @@ class TestMultiVectorNet(object):
         assert isinstance(accuracy_a, float) and isinstance(accuracy_b, float)
         assert isinstance(conf_mat_a, np.ndarray) and isinstance(conf_mat_b, np.ndarray)
         assert (
-            accuracy_a > accuracy_b
-        ), f"Expected denoising to achieve better accuracy on a noised dataset, got {accuracy_a} (treatment) vs. {accuracy_b} (control)"
+            accuracy_a > accuracy_b + 1e-2
+        ), f"Expected denoising to achieve better accuracy (> 0.01 margin) on a noised dataset, got {accuracy_a} (treatment) vs. {accuracy_b} (control)"

@@ -347,7 +347,9 @@ class MultiVectorNet(Loggable):
             verbose, int
         ), f"Expected verbose as int, got {type(verbose)} {verbose}"
         self.verbose = verbose
-        self._warn("this class is not sufficiently tested. Use with caution.")
+        self._warn(
+            "this class is in preview and is not sufficiently tested. Use with caution."
+        )
 
     def train(self, train_loader, params_per_epoch, dev_loader=None):
         """
