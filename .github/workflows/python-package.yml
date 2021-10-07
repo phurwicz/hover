@@ -17,7 +17,7 @@ jobs:
       matrix:
         # these versions have worked before: 3.7.10, 3.8.8, 3.9.7
         python-version: ['3.7', '3.8', '3.9']
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        os: [ubuntu-latest, macos-latest]
 
     steps:
     - uses: actions/checkout@v2
