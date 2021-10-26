@@ -1,506 +1,908 @@
 
-<!DOCTYPE html>
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Hover over and label data rapidly.">
+      
+      
+      
+      
+        <link rel="canonical" href="https://phurwicz.github.io/hover/pages/reference/recipes/">
+      
+      <link rel="icon" href="../../../images/favicon.png">
+      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-7.3.4">
+    
+    
+      
+        <title>hover.recipes - Hover</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.db9e7362.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.3f5d1f46.min.css">
+        
+      
+    
+    
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>:root{--md-text-font-family:"Roboto";--md-code-font-family:"Roboto Mono"}</style>
+      
+    
+    
+    
+      <link rel="stylesheet" href="../../../assets/_mkdocstrings.css">
+    
+    
+      
 
-<html class="no-js" lang="en">
-<head>
-<meta charset="utf-8"/>
-<meta content="width=device-width,initial-scale=1" name="viewport"/>
-<meta content="Hover over and label data rapidly." name="description"/>
-<link href="https://phurwicz.github.io/hover/pages/reference/recipes/" rel="canonical"/>
-<link href="../../../images/favicon.png" rel="shortcut icon"/>
-<meta content="mkdocs-1.1, mkdocs-material-6.1.6" name="generator"/>
-<title>hover.recipes - Hover</title>
-<link href="../../../assets/stylesheets/main.6910b76c.min.css" rel="stylesheet"/>
-<link href="../../../assets/stylesheets/palette.196e0c26.min.css" rel="stylesheet"/>
-<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&amp;display=fallback" rel="stylesheet"/>
-<style>body,input{font-family:"Roboto",-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono",SFMono-Regular,Consolas,Menlo,monospace}</style>
-</head>
-<body data-md-color-accent="none" data-md-color-primary="none" data-md-color-scheme="" dir="ltr">
-<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
-<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
-<label class="md-overlay" for="__drawer"></label>
-<div data-md-component="skip">
-<a class="md-skip" href="#hoverrecipes">
+  
+
+
+  
+
+  
+
+
+  <script>window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga("create","UA-211167044-1","auto"),ga("set","anonymizeIp",!0),ga("send","pageview"),document.addEventListener("DOMContentLoaded",function(){document.forms.search&&document.forms.search.query.addEventListener("blur",function(){var e;this.value&&(e=document.location.pathname,ga("send","pageview",e+"?q="+this.value))}),"undefined"!=typeof location$&&location$.subscribe(function(e){ga("send","pageview",e.pathname)})})</script>
+  <script async src="https://www.google-analytics.com/analytics.js"></script>
+
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="none" data-md-color-accent="none">
+  
+    
+    <script>function __prefix(e){return new URL("../../..",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#hoverrecipes" class="md-skip">
           Skip to content
         </a>
-</div>
-<div data-md-component="announce">
-</div>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      
+
 <header class="md-header" data-md-component="header">
-<nav aria-label="Header" class="md-header-nav md-grid">
-<a aria-label="Hover" class="md-header-nav__button md-logo" href="https://phurwicz.github.io/hover" title="Hover">
-<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9 7v10h2v-4h2v4h2V7h-2v4h-2V7H9M5 3h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2z"></path></svg>
-</a>
-<label class="md-header-nav__button md-icon" for="__drawer">
-<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"></path></svg>
-</label>
-<div class="md-header-nav__title" data-md-component="header-title">
-<div class="md-header-nav__ellipsis">
-<span class="md-header-nav__topic md-ellipsis">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="Hover" class="md-header__button md-logo" aria-label="Hover" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9 7v10h2v-4h2v4h2V7h-2v4h-2V7H9M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
             Hover
           </span>
-<span class="md-header-nav__topic md-ellipsis">
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
             
               hover.recipes
             
           </span>
-</div>
-</div>
-<label class="md-header-nav__button md-icon" for="__search">
-<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"></path></svg>
-</label>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
 <div class="md-search" data-md-component="search" role="dialog">
-<label class="md-search__overlay" for="__search"></label>
-<div class="md-search__inner" role="search">
-<form class="md-search__form" name="search">
-<input aria-label="Search" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" data-md-state="active" name="query" placeholder="Search" required="" spellcheck="false" type="text"/>
-<label class="md-search__icon md-icon" for="__search">
-<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"></path></svg>
-<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"></path></svg>
-</label>
-<button aria-label="Clear" class="md-search__icon md-icon" data-md-component="search-reset" tabindex="-1" type="reset">
-<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"></path></svg>
-</button>
-</form>
-<div class="md-search__output">
-<div class="md-search__scrollwrap" data-md-scrollfix="">
-<div class="md-search-result" data-md-component="search-result">
-<div class="md-search-result__meta">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
             Initializing search
           </div>
-<ol class="md-search-result__list"></ol>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-</div>
-</div>
-</div>
-</div>
-<div class="md-header-nav__source">
-<a class="md-source" href="https://github.com/phurwicz/hover/" title="Go to repository">
-<div class="md-source__icon md-icon">
-<svg viewbox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 00-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 01-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 000 40.81l195.61 195.6a28.86 28.86 0 0040.8 0l194.69-194.69a28.86 28.86 0 000-40.81z"></path></svg>
-</div>
-<div class="md-source__repository">
+    
+    
+      <div class="md-header__source">
+        
+<a href="https://github.com/phurwicz/hover/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
     phurwicz/hover
   </div>
 </a>
-</div>
-</nav>
+      </div>
+    
+  </nav>
+  
 </header>
-<div class="md-container" data-md-component="container">
-<nav aria-label="Tabs" class="md-tabs md-tabs--active" data-md-component="tabs">
-<div class="md-tabs__inner md-grid">
-<ul class="md-tabs__list">
-<li class="md-tabs__item">
-<a class="md-tabs__link" href="../../..">
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-tabs__inner md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../.." class="md-tabs__link">
       Home
     </a>
-</li>
-<li class="md-tabs__item">
-<a class="md-tabs__link" href="../../tutorial/t0-quickstart/">
+  </li>
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../tutorial/t0-quickstart/" class="md-tabs__link">
         Tutorial
       </a>
-</li>
-<li class="md-tabs__item">
-<a class="md-tabs__link" href="../../topics/managing-data/">
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../topics/managing-data/" class="md-tabs__link">
         Topics
       </a>
-</li>
-<li class="md-tabs__item">
-<a class="md-tabs__link md-tabs__link--active" href="./">
+    </li>
+  
+
+      
+        
+  
+  
+    
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="./" class="md-tabs__link md-tabs__link--active">
         API Reference
       </a>
-</li>
-</ul>
-</div>
+    </li>
+  
+
+      
+    </ul>
+  </div>
 </nav>
-<main class="md-main" data-md-component="main">
-<div class="md-main__inner md-grid">
-<div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
-<div class="md-sidebar__scrollwrap">
-<div class="md-sidebar__inner">
-<nav aria-label="Navigation" class="md-nav md-nav--primary" data-md-level="0">
-<label class="md-nav__title" for="__drawer">
-<a aria-label="Hover" class="md-nav__button md-logo" href="https://phurwicz.github.io/hover" title="Hover">
-<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9 7v10h2v-4h2v4h2V7h-2v4h-2V7H9M5 3h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2z"></path></svg>
-</a>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Hover" class="md-nav__button md-logo" aria-label="Hover" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9 7v10h2v-4h2v4h2V7h-2v4h-2V7H9M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/></svg>
+
+    </a>
     Hover
   </label>
-<div class="md-nav__source">
-<a class="md-source" href="https://github.com/phurwicz/hover/" title="Go to repository">
-<div class="md-source__icon md-icon">
-<svg viewbox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 00-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 01-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 000 40.81l195.61 195.6a28.86 28.86 0 0040.8 0l194.69-194.69a28.86 28.86 0 000-40.81z"></path></svg>
-</div>
-<div class="md-source__repository">
+  
+    <div class="md-nav__source">
+      
+<a href="https://github.com/phurwicz/hover/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
     phurwicz/hover
   </div>
 </a>
-</div>
-<ul class="md-nav__list" data-md-scrollfix="">
-<li class="md-nav__item">
-<a class="md-nav__link" href="../../..">
-      Home
-    </a>
-</li>
-<li class="md-nav__item md-nav__item--nested">
-<input class="md-nav__toggle md-toggle" data-md-toggle="nav-2" id="nav-2" type="checkbox"/>
-<label class="md-nav__link" for="nav-2">
-      Tutorial
-      <span class="md-nav__icon md-icon"></span>
-</label>
-<nav aria-label="Tutorial" class="md-nav" data-md-level="1">
-<label class="md-nav__title" for="nav-2">
-<span class="md-nav__icon md-icon"></span>
-        Tutorial
-      </label>
-<ul class="md-nav__list" data-md-scrollfix="">
-<li class="md-nav__item">
-<a class="md-nav__link" href="../../tutorial/t0-quickstart/">
-      Quickstart
-    </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../../tutorial/t1-active-learning/">
-      Using Recipes
-    </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../../tutorial/t2-bokeh-app/">
-      Server Options
-    </a>
-</li>
-</ul>
-</nav>
-</li>
-<li class="md-nav__item md-nav__item--nested">
-<input class="md-nav__toggle md-toggle" data-md-toggle="nav-3" id="nav-3" type="checkbox"/>
-<label class="md-nav__link" for="nav-3">
-      Topics
-      <span class="md-nav__icon md-icon"></span>
-</label>
-<nav aria-label="Topics" class="md-nav" data-md-level="1">
-<label class="md-nav__title" for="nav-3">
-<span class="md-nav__icon md-icon"></span>
-        Topics
-      </label>
-<ul class="md-nav__list" data-md-scrollfix="">
-<li class="md-nav__item">
-<a class="md-nav__link" href="../../topics/managing-data/">
-      Managing Data (under work)
-    </a>
-</li>
-</ul>
-</nav>
-</li>
-<li class="md-nav__item md-nav__item--active md-nav__item--nested">
-<input checked="" class="md-nav__toggle md-toggle" data-md-toggle="nav-4" id="nav-4" type="checkbox"/>
-<label class="md-nav__link" for="nav-4">
-      API Reference
-      <span class="md-nav__icon md-icon"></span>
-</label>
-<nav aria-label="API Reference" class="md-nav" data-md-level="1">
-<label class="md-nav__title" for="nav-4">
-<span class="md-nav__icon md-icon"></span>
-        API Reference
-      </label>
-<ul class="md-nav__list" data-md-scrollfix="">
-<li class="md-nav__item md-nav__item--active">
-<input class="md-nav__toggle md-toggle" data-md-toggle="toc" id="__toc" type="checkbox"/>
-<label class="md-nav__link md-nav__link--active" for="__toc">
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" data-md-state="indeterminate" type="checkbox" id="__nav_2" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2">
+          Tutorial
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Tutorial" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          Tutorial
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/t0-quickstart/" class="md-nav__link">
+        Quickstart
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/t1-active-learning/" class="md-nav__link">
+        Using Recipes
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/t2-bokeh-app/" class="md-nav__link">
+        Server Options
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" data-md-state="indeterminate" type="checkbox" id="__nav_3" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3">
+          Topics
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Topics" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Topics
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/managing-data/" class="md-nav__link">
+        Managing Data (under work)
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4">
+          API Reference
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="API Reference" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          API Reference
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          hover.recipes
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         hover.recipes
-        <span class="md-nav__icon md-icon"></span>
-</label>
-<a class="md-nav__link md-nav__link--active" href="./">
-      hover.recipes
-    </a>
-<nav aria-label="Table of contents" class="md-nav md-nav--secondary">
-<label class="md-nav__title" for="__toc">
-<span class="md-nav__icon md-icon"></span>
+      </a>
+      
+        
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
       Table of contents
     </label>
-<ul class="md-nav__list" data-md-scrollfix="">
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.recipes.stable">
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#hover.recipes.stable" class="md-nav__link">
     stable
   </a>
-<nav aria-label="stable" class="md-nav">
-<ul class="md-nav__list">
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.recipes.stable.linked_annotator">
+  
+    <nav class="md-nav" aria-label="stable">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#hover.recipes.stable.linked_annotator" class="md-nav__link">
     linked_annotator()
   </a>
+  
 </li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.recipes.stable.simple_annotator">
+        
+          <li class="md-nav__item">
+  <a href="#hover.recipes.stable.simple_annotator" class="md-nav__link">
     simple_annotator()
   </a>
+  
 </li>
-</ul>
-</nav>
+        
+      </ul>
+    </nav>
+  
 </li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.recipes.experimental">
+      
+        <li class="md-nav__item">
+  <a href="#hover.recipes.experimental" class="md-nav__link">
     experimental
   </a>
-<nav aria-label="experimental" class="md-nav">
-<ul class="md-nav__list">
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.recipes.experimental.active_learning">
+  
+    <nav class="md-nav" aria-label="experimental">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#hover.recipes.experimental.active_learning" class="md-nav__link">
     active_learning()
   </a>
+  
 </li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.recipes.experimental.snorkel_crosscheck">
+        
+          <li class="md-nav__item">
+  <a href="#hover.recipes.experimental.snorkel_crosscheck" class="md-nav__link">
     snorkel_crosscheck()
   </a>
+  
 </li>
-</ul>
-</nav>
+        
+      </ul>
+    </nav>
+  
 </li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.recipes.subroutine">
+      
+        <li class="md-nav__item">
+  <a href="#hover.recipes.subroutine" class="md-nav__link">
     subroutine
   </a>
-<nav aria-label="subroutine" class="md-nav">
-<ul class="md-nav__list">
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.recipes.subroutine.get_explorer_class">
+  
+    <nav class="md-nav" aria-label="subroutine">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#hover.recipes.subroutine.get_explorer_class" class="md-nav__link">
     get_explorer_class()
   </a>
+  
 </li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.recipes.subroutine.standard_annotator">
+        
+          <li class="md-nav__item">
+  <a href="#hover.recipes.subroutine.standard_annotator" class="md-nav__link">
     standard_annotator()
   </a>
+  
 </li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.recipes.subroutine.standard_finder">
+        
+          <li class="md-nav__item">
+  <a href="#hover.recipes.subroutine.standard_finder" class="md-nav__link">
     standard_finder()
   </a>
+  
 </li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.recipes.subroutine.standard_snorkel">
+        
+          <li class="md-nav__item">
+  <a href="#hover.recipes.subroutine.standard_snorkel" class="md-nav__link">
     standard_snorkel()
   </a>
+  
 </li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.recipes.subroutine.standard_softlabel">
+        
+          <li class="md-nav__item">
+  <a href="#hover.recipes.subroutine.standard_softlabel" class="md-nav__link">
     standard_softlabel()
   </a>
+  
 </li>
-</ul>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
 </nav>
-</li>
-</ul>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2" data-md-state="indeterminate" type="checkbox" id="__nav_4_2" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2">
+          hover.core
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="hover.core" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_2">
+          <span class="md-nav__icon md-icon"></span>
+          hover.core
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../core-dataset/" class="md-nav__link">
+        hover.core.dataset
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_2" data-md-state="indeterminate" type="checkbox" id="__nav_4_2_2" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_2">
+          hover.core.explorer
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="hover.core.explorer" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_2">
+          <span class="md-nav__icon md-icon"></span>
+          hover.core.explorer
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../core-explorer-base/" class="md-nav__link">
+        .base
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../core-explorer-feature/" class="md-nav__link">
+        .feature
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../core-explorer-functionality/" class="md-nav__link">
+        .functionality
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../core-explorer-specialization/" class="md-nav__link">
+        .specialization
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../core-neural/" class="md-nav__link">
+        hover.core.neural
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../core-representation/" class="md-nav__link">
+        hover.core.representation
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_3" data-md-state="indeterminate" type="checkbox" id="__nav_4_3" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_3">
+          hover.utils
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="hover.utils" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_3">
+          <span class="md-nav__icon md-icon"></span>
+          hover.utils
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../utils-bokeh_helper/" class="md-nav__link">
+        hover.utils.bokeh_helper
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../utils-snorkel_helper/" class="md-nav__link">
+        hover.utils.snorkel_helper
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
 </nav>
-</li>
-<li class="md-nav__item md-nav__item--nested">
-<input class="md-nav__toggle md-toggle" data-md-toggle="nav-4-2" id="nav-4-2" type="checkbox"/>
-<label class="md-nav__link" for="nav-4-2">
-      hover.core
-      <span class="md-nav__icon md-icon"></span>
-</label>
-<nav aria-label="hover.core" class="md-nav" data-md-level="2">
-<label class="md-nav__title" for="nav-4-2">
-<span class="md-nav__icon md-icon"></span>
-        hover.core
-      </label>
-<ul class="md-nav__list" data-md-scrollfix="">
-<li class="md-nav__item">
-<a class="md-nav__link" href="../core-dataset/">
-      hover.core.dataset
-    </a>
-</li>
-<li class="md-nav__item md-nav__item--nested">
-<input class="md-nav__toggle md-toggle" data-md-toggle="nav-4-2-2" id="nav-4-2-2" type="checkbox"/>
-<label class="md-nav__link" for="nav-4-2-2">
-      hover.core.explorer
-      <span class="md-nav__icon md-icon"></span>
-</label>
-<nav aria-label="hover.core.explorer" class="md-nav" data-md-level="3">
-<label class="md-nav__title" for="nav-4-2-2">
-<span class="md-nav__icon md-icon"></span>
-        hover.core.explorer
-      </label>
-<ul class="md-nav__list" data-md-scrollfix="">
-<li class="md-nav__item">
-<a class="md-nav__link" href="../core-explorer-base/">
-      .base
-    </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../core-explorer-feature/">
-      .feature
-    </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../core-explorer-functionality/">
-      .functionality
-    </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../core-explorer-specialization/">
-      .specialization
-    </a>
-</li>
-</ul>
-</nav>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../core-neural/">
-      hover.core.neural
-    </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../core-representation/">
-      hover.core.representation
-    </a>
-</li>
-</ul>
-</nav>
-</li>
-<li class="md-nav__item md-nav__item--nested">
-<input class="md-nav__toggle md-toggle" data-md-toggle="nav-4-3" id="nav-4-3" type="checkbox"/>
-<label class="md-nav__link" for="nav-4-3">
-      hover.utils
-      <span class="md-nav__icon md-icon"></span>
-</label>
-<nav aria-label="hover.utils" class="md-nav" data-md-level="2">
-<label class="md-nav__title" for="nav-4-3">
-<span class="md-nav__icon md-icon"></span>
-        hover.utils
-      </label>
-<ul class="md-nav__list" data-md-scrollfix="">
-<li class="md-nav__item">
-<a class="md-nav__link" href="../utils-bokeh_helper/">
-      hover.utils.bokeh_helper
-    </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../utils-snorkel_helper/">
-      hover.utils.snorkel_helper
-    </a>
-</li>
-</ul>
-</nav>
-</li>
-</ul>
-</nav>
-</li>
-</ul>
-</nav>
-</div>
-</div>
-</div>
-<div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
-<div class="md-sidebar__scrollwrap">
-<div class="md-sidebar__inner">
-<nav aria-label="Table of contents" class="md-nav md-nav--secondary">
-<label class="md-nav__title" for="__toc">
-<span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-<ul class="md-nav__list" data-md-scrollfix="">
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.recipes.stable">
-    stable
-  </a>
-<nav aria-label="stable" class="md-nav">
-<ul class="md-nav__list">
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.recipes.stable.linked_annotator">
-    linked_annotator()
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.recipes.stable.simple_annotator">
-    simple_annotator()
-  </a>
-</li>
-</ul>
-</nav>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.recipes.experimental">
-    experimental
-  </a>
-<nav aria-label="experimental" class="md-nav">
-<ul class="md-nav__list">
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.recipes.experimental.active_learning">
-    active_learning()
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.recipes.experimental.snorkel_crosscheck">
-    snorkel_crosscheck()
-  </a>
-</li>
-</ul>
-</nav>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.recipes.subroutine">
-    subroutine
-  </a>
-<nav aria-label="subroutine" class="md-nav">
-<ul class="md-nav__list">
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.recipes.subroutine.get_explorer_class">
-    get_explorer_class()
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.recipes.subroutine.standard_annotator">
-    standard_annotator()
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.recipes.subroutine.standard_finder">
-    standard_finder()
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.recipes.subroutine.standard_snorkel">
-    standard_snorkel()
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.recipes.subroutine.standard_softlabel">
-    standard_softlabel()
-  </a>
-</li>
-</ul>
-</nav>
-</li>
-</ul>
-</nav>
-</div>
-</div>
-</div>
-<div class="md-content">
-<article class="md-content__inner md-typeset">
-<a class="md-content__button md-icon" href="https://github.com/phurwicz/hover/edit/master/docs/pages/reference/recipes.md" title="Edit this page">
-<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"></path></svg>
-</a>
-<h1 id="hoverrecipes"><code>hover.recipes</code></h1>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/phurwicz/hover/edit/master/docs/pages/reference/recipes.md" title="Edit this page" class="md-content__button md-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
+                  </a>
+                
+                
+                <h1 id="hoverrecipes"><code>hover.recipes</code></h1>
 <ul>
 <li>
-<div class="doc doc-object doc-module">
+<div class="mkdocstrings">
+
+  <div class="doc doc-object doc-module">
+
+
+
 <h2 class="doc doc-heading" id="hover.recipes.stable">
-<code>hover.recipes.stable</code>
+        <code>hover.recipes.stable</code>
+
+
+
 </h2>
-<div class="doc doc-contents first">
-<details class="note" open="open"><summary>High-level functions to produce an interactive annotation interface.</summary><p>Stable recipes whose function signatures should almost never change in the future.</p>
+
+    <div class="doc doc-contents first">
+
+      <details class="note" open="open"><summary>High-level functions to produce an interactive annotation interface.</summary><p>Stable recipes whose function signatures should almost never change in the future.</p>
 </details>
-<div class="doc doc-children">
-<div class="doc doc-object doc-function">
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+  <div class="doc doc-object doc-function">
+
+
+
 <h3 class="doc doc-heading" id="hover.recipes.stable.linked_annotator">
-<code class="highlight language-python">
-linked_annotator<span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> </code>
+<code class="highlight language-python"><span class="n">linked_annotator</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
+
+
 </h3>
-<div class="doc doc-contents">
-<details class="note" open="open"><summary>Display the dataset on a 2D map in two views, one for search and one for annotation.</summary><table>
+
+    <div class="doc doc-contents ">
+
+      <details class="note" open="open"><summary>Display the dataset on a 2D map in two views, one for search and one for annotation.</summary><table>
 <thead>
 <tr>
 <th align="left">Param</th>
@@ -539,13 +941,13 @@ linked_annotator<span class="p">(</span><span class="n">dataset</span><span clas
 </tbody>
 </table>
 </details>
-<details class="quote">
-<summary>Source code in <code>hover/recipes/stable.py</code></summary>
-<div class="highlight">
-<pre><span></span><code><span class="nd">@servable</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">"Linked Annotator"</span><span class="p">)</span>
+
+        <details class="quote">
+          <summary>Source code in <code>hover/recipes/stable.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="nd">@servable</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Linked Annotator&quot;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">linked_annotator</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">"""</span>
-<span class="sd">    ???+ note "Display the dataset on a 2D map in two views, one for search and one for annotation."</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ???+ note &quot;Display the dataset on a 2D map in two views, one for search and one for annotation.&quot;</span>
 
 <span class="sd">        | Param     | Type     | Description                          |</span>
 <span class="sd">        | :-------- | :------- | :----------------------------------- |</span>
@@ -557,21 +959,30 @@ linked_annotator<span class="p">(</span><span class="n">dataset</span><span clas
 <span class="sd">        | SupervisableDataset | BokehDataFinder     | BokehDataAnnotator |</span>
 <span class="sd">        | :------------------ | :------------------ | :----------------- |</span>
 <span class="sd">        | manage data subsets | search -&gt; highlight | make annotations   |</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">layout</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">_linked_annotator</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">layout</span>
-</code></pre>
-</div>
-</details>
-</div>
-</div>
-<div class="doc doc-object doc-function">
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-function">
+
+
+
 <h3 class="doc doc-heading" id="hover.recipes.stable.simple_annotator">
-<code class="highlight language-python">
-simple_annotator<span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> </code>
+<code class="highlight language-python"><span class="n">simple_annotator</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
+
+
 </h3>
-<div class="doc doc-contents">
-<details class="note" open="open"><summary>Display the dataset with on a 2D map for annotation.</summary><table>
+
+    <div class="doc doc-contents ">
+
+      <details class="note" open="open"><summary>Display the dataset with on a 2D map for annotation.</summary><table>
 <thead>
 <tr>
 <th align="left">Param</th>
@@ -608,13 +1019,13 @@ simple_annotator<span class="p">(</span><span class="n">dataset</span><span clas
 </tbody>
 </table>
 </details>
-<details class="quote">
-<summary>Source code in <code>hover/recipes/stable.py</code></summary>
-<div class="highlight">
-<pre><span></span><code><span class="nd">@servable</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">"Simple Annotator"</span><span class="p">)</span>
+
+        <details class="quote">
+          <summary>Source code in <code>hover/recipes/stable.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="nd">@servable</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Simple Annotator&quot;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">simple_annotator</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">"""</span>
-<span class="sd">    ???+ note "Display the dataset with on a 2D map for annotation."</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ???+ note &quot;Display the dataset with on a 2D map for annotation.&quot;</span>
 
 <span class="sd">        | Param     | Type     | Description                          |</span>
 <span class="sd">        | :-------- | :------- | :----------------------------------- |</span>
@@ -626,37 +1037,77 @@ simple_annotator<span class="p">(</span><span class="n">dataset</span><span clas
 <span class="sd">        | SupervisableDataset | BokehDataAnnotator |</span>
 <span class="sd">        | :------------------ | :----------------- |</span>
 <span class="sd">        | manage data subsets | make annotations   |</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">layout</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">_simple_annotator</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">layout</span>
-</code></pre>
-</div>
-</details>
-</div>
-</div>
-</div>
-</div>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+  </div>
+
+<h2 class="doc doc-heading" data-role="module" id="hover.recipes.stable"></h2>
+<h3 class="doc doc-heading" data-role="function" id="hover.recipes.stable.linked_annotator"></h3>
+<h3 class="doc doc-heading" data-role="function" id="hover.recipes.stable.simple_annotator"></h3>
 </div>
 </li>
 </ul>
-<hr/>
+<hr />
 <ul>
 <li>
-<div class="doc doc-object doc-module">
+<div class="mkdocstrings">
+
+  <div class="doc doc-object doc-module">
+
+
+
 <h2 class="doc doc-heading" id="hover.recipes.experimental">
-<code>hover.recipes.experimental</code>
+        <code>hover.recipes.experimental</code>
+
+
+
 </h2>
-<div class="doc doc-contents first">
-<details class="note" open="open"><summary>High-level functions to produce an interactive annotation interface.</summary><p>Experimental recipes whose function signatures might change significantly in the future. Use with caution.</p>
+
+    <div class="doc doc-contents first">
+
+      <details class="note" open="open"><summary>High-level functions to produce an interactive annotation interface.</summary><p>Experimental recipes whose function signatures might change significantly in the future. Use with caution.</p>
 </details>
-<div class="doc doc-children">
-<div class="doc doc-object doc-function">
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+  <div class="doc doc-object doc-function">
+
+
+
 <h3 class="doc doc-heading" id="hover.recipes.experimental.active_learning">
-<code class="highlight language-python">
-active_learning<span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">vectorizer</span><span class="p">,</span> <span class="n">vecnet_callback</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> </code>
+<code class="highlight language-python"><span class="n">active_learning</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">vectorizer</span><span class="p">,</span> <span class="n">vecnet_callback</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
+
+
 </h3>
-<div class="doc doc-contents">
-<details class="note" open="open"><summary>Display the dataset for annotation, putting a classification model in the loop.</summary><p>Currently works most smoothly with <code>VectorNet</code>.</p>
+
+    <div class="doc doc-contents ">
+
+      <details class="note" open="open"><summary>Display the dataset for annotation, putting a classification model in the loop.</summary><p>Currently works most smoothly with <code>VectorNet</code>.</p>
 <table>
 <thead>
 <tr>
@@ -708,13 +1159,13 @@ active_learning<span class="p">(</span><span class="n">dataset</span><span class
 </tbody>
 </table>
 </details>
-<details class="quote">
-<summary>Source code in <code>hover/recipes/experimental.py</code></summary>
-<div class="highlight">
-<pre><span></span><code><span class="nd">@servable</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">"Active Learning"</span><span class="p">)</span>
+
+        <details class="quote">
+          <summary>Source code in <code>hover/recipes/experimental.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="nd">@servable</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Active Learning&quot;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">active_learning</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">vectorizer</span><span class="p">,</span> <span class="n">vecnet_callback</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">"""</span>
-<span class="sd">    ???+ note "Display the dataset for annotation, putting a classification model in the loop."</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ???+ note &quot;Display the dataset for annotation, putting a classification model in the loop.&quot;</span>
 <span class="sd">        Currently works most smoothly with `VectorNet`.</span>
 
 <span class="sd">        | Param     | Type     | Description                          |</span>
@@ -729,21 +1180,30 @@ active_learning<span class="p">(</span><span class="n">dataset</span><span class
 <span class="sd">        | SupervisableDataset | BokehSoftLabelExplorer    | BokehDataAnnotator | BokehDataFinder     |</span>
 <span class="sd">        | :------------------ | :------------------------ | :----------------- | :------------------ |</span>
 <span class="sd">        | manage data subsets | inspect model predictions | make annotations   | search -&gt; highlight |</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">layout</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">_active_learning</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">vectorizer</span><span class="p">,</span> <span class="n">vecnet_callback</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">layout</span>
-</code></pre>
-</div>
-</details>
-</div>
-</div>
-<div class="doc doc-object doc-function">
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-function">
+
+
+
 <h3 class="doc doc-heading" id="hover.recipes.experimental.snorkel_crosscheck">
-<code class="highlight language-python">
-snorkel_crosscheck<span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">lf_list</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> </code>
+<code class="highlight language-python"><span class="n">snorkel_crosscheck</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">lf_list</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
+
+
 </h3>
-<div class="doc doc-contents">
-<details class="note" open="open"><summary>Display the dataset for annotation, cross-checking with labeling functions.</summary><p>Use the dev set to check labeling functions; use the labeling functions to hint at potential annotation.</p>
+
+    <div class="doc doc-contents ">
+
+      <details class="note" open="open"><summary>Display the dataset for annotation, cross-checking with labeling functions.</summary><p>Use the dev set to check labeling functions; use the labeling functions to hint at potential annotation.</p>
 <table>
 <thead>
 <tr>
@@ -788,13 +1248,13 @@ snorkel_crosscheck<span class="p">(</span><span class="n">dataset</span><span cl
 </tbody>
 </table>
 </details>
-<details class="quote">
-<summary>Source code in <code>hover/recipes/experimental.py</code></summary>
-<div class="highlight">
-<pre><span></span><code><span class="nd">@servable</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">"Snorkel Crosscheck"</span><span class="p">)</span>
+
+        <details class="quote">
+          <summary>Source code in <code>hover/recipes/experimental.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="nd">@servable</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Snorkel Crosscheck&quot;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">snorkel_crosscheck</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">lf_list</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">"""</span>
-<span class="sd">    ???+ note "Display the dataset for annotation, cross-checking with labeling functions."</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ???+ note &quot;Display the dataset for annotation, cross-checking with labeling functions.&quot;</span>
 <span class="sd">        Use the dev set to check labeling functions; use the labeling functions to hint at potential annotation.</span>
 
 <span class="sd">        | Param     | Type     | Description                          |</span>
@@ -808,40 +1268,81 @@ snorkel_crosscheck<span class="p">(</span><span class="n">dataset</span><span cl
 <span class="sd">        | SupervisableDataset | BokehSnorkelExplorer       | BokehDataAnnotator |</span>
 <span class="sd">        | :------------------ | :------------------------- | :----------------- |</span>
 <span class="sd">        | manage data subsets | inspect labeling functions | make annotations   |</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">layout</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">_snorkel_crosscheck</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">lf_list</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">layout</span>
-</code></pre>
-</div>
-</details>
-</div>
-</div>
-</div>
-</div>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+  </div>
+
+<h2 class="doc doc-heading" data-role="module" id="hover.recipes.experimental"></h2>
+<h3 class="doc doc-heading" data-role="function" id="hover.recipes.experimental.active_learning"></h3>
+<h3 class="doc doc-heading" data-role="function" id="hover.recipes.experimental.snorkel_crosscheck"></h3>
 </div>
 </li>
 </ul>
-<hr/>
+<hr />
 <ul>
 <li>
-<div class="doc doc-object doc-module">
+<div class="mkdocstrings">
+
+  <div class="doc doc-object doc-module">
+
+
+
 <h2 class="doc doc-heading" id="hover.recipes.subroutine">
-<code>hover.recipes.subroutine</code>
+        <code>hover.recipes.subroutine</code>
+
+
+
 </h2>
-<div class="doc doc-contents first">
-<details class="note" open="open"><summary>Building blocks of high-level recipes.</summary><p>Includes the following:</p>
+
+    <div class="doc doc-contents first">
+
+      <details class="note" open="open"><summary>Building blocks of high-level recipes.</summary><p>Includes the following:</p>
 <ul>
 <li>functions for creating individual standard explorers appropriate for a dataset.</li>
 </ul>
 </details>
-<div class="doc doc-children">
-<div class="doc doc-object doc-function">
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-object doc-function">
+
+
+
 <h3 class="doc doc-heading" id="hover.recipes.subroutine.get_explorer_class">
-<code class="highlight language-python">
-get_explorer_class<span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="n">feature</span><span class="p">)</span> </code>
+<code class="highlight language-python"><span class="n">get_explorer_class</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="n">feature</span><span class="p">)</span></code>
+
+
 </h3>
-<div class="doc doc-contents">
-<details class="note" open="open"><summary>Get the right <code>hover.core.explorer</code> class given a task and a feature.</summary><p>Can be useful for dynamically creating explorers without knowing the feature in advance.</p>
+
+    <div class="doc doc-contents ">
+
+      <details class="note" open="open"><summary>Get the right <code>hover.core.explorer</code> class given a task and a feature.</summary><p>Can be useful for dynamically creating explorers without knowing the feature in advance.</p>
 <table>
 <thead>
 <tr>
@@ -864,48 +1365,54 @@ get_explorer_class<span class="p">(</span><span class="n">task</span><span class
 </tbody>
 </table>
 <p>Usage:
-<div class="highlight">
-<pre><span></span><code><span class="c1"># this creates an instance of BokehTextFinder</span>
-<span class="n">explorer</span> <span class="o">=</span> <span class="n">get_explorer_class</span><span class="p">(</span><span class="s2">"finder"</span><span class="p">,</span> <span class="s2">"text"</span><span class="p">)(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-</code></pre>
-</div>
-</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># this creates an instance of BokehTextFinder</span>
+<span class="n">explorer</span> <span class="o">=</span> <span class="n">get_explorer_class</span><span class="p">(</span><span class="s2">&quot;finder&quot;</span><span class="p">,</span> <span class="s2">&quot;text&quot;</span><span class="p">)(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</code></pre></div></p>
 </details>
-<details class="quote">
-<summary>Source code in <code>hover/recipes/subroutine.py</code></summary>
-<div class="highlight">
-<pre><span></span><code><span class="k">def</span> <span class="nf">get_explorer_class</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="n">feature</span><span class="p">):</span>
-    <span class="sd">"""</span>
-<span class="sd">    ???+ note "Get the right `hover.core.explorer` class given a task and a feature."</span>
+
+        <details class="quote">
+          <summary>Source code in <code>hover/recipes/subroutine.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_explorer_class</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="n">feature</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ???+ note &quot;Get the right `hover.core.explorer` class given a task and a feature.&quot;</span>
 
 <span class="sd">        Can be useful for dynamically creating explorers without knowing the feature in advance.</span>
 
 <span class="sd">        | Param     | Type  | Description                          |</span>
 <span class="sd">        | :-------- | :---- | :----------------------------------- |</span>
-<span class="sd">        | `task`    | `str` | name of the task, which can be `"finder"`, `"annotator"`, `"margin"`, `"softlabel"`, or `"snorkel"` |</span>
-<span class="sd">        | `feature` | `str` | name of the main feature, which can be `"text"`, `"audio"` or `"image"` |</span>
+<span class="sd">        | `task`    | `str` | name of the task, which can be `&quot;finder&quot;`, `&quot;annotator&quot;`, `&quot;margin&quot;`, `&quot;softlabel&quot;`, or `&quot;snorkel&quot;` |</span>
+<span class="sd">        | `feature` | `str` | name of the main feature, which can be `&quot;text&quot;`, `&quot;audio&quot;` or `&quot;image&quot;` |</span>
 
 <span class="sd">        Usage:</span>
 <span class="sd">        ```python</span>
 <span class="sd">        # this creates an instance of BokehTextFinder</span>
-<span class="sd">        explorer = get_explorer_class("finder", "text")(*args, **kwargs)</span>
+<span class="sd">        explorer = get_explorer_class(&quot;finder&quot;, &quot;text&quot;)(*args, **kwargs)</span>
 <span class="sd">        ```</span>
-<span class="sd">    """</span>
-    <span class="k">assert</span> <span class="n">task</span> <span class="ow">in</span> <span class="n">EXPLORER_CATALOG</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"Invalid task: </span><span class="si">{</span><span class="n">task</span><span class="si">}</span><span class="s2">"</span>
-    <span class="k">assert</span> <span class="n">feature</span> <span class="ow">in</span> <span class="n">EXPLORER_CATALOG</span><span class="p">[</span><span class="n">task</span><span class="p">],</span> <span class="sa">f</span><span class="s2">"Invalid feature: </span><span class="si">{</span><span class="n">feature</span><span class="si">}</span><span class="s2">"</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">assert</span> <span class="n">task</span> <span class="ow">in</span> <span class="n">EXPLORER_CATALOG</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Invalid task: </span><span class="si">{</span><span class="n">task</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="k">assert</span> <span class="n">feature</span> <span class="ow">in</span> <span class="n">EXPLORER_CATALOG</span><span class="p">[</span><span class="n">task</span><span class="p">],</span> <span class="sa">f</span><span class="s2">&quot;Invalid feature: </span><span class="si">{</span><span class="n">feature</span><span class="si">}</span><span class="s2">&quot;</span>
     <span class="k">return</span> <span class="n">EXPLORER_CATALOG</span><span class="p">[</span><span class="n">task</span><span class="p">][</span><span class="n">feature</span><span class="p">]</span>
-</code></pre>
-</div>
-</details>
-</div>
-</div>
-<div class="doc doc-object doc-function">
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-function">
+
+
+
 <h3 class="doc doc-heading" id="hover.recipes.subroutine.standard_annotator">
-<code class="highlight language-python">
-standard_annotator<span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> </code>
+<code class="highlight language-python"><span class="n">standard_annotator</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
+
+
 </h3>
-<div class="doc doc-contents">
-<details class="note" open="open"><summary>Set up a <code>BokehDataAnnotator</code> for a <code>SupervisableDataset</code>.</summary><p>The annotator has a few standard interactions with the dataset:</p>
+
+    <div class="doc doc-contents ">
+
+      <details class="note" open="open"><summary>Set up a <code>BokehDataAnnotator</code> for a <code>SupervisableDataset</code>.</summary><p>The annotator has a few standard interactions with the dataset:</p>
 <ul>
 <li>read all subsets of the dataset</li>
 <li>subscribe to all updates in the dataset</li>
@@ -933,34 +1440,34 @@ standard_annotator<span class="p">(</span><span class="n">dataset</span><span cl
 </tbody>
 </table>
 </details>
-<details class="quote">
-<summary>Source code in <code>hover/recipes/subroutine.py</code></summary>
-<div class="highlight">
-<pre><span></span><code><span class="k">def</span> <span class="nf">standard_annotator</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">"""</span>
-<span class="sd">    ???+ note "Set up a `BokehDataAnnotator` for a `SupervisableDataset`."</span>
+
+        <details class="quote">
+          <summary>Source code in <code>hover/recipes/subroutine.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">standard_annotator</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ???+ note &quot;Set up a `BokehDataAnnotator` for a `SupervisableDataset`.&quot;</span>
 
 <span class="sd">        The annotator has a few standard interactions with the dataset:</span>
 
 <span class="sd">        -   read all subsets of the dataset</span>
 <span class="sd">        -   subscribe to all updates in the dataset</span>
-<span class="sd">        -   can commit annotations through selections in the "raw" subset</span>
+<span class="sd">        -   can commit annotations through selections in the &quot;raw&quot; subset</span>
 
 <span class="sd">        | Param      | Type     | Description                          |</span>
 <span class="sd">        | :--------- | :------- | :----------------------------------- |</span>
 <span class="sd">        | `dataset`  | `SupervisableDataset` | the dataset to link to  |</span>
 <span class="sd">        | `**kwargs` | | kwargs to forward to the `BokehDataAnnotator` |</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># auto-detect the (main) feature to use</span>
     <span class="n">feature</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">FEATURE_KEY</span>
-    <span class="n">explorer_cls</span> <span class="o">=</span> <span class="n">get_explorer_class</span><span class="p">(</span><span class="s2">"annotator"</span><span class="p">,</span> <span class="n">feature</span><span class="p">)</span>
+    <span class="n">explorer_cls</span> <span class="o">=</span> <span class="n">get_explorer_class</span><span class="p">(</span><span class="s2">&quot;annotator&quot;</span><span class="p">,</span> <span class="n">feature</span><span class="p">)</span>
 
-    <span class="c1"># first "static" version of the plot</span>
+    <span class="c1"># first &quot;static&quot; version of the plot</span>
     <span class="n">subsets</span> <span class="o">=</span> <span class="n">explorer_cls</span><span class="o">.</span><span class="n">SUBSET_GLYPH_KWARGS</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
     <span class="n">annotator</span> <span class="o">=</span> <span class="n">explorer_cls</span><span class="o">.</span><span class="n">from_dataset</span><span class="p">(</span>
         <span class="n">dataset</span><span class="p">,</span>
         <span class="p">{</span><span class="n">_k</span><span class="p">:</span> <span class="n">_k</span> <span class="k">for</span> <span class="n">_k</span> <span class="ow">in</span> <span class="n">subsets</span><span class="p">},</span>
-        <span class="n">title</span><span class="o">=</span><span class="s2">"Annotator: apply labels to the selected points"</span><span class="p">,</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Annotator: apply labels to the selected points&quot;</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">annotator</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
@@ -969,23 +1476,32 @@ standard_annotator<span class="p">(</span><span class="n">dataset</span><span cl
     <span class="n">dataset</span><span class="o">.</span><span class="n">subscribe_update_push</span><span class="p">(</span><span class="n">annotator</span><span class="p">,</span> <span class="p">{</span><span class="n">_k</span><span class="p">:</span> <span class="n">_k</span> <span class="k">for</span> <span class="n">_k</span> <span class="ow">in</span> <span class="n">subsets</span><span class="p">})</span>
 
     <span class="c1"># annotators can commit to a dataset</span>
-    <span class="n">dataset</span><span class="o">.</span><span class="n">subscribe_data_commit</span><span class="p">(</span><span class="n">annotator</span><span class="p">,</span> <span class="p">{</span><span class="s2">"raw"</span><span class="p">:</span> <span class="s2">"raw"</span><span class="p">})</span>
+    <span class="n">dataset</span><span class="o">.</span><span class="n">subscribe_data_commit</span><span class="p">(</span><span class="n">annotator</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;raw&quot;</span><span class="p">:</span> <span class="s2">&quot;raw&quot;</span><span class="p">})</span>
 
     <span class="c1"># annotators by default link the selection for preview</span>
-    <span class="n">dataset</span><span class="o">.</span><span class="n">subscribe_selection_view</span><span class="p">(</span><span class="n">annotator</span><span class="p">,</span> <span class="p">[</span><span class="s2">"raw"</span><span class="p">,</span> <span class="s2">"train"</span><span class="p">,</span> <span class="s2">"dev"</span><span class="p">,</span> <span class="s2">"test"</span><span class="p">])</span>
+    <span class="n">dataset</span><span class="o">.</span><span class="n">subscribe_selection_view</span><span class="p">(</span><span class="n">annotator</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;raw&quot;</span><span class="p">,</span> <span class="s2">&quot;train&quot;</span><span class="p">,</span> <span class="s2">&quot;dev&quot;</span><span class="p">,</span> <span class="s2">&quot;test&quot;</span><span class="p">])</span>
     <span class="k">return</span> <span class="n">annotator</span>
-</code></pre>
-</div>
-</details>
-</div>
-</div>
-<div class="doc doc-object doc-function">
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-function">
+
+
+
 <h3 class="doc doc-heading" id="hover.recipes.subroutine.standard_finder">
-<code class="highlight language-python">
-standard_finder<span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> </code>
+<code class="highlight language-python"><span class="n">standard_finder</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
+
+
 </h3>
-<div class="doc doc-contents">
-<details class="note" open="open"><summary>Set up a <code>BokehDataFinder</code> for a <code>SupervisableDataset</code>.</summary><p>The finder has a few standard interactions with the dataset:</p>
+
+    <div class="doc doc-contents ">
+
+      <details class="note" open="open"><summary>Set up a <code>BokehDataFinder</code> for a <code>SupervisableDataset</code>.</summary><p>The finder has a few standard interactions with the dataset:</p>
 <ul>
 <li>read all subsets of the dataset</li>
 <li>subscribe to all updates in the dataset</li>
@@ -1012,12 +1528,12 @@ standard_finder<span class="p">(</span><span class="n">dataset</span><span class
 </tbody>
 </table>
 </details>
-<details class="quote">
-<summary>Source code in <code>hover/recipes/subroutine.py</code></summary>
-<div class="highlight">
-<pre><span></span><code><span class="k">def</span> <span class="nf">standard_finder</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">"""</span>
-<span class="sd">    ???+ note "Set up a `BokehDataFinder` for a `SupervisableDataset`."</span>
+
+        <details class="quote">
+          <summary>Source code in <code>hover/recipes/subroutine.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">standard_finder</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ???+ note &quot;Set up a `BokehDataFinder` for a `SupervisableDataset`.&quot;</span>
 
 <span class="sd">        The finder has a few standard interactions with the dataset:</span>
 
@@ -1028,17 +1544,17 @@ standard_finder<span class="p">(</span><span class="n">dataset</span><span class
 <span class="sd">        | :--------- | :------- | :----------------------------------- |</span>
 <span class="sd">        | `dataset`  | `SupervisableDataset` | the dataset to link to  |</span>
 <span class="sd">        | `**kwargs` | | kwargs to forward to the `BokehDataFinder` |</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># auto-detect the (main) feature to use</span>
     <span class="n">feature</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">FEATURE_KEY</span>
-    <span class="n">explorer_cls</span> <span class="o">=</span> <span class="n">get_explorer_class</span><span class="p">(</span><span class="s2">"finder"</span><span class="p">,</span> <span class="n">feature</span><span class="p">)</span>
+    <span class="n">explorer_cls</span> <span class="o">=</span> <span class="n">get_explorer_class</span><span class="p">(</span><span class="s2">&quot;finder&quot;</span><span class="p">,</span> <span class="n">feature</span><span class="p">)</span>
 
-    <span class="c1"># first "static" version of the plot</span>
+    <span class="c1"># first &quot;static&quot; version of the plot</span>
     <span class="n">subsets</span> <span class="o">=</span> <span class="n">explorer_cls</span><span class="o">.</span><span class="n">SUBSET_GLYPH_KWARGS</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
     <span class="n">finder</span> <span class="o">=</span> <span class="n">explorer_cls</span><span class="o">.</span><span class="n">from_dataset</span><span class="p">(</span>
         <span class="n">dataset</span><span class="p">,</span>
         <span class="p">{</span><span class="n">_k</span><span class="p">:</span> <span class="n">_k</span> <span class="k">for</span> <span class="n">_k</span> <span class="ow">in</span> <span class="n">subsets</span><span class="p">},</span>
-        <span class="n">title</span><span class="o">=</span><span class="s2">"Finder: use the search widget for highlights"</span><span class="p">,</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Finder: use the search widget for highlights&quot;</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">finder</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
@@ -1046,18 +1562,27 @@ standard_finder<span class="p">(</span><span class="n">dataset</span><span class
     <span class="c1"># subscribe for df updates</span>
     <span class="n">dataset</span><span class="o">.</span><span class="n">subscribe_update_push</span><span class="p">(</span><span class="n">finder</span><span class="p">,</span> <span class="p">{</span><span class="n">_k</span><span class="p">:</span> <span class="n">_k</span> <span class="k">for</span> <span class="n">_k</span> <span class="ow">in</span> <span class="n">subsets</span><span class="p">})</span>
     <span class="k">return</span> <span class="n">finder</span>
-</code></pre>
-</div>
-</details>
-</div>
-</div>
-<div class="doc doc-object doc-function">
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-function">
+
+
+
 <h3 class="doc doc-heading" id="hover.recipes.subroutine.standard_snorkel">
-<code class="highlight language-python">
-standard_snorkel<span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> </code>
+<code class="highlight language-python"><span class="n">standard_snorkel</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
+
+
 </h3>
-<div class="doc doc-contents">
-<details class="note" open="open"><summary>Set up a <code>BokehSnorkelExplorer</code> for a <code>SupervisableDataset</code>.</summary><p>The snorkel explorer has a few standard interactions with the dataset:</p>
+
+    <div class="doc doc-contents ">
+
+      <details class="note" open="open"><summary>Set up a <code>BokehSnorkelExplorer</code> for a <code>SupervisableDataset</code>.</summary><p>The snorkel explorer has a few standard interactions with the dataset:</p>
 <ul>
 <li>read "raw" and "dev" subsets of the dataset, interpreting "dev" as "labeled"</li>
 <li>subscribe to all updates in those subsets</li>
@@ -1084,51 +1609,60 @@ standard_snorkel<span class="p">(</span><span class="n">dataset</span><span clas
 </tbody>
 </table>
 </details>
-<details class="quote">
-<summary>Source code in <code>hover/recipes/subroutine.py</code></summary>
-<div class="highlight">
-<pre><span></span><code><span class="k">def</span> <span class="nf">standard_snorkel</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">"""</span>
-<span class="sd">    ???+ note "Set up a `BokehSnorkelExplorer` for a `SupervisableDataset`."</span>
+
+        <details class="quote">
+          <summary>Source code in <code>hover/recipes/subroutine.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">standard_snorkel</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ???+ note &quot;Set up a `BokehSnorkelExplorer` for a `SupervisableDataset`.&quot;</span>
 
 <span class="sd">        The snorkel explorer has a few standard interactions with the dataset:</span>
 
-<span class="sd">        -   read "raw" and "dev" subsets of the dataset, interpreting "dev" as "labeled"</span>
+<span class="sd">        -   read &quot;raw&quot; and &quot;dev&quot; subsets of the dataset, interpreting &quot;dev&quot; as &quot;labeled&quot;</span>
 <span class="sd">        -   subscribe to all updates in those subsets</span>
 
 <span class="sd">        | Param      | Type     | Description                          |</span>
 <span class="sd">        | :--------- | :------- | :----------------------------------- |</span>
 <span class="sd">        | `dataset`  | `SupervisableDataset` | the dataset to link to  |</span>
 <span class="sd">        | `**kwargs` | | kwargs to forward to the `BokehSnorkelExplorer` |</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># auto-detect the (main) feature to use</span>
     <span class="n">feature</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">FEATURE_KEY</span>
-    <span class="n">explorer_cls</span> <span class="o">=</span> <span class="n">get_explorer_class</span><span class="p">(</span><span class="s2">"snorkel"</span><span class="p">,</span> <span class="n">feature</span><span class="p">)</span>
+    <span class="n">explorer_cls</span> <span class="o">=</span> <span class="n">get_explorer_class</span><span class="p">(</span><span class="s2">&quot;snorkel&quot;</span><span class="p">,</span> <span class="n">feature</span><span class="p">)</span>
 
-    <span class="c1"># first "static" version of the plot</span>
+    <span class="c1"># first &quot;static&quot; version of the plot</span>
     <span class="n">snorkel</span> <span class="o">=</span> <span class="n">explorer_cls</span><span class="o">.</span><span class="n">from_dataset</span><span class="p">(</span>
         <span class="n">dataset</span><span class="p">,</span>
-        <span class="p">{</span><span class="s2">"raw"</span><span class="p">:</span> <span class="s2">"raw"</span><span class="p">,</span> <span class="s2">"dev"</span><span class="p">:</span> <span class="s2">"labeled"</span><span class="p">},</span>
-        <span class="n">title</span><span class="o">=</span><span class="s2">"Snorkel: square for correct, x for incorrect, + for missed, o for hit; click on legends to hide or show LF"</span><span class="p">,</span>
+        <span class="p">{</span><span class="s2">&quot;raw&quot;</span><span class="p">:</span> <span class="s2">&quot;raw&quot;</span><span class="p">,</span> <span class="s2">&quot;dev&quot;</span><span class="p">:</span> <span class="s2">&quot;labeled&quot;</span><span class="p">},</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Snorkel: square for correct, x for incorrect, + for missed, o for hit; click on legends to hide or show LF&quot;</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">snorkel</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 
     <span class="c1"># subscribe to dataset widgets</span>
-    <span class="n">dataset</span><span class="o">.</span><span class="n">subscribe_update_push</span><span class="p">(</span><span class="n">snorkel</span><span class="p">,</span> <span class="p">{</span><span class="s2">"raw"</span><span class="p">:</span> <span class="s2">"raw"</span><span class="p">,</span> <span class="s2">"dev"</span><span class="p">:</span> <span class="s2">"labeled"</span><span class="p">})</span>
+    <span class="n">dataset</span><span class="o">.</span><span class="n">subscribe_update_push</span><span class="p">(</span><span class="n">snorkel</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;raw&quot;</span><span class="p">:</span> <span class="s2">&quot;raw&quot;</span><span class="p">,</span> <span class="s2">&quot;dev&quot;</span><span class="p">:</span> <span class="s2">&quot;labeled&quot;</span><span class="p">})</span>
     <span class="k">return</span> <span class="n">snorkel</span>
-</code></pre>
-</div>
-</details>
-</div>
-</div>
-<div class="doc doc-object doc-function">
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-function">
+
+
+
 <h3 class="doc doc-heading" id="hover.recipes.subroutine.standard_softlabel">
-<code class="highlight language-python">
-standard_softlabel<span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> </code>
+<code class="highlight language-python"><span class="n">standard_softlabel</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
+
+
 </h3>
-<div class="doc doc-contents">
-<details class="note" open="open"><summary>Set up a <code>BokehSoftLabelExplorer</code> for a <code>SupervisableDataset</code>.</summary><p>The soft label explorer has a few standard interactions with the dataset:</p>
+
+    <div class="doc doc-contents ">
+
+      <details class="note" open="open"><summary>Set up a <code>BokehSoftLabelExplorer</code> for a <code>SupervisableDataset</code>.</summary><p>The soft label explorer has a few standard interactions with the dataset:</p>
 <ul>
 <li>read all subsets of the dataset</li>
 <li>subscribe to all updates in the dataset</li>
@@ -1155,12 +1689,12 @@ standard_softlabel<span class="p">(</span><span class="n">dataset</span><span cl
 </tbody>
 </table>
 </details>
-<details class="quote">
-<summary>Source code in <code>hover/recipes/subroutine.py</code></summary>
-<div class="highlight">
-<pre><span></span><code><span class="k">def</span> <span class="nf">standard_softlabel</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">"""</span>
-<span class="sd">    ???+ note "Set up a `BokehSoftLabelExplorer` for a `SupervisableDataset`."</span>
+
+        <details class="quote">
+          <summary>Source code in <code>hover/recipes/subroutine.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">standard_softlabel</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ???+ note &quot;Set up a `BokehSoftLabelExplorer` for a `SupervisableDataset`.&quot;</span>
 
 <span class="sd">        The soft label explorer has a few standard interactions with the dataset:</span>
 
@@ -1171,19 +1705,19 @@ standard_softlabel<span class="p">(</span><span class="n">dataset</span><span cl
 <span class="sd">        | :--------- | :------- | :----------------------------------- |</span>
 <span class="sd">        | `dataset`  | `SupervisableDataset` | the dataset to link to  |</span>
 <span class="sd">        | `**kwargs` | | kwargs to forward to the `BokehSoftLabelExplorer` |</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># auto-detect the (main) feature to use</span>
     <span class="n">feature</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">FEATURE_KEY</span>
-    <span class="n">explorer_cls</span> <span class="o">=</span> <span class="n">get_explorer_class</span><span class="p">(</span><span class="s2">"softlabel"</span><span class="p">,</span> <span class="n">feature</span><span class="p">)</span>
+    <span class="n">explorer_cls</span> <span class="o">=</span> <span class="n">get_explorer_class</span><span class="p">(</span><span class="s2">&quot;softlabel&quot;</span><span class="p">,</span> <span class="n">feature</span><span class="p">)</span>
 
-    <span class="c1"># first "static" version of the plot</span>
+    <span class="c1"># first &quot;static&quot; version of the plot</span>
     <span class="n">subsets</span> <span class="o">=</span> <span class="n">explorer_cls</span><span class="o">.</span><span class="n">SUBSET_GLYPH_KWARGS</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
     <span class="n">softlabel</span> <span class="o">=</span> <span class="n">explorer_cls</span><span class="o">.</span><span class="n">from_dataset</span><span class="p">(</span>
         <span class="n">dataset</span><span class="p">,</span>
         <span class="p">{</span><span class="n">_k</span><span class="p">:</span> <span class="n">_k</span> <span class="k">for</span> <span class="n">_k</span> <span class="ow">in</span> <span class="n">subsets</span><span class="p">},</span>
-        <span class="s2">"pred_label"</span><span class="p">,</span>
-        <span class="s2">"pred_score"</span><span class="p">,</span>
-        <span class="n">title</span><span class="o">=</span><span class="s2">"SoftLabel: inspect predictions and scores"</span><span class="p">,</span>
+        <span class="s2">&quot;pred_label&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;pred_score&quot;</span><span class="p">,</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;SoftLabel: inspect predictions and scores&quot;</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">softlabel</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
@@ -1191,74 +1725,109 @@ standard_softlabel<span class="p">(</span><span class="n">dataset</span><span cl
     <span class="c1"># subscribe to dataset widgets</span>
     <span class="n">dataset</span><span class="o">.</span><span class="n">subscribe_update_push</span><span class="p">(</span><span class="n">softlabel</span><span class="p">,</span> <span class="p">{</span><span class="n">_k</span><span class="p">:</span> <span class="n">_k</span> <span class="k">for</span> <span class="n">_k</span> <span class="ow">in</span> <span class="n">subsets</span><span class="p">})</span>
     <span class="k">return</span> <span class="n">softlabel</span>
-</code></pre>
-</div>
-</details>
-</div>
-</div>
-</div>
-</div>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+  </div>
+
+<h2 class="doc doc-heading" data-role="module" id="hover.recipes.subroutine"></h2>
+<h3 class="doc doc-heading" data-role="function" id="hover.recipes.subroutine.get_explorer_class"></h3>
+<h3 class="doc doc-heading" data-role="function" id="hover.recipes.subroutine.standard_annotator"></h3>
+<h3 class="doc doc-heading" data-role="function" id="hover.recipes.subroutine.standard_finder"></h3>
+<h3 class="doc doc-heading" data-role="function" id="hover.recipes.subroutine.standard_snorkel"></h3>
+<h3 class="doc doc-heading" data-role="function" id="hover.recipes.subroutine.standard_softlabel"></h3>
 </div>
 </li>
 </ul>
-</article>
-</div>
-</div>
-</main>
-<footer class="md-footer">
-<div class="md-footer-nav">
-<nav aria-label="Footer" class="md-footer-nav__inner md-grid">
-<a class="md-footer-nav__link md-footer-nav__link--prev" href="../../topics/managing-data/" rel="prev">
-<div class="md-footer-nav__button md-icon">
-<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"></path></svg>
-</div>
-<div class="md-footer-nav__title">
-<div class="md-ellipsis">
-<span class="md-footer-nav__direction">
-                  Previous
-                </span>
-                Managing Data (under work)
-              </div>
-</div>
-</a>
-<a class="md-footer-nav__link md-footer-nav__link--next" href="../core-dataset/" rel="next">
-<div class="md-footer-nav__title">
-<div class="md-ellipsis">
-<span class="md-footer-nav__direction">
-                  Next
-                </span>
-                hover.core.dataset
-              </div>
-</div>
-<div class="md-footer-nav__button md-icon">
-<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"></path></svg>
-</div>
-</a>
-</nav>
-</div>
-<div class="md-footer-meta md-typeset">
-<div class="md-footer-meta__inner md-grid">
-<div class="md-footer-copyright">
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
         
-        Made with
-        <a href="https://squidfunk.github.io/mkdocs-material/" rel="noopener" target="_blank">
-          Material for MkDocs
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        
+        <a href="../../topics/managing-data/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Managing Data (under work)" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Managing Data (under work)
+            </div>
+          </div>
         </a>
-</div>
-</div>
-</div>
+      
+      
+        
+        <a href="../core-dataset/" class="md-footer__link md-footer__link--next" aria-label="Next: hover.core.dataset" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              hover.core.dataset
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        
+          Made with
+          <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+            Material for MkDocs
+          </a>
+        
+        
+      </div>
+      
+    </div>
+  </div>
 </footer>
-</div>
-<script src="../../../assets/javascripts/vendor.fd16492e.min.js"></script>
-<script src="../../../assets/javascripts/bundle.7836ba4d.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}</script>
-<script>
-        app = initialize({
-          base: "../../..",
-          features: ['navigation.expand', 'navigation.tabs', 'search.suggest', 'toc.integrate'],
-          search: Object.assign({
-            worker: "../../../assets/javascripts/worker/search.4ac00218.min.js"
-          }, typeof search !== "undefined" && search)
-        })
-      </script>
-</body>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.expand", "navigation.tabs", "search.suggest", "toc.integrate"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../../assets/javascripts/workers/search.8397ff9e.min.js", "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.1e84347e.min.js"></script>
+      
+    
+  </body>
 </html>

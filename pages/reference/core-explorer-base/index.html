@@ -1,477 +1,883 @@
 
-<!DOCTYPE html>
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Hover over and label data rapidly.">
+      
+      
+      
+      
+        <link rel="canonical" href="https://phurwicz.github.io/hover/pages/reference/core-explorer-base/">
+      
+      <link rel="icon" href="../../../images/favicon.png">
+      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-7.3.4">
+    
+    
+      
+        <title>.base - Hover</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.db9e7362.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.3f5d1f46.min.css">
+        
+      
+    
+    
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>:root{--md-text-font-family:"Roboto";--md-code-font-family:"Roboto Mono"}</style>
+      
+    
+    
+    
+      <link rel="stylesheet" href="../../../assets/_mkdocstrings.css">
+    
+    
+      
 
-<html class="no-js" lang="en">
-<head>
-<meta charset="utf-8"/>
-<meta content="width=device-width,initial-scale=1" name="viewport"/>
-<meta content="Hover over and label data rapidly." name="description"/>
-<link href="https://phurwicz.github.io/hover/pages/reference/core-explorer-base/" rel="canonical"/>
-<link href="../../../images/favicon.png" rel="shortcut icon"/>
-<meta content="mkdocs-1.1, mkdocs-material-6.1.6" name="generator"/>
-<title>.base - Hover</title>
-<link href="../../../assets/stylesheets/main.6910b76c.min.css" rel="stylesheet"/>
-<link href="../../../assets/stylesheets/palette.196e0c26.min.css" rel="stylesheet"/>
-<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&amp;display=fallback" rel="stylesheet"/>
-<style>body,input{font-family:"Roboto",-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono",SFMono-Regular,Consolas,Menlo,monospace}</style>
-</head>
-<body data-md-color-accent="none" data-md-color-primary="none" data-md-color-scheme="" dir="ltr">
-<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
-<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
-<label class="md-overlay" for="__drawer"></label>
-<div data-md-component="skip">
-<a class="md-skip" href="#hover.core.explorer.base">
+  
+
+
+  
+
+  
+
+
+  <script>window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga("create","UA-211167044-1","auto"),ga("set","anonymizeIp",!0),ga("send","pageview"),document.addEventListener("DOMContentLoaded",function(){document.forms.search&&document.forms.search.query.addEventListener("blur",function(){var e;this.value&&(e=document.location.pathname,ga("send","pageview",e+"?q="+this.value))}),"undefined"!=typeof location$&&location$.subscribe(function(e){ga("send","pageview",e.pathname)})})</script>
+  <script async src="https://www.google-analytics.com/analytics.js"></script>
+
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="none" data-md-color-accent="none">
+  
+    
+    <script>function __prefix(e){return new URL("../../..",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#hover.core.explorer.base" class="md-skip">
           Skip to content
         </a>
-</div>
-<div data-md-component="announce">
-</div>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      
+
 <header class="md-header" data-md-component="header">
-<nav aria-label="Header" class="md-header-nav md-grid">
-<a aria-label="Hover" class="md-header-nav__button md-logo" href="https://phurwicz.github.io/hover" title="Hover">
-<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9 7v10h2v-4h2v4h2V7h-2v4h-2V7H9M5 3h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2z"></path></svg>
-</a>
-<label class="md-header-nav__button md-icon" for="__drawer">
-<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"></path></svg>
-</label>
-<div class="md-header-nav__title" data-md-component="header-title">
-<div class="md-header-nav__ellipsis">
-<span class="md-header-nav__topic md-ellipsis">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="Hover" class="md-header__button md-logo" aria-label="Hover" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9 7v10h2v-4h2v4h2V7h-2v4h-2V7H9M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
             Hover
           </span>
-<span class="md-header-nav__topic md-ellipsis">
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
             
               .base
             
           </span>
-</div>
-</div>
-<label class="md-header-nav__button md-icon" for="__search">
-<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"></path></svg>
-</label>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
 <div class="md-search" data-md-component="search" role="dialog">
-<label class="md-search__overlay" for="__search"></label>
-<div class="md-search__inner" role="search">
-<form class="md-search__form" name="search">
-<input aria-label="Search" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" data-md-state="active" name="query" placeholder="Search" required="" spellcheck="false" type="text"/>
-<label class="md-search__icon md-icon" for="__search">
-<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"></path></svg>
-<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"></path></svg>
-</label>
-<button aria-label="Clear" class="md-search__icon md-icon" data-md-component="search-reset" tabindex="-1" type="reset">
-<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"></path></svg>
-</button>
-</form>
-<div class="md-search__output">
-<div class="md-search__scrollwrap" data-md-scrollfix="">
-<div class="md-search-result" data-md-component="search-result">
-<div class="md-search-result__meta">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
             Initializing search
           </div>
-<ol class="md-search-result__list"></ol>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-</div>
-</div>
-</div>
-</div>
-<div class="md-header-nav__source">
-<a class="md-source" href="https://github.com/phurwicz/hover/" title="Go to repository">
-<div class="md-source__icon md-icon">
-<svg viewbox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 00-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 01-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 000 40.81l195.61 195.6a28.86 28.86 0 0040.8 0l194.69-194.69a28.86 28.86 0 000-40.81z"></path></svg>
-</div>
-<div class="md-source__repository">
+    
+    
+      <div class="md-header__source">
+        
+<a href="https://github.com/phurwicz/hover/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
     phurwicz/hover
   </div>
 </a>
-</div>
-</nav>
+      </div>
+    
+  </nav>
+  
 </header>
-<div class="md-container" data-md-component="container">
-<nav aria-label="Tabs" class="md-tabs md-tabs--active" data-md-component="tabs">
-<div class="md-tabs__inner md-grid">
-<ul class="md-tabs__list">
-<li class="md-tabs__item">
-<a class="md-tabs__link" href="../../..">
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-tabs__inner md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../.." class="md-tabs__link">
       Home
     </a>
-</li>
-<li class="md-tabs__item">
-<a class="md-tabs__link" href="../../tutorial/t0-quickstart/">
+  </li>
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../tutorial/t0-quickstart/" class="md-tabs__link">
         Tutorial
       </a>
-</li>
-<li class="md-tabs__item">
-<a class="md-tabs__link" href="../../topics/managing-data/">
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../topics/managing-data/" class="md-tabs__link">
         Topics
       </a>
-</li>
-<li class="md-tabs__item">
-<a class="md-tabs__link md-tabs__link--active" href="../recipes/">
+    </li>
+  
+
+      
+        
+  
+  
+    
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../recipes/" class="md-tabs__link md-tabs__link--active">
         API Reference
       </a>
-</li>
-</ul>
-</div>
+    </li>
+  
+
+      
+    </ul>
+  </div>
 </nav>
-<main class="md-main" data-md-component="main">
-<div class="md-main__inner md-grid">
-<div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
-<div class="md-sidebar__scrollwrap">
-<div class="md-sidebar__inner">
-<nav aria-label="Navigation" class="md-nav md-nav--primary" data-md-level="0">
-<label class="md-nav__title" for="__drawer">
-<a aria-label="Hover" class="md-nav__button md-logo" href="https://phurwicz.github.io/hover" title="Hover">
-<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9 7v10h2v-4h2v4h2V7h-2v4h-2V7H9M5 3h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2z"></path></svg>
-</a>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Hover" class="md-nav__button md-logo" aria-label="Hover" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9 7v10h2v-4h2v4h2V7h-2v4h-2V7H9M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/></svg>
+
+    </a>
     Hover
   </label>
-<div class="md-nav__source">
-<a class="md-source" href="https://github.com/phurwicz/hover/" title="Go to repository">
-<div class="md-source__icon md-icon">
-<svg viewbox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 00-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 01-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 000 40.81l195.61 195.6a28.86 28.86 0 0040.8 0l194.69-194.69a28.86 28.86 0 000-40.81z"></path></svg>
-</div>
-<div class="md-source__repository">
+  
+    <div class="md-nav__source">
+      
+<a href="https://github.com/phurwicz/hover/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
     phurwicz/hover
   </div>
 </a>
-</div>
-<ul class="md-nav__list" data-md-scrollfix="">
-<li class="md-nav__item">
-<a class="md-nav__link" href="../../..">
-      Home
-    </a>
-</li>
-<li class="md-nav__item md-nav__item--nested">
-<input class="md-nav__toggle md-toggle" data-md-toggle="nav-2" id="nav-2" type="checkbox"/>
-<label class="md-nav__link" for="nav-2">
-      Tutorial
-      <span class="md-nav__icon md-icon"></span>
-</label>
-<nav aria-label="Tutorial" class="md-nav" data-md-level="1">
-<label class="md-nav__title" for="nav-2">
-<span class="md-nav__icon md-icon"></span>
-        Tutorial
-      </label>
-<ul class="md-nav__list" data-md-scrollfix="">
-<li class="md-nav__item">
-<a class="md-nav__link" href="../../tutorial/t0-quickstart/">
-      Quickstart
-    </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../../tutorial/t1-active-learning/">
-      Using Recipes
-    </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../../tutorial/t2-bokeh-app/">
-      Server Options
-    </a>
-</li>
-</ul>
-</nav>
-</li>
-<li class="md-nav__item md-nav__item--nested">
-<input class="md-nav__toggle md-toggle" data-md-toggle="nav-3" id="nav-3" type="checkbox"/>
-<label class="md-nav__link" for="nav-3">
-      Topics
-      <span class="md-nav__icon md-icon"></span>
-</label>
-<nav aria-label="Topics" class="md-nav" data-md-level="1">
-<label class="md-nav__title" for="nav-3">
-<span class="md-nav__icon md-icon"></span>
-        Topics
-      </label>
-<ul class="md-nav__list" data-md-scrollfix="">
-<li class="md-nav__item">
-<a class="md-nav__link" href="../../topics/managing-data/">
-      Managing Data (under work)
-    </a>
-</li>
-</ul>
-</nav>
-</li>
-<li class="md-nav__item md-nav__item--active md-nav__item--nested">
-<input checked="" class="md-nav__toggle md-toggle" data-md-toggle="nav-4" id="nav-4" type="checkbox"/>
-<label class="md-nav__link" for="nav-4">
-      API Reference
-      <span class="md-nav__icon md-icon"></span>
-</label>
-<nav aria-label="API Reference" class="md-nav" data-md-level="1">
-<label class="md-nav__title" for="nav-4">
-<span class="md-nav__icon md-icon"></span>
-        API Reference
-      </label>
-<ul class="md-nav__list" data-md-scrollfix="">
-<li class="md-nav__item">
-<a class="md-nav__link" href="../recipes/">
-      hover.recipes
-    </a>
-</li>
-<li class="md-nav__item md-nav__item--active md-nav__item--nested">
-<input checked="" class="md-nav__toggle md-toggle" data-md-toggle="nav-4-2" id="nav-4-2" type="checkbox"/>
-<label class="md-nav__link" for="nav-4-2">
-      hover.core
-      <span class="md-nav__icon md-icon"></span>
-</label>
-<nav aria-label="hover.core" class="md-nav" data-md-level="2">
-<label class="md-nav__title" for="nav-4-2">
-<span class="md-nav__icon md-icon"></span>
-        hover.core
-      </label>
-<ul class="md-nav__list" data-md-scrollfix="">
-<li class="md-nav__item">
-<a class="md-nav__link" href="../core-dataset/">
-      hover.core.dataset
-    </a>
-</li>
-<li class="md-nav__item md-nav__item--active md-nav__item--nested">
-<input checked="" class="md-nav__toggle md-toggle" data-md-toggle="nav-4-2-2" id="nav-4-2-2" type="checkbox"/>
-<label class="md-nav__link" for="nav-4-2-2">
-      hover.core.explorer
-      <span class="md-nav__icon md-icon"></span>
-</label>
-<nav aria-label="hover.core.explorer" class="md-nav" data-md-level="3">
-<label class="md-nav__title" for="nav-4-2-2">
-<span class="md-nav__icon md-icon"></span>
-        hover.core.explorer
-      </label>
-<ul class="md-nav__list" data-md-scrollfix="">
-<li class="md-nav__item md-nav__item--active">
-<input class="md-nav__toggle md-toggle" data-md-toggle="toc" id="__toc" type="checkbox"/>
-<label class="md-nav__link md-nav__link--active" for="__toc">
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" data-md-state="indeterminate" type="checkbox" id="__nav_2" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2">
+          Tutorial
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Tutorial" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          Tutorial
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/t0-quickstart/" class="md-nav__link">
+        Quickstart
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/t1-active-learning/" class="md-nav__link">
+        Using Recipes
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/t2-bokeh-app/" class="md-nav__link">
+        Server Options
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" data-md-state="indeterminate" type="checkbox" id="__nav_3" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3">
+          Topics
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Topics" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Topics
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/managing-data/" class="md-nav__link">
+        Managing Data (under work)
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4">
+          API Reference
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="API Reference" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          API Reference
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../recipes/" class="md-nav__link">
+        hover.recipes
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2" type="checkbox" id="__nav_4_2" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2">
+          hover.core
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="hover.core" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_2">
+          <span class="md-nav__icon md-icon"></span>
+          hover.core
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../core-dataset/" class="md-nav__link">
+        hover.core.dataset
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_2" type="checkbox" id="__nav_4_2_2" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_2">
+          hover.core.explorer
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="hover.core.explorer" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_2">
+          <span class="md-nav__icon md-icon"></span>
+          hover.core.explorer
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          .base
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         .base
-        <span class="md-nav__icon md-icon"></span>
-</label>
-<a class="md-nav__link md-nav__link--active" href="./">
-      .base
-    </a>
-<nav aria-label="Table of contents" class="md-nav md-nav--secondary">
-<label class="md-nav__title" for="__toc">
-<span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-<ul class="md-nav__list" data-md-scrollfix="">
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.core.explorer.base">
-    hover.core.explorer.base
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.core.explorer.base.BokehBaseExplorer">
-    BokehBaseExplorer
-  </a>
-<nav aria-label="BokehBaseExplorer" class="md-nav">
-<ul class="md-nav__list">
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.core.explorer.base.BokehBaseExplorer.__init__">
-    __init__()
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.core.explorer.base.BokehBaseExplorer.activate_search">
-    activate_search()
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.core.explorer.base.BokehBaseExplorer.auto_color_mapping">
-    auto_color_mapping()
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.core.explorer.base.BokehBaseExplorer.from_dataset">
-    from_dataset()
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.core.explorer.base.BokehBaseExplorer.link_selection">
-    link_selection()
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.core.explorer.base.BokehBaseExplorer.link_xy_range">
-    link_xy_range()
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.core.explorer.base.BokehBaseExplorer.plot">
-    plot()
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.core.explorer.base.BokehBaseExplorer.value_patch">
-    value_patch()
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.core.explorer.base.BokehBaseExplorer.view">
-    view()
-  </a>
-</li>
-</ul>
-</nav>
-</li>
-</ul>
-</nav>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../core-explorer-feature/">
-      .feature
-    </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../core-explorer-functionality/">
-      .functionality
-    </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../core-explorer-specialization/">
-      .specialization
-    </a>
-</li>
-</ul>
-</nav>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../core-neural/">
-      hover.core.neural
-    </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../core-representation/">
-      hover.core.representation
-    </a>
-</li>
-</ul>
-</nav>
-</li>
-<li class="md-nav__item md-nav__item--nested">
-<input class="md-nav__toggle md-toggle" data-md-toggle="nav-4-3" id="nav-4-3" type="checkbox"/>
-<label class="md-nav__link" for="nav-4-3">
-      hover.utils
+      </a>
+      
+        
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
-</label>
-<nav aria-label="hover.utils" class="md-nav" data-md-level="2">
-<label class="md-nav__title" for="nav-4-3">
-<span class="md-nav__icon md-icon"></span>
-        hover.utils
-      </label>
-<ul class="md-nav__list" data-md-scrollfix="">
-<li class="md-nav__item">
-<a class="md-nav__link" href="../utils-bokeh_helper/">
-      hover.utils.bokeh_helper
-    </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../utils-snorkel_helper/">
-      hover.utils.snorkel_helper
-    </a>
-</li>
-</ul>
-</nav>
-</li>
-</ul>
-</nav>
-</li>
-</ul>
-</nav>
-</div>
-</div>
-</div>
-<div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
-<div class="md-sidebar__scrollwrap">
-<div class="md-sidebar__inner">
-<nav aria-label="Table of contents" class="md-nav md-nav--secondary">
-<label class="md-nav__title" for="__toc">
-<span class="md-nav__icon md-icon"></span>
       Table of contents
     </label>
-<ul class="md-nav__list" data-md-scrollfix="">
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.core.explorer.base">
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#hover.core.explorer.base" class="md-nav__link">
     hover.core.explorer.base
   </a>
+  
 </li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.core.explorer.base.BokehBaseExplorer">
+      
+        <li class="md-nav__item">
+  <a href="#hover.core.explorer.base.BokehBaseExplorer" class="md-nav__link">
     BokehBaseExplorer
   </a>
-<nav aria-label="BokehBaseExplorer" class="md-nav">
-<ul class="md-nav__list">
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.core.explorer.base.BokehBaseExplorer.__init__">
+  
+    <nav class="md-nav" aria-label="BokehBaseExplorer">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#hover.core.explorer.base.BokehBaseExplorer.__init__" class="md-nav__link">
     __init__()
   </a>
+  
 </li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.core.explorer.base.BokehBaseExplorer.activate_search">
+        
+          <li class="md-nav__item">
+  <a href="#hover.core.explorer.base.BokehBaseExplorer.activate_search" class="md-nav__link">
     activate_search()
   </a>
+  
 </li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.core.explorer.base.BokehBaseExplorer.auto_color_mapping">
+        
+          <li class="md-nav__item">
+  <a href="#hover.core.explorer.base.BokehBaseExplorer.auto_color_mapping" class="md-nav__link">
     auto_color_mapping()
   </a>
+  
 </li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.core.explorer.base.BokehBaseExplorer.from_dataset">
+        
+          <li class="md-nav__item">
+  <a href="#hover.core.explorer.base.BokehBaseExplorer.from_dataset" class="md-nav__link">
     from_dataset()
   </a>
+  
 </li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.core.explorer.base.BokehBaseExplorer.link_selection">
+        
+          <li class="md-nav__item">
+  <a href="#hover.core.explorer.base.BokehBaseExplorer.link_selection" class="md-nav__link">
     link_selection()
   </a>
+  
 </li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.core.explorer.base.BokehBaseExplorer.link_xy_range">
+        
+          <li class="md-nav__item">
+  <a href="#hover.core.explorer.base.BokehBaseExplorer.link_xy_range" class="md-nav__link">
     link_xy_range()
   </a>
+  
 </li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.core.explorer.base.BokehBaseExplorer.plot">
+        
+          <li class="md-nav__item">
+  <a href="#hover.core.explorer.base.BokehBaseExplorer.plot" class="md-nav__link">
     plot()
   </a>
+  
 </li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.core.explorer.base.BokehBaseExplorer.value_patch">
+        
+          <li class="md-nav__item">
+  <a href="#hover.core.explorer.base.BokehBaseExplorer.value_patch" class="md-nav__link">
     value_patch()
   </a>
+  
 </li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.core.explorer.base.BokehBaseExplorer.view">
+        
+          <li class="md-nav__item">
+  <a href="#hover.core.explorer.base.BokehBaseExplorer.view" class="md-nav__link">
     view()
   </a>
+  
 </li>
-</ul>
-</nav>
+        
+      </ul>
+    </nav>
+  
 </li>
-</ul>
+      
+    </ul>
+  
 </nav>
-</div>
-</div>
-</div>
-<div class="md-content">
-<article class="md-content__inner md-typeset">
-<a class="md-content__button md-icon" href="https://github.com/phurwicz/hover/edit/master/docs/pages/reference/core-explorer-base.md" title="Edit this page">
-<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"></path></svg>
-</a>
-<h1>.base</h1>
-<ul>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../core-explorer-feature/" class="md-nav__link">
+        .feature
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../core-explorer-functionality/" class="md-nav__link">
+        .functionality
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../core-explorer-specialization/" class="md-nav__link">
+        .specialization
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../core-neural/" class="md-nav__link">
+        hover.core.neural
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../core-representation/" class="md-nav__link">
+        hover.core.representation
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_3" data-md-state="indeterminate" type="checkbox" id="__nav_4_3" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_3">
+          hover.utils
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="hover.utils" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_3">
+          <span class="md-nav__icon md-icon"></span>
+          hover.utils
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../utils-bokeh_helper/" class="md-nav__link">
+        hover.utils.bokeh_helper
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../utils-snorkel_helper/" class="md-nav__link">
+        hover.utils.snorkel_helper
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/phurwicz/hover/edit/master/docs/pages/reference/core-explorer-base.md" title="Edit this page" class="md-content__button md-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
+                  </a>
+                
+                
+                  <h1>.base</h1>
+                
+                <ul>
 <li>
-<div class="doc doc-object doc-module">
-<h2 class="hidden-toc" href="#hover.core.explorer.base" id="hover.core.explorer.base" style="visibility: hidden; position: absolute;">
-</h2>
-<div class="doc doc-contents first">
-<details class="note" open="open"><summary>Base class(es) for ALL explorer implementations.</summary></details>
-<div class="doc doc-children">
-<div class="doc doc-object doc-class">
+<div class="mkdocstrings">
+
+  <div class="doc doc-object doc-module">
+
+<a id="hover.core.explorer.base"></a>
+    <div class="doc doc-contents first">
+
+      <details class="note" open="open"><summary>Base class(es) for ALL explorer implementations.</summary></details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+  <div class="doc doc-object doc-class">
+
+
+
 <h2 class="doc doc-heading" id="hover.core.explorer.base.BokehBaseExplorer">
-<code>BokehBaseExplorer</code>
+        <code>
+BokehBaseExplorer        </code>
+
+
+
 </h2>
-<div class="doc doc-contents">
-<details class="note" open="open"><summary>Base class for visually exploring data with <code>Bokeh</code>.</summary><p>Assumes:</p>
+
+    <div class="doc doc-contents ">
+
+      <details class="note" open="open"><summary>Base class for visually exploring data with <code>Bokeh</code>.</summary><p>Assumes:</p>
 <ul>
 <li>in supplied dataframes</li>
 <li>(always) xy coordinates in <code>x</code> and <code>y</code> columns;</li>
@@ -484,17 +890,39 @@
 <li>what the map serves to do.</li>
 </ul>
 </details>
-<div class="doc doc-children">
-<div class="doc doc-object doc-method">
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
 <h3 class="doc doc-heading" id="hover.core.explorer.base.BokehBaseExplorer.__init__">
-<code class="highlight language-python">
-__init__<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df_dict</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> </code>
-<span class="doc doc-properties">
-<small class="doc doc-property doc-property-special"><code>special</code></small>
-</span>
+<code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df_dict</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-special"><code>special</code></small>
+  </span>
+
 </h3>
-<div class="doc doc-contents">
-<details class="note" open="open"><summary>Constructor shared by all child classes.</summary><table>
+
+    <div class="doc doc-contents ">
+
+      <details class="note" open="open"><summary>Constructor shared by all child classes.</summary><table>
 <thead>
 <tr>
 <th align="left">Param</th>
@@ -524,12 +952,12 @@ __init__<span class="p">(</span><span class="bp">self</span><span class="p">,</s
 <li>initialize a figure under the settings above</li>
 </ol>
 </details>
-<details class="quote">
-<summary>Source code in <code>hover/core/explorer/base.py</code></summary>
-<div class="highlight">
-<pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df_dict</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">"""</span>
-<span class="sd">    ???+ note "Constructor shared by all child classes."</span>
+
+        <details class="quote">
+          <summary>Source code in <code>hover/core/explorer/base.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df_dict</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ???+ note &quot;Constructor shared by all child classes.&quot;</span>
 <span class="sd">        | Param       | Type   | Description                  |</span>
 <span class="sd">        | :---------- | :----- | :--------------------------- |</span>
 <span class="sd">        | `df_dict`   | `dict` | `str` -&gt; `DataFrame` mapping |</span>
@@ -541,35 +969,44 @@ __init__<span class="p">(</span><span class="bp">self</span><span class="p">,</s
 <span class="sd">        4. create data sources the correspond to class-specific data subsets.</span>
 <span class="sd">        5. activate builtin search callbacks depending on the child class.</span>
 <span class="sd">        6. initialize a figure under the settings above</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">figure_kwargs</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">"tools"</span><span class="p">:</span> <span class="n">STANDARD_PLOT_TOOLS</span><span class="p">,</span>
-        <span class="s2">"tooltips"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_tooltip</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">"tooltips"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)),</span>
+        <span class="s2">&quot;tools&quot;</span><span class="p">:</span> <span class="n">STANDARD_PLOT_TOOLS</span><span class="p">,</span>
+        <span class="s2">&quot;tooltips&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_tooltip</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;tooltips&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)),</span>
         <span class="c1"># bokeh recommends webgl for scalability</span>
-        <span class="s2">"output_backend"</span><span class="p">:</span> <span class="s2">"webgl"</span><span class="p">,</span>
+        <span class="s2">&quot;output_backend&quot;</span><span class="p">:</span> <span class="s2">&quot;webgl&quot;</span><span class="p">,</span>
     <span class="p">}</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">figure_kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">figure</span> <span class="o">=</span> <span class="n">figure</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">figure_kwargs</span><span class="p">)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">glyph_kwargs</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="n">_key</span><span class="p">:</span> <span class="n">_dict</span><span class="p">[</span><span class="s2">"constant"</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">_key</span><span class="p">:</span> <span class="n">_dict</span><span class="p">[</span><span class="s2">&quot;constant&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">_key</span><span class="p">,</span> <span class="n">_dict</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">SUBSET_GLYPH_KWARGS</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
     <span class="p">}</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_setup_dfs</span><span class="p">(</span><span class="n">df_dict</span><span class="p">)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_setup_sources</span><span class="p">()</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_setup_widgets</span><span class="p">()</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_activate_search_builtin</span><span class="p">()</span>
-</code></pre>
-</div>
-</details>
-</div>
-</div>
-<div class="doc doc-object doc-method">
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
 <h3 class="doc doc-heading" id="hover.core.explorer.base.BokehBaseExplorer.activate_search">
-<code class="highlight language-python">
-activate_search<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">subset</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">,</span> <span class="n">altered_param</span><span class="o">=</span><span class="p">(</span><span class="s1">'size'</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span> </code>
+<code class="highlight language-python"><span class="n">activate_search</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">subset</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">,</span> <span class="n">altered_param</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;size&#39;</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span></code>
+
+
 </h3>
-<div class="doc doc-contents">
-<details class="note" open="open"><summary>Left to child classes that have a specific feature format.</summary><table>
+
+    <div class="doc doc-contents ">
+
+      <details class="note" open="open"><summary>Left to child classes that have a specific feature format.</summary><table>
 <thead>
 <tr>
 <th align="left">Param</th>
@@ -596,62 +1033,80 @@ activate_search<span class="p">(</span><span class="bp">self</span><span class="
 </tbody>
 </table>
 </details>
-<details class="quote">
-<summary>Source code in <code>hover/core/explorer/base.py</code></summary>
-<div class="highlight">
-<pre><span></span><code><span class="nd">@abstractmethod</span>
-<span class="k">def</span> <span class="nf">activate_search</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">subset</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">,</span> <span class="n">altered_param</span><span class="o">=</span><span class="p">(</span><span class="s2">"size"</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">)):</span>
-    <span class="sd">"""</span>
-<span class="sd">    ???+ note "Left to child classes that have a specific feature format."</span>
+
+        <details class="quote">
+          <summary>Source code in <code>hover/core/explorer/base.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="nd">@abstractmethod</span>
+<span class="k">def</span> <span class="nf">activate_search</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">subset</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">,</span> <span class="n">altered_param</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;size&quot;</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">)):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ???+ note &quot;Left to child classes that have a specific feature format.&quot;</span>
 
 <span class="sd">        | Param           | Type    | Description                   |</span>
 <span class="sd">        | :-------------- | :------ | :---------------------------  |</span>
 <span class="sd">        | `subset`        | `str`   | the subset to activate search on |</span>
 <span class="sd">        | `kwargs`        | `bool`  | kwargs for the plot to add to |</span>
 <span class="sd">        | `altered_param` | `tuple` | (attribute, positive, negative, default) |</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">pass</span>
-</code></pre>
-</div>
-</details>
-</div>
-</div>
-<div class="doc doc-object doc-method">
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
 <h3 class="doc doc-heading" id="hover.core.explorer.base.BokehBaseExplorer.auto_color_mapping">
-<code class="highlight language-python">
-auto_color_mapping<span class="p">(</span><span class="bp">self</span><span class="p">)</span> </code>
+<code class="highlight language-python"><span class="n">auto_color_mapping</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></code>
+
+
 </h3>
-<div class="doc doc-contents">
-<details class="note" open="open"><summary>Find all labels and an appropriate color for each.</summary></details>
-<details class="quote">
-<summary>Source code in <code>hover/core/explorer/base.py</code></summary>
-<div class="highlight">
-<pre><span></span><code><span class="k">def</span> <span class="nf">auto_color_mapping</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="sd">"""</span>
-<span class="sd">    ???+ note "Find all labels and an appropriate color for each."</span>
-<span class="sd">    """</span>
+
+    <div class="doc doc-contents ">
+
+      <details class="note" open="open"><summary>Find all labels and an appropriate color for each.</summary></details>
+
+        <details class="quote">
+          <summary>Source code in <code>hover/core/explorer/base.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">auto_color_mapping</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ???+ note &quot;Find all labels and an appropriate color for each.&quot;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="kn">from</span> <span class="nn">hover.utils.bokeh_helper</span> <span class="kn">import</span> <span class="n">auto_label_color</span>
 
     <span class="n">labels</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
     <span class="k">for</span> <span class="n">_key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dfs</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-        <span class="n">labels</span> <span class="o">=</span> <span class="n">labels</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dfs</span><span class="p">[</span><span class="n">_key</span><span class="p">][</span><span class="s2">"label"</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">))</span>
+        <span class="n">labels</span> <span class="o">=</span> <span class="n">labels</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dfs</span><span class="p">[</span><span class="n">_key</span><span class="p">][</span><span class="s2">&quot;label&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">))</span>
 
     <span class="k">return</span> <span class="n">auto_label_color</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span>
-</code></pre>
-</div>
-</details>
-</div>
-</div>
-<div class="doc doc-object doc-method">
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
 <h3 class="doc doc-heading" id="hover.core.explorer.base.BokehBaseExplorer.from_dataset">
-<code class="highlight language-python">
-from_dataset<span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">subset_mapping</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> </code>
-<span class="doc doc-properties">
-<small class="doc doc-property doc-property-classmethod"><code>classmethod</code></small>
-</span>
+<code class="highlight language-python"><span class="n">from_dataset</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">subset_mapping</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-classmethod"><code>classmethod</code></small>
+  </span>
+
 </h3>
-<div class="doc doc-contents">
-<details class="note" open="open"><summary>Alternative constructor from a <code>SupervisableDataset</code>.</summary><table>
+
+    <div class="doc doc-contents ">
+
+      <details class="note" open="open"><summary>Alternative constructor from a <code>SupervisableDataset</code>.</summary><table>
 <thead>
 <tr>
 <th align="left">Param</th>
@@ -683,38 +1138,47 @@ from_dataset<span class="p">(</span><span class="n">dataset</span><span class="p
 </tbody>
 </table>
 </details>
-<details class="quote">
-<summary>Source code in <code>hover/core/explorer/base.py</code></summary>
-<div class="highlight">
-<pre><span></span><code><span class="nd">@classmethod</span>
+
+        <details class="quote">
+          <summary>Source code in <code>hover/core/explorer/base.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="nd">@classmethod</span>
 <span class="k">def</span> <span class="nf">from_dataset</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">subset_mapping</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">"""</span>
-<span class="sd">    ???+ note "Alternative constructor from a `SupervisableDataset`."</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ???+ note &quot;Alternative constructor from a `SupervisableDataset`.&quot;</span>
 <span class="sd">        | Param            | Type   | Description                  |</span>
 <span class="sd">        | :--------------- | :----- | :--------------------------- |</span>
 <span class="sd">        | `dataset`        | `SupervisableDataset` | dataset with `DataFrame`s |</span>
 <span class="sd">        | `subset_mapping` | `dict` | `dataset` -&gt; `explorer` subset mapping |</span>
 <span class="sd">        | `*args`          |        | forwarded to the constructor |</span>
 <span class="sd">        | `**kwargs`       |        | forwarded to the constructor |</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># local import to avoid import cycles</span>
     <span class="kn">from</span> <span class="nn">hover.core.dataset</span> <span class="kn">import</span> <span class="n">SupervisableDataset</span>
 
     <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">SupervisableDataset</span><span class="p">)</span>
     <span class="n">df_dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">_v</span><span class="p">:</span> <span class="n">dataset</span><span class="o">.</span><span class="n">dfs</span><span class="p">[</span><span class="n">_k</span><span class="p">]</span> <span class="k">for</span> <span class="n">_k</span><span class="p">,</span> <span class="n">_v</span> <span class="ow">in</span> <span class="n">subset_mapping</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
     <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">df_dict</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-</code></pre>
-</div>
-</details>
-</div>
-</div>
-<div class="doc doc-object doc-method">
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
 <h3 class="doc doc-heading" id="hover.core.explorer.base.BokehBaseExplorer.link_selection">
-<code class="highlight language-python">
-link_selection<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="n">other_key</span><span class="p">)</span> </code>
+<code class="highlight language-python"><span class="n">link_selection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="n">other_key</span><span class="p">)</span></code>
+
+
 </h3>
-<div class="doc doc-contents">
-<details class="note" open="open"><summary>Synchronize the selected indices between specified sources.</summary><table>
+
+    <div class="doc doc-contents ">
+
+      <details class="note" open="open"><summary>Synchronize the selected indices between specified sources.</summary><table>
 <thead>
 <tr>
 <th align="left">Param</th>
@@ -741,33 +1205,33 @@ link_selection<span class="p">(</span><span class="bp">self</span><span class="p
 </tbody>
 </table>
 </details>
-<details class="quote">
-<summary>Source code in <code>hover/core/explorer/base.py</code></summary>
-<div class="highlight">
-<pre><span></span><code><span class="k">def</span> <span class="nf">link_selection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="n">other_key</span><span class="p">):</span>
-    <span class="sd">"""</span>
-<span class="sd">    ???+ note "Synchronize the selected indices between specified sources."</span>
+
+        <details class="quote">
+          <summary>Source code in <code>hover/core/explorer/base.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">link_selection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="n">other_key</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ???+ note &quot;Synchronize the selected indices between specified sources.&quot;</span>
 <span class="sd">        | Param   | Type    | Description                    |</span>
 <span class="sd">        | :------ | :------ | :----------------------------- |</span>
 <span class="sd">        | `key`   | `str`   | the key of the subset to link  |</span>
 <span class="sd">        | `other` | `BokehBaseExplorer` | the other explorer |</span>
 <span class="sd">        | `other_key` | `str` | the key of the other subset  |</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_prelink_check</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
     <span class="c1"># link selection in a bidirectional manner</span>
     <span class="n">sl</span><span class="p">,</span> <span class="n">sr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">other</span><span class="o">.</span><span class="n">sources</span><span class="p">[</span><span class="n">other_key</span><span class="p">]</span>
 
     <span class="c1"># deprecated: use js_link to sync attributes</span>
-    <span class="c1"># sl.selected.js_link("indices", sr.selected, "indices")</span>
-    <span class="c1"># sr.selected.js_link("indices", sl.selected, "indices")</span>
+    <span class="c1"># sl.selected.js_link(&quot;indices&quot;, sr.selected, &quot;indices&quot;)</span>
+    <span class="c1"># sr.selected.js_link(&quot;indices&quot;, sl.selected, &quot;indices&quot;)</span>
     <span class="k">def</span> <span class="nf">left_to_right</span><span class="p">(</span><span class="n">attr</span><span class="p">,</span> <span class="n">old</span><span class="p">,</span> <span class="n">new</span><span class="p">):</span>
         <span class="n">sr</span><span class="o">.</span><span class="n">selected</span><span class="o">.</span><span class="n">indices</span> <span class="o">=</span> <span class="n">sl</span><span class="o">.</span><span class="n">selected</span><span class="o">.</span><span class="n">indices</span><span class="p">[:]</span>
 
     <span class="k">def</span> <span class="nf">right_to_left</span><span class="p">(</span><span class="n">attr</span><span class="p">,</span> <span class="n">old</span><span class="p">,</span> <span class="n">new</span><span class="p">):</span>
         <span class="n">sl</span><span class="o">.</span><span class="n">selected</span><span class="o">.</span><span class="n">indices</span> <span class="o">=</span> <span class="n">sr</span><span class="o">.</span><span class="n">selected</span><span class="o">.</span><span class="n">indices</span><span class="p">[:]</span>
 
-    <span class="n">sl</span><span class="o">.</span><span class="n">selected</span><span class="o">.</span><span class="n">on_change</span><span class="p">(</span><span class="s2">"indices"</span><span class="p">,</span> <span class="n">left_to_right</span><span class="p">)</span>
-    <span class="n">sr</span><span class="o">.</span><span class="n">selected</span><span class="o">.</span><span class="n">on_change</span><span class="p">(</span><span class="s2">"indices"</span><span class="p">,</span> <span class="n">right_to_left</span><span class="p">)</span>
+    <span class="n">sl</span><span class="o">.</span><span class="n">selected</span><span class="o">.</span><span class="n">on_change</span><span class="p">(</span><span class="s2">&quot;indices&quot;</span><span class="p">,</span> <span class="n">left_to_right</span><span class="p">)</span>
+    <span class="n">sr</span><span class="o">.</span><span class="n">selected</span><span class="o">.</span><span class="n">on_change</span><span class="p">(</span><span class="s2">&quot;indices&quot;</span><span class="p">,</span> <span class="n">right_to_left</span><span class="p">)</span>
 
     <span class="c1"># link last manual selections (pointing to the same set)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_last_selections</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">_last_selections</span><span class="p">[</span><span class="n">other_key</span><span class="p">])</span>
@@ -777,18 +1241,27 @@ link_selection<span class="p">(</span><span class="bp">self</span><span class="p
         <span class="n">other</span><span class="o">.</span><span class="n">_selection_filters</span><span class="p">[</span><span class="n">other_key</span><span class="p">]</span><span class="o">.</span><span class="n">data</span>
     <span class="p">)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_selection_filters</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">_selection_filters</span><span class="p">[</span><span class="n">other_key</span><span class="p">])</span>
-</code></pre>
-</div>
-</details>
-</div>
-</div>
-<div class="doc doc-object doc-method">
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
 <h3 class="doc doc-heading" id="hover.core.explorer.base.BokehBaseExplorer.link_xy_range">
-<code class="highlight language-python">
-link_xy_range<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">)</span> </code>
+<code class="highlight language-python"><span class="n">link_xy_range</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">)</span></code>
+
+
 </h3>
-<div class="doc doc-contents">
-<details class="note" open="open"><summary>Synchronize plotting ranges on the xy-plane.</summary><table>
+
+    <div class="doc doc-contents ">
+
+      <details class="note" open="open"><summary>Synchronize plotting ranges on the xy-plane.</summary><table>
 <thead>
 <tr>
 <th align="left">Param</th>
@@ -805,66 +1278,84 @@ link_xy_range<span class="p">(</span><span class="bp">self</span><span class="p"
 </tbody>
 </table>
 </details>
-<details class="quote">
-<summary>Source code in <code>hover/core/explorer/base.py</code></summary>
-<div class="highlight">
-<pre><span></span><code><span class="k">def</span> <span class="nf">link_xy_range</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
-    <span class="sd">"""</span>
-<span class="sd">    ???+ note "Synchronize plotting ranges on the xy-plane."</span>
+
+        <details class="quote">
+          <summary>Source code in <code>hover/core/explorer/base.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">link_xy_range</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ???+ note &quot;Synchronize plotting ranges on the xy-plane.&quot;</span>
 <span class="sd">        | Param   | Type    | Description                    |</span>
 <span class="sd">        | :------ | :------ | :----------------------------- |</span>
 <span class="sd">        | `other` | `BokehBaseExplorer` | the other explorer |</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_prelink_check</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
     <span class="c1"># link coordinate ranges in a bidirectional manner</span>
-    <span class="k">for</span> <span class="n">_attr</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"start"</span><span class="p">,</span> <span class="s2">"end"</span><span class="p">]:</span>
+    <span class="k">for</span> <span class="n">_attr</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;start&quot;</span><span class="p">,</span> <span class="s2">&quot;end&quot;</span><span class="p">]:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">x_range</span><span class="o">.</span><span class="n">js_link</span><span class="p">(</span><span class="n">_attr</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">x_range</span><span class="p">,</span> <span class="n">_attr</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">y_range</span><span class="o">.</span><span class="n">js_link</span><span class="p">(</span><span class="n">_attr</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">y_range</span><span class="p">,</span> <span class="n">_attr</span><span class="p">)</span>
         <span class="n">other</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">x_range</span><span class="o">.</span><span class="n">js_link</span><span class="p">(</span><span class="n">_attr</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">x_range</span><span class="p">,</span> <span class="n">_attr</span><span class="p">)</span>
         <span class="n">other</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">y_range</span><span class="o">.</span><span class="n">js_link</span><span class="p">(</span><span class="n">_attr</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">y_range</span><span class="p">,</span> <span class="n">_attr</span><span class="p">)</span>
-</code></pre>
-</div>
-</details>
-</div>
-</div>
-<div class="doc doc-object doc-method">
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
 <h3 class="doc doc-heading" id="hover.core.explorer.base.BokehBaseExplorer.plot">
-<code class="highlight language-python">
-plot<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> </code>
+<code class="highlight language-python"><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
+
+
 </h3>
-<div class="doc doc-contents">
-<details class="note" open="open"><summary>Plot something onto the figure.</summary><p>Implemented in child classes based on their functionalities.
+
+    <div class="doc doc-contents ">
+
+      <details class="note" open="open"><summary>Plot something onto the figure.</summary><p>Implemented in child classes based on their functionalities.
 | Param      | Type  | Description           |
 | :--------- | :---- | :-------------------- |
 | <code>*args</code>    |       | left to child classes |
 | <code>**kwargs</code> |       | left to child classes |</p>
 </details>
-<details class="quote">
-<summary>Source code in <code>hover/core/explorer/base.py</code></summary>
-<div class="highlight">
-<pre><span></span><code><span class="nd">@abstractmethod</span>
+
+        <details class="quote">
+          <summary>Source code in <code>hover/core/explorer/base.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="nd">@abstractmethod</span>
 <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">"""</span>
-<span class="sd">    ???+ note "Plot something onto the figure."</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ???+ note &quot;Plot something onto the figure.&quot;</span>
 <span class="sd">        Implemented in child classes based on their functionalities.</span>
 <span class="sd">        | Param      | Type  | Description           |</span>
 <span class="sd">        | :--------- | :---- | :-------------------- |</span>
 <span class="sd">        | `*args`    |       | left to child classes |</span>
 <span class="sd">        | `**kwargs` |       | left to child classes |</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">pass</span>
-</code></pre>
-</div>
-</details>
-</div>
-</div>
-<div class="doc doc-object doc-method">
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
 <h3 class="doc doc-heading" id="hover.core.explorer.base.BokehBaseExplorer.value_patch">
-<code class="highlight language-python">
-value_patch<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">col_original</span><span class="p">,</span> <span class="n">col_patch</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> </code>
+<code class="highlight language-python"><span class="n">value_patch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">col_original</span><span class="p">,</span> <span class="n">col_patch</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
+
+
 </h3>
-<div class="doc doc-contents">
-<details class="note" open="open"><summary>Allow source values to be dynamically patched through a slider.</summary><table>
+
+    <div class="doc doc-contents ">
+
+      <details class="note" open="open"><summary>Allow source values to be dynamically patched through a slider.</summary><table>
 <thead>
 <tr>
 <th align="left">Param</th>
@@ -892,12 +1383,12 @@ value_patch<span class="p">(</span><span class="bp">self</span><span class="p">,
 </table>
 <p><a href="https://github.com/bokeh/bokeh/blob/2.3.0/examples/howto/patch_app.py">Reference</a></p>
 </details>
-<details class="quote">
-<summary>Source code in <code>hover/core/explorer/base.py</code></summary>
-<div class="highlight">
-<pre><span></span><code><span class="k">def</span> <span class="nf">value_patch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">col_original</span><span class="p">,</span> <span class="n">col_patch</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">"""</span>
-<span class="sd">    ???+ note "Allow source values to be dynamically patched through a slider."</span>
+
+        <details class="quote">
+          <summary>Source code in <code>hover/core/explorer/base.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">value_patch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">col_original</span><span class="p">,</span> <span class="n">col_patch</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ???+ note &quot;Allow source values to be dynamically patched through a slider.&quot;</span>
 <span class="sd">        | Param            | Type   | Description                  |</span>
 <span class="sd">        | :--------------- | :----- | :--------------------------- |</span>
 <span class="sd">        | `col_original`   | `str`  | column of values before the patch |</span>
@@ -905,30 +1396,30 @@ value_patch<span class="p">(</span><span class="bp">self</span><span class="p">,
 <span class="sd">        | `**kwargs`       |        | forwarded to the slider |</span>
 
 <span class="sd">        [Reference](https://github.com/bokeh/bokeh/blob/2.3.0/examples/howto/patch_app.py)</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># add a patch slider to widgets, if none exist</span>
-    <span class="k">if</span> <span class="s2">"patch_slider"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dynamic_widgets</span><span class="p">:</span>
+    <span class="k">if</span> <span class="s2">&quot;patch_slider&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dynamic_widgets</span><span class="p">:</span>
         <span class="n">slider</span> <span class="o">=</span> <span class="n">Slider</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="n">slider</span><span class="o">.</span><span class="n">disabled</span> <span class="o">=</span> <span class="kc">True</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_dynamic_widgets</span><span class="p">[</span><span class="s2">"patch_slider"</span><span class="p">]</span> <span class="o">=</span> <span class="n">slider</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dynamic_widgets</span><span class="p">[</span><span class="s2">&quot;patch_slider&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">slider</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">slider</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dynamic_widgets</span><span class="p">[</span><span class="s2">"patch_slider"</span><span class="p">]</span>
+        <span class="n">slider</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dynamic_widgets</span><span class="p">[</span><span class="s2">&quot;patch_slider&quot;</span><span class="p">]</span>
 
     <span class="c1"># create a slider-adjusting callback exposed to the outside</span>
     <span class="k">def</span> <span class="nf">adjust_slider</span><span class="p">():</span>
-        <span class="sd">"""</span>
+        <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Infer slider length from the number of patch values.</span>
-<span class="sd">        """</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">num_patches</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">for</span> <span class="n">_key</span><span class="p">,</span> <span class="n">_df</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dfs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">assert</span> <span class="p">(</span>
                 <span class="n">col_patch</span> <span class="ow">in</span> <span class="n">_df</span><span class="o">.</span><span class="n">columns</span>
-            <span class="p">),</span> <span class="sa">f</span><span class="s2">"Subset </span><span class="si">{</span><span class="n">_key</span><span class="si">}</span><span class="s2"> expecting column </span><span class="si">{</span><span class="n">col_patch</span><span class="si">}</span><span class="s2"> among columns, got </span><span class="si">{</span><span class="n">_df</span><span class="o">.</span><span class="n">columns</span><span class="si">}</span><span class="s2">"</span>
+            <span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;Subset </span><span class="si">{</span><span class="n">_key</span><span class="si">}</span><span class="s2"> expecting column </span><span class="si">{</span><span class="n">col_patch</span><span class="si">}</span><span class="s2"> among columns, got </span><span class="si">{</span><span class="n">_df</span><span class="o">.</span><span class="n">columns</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="c1"># find all array lengths; note that the data subset can be empty</span>
             <span class="n">_num_patches_seen</span> <span class="o">=</span> <span class="n">_df</span><span class="p">[</span><span class="n">col_patch</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="nb">len</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>
             <span class="k">assert</span> <span class="p">(</span>
                 <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">_num_patches_seen</span><span class="p">))</span> <span class="o">&lt;=</span> <span class="mi">1</span>
-            <span class="p">),</span> <span class="sa">f</span><span class="s2">"Expecting consistent number of patches, got </span><span class="si">{</span><span class="n">_num_patches_seen</span><span class="si">}</span><span class="s2">"</span>
+            <span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;Expecting consistent number of patches, got </span><span class="si">{</span><span class="n">_num_patches_seen</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="n">_num_patches</span> <span class="o">=</span> <span class="n">_num_patches_seen</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="n">_df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="kc">None</span>
 
             <span class="c1"># if a previous subset has implied the number of patches, run a consistency check</span>
@@ -937,13 +1428,13 @@ value_patch<span class="p">(</span><span class="bp">self</span><span class="p">,
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">assert</span> <span class="p">(</span>
                     <span class="n">num_patches</span> <span class="o">==</span> <span class="n">_num_patches</span>
-                <span class="p">),</span> <span class="sa">f</span><span class="s2">"Conflicting number of patches: </span><span class="si">{</span><span class="n">num_patches</span><span class="si">}</span><span class="s2"> vs </span><span class="si">{</span><span class="n">_num_patches</span><span class="si">}</span><span class="s2">"</span>
+                <span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;Conflicting number of patches: </span><span class="si">{</span><span class="n">num_patches</span><span class="si">}</span><span class="s2"> vs </span><span class="si">{</span><span class="n">_num_patches</span><span class="si">}</span><span class="s2">&quot;</span>
 
-        <span class="k">assert</span> <span class="n">num_patches</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"Expecting at least 2 patches, got </span><span class="si">{</span><span class="n">num_patches</span><span class="si">}</span><span class="s2">"</span>
+        <span class="k">assert</span> <span class="n">num_patches</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Expecting at least 2 patches, got </span><span class="si">{</span><span class="n">num_patches</span><span class="si">}</span><span class="s2">&quot;</span>
         <span class="n">slider</span><span class="o">.</span><span class="n">end</span> <span class="o">=</span> <span class="n">num_patches</span> <span class="o">-</span> <span class="mi">1</span>
         <span class="n">slider</span><span class="o">.</span><span class="n">disabled</span> <span class="o">=</span> <span class="kc">False</span>
 
-    <span class="bp">self</span><span class="o">.</span><span class="n">_dynamic_callbacks</span><span class="p">[</span><span class="s2">"adjust_patch_slider"</span><span class="p">]</span> <span class="o">=</span> <span class="n">adjust_slider</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_dynamic_callbacks</span><span class="p">[</span><span class="s2">&quot;adjust_patch_slider&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">adjust_slider</span>
 
     <span class="c1"># create the callback for patching values</span>
     <span class="k">def</span> <span class="nf">update_patch</span><span class="p">(</span><span class="n">attr</span><span class="p">,</span> <span class="n">old</span><span class="p">,</span> <span class="n">new</span><span class="p">):</span>
@@ -954,101 +1445,158 @@ value_patch<span class="p">(</span><span class="bp">self</span><span class="p">,
             <span class="n">_patch</span> <span class="o">=</span> <span class="p">{</span><span class="n">col_original</span><span class="p">:</span> <span class="p">[(</span><span class="n">_slice</span><span class="p">,</span> <span class="n">_value</span><span class="p">)]}</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">[</span><span class="n">_key</span><span class="p">]</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="n">_patch</span><span class="p">)</span>
 
-    <span class="n">slider</span><span class="o">.</span><span class="n">on_change</span><span class="p">(</span><span class="s2">"value"</span><span class="p">,</span> <span class="n">update_patch</span><span class="p">)</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">_good</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Patching </span><span class="si">{</span><span class="n">col_original</span><span class="si">}</span><span class="s2"> using </span><span class="si">{</span><span class="n">col_patch</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-</code></pre>
-</div>
-</details>
-</div>
-</div>
-<div class="doc doc-object doc-method">
+    <span class="n">slider</span><span class="o">.</span><span class="n">on_change</span><span class="p">(</span><span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="n">update_patch</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_good</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Patching </span><span class="si">{</span><span class="n">col_original</span><span class="si">}</span><span class="s2"> using </span><span class="si">{</span><span class="n">col_patch</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
 <h3 class="doc doc-heading" id="hover.core.explorer.base.BokehBaseExplorer.view">
-<code class="highlight language-python">
-view<span class="p">(</span><span class="bp">self</span><span class="p">)</span> </code>
+<code class="highlight language-python"><span class="n">view</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></code>
+
+
 </h3>
-<div class="doc doc-contents">
-<details class="note" open="open"><summary>Define the high-level visual layout of the whole explorer.</summary></details>
-<details class="quote">
-<summary>Source code in <code>hover/core/explorer/base.py</code></summary>
-<div class="highlight">
-<pre><span></span><code><span class="k">def</span> <span class="nf">view</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="sd">"""</span>
-<span class="sd">    ???+ note "Define the high-level visual layout of the whole explorer."</span>
-<span class="sd">    """</span>
+
+    <div class="doc doc-contents ">
+
+      <details class="note" open="open"><summary>Define the high-level visual layout of the whole explorer.</summary></details>
+
+        <details class="quote">
+          <summary>Source code in <code>hover/core/explorer/base.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">view</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ???+ note &quot;Define the high-level visual layout of the whole explorer.&quot;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="kn">from</span> <span class="nn">bokeh.layouts</span> <span class="kn">import</span> <span class="n">column</span>
 
     <span class="k">return</span> <span class="n">column</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_layout_widgets</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="p">)</span>
-</code></pre>
-</div>
-</details>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+
+
+  </div>
+
+    </div>
+
+  </div>
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+  </div>
+
+<h2 data-role="module" id="hover.core.explorer.base"></h2>
+<h2 class="doc doc-heading" data-role="class" id="hover.core.explorer.base.BokehBaseExplorer"></h2>
+<h3 class="doc doc-heading" data-role="method" id="hover.core.explorer.base.BokehBaseExplorer.__init__"></h3>
+<h3 class="doc doc-heading" data-role="method" id="hover.core.explorer.base.BokehBaseExplorer.activate_search"></h3>
+<h3 class="doc doc-heading" data-role="method" id="hover.core.explorer.base.BokehBaseExplorer.auto_color_mapping"></h3>
+<h3 class="doc doc-heading" data-role="method" id="hover.core.explorer.base.BokehBaseExplorer.from_dataset"></h3>
+<h3 class="doc doc-heading" data-role="method" id="hover.core.explorer.base.BokehBaseExplorer.link_selection"></h3>
+<h3 class="doc doc-heading" data-role="method" id="hover.core.explorer.base.BokehBaseExplorer.link_xy_range"></h3>
+<h3 class="doc doc-heading" data-role="method" id="hover.core.explorer.base.BokehBaseExplorer.plot"></h3>
+<h3 class="doc doc-heading" data-role="method" id="hover.core.explorer.base.BokehBaseExplorer.value_patch"></h3>
+<h3 class="doc doc-heading" data-role="method" id="hover.core.explorer.base.BokehBaseExplorer.view"></h3>
 </div>
 </li>
 </ul>
-</article>
-</div>
-</div>
-</main>
-<footer class="md-footer">
-<div class="md-footer-nav">
-<nav aria-label="Footer" class="md-footer-nav__inner md-grid">
-<a class="md-footer-nav__link md-footer-nav__link--prev" href="../core-dataset/" rel="prev">
-<div class="md-footer-nav__button md-icon">
-<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"></path></svg>
-</div>
-<div class="md-footer-nav__title">
-<div class="md-ellipsis">
-<span class="md-footer-nav__direction">
-                  Previous
-                </span>
-                hover.core.dataset
-              </div>
-</div>
-</a>
-<a class="md-footer-nav__link md-footer-nav__link--next" href="../core-explorer-feature/" rel="next">
-<div class="md-footer-nav__title">
-<div class="md-ellipsis">
-<span class="md-footer-nav__direction">
-                  Next
-                </span>
-                .feature
-              </div>
-</div>
-<div class="md-footer-nav__button md-icon">
-<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"></path></svg>
-</div>
-</a>
-</nav>
-</div>
-<div class="md-footer-meta md-typeset">
-<div class="md-footer-meta__inner md-grid">
-<div class="md-footer-copyright">
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
         
-        Made with
-        <a href="https://squidfunk.github.io/mkdocs-material/" rel="noopener" target="_blank">
-          Material for MkDocs
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        
+        <a href="../core-dataset/" class="md-footer__link md-footer__link--prev" aria-label="Previous: hover.core.dataset" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              hover.core.dataset
+            </div>
+          </div>
         </a>
-</div>
-</div>
-</div>
+      
+      
+        
+        <a href="../core-explorer-feature/" class="md-footer__link md-footer__link--next" aria-label="Next: .feature" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              .feature
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        
+          Made with
+          <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+            Material for MkDocs
+          </a>
+        
+        
+      </div>
+      
+    </div>
+  </div>
 </footer>
-</div>
-<script src="../../../assets/javascripts/vendor.fd16492e.min.js"></script>
-<script src="../../../assets/javascripts/bundle.7836ba4d.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}</script>
-<script>
-        app = initialize({
-          base: "../../..",
-          features: ['navigation.expand', 'navigation.tabs', 'search.suggest', 'toc.integrate'],
-          search: Object.assign({
-            worker: "../../../assets/javascripts/worker/search.4ac00218.min.js"
-          }, typeof search !== "undefined" && search)
-        })
-      </script>
-</body>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.expand", "navigation.tabs", "search.suggest", "toc.integrate"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../../assets/javascripts/workers/search.8397ff9e.min.js", "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.1e84347e.min.js"></script>
+      
+    
+  </body>
 </html>

@@ -1,651 +1,1134 @@
 
-<!DOCTYPE html>
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Hover over and label data rapidly.">
+      
+      
+      
+      
+        <link rel="canonical" href="https://phurwicz.github.io/hover/pages/reference/core-explorer-functionality/">
+      
+      <link rel="icon" href="../../../images/favicon.png">
+      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-7.3.4">
+    
+    
+      
+        <title>.functionality - Hover</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.db9e7362.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.3f5d1f46.min.css">
+        
+      
+    
+    
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>:root{--md-text-font-family:"Roboto";--md-code-font-family:"Roboto Mono"}</style>
+      
+    
+    
+    
+      <link rel="stylesheet" href="../../../assets/_mkdocstrings.css">
+    
+    
+      
 
-<html class="no-js" lang="en">
-<head>
-<meta charset="utf-8"/>
-<meta content="width=device-width,initial-scale=1" name="viewport"/>
-<meta content="Hover over and label data rapidly." name="description"/>
-<link href="https://phurwicz.github.io/hover/pages/reference/core-explorer-functionality/" rel="canonical"/>
-<link href="../../../images/favicon.png" rel="shortcut icon"/>
-<meta content="mkdocs-1.1, mkdocs-material-6.1.6" name="generator"/>
-<title>.functionality - Hover</title>
-<link href="../../../assets/stylesheets/main.6910b76c.min.css" rel="stylesheet"/>
-<link href="../../../assets/stylesheets/palette.196e0c26.min.css" rel="stylesheet"/>
-<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&amp;display=fallback" rel="stylesheet"/>
-<style>body,input{font-family:"Roboto",-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono",SFMono-Regular,Consolas,Menlo,monospace}</style>
-</head>
-<body data-md-color-accent="none" data-md-color-primary="none" data-md-color-scheme="" dir="ltr">
-<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
-<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
-<label class="md-overlay" for="__drawer"></label>
-<div data-md-component="skip">
-<a class="md-skip" href="#hover.core.explorer.functionality">
+  
+
+
+  
+
+  
+
+
+  <script>window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga("create","UA-211167044-1","auto"),ga("set","anonymizeIp",!0),ga("send","pageview"),document.addEventListener("DOMContentLoaded",function(){document.forms.search&&document.forms.search.query.addEventListener("blur",function(){var e;this.value&&(e=document.location.pathname,ga("send","pageview",e+"?q="+this.value))}),"undefined"!=typeof location$&&location$.subscribe(function(e){ga("send","pageview",e.pathname)})})</script>
+  <script async src="https://www.google-analytics.com/analytics.js"></script>
+
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="none" data-md-color-accent="none">
+  
+    
+    <script>function __prefix(e){return new URL("../../..",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#hover.core.explorer.functionality" class="md-skip">
           Skip to content
         </a>
-</div>
-<div data-md-component="announce">
-</div>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      
+
 <header class="md-header" data-md-component="header">
-<nav aria-label="Header" class="md-header-nav md-grid">
-<a aria-label="Hover" class="md-header-nav__button md-logo" href="https://phurwicz.github.io/hover" title="Hover">
-<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9 7v10h2v-4h2v4h2V7h-2v4h-2V7H9M5 3h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2z"></path></svg>
-</a>
-<label class="md-header-nav__button md-icon" for="__drawer">
-<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"></path></svg>
-</label>
-<div class="md-header-nav__title" data-md-component="header-title">
-<div class="md-header-nav__ellipsis">
-<span class="md-header-nav__topic md-ellipsis">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="Hover" class="md-header__button md-logo" aria-label="Hover" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9 7v10h2v-4h2v4h2V7h-2v4h-2V7H9M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
             Hover
           </span>
-<span class="md-header-nav__topic md-ellipsis">
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
             
               .functionality
             
           </span>
-</div>
-</div>
-<label class="md-header-nav__button md-icon" for="__search">
-<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"></path></svg>
-</label>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
 <div class="md-search" data-md-component="search" role="dialog">
-<label class="md-search__overlay" for="__search"></label>
-<div class="md-search__inner" role="search">
-<form class="md-search__form" name="search">
-<input aria-label="Search" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" data-md-state="active" name="query" placeholder="Search" required="" spellcheck="false" type="text"/>
-<label class="md-search__icon md-icon" for="__search">
-<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"></path></svg>
-<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"></path></svg>
-</label>
-<button aria-label="Clear" class="md-search__icon md-icon" data-md-component="search-reset" tabindex="-1" type="reset">
-<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"></path></svg>
-</button>
-</form>
-<div class="md-search__output">
-<div class="md-search__scrollwrap" data-md-scrollfix="">
-<div class="md-search-result" data-md-component="search-result">
-<div class="md-search-result__meta">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
             Initializing search
           </div>
-<ol class="md-search-result__list"></ol>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-</div>
-</div>
-</div>
-</div>
-<div class="md-header-nav__source">
-<a class="md-source" href="https://github.com/phurwicz/hover/" title="Go to repository">
-<div class="md-source__icon md-icon">
-<svg viewbox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 00-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 01-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 000 40.81l195.61 195.6a28.86 28.86 0 0040.8 0l194.69-194.69a28.86 28.86 0 000-40.81z"></path></svg>
-</div>
-<div class="md-source__repository">
+    
+    
+      <div class="md-header__source">
+        
+<a href="https://github.com/phurwicz/hover/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
     phurwicz/hover
   </div>
 </a>
-</div>
-</nav>
+      </div>
+    
+  </nav>
+  
 </header>
-<div class="md-container" data-md-component="container">
-<nav aria-label="Tabs" class="md-tabs md-tabs--active" data-md-component="tabs">
-<div class="md-tabs__inner md-grid">
-<ul class="md-tabs__list">
-<li class="md-tabs__item">
-<a class="md-tabs__link" href="../../..">
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-tabs__inner md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../.." class="md-tabs__link">
       Home
     </a>
-</li>
-<li class="md-tabs__item">
-<a class="md-tabs__link" href="../../tutorial/t0-quickstart/">
+  </li>
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../tutorial/t0-quickstart/" class="md-tabs__link">
         Tutorial
       </a>
-</li>
-<li class="md-tabs__item">
-<a class="md-tabs__link" href="../../topics/managing-data/">
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../topics/managing-data/" class="md-tabs__link">
         Topics
       </a>
-</li>
-<li class="md-tabs__item">
-<a class="md-tabs__link md-tabs__link--active" href="../recipes/">
+    </li>
+  
+
+      
+        
+  
+  
+    
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../recipes/" class="md-tabs__link md-tabs__link--active">
         API Reference
       </a>
-</li>
-</ul>
-</div>
+    </li>
+  
+
+      
+    </ul>
+  </div>
 </nav>
-<main class="md-main" data-md-component="main">
-<div class="md-main__inner md-grid">
-<div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
-<div class="md-sidebar__scrollwrap">
-<div class="md-sidebar__inner">
-<nav aria-label="Navigation" class="md-nav md-nav--primary" data-md-level="0">
-<label class="md-nav__title" for="__drawer">
-<a aria-label="Hover" class="md-nav__button md-logo" href="https://phurwicz.github.io/hover" title="Hover">
-<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9 7v10h2v-4h2v4h2V7h-2v4h-2V7H9M5 3h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2z"></path></svg>
-</a>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Hover" class="md-nav__button md-logo" aria-label="Hover" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9 7v10h2v-4h2v4h2V7h-2v4h-2V7H9M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/></svg>
+
+    </a>
     Hover
   </label>
-<div class="md-nav__source">
-<a class="md-source" href="https://github.com/phurwicz/hover/" title="Go to repository">
-<div class="md-source__icon md-icon">
-<svg viewbox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 00-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 01-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 000 40.81l195.61 195.6a28.86 28.86 0 0040.8 0l194.69-194.69a28.86 28.86 0 000-40.81z"></path></svg>
-</div>
-<div class="md-source__repository">
+  
+    <div class="md-nav__source">
+      
+<a href="https://github.com/phurwicz/hover/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
     phurwicz/hover
   </div>
 </a>
-</div>
-<ul class="md-nav__list" data-md-scrollfix="">
-<li class="md-nav__item">
-<a class="md-nav__link" href="../../..">
-      Home
-    </a>
-</li>
-<li class="md-nav__item md-nav__item--nested">
-<input class="md-nav__toggle md-toggle" data-md-toggle="nav-2" id="nav-2" type="checkbox"/>
-<label class="md-nav__link" for="nav-2">
-      Tutorial
-      <span class="md-nav__icon md-icon"></span>
-</label>
-<nav aria-label="Tutorial" class="md-nav" data-md-level="1">
-<label class="md-nav__title" for="nav-2">
-<span class="md-nav__icon md-icon"></span>
-        Tutorial
-      </label>
-<ul class="md-nav__list" data-md-scrollfix="">
-<li class="md-nav__item">
-<a class="md-nav__link" href="../../tutorial/t0-quickstart/">
-      Quickstart
-    </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../../tutorial/t1-active-learning/">
-      Using Recipes
-    </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../../tutorial/t2-bokeh-app/">
-      Server Options
-    </a>
-</li>
-</ul>
-</nav>
-</li>
-<li class="md-nav__item md-nav__item--nested">
-<input class="md-nav__toggle md-toggle" data-md-toggle="nav-3" id="nav-3" type="checkbox"/>
-<label class="md-nav__link" for="nav-3">
-      Topics
-      <span class="md-nav__icon md-icon"></span>
-</label>
-<nav aria-label="Topics" class="md-nav" data-md-level="1">
-<label class="md-nav__title" for="nav-3">
-<span class="md-nav__icon md-icon"></span>
-        Topics
-      </label>
-<ul class="md-nav__list" data-md-scrollfix="">
-<li class="md-nav__item">
-<a class="md-nav__link" href="../../topics/managing-data/">
-      Managing Data (under work)
-    </a>
-</li>
-</ul>
-</nav>
-</li>
-<li class="md-nav__item md-nav__item--active md-nav__item--nested">
-<input checked="" class="md-nav__toggle md-toggle" data-md-toggle="nav-4" id="nav-4" type="checkbox"/>
-<label class="md-nav__link" for="nav-4">
-      API Reference
-      <span class="md-nav__icon md-icon"></span>
-</label>
-<nav aria-label="API Reference" class="md-nav" data-md-level="1">
-<label class="md-nav__title" for="nav-4">
-<span class="md-nav__icon md-icon"></span>
-        API Reference
-      </label>
-<ul class="md-nav__list" data-md-scrollfix="">
-<li class="md-nav__item">
-<a class="md-nav__link" href="../recipes/">
-      hover.recipes
-    </a>
-</li>
-<li class="md-nav__item md-nav__item--active md-nav__item--nested">
-<input checked="" class="md-nav__toggle md-toggle" data-md-toggle="nav-4-2" id="nav-4-2" type="checkbox"/>
-<label class="md-nav__link" for="nav-4-2">
-      hover.core
-      <span class="md-nav__icon md-icon"></span>
-</label>
-<nav aria-label="hover.core" class="md-nav" data-md-level="2">
-<label class="md-nav__title" for="nav-4-2">
-<span class="md-nav__icon md-icon"></span>
-        hover.core
-      </label>
-<ul class="md-nav__list" data-md-scrollfix="">
-<li class="md-nav__item">
-<a class="md-nav__link" href="../core-dataset/">
-      hover.core.dataset
-    </a>
-</li>
-<li class="md-nav__item md-nav__item--active md-nav__item--nested">
-<input checked="" class="md-nav__toggle md-toggle" data-md-toggle="nav-4-2-2" id="nav-4-2-2" type="checkbox"/>
-<label class="md-nav__link" for="nav-4-2-2">
-      hover.core.explorer
-      <span class="md-nav__icon md-icon"></span>
-</label>
-<nav aria-label="hover.core.explorer" class="md-nav" data-md-level="3">
-<label class="md-nav__title" for="nav-4-2-2">
-<span class="md-nav__icon md-icon"></span>
-        hover.core.explorer
-      </label>
-<ul class="md-nav__list" data-md-scrollfix="">
-<li class="md-nav__item">
-<a class="md-nav__link" href="../core-explorer-base/">
-      .base
-    </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../core-explorer-feature/">
-      .feature
-    </a>
-</li>
-<li class="md-nav__item md-nav__item--active">
-<input class="md-nav__toggle md-toggle" data-md-toggle="toc" id="__toc" type="checkbox"/>
-<label class="md-nav__link md-nav__link--active" for="__toc">
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" data-md-state="indeterminate" type="checkbox" id="__nav_2" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2">
+          Tutorial
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Tutorial" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          Tutorial
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/t0-quickstart/" class="md-nav__link">
+        Quickstart
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/t1-active-learning/" class="md-nav__link">
+        Using Recipes
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/t2-bokeh-app/" class="md-nav__link">
+        Server Options
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" data-md-state="indeterminate" type="checkbox" id="__nav_3" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3">
+          Topics
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Topics" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Topics
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/managing-data/" class="md-nav__link">
+        Managing Data (under work)
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4">
+          API Reference
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="API Reference" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          API Reference
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../recipes/" class="md-nav__link">
+        hover.recipes
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2" type="checkbox" id="__nav_4_2" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2">
+          hover.core
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="hover.core" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_2">
+          <span class="md-nav__icon md-icon"></span>
+          hover.core
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../core-dataset/" class="md-nav__link">
+        hover.core.dataset
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_2" type="checkbox" id="__nav_4_2_2" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_2">
+          hover.core.explorer
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="hover.core.explorer" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_2">
+          <span class="md-nav__icon md-icon"></span>
+          hover.core.explorer
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../core-explorer-base/" class="md-nav__link">
+        .base
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../core-explorer-feature/" class="md-nav__link">
+        .feature
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          .functionality
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         .functionality
-        <span class="md-nav__icon md-icon"></span>
-</label>
-<a class="md-nav__link md-nav__link--active" href="./">
-      .functionality
-    </a>
-<nav aria-label="Table of contents" class="md-nav md-nav--secondary">
-<label class="md-nav__title" for="__toc">
-<span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-<ul class="md-nav__list" data-md-scrollfix="">
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.core.explorer.functionality">
-    hover.core.explorer.functionality
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.core.explorer.functionality.BokehDataAnnotator">
-    BokehDataAnnotator
-  </a>
-<nav aria-label="BokehDataAnnotator" class="md-nav">
-<ul class="md-nav__list">
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.core.explorer.functionality.BokehDataAnnotator.plot">
-    plot()
-  </a>
-</li>
-</ul>
-</nav>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.core.explorer.functionality.BokehDataFinder">
-    BokehDataFinder
-  </a>
-<nav aria-label="BokehDataFinder" class="md-nav">
-<ul class="md-nav__list">
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.core.explorer.functionality.BokehDataFinder.plot">
-    plot()
-  </a>
-</li>
-</ul>
-</nav>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.core.explorer.functionality.BokehMarginExplorer">
-    BokehMarginExplorer
-  </a>
-<nav aria-label="BokehMarginExplorer" class="md-nav">
-<ul class="md-nav__list">
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.core.explorer.functionality.BokehMarginExplorer.__init__">
-    __init__()
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.core.explorer.functionality.BokehMarginExplorer.plot">
-    plot()
-  </a>
-</li>
-</ul>
-</nav>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.core.explorer.functionality.BokehSnorkelExplorer">
-    BokehSnorkelExplorer
-  </a>
-<nav aria-label="BokehSnorkelExplorer" class="md-nav">
-<ul class="md-nav__list">
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.core.explorer.functionality.BokehSnorkelExplorer.__init__">
-    __init__()
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.core.explorer.functionality.BokehSnorkelExplorer.plot">
-    plot()
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.core.explorer.functionality.BokehSnorkelExplorer.plot_lf">
-    plot_lf()
-  </a>
-</li>
-</ul>
-</nav>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.core.explorer.functionality.BokehSoftLabelExplorer">
-    BokehSoftLabelExplorer
-  </a>
-<nav aria-label="BokehSoftLabelExplorer" class="md-nav">
-<ul class="md-nav__list">
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.core.explorer.functionality.BokehSoftLabelExplorer.__init__">
-    __init__()
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.core.explorer.functionality.BokehSoftLabelExplorer.plot">
-    plot()
-  </a>
-</li>
-</ul>
-</nav>
-</li>
-</ul>
-</nav>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../core-explorer-specialization/">
-      .specialization
-    </a>
-</li>
-</ul>
-</nav>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../core-neural/">
-      hover.core.neural
-    </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../core-representation/">
-      hover.core.representation
-    </a>
-</li>
-</ul>
-</nav>
-</li>
-<li class="md-nav__item md-nav__item--nested">
-<input class="md-nav__toggle md-toggle" data-md-toggle="nav-4-3" id="nav-4-3" type="checkbox"/>
-<label class="md-nav__link" for="nav-4-3">
-      hover.utils
+      </a>
+      
+        
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
-</label>
-<nav aria-label="hover.utils" class="md-nav" data-md-level="2">
-<label class="md-nav__title" for="nav-4-3">
-<span class="md-nav__icon md-icon"></span>
-        hover.utils
-      </label>
-<ul class="md-nav__list" data-md-scrollfix="">
-<li class="md-nav__item">
-<a class="md-nav__link" href="../utils-bokeh_helper/">
-      hover.utils.bokeh_helper
-    </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../utils-snorkel_helper/">
-      hover.utils.snorkel_helper
-    </a>
-</li>
-</ul>
-</nav>
-</li>
-</ul>
-</nav>
-</li>
-</ul>
-</nav>
-</div>
-</div>
-</div>
-<div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
-<div class="md-sidebar__scrollwrap">
-<div class="md-sidebar__inner">
-<nav aria-label="Table of contents" class="md-nav md-nav--secondary">
-<label class="md-nav__title" for="__toc">
-<span class="md-nav__icon md-icon"></span>
       Table of contents
     </label>
-<ul class="md-nav__list" data-md-scrollfix="">
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.core.explorer.functionality">
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#hover.core.explorer.functionality" class="md-nav__link">
     hover.core.explorer.functionality
   </a>
+  
 </li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.core.explorer.functionality.BokehDataAnnotator">
+      
+        <li class="md-nav__item">
+  <a href="#hover.core.explorer.functionality.BokehDataAnnotator" class="md-nav__link">
     BokehDataAnnotator
   </a>
-<nav aria-label="BokehDataAnnotator" class="md-nav">
-<ul class="md-nav__list">
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.core.explorer.functionality.BokehDataAnnotator.plot">
+  
+    <nav class="md-nav" aria-label="BokehDataAnnotator">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#hover.core.explorer.functionality.BokehDataAnnotator.plot" class="md-nav__link">
     plot()
   </a>
+  
 </li>
-</ul>
-</nav>
+        
+      </ul>
+    </nav>
+  
 </li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.core.explorer.functionality.BokehDataFinder">
+      
+        <li class="md-nav__item">
+  <a href="#hover.core.explorer.functionality.BokehDataFinder" class="md-nav__link">
     BokehDataFinder
   </a>
-<nav aria-label="BokehDataFinder" class="md-nav">
-<ul class="md-nav__list">
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.core.explorer.functionality.BokehDataFinder.plot">
+  
+    <nav class="md-nav" aria-label="BokehDataFinder">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#hover.core.explorer.functionality.BokehDataFinder.plot" class="md-nav__link">
     plot()
   </a>
+  
 </li>
-</ul>
-</nav>
+        
+      </ul>
+    </nav>
+  
 </li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.core.explorer.functionality.BokehMarginExplorer">
+      
+        <li class="md-nav__item">
+  <a href="#hover.core.explorer.functionality.BokehMarginExplorer" class="md-nav__link">
     BokehMarginExplorer
   </a>
-<nav aria-label="BokehMarginExplorer" class="md-nav">
-<ul class="md-nav__list">
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.core.explorer.functionality.BokehMarginExplorer.__init__">
+  
+    <nav class="md-nav" aria-label="BokehMarginExplorer">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#hover.core.explorer.functionality.BokehMarginExplorer.__init__" class="md-nav__link">
     __init__()
   </a>
+  
 </li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.core.explorer.functionality.BokehMarginExplorer.plot">
+        
+          <li class="md-nav__item">
+  <a href="#hover.core.explorer.functionality.BokehMarginExplorer.plot" class="md-nav__link">
     plot()
   </a>
+  
 </li>
-</ul>
-</nav>
+        
+      </ul>
+    </nav>
+  
 </li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.core.explorer.functionality.BokehSnorkelExplorer">
+      
+        <li class="md-nav__item">
+  <a href="#hover.core.explorer.functionality.BokehSnorkelExplorer" class="md-nav__link">
     BokehSnorkelExplorer
   </a>
-<nav aria-label="BokehSnorkelExplorer" class="md-nav">
-<ul class="md-nav__list">
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.core.explorer.functionality.BokehSnorkelExplorer.__init__">
+  
+    <nav class="md-nav" aria-label="BokehSnorkelExplorer">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#hover.core.explorer.functionality.BokehSnorkelExplorer.__init__" class="md-nav__link">
     __init__()
   </a>
+  
 </li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.core.explorer.functionality.BokehSnorkelExplorer.plot">
+        
+          <li class="md-nav__item">
+  <a href="#hover.core.explorer.functionality.BokehSnorkelExplorer.plot" class="md-nav__link">
     plot()
   </a>
+  
 </li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.core.explorer.functionality.BokehSnorkelExplorer.plot_lf">
+        
+          <li class="md-nav__item">
+  <a href="#hover.core.explorer.functionality.BokehSnorkelExplorer.plot_lf" class="md-nav__link">
     plot_lf()
   </a>
+  
 </li>
-</ul>
-</nav>
+        
+      </ul>
+    </nav>
+  
 </li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.core.explorer.functionality.BokehSoftLabelExplorer">
+      
+        <li class="md-nav__item">
+  <a href="#hover.core.explorer.functionality.BokehSoftLabelExplorer" class="md-nav__link">
     BokehSoftLabelExplorer
   </a>
-<nav aria-label="BokehSoftLabelExplorer" class="md-nav">
-<ul class="md-nav__list">
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.core.explorer.functionality.BokehSoftLabelExplorer.__init__">
+  
+    <nav class="md-nav" aria-label="BokehSoftLabelExplorer">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#hover.core.explorer.functionality.BokehSoftLabelExplorer.__init__" class="md-nav__link">
     __init__()
   </a>
+  
 </li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.core.explorer.functionality.BokehSoftLabelExplorer.plot">
+        
+          <li class="md-nav__item">
+  <a href="#hover.core.explorer.functionality.BokehSoftLabelExplorer.plot" class="md-nav__link">
     plot()
   </a>
+  
 </li>
-</ul>
-</nav>
+        
+      </ul>
+    </nav>
+  
 </li>
-</ul>
+      
+    </ul>
+  
 </nav>
-</div>
-</div>
-</div>
-<div class="md-content">
-<article class="md-content__inner md-typeset">
-<a class="md-content__button md-icon" href="https://github.com/phurwicz/hover/edit/master/docs/pages/reference/core-explorer-functionality.md" title="Edit this page">
-<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"></path></svg>
-</a>
-<h1>.functionality</h1>
-<ul>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../core-explorer-specialization/" class="md-nav__link">
+        .specialization
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../core-neural/" class="md-nav__link">
+        hover.core.neural
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../core-representation/" class="md-nav__link">
+        hover.core.representation
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_3" data-md-state="indeterminate" type="checkbox" id="__nav_4_3" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_3">
+          hover.utils
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="hover.utils" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_3">
+          <span class="md-nav__icon md-icon"></span>
+          hover.utils
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../utils-bokeh_helper/" class="md-nav__link">
+        hover.utils.bokeh_helper
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../utils-snorkel_helper/" class="md-nav__link">
+        hover.utils.snorkel_helper
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/phurwicz/hover/edit/master/docs/pages/reference/core-explorer-functionality.md" title="Edit this page" class="md-content__button md-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
+                  </a>
+                
+                
+                  <h1>.functionality</h1>
+                
+                <ul>
 <li>
-<div class="doc doc-object doc-module">
-<h2 class="hidden-toc" href="#hover.core.explorer.functionality" id="hover.core.explorer.functionality" style="visibility: hidden; position: absolute;">
-</h2>
-<div class="doc doc-contents first">
-<details class="note" open="open"><summary>Intermediate classes based on the functionality.</summary></details>
-<div class="doc doc-children">
-<div class="doc doc-object doc-class">
+<div class="mkdocstrings">
+
+  <div class="doc doc-object doc-module">
+
+<a id="hover.core.explorer.functionality"></a>
+    <div class="doc doc-contents first">
+
+      <details class="note" open="open"><summary>Intermediate classes based on the functionality.</summary></details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+  <div class="doc doc-object doc-class">
+
+
+
 <h2 class="doc doc-heading" id="hover.core.explorer.functionality.BokehDataAnnotator">
-<code>BokehDataAnnotator</code>
+        <code>
+BokehDataAnnotator        </code>
+
+
+
 </h2>
-<div class="doc doc-contents">
-<details class="note" open="open"><summary>Annoate data points via callbacks on the buttons.</summary><p>Features:</p>
+
+    <div class="doc doc-contents ">
+
+      <details class="note" open="open"><summary>Annoate data points via callbacks on the buttons.</summary><p>Features:</p>
 <ul>
 <li>alter values in the 'label' column through the widgets.</li>
 </ul>
 </details>
-<div class="doc doc-children">
-<div class="doc doc-object doc-method">
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
 <h3 class="doc doc-heading" id="hover.core.explorer.functionality.BokehDataAnnotator.plot">
-<code class="highlight language-python">
-plot<span class="p">(</span><span class="bp">self</span><span class="p">)</span> </code>
+<code class="highlight language-python"><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></code>
+
+
 </h3>
-<div class="doc doc-contents">
-<details class="note" open="open"><summary>Re-plot all data points with the new labels.</summary><p>Overrides the parent method.
+
+    <div class="doc doc-contents ">
+
+      <details class="note" open="open"><summary>Re-plot all data points with the new labels.</summary><p>Overrides the parent method.
 Determines the label -&gt; color mapping dynamically.</p>
 </details>
-<details class="quote">
-<summary>Source code in <code>hover/core/explorer/functionality.py</code></summary>
-<div class="highlight">
-<pre><span></span><code><span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="sd">"""</span>
-<span class="sd">    ???+ note "Re-plot all data points with the new labels."</span>
+
+        <details class="quote">
+          <summary>Source code in <code>hover/core/explorer/functionality.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ???+ note &quot;Re-plot all data points with the new labels.&quot;</span>
 <span class="sd">        Overrides the parent method.</span>
 <span class="sd">        Determines the label -&gt; color mapping dynamically.</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">_key</span><span class="p">,</span> <span class="n">_source</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span>
-            <span class="s2">"x"</span><span class="p">,</span>
-            <span class="s2">"y"</span><span class="p">,</span>
+            <span class="s2">&quot;x&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;y&quot;</span><span class="p">,</span>
             <span class="n">name</span><span class="o">=</span><span class="n">_key</span><span class="p">,</span>
             <span class="n">color</span><span class="o">=</span><span class="n">SOURCE_COLOR_FIELD</span><span class="p">,</span>
             <span class="n">source</span><span class="o">=</span><span class="n">_source</span><span class="p">,</span>
             <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">glyph_kwargs</span><span class="p">[</span><span class="n">_key</span><span class="p">],</span>
         <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_good</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Plotted subset </span><span class="si">{</span><span class="n">_key</span><span class="si">}</span><span class="s2"> with </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">dfs</span><span class="p">[</span><span class="n">_key</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> points"</span><span class="p">)</span>
-</code></pre>
-</div>
-</details>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="doc doc-object doc-class">
+        <span class="bp">self</span><span class="o">.</span><span class="n">_good</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Plotted subset </span><span class="si">{</span><span class="n">_key</span><span class="si">}</span><span class="s2"> with </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">dfs</span><span class="p">[</span><span class="n">_key</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> points&quot;</span><span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+
+
+  </div>
+
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-class">
+
+
+
 <h2 class="doc doc-heading" id="hover.core.explorer.functionality.BokehDataFinder">
-<code>BokehDataFinder</code>
+        <code>
+BokehDataFinder        </code>
+
+
+
 </h2>
-<div class="doc doc-contents">
-<details class="note" open="open"><summary>Plot data points in grey ('gainsboro') and highlight search positives in coral.</summary><p>Features:</p>
+
+    <div class="doc doc-contents ">
+
+      <details class="note" open="open"><summary>Plot data points in grey ('gainsboro') and highlight search positives in coral.</summary><p>Features:</p>
 <ul>
 <li>the search widgets will highlight the results through a change of color, which gives arguably the best focus.</li>
 </ul>
 </details>
-<div class="doc doc-children">
-<div class="doc doc-object doc-method">
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
 <h3 class="doc doc-heading" id="hover.core.explorer.functionality.BokehDataFinder.plot">
-<code class="highlight language-python">
-plot<span class="p">(</span><span class="bp">self</span><span class="p">)</span> </code>
+<code class="highlight language-python"><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></code>
+
+
 </h3>
-<div class="doc doc-contents">
-<details class="note" open="open"><summary>Plot all data points.</summary></details>
-<details class="quote">
-<summary>Source code in <code>hover/core/explorer/functionality.py</code></summary>
-<div class="highlight">
-<pre><span></span><code><span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="sd">"""</span>
-<span class="sd">    ???+ note "Plot all data points."</span>
-<span class="sd">    """</span>
+
+    <div class="doc doc-contents ">
+
+      <details class="note" open="open"><summary>Plot all data points.</summary></details>
+
+        <details class="quote">
+          <summary>Source code in <code>hover/core/explorer/functionality.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ???+ note &quot;Plot all data points.&quot;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">_key</span><span class="p">,</span> <span class="n">_source</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span>
-            <span class="s2">"x"</span><span class="p">,</span> <span class="s2">"y"</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">_key</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="n">_source</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">glyph_kwargs</span><span class="p">[</span><span class="n">_key</span><span class="p">]</span>
+            <span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">_key</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="n">_source</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">glyph_kwargs</span><span class="p">[</span><span class="n">_key</span><span class="p">]</span>
         <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_good</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Plotted subset </span><span class="si">{</span><span class="n">_key</span><span class="si">}</span><span class="s2"> with </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">dfs</span><span class="p">[</span><span class="n">_key</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> points"</span><span class="p">)</span>
-</code></pre>
-</div>
-</details>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="doc doc-object doc-class">
+        <span class="bp">self</span><span class="o">.</span><span class="n">_good</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Plotted subset </span><span class="si">{</span><span class="n">_key</span><span class="si">}</span><span class="s2"> with </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">dfs</span><span class="p">[</span><span class="n">_key</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> points&quot;</span><span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+
+
+  </div>
+
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-class">
+
+
+
 <h2 class="doc doc-heading" id="hover.core.explorer.functionality.BokehMarginExplorer">
-<code>BokehMarginExplorer</code>
+        <code>
+BokehMarginExplorer        </code>
+
+
+
 </h2>
-<div class="doc doc-contents">
-<details class="note" open="open"><summary>Plot data points along with two versions of labels.</summary><p>Could be useful for A/B tests.</p>
+
+    <div class="doc doc-contents ">
+
+      <details class="note" open="open"><summary>Plot data points along with two versions of labels.</summary><p>Could be useful for A/B tests.</p>
 <p>Features:</p>
 <ul>
 <li>can choose to only plot the margins about specific labels.</li>
 <li>currently not considering multi-label scenarios.</li>
 </ul>
 </details>
-<div class="doc doc-children">
-<div class="doc doc-object doc-method">
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
 <h3 class="doc doc-heading" id="hover.core.explorer.functionality.BokehMarginExplorer.__init__">
-<code class="highlight language-python">
-__init__<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df_dict</span><span class="p">,</span> <span class="n">label_col_a</span><span class="p">,</span> <span class="n">label_col_b</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> </code>
-<span class="doc doc-properties">
-<small class="doc doc-property doc-property-special"><code>special</code></small>
-</span>
+<code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df_dict</span><span class="p">,</span> <span class="n">label_col_a</span><span class="p">,</span> <span class="n">label_col_b</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-special"><code>special</code></small>
+  </span>
+
 </h3>
-<div class="doc doc-contents">
-<details class="note" open="open"><summary>Additional construtor</summary><p>On top of the requirements of the parent class,
+
+    <div class="doc doc-contents ">
+
+      <details class="note" open="open"><summary>Additional construtor</summary><p>On top of the requirements of the parent class,
 the input dataframe should contain:</p>
 <ul>
 <li>label_col_a and label_col_b for "label margins".</li>
@@ -682,16 +1165,16 @@ the input dataframe should contain:</p>
 </tbody>
 </table>
 </details>
-<details class="quote">
-<summary>Source code in <code>hover/core/explorer/functionality.py</code></summary>
-<div class="highlight">
-<pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df_dict</span><span class="p">,</span> <span class="n">label_col_a</span><span class="p">,</span> <span class="n">label_col_b</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">"""</span>
-<span class="sd">    ???+ note "Additional construtor"</span>
+
+        <details class="quote">
+          <summary>Source code in <code>hover/core/explorer/functionality.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df_dict</span><span class="p">,</span> <span class="n">label_col_a</span><span class="p">,</span> <span class="n">label_col_b</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ???+ note &quot;Additional construtor&quot;</span>
 <span class="sd">        On top of the requirements of the parent class,</span>
 <span class="sd">        the input dataframe should contain:</span>
 
-<span class="sd">        - label_col_a and label_col_b for "label margins".</span>
+<span class="sd">        - label_col_a and label_col_b for &quot;label margins&quot;.</span>
 
 <span class="sd">        | Param         | Type   | Description                  |</span>
 <span class="sd">        | :------------ | :----- | :--------------------------- |</span>
@@ -699,22 +1182,31 @@ the input dataframe should contain:</p>
 <span class="sd">        | `label_col_a` | `str`  | column for label set A       |</span>
 <span class="sd">        | `label_col_b` | `str`  | column for label set B       |</span>
 <span class="sd">        | `**kwargs`    |        | forwarded to `bokeh.plotting.figure` |</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">label_col_a</span> <span class="o">=</span> <span class="n">label_col_a</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">label_col_b</span> <span class="o">=</span> <span class="n">label_col_b</span>
     <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">df_dict</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-</code></pre>
-</div>
-</details>
-</div>
-</div>
-<div class="doc doc-object doc-method">
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
 <h3 class="doc doc-heading" id="hover.core.explorer.functionality.BokehMarginExplorer.plot">
-<code class="highlight language-python">
-plot<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> </code>
+<code class="highlight language-python"><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
+
+
 </h3>
-<div class="doc doc-contents">
-<details class="note" open="open"><summary>Plot the margins about a single label.</summary><table>
+
+    <div class="doc doc-contents ">
+
+      <details class="note" open="open"><summary>Plot the margins about a single label.</summary><table>
 <thead>
 <tr>
 <th align="left">Param</th>
@@ -736,23 +1228,23 @@ plot<span class="p">(</span><span class="bp">self</span><span class="p">,</span>
 </tbody>
 </table>
 </details>
-<details class="quote">
-<summary>Source code in <code>hover/core/explorer/functionality.py</code></summary>
-<div class="highlight">
-<pre><span></span><code><span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">"""</span>
-<span class="sd">    ???+ note "Plot the margins about a single label."</span>
+
+        <details class="quote">
+          <summary>Source code in <code>hover/core/explorer/functionality.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ???+ note &quot;Plot the margins about a single label.&quot;</span>
 <span class="sd">        | Param      | Type   | Description                  |</span>
 <span class="sd">        | :--------- | :----- | :--------------------------- |</span>
 <span class="sd">        | `label`    |        | the label to plot about      |</span>
 <span class="sd">        | `**kwargs` |        | forwarded to plotting markers |</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">for</span> <span class="n">_key</span><span class="p">,</span> <span class="n">_source</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="c1"># prepare plot settings</span>
         <span class="n">eff_kwargs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">glyph_kwargs</span><span class="p">[</span><span class="n">_key</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="n">eff_kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="n">eff_kwargs</span><span class="p">[</span><span class="s2">"legend_label"</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2">"</span>
+        <span class="n">eff_kwargs</span><span class="p">[</span><span class="s2">&quot;legend_label&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2">&quot;</span>
 
         <span class="c1"># create agreement/increment/decrement subsets</span>
         <span class="n">col_a_pos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dfs</span><span class="p">[</span><span class="n">_key</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">label_col_a</span><span class="p">]</span> <span class="o">==</span> <span class="n">label</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
@@ -770,30 +1262,49 @@ plot<span class="p">(</span><span class="bp">self</span><span class="p">,</span>
         <span class="p">)</span>
 
         <span class="n">to_plot</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="p">{</span><span class="s2">"view"</span><span class="p">:</span> <span class="n">agreement_view</span><span class="p">,</span> <span class="s2">"marker"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">square</span><span class="p">},</span>
-            <span class="p">{</span><span class="s2">"view"</span><span class="p">:</span> <span class="n">increment_view</span><span class="p">,</span> <span class="s2">"marker"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">x</span><span class="p">},</span>
-            <span class="p">{</span><span class="s2">"view"</span><span class="p">:</span> <span class="n">decrement_view</span><span class="p">,</span> <span class="s2">"marker"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">cross</span><span class="p">},</span>
+            <span class="p">{</span><span class="s2">&quot;view&quot;</span><span class="p">:</span> <span class="n">agreement_view</span><span class="p">,</span> <span class="s2">&quot;marker&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">square</span><span class="p">},</span>
+            <span class="p">{</span><span class="s2">&quot;view&quot;</span><span class="p">:</span> <span class="n">increment_view</span><span class="p">,</span> <span class="s2">&quot;marker&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">x</span><span class="p">},</span>
+            <span class="p">{</span><span class="s2">&quot;view&quot;</span><span class="p">:</span> <span class="n">decrement_view</span><span class="p">,</span> <span class="s2">&quot;marker&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">cross</span><span class="p">},</span>
         <span class="p">]</span>
 
         <span class="c1"># plot created subsets</span>
         <span class="k">for</span> <span class="n">_dict</span> <span class="ow">in</span> <span class="n">to_plot</span><span class="p">:</span>
-            <span class="n">_view</span> <span class="o">=</span> <span class="n">_dict</span><span class="p">[</span><span class="s2">"view"</span><span class="p">]</span>
-            <span class="n">_marker</span> <span class="o">=</span> <span class="n">_dict</span><span class="p">[</span><span class="s2">"marker"</span><span class="p">]</span>
-            <span class="n">_marker</span><span class="p">(</span><span class="s2">"x"</span><span class="p">,</span> <span class="s2">"y"</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">_key</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="n">_source</span><span class="p">,</span> <span class="n">view</span><span class="o">=</span><span class="n">_view</span><span class="p">,</span> <span class="o">**</span><span class="n">eff_kwargs</span><span class="p">)</span>
-</code></pre>
-</div>
-</details>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="doc doc-object doc-class">
+            <span class="n">_view</span> <span class="o">=</span> <span class="n">_dict</span><span class="p">[</span><span class="s2">&quot;view&quot;</span><span class="p">]</span>
+            <span class="n">_marker</span> <span class="o">=</span> <span class="n">_dict</span><span class="p">[</span><span class="s2">&quot;marker&quot;</span><span class="p">]</span>
+            <span class="n">_marker</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">_key</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="n">_source</span><span class="p">,</span> <span class="n">view</span><span class="o">=</span><span class="n">_view</span><span class="p">,</span> <span class="o">**</span><span class="n">eff_kwargs</span><span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+
+
+  </div>
+
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-class">
+
+
+
 <h2 class="doc doc-heading" id="hover.core.explorer.functionality.BokehSnorkelExplorer">
-<code>BokehSnorkelExplorer</code>
+        <code>
+BokehSnorkelExplorer        </code>
+
+
+
 </h2>
-<div class="doc doc-contents">
-<details class="note" open="open"><summary>Plot data points along with labeling function (LF) outputs.</summary><p>Features:</p>
+
+    <div class="doc doc-contents ">
+
+      <details class="note" open="open"><summary>Plot data points along with labeling function (LF) outputs.</summary><p>Features:</p>
 <ul>
 <li>each labeling function corresponds to its own line_color.</li>
 <li>uses a different marker for each type of predictions: square for 'correct', x for 'incorrect', cross for 'missed', circle for 'hit'.</li>
@@ -803,17 +1314,37 @@ plot<span class="p">(</span><span class="bp">self</span><span class="p">,</span>
 <li>'hit': the LF made a prediction on a point in the 'raw' set.</li>
 </ul>
 </details>
-<div class="doc doc-children">
-<div class="doc doc-object doc-method">
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
 <h3 class="doc doc-heading" id="hover.core.explorer.functionality.BokehSnorkelExplorer.__init__">
-<code class="highlight language-python">
-__init__<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df_dict</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> </code>
-<span class="doc doc-properties">
-<small class="doc doc-property doc-property-special"><code>special</code></small>
-</span>
+<code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df_dict</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-special"><code>special</code></small>
+  </span>
+
 </h3>
-<div class="doc doc-contents">
-<details class="note" open="open"><summary>Additional construtor</summary><p>Set up</p>
+
+    <div class="doc doc-contents ">
+
+      <details class="note" open="open"><summary>Additional construtor</summary><p>Set up</p>
 <ul>
 <li>a list to keep track of plotted labeling functions.</li>
 <li>a palette for plotting labeling function predictions.</li>
@@ -840,12 +1371,12 @@ __init__<span class="p">(</span><span class="bp">self</span><span class="p">,</s
 </tbody>
 </table>
 </details>
-<details class="quote">
-<summary>Source code in <code>hover/core/explorer/functionality.py</code></summary>
-<div class="highlight">
-<pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df_dict</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">"""</span>
-<span class="sd">    ???+ note "Additional construtor"</span>
+
+        <details class="quote">
+          <summary>Source code in <code>hover/core/explorer/functionality.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df_dict</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ???+ note &quot;Additional construtor&quot;</span>
 <span class="sd">        Set up</span>
 
 <span class="sd">        -   a list to keep track of plotted labeling functions.</span>
@@ -855,47 +1386,65 @@ __init__<span class="p">(</span><span class="bp">self</span><span class="p">,</s
 <span class="sd">        | :---------- | :----- | :--------------------------- |</span>
 <span class="sd">        | `df_dict`   | `dict` | `str` -&gt; `DataFrame` mapping |</span>
 <span class="sd">        | `**kwargs`  |        | forwarded to `bokeh.plotting.figure` |</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">df_dict</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="c1"># initialize a list to keep track of plotted LFs</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">lfs</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">palette</span> <span class="o">=</span> <span class="n">Category20</span><span class="p">[</span><span class="mi">20</span><span class="p">]</span>
-</code></pre>
-</div>
-</details>
-</div>
-</div>
-<div class="doc doc-object doc-method">
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
 <h3 class="doc doc-heading" id="hover.core.explorer.functionality.BokehSnorkelExplorer.plot">
-<code class="highlight language-python">
-plot<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> </code>
+<code class="highlight language-python"><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
+
+
 </h3>
-<div class="doc doc-contents">
-<details class="note" open="open"><summary>Plot the raw subset in the background.</summary></details>
-<details class="quote">
-<summary>Source code in <code>hover/core/explorer/functionality.py</code></summary>
-<div class="highlight">
-<pre><span></span><code><span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">"""</span>
-<span class="sd">    ???+ note "Plot the raw subset in the background."</span>
-<span class="sd">    """</span>
+
+    <div class="doc doc-contents ">
+
+      <details class="note" open="open"><summary>Plot the raw subset in the background.</summary></details>
+
+        <details class="quote">
+          <summary>Source code in <code>hover/core/explorer/functionality.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ???+ note &quot;Plot the raw subset in the background.&quot;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span>
-        <span class="s2">"x"</span><span class="p">,</span> <span class="s2">"y"</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">"raw"</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">[</span><span class="s2">"raw"</span><span class="p">],</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">glyph_kwargs</span><span class="p">[</span><span class="s2">"raw"</span><span class="p">]</span>
+        <span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;raw&quot;</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">[</span><span class="s2">&quot;raw&quot;</span><span class="p">],</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">glyph_kwargs</span><span class="p">[</span><span class="s2">&quot;raw&quot;</span><span class="p">]</span>
     <span class="p">)</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">_good</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Plotted subset raw with </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">dfs</span><span class="p">[</span><span class="s1">'raw'</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> points"</span><span class="p">)</span>
-</code></pre>
-</div>
-</details>
-</div>
-</div>
-<div class="doc doc-object doc-method">
+    <span class="bp">self</span><span class="o">.</span><span class="n">_good</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Plotted subset raw with </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">dfs</span><span class="p">[</span><span class="s1">&#39;raw&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> points&quot;</span><span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
 <h3 class="doc doc-heading" id="hover.core.explorer.functionality.BokehSnorkelExplorer.plot_lf">
-<code class="highlight language-python">
-plot_lf<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lf</span><span class="p">,</span> <span class="n">L_raw</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">L_labeled</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">include</span><span class="o">=</span><span class="p">(</span><span class="s1">'C'</span><span class="p">,</span> <span class="s1">'I'</span><span class="p">,</span> <span class="s1">'M'</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> </code>
+<code class="highlight language-python"><span class="n">plot_lf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lf</span><span class="p">,</span> <span class="n">L_raw</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">L_labeled</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">include</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="s1">&#39;I&#39;</span><span class="p">,</span> <span class="s1">&#39;M&#39;</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
+
+
 </h3>
-<div class="doc doc-contents">
-<details class="note" open="open"><summary>Plot about a single labeling function.</summary><table>
+
+    <div class="doc doc-contents ">
+
+      <details class="note" open="open"><summary>Plot about a single labeling function.</summary><table>
 <thead>
 <tr>
 <th align="left">Param</th>
@@ -938,20 +1487,20 @@ plot_lf<span class="p">(</span><span class="bp">self</span><span class="p">,</sp
 <li>include: subsets to show, which can be correct(C)/incorrect(I)/missed(M)/hit(H).</li>
 </ul>
 </details>
-<details class="quote">
-<summary>Source code in <code>hover/core/explorer/functionality.py</code></summary>
-<div class="highlight">
-<pre><span></span><code><span class="k">def</span> <span class="nf">plot_lf</span><span class="p">(</span>
-    <span class="bp">self</span><span class="p">,</span> <span class="n">lf</span><span class="p">,</span> <span class="n">L_raw</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">L_labeled</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">include</span><span class="o">=</span><span class="p">(</span><span class="s2">"C"</span><span class="p">,</span> <span class="s2">"I"</span><span class="p">,</span> <span class="s2">"M"</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span>
+
+        <details class="quote">
+          <summary>Source code in <code>hover/core/explorer/functionality.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">plot_lf</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span> <span class="n">lf</span><span class="p">,</span> <span class="n">L_raw</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">L_labeled</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">include</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;C&quot;</span><span class="p">,</span> <span class="s2">&quot;I&quot;</span><span class="p">,</span> <span class="s2">&quot;M&quot;</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span>
 <span class="p">):</span>
-    <span class="sd">"""</span>
-<span class="sd">    ???+ note "Plot about a single labeling function."</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ???+ note &quot;Plot about a single labeling function.&quot;</span>
 <span class="sd">        | Param       | Type             | Description                  |</span>
 <span class="sd">        | :---------- | :--------------- | :--------------------------- |</span>
 <span class="sd">        | `lf`        | `callable`       | labeling function decorated by `@labeling_function()` from `hover.utils.snorkel_helper` |</span>
-<span class="sd">        | `L_raw`     | `np.ndarray`     | predictions, in decoded `str`, on the `"raw"` set |</span>
-<span class="sd">        | `L_labeled` | `np.ndarray`     | predictions, in decoded `str`, on the `"labeled"` set |</span>
-<span class="sd">        | `include`   | `tuple` of `str` | "C" for correct, "I" for incorrect, "M" for missed", "H" for hit: types of predictions to make visible in the plot |</span>
+<span class="sd">        | `L_raw`     | `np.ndarray`     | predictions, in decoded `str`, on the `&quot;raw&quot;` set |</span>
+<span class="sd">        | `L_labeled` | `np.ndarray`     | predictions, in decoded `str`, on the `&quot;labeled&quot;` set |</span>
+<span class="sd">        | `include`   | `tuple` of `str` | &quot;C&quot; for correct, &quot;I&quot; for incorrect, &quot;M&quot; for missed&quot;, &quot;H&quot; for hit: types of predictions to make visible in the plot |</span>
 <span class="sd">        | `**kwargs`  |                  | forwarded to plotting markers |</span>
 
 
@@ -959,107 +1508,146 @@ plot_lf<span class="p">(</span><span class="bp">self</span><span class="p">,</sp
 <span class="sd">        - L_raw: .</span>
 <span class="sd">        - L_labeled: .</span>
 <span class="sd">        - include: subsets to show, which can be correct(C)/incorrect(I)/missed(M)/hit(H).</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># keep track of added LF</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">lfs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">lf</span><span class="p">)</span>
 
     <span class="c1"># calculate predicted labels if not provided</span>
     <span class="k">if</span> <span class="n">L_raw</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">L_raw</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dfs</span><span class="p">[</span><span class="s2">"raw"</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">lf</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>
+        <span class="n">L_raw</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dfs</span><span class="p">[</span><span class="s2">&quot;raw&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">lf</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>
     <span class="k">if</span> <span class="n">L_labeled</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">L_labeled</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dfs</span><span class="p">[</span><span class="s2">"labeled"</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">lf</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>
+        <span class="n">L_labeled</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dfs</span><span class="p">[</span><span class="s2">&quot;labeled&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">lf</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>
 
     <span class="c1"># prepare plot settings</span>
-    <span class="n">legend_label</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="s1">', '</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lf</span><span class="o">.</span><span class="n">targets</span><span class="p">)</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="n">lf</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span>
+    <span class="n">legend_label</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lf</span><span class="o">.</span><span class="n">targets</span><span class="p">)</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="n">lf</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span>
     <span class="n">color</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">palette</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lfs</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
 
-    <span class="n">raw_glyph_kwargs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">glyph_kwargs</span><span class="p">[</span><span class="s2">"raw"</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-    <span class="n">raw_glyph_kwargs</span><span class="p">[</span><span class="s2">"legend_label"</span><span class="p">]</span> <span class="o">=</span> <span class="n">legend_label</span>
-    <span class="n">raw_glyph_kwargs</span><span class="p">[</span><span class="s2">"color"</span><span class="p">]</span> <span class="o">=</span> <span class="n">color</span>
+    <span class="n">raw_glyph_kwargs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">glyph_kwargs</span><span class="p">[</span><span class="s2">&quot;raw&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">raw_glyph_kwargs</span><span class="p">[</span><span class="s2">&quot;legend_label&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">legend_label</span>
+    <span class="n">raw_glyph_kwargs</span><span class="p">[</span><span class="s2">&quot;color&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">color</span>
     <span class="n">raw_glyph_kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
 
-    <span class="n">labeled_glyph_kwargs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">glyph_kwargs</span><span class="p">[</span><span class="s2">"labeled"</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-    <span class="n">labeled_glyph_kwargs</span><span class="p">[</span><span class="s2">"legend_label"</span><span class="p">]</span> <span class="o">=</span> <span class="n">legend_label</span>
-    <span class="n">labeled_glyph_kwargs</span><span class="p">[</span><span class="s2">"color"</span><span class="p">]</span> <span class="o">=</span> <span class="n">color</span>
+    <span class="n">labeled_glyph_kwargs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">glyph_kwargs</span><span class="p">[</span><span class="s2">&quot;labeled&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">labeled_glyph_kwargs</span><span class="p">[</span><span class="s2">&quot;legend_label&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">legend_label</span>
+    <span class="n">labeled_glyph_kwargs</span><span class="p">[</span><span class="s2">&quot;color&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">color</span>
     <span class="n">labeled_glyph_kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="c1"># create correct/incorrect/missed/hit subsets</span>
     <span class="n">to_plot</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">if</span> <span class="s2">"C"</span> <span class="ow">in</span> <span class="n">include</span><span class="p">:</span>
+    <span class="k">if</span> <span class="s2">&quot;C&quot;</span> <span class="ow">in</span> <span class="n">include</span><span class="p">:</span>
         <span class="n">to_plot</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
             <span class="p">{</span>
-                <span class="s2">"name"</span><span class="p">:</span> <span class="s2">"labeled"</span><span class="p">,</span>
-                <span class="s2">"view"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_view_correct</span><span class="p">(</span><span class="n">L_labeled</span><span class="p">),</span>
-                <span class="s2">"marker"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">square</span><span class="p">,</span>
-                <span class="s2">"kwargs"</span><span class="p">:</span> <span class="n">labeled_glyph_kwargs</span><span class="p">,</span>
+                <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;labeled&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;view&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_view_correct</span><span class="p">(</span><span class="n">L_labeled</span><span class="p">),</span>
+                <span class="s2">&quot;marker&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">square</span><span class="p">,</span>
+                <span class="s2">&quot;kwargs&quot;</span><span class="p">:</span> <span class="n">labeled_glyph_kwargs</span><span class="p">,</span>
             <span class="p">}</span>
         <span class="p">)</span>
-    <span class="k">if</span> <span class="s2">"I"</span> <span class="ow">in</span> <span class="n">include</span><span class="p">:</span>
+    <span class="k">if</span> <span class="s2">&quot;I&quot;</span> <span class="ow">in</span> <span class="n">include</span><span class="p">:</span>
         <span class="n">to_plot</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
             <span class="p">{</span>
-                <span class="s2">"name"</span><span class="p">:</span> <span class="s2">"labeled"</span><span class="p">,</span>
-                <span class="s2">"view"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_view_incorrect</span><span class="p">(</span><span class="n">L_labeled</span><span class="p">),</span>
-                <span class="s2">"marker"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">x</span><span class="p">,</span>
-                <span class="s2">"kwargs"</span><span class="p">:</span> <span class="n">labeled_glyph_kwargs</span><span class="p">,</span>
+                <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;labeled&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;view&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_view_incorrect</span><span class="p">(</span><span class="n">L_labeled</span><span class="p">),</span>
+                <span class="s2">&quot;marker&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">x</span><span class="p">,</span>
+                <span class="s2">&quot;kwargs&quot;</span><span class="p">:</span> <span class="n">labeled_glyph_kwargs</span><span class="p">,</span>
             <span class="p">}</span>
         <span class="p">)</span>
-    <span class="k">if</span> <span class="s2">"M"</span> <span class="ow">in</span> <span class="n">include</span><span class="p">:</span>
+    <span class="k">if</span> <span class="s2">&quot;M&quot;</span> <span class="ow">in</span> <span class="n">include</span><span class="p">:</span>
         <span class="n">to_plot</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
             <span class="p">{</span>
-                <span class="s2">"name"</span><span class="p">:</span> <span class="s2">"labeled"</span><span class="p">,</span>
-                <span class="s2">"view"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_view_missed</span><span class="p">(</span><span class="n">L_labeled</span><span class="p">,</span> <span class="n">lf</span><span class="o">.</span><span class="n">targets</span><span class="p">),</span>
-                <span class="s2">"marker"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">cross</span><span class="p">,</span>
-                <span class="s2">"kwargs"</span><span class="p">:</span> <span class="n">labeled_glyph_kwargs</span><span class="p">,</span>
+                <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;labeled&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;view&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_view_missed</span><span class="p">(</span><span class="n">L_labeled</span><span class="p">,</span> <span class="n">lf</span><span class="o">.</span><span class="n">targets</span><span class="p">),</span>
+                <span class="s2">&quot;marker&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">cross</span><span class="p">,</span>
+                <span class="s2">&quot;kwargs&quot;</span><span class="p">:</span> <span class="n">labeled_glyph_kwargs</span><span class="p">,</span>
             <span class="p">}</span>
         <span class="p">)</span>
-    <span class="k">if</span> <span class="s2">"H"</span> <span class="ow">in</span> <span class="n">include</span><span class="p">:</span>
+    <span class="k">if</span> <span class="s2">&quot;H&quot;</span> <span class="ow">in</span> <span class="n">include</span><span class="p">:</span>
         <span class="n">to_plot</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
             <span class="p">{</span>
-                <span class="s2">"name"</span><span class="p">:</span> <span class="s2">"raw"</span><span class="p">,</span>
-                <span class="s2">"view"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_view_hit</span><span class="p">(</span><span class="n">L_raw</span><span class="p">),</span>
-                <span class="s2">"marker"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">circle</span><span class="p">,</span>
-                <span class="s2">"kwargs"</span><span class="p">:</span> <span class="n">raw_glyph_kwargs</span><span class="p">,</span>
+                <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;raw&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;view&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_view_hit</span><span class="p">(</span><span class="n">L_raw</span><span class="p">),</span>
+                <span class="s2">&quot;marker&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">circle</span><span class="p">,</span>
+                <span class="s2">&quot;kwargs&quot;</span><span class="p">:</span> <span class="n">raw_glyph_kwargs</span><span class="p">,</span>
             <span class="p">}</span>
         <span class="p">)</span>
 
     <span class="c1"># plot created subsets</span>
     <span class="k">for</span> <span class="n">_dict</span> <span class="ow">in</span> <span class="n">to_plot</span><span class="p">:</span>
-        <span class="n">_name</span> <span class="o">=</span> <span class="n">_dict</span><span class="p">[</span><span class="s2">"name"</span><span class="p">]</span>
-        <span class="n">_view</span> <span class="o">=</span> <span class="n">_dict</span><span class="p">[</span><span class="s2">"view"</span><span class="p">]</span>
-        <span class="n">_marker</span> <span class="o">=</span> <span class="n">_dict</span><span class="p">[</span><span class="s2">"marker"</span><span class="p">]</span>
-        <span class="n">_kwargs</span> <span class="o">=</span> <span class="n">_dict</span><span class="p">[</span><span class="s2">"kwargs"</span><span class="p">]</span>
-        <span class="n">_marker</span><span class="p">(</span><span class="s2">"x"</span><span class="p">,</span> <span class="s2">"y"</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="n">_view</span><span class="o">.</span><span class="n">source</span><span class="p">,</span> <span class="n">view</span><span class="o">=</span><span class="n">_view</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">_name</span><span class="p">,</span> <span class="o">**</span><span class="n">_kwargs</span><span class="p">)</span>
-</code></pre>
-</div>
-</details>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="doc doc-object doc-class">
+        <span class="n">_name</span> <span class="o">=</span> <span class="n">_dict</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
+        <span class="n">_view</span> <span class="o">=</span> <span class="n">_dict</span><span class="p">[</span><span class="s2">&quot;view&quot;</span><span class="p">]</span>
+        <span class="n">_marker</span> <span class="o">=</span> <span class="n">_dict</span><span class="p">[</span><span class="s2">&quot;marker&quot;</span><span class="p">]</span>
+        <span class="n">_kwargs</span> <span class="o">=</span> <span class="n">_dict</span><span class="p">[</span><span class="s2">&quot;kwargs&quot;</span><span class="p">]</span>
+        <span class="n">_marker</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="n">_view</span><span class="o">.</span><span class="n">source</span><span class="p">,</span> <span class="n">view</span><span class="o">=</span><span class="n">_view</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">_name</span><span class="p">,</span> <span class="o">**</span><span class="n">_kwargs</span><span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+
+
+  </div>
+
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-class">
+
+
+
 <h2 class="doc doc-heading" id="hover.core.explorer.functionality.BokehSoftLabelExplorer">
-<code>BokehSoftLabelExplorer</code>
+        <code>
+BokehSoftLabelExplorer        </code>
+
+
+
 </h2>
-<div class="doc doc-contents">
-<details class="note" open="open"><summary>Plot data points according to their labels and confidence scores.</summary><p>Features:</p>
+
+    <div class="doc doc-contents ">
+
+      <details class="note" open="open"><summary>Plot data points according to their labels and confidence scores.</summary><p>Features:</p>
 <ul>
 <li>the predicted label will correspond to fill_color.</li>
 <li>the confidence score, assumed to be a float between 0.0 and 1.0, will be reflected through fill_alpha.</li>
 <li>currently not considering multi-label scenarios.</li>
 </ul>
 </details>
-<div class="doc doc-children">
-<div class="doc doc-object doc-method">
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
 <h3 class="doc doc-heading" id="hover.core.explorer.functionality.BokehSoftLabelExplorer.__init__">
-<code class="highlight language-python">
-__init__<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df_dict</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">score_col</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> </code>
-<span class="doc doc-properties">
-<small class="doc doc-property doc-property-special"><code>special</code></small>
-</span>
+<code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df_dict</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">score_col</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-special"><code>special</code></small>
+  </span>
+
 </h3>
-<div class="doc doc-contents">
-<details class="note" open="open"><summary>Additional construtor</summary><p>On top of the requirements of the parent class,
+
+    <div class="doc doc-contents ">
+
+      <details class="note" open="open"><summary>Additional construtor</summary><p>On top of the requirements of the parent class,
 the input dataframe should contain:</p>
 <ul>
 <li>label_col and score_col for "soft predictions".</li>
@@ -1096,16 +1684,16 @@ the input dataframe should contain:</p>
 </tbody>
 </table>
 </details>
-<details class="quote">
-<summary>Source code in <code>hover/core/explorer/functionality.py</code></summary>
-<div class="highlight">
-<pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df_dict</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">score_col</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">"""</span>
-<span class="sd">    ???+ note "Additional construtor"</span>
+
+        <details class="quote">
+          <summary>Source code in <code>hover/core/explorer/functionality.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df_dict</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">score_col</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ???+ note &quot;Additional construtor&quot;</span>
 <span class="sd">        On top of the requirements of the parent class,</span>
 <span class="sd">        the input dataframe should contain:</span>
 
-<span class="sd">        - label_col and score_col for "soft predictions".</span>
+<span class="sd">        - label_col and score_col for &quot;soft predictions&quot;.</span>
 
 <span class="sd">        | Param       | Type   | Description                  |</span>
 <span class="sd">        | :---------- | :----- | :--------------------------- |</span>
@@ -1113,23 +1701,32 @@ the input dataframe should contain:</p>
 <span class="sd">        | `label_col` | `str`  | column for the soft label    |</span>
 <span class="sd">        | `score_col` | `str`  | column for the soft score    |</span>
 <span class="sd">        | `**kwargs`  |        | forwarded to `bokeh.plotting.figure` |</span>
-<span class="sd">    """</span>
-    <span class="k">assert</span> <span class="n">label_col</span> <span class="o">!=</span> <span class="s2">"label"</span><span class="p">,</span> <span class="s2">"'label' field is reserved"</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">assert</span> <span class="n">label_col</span> <span class="o">!=</span> <span class="s2">&quot;label&quot;</span><span class="p">,</span> <span class="s2">&quot;&#39;label&#39; field is reserved&quot;</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">label_col</span> <span class="o">=</span> <span class="n">label_col</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">score_col</span> <span class="o">=</span> <span class="n">score_col</span>
     <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">df_dict</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-</code></pre>
-</div>
-</details>
-</div>
-</div>
-<div class="doc doc-object doc-method">
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
 <h3 class="doc doc-heading" id="hover.core.explorer.functionality.BokehSoftLabelExplorer.plot">
-<code class="highlight language-python">
-plot<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> </code>
+<code class="highlight language-python"><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
+
+
 </h3>
-<div class="doc doc-contents">
-<details class="note" open="open"><summary>Plot all data points, setting color alpha based on the soft score.</summary><table>
+
+    <div class="doc doc-contents ">
+
+      <details class="note" open="open"><summary>Plot all data points, setting color alpha based on the soft score.</summary><table>
 <thead>
 <tr>
 <th align="left">Param</th>
@@ -1146,99 +1743,151 @@ plot<span class="p">(</span><span class="bp">self</span><span class="p">,</span>
 </tbody>
 </table>
 </details>
-<details class="quote">
-<summary>Source code in <code>hover/core/explorer/functionality.py</code></summary>
-<div class="highlight">
-<pre><span></span><code><span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">"""</span>
-<span class="sd">    ???+ note "Plot all data points, setting color alpha based on the soft score."</span>
+
+        <details class="quote">
+          <summary>Source code in <code>hover/core/explorer/functionality.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ???+ note &quot;Plot all data points, setting color alpha based on the soft score.&quot;</span>
 <span class="sd">        | Param      | Type   | Description                  |</span>
 <span class="sd">        | :--------- | :----- | :--------------------------- |</span>
 <span class="sd">        | `**kwargs` |        | forwarded to plotting markers |</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">_key</span><span class="p">,</span> <span class="n">_source</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="c1"># prepare plot settings</span>
         <span class="n">preset_kwargs</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">"color"</span><span class="p">:</span> <span class="n">SOURCE_COLOR_FIELD</span><span class="p">,</span>
-            <span class="s2">"fill_alpha"</span><span class="p">:</span> <span class="n">SOURCE_ALPHA_FIELD</span><span class="p">,</span>
+            <span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="n">SOURCE_COLOR_FIELD</span><span class="p">,</span>
+            <span class="s2">&quot;fill_alpha&quot;</span><span class="p">:</span> <span class="n">SOURCE_ALPHA_FIELD</span><span class="p">,</span>
         <span class="p">}</span>
         <span class="n">eff_kwargs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">glyph_kwargs</span><span class="p">[</span><span class="n">_key</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="n">eff_kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">preset_kwargs</span><span class="p">)</span>
         <span class="n">eff_kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span><span class="s2">"x"</span><span class="p">,</span> <span class="s2">"y"</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">_key</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="n">_source</span><span class="p">,</span> <span class="o">**</span><span class="n">eff_kwargs</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_good</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Plotted subset </span><span class="si">{</span><span class="n">_key</span><span class="si">}</span><span class="s2"> with </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">dfs</span><span class="p">[</span><span class="n">_key</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> points"</span><span class="p">)</span>
-</code></pre>
-</div>
-</details>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">_key</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="n">_source</span><span class="p">,</span> <span class="o">**</span><span class="n">eff_kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_good</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Plotted subset </span><span class="si">{</span><span class="n">_key</span><span class="si">}</span><span class="s2"> with </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">dfs</span><span class="p">[</span><span class="n">_key</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> points&quot;</span><span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+
+
+  </div>
+
+    </div>
+
+  </div>
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+  </div>
+
+<h2 data-role="module" id="hover.core.explorer.functionality"></h2>
+<h2 class="doc doc-heading" data-role="class" id="hover.core.explorer.functionality.BokehDataAnnotator"></h2>
+<h3 class="doc doc-heading" data-role="method" id="hover.core.explorer.functionality.BokehDataAnnotator.plot"></h3>
+<h2 class="doc doc-heading" data-role="class" id="hover.core.explorer.functionality.BokehDataFinder"></h2>
+<h3 class="doc doc-heading" data-role="method" id="hover.core.explorer.functionality.BokehDataFinder.plot"></h3>
+<h2 class="doc doc-heading" data-role="class" id="hover.core.explorer.functionality.BokehMarginExplorer"></h2>
+<h3 class="doc doc-heading" data-role="method" id="hover.core.explorer.functionality.BokehMarginExplorer.__init__"></h3>
+<h3 class="doc doc-heading" data-role="method" id="hover.core.explorer.functionality.BokehMarginExplorer.plot"></h3>
+<h2 class="doc doc-heading" data-role="class" id="hover.core.explorer.functionality.BokehSnorkelExplorer"></h2>
+<h3 class="doc doc-heading" data-role="method" id="hover.core.explorer.functionality.BokehSnorkelExplorer.__init__"></h3>
+<h3 class="doc doc-heading" data-role="method" id="hover.core.explorer.functionality.BokehSnorkelExplorer.plot"></h3>
+<h3 class="doc doc-heading" data-role="method" id="hover.core.explorer.functionality.BokehSnorkelExplorer.plot_lf"></h3>
+<h2 class="doc doc-heading" data-role="class" id="hover.core.explorer.functionality.BokehSoftLabelExplorer"></h2>
+<h3 class="doc doc-heading" data-role="method" id="hover.core.explorer.functionality.BokehSoftLabelExplorer.__init__"></h3>
+<h3 class="doc doc-heading" data-role="method" id="hover.core.explorer.functionality.BokehSoftLabelExplorer.plot"></h3>
 </div>
 </li>
 </ul>
-</article>
-</div>
-</div>
-</main>
-<footer class="md-footer">
-<div class="md-footer-nav">
-<nav aria-label="Footer" class="md-footer-nav__inner md-grid">
-<a class="md-footer-nav__link md-footer-nav__link--prev" href="../core-explorer-feature/" rel="prev">
-<div class="md-footer-nav__button md-icon">
-<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"></path></svg>
-</div>
-<div class="md-footer-nav__title">
-<div class="md-ellipsis">
-<span class="md-footer-nav__direction">
-                  Previous
-                </span>
-                .feature
-              </div>
-</div>
-</a>
-<a class="md-footer-nav__link md-footer-nav__link--next" href="../core-explorer-specialization/" rel="next">
-<div class="md-footer-nav__title">
-<div class="md-ellipsis">
-<span class="md-footer-nav__direction">
-                  Next
-                </span>
-                .specialization
-              </div>
-</div>
-<div class="md-footer-nav__button md-icon">
-<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"></path></svg>
-</div>
-</a>
-</nav>
-</div>
-<div class="md-footer-meta md-typeset">
-<div class="md-footer-meta__inner md-grid">
-<div class="md-footer-copyright">
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
         
-        Made with
-        <a href="https://squidfunk.github.io/mkdocs-material/" rel="noopener" target="_blank">
-          Material for MkDocs
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        
+        <a href="../core-explorer-feature/" class="md-footer__link md-footer__link--prev" aria-label="Previous: .feature" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              .feature
+            </div>
+          </div>
         </a>
-</div>
-</div>
-</div>
+      
+      
+        
+        <a href="../core-explorer-specialization/" class="md-footer__link md-footer__link--next" aria-label="Next: .specialization" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              .specialization
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        
+          Made with
+          <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+            Material for MkDocs
+          </a>
+        
+        
+      </div>
+      
+    </div>
+  </div>
 </footer>
-</div>
-<script src="../../../assets/javascripts/vendor.fd16492e.min.js"></script>
-<script src="../../../assets/javascripts/bundle.7836ba4d.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}</script>
-<script>
-        app = initialize({
-          base: "../../..",
-          features: ['navigation.expand', 'navigation.tabs', 'search.suggest', 'toc.integrate'],
-          search: Object.assign({
-            worker: "../../../assets/javascripts/worker/search.4ac00218.min.js"
-          }, typeof search !== "undefined" && search)
-        })
-      </script>
-</body>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.expand", "navigation.tabs", "search.suggest", "toc.integrate"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../../assets/javascripts/workers/search.8397ff9e.min.js", "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.1e84347e.min.js"></script>
+      
+    
+  </body>
 </html>

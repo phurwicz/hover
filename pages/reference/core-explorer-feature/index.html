@@ -1,453 +1,866 @@
 
-<!DOCTYPE html>
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Hover over and label data rapidly.">
+      
+      
+      
+      
+        <link rel="canonical" href="https://phurwicz.github.io/hover/pages/reference/core-explorer-feature/">
+      
+      <link rel="icon" href="../../../images/favicon.png">
+      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-7.3.4">
+    
+    
+      
+        <title>.feature - Hover</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.db9e7362.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.3f5d1f46.min.css">
+        
+      
+    
+    
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>:root{--md-text-font-family:"Roboto";--md-code-font-family:"Roboto Mono"}</style>
+      
+    
+    
+    
+      <link rel="stylesheet" href="../../../assets/_mkdocstrings.css">
+    
+    
+      
 
-<html class="no-js" lang="en">
-<head>
-<meta charset="utf-8"/>
-<meta content="width=device-width,initial-scale=1" name="viewport"/>
-<meta content="Hover over and label data rapidly." name="description"/>
-<link href="https://phurwicz.github.io/hover/pages/reference/core-explorer-feature/" rel="canonical"/>
-<link href="../../../images/favicon.png" rel="shortcut icon"/>
-<meta content="mkdocs-1.1, mkdocs-material-6.1.6" name="generator"/>
-<title>.feature - Hover</title>
-<link href="../../../assets/stylesheets/main.6910b76c.min.css" rel="stylesheet"/>
-<link href="../../../assets/stylesheets/palette.196e0c26.min.css" rel="stylesheet"/>
-<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&amp;display=fallback" rel="stylesheet"/>
-<style>body,input{font-family:"Roboto",-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono",SFMono-Regular,Consolas,Menlo,monospace}</style>
-</head>
-<body data-md-color-accent="none" data-md-color-primary="none" data-md-color-scheme="" dir="ltr">
-<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
-<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
-<label class="md-overlay" for="__drawer"></label>
-<div data-md-component="skip">
-<a class="md-skip" href="#hover.core.explorer.feature">
+  
+
+
+  
+
+  
+
+
+  <script>window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga("create","UA-211167044-1","auto"),ga("set","anonymizeIp",!0),ga("send","pageview"),document.addEventListener("DOMContentLoaded",function(){document.forms.search&&document.forms.search.query.addEventListener("blur",function(){var e;this.value&&(e=document.location.pathname,ga("send","pageview",e+"?q="+this.value))}),"undefined"!=typeof location$&&location$.subscribe(function(e){ga("send","pageview",e.pathname)})})</script>
+  <script async src="https://www.google-analytics.com/analytics.js"></script>
+
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="none" data-md-color-accent="none">
+  
+    
+    <script>function __prefix(e){return new URL("../../..",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#hover.core.explorer.feature" class="md-skip">
           Skip to content
         </a>
-</div>
-<div data-md-component="announce">
-</div>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      
+
 <header class="md-header" data-md-component="header">
-<nav aria-label="Header" class="md-header-nav md-grid">
-<a aria-label="Hover" class="md-header-nav__button md-logo" href="https://phurwicz.github.io/hover" title="Hover">
-<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9 7v10h2v-4h2v4h2V7h-2v4h-2V7H9M5 3h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2z"></path></svg>
-</a>
-<label class="md-header-nav__button md-icon" for="__drawer">
-<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"></path></svg>
-</label>
-<div class="md-header-nav__title" data-md-component="header-title">
-<div class="md-header-nav__ellipsis">
-<span class="md-header-nav__topic md-ellipsis">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="Hover" class="md-header__button md-logo" aria-label="Hover" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9 7v10h2v-4h2v4h2V7h-2v4h-2V7H9M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
             Hover
           </span>
-<span class="md-header-nav__topic md-ellipsis">
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
             
               .feature
             
           </span>
-</div>
-</div>
-<label class="md-header-nav__button md-icon" for="__search">
-<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"></path></svg>
-</label>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
 <div class="md-search" data-md-component="search" role="dialog">
-<label class="md-search__overlay" for="__search"></label>
-<div class="md-search__inner" role="search">
-<form class="md-search__form" name="search">
-<input aria-label="Search" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" data-md-state="active" name="query" placeholder="Search" required="" spellcheck="false" type="text"/>
-<label class="md-search__icon md-icon" for="__search">
-<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"></path></svg>
-<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"></path></svg>
-</label>
-<button aria-label="Clear" class="md-search__icon md-icon" data-md-component="search-reset" tabindex="-1" type="reset">
-<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"></path></svg>
-</button>
-</form>
-<div class="md-search__output">
-<div class="md-search__scrollwrap" data-md-scrollfix="">
-<div class="md-search-result" data-md-component="search-result">
-<div class="md-search-result__meta">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
             Initializing search
           </div>
-<ol class="md-search-result__list"></ol>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-</div>
-</div>
-</div>
-</div>
-<div class="md-header-nav__source">
-<a class="md-source" href="https://github.com/phurwicz/hover/" title="Go to repository">
-<div class="md-source__icon md-icon">
-<svg viewbox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 00-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 01-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 000 40.81l195.61 195.6a28.86 28.86 0 0040.8 0l194.69-194.69a28.86 28.86 0 000-40.81z"></path></svg>
-</div>
-<div class="md-source__repository">
+    
+    
+      <div class="md-header__source">
+        
+<a href="https://github.com/phurwicz/hover/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
     phurwicz/hover
   </div>
 </a>
-</div>
-</nav>
+      </div>
+    
+  </nav>
+  
 </header>
-<div class="md-container" data-md-component="container">
-<nav aria-label="Tabs" class="md-tabs md-tabs--active" data-md-component="tabs">
-<div class="md-tabs__inner md-grid">
-<ul class="md-tabs__list">
-<li class="md-tabs__item">
-<a class="md-tabs__link" href="../../..">
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-tabs__inner md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../.." class="md-tabs__link">
       Home
     </a>
-</li>
-<li class="md-tabs__item">
-<a class="md-tabs__link" href="../../tutorial/t0-quickstart/">
+  </li>
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../tutorial/t0-quickstart/" class="md-tabs__link">
         Tutorial
       </a>
-</li>
-<li class="md-tabs__item">
-<a class="md-tabs__link" href="../../topics/managing-data/">
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../topics/managing-data/" class="md-tabs__link">
         Topics
       </a>
-</li>
-<li class="md-tabs__item">
-<a class="md-tabs__link md-tabs__link--active" href="../recipes/">
+    </li>
+  
+
+      
+        
+  
+  
+    
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../recipes/" class="md-tabs__link md-tabs__link--active">
         API Reference
       </a>
-</li>
-</ul>
-</div>
+    </li>
+  
+
+      
+    </ul>
+  </div>
 </nav>
-<main class="md-main" data-md-component="main">
-<div class="md-main__inner md-grid">
-<div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
-<div class="md-sidebar__scrollwrap">
-<div class="md-sidebar__inner">
-<nav aria-label="Navigation" class="md-nav md-nav--primary" data-md-level="0">
-<label class="md-nav__title" for="__drawer">
-<a aria-label="Hover" class="md-nav__button md-logo" href="https://phurwicz.github.io/hover" title="Hover">
-<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9 7v10h2v-4h2v4h2V7h-2v4h-2V7H9M5 3h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2z"></path></svg>
-</a>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Hover" class="md-nav__button md-logo" aria-label="Hover" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9 7v10h2v-4h2v4h2V7h-2v4h-2V7H9M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/></svg>
+
+    </a>
     Hover
   </label>
-<div class="md-nav__source">
-<a class="md-source" href="https://github.com/phurwicz/hover/" title="Go to repository">
-<div class="md-source__icon md-icon">
-<svg viewbox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 00-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 01-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 000 40.81l195.61 195.6a28.86 28.86 0 0040.8 0l194.69-194.69a28.86 28.86 0 000-40.81z"></path></svg>
-</div>
-<div class="md-source__repository">
+  
+    <div class="md-nav__source">
+      
+<a href="https://github.com/phurwicz/hover/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
     phurwicz/hover
   </div>
 </a>
-</div>
-<ul class="md-nav__list" data-md-scrollfix="">
-<li class="md-nav__item">
-<a class="md-nav__link" href="../../..">
-      Home
-    </a>
-</li>
-<li class="md-nav__item md-nav__item--nested">
-<input class="md-nav__toggle md-toggle" data-md-toggle="nav-2" id="nav-2" type="checkbox"/>
-<label class="md-nav__link" for="nav-2">
-      Tutorial
-      <span class="md-nav__icon md-icon"></span>
-</label>
-<nav aria-label="Tutorial" class="md-nav" data-md-level="1">
-<label class="md-nav__title" for="nav-2">
-<span class="md-nav__icon md-icon"></span>
-        Tutorial
-      </label>
-<ul class="md-nav__list" data-md-scrollfix="">
-<li class="md-nav__item">
-<a class="md-nav__link" href="../../tutorial/t0-quickstart/">
-      Quickstart
-    </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../../tutorial/t1-active-learning/">
-      Using Recipes
-    </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../../tutorial/t2-bokeh-app/">
-      Server Options
-    </a>
-</li>
-</ul>
-</nav>
-</li>
-<li class="md-nav__item md-nav__item--nested">
-<input class="md-nav__toggle md-toggle" data-md-toggle="nav-3" id="nav-3" type="checkbox"/>
-<label class="md-nav__link" for="nav-3">
-      Topics
-      <span class="md-nav__icon md-icon"></span>
-</label>
-<nav aria-label="Topics" class="md-nav" data-md-level="1">
-<label class="md-nav__title" for="nav-3">
-<span class="md-nav__icon md-icon"></span>
-        Topics
-      </label>
-<ul class="md-nav__list" data-md-scrollfix="">
-<li class="md-nav__item">
-<a class="md-nav__link" href="../../topics/managing-data/">
-      Managing Data (under work)
-    </a>
-</li>
-</ul>
-</nav>
-</li>
-<li class="md-nav__item md-nav__item--active md-nav__item--nested">
-<input checked="" class="md-nav__toggle md-toggle" data-md-toggle="nav-4" id="nav-4" type="checkbox"/>
-<label class="md-nav__link" for="nav-4">
-      API Reference
-      <span class="md-nav__icon md-icon"></span>
-</label>
-<nav aria-label="API Reference" class="md-nav" data-md-level="1">
-<label class="md-nav__title" for="nav-4">
-<span class="md-nav__icon md-icon"></span>
-        API Reference
-      </label>
-<ul class="md-nav__list" data-md-scrollfix="">
-<li class="md-nav__item">
-<a class="md-nav__link" href="../recipes/">
-      hover.recipes
-    </a>
-</li>
-<li class="md-nav__item md-nav__item--active md-nav__item--nested">
-<input checked="" class="md-nav__toggle md-toggle" data-md-toggle="nav-4-2" id="nav-4-2" type="checkbox"/>
-<label class="md-nav__link" for="nav-4-2">
-      hover.core
-      <span class="md-nav__icon md-icon"></span>
-</label>
-<nav aria-label="hover.core" class="md-nav" data-md-level="2">
-<label class="md-nav__title" for="nav-4-2">
-<span class="md-nav__icon md-icon"></span>
-        hover.core
-      </label>
-<ul class="md-nav__list" data-md-scrollfix="">
-<li class="md-nav__item">
-<a class="md-nav__link" href="../core-dataset/">
-      hover.core.dataset
-    </a>
-</li>
-<li class="md-nav__item md-nav__item--active md-nav__item--nested">
-<input checked="" class="md-nav__toggle md-toggle" data-md-toggle="nav-4-2-2" id="nav-4-2-2" type="checkbox"/>
-<label class="md-nav__link" for="nav-4-2-2">
-      hover.core.explorer
-      <span class="md-nav__icon md-icon"></span>
-</label>
-<nav aria-label="hover.core.explorer" class="md-nav" data-md-level="3">
-<label class="md-nav__title" for="nav-4-2-2">
-<span class="md-nav__icon md-icon"></span>
-        hover.core.explorer
-      </label>
-<ul class="md-nav__list" data-md-scrollfix="">
-<li class="md-nav__item">
-<a class="md-nav__link" href="../core-explorer-base/">
-      .base
-    </a>
-</li>
-<li class="md-nav__item md-nav__item--active">
-<input class="md-nav__toggle md-toggle" data-md-toggle="toc" id="__toc" type="checkbox"/>
-<label class="md-nav__link md-nav__link--active" for="__toc">
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" data-md-state="indeterminate" type="checkbox" id="__nav_2" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2">
+          Tutorial
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Tutorial" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          Tutorial
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/t0-quickstart/" class="md-nav__link">
+        Quickstart
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/t1-active-learning/" class="md-nav__link">
+        Using Recipes
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/t2-bokeh-app/" class="md-nav__link">
+        Server Options
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" data-md-state="indeterminate" type="checkbox" id="__nav_3" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3">
+          Topics
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Topics" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Topics
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/managing-data/" class="md-nav__link">
+        Managing Data (under work)
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4">
+          API Reference
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="API Reference" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          API Reference
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../recipes/" class="md-nav__link">
+        hover.recipes
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2" type="checkbox" id="__nav_4_2" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2">
+          hover.core
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="hover.core" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_2">
+          <span class="md-nav__icon md-icon"></span>
+          hover.core
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../core-dataset/" class="md-nav__link">
+        hover.core.dataset
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_2" type="checkbox" id="__nav_4_2_2" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2_2">
+          hover.core.explorer
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="hover.core.explorer" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_2_2">
+          <span class="md-nav__icon md-icon"></span>
+          hover.core.explorer
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../core-explorer-base/" class="md-nav__link">
+        .base
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          .feature
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         .feature
-        <span class="md-nav__icon md-icon"></span>
-</label>
-<a class="md-nav__link md-nav__link--active" href="./">
-      .feature
-    </a>
-<nav aria-label="Table of contents" class="md-nav md-nav--secondary">
-<label class="md-nav__title" for="__toc">
-<span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-<ul class="md-nav__list" data-md-scrollfix="">
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.core.explorer.feature">
-    hover.core.explorer.feature
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.core.explorer.feature.BokehForAudio">
-    BokehForAudio
-  </a>
-<nav aria-label="BokehForAudio" class="md-nav">
-<ul class="md-nav__list">
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.core.explorer.feature.BokehForAudio.activate_search">
-    activate_search()
-  </a>
-</li>
-</ul>
-</nav>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.core.explorer.feature.BokehForImage">
-    BokehForImage
-  </a>
-<nav aria-label="BokehForImage" class="md-nav">
-<ul class="md-nav__list">
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.core.explorer.feature.BokehForImage.activate_search">
-    activate_search()
-  </a>
-</li>
-</ul>
-</nav>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.core.explorer.feature.BokehForText">
-    BokehForText
-  </a>
-<nav aria-label="BokehForText" class="md-nav">
-<ul class="md-nav__list">
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.core.explorer.feature.BokehForText.activate_search">
-    activate_search()
-  </a>
-</li>
-</ul>
-</nav>
-</li>
-</ul>
-</nav>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../core-explorer-functionality/">
-      .functionality
-    </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../core-explorer-specialization/">
-      .specialization
-    </a>
-</li>
-</ul>
-</nav>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../core-neural/">
-      hover.core.neural
-    </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../core-representation/">
-      hover.core.representation
-    </a>
-</li>
-</ul>
-</nav>
-</li>
-<li class="md-nav__item md-nav__item--nested">
-<input class="md-nav__toggle md-toggle" data-md-toggle="nav-4-3" id="nav-4-3" type="checkbox"/>
-<label class="md-nav__link" for="nav-4-3">
-      hover.utils
+      </a>
+      
+        
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
-</label>
-<nav aria-label="hover.utils" class="md-nav" data-md-level="2">
-<label class="md-nav__title" for="nav-4-3">
-<span class="md-nav__icon md-icon"></span>
-        hover.utils
-      </label>
-<ul class="md-nav__list" data-md-scrollfix="">
-<li class="md-nav__item">
-<a class="md-nav__link" href="../utils-bokeh_helper/">
-      hover.utils.bokeh_helper
-    </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../utils-snorkel_helper/">
-      hover.utils.snorkel_helper
-    </a>
-</li>
-</ul>
-</nav>
-</li>
-</ul>
-</nav>
-</li>
-</ul>
-</nav>
-</div>
-</div>
-</div>
-<div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
-<div class="md-sidebar__scrollwrap">
-<div class="md-sidebar__inner">
-<nav aria-label="Table of contents" class="md-nav md-nav--secondary">
-<label class="md-nav__title" for="__toc">
-<span class="md-nav__icon md-icon"></span>
       Table of contents
     </label>
-<ul class="md-nav__list" data-md-scrollfix="">
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.core.explorer.feature">
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#hover.core.explorer.feature" class="md-nav__link">
     hover.core.explorer.feature
   </a>
+  
 </li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.core.explorer.feature.BokehForAudio">
+      
+        <li class="md-nav__item">
+  <a href="#hover.core.explorer.feature.BokehForAudio" class="md-nav__link">
     BokehForAudio
   </a>
-<nav aria-label="BokehForAudio" class="md-nav">
-<ul class="md-nav__list">
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.core.explorer.feature.BokehForAudio.activate_search">
+  
+    <nav class="md-nav" aria-label="BokehForAudio">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#hover.core.explorer.feature.BokehForAudio.activate_search" class="md-nav__link">
     activate_search()
   </a>
+  
 </li>
-</ul>
-</nav>
+        
+      </ul>
+    </nav>
+  
 </li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.core.explorer.feature.BokehForImage">
+      
+        <li class="md-nav__item">
+  <a href="#hover.core.explorer.feature.BokehForImage" class="md-nav__link">
     BokehForImage
   </a>
-<nav aria-label="BokehForImage" class="md-nav">
-<ul class="md-nav__list">
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.core.explorer.feature.BokehForImage.activate_search">
+  
+    <nav class="md-nav" aria-label="BokehForImage">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#hover.core.explorer.feature.BokehForImage.activate_search" class="md-nav__link">
     activate_search()
   </a>
+  
 </li>
-</ul>
-</nav>
+        
+      </ul>
+    </nav>
+  
 </li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.core.explorer.feature.BokehForText">
+      
+        <li class="md-nav__item">
+  <a href="#hover.core.explorer.feature.BokehForText" class="md-nav__link">
     BokehForText
   </a>
-<nav aria-label="BokehForText" class="md-nav">
-<ul class="md-nav__list">
-<li class="md-nav__item">
-<a class="md-nav__link" href="#hover.core.explorer.feature.BokehForText.activate_search">
+  
+    <nav class="md-nav" aria-label="BokehForText">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#hover.core.explorer.feature.BokehForText.activate_search" class="md-nav__link">
     activate_search()
   </a>
+  
 </li>
-</ul>
-</nav>
+        
+      </ul>
+    </nav>
+  
 </li>
-</ul>
+      
+    </ul>
+  
 </nav>
-</div>
-</div>
-</div>
-<div class="md-content">
-<article class="md-content__inner md-typeset">
-<a class="md-content__button md-icon" href="https://github.com/phurwicz/hover/edit/master/docs/pages/reference/core-explorer-feature.md" title="Edit this page">
-<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"></path></svg>
-</a>
-<h1>.feature</h1>
-<ul>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../core-explorer-functionality/" class="md-nav__link">
+        .functionality
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../core-explorer-specialization/" class="md-nav__link">
+        .specialization
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../core-neural/" class="md-nav__link">
+        hover.core.neural
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../core-representation/" class="md-nav__link">
+        hover.core.representation
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_3" data-md-state="indeterminate" type="checkbox" id="__nav_4_3" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_3">
+          hover.utils
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="hover.utils" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_3">
+          <span class="md-nav__icon md-icon"></span>
+          hover.utils
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../utils-bokeh_helper/" class="md-nav__link">
+        hover.utils.bokeh_helper
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../utils-snorkel_helper/" class="md-nav__link">
+        hover.utils.snorkel_helper
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/phurwicz/hover/edit/master/docs/pages/reference/core-explorer-feature.md" title="Edit this page" class="md-content__button md-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
+                  </a>
+                
+                
+                  <h1>.feature</h1>
+                
+                <ul>
 <li>
-<div class="doc doc-object doc-module">
-<h2 class="hidden-toc" href="#hover.core.explorer.feature" id="hover.core.explorer.feature" style="visibility: hidden; position: absolute;">
-</h2>
-<div class="doc doc-contents first">
-<details class="note" open="open"><summary>Intermediate classes based on the main feature.</summary></details>
-<div class="doc doc-children">
-<div class="doc doc-object doc-class">
+<div class="mkdocstrings">
+
+  <div class="doc doc-object doc-module">
+
+<a id="hover.core.explorer.feature"></a>
+    <div class="doc doc-contents first">
+
+      <details class="note" open="open"><summary>Intermediate classes based on the main feature.</summary></details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+  <div class="doc doc-object doc-class">
+
+
+
 <h2 class="doc doc-heading" id="hover.core.explorer.feature.BokehForAudio">
-<code>BokehForAudio</code>
+        <code>
+BokehForAudio        </code>
+
+
+
 </h2>
-<div class="doc doc-contents">
-<details class="note" open="open"><summary><code>BokehBaseExplorer</code> with <code>audio</code> (path like <code>"http://"</code> or <code>"file:///"</code>) as the main feature.</summary><p>Assumes on top of its parent class:</p>
+
+    <div class="doc doc-contents ">
+
+      <details class="note" open="open"><summary><code>BokehBaseExplorer</code> with <code>audio</code> (path like <code>"http://"</code> or <code>"file:///"</code>) as the main feature.</summary><p>Assumes on top of its parent class:</p>
 <ul>
 <li>in supplied dataframes</li>
 <li>(always) audio urls in an <code>audio</code> column</li>
@@ -457,14 +870,35 @@
 <li>what the explorer serves to do.</li>
 </ul>
 </details>
-<div class="doc doc-children">
-<div class="doc doc-object doc-method">
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
 <h3 class="doc doc-heading" id="hover.core.explorer.feature.BokehForAudio.activate_search">
-<code class="highlight language-python">
-activate_search<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">subset</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">,</span> <span class="n">altered_param</span><span class="o">=</span><span class="p">(</span><span class="s1">'size'</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span> </code>
+<code class="highlight language-python"><span class="n">activate_search</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">subset</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">,</span> <span class="n">altered_param</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;size&#39;</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span></code>
+
+
 </h3>
-<div class="doc doc-contents">
-<details class="help" open="open"><summary>Help wanted</summary><p>Trivial implementation until we figure out how to search audios.</p>
+
+    <div class="doc doc-contents ">
+
+      <details class="help" open="open"><summary>Help wanted</summary><p>Trivial implementation until we figure out how to search audios.</p>
 <p><a href="https://github.com/phurwicz/hover/issues/new">Create an issue</a> if you have an idea :)</p>
 <table>
 <thead>
@@ -493,12 +927,12 @@ activate_search<span class="p">(</span><span class="bp">self</span><span class="
 </tbody>
 </table>
 </details>
-<details class="quote">
-<summary>Source code in <code>hover/core/explorer/feature.py</code></summary>
-<div class="highlight">
-<pre><span></span><code><span class="k">def</span> <span class="nf">activate_search</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">subset</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">,</span> <span class="n">altered_param</span><span class="o">=</span><span class="p">(</span><span class="s2">"size"</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">)):</span>
-    <span class="sd">"""</span>
-<span class="sd">    ???+ help "Help wanted"</span>
+
+        <details class="quote">
+          <summary>Source code in <code>hover/core/explorer/feature.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">activate_search</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">subset</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">,</span> <span class="n">altered_param</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;size&quot;</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">)):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ???+ help &quot;Help wanted&quot;</span>
 <span class="sd">        Trivial implementation until we figure out how to search audios.</span>
 
 <span class="sd">        [Create an issue](https://github.com/phurwicz/hover/issues/new) if you have an idea :)</span>
@@ -508,23 +942,42 @@ activate_search<span class="p">(</span><span class="bp">self</span><span class="
 <span class="sd">        | `subset`        | `str`   | the subset to activate search on |</span>
 <span class="sd">        | `kwargs`        | `bool`  | kwargs for the plot to add to |</span>
 <span class="sd">        | `altered_param` | `tuple` | (attribute, positive, negative, default) |</span>
-<span class="sd">    """</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">_warn</span><span class="p">(</span><span class="s2">"no search highlight available."</span><span class="p">)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_warn</span><span class="p">(</span><span class="s2">&quot;no search highlight available.&quot;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">kwargs</span>
-</code></pre>
-</div>
-</details>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="doc doc-object doc-class">
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+
+
+  </div>
+
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-class">
+
+
+
 <h2 class="doc doc-heading" id="hover.core.explorer.feature.BokehForImage">
-<code>BokehForImage</code>
+        <code>
+BokehForImage        </code>
+
+
+
 </h2>
-<div class="doc doc-contents">
-<details class="note" open="open"><summary><code>BokehBaseExplorer</code> with <code>image</code> (path like <code>"http://"</code> or <code>"file:///"</code>) as the main feature.</summary><p>Assumes on top of its parent class:</p>
+
+    <div class="doc doc-contents ">
+
+      <details class="note" open="open"><summary><code>BokehBaseExplorer</code> with <code>image</code> (path like <code>"http://"</code> or <code>"file:///"</code>) as the main feature.</summary><p>Assumes on top of its parent class:</p>
 <ul>
 <li>in supplied dataframes</li>
 <li>(always) image urls in an <code>image</code> column</li>
@@ -534,14 +987,35 @@ activate_search<span class="p">(</span><span class="bp">self</span><span class="
 <li>what the explorer serves to do.</li>
 </ul>
 </details>
-<div class="doc doc-children">
-<div class="doc doc-object doc-method">
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
 <h3 class="doc doc-heading" id="hover.core.explorer.feature.BokehForImage.activate_search">
-<code class="highlight language-python">
-activate_search<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">subset</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">,</span> <span class="n">altered_param</span><span class="o">=</span><span class="p">(</span><span class="s1">'size'</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span> </code>
+<code class="highlight language-python"><span class="n">activate_search</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">subset</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">,</span> <span class="n">altered_param</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;size&#39;</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span></code>
+
+
 </h3>
-<div class="doc doc-contents">
-<details class="help" open="open"><summary>Help wanted</summary><p>Trivial implementation until we figure out how to search images.</p>
+
+    <div class="doc doc-contents ">
+
+      <details class="help" open="open"><summary>Help wanted</summary><p>Trivial implementation until we figure out how to search images.</p>
 <p><a href="https://github.com/phurwicz/hover/issues/new">Create an issue</a> if you have an idea :)</p>
 <table>
 <thead>
@@ -570,12 +1044,12 @@ activate_search<span class="p">(</span><span class="bp">self</span><span class="
 </tbody>
 </table>
 </details>
-<details class="quote">
-<summary>Source code in <code>hover/core/explorer/feature.py</code></summary>
-<div class="highlight">
-<pre><span></span><code><span class="k">def</span> <span class="nf">activate_search</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">subset</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">,</span> <span class="n">altered_param</span><span class="o">=</span><span class="p">(</span><span class="s2">"size"</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">)):</span>
-    <span class="sd">"""</span>
-<span class="sd">    ???+ help "Help wanted"</span>
+
+        <details class="quote">
+          <summary>Source code in <code>hover/core/explorer/feature.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">activate_search</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">subset</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">,</span> <span class="n">altered_param</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;size&quot;</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">)):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ???+ help &quot;Help wanted&quot;</span>
 <span class="sd">        Trivial implementation until we figure out how to search images.</span>
 
 <span class="sd">        [Create an issue](https://github.com/phurwicz/hover/issues/new) if you have an idea :)</span>
@@ -585,23 +1059,42 @@ activate_search<span class="p">(</span><span class="bp">self</span><span class="
 <span class="sd">        | `subset`        | `str`   | the subset to activate search on |</span>
 <span class="sd">        | `kwargs`        | `bool`  | kwargs for the plot to add to |</span>
 <span class="sd">        | `altered_param` | `tuple` | (attribute, positive, negative, default) |</span>
-<span class="sd">    """</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">_warn</span><span class="p">(</span><span class="s2">"no search highlight available."</span><span class="p">)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_warn</span><span class="p">(</span><span class="s2">&quot;no search highlight available.&quot;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">kwargs</span>
-</code></pre>
-</div>
-</details>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="doc doc-object doc-class">
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+
+
+  </div>
+
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-class">
+
+
+
 <h2 class="doc doc-heading" id="hover.core.explorer.feature.BokehForText">
-<code>BokehForText</code>
+        <code>
+BokehForText        </code>
+
+
+
 </h2>
-<div class="doc doc-contents">
-<details class="note" open="open"><summary><code>BokehBaseExplorer</code> with <code>text</code> (<code>str</code>) as the main feature.</summary><p>Assumes on top of its parent class:</p>
+
+    <div class="doc doc-contents ">
+
+      <details class="note" open="open"><summary><code>BokehBaseExplorer</code> with <code>text</code> (<code>str</code>) as the main feature.</summary><p>Assumes on top of its parent class:</p>
 <ul>
 <li>in supplied dataframes</li>
 <li>(always) text data in a <code>text</code> column</li>
@@ -611,14 +1104,35 @@ activate_search<span class="p">(</span><span class="bp">self</span><span class="
 <li>what the explorer serves to do.</li>
 </ul>
 </details>
-<div class="doc doc-children">
-<div class="doc doc-object doc-method">
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
 <h3 class="doc doc-heading" id="hover.core.explorer.feature.BokehForText.activate_search">
-<code class="highlight language-python">
-activate_search<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">subset</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">,</span> <span class="n">altered_param</span><span class="o">=</span><span class="p">(</span><span class="s1">'size'</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span> </code>
+<code class="highlight language-python"><span class="n">activate_search</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">subset</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">,</span> <span class="n">altered_param</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;size&#39;</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span></code>
+
+
 </h3>
-<div class="doc doc-contents">
-<details class="note" open="open"><summary>Enables string/regex search-and-highlight mechanism.</summary><p>Modifies the plotting source in-place.
+
+    <div class="doc doc-contents ">
+
+      <details class="note" open="open"><summary>Enables string/regex search-and-highlight mechanism.</summary><p>Modifies the plotting source in-place.
 Using a JS callback (instead of Python) so that it also works in standalone HTML.</p>
 <table>
 <thead>
@@ -647,12 +1161,12 @@ Using a JS callback (instead of Python) so that it also works in standalone HTML
 </tbody>
 </table>
 </details>
-<details class="quote">
-<summary>Source code in <code>hover/core/explorer/feature.py</code></summary>
-<div class="highlight">
-<pre><span></span><code><span class="k">def</span> <span class="nf">activate_search</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">subset</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">,</span> <span class="n">altered_param</span><span class="o">=</span><span class="p">(</span><span class="s2">"size"</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">)):</span>
-    <span class="sd">"""</span>
-<span class="sd">    ???+ note "Enables string/regex search-and-highlight mechanism."</span>
+
+        <details class="quote">
+          <summary>Source code in <code>hover/core/explorer/feature.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">activate_search</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">subset</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">,</span> <span class="n">altered_param</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;size&quot;</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">)):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ???+ note &quot;Enables string/regex search-and-highlight mechanism.&quot;</span>
 <span class="sd">        Modifies the plotting source in-place.</span>
 <span class="sd">        Using a JS callback (instead of Python) so that it also works in standalone HTML.</span>
 
@@ -661,13 +1175,13 @@ Using a JS callback (instead of Python) so that it also works in standalone HTML
 <span class="sd">        | `subset`        | `str`   | the subset to activate search on |</span>
 <span class="sd">        | `kwargs`        | `bool`  | kwargs for the plot to add to |</span>
 <span class="sd">        | `altered_param` | `tuple` | (attribute, positive, negative, default) |</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">kwargs</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span>
     <span class="n">updated_kwargs</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 
     <span class="n">param_key</span><span class="p">,</span> <span class="n">param_pos</span><span class="p">,</span> <span class="n">param_neg</span><span class="p">,</span> <span class="n">param_default</span> <span class="o">=</span> <span class="n">altered_param</span>
-    <span class="n">num_points</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">[</span><span class="n">subset</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">"text"</span><span class="p">])</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">[</span><span class="n">subset</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">([</span><span class="n">param_default</span><span class="p">]</span> <span class="o">*</span> <span class="n">num_points</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">param_key</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="n">num_points</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">[</span><span class="n">subset</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">])</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">[</span><span class="n">subset</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">([</span><span class="n">param_default</span><span class="p">]</span> <span class="o">*</span> <span class="n">num_points</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">param_key</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_extra_source_cols</span><span class="p">[</span><span class="n">subset</span><span class="p">][</span><span class="n">param_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">param_default</span>
 
     <span class="n">updated_kwargs</span><span class="p">[</span><span class="n">param_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">param_key</span>
@@ -691,8 +1205,8 @@ Using a JS callback (instead of Python) so that it also works in standalone HTML
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">return</span> <span class="n">param_neg</span>
 
-        <span class="n">patch_slice</span> <span class="o">=</span> <span class="nb">slice</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">[</span><span class="n">subset</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">"text"</span><span class="p">]))</span>
-        <span class="n">search_scores</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">regex_score</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">[</span><span class="n">subset</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">"text"</span><span class="p">]))</span>
+        <span class="n">patch_slice</span> <span class="o">=</span> <span class="nb">slice</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">[</span><span class="n">subset</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">]))</span>
+        <span class="n">search_scores</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">regex_score</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">[</span><span class="n">subset</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">]))</span>
         <span class="n">search_params</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">score_to_param</span><span class="p">,</span> <span class="n">search_scores</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">[</span><span class="n">subset</span><span class="p">]</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span>
             <span class="p">{</span><span class="n">SEARCH_SCORE_FIELD</span><span class="p">:</span> <span class="p">[(</span><span class="n">patch_slice</span><span class="p">,</span> <span class="n">search_scores</span><span class="p">)]}</span>
@@ -702,20 +1216,20 @@ Using a JS callback (instead of Python) so that it also works in standalone HTML
 
     <span class="c1"># js_callback = CustomJS(</span>
     <span class="c1">#    args={</span>
-    <span class="c1">#        "source": self.sources[subset],</span>
-    <span class="c1">#        "key_pos": self.search_pos,</span>
-    <span class="c1">#        "key_neg": self.search_neg,</span>
-    <span class="c1">#        "param_pos": param_pos,</span>
-    <span class="c1">#        "param_neg": param_neg,</span>
-    <span class="c1">#        "param_default": param_default,</span>
+    <span class="c1">#        &quot;source&quot;: self.sources[subset],</span>
+    <span class="c1">#        &quot;key_pos&quot;: self.search_pos,</span>
+    <span class="c1">#        &quot;key_neg&quot;: self.search_neg,</span>
+    <span class="c1">#        &quot;param_pos&quot;: param_pos,</span>
+    <span class="c1">#        &quot;param_neg&quot;: param_neg,</span>
+    <span class="c1">#        &quot;param_default&quot;: param_default,</span>
     <span class="c1">#    },</span>
-    <span class="c1">#    code=f"""</span>
+    <span class="c1">#    code=f&quot;&quot;&quot;</span>
     <span class="c1">#    const data = source.data;</span>
-    <span class="c1">#    const text = data['text'];</span>
-    <span class="c1">#    var highlight_arr = data['{param_key}'];</span>
-    <span class="c1">#    var score_arr = data['{SEARCH_SCORE_FIELD}'];</span>
-    <span class="c1">#    """</span>
-    <span class="c1">#    + """</span>
+    <span class="c1">#    const text = data[&#39;text&#39;];</span>
+    <span class="c1">#    var highlight_arr = data[&#39;{param_key}&#39;];</span>
+    <span class="c1">#    var score_arr = data[&#39;{SEARCH_SCORE_FIELD}&#39;];</span>
+    <span class="c1">#    &quot;&quot;&quot;</span>
+    <span class="c1">#    + &quot;&quot;&quot;</span>
     <span class="c1">#    var search_pos = key_pos.value;</span>
     <span class="c1">#    var search_neg = key_neg.value;</span>
     <span class="c1">#    var valid_pos = (search_pos.length &gt; 0);</span>
@@ -752,7 +1266,7 @@ Using a JS callback (instead of Python) so that it also works in standalone HTML
     <span class="c1">#    }</span>
     <span class="c1">#</span>
     <span class="c1">#    function toRegex(search_key) {</span>
-    <span class="c1">#        var match = search_key.match(new RegExp('^/(.*?)/([gimy]*)$'));</span>
+    <span class="c1">#        var match = search_key.match(new RegExp(&#39;^/(.*?)/([gimy]*)$&#39;));</span>
     <span class="c1">#        if (match) {</span>
     <span class="c1">#            return new RegExp(match[1], match[2]);</span>
     <span class="c1">#        } else {</span>
@@ -772,83 +1286,127 @@ Using a JS callback (instead of Python) so that it also works in standalone HTML
     <span class="c1">#    }</span>
     <span class="c1">#</span>
     <span class="c1">#    source.change.emit()</span>
-    <span class="c1">#    """,</span>
+    <span class="c1">#    &quot;&quot;&quot;,</span>
     <span class="c1"># )</span>
 
     <span class="c1"># assign dynamic callback</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">_dynamic_callbacks</span><span class="p">[</span><span class="s2">"search_response"</span><span class="p">][</span><span class="n">subset</span><span class="p">]</span> <span class="o">=</span> <span class="n">search_response</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_dynamic_callbacks</span><span class="p">[</span><span class="s2">&quot;search_response&quot;</span><span class="p">][</span><span class="n">subset</span><span class="p">]</span> <span class="o">=</span> <span class="n">search_response</span>
     <span class="k">return</span> <span class="n">updated_kwargs</span>
-</code></pre>
-</div>
-</details>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+
+
+  </div>
+
+    </div>
+
+  </div>
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+  </div>
+
+<h2 data-role="module" id="hover.core.explorer.feature"></h2>
+<h2 class="doc doc-heading" data-role="class" id="hover.core.explorer.feature.BokehForAudio"></h2>
+<h3 class="doc doc-heading" data-role="method" id="hover.core.explorer.feature.BokehForAudio.activate_search"></h3>
+<h2 class="doc doc-heading" data-role="class" id="hover.core.explorer.feature.BokehForImage"></h2>
+<h3 class="doc doc-heading" data-role="method" id="hover.core.explorer.feature.BokehForImage.activate_search"></h3>
+<h2 class="doc doc-heading" data-role="class" id="hover.core.explorer.feature.BokehForText"></h2>
+<h3 class="doc doc-heading" data-role="method" id="hover.core.explorer.feature.BokehForText.activate_search"></h3>
 </div>
 </li>
 </ul>
-</article>
-</div>
-</div>
-</main>
-<footer class="md-footer">
-<div class="md-footer-nav">
-<nav aria-label="Footer" class="md-footer-nav__inner md-grid">
-<a class="md-footer-nav__link md-footer-nav__link--prev" href="../core-explorer-base/" rel="prev">
-<div class="md-footer-nav__button md-icon">
-<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"></path></svg>
-</div>
-<div class="md-footer-nav__title">
-<div class="md-ellipsis">
-<span class="md-footer-nav__direction">
-                  Previous
-                </span>
-                .base
-              </div>
-</div>
-</a>
-<a class="md-footer-nav__link md-footer-nav__link--next" href="../core-explorer-functionality/" rel="next">
-<div class="md-footer-nav__title">
-<div class="md-ellipsis">
-<span class="md-footer-nav__direction">
-                  Next
-                </span>
-                .functionality
-              </div>
-</div>
-<div class="md-footer-nav__button md-icon">
-<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"></path></svg>
-</div>
-</a>
-</nav>
-</div>
-<div class="md-footer-meta md-typeset">
-<div class="md-footer-meta__inner md-grid">
-<div class="md-footer-copyright">
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
         
-        Made with
-        <a href="https://squidfunk.github.io/mkdocs-material/" rel="noopener" target="_blank">
-          Material for MkDocs
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        
+        <a href="../core-explorer-base/" class="md-footer__link md-footer__link--prev" aria-label="Previous: .base" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              .base
+            </div>
+          </div>
         </a>
-</div>
-</div>
-</div>
+      
+      
+        
+        <a href="../core-explorer-functionality/" class="md-footer__link md-footer__link--next" aria-label="Next: .functionality" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              .functionality
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        
+          Made with
+          <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+            Material for MkDocs
+          </a>
+        
+        
+      </div>
+      
+    </div>
+  </div>
 </footer>
-</div>
-<script src="../../../assets/javascripts/vendor.fd16492e.min.js"></script>
-<script src="../../../assets/javascripts/bundle.7836ba4d.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}</script>
-<script>
-        app = initialize({
-          base: "../../..",
-          features: ['navigation.expand', 'navigation.tabs', 'search.suggest', 'toc.integrate'],
-          search: Object.assign({
-            worker: "../../../assets/javascripts/worker/search.4ac00218.min.js"
-          }, typeof search !== "undefined" && search)
-        })
-      </script>
-</body>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.expand", "navigation.tabs", "search.suggest", "toc.integrate"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../../assets/javascripts/workers/search.8397ff9e.min.js", "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.1e84347e.min.js"></script>
+      
+    
+  </body>
 </html>
