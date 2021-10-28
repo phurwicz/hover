@@ -1396,11 +1396,18 @@ SupervisableDataset        </code>
 <span class="sd">        | :------- | :----- | :----------------------------------- |</span>
 <span class="sd">        | `df` | `DataFrame` | with a &quot;SUBSET&quot; field dividing subsets |</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">SUBSETS</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">SCRATCH_SUBSETS</span> <span class="o">+</span> <span class="bp">cls</span><span class="o">.</span><span class="n">PUBLIC_SUBSETS</span> <span class="o">+</span> <span class="bp">cls</span><span class="o">.</span><span class="n">PRIVATE_SUBSETS</span>
+
+    <span class="k">if</span> <span class="n">DATASET_SUBSET_FIELD</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Expecting column &#39;</span><span class="si">{</span><span class="n">DATASET_SUBSET_FIELD</span><span class="si">}</span><span class="s2">&#39; in the DataFrame which takes values from </span><span class="si">{</span><span class="n">SUBSETS</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
     <span class="n">dictls</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">for</span> <span class="n">_subset</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;raw&quot;</span><span class="p">,</span> <span class="s2">&quot;train&quot;</span><span class="p">,</span> <span class="s2">&quot;dev&quot;</span><span class="p">,</span> <span class="s2">&quot;test&quot;</span><span class="p">]:</span>
-        <span class="n">dictls</span><span class="p">[</span><span class="n">_subset</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="n">DATASET_SUBSET_FIELD</span><span class="p">]</span> <span class="o">==</span> <span class="n">_subset</span><span class="p">]</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(</span>
-            <span class="n">orient</span><span class="o">=</span><span class="s2">&quot;records&quot;</span>
-        <span class="p">)</span>
+        <span class="n">_sub_df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="n">DATASET_SUBSET_FIELD</span><span class="p">]</span> <span class="o">==</span> <span class="n">_subset</span><span class="p">]</span>
+        <span class="n">dictls</span><span class="p">[</span><span class="n">_subset</span><span class="p">]</span> <span class="o">=</span> <span class="n">_sub_df</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(</span><span class="n">orient</span><span class="o">=</span><span class="s2">&quot;records&quot;</span><span class="p">)</span>
+
     <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
         <span class="n">raw_dictl</span><span class="o">=</span><span class="n">dictls</span><span class="p">[</span><span class="s2">&quot;raw&quot;</span><span class="p">],</span>
         <span class="n">train_dictl</span><span class="o">=</span><span class="n">dictls</span><span class="p">[</span><span class="s2">&quot;train&quot;</span><span class="p">],</span>
