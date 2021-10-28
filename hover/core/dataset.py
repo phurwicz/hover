@@ -166,11 +166,18 @@ class SupervisableDataset(Loggable):
             | :------- | :----- | :----------------------------------- |
             | `df` | `DataFrame` | with a "SUBSET" field dividing subsets |
         """
+        SUBSETS = cls.SCRATCH_SUBSETS + cls.PUBLIC_SUBSETS + cls.PRIVATE_SUBSETS
+
+        if DATASET_SUBSET_FIELD not in df.columns:
+            raise ValueError(
+                f"Expecting column '{DATASET_SUBSET_FIELD}' in the DataFrame which takes values from {SUBSETS}"
+            )
+
         dictls = {}
         for _subset in ["raw", "train", "dev", "test"]:
-            dictls[_subset] = df[df[DATASET_SUBSET_FIELD] == _subset].to_dict(
-                orient="records"
-            )
+            _sub_df = df[df[DATASET_SUBSET_FIELD] == _subset]
+            dictls[_subset] = _sub_df.to_dict(orient="records")
+
         return cls(
             raw_dictl=dictls["raw"],
             train_dictl=dictls["train"],
