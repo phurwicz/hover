@@ -42,21 +42,21 @@ jobs:
         python -m venv env
 
     - name: Get mandatory dependencies
-      if: steps.find-venv.outputs.cache-hit != 'true'
+      #if: steps.find-venv.outputs.cache-hit != 'true'
       run: |
         source env/bin/activate
-        python -m pip install --upgrade pip
+        pip install --upgrade pip
         # dependencies that could be involved in builds
-        pip install pip-tools setuptools wheel cython
+        pip install --upgrade pip-tools setuptools wheel cython
         # find dependencies based on setup.py
         pip-compile
-        pip install -r requirements.txt
+        pip install --upgrade -r requirements.txt
 
     - name: Get testing dependencies
-      if: steps.find-venv.outputs.cache-hit != 'true'
+      #if: steps.find-venv.outputs.cache-hit != 'true'
       run: |
         source env/bin/activate
-        pip install tox tox-gh-actions
+        pip install --upgrade tox tox-gh-actions
 
     - name: Test and make coverage report
       run: |
