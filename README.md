@@ -1,8 +1,8 @@
 ![Hover](https://raw.githubusercontent.com/phurwicz/hover/main/docs/images/hover-logo-title.png)
 
-> Label data at scale while exploring it.
+> Explore and mark areas on a map of your data.
 >
-> You won't need, or want, to hire labelers again.
+> Zoom in, zoom out, hover.. and have fun! 
 
 [![PyPI Version](https://img.shields.io/pypi/v/hover?logo=pypi&logoColor=white)](https://pypi.org/project/hover/)
 [![PyPI Stage](https://img.shields.io/pypi/status/hover?logo=pypi&logoColor=white)](https://pypi.org/project/hover/)
