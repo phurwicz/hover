@@ -2,7 +2,7 @@
 
 > Explore and mark areas on a map of your data.
 >
-> Zoom in, zoom out, hover.. and have fun! 
+> Zoom in, zoom out, hover.. and have fun!
 
 [![PyPI Version](https://img.shields.io/pypi/v/hover?logo=pypi&logoColor=white)](https://pypi.org/project/hover/)
 [![PyPI Stage](https://img.shields.io/pypi/status/hover?logo=pypi&logoColor=white)](https://pypi.org/project/hover/)
@@ -15,20 +15,23 @@
 
 ----
 
-Draw shapes and apply labels with `hover`, the library for making data annotation blazing fast for engineers. You get:
+`hover` makes data annotation blazing fast by putting together `embedding + visualization + callbacks`.
 
--   A view from above: plot your dataset in 2D with tooltips
+-   :mag: A 2D-embedded view of your dataset with tooltips
     -   See the whole picture while able to inspect every detail.
-    -   Know how much data has been labeled and where they are.
+    -   A variety of tools to help you label data on the fly.
+    -   Works both in Jupyter and as an web app.
 
--   Balance between speed and precision
+-   :triangular_ruler: Balance between speed and precision
     -   Come up with labels as you inspect the data, no need to pre-define them.
-    -   Identify & label groups of data of any shape or scale.
-    -   Leverage additional filter conditions such as regex or soft label score.
+    -   Utilize active learning directly in the annotation interface.
+    -   Leverage multiple views and filter conditions of the data.
 
 Check out [@phurwicz/hover-binder](https://github.com/phurwicz/hover-binder) for a list of demo apps.
 
 ## :flags: Project News
+
+-   **Dec 8, 2021** We are working on updates to make `hover` more extensible. An example would be the usage of `VectorNet`.
 
 -   **Apr 30, 2021** 0.5.0 is now available. Check out the [changelog](https://github.com/phurwicz/hover/blob/main/CHANGELOG.md) for details :partying_face:. Some tl-dr for the impatient:
     -   you can now filter selected data with search criteria, or soft label scores, or both!
@@ -41,9 +44,9 @@ Check out [@phurwicz/hover-binder](https://github.com/phurwicz/hover-binder) for
 
 ## :package: Install
 
-> Python: 3.6+
+> Python: 3.7+
 >
-> OS: tested on Mac & Linux
+> OS: Mac & Linux
 
 To get the latest release version: `pip install hover`
 
