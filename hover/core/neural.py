@@ -81,7 +81,7 @@ class VectorNet(Loggable):
             try:
                 self.nn.load_state_dict(torch.load(state_dict_path))
             except Exception as e:
-                self._warn(f"Load VectorNet state path failed with {type(e)}: e")
+                self._warn(f"Load VectorNet state path failed with {type(e)}: {e}")
 
             if backup_state_dict:
                 state_dict_backup_path = (
