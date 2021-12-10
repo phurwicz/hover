@@ -1,7 +1,35 @@
-from hover.recipes.experimental import active_learning
+from hover.recipes.experimental import active_learning, _active_learning
 from bokeh.io import show, output_notebook
 
-handle = active_learning(dataset, vectorizer, vecnet_callback)
-
 output_notebook()
-show(handle)
+
+# ---------- DEMO CODE: for this documentation page ----------
+# because this demo is remotely hosted, we need to handle proxy
+def remote_jupyter_proxy_url(port):
+    """
+    Callable to configure Bokeh's show method when using a proxy (JupyterHub).
+    """
+    import os
+    import urllib
+
+    base_url = 'https://hub.gke2.mybinder.org/user/'
+    host = urllib.parse.urlparse(base_url).netloc
+
+    if port is None:
+        return host
+
+    service_url_path = os.environ['JUPYTERHUB_SERVICE_PREFIX']
+    proxy_url_path = 'proxy/%d' % port
+
+    user_url = urllib.parse.urljoin(base_url, service_url_path)
+    full_url = urllib.parse.urljoin(user_url, proxy_url_path)
+    return full_url
+
+# static plot for demonstating the annotation interface
+static_plot, plot_objects = _active_learning(dataset, vectorizer, vecnet_callback)
+show(static_plot, notebook_url=remote_jupyter_proxy_url)
+
+# ---------- REAL CODE: for your actual Jupyter environment ---------
+# the real annotation interface enables Python callbacks
+# interactive_plot = active_learning(dataset, vectorizer, vecnet_callback)
+# show(interactive_plot, notebook_url='https://localhost:port')

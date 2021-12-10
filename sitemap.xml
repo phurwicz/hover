@@ -96,6 +96,11 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
+         <loc>https://phurwicz.github.io/hover/snippets/markdown/binder-kernel/</loc>
+         <lastmod>2021-12-10</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
          <loc>https://phurwicz.github.io/hover/snippets/markdown/jupyterlab-js-issue/</loc>
          <lastmod>2021-12-10</lastmod>
          <changefreq>daily</changefreq>

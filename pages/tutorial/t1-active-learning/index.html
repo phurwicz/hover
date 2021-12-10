@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#ingredient-1-3-4-data-vectorizer-reduction" class="md-skip">
+        <a href="#recap-data-embeddings" class="md-skip">
           Skip to content
         </a>
       
@@ -386,22 +386,22 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#ingredient-1-3-4-data-vectorizer-reduction" class="md-nav__link">
-    Ingredient 1 ~ 3 / 4: Data, Vectorizer, Reduction
+  <a href="#recap-data-embeddings" class="md-nav__link">
+    Recap: Data &amp; Embeddings
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#ingredient-4-4-model-callback" class="md-nav__link">
-    Ingredient 4 / 4: Model Callback
+  <a href="#use-callbacks-to-train-a-model" class="md-nav__link">
+    Use Callbacks to Train a Model
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#recipe-time" class="md-nav__link">
-    Recipe Time
+  <a href="#apply-labels" class="md-nav__link">
+    Apply Labels
   </a>
   
 </li>
@@ -779,11 +779,6 @@
 <p>The most common usage of <code>hover</code> is through built-in <code>recipe</code>s like in the quickstart.</p>
 <p><img alt="🎡" class="emojione" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.2.7/assets/png/1f3a1.png" title=":ferris_wheel:" /> Let's explore another <code>recipe</code> -- an active learning example.</p>
 </blockquote>
-<style type="text/css">
-    @import url("../../../styles/monokai.css");
-</style>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js"></script>
 <script src="../../../plugins/thebe-custom/index.js"></script>
 <script type="text/x-thebe-config">
   {
@@ -803,8 +798,11 @@
     },
   }
 </script>
-
-<h2 id="ingredient-1-3-4-data-vectorizer-reduction"><strong>Ingredient 1 ~ 3 / 4: Data, Vectorizer, Reduction</strong></h2>
+<details class="info" open="open"><summary>Running Python right here</summary><p>Think of this page as <em>almost</em> a Jupyter notebook. You can edit code and press <code>Shift+Enter</code> to execute.</p>
+<p>Behind the scene is a <a href="https://mybinder.org/">Binder</a>-hosted Python environment. Below is the status of the kernel:
+<div class="thebe-status"></div><div class="thebe-activate"></div></p>
+</details>
+<h2 id="recap-data-embeddings"><strong>Recap: Data &amp; Embeddings</strong></h2>
 <p>This is exactly the same as in the <a href="../t0-quickstart/">quickstart</a>:</p>
 <pre data-executable>
 from hover.core.dataset import SupervisableTextDataset
@@ -854,7 +852,7 @@ dataset.compute_2d_embedding(vectorizer, "umap")
 dataset.dfs["raw"].head(5)
 </pre>
 
-<h2 id="ingredient-4-4-model-callback"><strong>Ingredient 4 / 4: Model Callback</strong></h2>
+<h2 id="use-callbacks-to-train-a-model"><strong>Use Callbacks to Train a Model</strong></h2>
 <p>To utilize active learning, we need to specify how to get a model in the loop.</p>
 <p><code>hover</code> considers the <code>vectorizer</code> as a "frozen" embedding and follows up with a neural network, which infers its own dimensionality from the vectorizer and the output classes.</p>
 <ul>
@@ -890,7 +888,7 @@ print(vecnet.predict_proba([text]))
 </pre>
 
 <p>Note how the callback dynamically takes <code>dataset.classes</code>, which means the model architecture will adapt when we add classes during annotation.</p>
-<h2 id="recipe-time"><img alt="✨" class="emojione" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.2.7/assets/png/2728.png" title=":sparkles:" /> <strong>Recipe Time</strong></h2>
+<h2 id="apply-labels"><img alt="✨" class="emojione" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.2.7/assets/png/2728.png" title=":sparkles:" /> <strong>Apply Labels</strong></h2>
 <p>Now we invoke the <code>active_learning</code> recipe.</p>
 <details class="tip"><summary>Tips: how recipes work programmatically</summary><p>In general, a <code>recipe</code> is a function taking a <code>SupervisableDataset</code> and other arguments based on its functionality.</p>
 <p>Here are a few common recipes:</p>
@@ -1150,13 +1148,41 @@ print(vecnet.predict_proba([text]))
 </ul>
 </details>
 <pre data-executable>
-from hover.recipes.experimental import active_learning
+from hover.recipes.experimental import active_learning, _active_learning
 from bokeh.io import show, output_notebook
 
-handle = active_learning(dataset, vectorizer, vecnet_callback)
-
 output_notebook()
-show(handle)
+
+# ---------- DEMO CODE: for this documentation page ----------
+# because this demo is remotely hosted, we need to handle proxy
+def remote_jupyter_proxy_url(port):
+    """
+    Callable to configure Bokeh's show method when using a proxy (JupyterHub).
+    """
+    import os
+    import urllib
+
+    base_url = 'https://hub.gke2.mybinder.org/user/'
+    host = urllib.parse.urlparse(base_url).netloc
+
+    if port is None:
+        return host
+
+    service_url_path = os.environ['JUPYTERHUB_SERVICE_PREFIX']
+    proxy_url_path = 'proxy/%d' % port
+
+    user_url = urllib.parse.urljoin(base_url, service_url_path)
+    full_url = urllib.parse.urljoin(user_url, proxy_url_path)
+    return full_url
+
+# static plot for demonstating the annotation interface
+static_plot, plot_objects = _active_learning(dataset, vectorizer, vecnet_callback)
+show(static_plot, notebook_url=remote_jupyter_proxy_url)
+
+# ---------- REAL CODE: for your actual Jupyter environment ---------
+# the real annotation interface enables Python callbacks
+# interactive_plot = active_learning(dataset, vectorizer, vecnet_callback)
+# show(interactive_plot, notebook_url='https://localhost:port')
 </pre>
 
 <details class="tip" open="open"><summary>Tips: annotation interface with multiple plots</summary><details class="example"><summary>Video guide: leveraging linked selection</summary><p><iframe width="560" height="315" src="https://www.youtube.com/embed/TIwBlCH9YHw" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></p>
@@ -1170,6 +1196,11 @@ show(handle)
 </ul>
 </details>
 </details>
+<style type="text/css">
+    @import url("../../../styles/monokai.css");
+</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js"></script>
                 
               
               
