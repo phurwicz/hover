@@ -734,8 +734,9 @@
 </blockquote>
 <style type="text/css">
     @import url("../../../styles/monokai.css");
-    @import url("../../../styles/juniper.css");
 </style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js"></script>
 
 <pre data-executable>
 from hover.core.dataset import SupervisableTextDataset
@@ -775,13 +776,24 @@ dataset = SupervisableTextDataset(
 dataset.dfs
 </pre>
 <p><br></p>
-<script src="../../../plugins/juniper.min.js"></script>
-<script>
-    new Juniper({
-        repo: 'phurwicz/hover-binder',
-        isolateCells: false,
-        theme: 'monokai'
-    })
+<script src="../../../plugins/thebe-custom/index.js"></script>
+<script type="text/x-thebe-config">
+  {
+    bootstrap: true,
+    mountStatusWidget: true,
+    mountActivateWidget: false,
+    mountRunButton: false,
+    mountRestartButton: false,
+    mountRestartallButton: false,
+    requestKernel: true,
+    binderOptions: {
+      repo: "phurwicz/hover-binder",
+      codeMirrorConfig: {
+        theme: "monokai",
+        indentUnit: 4,
+      }
+    },
+  }
 </script>
                 
               

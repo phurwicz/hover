@@ -716,6 +716,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#hover.utils.bokeh_helper.remote_jupyter_proxy_url" class="md-nav__link">
+    remote_jupyter_proxy_url()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#hover.utils.bokeh_helper.servable" class="md-nav__link">
     servable()
   </a>
@@ -974,6 +981,61 @@
 
 
 
+<h3 class="doc doc-heading" id="hover.utils.bokeh_helper.remote_jupyter_proxy_url">
+<code class="highlight language-python"><span class="n">remote_jupyter_proxy_url</span><span class="p">(</span><span class="n">port</span><span class="p">,</span> <span class="n">base_url</span><span class="p">)</span></code>
+
+
+</h3>
+
+    <div class="doc doc-contents ">
+
+      <details class="note" open="open"><summary>Callable to configure Bokeh's show method when using a proxy (JupyterHub).</summary><p>Usage:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># show(plot)</span>
+<span class="n">show</span><span class="p">(</span><span class="n">plot</span><span class="p">,</span> <span class="n">notebook_url</span><span class="o">=</span><span class="n">remote_jupyter_proxy_url</span><span class="p">)</span>
+</code></pre></div>
+</details>
+
+        <details class="quote">
+          <summary>Source code in <code>hover/utils/bokeh_helper.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">remote_jupyter_proxy_url</span><span class="p">(</span><span class="n">port</span><span class="p">,</span> <span class="n">base_url</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ???+ note &quot;Callable to configure Bokeh&#39;s show method when using a proxy (JupyterHub).&quot;</span>
+
+<span class="sd">        Usage:</span>
+
+<span class="sd">        ```python</span>
+<span class="sd">        # show(plot)</span>
+<span class="sd">        show(plot, notebook_url=remote_jupyter_proxy_url)</span>
+<span class="sd">        ```</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># find JupyterHub base (external) url, default to Binder</span>
+    <span class="n">base_url</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+        <span class="s2">&quot;JUPYTERHUB_BASE_URL&quot;</span><span class="p">,</span> <span class="s2">&quot;https://hub.gke2.mybinder.org/user/&quot;</span>
+    <span class="p">)</span>
+    <span class="n">host</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">urlparse</span><span class="p">(</span><span class="n">base_url</span><span class="p">)</span><span class="o">.</span><span class="n">netloc</span>
+
+    <span class="k">if</span> <span class="n">port</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">host</span>
+
+    <span class="n">service_url_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;JUPYTERHUB_SERVICE_PREFIX&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">proxy_url_path</span> <span class="o">=</span> <span class="s2">&quot;proxy/</span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">port</span>
+
+    <span class="n">user_url</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">urljoin</span><span class="p">(</span><span class="n">base_url</span><span class="p">,</span> <span class="n">service_url_path</span><span class="p">)</span>
+    <span class="n">full_url</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">urljoin</span><span class="p">(</span><span class="n">user_url</span><span class="p">,</span> <span class="n">proxy_url_path</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">full_url</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-function">
+
+
+
 <h3 class="doc doc-heading" id="hover.utils.bokeh_helper.servable">
 <code class="highlight language-python"><span class="n">servable</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
 
@@ -1139,6 +1201,7 @@
 
 <h3 class="doc doc-heading" data-role="function" id="hover.utils.bokeh_helper.auto_label_color"></h3>
 <h3 class="doc doc-heading" data-role="function" id="hover.utils.bokeh_helper.bokeh_hover_tooltip"></h3>
+<h3 class="doc doc-heading" data-role="function" id="hover.utils.bokeh_helper.remote_jupyter_proxy_url"></h3>
 <h3 class="doc doc-heading" data-role="function" id="hover.utils.bokeh_helper.servable"></h3>
 </div>
 </li>
