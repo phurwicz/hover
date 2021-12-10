@@ -2,10 +2,10 @@
 >
 > :ferris_wheel: Let's explore another `recipe` -- an active learning example.
 
-{!docs/snippets/html/stylesheet.html!}
 {!docs/snippets/html/thebe.html!}
+{!docs/snippets/markdown/binder-kernel.md!}
 
-## **Ingredient 1 ~ 3 / 4: Data, Vectorizer, Reduction**
+## **Recap: Data & Embeddings**
 
 This is exactly the same as in the [quickstart](../t0-quickstart/):
 
@@ -22,7 +22,7 @@ This is exactly the same as in the [quickstart](../t0-quickstart/):
 </pre>
 
 
-## **Ingredient 4 / 4: Model Callback**
+## **Use Callbacks to Train a Model**
 
 To utilize active learning, we need to specify how to get a model in the loop.
 
@@ -46,7 +46,7 @@ To utilize active learning, we need to specify how to get a model in the loop.
 Note how the callback dynamically takes `dataset.classes`, which means the model architecture will adapt when we add classes during annotation.
 
 
-## :sparkles: **Recipe Time**
+## :sparkles: **Apply Labels**
 
 Now we invoke the `active_learning` recipe.
 
@@ -93,3 +93,5 @@ Now we invoke the `active_learning` recipe.
 
         -   get an idea of how the current set of annotations will likely teach the model.
         -   locate the most valuable samples for further annotation.
+
+{!docs/snippets/html/stylesheet.html!}

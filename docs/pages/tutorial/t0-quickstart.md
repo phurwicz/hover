@@ -3,13 +3,7 @@
 > :sunglasses: Let's say we want to label some data and call it a day.
 
 {!docs/snippets/html/thebe.html!}
-
-???+ info "Running Python right here"
-    Think of this page as a Jupyter notebook. You can edit code and press `Shift+Enter` to execute.
-
-    Behind the scene is a [Binder](https://mybinder.org/)-hosted Python environment. Below is the status of the kernel:
-    <div class="thebe-status"></div><div class="thebe-activate"></div>
-
+{!docs/snippets/markdown/binder-kernel.md!}
 
 ## **Ingredient 1 / 3: Raw Data**
 
