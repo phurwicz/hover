@@ -3,6 +3,7 @@
 > :ferris_wheel: Let's explore another `recipe` -- an active learning example.
 
 {!docs/snippets/html/stylesheet.html!}
+{!docs/snippets/html/thebe.html!}
 
 ## **Ingredient 1 ~ 3 / 4: Data, Vectorizer, Reduction**
 
@@ -92,5 +93,3 @@ Now we invoke the `active_learning` recipe.
 
         -   get an idea of how the current set of annotations will likely teach the model.
         -   locate the most valuable samples for further annotation.
-
-{!docs/snippets/html/juniper.html!}

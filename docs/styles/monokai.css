@@ -1,5 +1,7 @@
 .cm-s-monokai {
-	font-size: 1em;
+	padding: 2em 2em 2em;
+	height: auto;
+	font-size: 0.8em;
 	line-height: 1.5em;
 	font-family: inconsolata, monospace;
 	letter-spacing: 0.3px;
@@ -46,7 +48,6 @@
 	color: #A6E22E;
 }
 .cm-s-monokai .cm-def {
-	font-style: italic;
 	color: #FD971F;
 }
 .cm-s-monokai .cm-variable-2 {

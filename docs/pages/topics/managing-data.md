@@ -8,4 +8,4 @@
 {!docs/snippets/py/dataset-duplicates.txt!}
 </pre><br>
 
-{!docs/snippets/html/juniper.html!}
+{!docs/snippets/html/thebe.html!}

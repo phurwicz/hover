@@ -1,14 +1,21 @@
-> Welcome to the simplest use case of `hover`!
+> Welcome to the basic use case of `hover`!
 >
 > :sunglasses: Let's say we want to label some data and call it a day.
 
-{!docs/snippets/html/stylesheet.html!}
+{!docs/snippets/html/thebe.html!}
 
-## **Ingredient 1 / 3: Some Data**
+???+ info "Running Python right here"
+    Think of this page as a Jupyter notebook. You can edit code and press `Shift+Enter` to execute.
 
-Suppose that we have a list of data entries, each in the form of a dictionary.
+    Behind the scene is a [Binder](https://mybinder.org/)-hosted Python environment. Below is the status of the kernel:
+    <div class="thebe-status"></div><div class="thebe-activate"></div>
 
-We can first create a [`SupervisableDataset`](../../reference/core-dataset/#hover.core.dataset.SupervisableDataset) based on those entries:
+
+## **Ingredient 1 / 3: Raw Data**
+
+Start with a spreadsheet loaded in `pandas`.
+
+We turn it into a [`SupervisableDataset`](../../reference/core-dataset/#hover.core.dataset.SupervisableDataset) designed for labeling:
 
 <pre data-executable>
 {!docs/snippets/py/t0-0-dataset-text.txt!}
@@ -40,11 +47,11 @@ We can first create a [`SupervisableDataset`](../../reference/core-dataset/#hove
 
 
 
-## **Ingredient 2 / 3: Vectorizer**
+## **Ingredient 2 / 3: Embedding**
 
-To put our dataset sensibly on a 2-D "map", we will use a vectorizer for feature extraction, and then perform dimensionality reduction.
+A pre-trained embedding lets us group data points semantically.
 
-Here's one of many ways to define a vectorizer:
+In particular, let's define a `data -> embedding vector` function.
 
 <pre data-executable>
 {!docs/snippets/py/t0-1-vectorizer.txt!}
@@ -102,14 +109,14 @@ Here's one of many ways to define a vectorizer:
         ```
 
 
-## **Ingredient 3 / 3: Reduction**
+## **Ingredient 3 / 3: 2D Embedding**
 
-The dataset has built-in high-level support for dimensionality reduction.
+We compute a 2D version of the pre-trained embedding to visualize the whole dataset.
 
-Currently we can use [umap](https://umap-learn.readthedocs.io/en/latest/) or [ivis](https://bering-ivis.readthedocs.io/en/latest/).
+Hover has built-in methods for calling [umap](https://umap-learn.readthedocs.io/en/latest/) or [ivis](https://bering-ivis.readthedocs.io/en/latest/).
 
-??? info "Optional dependencies"
-    The corresponding libraries do not ship with hover by default, and may need to be installed:
+??? info "Dependencies (when in your own environment)"
+    The libraries for this step are not directly required by `hover`:
 
     -   for umap: `pip install umap-learn`
     -   for ivis: `pip install ivis[cpu]` or `pip install ivis[gpu]`
@@ -123,7 +130,7 @@ Currently we can use [umap](https://umap-learn.readthedocs.io/en/latest/) or [iv
 
 ## :sparkles: **Apply Labels**
 
-Now we are ready to visualize and annotate!
+We are ready for the annotation interface!
 
 {!docs/snippets/markdown/jupyterlab-js-issue.md!}
 
@@ -155,4 +162,4 @@ Now we are ready to visualize and annotate!
         -   the search widget might turn out useful.
             -    note that it does not select points but highlights them.
 
-{!docs/snippets/html/juniper.html!}
+{!docs/snippets/html/stylesheet.html!}
