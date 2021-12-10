@@ -1,6 +1,8 @@
 """
 ???+ note "Useful subroutines for working with bokeh in general."
 """
+import os
+import urllib
 import warnings
 from functools import wraps
 from traceback import format_exc
@@ -222,3 +224,32 @@ def bokeh_hover_tooltip(
     divbox += divbox_suffix
     script += script_suffix
     return divbox + script
+
+
+def remote_jupyter_proxy_url(port, base_url):
+    """
+    ???+ note "Callable to configure Bokeh's show method when using a proxy (JupyterHub)."
+
+        Usage:
+
+        ```python
+        # show(plot)
+        show(plot, notebook_url=remote_jupyter_proxy_url)
+        ```
+    """
+
+    # find JupyterHub base (external) url, default to Binder
+    base_url = os.environ.get(
+        "JUPYTERHUB_BASE_URL", "https://hub.gke2.mybinder.org/user/"
+    )
+    host = urllib.parse.urlparse(base_url).netloc
+
+    if port is None:
+        return host
+
+    service_url_path = os.environ.get("JUPYTERHUB_SERVICE_PREFIX", "")
+    proxy_url_path = "proxy/%d" % port
+
+    user_url = urllib.parse.urljoin(base_url, service_url_path)
+    full_url = urllib.parse.urljoin(user_url, proxy_url_path)
+    return full_url
