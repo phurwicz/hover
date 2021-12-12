@@ -1,5 +1,4 @@
-from hover.recipes import simple_annotator
-from hover.recipes.stable import _simple_annotator
+from hover.recipes.stable import simple_annotator, _simple_annotator
 from bokeh.io import show, output_notebook
 
 output_notebook()
@@ -26,8 +25,9 @@ def remote_jupyter_proxy_url(port):
     full_url = urllib.parse.urljoin(user_url, proxy_url_path)
     return full_url
 
-# static plot for demonstating the annotation interface
-static_plot, plot_objects = _simple_annotator(dataset)
+# static plot showcasing the annotation interface
+_, plot_objects = _simple_annotator(dataset)
+static_plot = plot_objects["annotator"].view()
 show(static_plot, notebook_url=remote_jupyter_proxy_url)
 
 # ---------- REAL CODE: for your actual Jupyter environment ---------
