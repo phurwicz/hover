@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 0.6.0 - In Progress
+
+### :tada: Features Added
+
+-   `BokehBaseExplorer`
+    -   Selections can now be made cumulatively. Tap on multiple points to view or label at once, without the overhead of re-plotting in between.
+
 ## 0.5.0 - Apr 30, 2021
 
 ### :tada: Features Added
