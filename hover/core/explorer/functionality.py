@@ -45,7 +45,7 @@ class BokehDataFinder(BokehBaseExplorer):
             labels=["use as selection filter"], active=[]
         )
 
-        def activated():
+        def filter_flag():
             return bool(0 in self.search_filter_box.active)
 
         def filter_by_search(indices, subset):
@@ -59,7 +59,7 @@ class BokehDataFinder(BokehBaseExplorer):
         for _key in self.sources.keys():
             self._selection_filters[_key].data.add(
                 lambda indices, subset: filter_by_search(indices, subset)
-                if activated()
+                if filter_flag()
                 else indices
             )
 
@@ -67,13 +67,13 @@ class BokehDataFinder(BokehBaseExplorer):
         self.search_pos.on_change(
             "value",
             lambda attr, old, new: self._trigger_selection_filters()
-            if activated()
+            if filter_flag()
             else None,
         )
         self.search_neg.on_change(
             "value",
             lambda attr, old, new: self._trigger_selection_filters()
-            if activated()
+            if filter_flag()
             else None,
         )
 
@@ -318,7 +318,7 @@ class BokehSoftLabelExplorer(BokehBaseExplorer):
         )
         self.score_filter = row(self.score_range, self.score_filter_box)
 
-        def activated():
+        def filter_flag():
             return bool(0 in self.score_filter_box.active)
 
         def subroutine(df, lower, upper):
@@ -341,7 +341,7 @@ class BokehSoftLabelExplorer(BokehBaseExplorer):
         for _key in self.sources.keys():
             self._selection_filters[_key].data.add(
                 lambda indices, subset: filter_by_score(indices, subset)
-                if activated()
+                if filter_flag()
                 else indices
             )
 
@@ -349,7 +349,7 @@ class BokehSoftLabelExplorer(BokehBaseExplorer):
         self.score_range.on_change(
             "value",
             lambda attr, old, new: self._trigger_selection_filters()
-            if activated()
+            if filter_flag()
             else None,
         )
 
