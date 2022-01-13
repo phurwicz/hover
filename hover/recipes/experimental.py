@@ -52,6 +52,7 @@ def _snorkel_crosscheck(dataset, lf_list, **kwargs):
 
     # link coordinates and selections
     snorkel.link_xy_range(annotator)
+    snorkel.link_selection_options(annotator)
     snorkel.link_selection("raw", annotator, "raw")
     snorkel.link_selection("labeled", annotator, "dev")
 
@@ -105,6 +106,8 @@ def _active_learning(dataset, vectorizer, vecnet_callback, **kwargs):
     finder.link_xy_range(annotator)
 
     # link selections, noting that softlabel does not take "test"
+    finder.link_selection_options(annotator)
+    finder.link_selection_options(softlabel)
     for _key in ["raw", "train", "dev"]:
         softlabel.link_selection(_key, annotator, _key)
         softlabel.link_selection(_key, finder, _key)
