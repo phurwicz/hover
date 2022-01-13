@@ -26,8 +26,11 @@ class BokehTextFinder(BokehDataFinder, BokehForText):
     def _layout_widgets(self):
         """Define the layout of widgets."""
         layout_rows = (
-            row(column(self.search_pos, self.search_neg), self.search_filter_box),
-            row(self.data_key_button_group),
+            row(self.data_key_button_group, self.selection_option_box),
+            row(
+                column(self.search_pos, self.search_neg),
+                column(self.search_filter_box),
+            ),
             row(*self._dynamic_widgets.values()),
         )
         return column(*layout_rows)
@@ -45,8 +48,8 @@ class BokehTextAnnotator(BokehDataAnnotator, BokehForText):
     def _layout_widgets(self):
         """Define the layout of widgets."""
         layout_rows = (
+            row(self.data_key_button_group, self.selection_option_box),
             row(self.search_pos, self.search_neg),
-            row(self.data_key_button_group),
             row(self.annotator_input, self.annotator_apply),
             row(*self._dynamic_widgets.values()),
         )
@@ -65,8 +68,8 @@ class BokehTextSoftLabel(BokehSoftLabelExplorer, BokehForText):
     def _layout_widgets(self):
         """Define the layout of widgets."""
         layout_rows = (
+            row(self.data_key_button_group, self.selection_option_box),
             row(self.search_pos, self.search_neg),
-            row(self.data_key_button_group),
             row(self.score_filter),
             row(*self._dynamic_widgets.values()),
         )
@@ -115,7 +118,7 @@ class BokehAudioAnnotator(BokehDataAnnotator, BokehForAudio):
     def _layout_widgets(self):
         """Define the layout of widgets."""
         layout_rows = (
-            row(self.data_key_button_group),
+            row(self.data_key_button_group, self.selection_option_box),
             row(self.annotator_input, self.annotator_apply),
             row(*self._dynamic_widgets.values()),
         )
@@ -134,7 +137,7 @@ class BokehAudioSoftLabel(BokehSoftLabelExplorer, BokehForAudio):
     def _layout_widgets(self):
         """Define the layout of widgets."""
         layout_rows = (
-            row(self.data_key_button_group),
+            row(self.data_key_button_group, self.selection_option_box),
             row(self.score_filter),
             row(*self._dynamic_widgets.values()),
         )
@@ -183,7 +186,7 @@ class BokehImageAnnotator(BokehDataAnnotator, BokehForImage):
     def _layout_widgets(self):
         """Define the layout of widgets."""
         layout_rows = (
-            row(self.data_key_button_group),
+            row(self.data_key_button_group, self.selection_option_box),
             row(self.annotator_input, self.annotator_apply),
             row(*self._dynamic_widgets.values()),
         )
@@ -202,7 +205,7 @@ class BokehImageSoftLabel(BokehSoftLabelExplorer, BokehForImage):
     def _layout_widgets(self):
         """Define the layout of widgets."""
         layout_rows = (
-            row(self.data_key_button_group),
+            row(self.data_key_button_group, self.selection_option_box),
             row(self.score_filter),
             row(*self._dynamic_widgets.values()),
         )

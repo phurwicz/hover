@@ -126,6 +126,7 @@ class BokehBaseExplorer(Loggable, ABC):
         self._dynamic_widgets = OrderedDict()
         self._dynamic_callbacks = OrderedDict()
         self._setup_search_highlight()
+        self._setup_selection_option()
         self._setup_subset_toggle()
 
     @abstractmethod
@@ -143,6 +144,16 @@ class BokehBaseExplorer(Loggable, ABC):
             Left to child classes that have a specific feature format.
         """
         pass
+
+    def _setup_selection_option(self):
+        """
+        ???+ note "Create a group of checkbox(es) for advanced selection options."
+        """
+        from bokeh.models import CheckboxGroup
+
+        self.selection_option_box = CheckboxGroup(
+            labels=["cumulative selection"], active=[]
+        )
 
     def _setup_subset_toggle(self):
         """
@@ -294,9 +305,16 @@ class BokehBaseExplorer(Loggable, ABC):
             _key: RootUnionFind(set()) for _key in self.sources.keys()
         }
 
+        def cumulative_selection_flag():
+            """
+            Determine whether cumulative selection is enabled.
+            """
+            return bool(0 in self.selection_option_box.active)
+
         def store_selection(event):
             """
             Keep track of the last manual selection.
+            Useful for applying cumulation / filters dynamically.
             """
             # ensure that nothing happens until the selection event is complete
             if not event.final:
@@ -306,8 +324,12 @@ class BokehBaseExplorer(Loggable, ABC):
             for _key, _source in self.sources.items():
                 _selected = _source.selected.indices
                 # use clear() and update() instead of assignment to keep clean references
-                self._last_selections[_key].data.clear()
-                self._last_selections[_key].data.update(_selected)
+                if not cumulative_selection_flag():
+                    self._last_selections[_key].data.clear()
+                    self._last_selections[_key].data.update(_selected)
+                else:
+                    self._last_selections[_key].data.update(_selected)
+                    _source.selected.indices = list(self._last_selections[_key].data)
 
         def trigger_selection_filters(subsets=None):
             """
@@ -326,8 +348,13 @@ class BokehBaseExplorer(Loggable, ABC):
                     _selected = _func(_selected, _key)
                 self.sources[_key].selected.indices = list(_selected)
 
-        self._trigger_selection_filters = trigger_selection_filters
+        # no need to keep the reference to store_selection()
+        # because it only gets called upon selection event
         self.figure.on_event(SelectionGeometry, store_selection)
+
+        # keep reference to trigger_selection_filter() for further access
+        # for example, toggling filters should call the trigger
+        self._trigger_selection_filters = trigger_selection_filters
         self.figure.on_event(
             SelectionGeometry,
             lambda event: self._trigger_selection_filters() if event.final else None,
@@ -431,9 +458,6 @@ class BokehBaseExplorer(Loggable, ABC):
         # link selection in a bidirectional manner
         sl, sr = self.sources[key], other.sources[other_key]
 
-        # deprecated: use js_link to sync attributes
-        # sl.selected.js_link("indices", sr.selected, "indices")
-        # sr.selected.js_link("indices", sl.selected, "indices")
         def left_to_right(attr, old, new):
             sr.selected.indices = sl.selected.indices[:]
 
@@ -451,6 +475,23 @@ class BokehBaseExplorer(Loggable, ABC):
             other._selection_filters[other_key].data
         )
         self._selection_filters[key].union(other._selection_filters[other_key])
+
+    def link_selection_options(self, other):
+        """
+        ???+ note "Synchronize the selection option values between explorers."
+            | Param   | Type    | Description                    |
+            | :------ | :------ | :----------------------------- |
+            | `other` | `BokehBaseExplorer` | the other explorer |
+        """
+
+        def left_to_right(attr, old, new):
+            other.selection_option_box.active = self.selection_option_box.active[:]
+
+        def right_to_left(attr, old, new):
+            self.selection_option_box.active = other.selection_option_box.active[:]
+
+        self.selection_option_box.on_change("active", left_to_right)
+        other.selection_option_box.on_change("active", right_to_left)
 
     def link_xy_range(self, other):
         """
