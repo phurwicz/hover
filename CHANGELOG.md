@@ -4,8 +4,24 @@
 
 ### :tada: Features Added
 
--   `BokehBaseExplorer`
+-   all `BokehBaseExplorer` subclasses
     -   Selections can now be made cumulatively. Tap on multiple points to view or label at once, without the overhead of re-plotting in between.
+        -   this option is invoked through a checkbox toggle.
+        -   By default, built-in recipes link the toggle between all explorers in the recipe.
+
+-   `VectorNet`
+    -   now has widgets for configuring training hyperparameters.
+        -   currently only supports changing epochs.
+        -   will support changing learning rate and momentum.
+    -   added a method prepare_loader() that takes `SupervisableDataset` and returns a torch `DataLoader`.
+
+-   `MultiVectorNet` **new class**
+    -   makes use of multiple VectorNets trained simutaneously, inspired by the [Coteaching research](https://arxiv.org/abs/1804.06872).
+
+### :exclamation: Backward Incompatibility
+
+-   `active_learning` **signature change**
+    -   no longer takes `vectorizer` as an input. Instead, `VectorNet`/`MultiVectorNet` produced by `vecnet_callback` will handle the vectorization of raw input data.
 
 ## 0.5.0 - Apr 30, 2021
 
