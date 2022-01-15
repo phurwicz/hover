@@ -26,10 +26,10 @@ def remote_jupyter_proxy_url(port):
     return full_url
 
 # static plot for demonstating the annotation interface
-static_plot, plot_objects = _active_learning(dataset, vectorizer, vecnet_callback)
+static_plot, plot_objects = _active_learning(dataset, vecnet_callback)
 show(static_plot, notebook_url=remote_jupyter_proxy_url)
 
 # ---------- REAL CODE: for your actual Jupyter environment ---------
 # the real annotation interface enables Python callbacks
-# interactive_plot = active_learning(dataset, vectorizer, vecnet_callback)
+# interactive_plot = active_learning(dataset, vecnet_callback)
 # show(interactive_plot, notebook_url='https://localhost:port')
