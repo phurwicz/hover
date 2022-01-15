@@ -14,6 +14,7 @@ from hover.utils.denoising import (
     prediction_disagreement,
     disagreement_priority,
 )
+from bokeh.models import Slider, FuncTickFormatter
 from sklearn.metrics import confusion_matrix
 import numpy as np
 
@@ -102,6 +103,7 @@ class VectorNet(Loggable):
             self.nn_optimizer, torch.optim.Optimizer
         ), f"Expected an optimizer, got {type(self.nn_optimizer)}"
         self._dynamic_params = {"optimizer": optimizer_kwargs}
+        self._setup_widgets()
 
     @classmethod
     def from_module(cls, model_module, labels):
@@ -138,6 +140,26 @@ class VectorNet(Loggable):
         if save_path is None:
             save_path = self.nn_update_path
         torch.save(self.nn.state_dict(), save_path)
+
+    def _setup_widgets(self):
+        """
+        ???+ note "Bokeh widgets for changing hyperparameters through user interaction."
+        """
+        self.epochs_slider = Slider(start=1, end=50, value=1, step=1, title="# epochs")
+
+    def _layout_widgets(self):
+        """
+        ???+ note "Layout of widgets when plotted."
+        """
+        from bokeh.layouts import column
+
+        return column(self.epochs_slider)
+
+    def view(self):
+        """
+        ???+ note "Overall layout when plotted."
+        """
+        return self._layout_widgets()
 
     def adjust_optimizer_params(self):
         """
@@ -208,7 +230,19 @@ class VectorNet(Loggable):
 
         return traj_arr, seq_arr, disparities
 
-    def train(self, train_loader, dev_loader=None, epochs=1):
+    def prepare_loader(self, dataset, key, **kwargs):
+        """
+        ???+ note "Create dataloader from `SupervisableDataset` with implied vectorizer(s)."
+
+            | Param      | Type  | Description                |
+            | :--------- | :---- | :------------------------- |
+            | `dataset`  | `hover.core.dataset.SupervisableDataset` | the dataset to load |
+            | `key`      | `str` | "train", "dev", or "test"  |
+            | `**kwargs` | | forwarded to `dataset.loader()`  |
+        """
+        return dataset.loader(key, self.vectorizer, **kwargs)
+
+    def train(self, train_loader, dev_loader=None, epochs=None):
         """
         ???+ note "Train the neural network part of the VecNet."
 
@@ -221,6 +255,8 @@ class VectorNet(Loggable):
             | `dev_loader`   | `torch.utils.data.DataLoader` | dev set   |
             | `epochs`       | `int`        | number of epochs to train  |
         """
+        epochs = epochs or self.epochs_slider.value
+
         train_info = []
         for epoch_idx in range(epochs):
             self._dynamic_params["epoch"] = epoch_idx + 1
@@ -306,7 +342,7 @@ class VectorNet(Loggable):
         accuracy = classification_accuracy(true, pred)
         conf_mat = confusion_matrix(true, pred)
 
-        if self.verbose > 0:
+        if self.verbose >= 0:
             log_info = dict(self._dynamic_params)
             log_info["performance"] = "Acc {0:.3f}".format(accuracy)
             self._info(
@@ -323,7 +359,10 @@ class MultiVectorNet(Loggable):
     """
     ???+ note "Ensemble transfer learning model: multiple jointly-trained VectorNet's."
 
-        Note that the VectorNets can have different vectorizers.
+        One of the `VectorNet`s is treated as the "primary". Functionalities that only
+        work on single `VectorNet`s will point to the primary instead.
+
+        Note that the `VectorNet`s can have different vectorizers.
         Consequently, when training the nets, they expect multiple vectors per input.
 
         Coupled with:
@@ -333,45 +372,206 @@ class MultiVectorNet(Loggable):
 
     DEFAULT_ADJACENCY_FUNC = disagreement_priority
 
-    def __init__(self, vector_nets, verbose=0):
+    def __init__(self, vector_nets, primary=0, verbose=0):
         """
         ???+ note "Create the `VectorNet`, loading parameters if available."
             | Param           | Type   | Description                  |
             | :-------------- | :----- | :--------------------------- |
             | `vector_nets`   | `list` | list of VectorNet instances  |
+            | `primary`       | `int`  | index of the primary VectorNet |
             | `verbose`       | `int`  | logging verbosity level      |
         """
+        assert isinstance(
+            primary, int
+        ), f"Expected primary VectorNet index as int, got {type(primary)} {primary}"
+        assert primary < len(
+            vector_nets
+        ), f"Primary VectorNet index out of range ({primary} in a list of {len(vector_nets)})"
         self.vector_nets = vector_nets
+        self.primary = primary
         self._dynamic_params = dict()
         assert isinstance(
             verbose, int
         ), f"Expected verbose as int, got {type(verbose)} {verbose}"
         self.verbose = verbose
+        self._setup_widgets()
         self._warn(
             "this class is in preview and is not sufficiently tested. Use with caution."
         )
 
-    def train(self, train_loader, params_per_epoch, dev_loader=None):
+    def save(self, save_path=None):
+        """
+        ???+ note "Save the current state dict with authorization to overwrite."
+            | Param       | Type  | Description                           |
+            | :---------- | :---- | :------------------------------------ |
+            | `save_path` | `str` | option alternative path to state dict |
+        """
+        for _net in self.vector_nets:
+            if save_path is not None:
+                self._warn(
+                    "save_path is ignored. Please specify it on a single VectorNet."
+                )
+            torch.save(_net.nn.state_dict(), _net.nn_update_path)
+
+    def _setup_widgets(self):
+        """
+        ???+ note "Bokeh widgets for changing hyperparameters through user interaction."
+        """
+        epochs_shared_kwargs = dict(start=1, end=50, value=1, step=1)
+        self.warmup_epochs_slider = Slider(
+            title="# warmup epochs", **epochs_shared_kwargs
+        )
+        self.postwm_epochs_slider = Slider(
+            title="# post-warmup epochs", **epochs_shared_kwargs
+        )
+
+        noise_shared_kwargs = dict(start=0.0, end=0.5, step=0.01)
+        self.warmup_noise_slider = Slider(
+            value=0.0, title="# warmup denoise rate", **noise_shared_kwargs
+        )
+        self.postwm_noise_slider = Slider(
+            value=0.1, title="# post-warmup denoise rate", **noise_shared_kwargs
+        )
+
+        lr_shared_kwargs = dict(
+            start=0.0,
+            end=7.0,
+            value=1.0,
+            step=0.1,
+            format=FuncTickFormatter(code="return Math.pow(0.1, tick).toFixed(8)"),
+        )
+        self.warmup_loglr_slider = Slider(
+            title="# warmup learning rate", **lr_shared_kwargs
+        )
+        self.postwm_loglr_slider = Slider(
+            title="# post-warmup learning rate", **lr_shared_kwargs
+        )
+
+        momentum_shared_kwargs = dict(start=0.0, end=1.0, step=0.01)
+        self.warmup_momentum_slider = Slider(
+            value=0.9, title="# warmup momentum", **momentum_shared_kwargs
+        )
+        self.postwm_momentum_slider = Slider(
+            value=0.7, title="# post-warmup momentum", **momentum_shared_kwargs
+        )
+
+    def _layout_widgets(self):
+        """
+        ???+ note "Layout of widgets when plotted."
+        """
+        from bokeh.layouts import row, column
+
+        layout = row(
+            column(
+                self.warmup_epochs_slider,
+                self.warmup_noise_slider,
+                self.warmup_loglr_slider,
+                self.warmup_momentum_slider,
+            ),
+            column(
+                self.postwm_epochs_slider,
+                self.postwm_noise_slider,
+                self.postwm_loglr_slider,
+                self.postwm_momentum_slider,
+            ),
+        )
+        return layout
+
+    def view(self):
+        """
+        ???+ note "Overall layout when plotted."
+        """
+        return self._layout_widgets()
+
+    def predict_proba(self, inps):
+        """
+        ???+ note "End-to-end single/multi-piece prediction from inp to class probabilities."
+
+            Currently only uses the primary VectorNet.
+            *Dev note*: consider combining logits.
+
+            | Param  | Type    | Description                          |
+            | :----- | :------ | :----------------------------------- |
+            | `inps` | dynamic | (a list of) input features to vectorize |
+        """
+        vecnet = self.vector_nets[self.primary]
+        return vecnet.predict_proba(inps)
+
+    def manifold_trajectory(self, inps, method="umap", **kwargs):
+        """
+        ???+ note "Compute a propagation trajectory of the dataset manifold through the neural net."
+
+            Currently only uses the primary VectorNet.
+            *Dev note*: consider padding and concatenation to align intermediate layers.
+
+            | Param    | Type    | Description                          |
+            | :------- | :------ | :----------------------------------- |
+            | `inps`   | dynamic | (a list of) input features to vectorize |
+            | `method` | `str`   | reduction method: `"umap"` or `"ivis"`  |
+            | `**kwargs` | | kwargs to forward to dimensionality reduction |
+        """
+        vecnet = self.vector_nets[self.primary]
+        return vecnet.manifold_trajectory(inps, method=method, **kwargs)
+
+    def prepare_loader(self, dataset, key, **kwargs):
+        """
+        ???+ note "Create dataloader from `SupervisableDataset` with implied vectorizer(s)."
+
+            | Param      | Type  | Description                |
+            | :--------- | :---- | :------------------------- |
+            | `dataset`  | `hover.core.dataset.SupervisableDataset` | the dataset to load |
+            | `key`      | `str` | "train", "dev", or "test"  |
+            | `**kwargs` | | forwarded to `dataset.loader()`  |
+        """
+        vectorizers = [_net.vectorizer for _net in self.vector_nets]
+        return dataset.loader(key, *vectorizers, **kwargs)
+
+    def params_per_epoch_from_widgets(self):
+        for i in range(self.warmup_epochs_slider.value):
+            yield {
+                "denoise_rate": self.warmup_noise_slider.value,
+                "optimizer": [
+                    {
+                        "lr": 0.1 ** self.warmup_loglr_slider.value,
+                        "momentum": self.warmup_momentum_slider.value,
+                    }
+                ],
+            }
+        for i in range(self.postwm_epochs_slider.value):
+            yield {
+                "denoise_rate": self.postwm_noise_slider.value,
+                "optimizer": [
+                    {
+                        "lr": 0.1 ** self.postwm_loglr_slider.value,
+                        "momentum": self.postwm_momentum_slider.value,
+                    }
+                ],
+            }
+
+    def train(
+        self,
+        train_loader,
+        dev_loader=None,
+        warmup_epochs=1,
+        warmup_noise=0.0,
+        warmup_lr=0.1,
+        warmup_momentum=0.9,
+        postwm_epochs=1,
+        postwm_noise=0.1,
+        postwm_lr=0.05,
+        postwm_momentum=0.7,
+    ):
         """
         ???+ note "Train multiple VectorNet's jointly."
 
             | Param          | Type         | Description                |
             | :------------- | :----------- | :------------------------- |
             | `train_loader` | `torch.utils.data.DataLoader` | train set |
-            | `params_per_epoch` | `list` of `dict` | updates to dynamic params |
             | `dev_loader`   | `torch.utils.data.DataLoader` | dev set   |
-
-            Example for params_per_epoch:
-
-            ```
-            def get_params(warmup_epochs=5, coteach_epochs=10, forget_rate=0.3):
-                for i in range(warmup_epochs):
-                    yield {"forget_rate": 0.0, "optimizer": [{"lr": 0.1, "momentum": 0.9}] * 4}
-                for i in range(coteach_epochs):
-                    yield {"forget_rate": forget_rate, "optimizer": [{"lr": 0.05, "momentum": 0.7}] * 4}
-            params_per_epoch = get_params()
+            | other |        | intended to be overridden by widgets |
             ```
         """
+        params_per_epoch = self.params_per_epoch_from_widgets()
         train_info = []
         for epoch_idx, param_dict in enumerate(params_per_epoch):
             self._dynamic_params["epoch"] = epoch_idx + 1
@@ -421,7 +621,7 @@ class MultiVectorNet(Loggable):
             | `loaded_output`     | `torch.Tensor` | output tensor           |
             | `verbose`           | `int`          | verbosity for logging   |
         """
-        forget_rate = self._dynamic_params["forget_rate"]
+        denoise_rate = self._dynamic_params["denoise_rate"]
         tail_head_teachers = self._dynamic_params.get(
             "tail_head_teachers", [[i] for i, _net in enumerate(self.vector_nets)]
         )
@@ -441,7 +641,7 @@ class MultiVectorNet(Loggable):
             logits_list,
             output_tensor,
             tail_head_teachers,
-            forget_rate,
+            denoise_rate,
         )
 
         for i, (_net, _loss) in enumerate(zip(self.vector_nets, loss_list)):
@@ -499,7 +699,7 @@ class MultiVectorNet(Loggable):
         conf_mat_list = [confusion_matrix(true, _pred) for _pred in pred_list]
         disagree_rate = prediction_disagreement(pred_list, reduce=True)
 
-        if self.verbose > 0:
+        if self.verbose >= 0:
             log_info = dict(self._dynamic_params)
             log_info["performance"] = "".join(
                 [
@@ -551,7 +751,7 @@ class MultiVectorNet(Loggable):
         accuracy = classification_accuracy(true, pred)
         conf_mat = confusion_matrix(true, pred)
 
-        if self.verbose > 0:
+        if self.verbose >= 0:
             log_info = dict(self._dynamic_params)
             log_info["performance"] = "Ensemble Acc {0:.3f}".format(accuracy)
             self._info(

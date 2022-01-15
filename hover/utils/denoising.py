@@ -1,3 +1,8 @@
+"""
+Denoising techniques mostly based on or tweaked from this research:
+Han, et. al. Co-teaching: Robust Training of Deep Neural Networks with Extremely Noisy Labels
+https://arxiv.org/abs/1804.06872
+"""
 import math
 import numpy as np
 import torch
@@ -5,11 +10,11 @@ from collections import defaultdict
 from hover.utils.torch_helper import cross_entropy_with_probs
 
 
-def loss_coteaching_directed(y_student, y_teacher, target, forget_rate):
+def loss_coteaching_directed(y_student, y_teacher, target, denoise_rate):
     """
     Subroutine for loss_coteaching_graph.
     """
-    num_remember = math.ceil((1 - forget_rate) * target.size(0))
+    num_remember = math.ceil((1 - denoise_rate) * target.size(0))
     assert (
         num_remember > 0
     ), f"Expected at least one remembered target, got {num_remember}"
@@ -37,14 +42,14 @@ def prediction_disagreement(pred_list, reduce=False):
     return dict(disagreement)
 
 
-def loss_coteaching_graph(y_list, target, tail_head_adjacency_list, forget_rate):
+def loss_coteaching_graph(y_list, target, tail_head_adjacency_list, denoise_rate):
     """
     Co-teaching from differences.
     Generalized to graph representation where each vertex is a classifier and each edge is a source to check differences with and to learn from.
     y_list: list of logits from different classifiers.
     target: target, which is allowed to be probabilistic.
     tail_head_adjacency_list: the 'tail' classifier learns from the 'head'.
-    forget_rate: the proportion of high-loss contributions to discard.
+    denoise_rate: the proportion of high-loss contributions to discard.
     """
     # initialize co-teaching losses
     loss_list = []
@@ -57,7 +62,7 @@ def loss_coteaching_graph(y_list, target, tail_head_adjacency_list, forget_rate)
             _tar = target
 
             # add loss contribution to list
-            _contribution = loss_coteaching_directed(_yi, _yj, _tar, forget_rate)
+            _contribution = loss_coteaching_directed(_yi, _yj, _tar, denoise_rate)
             _losses.append(_contribution)
 
         # concatenate and average up

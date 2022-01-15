@@ -3,7 +3,7 @@
     Experimental recipes whose function signatures might change significantly in the future. Use with caution.
 """
 from bokeh.layouts import row, column
-from bokeh.models import Button, Slider
+from bokeh.models import Button
 from .subroutine import (
     standard_annotator,
     standard_finder,
@@ -69,7 +69,7 @@ def _snorkel_crosscheck(dataset, lf_list, **kwargs):
 
 
 @servable(title="Active Learning")
-def active_learning(dataset, vectorizer, vecnet_callback, **kwargs):
+def active_learning(dataset, vecnet_callback, **kwargs):
     """
     ???+ note "Display the dataset for annotation, putting a classification model in the loop."
         Currently works most smoothly with `VectorNet`.
@@ -77,9 +77,8 @@ def active_learning(dataset, vectorizer, vecnet_callback, **kwargs):
         | Param     | Type     | Description                          |
         | :-------- | :------- | :----------------------------------- |
         | `dataset` | `SupervisableDataset` | the dataset to link to  |
-        | `vectorizer` | `callable` | the feature -> vector function  |
-        | `vecnet_callback` | `callable` | the (dataset, vectorizer) -> `VecNet` function|
-        | `**kwargs` |       | kwargs to forward to each Bokeh figure |
+        | `vecnet_callback` | `callable` | function that creates a `VecNet` based on a `SupervisableDataset`|
+        | `**kwargs` |         | forwarded to each Bokeh figure       |
 
         Expected visual layout:
 
@@ -87,11 +86,11 @@ def active_learning(dataset, vectorizer, vecnet_callback, **kwargs):
         | :------------------ | :------------------------ | :----------------- | :------------------ |
         | manage data subsets | inspect model predictions | make annotations   | search -> highlight |
     """
-    layout, _ = _active_learning(dataset, vectorizer, vecnet_callback, **kwargs)
+    layout, _ = _active_learning(dataset, vecnet_callback, **kwargs)
     return layout
 
 
-def _active_learning(dataset, vectorizer, vecnet_callback, **kwargs):
+def _active_learning(dataset, vecnet_callback, **kwargs):
     """
     ???+ note "Cousin of active_learning which exposes objects in the layout."
     """
@@ -118,73 +117,79 @@ def _active_learning(dataset, vectorizer, vecnet_callback, **kwargs):
     softlabel.value_patch("y", "y_traj")
 
     # recipe-specific widget
-    def setup_model_retrainer():
-        model_retrainer = Button(label="Train model", button_type="primary")
-        epochs_slider = Slider(start=1, end=20, value=1, step=1, title="# epochs")
+    model = vecnet_callback(dataset)
+    model_retrainer = Button(label="Train model", button_type="primary")
 
-        def retrain_model():
-            """
-            Callback function.
-            """
-            model_retrainer.disabled = True
-            logger.info("Start training... button will be disabled temporarily.")
-            dataset.setup_label_coding()
-            model = vecnet_callback(dataset, vectorizer)
+    def retrain_model():
+        """
+        Callback subfunction 1 of 2.
+        """
+        model_retrainer.disabled = True
+        logger.info("Start training... button will be disabled temporarily.")
+        dataset.setup_label_coding()
 
-            train_loader = dataset.loader("train", vectorizer, smoothing_coeff=0.2)
-            if dataset.dfs["dev"].shape[0] > 0:
-                dev_loader = dataset.loader("dev", vectorizer)
-            else:
-                dataset._warn("Dev set is empty, borrowing train set for validation.")
-                dev_loader = train_loader
+        train_loader = model.prepare_loader(dataset, "train", smoothing_coeff=0.2)
+        if dataset.dfs["dev"].shape[0] > 0:
+            dev_loader = model.prepare_loader(dataset, "dev")
+        else:
+            dataset._warn("dev set is empty, borrowing train set for validation.")
+            dev_loader = train_loader
 
-            _ = model.train(train_loader, dev_loader, epochs=epochs_slider.value)
-            model.save()
-            logger.good("-- 1/2: retrained model")
+        _ = model.train(train_loader, dev_loader)
+        model.save()
+        logger.good("-- 1/2: retrained model")
 
-            # combine inputs and compute outputs of all non-test subsets
-            use_subsets = ("raw", "train", "dev")
-            inps = []
-            for _key in use_subsets:
-                inps.extend(dataset.dfs[_key][feature_key].tolist())
+    def update_softlabel_plot():
+        """
+        Callback subfunction 2 of 2.
+        """
+        # combine inputs and compute outputs of all non-test subsets
+        use_subsets = ("raw", "train", "dev")
+        inps = []
+        for _key in use_subsets:
+            inps.extend(dataset.dfs[_key][feature_key].tolist())
 
-            probs = model.predict_proba(inps)
-            labels = [dataset.label_decoder[_val] for _val in probs.argmax(axis=-1)]
-            scores = probs.max(axis=-1).tolist()
-            traj_arr, seq_arr, disparity_arr = model.manifold_trajectory(
-                inps,
-                points_per_step=5,
-            )
+        probs = model.predict_proba(inps)
+        labels = [dataset.label_decoder[_val] for _val in probs.argmax(axis=-1)]
+        scores = probs.max(axis=-1).tolist()
+        traj_arr, seq_arr, disparity_arr = model.manifold_trajectory(
+            inps,
+            points_per_step=5,
+        )
 
-            offset = 0
-            for _key in use_subsets:
-                _length = dataset.dfs[_key].shape[0]
-                # skip subset if empty
-                if _length > 0:
-                    _slice = slice(offset, offset + _length)
-                    dataset.dfs[_key]["pred_label"] = labels[_slice]
-                    dataset.dfs[_key]["pred_score"] = scores[_slice]
-                    # for each dimension: all steps, selected slice
-                    _x_traj = traj_arr[:, _slice, 0]
-                    _y_traj = traj_arr[:, _slice, 1]
-                    # for each dimension: selected slice, all steps
-                    _x_traj = list(np.swapaxes(_x_traj, 0, 1))
-                    _y_traj = list(np.swapaxes(_y_traj, 0, 1))
-                    dataset.dfs[_key]["x_traj"] = _x_traj
-                    dataset.dfs[_key]["y_traj"] = _y_traj
+        offset = 0
+        for _key in use_subsets:
+            _length = dataset.dfs[_key].shape[0]
+            # skip subset if empty
+            if _length > 0:
+                _slice = slice(offset, offset + _length)
+                dataset.dfs[_key]["pred_label"] = labels[_slice]
+                dataset.dfs[_key]["pred_score"] = scores[_slice]
+                # for each dimension: all steps, selected slice
+                _x_traj = traj_arr[:, _slice, 0]
+                _y_traj = traj_arr[:, _slice, 1]
+                # for each dimension: selected slice, all steps
+                _x_traj = list(np.swapaxes(_x_traj, 0, 1))
+                _y_traj = list(np.swapaxes(_y_traj, 0, 1))
+                dataset.dfs[_key]["x_traj"] = _x_traj
+                dataset.dfs[_key]["y_traj"] = _y_traj
 
-                    offset += _length
+                offset += _length
 
-            softlabel._dynamic_callbacks["adjust_patch_slider"]()
-            softlabel._update_sources()
-            model_retrainer.disabled = False
-            logger.good("-- 2/2: updated predictions. Training button is re-enabled.")
+        softlabel._dynamic_callbacks["adjust_patch_slider"]()
+        softlabel._update_sources()
+        model_retrainer.disabled = False
+        logger.good("-- 2/2: updated predictions. Training button is re-enabled.")
 
-        model_retrainer.on_click(retrain_model)
-        return model_retrainer, epochs_slider
+    def callback_sequence():
+        """
+        Overall callback function.
+        """
+        retrain_model()
+        update_softlabel_plot()
 
-    model_retrainer, epochs_slider = setup_model_retrainer()
-    sidebar = column(row(model_retrainer, epochs_slider), dataset.view())
+    model_retrainer.on_click(callback_sequence)
+    sidebar = column(model_retrainer, model.view(), dataset.view())
     layout = row(sidebar, *[_plot.view() for _plot in [softlabel, annotator, finder]])
 
     objects = {
@@ -194,6 +199,5 @@ def _active_learning(dataset, vectorizer, vecnet_callback, **kwargs):
         "sidebar": sidebar,
         "softlabel": softlabel,
         "model_retrainer": model_retrainer,
-        "epochs_slider": epochs_slider,
     }
     return layout, objects
