@@ -32,9 +32,9 @@ def prediction_disagreement(pred_list, reduce=False):
     Compute disagreements between predictions.
     """
     disagreement = defaultdict(dict)
-    for i in range(0, len(pred_list)):
-        for j in range(i, len(pred_list)):
-            _disagreed = np.not_equal(pred_list[i], pred_list[j])
+    for i, _pred_i in enumerate(pred_list):
+        for j, _pred_j in enumerate(pred_list):
+            _disagreed = np.not_equal(_pred_i, _pred_j)
             if reduce:
                 _disagreed = np.mean(_disagreed)
             disagreement[i][j] = _disagreed
@@ -53,16 +53,16 @@ def loss_coteaching_graph(y_list, target, tail_head_adjacency_list, denoise_rate
     """
     # initialize co-teaching losses
     loss_list = []
-    for i in range(0, len(y_list)):
+    # for i in range(0, len(y_list)):
+    for i, _yi in enumerate(y_list):
         assert tail_head_adjacency_list[i], f"Expected at least one teacher for {i}"
         _losses = []
         for j in tail_head_adjacency_list[i]:
             # fetch yi as student(tail), yj as teacher(head)
-            _yi, _yj = y_list[i], y_list[j]
-            _tar = target
+            _yj = y_list[j]
 
             # add loss contribution to list
-            _contribution = loss_coteaching_directed(_yi, _yj, _tar, denoise_rate)
+            _contribution = loss_coteaching_directed(_yi, _yj, target, denoise_rate)
             _losses.append(_contribution)
 
         # concatenate and average up
@@ -78,7 +78,8 @@ def identity_adjacency(info_dict):
     """
     refs = []
     acc_list = info_dict["accuracy"]
-    for i in range(0, len(acc_list)):
+    num_nodes = len(acc_list)
+    for i in range(0, num_nodes):
         refs.append([i])
     return refs
 
@@ -90,8 +91,9 @@ def cyclic_adjacency(info_dict, acc_bar=0.5):
     """
     refs = []
     acc_list = info_dict["accuracy"]
-    for i in range(0, len(acc_list)):
-        candidate = (i + 1) % (len(acc_list))
+    num_nodes = len(acc_list)
+    for i in range(0, num_nodes):
+        candidate = (i + 1) % num_nodes
         if acc_list[i] > acc_bar and acc_list[candidate] > acc_bar:
             refs.append([candidate])
         else:
@@ -106,13 +108,14 @@ def cyclic_except_last(info_dict, acc_bar=0.5):
     """
     refs = []
     acc_list = info_dict["accuracy"]
-    for i in range(0, len(acc_list) - 1):
-        candidate = (i + 1) % (len(acc_list) - 1)
+    num_nodes = len(acc_list)
+    for i in range(0, num_nodes - 1):
+        candidate = (i + 1) % (num_nodes - 1)
         if acc_list[i] > acc_bar and acc_list[candidate] > acc_bar:
             refs.append([candidate])
         else:
             refs.append([i])
-    refs.append([len(acc_list) - 1])
+    refs.append([num_nodes - 1])
     return refs
 
 
@@ -123,9 +126,10 @@ def accuracy_priority(info_dict, acc_bar=0.5):
     """
     refs = []
     acc_list = info_dict["accuracy"]
-    for i in range(0, len(acc_list)):
+    num_nodes = len(acc_list)
+    for i in range(0, num_nodes):
         top_candidates = sorted(
-            range(len(acc_list)), key=lambda j: acc_list[j], reverse=True
+            range(num_nodes), key=lambda j: acc_list[j], reverse=True
         )
         candidate = top_candidates[0] if top_candidates[0] != i else top_candidates[1]
         if acc_list[i] > acc_bar and acc_list[candidate] > acc_bar:
@@ -143,7 +147,8 @@ def disagreement_priority(info_dict, acc_bar=0.5):
     refs = []
     acc_list = info_dict["accuracy"]
     disagree_dict = info_dict["disagreement_rate"]
-    for i in range(0, len(acc_list)):
+    num_nodes = len(acc_list)
+    for i in range(0, num_nodes):
         top_candidates = sorted(
             disagree_dict[i].keys(), key=lambda j: disagree_dict[i][j], reverse=True
         )

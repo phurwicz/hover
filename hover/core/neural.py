@@ -546,7 +546,7 @@ class MultiVectorNet(Loggable):
         postwm_lr = postwm_lr or (0.1 ** self.postwm_loglr_slider.value)
         postwm_momentum = postwm_momentum or self.postwm_momentum_slider.value
 
-        for i in range(warmup_epochs):
+        for _ in range(warmup_epochs):
             yield {
                 "denoise_rate": warmup_noise,
                 "optimizer": [
@@ -556,7 +556,7 @@ class MultiVectorNet(Loggable):
                     }
                 ],
             }
-        for i in range(postwm_epochs):
+        for _ in range(postwm_epochs):
             yield {
                 "denoise_rate": postwm_noise,
                 "optimizer": [
