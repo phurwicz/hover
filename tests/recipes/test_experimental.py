@@ -4,10 +4,10 @@ from bokeh.events import ButtonClick, SelectionGeometry
 
 
 def test_active_learning(
-    mini_supervisable_text_dataset_embedded, dummy_vectorizer, dummy_vecnet_callback
+    mini_supervisable_text_dataset_embedded, dummy_vecnet_callback
 ):
     dataset = mini_supervisable_text_dataset_embedded.copy()
-    layout, objects = _active_learning(dataset, dummy_vectorizer, dummy_vecnet_callback)
+    layout, objects = _active_learning(dataset, dummy_vecnet_callback)
     assert layout.visible
 
     initial_scores = dataset.dfs["raw"]["pred_score"].values.copy()
@@ -15,13 +15,11 @@ def test_active_learning(
     finder, annotator = objects["finder"], objects["annotator"]
     softlabel = objects["softlabel"]
     coords_slider = softlabel._dynamic_widgets["patch_slider"]
-    model_retrainer = objects["model_retrainer"]
-    epochs_slider = objects["epochs_slider"]
-    retrain_event = ButtonClick(model_retrainer)
+    model_trainer = objects["model_trainer"]
+    train_event = ButtonClick(model_trainer)
 
-    # train for 1 epoch
-    epochs_slider.value = 1
-    model_retrainer._trigger_event(retrain_event)
+    # train for default number of epochs
+    model_trainer._trigger_event(train_event)
     first_scores = dataset.dfs["raw"]["pred_score"].values.copy()
     assert not np.allclose(first_scores, initial_scores)
 
@@ -30,7 +28,7 @@ def test_active_learning(
         coords_slider.value = _value
 
     # train for 1 more epoch
-    model_retrainer._trigger_event(retrain_event)
+    model_trainer._trigger_event(train_event)
     second_scores = dataset.dfs["raw"]["pred_score"].values
     assert not np.allclose(second_scores, first_scores)
     # take 25 and 75 percentiles of scores for later use

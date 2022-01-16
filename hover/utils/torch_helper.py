@@ -1,6 +1,7 @@
 """
 Submodule that handles interaction with PyTorch.
 """
+import numpy as np
 import torch
 import torch.nn.functional as F
 from torch.utils.data import Dataset, DataLoader
@@ -17,8 +18,8 @@ class VectorDataset(Dataset):
     def __init__(self, input_vectors, output_vectors):
         """Overrides the parent constructor."""
         assert len(input_vectors) == len(output_vectors)
-        self.input_tensor = torch.FloatTensor(input_vectors)
-        self.output_tensor = torch.FloatTensor(output_vectors)
+        self.input_tensor = torch.FloatTensor(np.asarray(input_vectors))
+        self.output_tensor = torch.FloatTensor(np.asarray(output_vectors))
 
     def __getitem__(self, index):
         """Makes the dataset an iterable."""
@@ -45,8 +46,10 @@ class MultiVectorDataset(Dataset):
         """Overrides the parent constructor."""
         for _list in input_vector_lists:
             assert len(_list) == len(output_vectors)
-        self.input_tensors = [torch.FloatTensor(_list) for _list in input_vector_lists]
-        self.output_tensor = torch.FloatTensor(output_vectors)
+        self.input_tensors = [
+            torch.FloatTensor(np.asarray(_list)) for _list in input_vector_lists
+        ]
+        self.output_tensor = torch.FloatTensor(np.asarray(output_vectors))
 
     def __getitem__(self, index):
         """Makes the dataset an iterable."""

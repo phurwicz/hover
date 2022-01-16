@@ -2,7 +2,6 @@ import pytest
 import numpy as np
 from copy import deepcopy
 from hover.core.neural import VectorNet, MultiVectorNet
-from hover.utils.denoising import identity_adjacency, cyclic_adjacency
 
 
 @pytest.fixture
@@ -114,26 +113,16 @@ class TestMultiVectorNet(object):
         test_loader = dataset.loader("test", *vectorizers)
 
         # use one MultiVectorNet for denoising treatment and the other for control
-        def get_params(warmup_epochs=5, coteach_epochs=10, forget_rate=0.3):
-            for i in range(warmup_epochs):
-                yield {
-                    "forget_rate": 0.0,
-                    "optimizer": [{"lr": 0.1, "momentum": 0.9}] * 4,
-                    "adjacency_function": identity_adjacency,
-                }
-            for i in range(coteach_epochs):
-                yield {
-                    "forget_rate": forget_rate,
-                    "optimizer": [{"lr": 0.01, "momentum": 0.9}] * 4,
-                    "adjacency_function": cyclic_adjacency,
-                }
-
-        param_a = get_params(warmup_epochs=5, coteach_epochs=10, forget_rate=0.5)
-        param_b = get_params(warmup_epochs=15, coteach_epochs=0, forget_rate=0.0)
+        kwargs_a = dict(
+            warmup_epochs=5, warmup_noise=0.0, postwm_epochs=10, postwm_noise=0.5
+        )
+        kwargs_b = dict(
+            warmup_epochs=15, warmup_noise=0.0, postwm_epochs=0, postwm_noise=0.0
+        )
 
         # train both MultiVectorNets
-        train_info_a = multi_a.train(train_loader, param_a, dev_loader=dev_loader)
-        train_info_b = multi_b.train(train_loader, param_b, dev_loader=dev_loader)
+        train_info_a = multi_a.train(train_loader, dev_loader=dev_loader, **kwargs_a)
+        train_info_b = multi_b.train(train_loader, dev_loader=dev_loader, **kwargs_b)
         for _train_info in [train_info_a, train_info_b]:
             assert isinstance(_train_info, list)
             assert isinstance(_train_info[0], dict)

@@ -526,24 +526,43 @@ class MultiVectorNet(Loggable):
         vectorizers = [_net.vectorizer for _net in self.vector_nets]
         return dataset.loader(key, *vectorizers, **kwargs)
 
-    def params_per_epoch_from_widgets(self):
-        for i in range(self.warmup_epochs_slider.value):
+    def hyperparam_per_epoch(
+        self,
+        warmup_epochs=None,
+        warmup_noise=None,
+        warmup_lr=None,
+        warmup_momentum=None,
+        postwm_epochs=None,
+        postwm_noise=None,
+        postwm_lr=None,
+        postwm_momentum=None,
+    ):
+        warmup_epochs = warmup_epochs or self.warmup_epochs_slider.value
+        warmup_noise = warmup_noise or self.warmup_noise_slider.value
+        warmup_lr = warmup_lr or (0.1 ** self.warmup_loglr_slider.value)
+        warmup_momentum = warmup_momentum or self.warmup_momentum_slider.value
+        postwm_epochs = postwm_epochs or self.postwm_epochs_slider.value
+        postwm_noise = postwm_noise or self.postwm_noise_slider.value
+        postwm_lr = postwm_lr or (0.1 ** self.postwm_loglr_slider.value)
+        postwm_momentum = postwm_momentum or self.postwm_momentum_slider.value
+
+        for i in range(warmup_epochs):
             yield {
-                "denoise_rate": self.warmup_noise_slider.value,
+                "denoise_rate": warmup_noise,
                 "optimizer": [
                     {
-                        "lr": 0.1 ** self.warmup_loglr_slider.value,
-                        "momentum": self.warmup_momentum_slider.value,
+                        "lr": warmup_lr,
+                        "momentum": warmup_momentum,
                     }
                 ],
             }
-        for i in range(self.postwm_epochs_slider.value):
+        for i in range(postwm_epochs):
             yield {
-                "denoise_rate": self.postwm_noise_slider.value,
+                "denoise_rate": postwm_noise,
                 "optimizer": [
                     {
-                        "lr": 0.1 ** self.postwm_loglr_slider.value,
-                        "momentum": self.postwm_momentum_slider.value,
+                        "lr": postwm_lr,
+                        "momentum": postwm_momentum,
                     }
                 ],
             }
@@ -552,14 +571,7 @@ class MultiVectorNet(Loggable):
         self,
         train_loader,
         dev_loader=None,
-        warmup_epochs=1,
-        warmup_noise=0.0,
-        warmup_lr=0.1,
-        warmup_momentum=0.9,
-        postwm_epochs=1,
-        postwm_noise=0.1,
-        postwm_lr=0.05,
-        postwm_momentum=0.7,
+        **kwargs,
     ):
         """
         ???+ note "Train multiple VectorNet's jointly."
@@ -568,10 +580,10 @@ class MultiVectorNet(Loggable):
             | :------------- | :----------- | :------------------------- |
             | `train_loader` | `torch.utils.data.DataLoader` | train set |
             | `dev_loader`   | `torch.utils.data.DataLoader` | dev set   |
-            | other |        | intended to be overridden by widgets |
+            | `**kwargs`     | | forwarded to `self.hyperparam_per_epoch()`  |
             ```
         """
-        params_per_epoch = self.params_per_epoch_from_widgets()
+        params_per_epoch = self.hyperparam_per_epoch(**kwargs)
         train_info = []
         for epoch_idx, param_dict in enumerate(params_per_epoch):
             self._dynamic_params["epoch"] = epoch_idx + 1

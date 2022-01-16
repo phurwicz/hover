@@ -118,13 +118,13 @@ def _active_learning(dataset, vecnet_callback, **kwargs):
 
     # recipe-specific widget
     model = vecnet_callback(dataset)
-    model_retrainer = Button(label="Train model", button_type="primary")
+    model_trainer = Button(label="Train model", button_type="primary")
 
     def retrain_model():
         """
         Callback subfunction 1 of 2.
         """
-        model_retrainer.disabled = True
+        model_trainer.disabled = True
         logger.info("Start training... button will be disabled temporarily.")
         dataset.setup_label_coding()
 
@@ -178,7 +178,7 @@ def _active_learning(dataset, vecnet_callback, **kwargs):
 
         softlabel._dynamic_callbacks["adjust_patch_slider"]()
         softlabel._update_sources()
-        model_retrainer.disabled = False
+        model_trainer.disabled = False
         logger.good("-- 2/2: updated predictions. Training button is re-enabled.")
 
     def callback_sequence():
@@ -188,8 +188,8 @@ def _active_learning(dataset, vecnet_callback, **kwargs):
         retrain_model()
         update_softlabel_plot()
 
-    model_retrainer.on_click(callback_sequence)
-    sidebar = column(model_retrainer, model.view(), dataset.view())
+    model_trainer.on_click(callback_sequence)
+    sidebar = column(model_trainer, model.view(), dataset.view())
     layout = row(sidebar, *[_plot.view() for _plot in [softlabel, annotator, finder]])
 
     objects = {
@@ -198,6 +198,7 @@ def _active_learning(dataset, vecnet_callback, **kwargs):
         "finder": finder,
         "sidebar": sidebar,
         "softlabel": softlabel,
-        "model_retrainer": model_retrainer,
+        "model": model,
+        "model_trainer": model_trainer,
     }
     return layout, objects

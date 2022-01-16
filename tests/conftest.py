@@ -31,13 +31,13 @@ def dummy_vectorizer(spacy_en_md):
 
 
 @pytest.fixture(scope="module")
-def dummy_vecnet_callback():
+def dummy_vecnet_callback(dummy_vectorizer):
     from hover.core.neural import VectorNet
     from hover.utils.common_nn import LogisticRegression
 
-    def callback(dataset, vectorizer):
+    def callback(dataset):
         vecnet = VectorNet(
-            vectorizer, LogisticRegression, ".model.test.pt", dataset.classes
+            dummy_vectorizer, LogisticRegression, ".model.test.pt", dataset.classes
         )
         return vecnet
 
