@@ -2,6 +2,7 @@
 ???+ note "Intermediate classes based on the functionality."
 """
 import numpy as np
+from collections import OrderedDict
 from bokeh.models import CDSView, IndexFilter
 from bokeh.palettes import Category20
 from bokeh.layouts import row
@@ -116,6 +117,8 @@ class BokehDataAnnotator(BokehBaseExplorer):
     def _postprocess_sources(self):
         """
         ???+ note "Infer glyph colors from the label dynamically."
+
+            This is during initialization or re-plotting, creating a new attribute column for each data source.
         """
         color_dict = self.auto_color_mapping()
 
@@ -126,6 +129,25 @@ class BokehDataAnnotator(BokehBaseExplorer):
                 .tolist()
             )
             self.sources[_key].add(_color, SOURCE_COLOR_FIELD)
+
+    def _update_colors(self):
+        """
+        ???+ note "Infer glyph colors from the label dynamically."
+
+            This is during annotation callbacks, patching an existing column for the `raw` subset only.
+        """
+        # infer glyph colors dynamically
+        color_dict = self.auto_color_mapping()
+
+        color_list = (
+            self.dfs["raw"]["label"]
+            .apply(lambda label: color_dict.get(label, "gainsboro"))
+            .tolist()
+        )
+        self.sources["raw"].patch(
+            {SOURCE_COLOR_FIELD: [(slice(len(color_list)), color_list)]}
+        )
+        self._good(f"Updated annotator plot at {current_time()}")
 
     def _setup_widgets(self):
         """
@@ -153,30 +175,18 @@ class BokehDataAnnotator(BokehBaseExplorer):
             selected_idx = self.sources["raw"].selected.indices
             if not selected_idx:
                 self._warn(
-                    "Attempting annotation: did not select any data points. Eligible subset is 'raw'."
+                    "attempting annotation: did not select any data points. Eligible subset is 'raw'."
                 )
                 return
 
-            self._info(f"Applying {len(selected_idx)} annotations: {label}")
             # update label in both the df and the data source
             self.dfs["raw"].at[selected_idx, "label"] = label
             for _idx in selected_idx:
                 _idx = int(_idx)
                 self.sources["raw"].patch({"label": [(_idx, label)]})
-            self._good(f"Applied {len(selected_idx)} annotations: {label}")
+            self._good(f"applied {len(selected_idx)} annotations: {label}")
 
-            # infer glyph colors dynamically
-            color_dict = self.auto_color_mapping()
-
-            color_list = (
-                self.dfs["raw"]["label"]
-                .apply(lambda label: color_dict.get(label, "gainsboro"))
-                .tolist()
-            )
-            self.sources["raw"].patch(
-                {SOURCE_COLOR_FIELD: [(slice(len(color_list)), color_list)]}
-            )
-            self._good(f"Updated annotator plot at {current_time()}")
+            self._update_colors()
 
         # assign the callback and keep the reference
         self._callback_apply = callback_apply
@@ -520,8 +530,101 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
         super().__init__(df_dict, **kwargs)
 
         # initialize a list to keep track of plotted LFs
-        self.lfs = []
+        self.lf_data = OrderedDict()
         self.palette = Category20[20]
+
+    def _setup_widgets(self):
+        """
+        ???+ note "Create labeling function support widgets and assign Python callbacks."
+        """
+        from bokeh.models import Dropdown, Button
+
+        super()._setup_widgets()
+
+        self.lf_list_refresher = Button(
+            label="Refresh Functions",
+            height_policy="fit",
+            width_policy="min",
+        )
+        self.lf_apply_trigger = Dropdown(
+            label="Apply Labels",
+            button_type="warning",
+            menu=list(self.lf_data.keys()),
+            height_policy="fit",
+            width_policy="min",
+        )
+        self.lf_filter_trigger = Dropdown(
+            label="Use as Selection Filter",
+            button_type="primary",
+            menu=list(self.lf_data.keys()),
+            height_policy="fit",
+            width_policy="min",
+        )
+
+        def callback_refresh():
+            """
+            The menu was assigned by value and needs to stay consistent with LF updates.
+            """
+            self.lf_apply_trigger.menu = list(self.lf_data.keys())
+            self.lf_filter_trigger.menu = list(self.lf_data.keys())
+
+        def callback_apply(event):
+            """
+            A callback on clicking the 'self.lf_apply_trigger' button.
+
+            Update labels in the source similarly to the annotator.
+            However, in this explorer, because LFs already use color, the produced labels will not.
+            """
+            lf = self.lf_data[event.item]
+            selected_idx = self.sources["raw"].selected.indices
+            if not selected_idx:
+                self._warn(
+                    "attempting labeling by function: did not select any data points. Eligible subset is 'raw'."
+                )
+                return
+
+            labels = self.dfs["raw"].at[selected_idx].apply(lf, axis=1).values
+            num_nontrivial = len(
+                filter(lambda l: l != module_config.ABSTAIN_DECODED, labels)
+            )
+
+            # update label in both the df and the data source
+            self.dfs["raw"].at[selected_idx, "label"] = labels
+            for _idx, _label in zip(selected_idx, labels):
+                _idx = int(_idx)
+                self.sources["raw"].patch({"label": [(_idx, _label)]})
+            self._info(
+                f"applied {num_nontrivial}/{len(labels)} annotations by func {lf.name}"
+            )
+
+        def callback_filter(event):
+            """
+            A callback on clicking the 'self.lf_filter_trigger' button.
+
+            Update selected indices in a one-time manner.
+            """
+            lf = self.lf_data[event.item]
+
+            for _key, _source in self.sources.values():
+                _selected = _source.selected.indices
+                _labels = self.dfs[_key].at[_selected].apply(lf, axis=1).values
+                _kept = [
+                    _idx
+                    for _idx, _label in zip(_selected, _labels)
+                    if _label != module_config.ABSTAIN_DECODED
+                ]
+                self.sources[_key].selected.indices = _kept
+
+        self.lf_list_refresher.on_click(callback_refresh)
+        self.lf_apply_trigger.on_click(callback_apply)
+        self.lf_filter_trigger.on_click(callback_filter)
+
+    def _postprocess_sources(self):
+        """
+        ???+ note "Refresh all LF glyphs because data source has changed."
+        """
+        for _dict in self.lf_data.values():
+            _dict["refresh_glyph"]()
 
     def plot(self, *args, **kwargs):
         """
@@ -532,11 +635,56 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
         )
         self._good(f"Plotted subset raw with {self.dfs['raw'].shape[0]} points")
 
-    def plot_lf(
+    def plot_lf(self, lf, **kwargs):
+        """
+        ???+ note "Add or refresh a single labeling function on the plot."
+            | Param       | Type             | Description                  |
+            | :---------- | :--------------- | :--------------------------- |
+            | `lf`        | `callable`       | labeling function decorated by `@labeling_function()` from `hover.utils.snorkel_helper` |
+            | `**kwargs`  |             | forwarded to `self.plot_new_lf()` |
+        """
+        # keep track of added LF
+        if lf.name in self.lf_data:
+            # overwrite the function and refresh glyphs
+            self.lf_data[lf.name]["lf"] = lf
+            self.refresh_glyphs(lf.name)
+            return
+
+        self.plot_new_lf(lf, **kwargs)
+
+    def refresh_glyphs(self, lf_name):
+        """
+        ???+ note "Refresh the glyph(s) of a single LF based on its name."
+            | Param   | Type   | Description               |
+            | :------ | :----- | :------------------------ |
+            | `lf`    | `str`  | name of labeling function |
+            Assumes that specified C/I/M/H glyphs are stored.
+            1. re-compute L_raw/L_labeled and CDSViews
+            2. update the view for each glyph
+        """
+        lf = self.lf_data[lf_name]["lf"]
+        L_raw = self.dfs["raw"].apply(lf, axis=1).values
+        L_labeled = self.dfs["labeled"].apply(lf, axis=1).values
+
+        glyph_codes = self.lf_data[lf_name]["glyphs"].keys()
+        if "C" in glyph_codes:
+            c_view = self._view_correct(L_labeled)
+            self.lf_data[lf_name]["glyphs"]["C"].view = c_view
+        if "I" in glyph_codes:
+            i_view = self._view_incorrect(L_labeled)
+            self.lf_data[lf_name]["glyphs"]["I"].view = i_view
+        if "M" in glyph_codes:
+            m_view = self._view_missed(L_labeled, lf.targets)
+            self.lf_data[lf_name]["glyphs"]["M"].view = m_view
+        if "H" in glyph_codes:
+            h_view = self._view_hit(L_raw)
+            self.lf_data[lf_name]["glyphs"]["H"].view = h_view
+
+    def plot_new_lf(
         self, lf, L_raw=None, L_labeled=None, include=("C", "I", "M"), **kwargs
     ):
         """
-        ???+ note "Plot about a single labeling function."
+        ???+ note "Plot a single labeling function and keep its settings for update."
             | Param       | Type             | Description                  |
             | :---------- | :--------------- | :--------------------------- |
             | `lf`        | `callable`       | labeling function decorated by `@labeling_function()` from `hover.utils.snorkel_helper` |
@@ -547,13 +695,10 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
 
 
             - lf: labeling function decorated by `@labeling_function()` from `hover.utils.snorkel_helper`
-            - L_raw: .
-            - L_labeled: .
+            - L_raw: numpy.ndarray
+            - L_labeled: numpy.ndarray
             - include: subsets to show, which can be correct(C)/incorrect(I)/missed(M)/hit(H).
         """
-        # keep track of added LF
-        self.lfs.append(lf)
-
         # calculate predicted labels if not provided
         if L_raw is None:
             L_raw = self.dfs["raw"].apply(lf, axis=1).values
@@ -561,8 +706,10 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
             L_labeled = self.dfs["labeled"].apply(lf, axis=1).values
 
         # prepare plot settings
-        legend_label = f"{', '.join(lf.targets)} | {lf.name}"
-        color = self.palette[len(self.lfs) - 1]
+        # TODO: this below setting will be problematic when LF targets change
+        # legend_label = f"{', '.join(lf.targets)} | {lf.name}"
+        legend_label = lf.name
+        color = self.palette[len(self.lf_data) - 1]
 
         raw_glyph_kwargs = self.glyph_kwargs["raw"].copy()
         raw_glyph_kwargs["legend_label"] = legend_label
@@ -574,52 +721,57 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
         labeled_glyph_kwargs["color"] = color
         labeled_glyph_kwargs.update(kwargs)
 
-        # create correct/incorrect/missed/hit subsets
-        to_plot = []
+        # create dictionary to prepare for dynamic lf & glyph updates
+        data_dict = {"lf": lf, "glyphs": {}}
+
+        # add correct/incorrect/missed/hit glyphs
         if "C" in include:
-            to_plot.append(
-                {
-                    "name": "labeled",
-                    "view": self._view_correct(L_labeled),
-                    "marker": self.figure.square,
-                    "kwargs": labeled_glyph_kwargs,
-                }
+            view = self._self._view_correct(L_labeled)
+            data_dict["glyphs"]["C"] = self.figure.square(
+                "x",
+                "y",
+                source=view.source,
+                view=view,
+                name="labeled",
+                tags=[lf.name],
+                **labeled_glyph_kwargs,
             )
         if "I" in include:
-            to_plot.append(
-                {
-                    "name": "labeled",
-                    "view": self._view_incorrect(L_labeled),
-                    "marker": self.figure.x,
-                    "kwargs": labeled_glyph_kwargs,
-                }
+            view = self._view_incorrect(L_labeled)
+            data_dict["glyphs"]["I"] = self.figure.x(
+                "x",
+                "y",
+                source=view.source,
+                view=view,
+                name="labeled",
+                tags=[lf.name],
+                **labeled_glyph_kwargs,
             )
         if "M" in include:
-            to_plot.append(
-                {
-                    "name": "labeled",
-                    "view": self._view_missed(L_labeled, lf.targets),
-                    "marker": self.figure.cross,
-                    "kwargs": labeled_glyph_kwargs,
-                }
+            view = self._view_missed(L_labeled, lf.targets)
+            data_dict["glyphs"]["M"] = self.figure.cross(
+                "x",
+                "y",
+                source=view.source,
+                view=view,
+                name="labeled",
+                tags=[lf.name],
+                **labeled_glyph_kwargs,
             )
         if "H" in include:
-            to_plot.append(
-                {
-                    "name": "raw",
-                    "view": self._view_hit(L_raw),
-                    "marker": self.figure.circle,
-                    "kwargs": raw_glyph_kwargs,
-                }
+            view = self._view_hit(L_raw)
+            data_dict["glyphs"]["H"] = self.figure.circle(
+                "x",
+                "y",
+                source=view.source,
+                view=view,
+                name="raw",
+                tags=[lf.name],
+                **raw_glyph_kwargs,
             )
 
-        # plot created subsets
-        for _dict in to_plot:
-            _name = _dict["name"]
-            _view = _dict["view"]
-            _marker = _dict["marker"]
-            _kwargs = _dict["kwargs"]
-            _marker("x", "y", source=_view.source, view=_view, name=_name, **_kwargs)
+        # assign the completed dictionary
+        self.lf_data[lf.name] = data_dict
 
     def _view_correct(self, L_labeled):
         """
@@ -671,3 +823,100 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
         indices = np.where(L_raw != module_config.ABSTAIN_DECODED)[0].tolist()
         view = CDSView(source=self.sources["raw"], filters=[IndexFilter(indices)])
         return view
+
+    #    def plot_lf(
+    #        self, lf, L_raw=None, L_labeled=None, include=("C", "I", "M"), **kwargs
+    #    ):
+    #        """
+    #        ???+ note "Plot about a single labeling function."
+    #            | Param       | Type             | Description                  |
+    #            | :---------- | :--------------- | :--------------------------- |
+    #            | `lf`        | `callable`       | labeling function decorated by `@labeling_function()` from `hover.utils.snorkel_helper` |
+    #            | `L_raw`     | `np.ndarray`     | predictions, in decoded `str`, on the `"raw"` set |
+    #            | `L_labeled` | `np.ndarray`     | predictions, in decoded `str`, on the `"labeled"` set |
+    #            | `include`   | `tuple` of `str` | "C" for correct, "I" for incorrect, "M" for missed", "H" for hit: types of predictions to make visible in the plot |
+    #            | `**kwargs`  |                  | forwarded to plotting markers |
+    #
+    #
+    #            - lf: labeling function decorated by `@labeling_function()` from `hover.utils.snorkel_helper`
+    #            - L_raw: .
+    #            - L_labeled: .
+    #            - include: subsets to show, which can be correct(C)/incorrect(I)/missed(M)/hit(H).
+    #        """
+    #        # keep track of added LF
+    #        if lf.name in self.lfs:
+    #            self._warn(f"name collision on {lf.name}. Skipping.")
+    #            return
+    #        self.lfs[lf.name] = lf
+    #
+    #        # calculate predicted labels if not provided
+    #        if L_raw is None:
+    #            L_raw = self.dfs["raw"].apply(lf, axis=1).values
+    #        if L_labeled is None:
+    #            L_labeled = self.dfs["labeled"].apply(lf, axis=1).values
+    #
+    #        # prepare plot settings
+    #        legend_label = f"{', '.join(lf.targets)} | {lf.name}"
+    #        color = self.palette[len(self.lfs) - 1]
+    #
+    #        raw_glyph_kwargs = self.glyph_kwargs["raw"].copy()
+    #        raw_glyph_kwargs["legend_label"] = legend_label
+    #        raw_glyph_kwargs["color"] = color
+    #        raw_glyph_kwargs.update(kwargs)
+    #
+    #        labeled_glyph_kwargs = self.glyph_kwargs["labeled"].copy()
+    #        labeled_glyph_kwargs["legend_label"] = legend_label
+    #        labeled_glyph_kwargs["color"] = color
+    #        labeled_glyph_kwargs.update(kwargs)
+    #
+    #        # create correct/incorrect/missed/hit subsets
+    #        to_plot = []
+    #        if "C" in include:
+    #            to_plot.append(
+    #                {
+    #                    "name": "labeled",
+    #                    "tags": [lf.name],
+    #                    "view": self._view_correct(L_labeled),
+    #                    "marker": self.figure.square,
+    #                    "kwargs": labeled_glyph_kwargs,
+    #                }
+    #            )
+    #        if "I" in include:
+    #            to_plot.append(
+    #                {
+    #                    "name": "labeled",
+    #                    "tags": [lf.name],
+    #                    "view": self._view_incorrect(L_labeled),
+    #                    "marker": self.figure.x,
+    #                    "kwargs": labeled_glyph_kwargs,
+    #                }
+    #            )
+    #        if "M" in include:
+    #            to_plot.append(
+    #                {
+    #                    "name": "labeled",
+    #                    "tags": [lf.name],
+    #                    "view": self._view_missed(L_labeled, lf.targets),
+    #                    "marker": self.figure.cross,
+    #                    "kwargs": labeled_glyph_kwargs,
+    #                }
+    #            )
+    #        if "H" in include:
+    #            to_plot.append(
+    #                {
+    #                    "name": "raw",
+    #                    "tags": [lf.name],
+    #                    "view": self._view_hit(L_raw),
+    #                    "marker": self.figure.circle,
+    #                    "kwargs": raw_glyph_kwargs,
+    #                }
+    #            )
+    #
+    #        # plot created subsets
+    #        for _dict in to_plot:
+    #            _name = _dict["name"]
+    #            _tags = _dict["tags"]
+    #            _view = _dict["view"]
+    #            _marker = _dict["marker"]
+    #            _kwargs = _dict["kwargs"]
+    #            _marker("x", "y", source=_view.source, view=_view, name=_name, tags=_tags, **_kwargs)

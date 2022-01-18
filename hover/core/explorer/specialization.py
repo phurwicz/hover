@@ -95,6 +95,16 @@ class BokehTextSnorkel(BokehSnorkelExplorer, BokehForText):
     MANDATORY_COLUMNS = BokehForText.MANDATORY_COLUMNS
     SUBSET_GLYPH_KWARGS = BokehSnorkelExplorer.SUBSET_GLYPH_KWARGS
 
+    def _layout_widgets(self):
+        """Define the layout of widgets."""
+        layout_rows = (
+            row(self.data_key_button_group, self.selection_option_box),
+            row(self.search_pos, self.search_neg),
+            row(self.lf_apply_trigger, self.lf_filter_trigger, self.lf_list_refresher),
+            row(*self._dynamic_widgets.values()),
+        )
+        return column(*layout_rows)
+
 
 class BokehAudioFinder(BokehDataFinder, BokehForAudio):
     """
