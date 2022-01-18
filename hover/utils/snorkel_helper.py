@@ -21,9 +21,10 @@ def labeling_function(targets, label_encoder=None, **kwargs):
         labeling_function as snorkel_lf,
         LabelingFunction as SnorkelLF,
     )
-    
+
     def wrapper(func):
         # set up kwargs for Snorkel's LF
+        # a default name that can be overridden
         snorkel_kwargs = {"name": func.__name__}
         snorkel_kwargs.update(kwargs)
 
