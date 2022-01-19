@@ -529,9 +529,15 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
         """
         super().__init__(df_dict, **kwargs)
 
-        # initialize a list to keep track of plotted LFs
-        self.lf_data = OrderedDict()
         self.palette = Category20[20]
+
+    def _setup_sources(self):
+        """
+        ???+ note "Create data structures that source interactions will need."
+        """
+        # keep track of plotted LFs and glyphs, which will interact with sources
+        self.lf_data = OrderedDict()
+        super()._setup_sources()
 
     def _setup_widgets(self):
         """
@@ -575,7 +581,9 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
             Update labels in the source similarly to the annotator.
             However, in this explorer, because LFs already use color, the produced labels will not.
             """
-            lf = self.lf_data[event.item]
+            lf = self.lf_data[event.item]["lf"]
+            assert callable(lf), f"Expected a function, got {lf}"
+
             selected_idx = self.sources["raw"].selected.indices
             if not selected_idx:
                 self._warn(
@@ -583,9 +591,9 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
                 )
                 return
 
-            labels = self.dfs["raw"].at[selected_idx].apply(lf, axis=1).values
+            labels = self.dfs["raw"].iloc[selected_idx].apply(lf, axis=1).values
             num_nontrivial = len(
-                filter(lambda l: l != module_config.ABSTAIN_DECODED, labels)
+                list(filter(lambda l: l != module_config.ABSTAIN_DECODED, labels))
             )
 
             # update label in both the df and the data source
@@ -603,11 +611,12 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
 
             Update selected indices in a one-time manner.
             """
-            lf = self.lf_data[event.item]
+            lf = self.lf_data[event.item]["lf"]
+            assert callable(lf), f"Expected a function, got {lf}"
 
-            for _key, _source in self.sources.values():
+            for _key, _source in self.sources.items():
                 _selected = _source.selected.indices
-                _labels = self.dfs[_key].at[_selected].apply(lf, axis=1).values
+                _labels = self.dfs[_key].iloc[_selected].apply(lf, axis=1).values
                 _kept = [
                     _idx
                     for _idx, _label in zip(_selected, _labels)
@@ -615,6 +624,7 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
                 ]
                 self.sources[_key].selected.indices = _kept
 
+        self._callback_refresh_lf = callback_refresh
         self.lf_list_refresher.on_click(callback_refresh)
         self.lf_apply_trigger.on_click(callback_apply)
         self.lf_filter_trigger.on_click(callback_filter)
@@ -623,8 +633,8 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
         """
         ???+ note "Refresh all LF glyphs because data source has changed."
         """
-        for _dict in self.lf_data.values():
-            _dict["refresh_glyph"]()
+        for _lf_name in self.lf_data.keys():
+            self.refresh_glyphs(_lf_name)
 
     def plot(self, *args, **kwargs):
         """
@@ -726,7 +736,7 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
 
         # add correct/incorrect/missed/hit glyphs
         if "C" in include:
-            view = self._self._view_correct(L_labeled)
+            view = self._view_correct(L_labeled)
             data_dict["glyphs"]["C"] = self.figure.square(
                 "x",
                 "y",
@@ -772,6 +782,8 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
 
         # assign the completed dictionary
         self.lf_data[lf.name] = data_dict
+        # reflect LF update in widgets
+        self._callback_refresh_lf()
 
     def _view_correct(self, L_labeled):
         """
