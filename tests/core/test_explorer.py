@@ -8,6 +8,7 @@ from hover.recipes.subroutine import get_explorer_class
 from bokeh.events import SelectionGeometry, MenuItemClick
 import pytest
 import random
+import re
 
 MAIN_FEATURES = ["text", "image", "audio"]
 
@@ -40,23 +41,27 @@ def almost_global_select(figure):
 
 
 def test_selection_filter(explorer, filter_toggle, narrowing_callbacks):
+    """
+    Assumes narrowing callbacks to give strict nonempty subsets.
+    """
     total_raw = explorer.dfs["raw"].shape[0]
     initial_select = list(range(total_raw))
 
     # emulate user interface: select everything through a SelectionGeometry event
     explorer.sources["raw"].selected.indices = initial_select[:]
     # TODO: ideally should select by event, but this is not working
-    # select_event = almost_global_select(explorer.figure)
-    # explorer.figure._trigger_event(select_event)
+    select_event = almost_global_select(explorer.figure)
+    explorer.figure._trigger_event(select_event)
     assert explorer.sources["raw"].selected.indices == initial_select[:]
 
     # trigger the first callback without activating filter
     narrowing_callbacks[0]()
-    assert explorer.sources["raw"].selected.indices == initial_select
+    assert explorer.sources["raw"].selected.indices == initial_select[:]
 
     # activate filter
     filter_toggle.active = [0]
     first_filter_select = explorer.sources["raw"].selected.indices[:]
+    assert first_filter_select
     assert first_filter_select != initial_select
     assert set(first_filter_select).issubset(set(initial_select))
 
@@ -65,8 +70,10 @@ def test_selection_filter(explorer, filter_toggle, narrowing_callbacks):
     for _callback in narrowing_callbacks[1:]:
         _callback()
         _curr_select = explorer.sources["raw"].selected.indices[:]
+        assert _curr_select
         assert _curr_select != _prev_select
         assert set(_curr_select).issubset(set(_prev_select))
+        _prev_select = _curr_select[:]
 
     # deactivate filter
     filter_toggle.active = []
@@ -155,12 +162,37 @@ class TestBokehDataFinder:
         explorer = get_explorer_class("finder", "text")({"raw": example_raw_df})
         explorer.plot()
 
+        # dynamically construct patterns with predictable outcome
+        texts = explorer.dfs["raw"]["text"].tolist()
+        first_token_of_ten = set()
+        first_token_of_two = set()
+        for i, _text in enumerate(texts):
+            # terminate when the two sets are different
+            if i >= 10 and first_token_of_ten != first_token_of_two:
+                assert first_token_of_two.issubset(first_token_of_ten)
+                break
+
+            _tokens = _text.split(" ")
+            # guard against empty text case
+            if not _tokens:
+                continue
+
+            # add token to sets
+            first_token_of_ten.add(_tokens[0])
+            if i < 2:
+                first_token_of_two.add(_tokens[0])
+
+        broad_pattern = "(?i)(" + "|".join(first_token_of_ten) + ")"
+        narrow_pattern = "(?i)(" + "|".join(first_token_of_two) + ")"
+        assert re.search(narrow_pattern, texts[0])
+        assert re.search(broad_pattern, texts[2])
+
         def first_condition():
-            explorer.search_pos.value = r"(?i)s[aeiou]\ "
+            explorer.search_pos.value = broad_pattern
             return
 
         def second_condition():
-            explorer.search_neg.value = r"(?i)s[ae]\ "
+            explorer.search_neg.value = narrow_pattern
             return
 
         test_selection_filter(
@@ -203,7 +235,9 @@ class TestBokehTextSoftLabel:
     @staticmethod
     def test_filter_score(example_soft_label_df):
         explorer = get_explorer_class("softlabel", "text")(
-            {"raw": example_soft_label_df}
+            {"raw": example_soft_label_df},
+            "pred_label",
+            "pred_score",
         )
         explorer.plot()
 
@@ -297,8 +331,8 @@ class TestBokehTextSnorkel:
         all_raw_idx = list(range(explorer.dfs["raw"].shape[0]))
         explorer.sources["raw"].selected.indices = all_raw_idx[:]
         # TODO: ideally should select by event, but this is not working
-        # select_event = almost_global_select(explorer.figure)
-        # explorer.figure._trigger_event(select_event)
+        select_event = almost_global_select(explorer.figure)
+        explorer.figure._trigger_event(select_event)
         assert explorer.sources["raw"].selected.indices == all_raw_idx
         _event = MenuItemClick(explorer.lf_filter_trigger, item="broad_rule_a")
         explorer.lf_filter_trigger._trigger_event(_event)
@@ -324,7 +358,7 @@ class TestBokehTextSnorkel:
         # slice to first ten, then assign B to first six
         explorer.sources["raw"].selected.indices = all_raw_idx[:]
         # TODO: ideally should select by event, but this is not working
-        # explorer.figure._trigger_event(select_event)
+        explorer.figure._trigger_event(select_event)
         _event = MenuItemClick(explorer.lf_filter_trigger, item="broad_rule_b")
         explorer.lf_filter_trigger._trigger_event(_event)
         _event = MenuItemClick(explorer.lf_apply_trigger, item="narrow_rule_b")
