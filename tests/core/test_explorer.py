@@ -1,5 +1,6 @@
 """
-Note that the whole point of explorers is to allow interaction, for which this file should not be considered a complete suite of tests.
+Note that the whole point of explorers is to allow interaction.
+Therefore we need to emulate user interaction through bokeh.events objects.
 """
 
 from hover import module_config
@@ -40,7 +41,7 @@ def almost_global_select(figure):
     return select_event
 
 
-def test_selection_filter(explorer, filter_toggle, narrowing_callbacks):
+def subroutine_selection_filter(explorer, filter_toggle, narrowing_callbacks):
     """
     Assumes narrowing callbacks to give strict nonempty subsets.
     """
@@ -195,7 +196,7 @@ class TestBokehDataFinder:
             explorer.search_neg.value = narrow_pattern
             return
 
-        test_selection_filter(
+        subroutine_selection_filter(
             explorer,
             explorer.search_filter_box,
             [first_condition, second_condition],
@@ -249,7 +250,7 @@ class TestBokehTextSoftLabel:
             explorer.score_range.value = (0.5, 0.6)
             return
 
-        test_selection_filter(
+        subroutine_selection_filter(
             explorer,
             explorer.score_filter_box,
             [first_condition, second_condition],
