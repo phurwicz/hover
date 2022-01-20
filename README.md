@@ -1,8 +1,8 @@
 ![Hover](https://raw.githubusercontent.com/phurwicz/hover/main/docs/images/hover-logo-title.png)
 
-> Explore and mark areas on a map of your data.
+> Explore and label on a map of raw data.
 >
-> Zoom in, zoom out, hover.. and have fun!
+> Get enough to feed your model in no time.
 
 [![PyPI Version](https://img.shields.io/pypi/v/hover?logo=pypi&logoColor=white)](https://pypi.org/project/hover/)
 [![PyPI Stage](https://img.shields.io/pypi/status/hover?logo=pypi&logoColor=white)](https://pypi.org/project/hover/)
@@ -11,31 +11,24 @@
 [![Codacy Coverage](https://img.shields.io/codacy/coverage/689827d9077b43ac8721c7658d122d1a/main?logo=codacy&logoColor=white)](https://app.codacy.com/gh/phurwicz/hover/dashboard)
 [![Discord](https://img.shields.io/discord/790112638456561665?label=discord&logo=discord&logoColor=white)](https://discord.gg/R5BwYgYZFD)
 
+`hover` speeds up data labeling through `embedding + visualization + callbacks`.
+-   all you need to supply is raw data and a vectorizer function.
+
 ![Demo](https://raw.githubusercontent.com/phurwicz/hover-gallery/main/0.5.0/trailer.gif)
 
-----
+## :sparkles: Features
 
-`hover` makes data annotation blazing fast by putting together `embedding + visualization + callbacks`.
+-   :telescope: A 2D-embedded view of your dataset for labeling, equipped with
+    -   **Tooltip** for each point and **table view** for groups of points.
+    -   **Search** widgets for ad-hoc highlight of data matching search criteria.
+    -   **Toggle** buttons that clearly distinguish data subsets ("raw"/"train"/"dev"/"test").
 
--   :mag: A 2D-embedded view of your dataset with tooltips
-    -   See the whole picture while able to inspect every detail.
-    -   A variety of tools to help you label data on the fly.
-    -   Works both in Jupyter and as an web app.
-
--   :triangular_ruler: Balance between speed and precision
-    -   Come up with labels as you inspect the data, no need to pre-define them.
-    -   Utilize active learning directly in the annotation interface.
-    -   Leverage multiple views and filter conditions of the data.
+-   :microscope: Supplementary views to provide additional precision, such as
+    -   Advanced search view ("Finder") which can **filter points by search criteria** and provides stronger highlight.
+    -   Active learning view ("SoftLabel") which puts a model in the loop and can **filter by confidence score**.
+    -   Function-based, `snorkel`-compatible view ("Snorkel") which can leverage **custom functions for labeling and filtering**.
 
 Check out [@phurwicz/hover-binder](https://github.com/phurwicz/hover-binder) for a list of demo apps.
-
-## :flags: Project News
-
--   **Dec 8, 2021** We are working on updates to make `hover` more extensible. An example would be the usage of `VectorNet`.
-
--   **Apr 30, 2021** 0.5.0 is now available. Check out the [changelog](https://github.com/phurwicz/hover/blob/main/CHANGELOG.md) for details :partying_face:. Some tl-dr for the impatient:
-    -   you can now filter selected data with search criteria, or soft label scores, or both!
-    -   active learning now includes an interpolation between input and output manifolds, helping you explore decision boundaries and their formation.
 
 ## :rocket: Quickstart
 
@@ -46,7 +39,7 @@ Check out [@phurwicz/hover-binder](https://github.com/phurwicz/hover-binder) for
 
 > Python: 3.7+
 >
-> OS: Mac & Linux
+> OS: OSX & Linux (including Windows Subsystem for Linux)
 
 To get the latest release version: `pip install hover`
 
@@ -58,6 +51,14 @@ Feel free to [open an issue](https://github.com/phurwicz/hover/issues/new) if yo
 -   [Changelog](https://github.com/phurwicz/hover/blob/main/CHANGELOG.md)
 -   [Documentation](https://phurwicz.github.io/hover/)
 -   [Tutorials](https://phurwicz.github.io/hover/pages/tutorial/t0-quickstart/)
+
+## :flags: Project News
+
+-   **Jan 20, 2022** We are working on version 0.6.0 to make `hover` more extensible, which will introduce breaking changes.
+
+-   **Apr 30, 2021** 0.5.0 is now available. Check out the [changelog](https://github.com/phurwicz/hover/blob/main/CHANGELOG.md) for details :partying_face:. Some tl-dr for the impatient:
+    -   you can now filter selected data with search criteria, or soft label scores, or both!
+    -   active learning now includes an interpolation between input and output manifolds, helping you explore decision boundaries and their formation.
 
 ## :bell: Remarks
 
