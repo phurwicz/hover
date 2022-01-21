@@ -6,7 +6,7 @@ Therefore we need to emulate user interaction through bokeh.events objects.
 from hover import module_config
 from hover.utils.snorkel_helper import labeling_function
 from hover.recipes.subroutine import get_explorer_class
-from bokeh.events import SelectionGeometry, MenuItemClick
+from bokeh.events import SelectionGeometry, ButtonClick, MenuItemClick
 import pytest
 import random
 import re
@@ -214,9 +214,14 @@ class TestBokehDataAnnotator:
             _explorer.plot()
             _ = _explorer.view()
 
+            # empty click
+            _apply_event = ButtonClick(_explorer.annotator_apply)
+            _explorer.annotator_apply._trigger_event(_apply_event)
+
+            # actual labeling
             _explorer.annotator_input.value = "A"
             _explorer.sources["raw"].selected.indices = [0, 2]
-            _explorer._callback_apply()
+            _explorer.annotator_apply._trigger_event(_apply_event)
 
 
 @pytest.mark.core
