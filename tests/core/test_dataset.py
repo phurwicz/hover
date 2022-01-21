@@ -45,8 +45,17 @@ class TestSupervisableTextDataset:
         assert len(dataset.classes) == self.__class__.EFFECTIVE_CLASSES
 
     @staticmethod
+    def test_basic_logging(mini_supervisable_text_dataset):
+        dataset = mini_supervisable_text_dataset.copy()
+        dataset._print("testing _print(); not expecting color")
+        dataset._good("testing _good(); expecting green")
+        dataset._info("testing _info(); expecting blue")
+        dataset._warn("testing _warn(); expecting yellow")
+        dataset._fail("testing _fail(); expecting red")
+
+    @staticmethod
     def test_export_import(mini_supervisable_text_dataset):
-        dataset = mini_supervisable_text_dataset
+        dataset = mini_supervisable_text_dataset.copy()
 
         df = dataset.to_pandas(use_df=True)
         df = dataset.to_pandas(use_df=False)
@@ -67,7 +76,7 @@ class TestSupervisableTextDataset:
 
     @staticmethod
     def test_compute_2d_embedding(mini_supervisable_text_dataset, dummy_vectorizer):
-        dataset = mini_supervisable_text_dataset
+        dataset = mini_supervisable_text_dataset.copy()
 
         dataset.compute_2d_embedding(dummy_vectorizer, "umap")
         dataset.compute_2d_embedding(dummy_vectorizer, "ivis")
@@ -76,7 +85,7 @@ class TestSupervisableTextDataset:
     def test_loader(mini_supervisable_text_dataset, dummy_vectorizer):
         from torch.utils.data import DataLoader
 
-        dataset = mini_supervisable_text_dataset
+        dataset = mini_supervisable_text_dataset.copy()
 
         try:
             loader = dataset.loader("raw", dummy_vectorizer, smoothing_coeff=0.1)
