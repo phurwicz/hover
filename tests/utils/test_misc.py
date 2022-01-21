@@ -23,11 +23,12 @@ def test_nodeunionfind():
     assert count_arr == [3, 3, 3, 2, 2, 1, 1, 1]
 
     arr[4].union(arr[2])
+    arr[7].data = 8
 
     node_data = [_node.data for _node in arr]
     find_data = [_node.find().data for _node in arr]
     assert node_data != find_data
-    assert find_data == [0, 0, 0, 0, 0, 5, 6, 7]
+    assert find_data == [0, 0, 0, 0, 0, 5, 6, 8]
 
 
 def test_rootunionfind():
@@ -48,5 +49,5 @@ def test_rootunionfind():
 
     node_data = [_node.data for _node in arr]
     find_data = [_node.find().data for _node in arr]
-    assert node_data == [0, 0, 0, 0, 0, 5, 6, 7]
+    assert node_data == [3, 3, 3, 3, 3, 5, 6, 7]
     assert node_data == find_data
