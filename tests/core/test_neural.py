@@ -13,7 +13,7 @@ def example_vecnet_args(mini_supervisable_text_dataset):
 
 @pytest.fixture
 def example_vecnet(example_vecnet_args):
-    model = VectorNet.from_module(*example_vecnet_args)
+    model = VectorNet.from_module(*example_vecnet_args, verbose=10)
     return model
 
 
@@ -100,7 +100,7 @@ class TestMultiVectorNet(object):
         Verify that MultiVectorNet can be used for denoising a noised dataset.
         """
         # create two MultiVectorNets with the same setup
-        dataset = noisy_supervisable_text_dataset
+        dataset = noisy_supervisable_text_dataset.copy()
         multi_a = create_new_multivecnet(dataset.classes)
         multi_b = create_new_multivecnet(dataset.classes)
 
@@ -135,3 +135,15 @@ class TestMultiVectorNet(object):
         assert (
             accuracy_a > accuracy_b + 1e-2
         ), f"Expected denoising to achieve better accuracy (> 0.01 margin) on a noised dataset, got {accuracy_a} (treatment) vs. {accuracy_b} (control)"
+
+        # simple test: saving a MultiVectorNet
+        multi_a.save()
+
+        # TODO: make tests below more meaningful
+        # simple test: viewing widgets
+        _ = multi_a.view()
+
+        # simple test: inference and manifold trajectory
+        inps = dataset.dfs["raw"]["text"].tolist()
+        _ = multi_a.predict_proba(inps)
+        _ = multi_a.manifold_trajectory(inps)
