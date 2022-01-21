@@ -322,10 +322,20 @@ class TestBokehTextSnorkel:
         # add two rules, check menu
         explorer.plot_lf(narrow_rule_a)
         explorer.plot_lf(broad_rule_a)
-
         lf_names_so_far = ["narrow_rule_a", "broad_rule_a"]
         assert explorer.lf_apply_trigger.menu == lf_names_so_far
         assert explorer.lf_filter_trigger.menu == lf_names_so_far
+
+        # add an existing rules, should trigger overwrite
+        explorer.plot_lf(narrow_rule_a)
+        assert explorer.lf_apply_trigger.menu == lf_names_so_far
+        assert explorer.lf_filter_trigger.menu == lf_names_so_far
+
+        # empty click: nothing selected
+        _event = MenuItemClick(explorer.lf_filter_trigger, item="broad_rule_a")
+        _event = MenuItemClick(explorer.lf_apply_trigger, item="narrow_rule_a")
+        explorer.lf_filter_trigger._trigger_event(_event)
+        explorer.lf_apply_trigger._trigger_event(_event)
 
         # emulate selection by user
         # slice to first ten, then assign A to first six
@@ -335,9 +345,9 @@ class TestBokehTextSnorkel:
         select_event = almost_global_select(explorer.figure)
         explorer.figure._trigger_event(select_event)
         assert explorer.sources["raw"].selected.indices == all_raw_idx
-        _event = MenuItemClick(explorer.lf_filter_trigger, item="broad_rule_a")
+
+        # actually triggering LFs on a valid selection
         explorer.lf_filter_trigger._trigger_event(_event)
-        _event = MenuItemClick(explorer.lf_apply_trigger, item="narrow_rule_a")
         explorer.lf_apply_trigger._trigger_event(_event)
 
         first_six_labels = explorer.dfs["raw"]["label"].iloc[:6].tolist()
