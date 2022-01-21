@@ -226,7 +226,7 @@ def bokeh_hover_tooltip(
     return divbox + script
 
 
-def remote_jupyter_proxy_url(port, base_url):
+def remote_jupyter_proxy_url(port):
     """
     ???+ note "Callable to configure Bokeh's show method when using a proxy (JupyterHub)."
 
