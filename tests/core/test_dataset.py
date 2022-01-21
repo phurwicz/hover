@@ -36,6 +36,7 @@ class TestSupervisableTextDataset:
             feature_key="content",
             label_key="mark",
         )
+        dataset.validate_labels()
 
         # check the subset sizes
         for _key, _value in self.__class__.EFFECTIVE_SIZE.items():
