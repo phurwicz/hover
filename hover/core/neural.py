@@ -106,7 +106,7 @@ class VectorNet(Loggable):
         self._setup_widgets()
 
     @classmethod
-    def from_module(cls, model_module, labels):
+    def from_module(cls, model_module, labels, **kwargs):
         """
         ???+ note "Create a VectorNet model from a loadable module."
 
@@ -114,6 +114,7 @@ class VectorNet(Loggable):
             | :------------- | :--------- | :----------------------------------- |
             | `model_module` | `module` or `str` | (path to) a local Python workspace module which contains a get_vectorizer() callable, get_architecture() callable, and a get_state_dict_path() callable |
             | `labels`       | `list`     | list of `str` classification labels  |
+            | `**kwargs`     |      | forwarded to `self.__init__()` constructor |
         """
         if isinstance(model_module, str):
             from importlib import import_module
@@ -126,6 +127,7 @@ class VectorNet(Loggable):
             model_module.get_architecture(),
             model_module.get_state_dict_path(),
             labels,
+            **kwargs,
         )
 
         return model
