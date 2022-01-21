@@ -287,8 +287,6 @@ class BokehBaseExplorer(Loggable, ABC):
         ???+ note "Create, **(not update)**, `ColumnDataSource` objects."
             Intended to be extended in child classes for pre/post processing.
         """
-        from bokeh.events import SelectionGeometry
-
         self._info("Setting up sources")
         self.sources = {_key: ColumnDataSource(_df) for _key, _df in self.dfs.items()}
         self._postprocess_sources()
@@ -296,6 +294,16 @@ class BokehBaseExplorer(Loggable, ABC):
         # initialize attributes that couple with sources
         # extra columns for dynamic plotting
         self._extra_source_cols = defaultdict(dict)
+
+        self._setup_selection_tools()
+
+    def _setup_selection_tools(self):
+        """
+        ???+ note "Create data structures and callbacks for dynamic selections."
+            Useful for linking and filtering selections across explorers.
+        """
+        from bokeh.events import SelectionGeometry
+
         # store the last manual selections
         self._last_selections = {
             _key: RootUnionFind(set()) for _key in self.sources.keys()
@@ -311,15 +319,11 @@ class BokehBaseExplorer(Loggable, ABC):
             """
             return bool(0 in self.selection_option_box.active)
 
-        def store_selection(event):
+        def store_selection():
             """
             Keep track of the last manual selection.
             Useful for applying cumulation / filters dynamically.
             """
-            # ensure that nothing happens until the selection event is complete
-            if not event.final:
-                return
-
             # store selection indices
             for _key, _source in self.sources.items():
                 _selected = _source.selected.indices
@@ -348,9 +352,12 @@ class BokehBaseExplorer(Loggable, ABC):
                     _selected = _func(_selected, _key)
                 self.sources[_key].selected.indices = list(_selected)
 
-        # no need to keep the reference to store_selection()
-        # because it only gets called upon selection event
-        self.figure.on_event(SelectionGeometry, store_selection)
+        # keep reference to trigger_store_selection() for testing only
+        self._store_selection = store_selection
+        self.figure.on_event(
+            SelectionGeometry,
+            lambda event: self._store_selection() if event.final else None,
+        )
 
         # keep reference to trigger_selection_filter() for further access
         # for example, toggling filters should call the trigger

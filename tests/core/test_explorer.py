@@ -41,6 +41,20 @@ def almost_global_select(figure):
     return select_event
 
 
+def almost_none_select(figure):
+    select_event = SelectionGeometry(
+        figure,
+        geometry={
+            "type": "poly",
+            "x": [1e4 - 1e-6, 1e4 - 1e-6, 1e4 + 1e-6, 1e4 + 1e-6],
+            "y": [1e4 - 1e-6, 1e4 + 1e-6, 1e4 + 1e-6, 1e4 - 1e-6],
+            "sx": [None, None, None, None],
+            "sy": [None, None, None, None],
+        },
+    )
+    return select_event
+
+
 def subroutine_selection_filter(explorer, filter_toggle, narrowing_callbacks):
     """
     Assumes narrowing callbacks to give strict nonempty subsets.
@@ -214,14 +228,32 @@ class TestBokehDataAnnotator:
             _explorer.plot()
             _ = _explorer.view()
 
-            # empty click
-            _apply_event = ButtonClick(_explorer.annotator_apply)
-            _explorer.annotator_apply._trigger_event(_apply_event)
+    @staticmethod
+    def test_labeling(example_raw_df):
+        feature = random.choice(MAIN_FEATURES)
+        explorer = get_explorer_class("annotator", feature)({"raw": example_raw_df})
 
-            # actual labeling
-            _explorer.annotator_input.value = "A"
-            _explorer.sources["raw"].selected.indices = [0, 2]
-            _explorer.annotator_apply._trigger_event(_apply_event)
+        # empty click
+        apply_event = ButtonClick(explorer.annotator_apply)
+        explorer.annotator_apply._trigger_event(apply_event)
+
+        # test non-cumulative selection
+        explorer.sources["raw"].selected.indices = [0]
+        explorer._store_selection()
+        assert explorer.sources["raw"].selected.indices == [0]
+        explorer.sources["raw"].selected.indices = [1]
+        explorer._store_selection()
+        assert explorer.sources["raw"].selected.indices == [1]
+
+        # test cumulative selection
+        explorer.selection_option_box.active = [0]
+        explorer.sources["raw"].selected.indices = [0]
+        explorer._store_selection()
+        assert explorer.sources["raw"].selected.indices == [0, 1]
+
+        # actual labeling
+        explorer.annotator_input.value = "A"
+        explorer.annotator_apply._trigger_event(apply_event)
 
 
 @pytest.mark.core
