@@ -35,6 +35,15 @@ def example_multivecnet(mini_supervisable_text_dataset):
     return create_new_multivecnet(target_labels)
 
 
+def subroutine_predict_proba(net, dataset):
+    num_classes = len(dataset.classes)
+    proba_single = net.predict_proba("hello")
+    assert proba_single.shape[0] == num_classes
+    proba_multi = net.predict_proba(["hello", "bye", "ciao"])
+    assert proba_multi.shape[0] == 3
+    assert proba_multi.shape[1] == num_classes
+
+
 @pytest.mark.core
 class TestVectorNet(object):
     """
@@ -54,12 +63,7 @@ class TestVectorNet(object):
 
     @staticmethod
     def test_predict_proba(example_vecnet, mini_supervisable_text_dataset):
-        num_classes = len(mini_supervisable_text_dataset.classes)
-        proba_single = example_vecnet.predict_proba("hello")
-        assert proba_single.shape[0] == num_classes
-        proba_multi = example_vecnet.predict_proba(["hello", "bye", "ciao"])
-        assert proba_multi.shape[0] == 3
-        assert proba_multi.shape[1] == num_classes
+        subroutine_predict_proba(example_vecnet, mini_supervisable_text_dataset)
 
     @staticmethod
     def test_manifold_trajectory(example_vecnet, mini_df_text):
@@ -95,7 +99,24 @@ class TestMultiVectorNet(object):
     """
 
     @staticmethod
-    def test_train_and_evaluate(example_multivecnet, noisy_supervisable_text_dataset):
+    def test_basics(example_multivecnet):
+        example_multivecnet.save()
+
+        # TODO: make tests below more meaningful
+        _ = example_multivecnet.view()
+
+    @staticmethod
+    def test_predict_proba(example_multivecnet, noisy_supervisable_text_dataset):
+        subroutine_predict_proba(example_multivecnet, noisy_supervisable_text_dataset)
+
+    @staticmethod
+    def test_manifold_trajectory(example_multivecnet, noisy_supervisable_text_dataset):
+        dataset = noisy_supervisable_text_dataset.copy()
+        inps = dataset.dfs["raw"]["text"].tolist()[:100]
+        _ = example_multivecnet.manifold_trajectory(inps)
+
+    @staticmethod
+    def test_train_and_evaluate(noisy_supervisable_text_dataset):
         """
         Verify that MultiVectorNet can be used for denoising a noised dataset.
         """
@@ -135,15 +156,3 @@ class TestMultiVectorNet(object):
         assert (
             accuracy_a > accuracy_b + 1e-2
         ), f"Expected denoising to achieve better accuracy (> 0.01 margin) on a noised dataset, got {accuracy_a} (treatment) vs. {accuracy_b} (control)"
-
-        # simple test: saving a MultiVectorNet
-        multi_a.save()
-
-        # TODO: make tests below more meaningful
-        # simple test: viewing widgets
-        _ = multi_a.view()
-
-        # simple test: inference and manifold trajectory
-        inps = dataset.dfs["raw"]["text"].tolist()
-        _ = multi_a.predict_proba(inps)
-        _ = multi_a.manifold_trajectory(inps)
