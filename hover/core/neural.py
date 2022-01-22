@@ -627,7 +627,11 @@ class MultiVectorNet(Loggable):
             _net.adjust_optimizer_params()
 
     def train_epoch(self, train_loader):
+        if self.verbose > 1:
+            self._info(f"dynamic params {self._dynamic_params}")
+
         self.adjust_optimizer_params()
+
         for batch_idx, (loaded_input_list, loaded_output, _) in enumerate(train_loader):
             self._dynamic_params["batch"] = batch_idx + 1
             self.train_batch(loaded_input_list, loaded_output)
