@@ -528,43 +528,50 @@ class MultiVectorNet(Loggable):
         vectorizers = [_net.vectorizer for _net in self.vector_nets]
         return dataset.loader(key, *vectorizers, **kwargs)
 
-    def hyperparam_per_epoch(
-        self,
-        warmup_epochs=None,
-        warmup_noise=None,
-        warmup_lr=None,
-        warmup_momentum=None,
-        postwm_epochs=None,
-        postwm_noise=None,
-        postwm_lr=None,
-        postwm_momentum=None,
-    ):
-        warmup_epochs = warmup_epochs or self.warmup_epochs_slider.value
-        warmup_noise = warmup_noise or self.warmup_noise_slider.value
-        warmup_lr = warmup_lr or (0.1 ** self.warmup_loglr_slider.value)
-        warmup_momentum = warmup_momentum or self.warmup_momentum_slider.value
-        postwm_epochs = postwm_epochs or self.postwm_epochs_slider.value
-        postwm_noise = postwm_noise or self.postwm_noise_slider.value
-        postwm_lr = postwm_lr or (0.1 ** self.postwm_loglr_slider.value)
-        postwm_momentum = postwm_momentum or self.postwm_momentum_slider.value
+    def hyperparam_config_from_widgets(self):
+        """
+        ???+ note "Get training hyperparameter configuration from widgets."
+        """
+        config = {
+            "warmup_epochs": self.warmup_epochs_slider.value,
+            "warmup_noise": self.warmup_noise_slider.value,
+            "warmup_lr": 0.1 ** self.warmup_loglr_slider.value,
+            "warmup_momentum": self.warmup_momentum_slider.value,
+            "postwm_epochs": self.postwm_epochs_slider.value,
+            "postwm_noise": self.postwm_noise_slider.value,
+            "postwm_lr": 0.1 ** self.postwm_loglr_slider.value,
+            "postwm_momentum": self.postwm_momentum_slider.value,
+        }
+        return config
 
-        for _ in range(warmup_epochs):
+    def hyperparam_per_epoch(self, **kwargs):
+        """
+        ???+ note "Produce dynamic hyperparameters from widget and overrides."
+
+            | Param      | Type  | Description                |
+            | :--------- | :---- | :------------------------- |
+            | `**kwargs` | | forwarded to `dataset.loader()`  |
+        """
+        config = self.hyperparam_config_from_widgets()
+        config.update(kwargs)
+
+        for _ in range(config["warmup_epochs"]):
             yield {
-                "denoise_rate": warmup_noise,
+                "denoise_rate": config["warmup_noise"],
                 "optimizer": [
                     {
-                        "lr": warmup_lr,
-                        "momentum": warmup_momentum,
+                        "lr": config["warmup_lr"],
+                        "momentum": config["warmup_momentum"],
                     }
                 ],
             }
-        for _ in range(postwm_epochs):
+        for _ in range(config["postwm_epochs"]):
             yield {
-                "denoise_rate": postwm_noise,
+                "denoise_rate": config["postwm_noise"],
                 "optimizer": [
                     {
-                        "lr": postwm_lr,
-                        "momentum": postwm_momentum,
+                        "lr": config["postwm_lr"],
+                        "momentum": config["postwm_momentum"],
                     }
                 ],
             }
