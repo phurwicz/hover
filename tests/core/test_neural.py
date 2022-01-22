@@ -25,9 +25,11 @@ def create_new_multivecnet(target_labels):
         "fixture_module.multi_vector_net.model3",
         "fixture_module.multi_vector_net.model4",
     ]
-    return MultiVectorNet(
-        [VectorNet.from_module(_m, target_labels) for _m in module_names]
-    )
+    nets = [
+        VectorNet.from_module(_m, target_labels, backup_state_dict=False)
+        for _m in module_names
+    ]
+    return MultiVectorNet(nets, primary=0)
 
 
 @pytest.fixture
@@ -103,7 +105,8 @@ class TestMultiVectorNet(object):
     def test_basics(example_multivecnet):
         # use unique paths to avoid unwanted interaction with other tests
         for _net in example_multivecnet.vector_nets:
-            _net.nn_update_path = f"{str(uuid.uuid1())}.pt"
+            _uuid = str(uuid.uuid1())
+            _net.nn_update_path = f"{_net.nn_update_path}-{_uuid}.pt"
         example_multivecnet.save()
 
         # TODO: make tests below more meaningful
@@ -114,8 +117,8 @@ class TestMultiVectorNet(object):
         subroutine_predict_proba(example_multivecnet, mini_supervisable_text_dataset)
 
     @staticmethod
-    def test_manifold_trajectory(example_multivecnet, noisy_supervisable_text_dataset):
-        dataset = noisy_supervisable_text_dataset.copy()
+    def test_manifold_trajectory(example_multivecnet, mini_supervisable_text_dataset):
+        dataset = mini_supervisable_text_dataset.copy()
         inps = dataset.dfs["raw"]["text"].tolist()[:100]
         _ = example_multivecnet.manifold_trajectory(inps)
 
