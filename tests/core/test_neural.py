@@ -106,8 +106,8 @@ class TestMultiVectorNet(object):
         _ = example_multivecnet.view()
 
     @staticmethod
-    def test_predict_proba(example_multivecnet, noisy_supervisable_text_dataset):
-        subroutine_predict_proba(example_multivecnet, noisy_supervisable_text_dataset)
+    def test_predict_proba(example_multivecnet, mini_supervisable_text_dataset):
+        subroutine_predict_proba(example_multivecnet, mini_supervisable_text_dataset)
 
     @staticmethod
     def test_manifold_trajectory(example_multivecnet, noisy_supervisable_text_dataset):
