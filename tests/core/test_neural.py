@@ -142,10 +142,24 @@ class TestMultiVectorNet(object):
 
         # use one MultiVectorNet for denoising treatment and the other for control
         kwargs_a = dict(
-            warmup_epochs=5, warmup_noise=0.0, postwm_epochs=10, postwm_noise=0.5
+            warmup_epochs=10,
+            warmup_noise=0.0,
+            warmup_lr=0.1,
+            warmup_momentum=0.9,
+            postwm_epochs=30,
+            postwm_noise=0.5,
+            postwm_lr=0.01,
+            postwm_momentum=0.7,
         )
         kwargs_b = dict(
-            warmup_epochs=15, warmup_noise=0.0, postwm_epochs=0, postwm_noise=0.0
+            warmup_epochs=40,
+            warmup_noise=0.0,
+            warmup_lr=0.1,
+            warmup_momentum=0.9,
+            postwm_epochs=0,
+            postwm_noise=0.5,
+            postwm_lr=0.01,
+            postwm_momentum=0.7,
         )
 
         # train both MultiVectorNets
