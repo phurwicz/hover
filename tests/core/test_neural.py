@@ -1,5 +1,6 @@
 import pytest
 import numpy as np
+import uuid
 from copy import deepcopy
 from hover.core.neural import VectorNet, MultiVectorNet
 
@@ -100,6 +101,9 @@ class TestMultiVectorNet(object):
 
     @staticmethod
     def test_basics(example_multivecnet):
+        # use unique paths to avoid unwanted interaction with other tests
+        for _net in example_multivecnet.vector_nets:
+            _net.nn_update_path = f"{str(uuid.uuid1())}.pt"
         example_multivecnet.save()
 
         # TODO: make tests below more meaningful
