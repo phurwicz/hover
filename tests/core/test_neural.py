@@ -135,24 +135,24 @@ class TestMultiVectorNet(object):
         # prepare multi-vector loaders
         vectorizers = [_net.vectorizer for _net in multi_a.vector_nets]
         train_loader = dataset.loader(
-            "train", *vectorizers, smoothing_coeff=0.1, batch_size=256
+            "train", *vectorizers, smoothing_coeff=0.0, batch_size=64
         )
         dev_loader = dataset.loader("dev", *vectorizers)
         test_loader = dataset.loader("test", *vectorizers)
 
         # use one MultiVectorNet for denoising treatment and the other for control
         kwargs_a = dict(
-            warmup_epochs=10,
+            warmup_epochs=20,
             warmup_noise=0.0,
             warmup_lr=0.1,
             warmup_momentum=0.9,
-            postwm_epochs=30,
+            postwm_epochs=60,
             postwm_noise=0.5,
             postwm_lr=0.01,
             postwm_momentum=0.7,
         )
         kwargs_b = dict(
-            warmup_epochs=40,
+            warmup_epochs=80,
             warmup_noise=0.0,
             warmup_lr=0.1,
             warmup_momentum=0.9,
