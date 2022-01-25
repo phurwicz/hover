@@ -6,9 +6,10 @@ Core module: contains classes which are centerpieces of the vast majority of use
 - neural: defines sub-applications that involve neural networks.
 """
 from rich.console import Console
+from hover.utils.meta.traceback import RichTraceback
 
 
-class Loggable:
+class Loggable(metaclass=RichTraceback):
     """
     Base class that provides consistently templated logging.
 
@@ -40,6 +41,7 @@ class Loggable:
         )
 
     def _fail(self, message):
+        assert False
         self.__class__.CONSOLE.print(
             f":red_circle: {self.__class__.__name__}: {message}", style="red"
         )
