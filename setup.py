@@ -14,7 +14,7 @@ def get_description():
 setuptools.setup(
     name="hover",
     version="0.5.0",
-    description="Never spend O(n) to annotate data again. Fun and precision come free.",
+    description="Label data at scale. Fun and precision come free.",
     long_description=get_description(),
     long_description_content_type="text/markdown",
     author="Pavel",
@@ -29,14 +29,14 @@ setuptools.setup(
         # neural stuff
         "torch>=1.4.0",
         # data handling
-        "pandas>=1.1.4",
+        "pandas>=1.4.0",
         "numpy>=1.14",
         # computations
-        "scipy>=1.3.2;python_version>='3.7.0'",
-        "scipy>=1.3.2,<=1.6.3;python_version<'3.7.0'",
+        "scipy>=1.3.2;python_version>='3.8.0'",
+        "scipy>=1.3.2,<=1.7.3;python_version<'3.8.0'",
         # utilities
         "tqdm>=4.0",
-        "rich>=9.2.0",
+        "rich>=11.0.0",
         "wasabi>=0.4.0",
         "wrappy>=0.2.6",
         "deprecated",
@@ -46,7 +46,7 @@ setuptools.setup(
         # optional: distant supervision
         # "snorkel>=0.9.3",
     ],
-    python_requires=">=3.6",
+    python_requires=">=3.7",
     classifiers=[
         "Programming Language :: Python :: 3",
         "Development Status :: 4 - Beta",
