@@ -39,11 +39,13 @@ Check out [@phurwicz/hover-binder](https://github.com/phurwicz/hover-binder) for
 
 > Python: 3.7+
 >
-> OS: OSX & Linux (including Windows Subsystem for Linux)
+> OS: Macintosh & Linux
 
 To get the latest release version: `pip install hover`
+-   Feel free to [open an issue](https://github.com/phurwicz/hover/issues/new) if you would like `conda` or `conda-forge` support.
 
-Feel free to [open an issue](https://github.com/phurwicz/hover/issues/new) if you would like `conda` or `conda-forge` support.
+For Windows users, we recommend [Windows Subsystem for Linux](https://docs.microsoft.com/en-us/windows/wsl/about).
+-   `Hover` itself it pure-Python and can be installed on Windows. However, optional dependencies like `umap-learn` may require C++ build tools. Compared with actively tracking Windows support for those, it would be much simpler to use WSL.
 
 ## :book: Resources
 

@@ -4,6 +4,9 @@
 
 ### :tada: Features Added
 
+-   all `Loggable` subclasses
+    -   traceback handling for all methods has switched to [`rich`](https://rich.readthedocs.io/en/stable/traceback.html).
+
 -   all `BokehBaseExplorer` subclasses
     -   Selections can now be made cumulatively. Tap on multiple points to view or label at once, without the overhead of re-plotting in between.
         -   this option is invoked through a checkbox toggle.
