@@ -41,7 +41,6 @@ class Loggable(metaclass=RichTracebackMeta):
         )
 
     def _fail(self, message):
-        assert False
         self.__class__.CONSOLE.print(
             f":red_circle: {self.__class__.__name__}: {message}", style="red"
         )
