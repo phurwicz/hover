@@ -7,6 +7,7 @@ from bokeh.plotting import figure
 from bokeh.models import ColumnDataSource, Slider
 from hover.core import Loggable
 from hover.utils.bokeh_helper import bokeh_hover_tooltip
+from hover.utils.meta.traceback import RichTracebackABCMeta
 from hover.utils.misc import RootUnionFind
 from .local_config import SEARCH_SCORE_FIELD
 
@@ -26,7 +27,7 @@ STANDARD_PLOT_TOOLS = [
 ]
 
 
-class BokehBaseExplorer(Loggable, ABC):
+class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
     """
     ???+ note "Base class for visually exploring data with `Bokeh`."
         Assumes:
