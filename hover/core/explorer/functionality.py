@@ -180,7 +180,7 @@ class BokehDataAnnotator(BokehBaseExplorer):
                 return
 
             # update label in both the df and the data source
-            self.dfs["raw"].at[selected_idx, "label"] = label
+            self.dfs["raw"].loc[selected_idx, "label"] = label
             for _idx in selected_idx:
                 _idx = int(_idx)
                 self.sources["raw"].patch({"label": [(_idx, label)]})
@@ -597,7 +597,7 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
             )
 
             # update label in both the df and the data source
-            self.dfs["raw"].at[selected_idx, "label"] = labels
+            self.dfs["raw"].loc[selected_idx, "label"] = labels
             for _idx, _label in zip(selected_idx, labels):
                 _idx = int(_idx)
                 self.sources["raw"].patch({"label": [(_idx, _label)]})
