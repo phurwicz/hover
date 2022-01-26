@@ -58,7 +58,7 @@ jobs:
         if [ "$RUNNER_OS" == "Linux" ] || [ "$RUNNER_OS" == "macOS" ]; then
              source env/bin/activate
         elif [ "$RUNNER_OS" == "Windows" ]; then
-             .\env\Scripts\activate
+             ./env/Scripts/activate
         else
              echo "$RUNNER_OS not supported"
              exit 1

@@ -29,8 +29,10 @@ setuptools.setup(
         # neural stuff
         "torch>=1.4.0",
         # data handling
-        "pandas>=1.4.0",
-        "numpy>=1.14",
+        "pandas>=1.4.0;python_version>='3.8.0'",
+        "pandas>=1.3.0,<=1.3.5;python_version<'3.8.0'",
+        "numpy>=1.14;python_version>='3.8.0'",
+        "numpy>=1.14,<=1.21.5;python_version<'3.8.0'",
         # computations
         "scipy>=1.3.2;python_version>='3.8.0'",
         "scipy>=1.3.2,<=1.7.3;python_version<'3.8.0'",
