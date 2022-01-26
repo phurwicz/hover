@@ -31,9 +31,9 @@ jobs:
       uses: actions/cache@v2
       with:
         path: env
-        key: ${{ runner.os }}-${{ runner.python-version }}-venv-build-${{ hashFiles('**/setup.py') }}
+        key: ${{ runner.os }}-${{ runner.python-version }}-venv-install-${{ hashFiles('**/setup.py') }}
         restore-keys: |
-          ${{ runner.os }}-${{ runner.python-version }}-venv-build-
+          ${{ runner.os }}-${{ runner.python-version }}-venv-install-
 
     - name: Create env
       id: create-venv
@@ -53,7 +53,6 @@ jobs:
     #    pip install -r requirements.txt
 
     - name: Install hover
-      if: matrix.os == 'ubuntu-latest'
       shell: bash
       run: |
         if [ "$RUNNER_OS" == "Linux" ] || [ "$RUNNER_OS" == "macOS" ]; then
