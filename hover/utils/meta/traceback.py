@@ -2,7 +2,6 @@ from abc import ABCMeta
 from functools import wraps
 from types import FunctionType
 from rich.console import Console
-from rich.prompt import Confirm
 
 
 class RichTracebackMeta(type):
@@ -21,13 +20,25 @@ class RichTracebackMeta(type):
             def wrapped(*args, **kwargs):
                 try:
                     return func(*args, **kwargs)
-                except Exception:
+                except Exception as e_original:
+                    func_name = f"{func.__module__}.{func.__qualname__}"
                     console.print(
-                        f":red_circle: {func.__module__}.{func.__qualname__} failed.",
+                        f":red_circle: {func_name} failed.",
                         style="red bold",
                     )
-                    locals_flag = Confirm.ask("Show local variables in traceback?")
-                    console.print_exception(show_locals=locals_flag)
+                    try:
+                        locals_flag = (
+                            console.input(
+                                "Show local variables in traceback? y/N",
+                            ).lower()
+                            == "y"
+                        )
+                        # similarly to e_original, will stop further code
+                        console.print_exception(show_locals=locals_flag)
+                    # sometimes (pytest for example) input can be forbidden
+                    # and the original exception is appropriate
+                    except Exception:
+                        raise e_original
 
             return wrapped
 
