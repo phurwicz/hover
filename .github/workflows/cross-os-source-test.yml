@@ -25,32 +25,8 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
 
-    - name: Find cached env
-      id: find-venv
-      uses: actions/cache@v2
-      with:
-        path: env
-        key: ${{ runner.os }}-${{ runner.python-version }}-venv-test-${{ hashFiles('**/setup.py') }}
-        restore-keys: |
-          ${{ runner.os }}-${{ runner.python-version }}-venv-test-
-
-    - name: Create env
-      id: create-venv
-      if: steps.find-venv.outputs.cache-hit != 'true'
+    - name: Test with Tox
       run: |
-        python -m venv env
-
-    - name: Get dependencies and test
-      shell: bash
-      run: |
-        if [ "$RUNNER_OS" == "Linux" ] || [ "$RUNNER_OS" == "macOS" ]; then
-             source env/bin/activate
-        elif [ "$RUNNER_OS" == "Windows" ]; then
-             ./env/Scripts/activate
-        else
-             echo "$RUNNER_OS not supported"
-             exit 1
-        fi
         pip install --upgrade pip
         pip install --upgrade tox tox-gh-actions
         tox -e test_api
