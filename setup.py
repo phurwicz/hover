@@ -42,8 +42,8 @@ setuptools.setup(
         "wasabi>=0.4.0",
         "wrappy>=0.2.6",
         "deprecated",
-        # optional: dimensionality reduction
-        # "umap-learn>=0.3.10",
+        # dimensionality reduction: UMAP is included
+        "umap-learn>=0.3.10",
         # "ivis[cpu]>=1.7",
         # optional: distant supervision
         # "snorkel>=0.9.3",
