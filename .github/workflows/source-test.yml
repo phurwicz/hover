@@ -1,7 +1,7 @@
 # This workflow will install Python dependencies and run tests on the source code.
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
 
-name: Ubuntu Source Test
+name: Quick Source Test
 
 on:
   push:
@@ -16,7 +16,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ['3.7', '3.8', '3.9']
+        # test oldest and newest supported Python version
+        python-version: ['3.7', '3.10']
         os: [ubuntu-latest]
 
     steps:
@@ -26,41 +27,19 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
 
-    - name: Find cached env
+    - name: Find cached tox env
       id: find-venv
       uses: actions/cache@v2
       with:
-        path: env
-        key: ${{ runner.os }}-${{ runner.python-version }}-cached-env-${{ hashFiles('**/setup.py') }}
+        path: .tox
+        key: ${{ runner.os }}-${{ runner.python-version }}-tox-env-${{ hashFiles('**/setup.py') }}
         restore-keys: |
-          ${{ runner.os }}-${{ runner.python-version }}-cached-env-
-
-    - name: Create env
-      id: create-venv
-      if: steps.find-venv.outputs.cache-hit != 'true'
-      run: |
-        python -m venv env
-
-    - name: Get mandatory dependencies
-      #if: steps.find-venv.outputs.cache-hit != 'true'
-      run: |
-        source env/bin/activate
-        pip install --upgrade pip
-        # dependencies that could be involved in builds
-        pip install --upgrade pip-tools setuptools wheel cython
-        # find dependencies based on setup.py
-        pip-compile
-        pip install --upgrade -r requirements.txt
-
-    - name: Get testing dependencies
-      #if: steps.find-venv.outputs.cache-hit != 'true'
-      run: |
-        source env/bin/activate
-        pip install --upgrade tox tox-gh-actions
+          ${{ runner.os }}-${{ runner.python-version }}-tox-env-
 
     - name: Test and make coverage report
       run: |
-        source env/bin/activate
+        pip install --upgrade pip
+        pip install --upgrade tox tox-gh-actions
         tox -e test_api
 
     - name: Codacy Coverage Reporter
