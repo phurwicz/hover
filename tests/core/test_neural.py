@@ -142,22 +142,22 @@ class TestMultiVectorNet(object):
 
         # use one MultiVectorNet for denoising treatment and the other for control
         kwargs_a = dict(
-            warmup_epochs=20,
+            warmup_epochs=40,
             warmup_noise=0.0,
-            warmup_lr=0.1,
+            warmup_lr=0.05,
             warmup_momentum=0.9,
-            postwm_epochs=60,
+            postwm_epochs=40,
             postwm_noise=0.5,
             postwm_lr=0.01,
             postwm_momentum=0.7,
         )
         kwargs_b = dict(
-            warmup_epochs=80,
+            warmup_epochs=40,
             warmup_noise=0.0,
-            warmup_lr=0.1,
+            warmup_lr=0.05,
             warmup_momentum=0.9,
-            postwm_epochs=0,
-            postwm_noise=0.5,
+            postwm_epochs=40,
+            postwm_noise=0.0,
             postwm_lr=0.01,
             postwm_momentum=0.7,
         )
@@ -174,8 +174,14 @@ class TestMultiVectorNet(object):
         accuracy_b, conf_mat_b = multi_b.evaluate_ensemble(test_loader)
         assert isinstance(accuracy_a, float) and isinstance(accuracy_b, float)
         assert isinstance(conf_mat_a, np.ndarray) and isinstance(conf_mat_b, np.ndarray)
+        assert (
+            accuracy_a > accuracy_b + 1e-3
+        ), f"Expected denoising to achieve better ensemble accuracy (> 0.001 margin) on a noised dataset, got {accuracy_a} (treatment) vs. {accuracy_b} (control)"
 
-        # TODO: review the training process above to ensure the assertion below
-        # assert (
-        #    accuracy_a > accuracy_b + 1e-2
-        # ), f"Expected denoising to achieve better accuracy (> 0.01 margin) on a noised dataset, got {accuracy_a} (treatment) vs. {accuracy_b} (control)"
+        # evaluate individual VectorNets
+        acc_list_a, _, _ = multi_a.evaluate_individual(test_loader)
+        acc_list_b, _, _ = multi_b.evaluate_individual(test_loader)
+        mean_acc_a, mean_acc_b = np.mean(acc_list_a), np.mean(acc_list_b)
+        assert (
+            mean_acc_a > mean_acc_b + 5e-3
+        ), f"Expected denoising to achieve better mean individual accuracy (> 0.005 margin) on a noised dataset, got {mean_acc_a} (treatment) vs. {mean_acc_b} (control)"

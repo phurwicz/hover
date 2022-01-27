@@ -12,7 +12,8 @@ from hover.utils.torch_helper import cross_entropy_with_probs
 from hover.utils.denoising import (
     loss_coteaching_graph,
     prediction_disagreement,
-    disagreement_priority,
+    accuracy_priority,
+    identity_adjacency,
 )
 from bokeh.models import Slider, FuncTickFormatter
 from sklearn.metrics import confusion_matrix
@@ -372,7 +373,7 @@ class MultiVectorNet(Loggable):
         -   `hover.utils.torch_helper.MultiVectorDataset`
     """
 
-    DEFAULT_ADJACENCY_FUNC = disagreement_priority
+    DEFAULT_ADJACENCY_FUNC = accuracy_priority
 
     def __init__(self, vector_nets, primary=0, verbose=0):
         """
@@ -594,6 +595,7 @@ class MultiVectorNet(Loggable):
         """
         params_per_epoch = self.hyperparam_per_epoch(**kwargs)
         train_info = []
+        prev_best_acc = 0.0
         for epoch_idx, param_dict in enumerate(params_per_epoch):
             self._dynamic_params["epoch"] = epoch_idx + 1
             self._dynamic_params.update(param_dict)
@@ -614,7 +616,25 @@ class MultiVectorNet(Loggable):
                 "disagreement_rate": disagree_rate,
             }
             train_info.append(info_dict)
-            self._dynamic_params["tail_head_teachers"] = adj_func(info_dict)
+
+            # prepare training detail for the next epoch
+            epoch_best_acc = np.max(acc_list)
+            # epoch_best_idx = np.argmax(acc_list)
+            coteaching_flag = self._dynamic_params["denoise_rate"] > 0.0
+            if coteaching_flag:
+                # re-calculate co-teaching graph
+                self._dynamic_params["tail_head_teachers"] = adj_func(info_dict)
+                # when training plateaus, freeze the best model for the next epoch
+                # if epoch_best_acc < prev_best_acc:
+                #    self._dynamic_params["frozen"] = [epoch_best_idx]
+                # else:
+                #    self._dynamic_params["frozen"] = []
+            else:
+                # no coteaching
+                trivial_adj = identity_adjacency(info_dict)
+                self._dynamic_params["tail_head_teachers"] = trivial_adj
+                self._dynamic_params["frozen"] = []
+            prev_best_acc = max(prev_best_acc, epoch_best_acc)
 
         return train_info
 
