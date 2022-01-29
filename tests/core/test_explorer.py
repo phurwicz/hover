@@ -63,10 +63,10 @@ def subroutine_selection_filter(explorer, filter_toggle, narrowing_callbacks):
     initial_select = list(range(total_raw))
 
     # emulate user interface: select everything through a SelectionGeometry event
-    explorer.sources["raw"].selected.indices = initial_select[:]
-    # TODO: ideally should select by event, but this is not working
+    # note: bokeh's SelectionGeometry seems to not actually make a selection
     select_event = almost_global_select(explorer.figure)
     explorer.figure._trigger_event(select_event)
+    explorer.sources["raw"].selected.indices = initial_select[:]
     assert explorer.sources["raw"].selected.indices == initial_select[:]
 
     # trigger the first callback without activating filter
@@ -377,10 +377,10 @@ class TestBokehTextSnorkel:
         # emulate selection by user
         # slice to first ten, then assign A to first six
         all_raw_idx = list(range(explorer.dfs["raw"].shape[0]))
-        explorer.sources["raw"].selected.indices = all_raw_idx[:]
-        # TODO: ideally should select by event, but this is not working
+        # note: bokeh's SelectionGeometry seems to not actually make a selection
         select_event = almost_global_select(explorer.figure)
         explorer.figure._trigger_event(select_event)
+        explorer.sources["raw"].selected.indices = all_raw_idx[:]
         assert explorer.sources["raw"].selected.indices == all_raw_idx
 
         # actually triggering LFs on a valid selection
@@ -403,10 +403,10 @@ class TestBokehTextSnorkel:
         assert explorer.lf_apply_trigger.menu == lf_names_so_far
         assert explorer.lf_filter_trigger.menu == lf_names_so_far
 
-        # slice to first ten, then assign B to first six
-        explorer.sources["raw"].selected.indices = all_raw_idx[:]
-        # TODO: ideally should select by event, but this is not working
+        # note: bokeh's SelectionGeometry seems to not actually make a selection
         explorer.figure._trigger_event(select_event)
+        explorer.sources["raw"].selected.indices = all_raw_idx[:]
+        # slice to first ten, then assign B to first six
         _event = MenuItemClick(explorer.lf_filter_trigger, item="broad_rule_b")
         explorer.lf_filter_trigger._trigger_event(_event)
         _event = MenuItemClick(explorer.lf_apply_trigger, item="narrow_rule_b")
