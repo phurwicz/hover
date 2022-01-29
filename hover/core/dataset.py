@@ -23,6 +23,7 @@ from bokeh.models import (
     ColumnDataSource,
     DataTable,
     TableColumn,
+    CellEditor,
     HTMLTemplateFormatter,
 )
 from .local_config import (
@@ -118,6 +119,7 @@ class SupervisableDataset(Loggable):
         self.synchronize_dictl_to_df()
         self.df_deduplicate()
         self.synchronize_df_to_dictl()
+        self.compute_feature_index()
         self.setup_widgets(show_widget_help=show_widget_help)
         # self.setup_label_coding() # redundant if setup_pop_table() immediately calls this again
         self.setup_file_export()
@@ -142,6 +144,42 @@ class SupervisableDataset(Loggable):
             feature_key=self.__class__.FEATURE_KEY,
             label_key="label",
         )
+
+    def compute_feature_index(self):
+        """
+        ???+ note "Allow lookup by feature value without setting it as the index."
+
+            Assumes that feature values are unique. The reason not to just set the feature as the index is because integer indices work smoothly with Bokeh `DataSource`s, NumPy `array`s, and Torch `Tensor`s.
+        """
+        feature_to_subset_idx = {}
+        for _subset, _df in self.dfs.items():
+            _values = _df[self.__class__.FEATURE_KEY].values
+            for i, _val in enumerate(_values):
+                if _val in feature_to_subset_idx:
+                    raise ValueError(
+                        f"Expected unique feature values, found duplicate {_val}"
+                    )
+                feature_to_subset_idx[_val] = (_subset, i)
+        self.feature_to_subset_idx = feature_to_subset_idx
+
+    def locate_by_feature_value(self, value, auto_recompute=True):
+        """
+        ???+ note "Find the subset and index given a feature value."
+
+            Assumes that the value is present and detects if the subset and index found is consistent with the value.
+        """
+        subset, index = self.feature_to_subset_idx[value]
+
+        current_value = self.dfs[subset].at[index, self.__class__.FEATURE_KEY]
+        if current_value != value:
+            if auto_recompute:
+                self._warn("locate_by_feature_value mismatch. Recomputing index.")
+                self.compute_feature_index()
+                # if ever need to recompute twice, there must be a bug
+                return self.locate_by_feature_value(value, auto_recompute=False)
+            else:
+                raise ValueError("locate_by_feature_value mismatch.")
+        return subset, index
 
     def to_pandas(self, use_df=True):
         """
@@ -191,6 +229,15 @@ class SupervisableDataset(Loggable):
     def setup_widgets(self, show_widget_help=False):
         """
         ???+ note "Create `bokeh` widgets for interactive data management."
+
+            Operations:
+            -   PUSH: push updated dataframes to linked `explorer`s.
+            -   COMMIT: added selected points to a specific subset `dataframe`.
+            -   DEDUP: cross-deduplicate across all subset `dataframe`s.
+            -   VIEW: view selected points of linked `explorer`s.
+                -   the link can be different from that for PUSH. Typically all the `explorer`s sync their selections, and only an `annotator` is linked to the `dataset`.
+            -   PATCH: update a few edited rows from VIEW result to the dataset.
+            -   EVICT: remove a few rows from both VIEW result and linked `explorer` selection.
         """
         self.update_pusher = Button(
             label="Push", button_type="success", height_policy="fit", width_policy="min"
@@ -214,34 +261,64 @@ class SupervisableDataset(Loggable):
             height_policy="fit",
             width_policy="min",
         )
+        self.selection_patcher = Button(
+            label="Update Row Values",
+            button_type="warning",
+            height_policy="fit",
+            width_policy="min",
+        )
+        self.selection_evictor = Button(
+            label="Evict Rows from Selection",
+            button_type="primary",
+            height_policy="fit",
+            width_policy="min",
+        )
 
         def commit_base_callback():
             """
             COMMIT creates cross-duplicates between subsets.
+            Changes dataset rows.
+            No change to explorers.
 
             - PUSH shall be blocked until DEDUP is executed.
+            - PATCH shall be blocked until PUSH is executed.
+            - EVICT shall be blocked until PUSH is executed.
             """
             self.dedup_trigger.disabled = False
             self.update_pusher.disabled = True
+            self.selection_patcher.disabled = True
+            self.selection_evictor.disabled = True
 
         def dedup_base_callback():
             """
             DEDUP re-creates dfs with different indices than before.
+            Changes dataset rows.
+            No change to explorers.
 
             - COMMIT shall be blocked until PUSH is executed.
+            - PATCH shall be blocked until PUSH is executed.
+            - EVICT shall be blocked until PUSH is executed.
             """
             self.update_pusher.disabled = False
             self.data_committer.disabled = True
+            self.selection_patcher.disabled = True
+            self.selection_evictor.disabled = True
             self.df_deduplicate()
 
         def push_base_callback():
             """
             PUSH enforces df consistency with all linked explorers.
+            No change to dataset rows.
+            Changes explorers.
 
             - DEDUP could be blocked because it stays trivial until COMMIT is executed.
             """
             self.data_committer.disabled = False
             self.dedup_trigger.disabled = True
+            # empty the selection table, then allow PATCH and EVICT
+            self.sel_table.source.data = dict()
+            self.selection_patcher.disabled = False
+            self.selection_evictor.disabled = False
 
         self.update_pusher.on_click(push_base_callback)
         self.data_committer.on_click(commit_base_callback)
@@ -258,14 +335,20 @@ class SupervisableDataset(Loggable):
 
         return column(
             self.help_div,
+            # population table and directly associated widgets
             row(
                 self.update_pusher,
                 self.data_committer,
                 self.dedup_trigger,
-                self.selection_viewer,
                 self.file_exporter,
             ),
             self.pop_table,
+            # selection table and directly associated widgets
+            row(
+                self.selection_viewer,
+                self.selection_patcher,
+                self.selection_evictor,
+            ),
             self.sel_table,
         )
 
@@ -279,15 +362,14 @@ class SupervisableDataset(Loggable):
 
             Note: the reason we need this is due to `self.dfs[key] = ...`-like assignments. If DF operations were all in-place, then the explorers could directly access the updates through their `self.dfs` references.
         """
-        # local import to avoid import cycles
-        from hover.core.explorer.base import BokehBaseExplorer
-
-        assert isinstance(explorer, BokehBaseExplorer)
 
         def callback_push():
             df_dict = {_v: self.dfs[_k] for _k, _v in subset_mapping.items()}
             explorer._setup_dfs(df_dict)
             explorer._update_sources()
+            # clear selections as previous indices are outdated now
+            for _v in subset_mapping.values():
+                explorer.sources[_v].selected.indices = []
 
         self.update_pusher.on_click(callback_push)
         self._good(
@@ -313,12 +395,6 @@ class SupervisableDataset(Loggable):
                     )
                     return
 
-                # take selected slice, ignoring ABSTAIN'ed rows
-                # CAUTION: applying selected_idx from explorer.source to self.df
-                #     this assumes that the source and the df have consistent entries.
-                # Consider this:
-                #    keep_cols = self.dfs[sub_k].columns
-                #    sel_slice = explorer.dfs[sub_v].iloc[selected_idx][keep_cols]
                 sel_slice = self.dfs[sub_k].iloc[selected_idx]
                 valid_slice = sel_slice[
                     sel_slice["label"] != module_config.ABSTAIN_DECODED
@@ -369,13 +445,39 @@ class SupervisableDataset(Loggable):
                 sel_slices.append(sub_slice)
 
             selected = pd.concat(sel_slices, axis=0)
-
-            # replace this with an actual display (and analysis)
             self._callback_update_selection(selected)
 
+        def callback_evict():
+            # create sets for fast index discarding
+            subset_to_indicies = {}
+            for subset in subsets:
+                indicies = set(explorer.sources[subset].selected.indices)
+                subset_to_indicies[subset] = indicies
+
+            # from datatable index, get feature values to look up dataframe index
+            sel_source = self.sel_table.source
+            raw_indicies = sel_source.selected.indices
+            for i in raw_indicies:
+                feature_value = sel_source.data[self.__class__.FEATURE_KEY][i]
+                subset, idx = self.locate_by_feature_value(feature_value)
+                subset_to_indicies[subset].discard(idx)
+
+            # assign indices back to change actual selection
+            for subset in subsets:
+                indicies = list(subset_to_indicies[subset])
+                explorer.sources[subset].selected.indices = indicies
+
+            self._good(
+                f"Selection table: evicted {len(raw_indicies)} points from selection."
+            )
+            # un-toggle within the selection table, then refresh the table
+            self.sel_table.source.selected.indices = []
+            callback_view()
+
         self.selection_viewer.on_click(callback_view)
+        self.selection_evictor.on_click(callback_evict)
         self._good(
-            f"Subscribed {explorer.__class__.__name__} to selection view: {subsets}"
+            f"Subscribed {explorer.__class__.__name__} to selection table: {subsets}"
         )
 
     def setup_label_coding(self, verbose=True, debug=False):
@@ -543,15 +645,25 @@ class SupervisableDataset(Loggable):
         """
 
         def auto_columns(df):
-            return [TableColumn(field=_col, title=_col) for _col in df.columns]
+            # CONSIDER: whether to show more columns
+            # return [TableColumn(field=_col, title=_col) for _col in df.columns]
+            # prevent the feature column from edits
+            feature_key = self.__class__.FEATURE_KEY
+            columns = [
+                TableColumn(field=feature_key, title=feature_key, editor=CellEditor()),
+                TableColumn(field="label", title="label"),
+            ]
+            return columns
 
         sel_source = ColumnDataSource(dict())
         sel_columns = auto_columns(self.dfs["train"])
+        # override: allow selection and editing within the table
+        kwargs.update(dict(selectable="checkbox", editable=True))
         self.sel_table = DataTable(source=sel_source, columns=sel_columns, **kwargs)
 
         def update_selection(selected_df):
             """
-            Callback function.
+            To be triggered as a subroutine of `self.selection_viewer`.
             """
             # push results to bokeh data source
             self.sel_table.columns = auto_columns(selected_df)
@@ -562,6 +674,21 @@ class SupervisableDataset(Loggable):
             )
 
         self._callback_update_selection = update_selection
+
+        def patch_edited_selection():
+            sel_source = self.sel_table.source
+            raw_indices = sel_source.selected.indices
+            for i in raw_indices:
+                feature_value = sel_source.data[self.__class__.FEATURE_KEY][i]
+                subset, idx = self.locate_by_feature_value(feature_value)
+                for key in sel_source.data.keys():
+                    self.dfs[subset].at[idx, key] = sel_source.data[key][i]
+
+            self._good(f"Selection table: edited {len(raw_indices)} dataset rows.")
+            # if edited labels (which is common), then population has changed
+            self._callback_update_population()
+
+        self.selection_patcher.on_click(patch_edited_selection)
 
     def df_deduplicate(self):
         """
@@ -601,6 +728,8 @@ class SupervisableDataset(Loggable):
             )[columns[_key]]
             after[_key] = self.dfs[_key].shape[0]
             self._info(f"--subset {_key} rows: {before[_key]} -> {after[_key]}.")
+
+        self.compute_feature_index()
 
     def synchronize_dictl_to_df(self):
         """
