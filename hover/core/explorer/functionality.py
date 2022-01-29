@@ -668,6 +668,7 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
             | Param   | Type   | Description               |
             | :------ | :----- | :------------------------ |
             | `lf`    | `str`  | name of labeling function |
+
             Assumes that specified C/I/M/H glyphs are stored.
             1. re-compute L_raw/L_labeled and CDSViews
             2. update the view for each glyph
@@ -835,100 +836,3 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
         indices = np.where(L_raw != module_config.ABSTAIN_DECODED)[0].tolist()
         view = CDSView(source=self.sources["raw"], filters=[IndexFilter(indices)])
         return view
-
-    #    def plot_lf(
-    #        self, lf, L_raw=None, L_labeled=None, include=("C", "I", "M"), **kwargs
-    #    ):
-    #        """
-    #        ???+ note "Plot about a single labeling function."
-    #            | Param       | Type             | Description                  |
-    #            | :---------- | :--------------- | :--------------------------- |
-    #            | `lf`        | `callable`       | labeling function decorated by `@labeling_function()` from `hover.utils.snorkel_helper` |
-    #            | `L_raw`     | `np.ndarray`     | predictions, in decoded `str`, on the `"raw"` set |
-    #            | `L_labeled` | `np.ndarray`     | predictions, in decoded `str`, on the `"labeled"` set |
-    #            | `include`   | `tuple` of `str` | "C" for correct, "I" for incorrect, "M" for missed", "H" for hit: types of predictions to make visible in the plot |
-    #            | `**kwargs`  |                  | forwarded to plotting markers |
-    #
-    #
-    #            - lf: labeling function decorated by `@labeling_function()` from `hover.utils.snorkel_helper`
-    #            - L_raw: .
-    #            - L_labeled: .
-    #            - include: subsets to show, which can be correct(C)/incorrect(I)/missed(M)/hit(H).
-    #        """
-    #        # keep track of added LF
-    #        if lf.name in self.lfs:
-    #            self._warn(f"name collision on {lf.name}. Skipping.")
-    #            return
-    #        self.lfs[lf.name] = lf
-    #
-    #        # calculate predicted labels if not provided
-    #        if L_raw is None:
-    #            L_raw = self.dfs["raw"].apply(lf, axis=1).values
-    #        if L_labeled is None:
-    #            L_labeled = self.dfs["labeled"].apply(lf, axis=1).values
-    #
-    #        # prepare plot settings
-    #        legend_label = f"{', '.join(lf.targets)} | {lf.name}"
-    #        color = self.palette[len(self.lfs) - 1]
-    #
-    #        raw_glyph_kwargs = self.glyph_kwargs["raw"].copy()
-    #        raw_glyph_kwargs["legend_label"] = legend_label
-    #        raw_glyph_kwargs["color"] = color
-    #        raw_glyph_kwargs.update(kwargs)
-    #
-    #        labeled_glyph_kwargs = self.glyph_kwargs["labeled"].copy()
-    #        labeled_glyph_kwargs["legend_label"] = legend_label
-    #        labeled_glyph_kwargs["color"] = color
-    #        labeled_glyph_kwargs.update(kwargs)
-    #
-    #        # create correct/incorrect/missed/hit subsets
-    #        to_plot = []
-    #        if "C" in include:
-    #            to_plot.append(
-    #                {
-    #                    "name": "labeled",
-    #                    "tags": [lf.name],
-    #                    "view": self._view_correct(L_labeled),
-    #                    "marker": self.figure.square,
-    #                    "kwargs": labeled_glyph_kwargs,
-    #                }
-    #            )
-    #        if "I" in include:
-    #            to_plot.append(
-    #                {
-    #                    "name": "labeled",
-    #                    "tags": [lf.name],
-    #                    "view": self._view_incorrect(L_labeled),
-    #                    "marker": self.figure.x,
-    #                    "kwargs": labeled_glyph_kwargs,
-    #                }
-    #            )
-    #        if "M" in include:
-    #            to_plot.append(
-    #                {
-    #                    "name": "labeled",
-    #                    "tags": [lf.name],
-    #                    "view": self._view_missed(L_labeled, lf.targets),
-    #                    "marker": self.figure.cross,
-    #                    "kwargs": labeled_glyph_kwargs,
-    #                }
-    #            )
-    #        if "H" in include:
-    #            to_plot.append(
-    #                {
-    #                    "name": "raw",
-    #                    "tags": [lf.name],
-    #                    "view": self._view_hit(L_raw),
-    #                    "marker": self.figure.circle,
-    #                    "kwargs": raw_glyph_kwargs,
-    #                }
-    #            )
-    #
-    #        # plot created subsets
-    #        for _dict in to_plot:
-    #            _name = _dict["name"]
-    #            _tags = _dict["tags"]
-    #            _view = _dict["view"]
-    #            _marker = _dict["marker"]
-    #            _kwargs = _dict["kwargs"]
-    #            _marker("x", "y", source=_view.source, view=_view, name=_name, tags=_tags, **_kwargs)
