@@ -9,7 +9,7 @@ COLOR_GLYPH_TEMPLATE = """
 </p>
 """
 
-DATASET_HELP_HTML = """Hover - dataset visual elements<br>
+DATASET_HELP_HTML = """Dataset Widgets<br>
 <br>
 Buttons:<br>
 - Push: "dataset -> plots" push of data points;<br>
@@ -23,5 +23,6 @@ Tables:<br>
 """
 
 
-def dataset_help_widget():
-    return Div(text=DATASET_HELP_HTML)
+def dataset_help_widget(verbose=False):
+    text = DATASET_HELP_HTML if verbose else "Dataset Widgets"
+    return Div(text=text)
