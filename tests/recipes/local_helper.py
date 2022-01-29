@@ -6,8 +6,21 @@ def action_view_selection(dataset):
     view_event = ButtonClick(dataset.selection_viewer)
     dataset.selection_viewer._trigger_event(view_event)
     # dataset.sel_table.source.data is a {"field": []}-like dict
-    view_data = dataset.sel_table.source.data
+    view_data = dataset.sel_table.source.data.copy()
     return view_data
+
+
+def action_evict_selection(dataset):
+    old_view_data = dataset.sel_table.source.data.copy()
+    evict_event = ButtonClick(dataset.selection_evictor)
+    dataset.selection_evictor._trigger_event(evict_event)
+    new_view_data = dataset.sel_table.source.data.copy()
+    return old_view_data, new_view_data
+
+
+def action_patch_selection(dataset):
+    patch_event = ButtonClick(dataset.selection_patcher)
+    dataset.selection_patcher._trigger_event(patch_event)
 
 
 def action_apply_labels(annotator):
@@ -19,8 +32,8 @@ def action_apply_labels(annotator):
     return labeled_slice
 
 
-def action_commit_selection(dataset):
-    commit_event = MenuItemClick(dataset.data_committer, item="train")
+def action_commit_selection(dataset, subset="train"):
+    commit_event = MenuItemClick(dataset.data_committer, item=subset)
     dataset.data_committer._trigger_event(commit_event)
     return dataset
 
