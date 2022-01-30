@@ -8,7 +8,6 @@ import torch.nn.functional as F
 from hover.core import Loggable
 from hover.utils.metrics import classification_accuracy
 from hover.utils.misc import current_time
-from hover.utils.torch_helper import cross_entropy_with_probs
 from hover.utils.denoising import (
     loss_coteaching_graph,
     prediction_disagreement,
@@ -16,6 +15,7 @@ from hover.utils.denoising import (
     identity_adjacency,
 )
 from bokeh.models import Slider, FuncTickFormatter
+from snorkel.classification import cross_entropy_with_probs
 from sklearn.metrics import confusion_matrix
 import numpy as np
 

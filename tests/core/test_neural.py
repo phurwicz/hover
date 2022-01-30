@@ -106,7 +106,8 @@ class TestMultiVectorNet(object):
         # use unique paths to avoid unwanted interaction with other tests
         for _net in example_multivecnet.vector_nets:
             _uuid = str(uuid.uuid1())
-            _net.nn_update_path = f"{_net.nn_update_path}-{_uuid}.pt"
+            _nn_path = _net.nn_update_path.replace(".pt", f"-{_uuid}.pt")
+            _net.nn_update_path = _nn_path
         example_multivecnet.save()
 
         # TODO: make tests below more meaningful

@@ -67,7 +67,7 @@ class MultiVectorDataset(Dataset):
 
 
 @deprecated(
-    version="0.5.1",
+    version="0.6.0",
     reason="will be removed in a future version; please use VectorDataset.loader() instead.",
 )
 def vector_dataloader(input_vectors, output_vectors, batch_size=64):
@@ -97,31 +97,6 @@ def one_hot(encoded_labels, num_classes):
     :type num_classes: int
     """
     return F.one_hot(torch.LongTensor(encoded_labels), num_classes=num_classes).float()
-
-
-def cross_entropy_with_probs(logits, target, weight=None, reduction="mean"):
-    """
-    Cherry-picked from snorkel.classification.
-    Calculate cross-entropy loss when targets are probabilities (floats), not ints.
-    """
-    num_points, num_classes = logits.shape
-    # Note that t.new_zeros, t.new_full put tensor on same device as t
-    cum_losses = logits.new_zeros(num_points)
-    for y in range(num_classes):
-        target_temp = logits.new_full((num_points,), y, dtype=torch.long)
-        y_loss = F.cross_entropy(logits, target_temp, reduction="none")
-        if weight is not None:
-            y_loss = y_loss * weight[y]
-        cum_losses += target[:, y].float() * y_loss
-
-    if reduction == "none":
-        return cum_losses
-    elif reduction == "mean":
-        return cum_losses.mean()
-    elif reduction == "sum":
-        return cum_losses.sum()
-    else:
-        raise ValueError("Keyword 'reduction' must be one of ['none', 'mean', 'sum']")
 
 
 def label_smoothing(probabilistic_labels, coefficient=0.1):

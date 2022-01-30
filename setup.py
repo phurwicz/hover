@@ -45,8 +45,8 @@ setuptools.setup(
         # dimensionality reduction: UMAP is included
         "umap-learn>=0.3.10",
         # "ivis[cpu]>=1.7",
-        # optional: distant supervision
-        # "snorkel>=0.9.3",
+        # distant supervision
+        "snorkel>=0.9.8",
     ],
     python_requires=">=3.7",
     classifiers=[
