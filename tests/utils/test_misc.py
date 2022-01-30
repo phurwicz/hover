@@ -6,48 +6,95 @@ def test_current_time():
     assert isinstance(timestamp, str)
 
 
+def node_data_from_uf_array(arr):
+    """Subroutine for testing utility."""
+    return [_node.data for _node in arr]
+
+
+def find_data_from_uf_array(arr):
+    """Subroutine for testing utility."""
+    return [_node.find().data for _node in arr]
+
+
+def counts_from_uf_array(arr):
+    """Subroutine for testing utility."""
+    return [_node.count for _node in arr]
+
+
+def check_unionfind(arr, nodes, finds, counts):
+    assert node_data_from_uf_array(arr) == nodes
+    assert find_data_from_uf_array(arr) == finds
+    assert counts_from_uf_array(arr) == counts
+
+
 def test_nodeunionfind():
     arr = [NodeUnionFind(i) for i in range(8)]
     assert repr(arr[0]) == "0"
 
     arr[0].union(arr[1])
+    check_unionfind(
+        arr,
+        [0, 1, 2, 3, 4, 5, 6, 7],
+        [0, 0, 2, 3, 4, 5, 6, 7],
+        [2, 2, 1, 1, 1, 1, 1, 1],
+    )
+
     arr[1].union(arr[2])
+    check_unionfind(
+        arr,
+        [0, 1, 2, 3, 4, 5, 6, 7],
+        [0, 0, 0, 3, 4, 5, 6, 7],
+        [3, 3, 3, 1, 1, 1, 1, 1],
+    )
+
     arr[3].union(arr[4])
-
-    node_data = [_node.data for _node in arr]
-    find_data = [_node.find().data for _node in arr]
-    assert node_data == [0, 1, 2, 3, 4, 5, 6, 7]
-    assert find_data == [0, 0, 0, 3, 3, 5, 6, 7]
-
-    count_arr = [_node.count for _node in arr]
-    assert count_arr == [3, 3, 3, 2, 2, 1, 1, 1]
+    check_unionfind(
+        arr,
+        [0, 1, 2, 3, 4, 5, 6, 7],
+        [0, 0, 0, 3, 3, 5, 6, 7],
+        [3, 3, 3, 2, 2, 1, 1, 1],
+    )
 
     arr[4].union(arr[2])
-    arr[7].data = 8
-
-    node_data = [_node.data for _node in arr]
-    find_data = [_node.find().data for _node in arr]
-    assert node_data != find_data
-    assert find_data == [0, 0, 0, 0, 0, 5, 6, 8]
+    check_unionfind(
+        arr,
+        [0, 1, 2, 3, 4, 5, 6, 7],
+        [0, 0, 0, 0, 0, 5, 6, 7],
+        [5, 5, 5, 5, 5, 1, 1, 1],
+    )
 
 
 def test_rootunionfind():
     arr = [RootUnionFind(i) for i in range(8)]
+
     arr[0].union(arr[1])
+    check_unionfind(
+        arr,
+        [0, 0, 2, 3, 4, 5, 6, 7],
+        [0, 0, 2, 3, 4, 5, 6, 7],
+        [2, 2, 1, 1, 1, 1, 1, 1],
+    )
+
     arr[1].union(arr[2])
+    check_unionfind(
+        arr,
+        [0, 0, 0, 3, 4, 5, 6, 7],
+        [0, 0, 0, 3, 4, 5, 6, 7],
+        [3, 3, 3, 1, 1, 1, 1, 1],
+    )
+
     arr[3].union(arr[4])
-
-    node_data = [_node.data for _node in arr]
-    find_data = [_node.find().data for _node in arr]
-    assert node_data == [0, 0, 0, 3, 3, 5, 6, 7]
-    assert find_data == [0, 0, 0, 3, 3, 5, 6, 7]
-
-    count_arr = [_node.count for _node in arr]
-    assert count_arr == [3, 3, 3, 2, 2, 1, 1, 1]
+    check_unionfind(
+        arr,
+        [0, 0, 0, 3, 3, 5, 6, 7],
+        [0, 0, 0, 3, 3, 5, 6, 7],
+        [3, 3, 3, 2, 2, 1, 1, 1],
+    )
 
     arr[4].union(arr[2])
-
-    node_data = [_node.data for _node in arr]
-    find_data = [_node.find().data for _node in arr]
-    assert node_data == [3, 3, 3, 3, 3, 5, 6, 7]
-    assert node_data == find_data
+    check_unionfind(
+        arr,
+        [3, 3, 3, 3, 3, 5, 6, 7],
+        [3, 3, 3, 3, 3, 5, 6, 7],
+        [5, 5, 5, 5, 5, 1, 1, 1],
+    )
