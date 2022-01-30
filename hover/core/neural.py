@@ -14,13 +14,39 @@ from hover.utils.denoising import (
     accuracy_priority,
     identity_adjacency,
 )
+from abc import abstractmethod
 from bokeh.models import Slider, FuncTickFormatter
 from snorkel.classification import cross_entropy_with_probs
 from sklearn.metrics import confusion_matrix
 import numpy as np
 
 
-class VectorNet(Loggable):
+class BaseVectorNet(Loggable):
+
+    """
+    ???+ note "Abstract transfer learning model defining common signatures."
+
+        Intended to define crucial interactions with built-in recipes like `hover.recipes.active_learning()`.
+    """
+
+    @abstractmethod
+    def predict_proba(self, inps):
+        pass
+
+    @abstractmethod
+    def manifold_trajectory(self, inps, method="umap", **kwargs):
+        pass
+
+    @abstractmethod
+    def prepare_loader(self, dataset, key, **kwargs):
+        pass
+
+    @abstractmethod
+    def train(self, train_loader, dev_loader=None, **kwargs):
+        pass
+
+
+class VectorNet(BaseVectorNet):
 
     """
     ???+ note "Simple transfer learning model: a user-supplied vectorizer followed by a neural net."
@@ -357,7 +383,7 @@ class VectorNet(Loggable):
         return accuracy, conf_mat
 
 
-class MultiVectorNet(Loggable):
+class MultiVectorNet(BaseVectorNet):
 
     """
     ???+ note "Ensemble transfer learning model: multiple jointly-trained VectorNet's."
