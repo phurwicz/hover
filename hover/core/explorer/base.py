@@ -3,8 +3,9 @@
 """
 from abc import ABC, abstractmethod
 from collections import OrderedDict, defaultdict
-from bokeh.plotting import figure
+from bokeh.events import SelectionGeometry
 from bokeh.models import ColumnDataSource, Slider
+from bokeh.plotting import figure
 from hover.core import Loggable
 from hover.utils.bokeh_helper import bokeh_hover_tooltip
 from hover.utils.meta.traceback import RichTracebackABCMeta
@@ -298,21 +299,11 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
 
         self._setup_selection_tools()
 
-    def _setup_selection_tools(self):
+    def _setup_subroutine_selection_store(self):
         """
-        ???+ note "Create data structures and callbacks for dynamic selections."
-            Useful for linking and filtering selections across explorers.
+        ???+ note "Subroutine of `_setup_selection_tools`."
+            Setup callbacks that interact with manual selections.
         """
-        from bokeh.events import SelectionGeometry
-
-        # store the last manual selections
-        self._last_selections = {
-            _key: RootUnionFind(set()) for _key in self.sources.keys()
-        }
-        # store commutative, idempotent index filters
-        self._selection_filters = {
-            _key: RootUnionFind(set()) for _key in self.sources.keys()
-        }
 
         def cumulative_selection_flag():
             """
@@ -336,6 +327,18 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
                     self._last_selections[_key].data.update(_selected)
                     _source.selected.indices = list(self._last_selections[_key].data)
 
+        self._store_selection = store_selection
+        self.figure.on_event(
+            SelectionGeometry,
+            lambda event: self._store_selection() if event.final else None,
+        )
+
+    def _setup_subroutine_selection_filter(self):
+        """
+        ???+ note "Subroutine of `_setup_selection_tools`."
+            Setup callbacks that interact with selection filters.
+        """
+
         def trigger_selection_filters(subsets=None):
             """
             Filter selection indices on specified subsets.
@@ -353,13 +356,6 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
                     _selected = _func(_selected, _key)
                 self.sources[_key].selected.indices = list(_selected)
 
-        # keep reference to trigger_store_selection() for testing only
-        self._store_selection = store_selection
-        self.figure.on_event(
-            SelectionGeometry,
-            lambda event: self._store_selection() if event.final else None,
-        )
-
         # keep reference to trigger_selection_filter() for further access
         # for example, toggling filters should call the trigger
         self._trigger_selection_filters = trigger_selection_filters
@@ -367,6 +363,43 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
             SelectionGeometry,
             lambda event: self._trigger_selection_filters() if event.final else None,
         )
+
+    def _setup_subroutine_selection_reset(self):
+        """
+        ???+ note "Subroutine of `_setup_selection_tools`."
+            Setup callbacks for scenarios where the selection should be reset.
+            For example, when the plot sources have changed.
+        """
+
+        def reset_selection():
+            """
+            Clear last manual selections and source selections.
+            Useful during post-processing of refreshed data source.
+            Not directly defined as a method because of `self._last_selections`.
+            """
+            for _key, _source in self.sources.items():
+                self._last_selections[_key].data.clear()
+                _source.selected.indices = []
+
+        self._reset_selection = reset_selection
+
+    def _setup_selection_tools(self):
+        """
+        ???+ note "Create data structures and callbacks for dynamic selections."
+            Useful for linking and filtering selections across explorers.
+        """
+        # store the last manual selections
+        self._last_selections = {
+            _key: RootUnionFind(set()) for _key in self.sources.keys()
+        }
+        # store commutative, idempotent index filters
+        self._selection_filters = {
+            _key: RootUnionFind(set()) for _key in self.sources.keys()
+        }
+
+        self._setup_subroutine_selection_store()
+        self._setup_subroutine_selection_filter()
+        self._setup_subroutine_selection_reset()
 
     def _update_sources(self):
         """
@@ -378,7 +411,9 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
         for _key in self.dfs.keys():
             self.sources[_key].data = self.dfs[_key]
         self._postprocess_sources()
-        # self._activate_search_builtin(verbose=False)
+
+        # reset selections now that source indices may have changed
+        self._reset_selection()
 
         # reset attribute values that couple with sources
         for _key in self.sources.keys():

@@ -367,9 +367,6 @@ class SupervisableDataset(Loggable):
             df_dict = {_v: self.dfs[_k] for _k, _v in subset_mapping.items()}
             explorer._setup_dfs(df_dict)
             explorer._update_sources()
-            # clear selections as previous indices are outdated now
-            for _v in subset_mapping.values():
-                explorer.sources[_v].selected.indices = []
 
         self.update_pusher.on_click(callback_push)
         self._good(
@@ -464,7 +461,7 @@ class SupervisableDataset(Loggable):
 
             # assign indices back to change actual selection
             for subset in subsets:
-                indicies = list(subset_to_indicies[subset])
+                indicies = sorted(list(subset_to_indicies[subset]))
                 explorer.sources[subset].selected.indices = indicies
 
             self._good(
