@@ -26,6 +26,13 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
 
+version }}
+
+    - name: Install tox
+      run: |
+        pip install --upgrade pip
+        pip install --upgrade tox
+
     - name: Install hover
       run: |
         tox -e install
