@@ -28,4 +28,4 @@ jobs:
 
     - name: Install hover
       run: |
-        python setup.py install
+        tox -e install
