@@ -16,7 +16,7 @@ COLOR_GLYPH_TEMPLATE = """
 
 
 def dataset_help_widget():
-    text = 'Dataset Widgets <a href="https://phurwicz.github.io/hover/">Help</a>'
+    text = 'Dataset Widgets <a href="https://phurwicz.github.io/hover/" target="_blank" rel="noreferrer noopener">Help</a>'
     return Div(text=text)
 
 
