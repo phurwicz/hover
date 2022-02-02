@@ -64,7 +64,6 @@ class SupervisableDataset(Loggable):
         test_dictl=None,
         feature_key="feature",
         label_key="label",
-        show_widget_help=False,
     ):
         """
         ???+ note "Create (1) dictl and df forms and (2) the mapping between categorical and string labels."
@@ -76,7 +75,6 @@ class SupervisableDataset(Loggable):
             | `test_dictl`  | `list` | list of dicts holding any **supervised** test data  |
             | `feature_key` | `str`  | the key for the feature in each piece of data |
             | `label_key`   | `str`  | the key for the `**str**` label in supervised data |
-            | `show_widget_help` | `bool` | whether to show widget help when visualized |
         """
         self._info("Initializing...")
 
@@ -120,7 +118,7 @@ class SupervisableDataset(Loggable):
         self.df_deduplicate()
         self.synchronize_df_to_dictl()
         self.compute_feature_index()
-        self.setup_widgets(show_widget_help=show_widget_help)
+        self.setup_widgets()
         # self.setup_label_coding() # redundant if setup_pop_table() immediately calls this again
         self.setup_file_export()
         self.setup_pop_table(width_policy="fit", height_policy="fit")
@@ -226,7 +224,7 @@ class SupervisableDataset(Loggable):
             **kwargs,
         )
 
-    def setup_widgets(self, show_widget_help=False):
+    def setup_widgets(self):
         """
         ???+ note "Create `bokeh` widgets for interactive data management."
 
@@ -324,7 +322,7 @@ class SupervisableDataset(Loggable):
         self.data_committer.on_click(commit_base_callback)
         self.dedup_trigger.on_click(dedup_base_callback)
 
-        self.help_div = dataset_help_widget(verbose=show_widget_help)
+        self.help_div = dataset_help_widget()
 
     def view(self):
         """
