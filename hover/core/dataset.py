@@ -23,11 +23,12 @@ from bokeh.models import (
     ColumnDataSource,
     DataTable,
     TableColumn,
-    CellEditor,
     HTMLTemplateFormatter,
 )
 from .local_config import (
     dataset_help_widget,
+    dataset_default_sel_table_columns,
+    dataset_default_sel_table_kwargs,
     COLOR_GLYPH_TEMPLATE,
     DATASET_SUBSET_FIELD,
 )
@@ -639,29 +640,18 @@ class SupervisableDataset(Loggable):
             | `**kwargs` |        | forwarded to the `DataTable` |
         """
 
-        def auto_columns(df):
-            # CONSIDER: whether to show more columns
-            # return [TableColumn(field=_col, title=_col) for _col in df.columns]
-            # prevent the feature column from edits
-            feature_key = self.__class__.FEATURE_KEY
-            columns = [
-                TableColumn(field=feature_key, title=feature_key, editor=CellEditor()),
-                TableColumn(field="label", title="label"),
-            ]
-            return columns
-
         sel_source = ColumnDataSource(dict())
-        sel_columns = auto_columns(self.dfs["train"])
-        # override: allow selection and editing within the table
-        kwargs.update(dict(selectable="checkbox", editable=True))
-        self.sel_table = DataTable(source=sel_source, columns=sel_columns, **kwargs)
+        sel_columns = dataset_default_sel_table_columns(self.__class__.FEATURE_KEY)
+        table_kwargs = dataset_default_sel_table_kwargs(self.__class__.FEATURE_KEY)
+        table_kwargs.update(kwargs)
+        self.sel_table = DataTable(
+            source=sel_source, columns=sel_columns, **table_kwargs
+        )
 
         def update_selection(selected_df):
             """
             To be triggered as a subroutine of `self.selection_viewer`.
             """
-            # push results to bokeh data source
-            self.sel_table.columns = auto_columns(selected_df)
             sel_source.data = selected_df.to_dict(orient="list")
 
             self._good(
