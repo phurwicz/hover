@@ -1,7 +1,7 @@
 from hover.core.neural import VectorNet
 from hover.utils.common_nn import LogisticRegression
 
-def vecnet_callback(dataset, vectorizer):
+def vecnet_callback(dataset):
     """
     Create a model with vectorizer-NN architecture.
     """
