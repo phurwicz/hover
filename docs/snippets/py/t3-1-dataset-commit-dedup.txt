@@ -6,4 +6,4 @@ show(column(
         dataset.dedup_trigger,
     ),
     dataset.pop_table,
-))
+), notebook_url=notebook_url)

@@ -13,6 +13,8 @@ We turn it into a [`SupervisableDataset`](../../reference/core-dataset/#hover.co
 
 <pre data-executable>
 {!docs/snippets/py/t0-0-dataset-text.txt!}
+
+{!docs/snippets/py/t0-0a-dataset-text-head.txt!}
 </pre>
 
 ???+ info "FAQ"

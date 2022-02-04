@@ -4,6 +4,7 @@
 
 {!docs/snippets/html/thebe.html!}
 {!docs/snippets/markdown/binder-kernel.md!}
+{!docs/snippets/markdown/component-tutorial.md!}
 
 ## **Data Subsets**
 
@@ -13,6 +14,10 @@ We place unlabeled data and labeled data in different subsets: "raw", "train", "
 
 <pre data-executable>
 {!docs/snippets/py/t0-0-dataset-text.txt!}
+</pre><br>
+
+<pre data-executable>
+{!docs/snippets/py/tz-bokeh-notebook.txt!}
 
 {!docs/snippets/py/t3-0-dataset-population-table.txt!}
 </pre><br>

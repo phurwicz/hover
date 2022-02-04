@@ -11,6 +11,3 @@ df_raw["SUBSET"] = "raw"
 
 # this class stores the dataset throught the labeling process
 dataset = SupervisableTextDataset.from_pandas(df_raw, feature_key="text", label_key="label")
-
-# each subset can be accessed as its own DataFrame
-dataset.dfs["raw"].head(5)

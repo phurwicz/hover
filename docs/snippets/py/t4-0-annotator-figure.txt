@@ -1,0 +1,4 @@
+from hover.recipes.subroutine import standard_annotator
+
+annotator = standard_annotator(dataset)
+show(annotator.figure, notebook_url=notebook_url)

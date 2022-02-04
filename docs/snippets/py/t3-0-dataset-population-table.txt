@@ -1,4 +1,1 @@
-from bokeh.io import show, output_notebook
-output_notebook()
-
-show(dataset.pop_table)
+show(dataset.pop_table, notebook_url=notebook_url)

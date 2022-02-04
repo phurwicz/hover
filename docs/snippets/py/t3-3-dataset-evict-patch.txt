@@ -4,4 +4,4 @@ show(column(
         dataset.selection_patcher,
     ),
     dataset.sel_table,
-))
+), notebook_url=notebook_url)

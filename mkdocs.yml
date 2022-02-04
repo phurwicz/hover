@@ -25,6 +25,7 @@ nav:
         - 'Using Recipes': 'pages/tutorial/t1-active-learning.md'
         - 'Server Options': 'pages/tutorial/t2-bokeh-app.md'
         - 'Select and Move Data': 'pages/tutorial/t3-dataset-population-selection.md'
+        - 'Labeling with Annotator': 'pages/tutorial/t4-annotator-dataset-interaction.md'
     - 'Topics':
         #- 'Why Hover': 'pages/topics/what-hover-is.md'
         - 'Managing Data (under work)': 'pages/topics/managing-data.md' # jupyter illustration of ideas & best practices around SupervisableDataset

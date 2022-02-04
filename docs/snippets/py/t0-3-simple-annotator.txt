@@ -1,30 +1,11 @@
 from hover.recipes.stable import simple_annotator, _simple_annotator
+from hover.utils.bokeh_helper import remote_jupyter_proxy_url
 from bokeh.io import show, output_notebook
 
 output_notebook()
 
 # ---------- DEMO CODE: for this documentation page ----------
 # because this demo is remotely hosted, we need to handle proxy
-def remote_jupyter_proxy_url(port):
-    """
-    Callable to configure Bokeh's show method when using a proxy (JupyterHub).
-    """
-    import os
-    import urllib
-
-    base_url = 'https://hub.gke2.mybinder.org/user/'
-    host = urllib.parse.urlparse(base_url).netloc
-
-    if port is None:
-        return host
-
-    service_url_path = os.environ['JUPYTERHUB_SERVICE_PREFIX']
-    proxy_url_path = 'proxy/%d' % port
-
-    user_url = urllib.parse.urljoin(base_url, service_url_path)
-    full_url = urllib.parse.urljoin(user_url, proxy_url_path)
-    return full_url
-
 # static plot showcasing the annotation interface
 _, plot_objects = _simple_annotator(dataset)
 static_plot = plot_objects["annotator"].view()
