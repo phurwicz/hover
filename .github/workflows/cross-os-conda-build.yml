@@ -4,7 +4,7 @@ name: Cross-OS Conda Build
 
 on:
   schedule:
-    - cron: "0 0 * * 1,4"
+    - cron: "0 0 * * 2,5"
   workflow_dispatch:
 
 jobs:
@@ -25,4 +25,6 @@ jobs:
 
       - name: Conda build
         run: |
+          conda update conda
+          conda install conda-build
           conda build --output-folder ./conda-out/ ./conda-recipe/
