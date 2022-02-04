@@ -8,6 +8,7 @@ PY_SNIPPET_HOME = "docs/snippets/py"
 SCRIPT_TO_SNIPPETS = {
     "tutorial-t0": [
         "t0-0-dataset-text.txt",
+        "t0-0a-dataset-text-head.txt",
         "t0-1-vectorizer.txt",
         "t0-2-reduction.txt",
         "t0-3-simple-annotator.txt",
@@ -26,6 +27,16 @@ SCRIPT_TO_SNIPPETS = {
         "t3-1-dataset-commit-dedup.txt",
         "t3-2-dataset-selection-table.txt",
         "t3-3-dataset-evict-patch.txt",
+    ],
+    "tutorial-t4": [
+        "t0-0-dataset-text.txt",
+        "t0-1-vectorizer.txt",
+        "t0-2-reduction.txt",
+        "t4-0-annotator-figure.txt",
+        "t4-1-annotator-subset-toggle.txt",
+        "t4-2-annotator-selection-option.txt",
+        "t4-3-annotator-search-box.txt",
+        "t0-3-simple-annotator.txt",
     ],
 }
 
