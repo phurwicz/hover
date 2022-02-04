@@ -25,7 +25,7 @@ setuptools.setup(
         # interactive/static visualization
         "bokeh>=2.3.3",
         # preprocessors
-        "scikit-learn",
+        "scikit-learn>=0.20.0",
         # neural stuff
         "torch>=1.4.0",
         # data handling
