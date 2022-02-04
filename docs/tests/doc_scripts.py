@@ -19,6 +19,14 @@ SCRIPT_TO_SNIPPETS = {
         "t1-0-vecnet-callback.txt",
         "t1-1-active-learning.txt",
     ],
+    # t2 has no script currently
+    "tutorial-t3": [
+        "t0-0-dataset-text.txt",
+        "t3-0-dataset-population-table.txt",
+        "t3-1-dataset-commit-dedup.txt",
+        "t3-2-dataset-selection-table.txt",
+        "t3-3-dataset-evict-patch.txt",
+    ],
 }
 
 
