@@ -39,6 +39,7 @@ setuptools.setup(
         # utilities
         "tqdm>=4.0",
         "rich>=11.0.0",
+        "deprecated>=1.1.0",
         # dimensionality reduction: UMAP is included
         "umap-learn>=0.3.10",
         # optional: more dimensionality reduction methods
