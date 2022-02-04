@@ -26,10 +26,6 @@
 -   `active_learning` **signature change**
     -   no longer takes `vectorizer` as an input. Instead, `VectorNet`/`MultiVectorNet` produced by `vecnet_callback` will handle the vectorization of raw input data.
 
-## 0.5.1 - Feb 3, 2022
-
-Source code is the same as 0.5.0. Fixed dependency versions and dropped `wrappy` (which is only present in fixture_module) to allow conda-forge support.
-
 ## 0.5.0 - Apr 30, 2021
 
 ### :tada: Features Added

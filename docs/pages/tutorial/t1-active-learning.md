@@ -33,11 +33,13 @@ To utilize active learning, we need to specify how to get a model in the loop.
 ??? info "Custom models"
     It is possible to use a model other than `VectorNet` or its subclass.
 
-    Simply implement the following methods with the same signatures as `VectorNet`:
+    You will need to implement the following methods with the same signatures as `VectorNet`:
 
     -   [`train`](../../reference/core-neural/#hover.core.neural.VectorNet.train)
     -   [`save`](../../reference/core-neural/#hover.core.neural.VectorNet.save)
     -   [`predict_proba`](../../reference/core-neural/#hover.core.neural.VectorNet.predict_proba)
+    -   [`prepare_loader`](../../reference/core-neural/#hover.core.neural.VectorNet.prepare_loader)
+    -   [`manifold_trajectory`](../../reference/core-neural/#hover.core.neural.VectorNet.manifold_trajectory)
 
 <pre data-executable>
 {!docs/snippets/py/t1-0-vecnet-callback.txt!}
