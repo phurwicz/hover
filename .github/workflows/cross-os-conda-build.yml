@@ -27,4 +27,4 @@ jobs:
         run: |
           conda update conda
           conda install conda-build
-          conda build --output-folder ./conda-out/ ./conda-recipe/
+          conda build --channel conda-forge --override-channels --output-folder ./conda-out/ ./conda-recipe/
