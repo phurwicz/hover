@@ -7,7 +7,7 @@ import math
 import numpy as np
 import torch
 from collections import defaultdict
-from snorkel.classification import cross_entropy_with_probs
+from hover.utils.copied.snorkel import cross_entropy_with_probs
 
 
 def loss_coteaching_directed(y_student, y_teacher, target, denoise_rate):

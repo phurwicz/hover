@@ -6,6 +6,7 @@
 import torch
 import torch.nn.functional as F
 from hover.core import Loggable
+from hover.utils.copied.snorkel import cross_entropy_with_probs
 from hover.utils.metrics import classification_accuracy
 from hover.utils.misc import current_time
 from hover.utils.denoising import (
@@ -16,7 +17,6 @@ from hover.utils.denoising import (
 )
 from abc import abstractmethod
 from bokeh.models import Slider, FuncTickFormatter
-from snorkel.classification import cross_entropy_with_probs
 from sklearn.metrics import confusion_matrix
 import numpy as np
 

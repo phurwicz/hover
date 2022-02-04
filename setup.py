@@ -13,7 +13,7 @@ def get_description():
 
 setuptools.setup(
     name="hover",
-    version="0.5.2a",
+    version="0.5.3a",
     description="Label data at scale. Fun and precision come free.",
     long_description=get_description(),
     long_description_content_type="text/markdown",
@@ -23,7 +23,7 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     install_requires=[
         # interactive/static visualization
-        "bokeh",
+        "bokeh>=2.3.3",
         # preprocessors
         "scikit-learn",
         # neural stuff
@@ -39,14 +39,12 @@ setuptools.setup(
         # utilities
         "tqdm>=4.0",
         "rich>=11.0.0",
-        "wasabi>=0.4.0",
-        "wrappy>=0.2.6",
-        "deprecated",
         # dimensionality reduction: UMAP is included
         "umap-learn>=0.3.10",
+        # optional: more dimensionality reduction methods
         # "ivis[cpu]>=1.7",
-        # distant supervision
-        "snorkel>=0.9.8",
+        # optional: distant supervision
+        # "snorkel>=0.9.8",
     ],
     python_requires=">=3.7",
     classifiers=[

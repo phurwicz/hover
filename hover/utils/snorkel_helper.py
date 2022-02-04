@@ -1,8 +1,4 @@
 import uuid
-from snorkel.labeling import (
-    labeling_function as snorkel_lf,
-    LabelingFunction as SnorkelLF,
-)
 
 
 def labeling_function(targets, label_encoder=None, **kwargs):
@@ -20,6 +16,17 @@ def labeling_function(targets, label_encoder=None, **kwargs):
         | `label_encoder` | `dict` | {decoded_label -> encoded_label} mapping, if you also want an original snorkel-style labeling function linked as a `.snorkel` attribute |
         | `**kwargs`      |        | forwarded to `snorkel`'s `labeling_function()` |
     """
+    # lazy import so that the package does not require snorkel
+    # Feb 3, 2022: snorkel's dependency handling is too strict
+    # for other dependencies like NumPy, SciPy, SpaCy, etc.
+    # Let's cite Snorkel and lazy import or copy functions.
+    # DO NOT explicitly depend on Snorkel without confirming
+    # that all builds/tests pass by Anaconda standards, else
+    # we risk having to drop conda support.
+    from snorkel.labeling import (
+        labeling_function as snorkel_lf,
+        LabelingFunction as SnorkelLF,
+    )
 
     def wrapper(func):
         # set up kwargs for Snorkel's LF

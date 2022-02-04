@@ -11,7 +11,7 @@ from .subroutine import (
     standard_softlabel,
 )
 from hover.utils.bokeh_helper import servable
-from wasabi import msg as logger
+from rich.console import Console
 import numpy as np
 
 
@@ -94,6 +94,7 @@ def _active_learning(dataset, vecnet_callback, **kwargs):
     """
     ???+ note "Cousin of active_learning which exposes objects in the layout."
     """
+    console = Console()
     feature_key = dataset.__class__.FEATURE_KEY
 
     # building-block subroutines
@@ -125,7 +126,7 @@ def _active_learning(dataset, vecnet_callback, **kwargs):
         Callback subfunction 1 of 2.
         """
         model_trainer.disabled = True
-        logger.info("Start training... button will be disabled temporarily.")
+        console.print("Start training... button will be disabled temporarily.")
         dataset.setup_label_coding()
 
         train_loader = model.prepare_loader(dataset, "train", smoothing_coeff=0.2)
@@ -137,7 +138,7 @@ def _active_learning(dataset, vecnet_callback, **kwargs):
 
         _ = model.train(train_loader, dev_loader)
         model.save()
-        logger.good("-- 1/2: retrained model")
+        console.print("-- 1/2: retrained model")
 
     def update_softlabel_plot():
         """
@@ -179,7 +180,7 @@ def _active_learning(dataset, vecnet_callback, **kwargs):
         softlabel._dynamic_callbacks["adjust_patch_slider"]()
         softlabel._update_sources()
         model_trainer.disabled = False
-        logger.good("-- 2/2: updated predictions. Training button is re-enabled.")
+        console.print("-- 2/2: updated predictions. Training button is re-enabled.")
 
     def callback_sequence():
         """
