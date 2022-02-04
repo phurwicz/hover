@@ -1,0 +1,9 @@
+from bokeh.layouts import row, column
+
+show(column(
+    row(
+        dataset.data_committer,
+        dataset.dedup_trigger,
+    ),
+    dataset.pop_table,
+))

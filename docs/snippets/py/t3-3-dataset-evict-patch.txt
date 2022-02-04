@@ -1,0 +1,7 @@
+show(column(
+    row(
+        dataset.selection_evictor,
+        dataset.selection_patcher,
+    ),
+    dataset.sel_table,
+))
