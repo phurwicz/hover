@@ -1,12 +1,6 @@
-variables:
-  - name: name
-    value: "hover"
-  - name: version
-    value: "0.5.3a"
-
 package:
-  name: ${{ variables.name|lower }}
-  version: ${{ variables.version }}
+  name: hover
+  version: "0.5.3a"
 
 source:
   git_url: https://github.com/phurwicz/hover
