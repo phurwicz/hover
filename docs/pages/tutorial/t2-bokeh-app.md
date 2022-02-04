@@ -24,7 +24,9 @@ show(handle) # notebook_url='http://localhost:8888'
 ???+ tip "Pros & Cons"
     This inline Jupyter mode can integrate particularly well with your notebook workflow. For example, when your are (tentatively) done with annotation, the `SupervisableDataset` can be accessed directly in the notebook, rather than exported to a file and loaded back.
 
-    The inline mode is highly recommended for local usage. However, with a remote Jupyter server, it has trouble loading JS libraries or accessing implicit `bokeh server` ports.
+    The inline mode is highly recommended for local usage.
+    -   On the contrary, with a remote Jupyter server, it may have trouble displaying the plots.
+        -   this is due to failure of loading JavaScript libraries or accessing implicit `bokeh server` ports.
 
 ## **Option 2: Command Line**
 
