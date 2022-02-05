@@ -21,8 +21,6 @@ When we use lasso or polygon select, we are describing a shape. Sometimes that s
 Just like `annotator`, `finder` has search widgets. But unlike `annotator`, `finder` has a **filter toggle** which can directly **intersect** *what we selected* with *what meets the search criteria*.
 
 <pre data-executable>
-{!docs/snippets/py/tz-bokeh-notebook.txt!}
-
 {!docs/snippets/py/t5-0-finder-toggle.txt!}
 </pre><br>
 

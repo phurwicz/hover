@@ -19,8 +19,6 @@
 The core of the annotator is a scatter plot and labeling widgets:
 
 <pre data-executable>
-{!docs/snippets/py/tz-bokeh-notebook.txt!}
-
 {!docs/snippets/py/t4-0-annotator-basics.txt!}
 </pre><br>
 
