@@ -51,6 +51,8 @@ To utilize active learning, we need to specify how to get a model in the loop.
 
 <pre data-executable>
 {!docs/snippets/py/t1-0-vecnet-callback.txt!}
+
+{!docs/snippets/py/t1-0a-vecnet-callback-print.txt!}
 </pre>
 
 Note how the callback dynamically takes `dataset.classes`, which means the model architecture will adapt when we add classes during annotation.
