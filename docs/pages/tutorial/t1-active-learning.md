@@ -5,9 +5,15 @@
 {!docs/snippets/html/thebe.html!}
 {!docs/snippets/markdown/binder-kernel.md!}
 
+## **Fundamentals**
+
+Hover `recipe`s are functions that take a `SupervisableDataset` and return an annotation interface.
+
+The `SupervisableDataset` is assumed to have some data and embeddings.
+
 ## **Recap: Data & Embeddings**
 
-This is exactly the same as in the [quickstart](../t0-quickstart/):
+Let's preprare a dataset with embeddings. This is exactly the same as in the [quickstart](../t0-quickstart/):
 
 <pre data-executable>
 {!docs/snippets/py/t0-0-dataset-text.txt!}
@@ -22,7 +28,9 @@ This is exactly the same as in the [quickstart](../t0-quickstart/):
 </pre>
 
 
-## **Use Callbacks to Train a Model**
+## **Recipe-Specific Ingredient**
+
+Each recipe has different functionalities and potentially different signature.
 
 To utilize active learning, we need to specify how to get a model in the loop.
 
