@@ -2,9 +2,8 @@
 ???+ note "High-level functions to produce an interactive annotation interface."
     Stable recipes whose function signatures should almost never change in the future.
 """
-from bokeh.layouts import row
 from hover.utils.bokeh_helper import servable
-from .subroutine import standard_annotator, standard_finder
+from .subroutine import recipe_layout, standard_annotator, standard_finder
 
 
 @servable(title="Simple Annotator")
@@ -27,14 +26,14 @@ def simple_annotator(dataset, **kwargs):
     return layout
 
 
-def _simple_annotator(dataset, **kwargs):
+def _simple_annotator(dataset, layout_style="horizontal", **kwargs):
     """
     ???+ note "Cousin of simple_annotator which exposes objects in the layout."
     """
     annotator = standard_annotator(dataset, **kwargs)
 
     sidebar = dataset.view()
-    layout = row(sidebar, annotator.view())
+    layout = recipe_layout(sidebar, annotator.view(), style=layout_style)
 
     objects = {"dataset": dataset, "annotator": annotator, "sidebar": sidebar}
     return layout, objects
@@ -60,7 +59,7 @@ def linked_annotator(dataset, **kwargs):
     return layout
 
 
-def _linked_annotator(dataset, **kwargs):
+def _linked_annotator(dataset, layout_style="horizontal", **kwargs):
     """
     ???+ note "Cousin of linked_annotator which exposes objects in the layout."
     """
@@ -74,7 +73,7 @@ def _linked_annotator(dataset, **kwargs):
         finder.link_selection(_key, annotator, _key)
 
     sidebar = dataset.view()
-    layout = row(sidebar, finder.view(), annotator.view())
+    layout = recipe_layout(sidebar, finder.view(), annotator.view(), style=layout_style)
 
     objects = {
         "dataset": dataset,

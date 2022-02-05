@@ -6,6 +6,7 @@
     -   functions for creating individual standard explorers appropriate for a dataset.
 """
 import hover.core.explorer as hovex
+from bokeh.layouts import row, column
 
 
 EXPLORER_CATALOG = {
@@ -35,6 +36,23 @@ EXPLORER_CATALOG = {
         "image": hovex.BokehImageSnorkel,
     },
 }
+
+
+def recipe_layout(*components, style="horizontal"):
+    """
+    ???+ note "Create a recipe-level layout of bokeh objects."
+
+        | Param      | Type     | Description                          |
+        | :--------- | :------- | :----------------------------------- |
+        | `*components` | `bokeh` objects | objects to be plotted      |
+        | `style`    | `str`    | "horizontal" or "vertical"           |
+    """
+    if style == "horizontal":
+        return row(*components)
+    elif style == "vertical":
+        return column(*components)
+    else:
+        raise ValueError(f"Unexpected layout style {style}")
 
 
 def get_explorer_class(task, feature):

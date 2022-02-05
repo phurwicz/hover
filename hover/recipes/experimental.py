@@ -2,9 +2,10 @@
 ???+ note "High-level functions to produce an interactive annotation interface."
     Experimental recipes whose function signatures might change significantly in the future. Use with caution.
 """
-from bokeh.layouts import row, column
 from bokeh.models import Button
+from bokeh.layouts import column
 from .subroutine import (
+    recipe_layout,
     standard_annotator,
     standard_finder,
     standard_snorkel,
@@ -37,7 +38,7 @@ def snorkel_crosscheck(dataset, lf_list, **kwargs):
     return layout
 
 
-def _snorkel_crosscheck(dataset, lf_list, **kwargs):
+def _snorkel_crosscheck(dataset, lf_list, layout_style="horizontal", **kwargs):
     """
     ???+ note "Cousin of snorkel_crosscheck which exposes objects in the layout."
     """
@@ -57,7 +58,9 @@ def _snorkel_crosscheck(dataset, lf_list, **kwargs):
     snorkel.link_selection("labeled", annotator, "dev")
 
     sidebar = dataset.view()
-    layout = row(sidebar, snorkel.view(), annotator.view())
+    layout = recipe_layout(
+        sidebar, snorkel.view(), annotator.view(), style=layout_style
+    )
 
     objects = {
         "dataset": dataset,
@@ -90,7 +93,7 @@ def active_learning(dataset, vecnet_callback, **kwargs):
     return layout
 
 
-def _active_learning(dataset, vecnet_callback, **kwargs):
+def _active_learning(dataset, vecnet_callback, layout_style="horizontal", **kwargs):
     """
     ???+ note "Cousin of active_learning which exposes objects in the layout."
     """
@@ -191,7 +194,11 @@ def _active_learning(dataset, vecnet_callback, **kwargs):
 
     model_trainer.on_click(callback_sequence)
     sidebar = column(model_trainer, model.view(), dataset.view())
-    layout = row(sidebar, *[_plot.view() for _plot in [softlabel, annotator, finder]])
+    layout = recipe_layout(
+        sidebar,
+        *[_plot.view() for _plot in [softlabel, annotator, finder]],
+        style=layout_style
+    )
 
     objects = {
         "dataset": dataset,
