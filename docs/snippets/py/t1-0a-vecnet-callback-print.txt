@@ -1,0 +1,6 @@
+vecnet = vecnet_callback(dataset)
+
+# predict_proba accepts individual strings or list
+# text -> vector -> class probabilities
+print(vecnet.predict_proba(text))
+print(vecnet.predict_proba([text]))

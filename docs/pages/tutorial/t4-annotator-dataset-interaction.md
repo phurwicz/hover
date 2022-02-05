@@ -1,6 +1,6 @@
 > `Annotator` is an `explorer` which provides a map of your data colored by labels.
 >
-> :speedboat: Let's walk through its components and how they interact with the `SupervisableDataset`.
+> :speedboat: Let's walk through its components and how they interact with the `dataset`.
 >
 > -   {== You will find many of these components again in other `explorer`s. ==}
 
@@ -68,16 +68,16 @@ In a particular kind of plots called `Finder` (see later in the tutorials), the 
 
 ## **The Plot and The Dataset**
 
-When we apply labels through the annotator plot, it's acutally the `SupervisableDataset` behind the plot that gets immediately updated. The plot itself is not in direct sync with the dataset, which is a design choice for performance. Instead, we will use a trigger called `PUSH` for updating the data entries to the plot.
+When we apply labels through the annotator plot, it's acutally the `dataset` behind the plot that gets immediately updated. The plot itself is not in direct sync with the dataset, which is a design choice for performance. Instead, we will use a trigger called `PUSH` for updating the data entries to the plot.
 
 ### **PUSH: synchronize from dataset to plots**
 
-Below is the interface from the quickstart, where you can find a green "Push" button:
-
-{!docs/snippets/markdown/jupyterlab-js-issue.md!}
+Below is the full interface of the `dataset`, where you can find a green "Push" button:
 
 <pre data-executable>
-{!docs/snippets/py/t0-3-simple-annotator.txt!}
+{!docs/snippets/py/t4-4-dataset-view.txt!}
 </pre>
+
+In a built-in `recipe`, the "Push" button will update the latest data to every `explorer` linked to the `dataset`.
 
 {!docs/snippets/html/stylesheet.html!}
