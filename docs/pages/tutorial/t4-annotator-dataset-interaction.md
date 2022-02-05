@@ -1,26 +1,30 @@
 > `Annotator` is an `explorer` which provides a map of your data colored by labels.
 >
-> :speedboat: Let's walk through its visual components and how they interact with the `SupervisableDataset`.
+> :speedboat: Let's walk through its components and how they interact with the `SupervisableDataset`.
+>
+> -   {== You will find many of these components again in other `explorer`s. ==}
 
 {!docs/snippets/html/thebe.html!}
 {!docs/snippets/markdown/binder-kernel.md!}
 {!docs/snippets/markdown/component-tutorial.md!}
 
+## **Preparation**
+
+{!docs/snippets/markdown/dataset-prep.md!}
+
 ## **Scatter Plot: Semantically Similar Points are Close Together**
 
 `hover` labels data points in bulk, which requires selecting groups of homogeneous data.
 
-Embeddings are often helpful but not perfect. This is why we have tooltips that show the detail of each point on mouse hover:
+The core of the annotator is a scatter plot and labeling widgets:
 
 <pre data-executable>
-{!docs/snippets/py/t0-0-dataset-text.txt!}
+{!docs/snippets/py/tz-bokeh-notebook.txt!}
 
-{!docs/snippets/py/t0-1-vectorizer.txt!}
-
-{!docs/snippets/py/t0-2-reduction.txt!}
-
-{!docs/snippets/py/t4-0-annotator-figure.txt!}
+{!docs/snippets/py/t4-0-annotator-basics.txt!}
 </pre><br>
+
+Embeddings are helpful but rarely perfect. This is why we have tooltips that show the detail of each point on mouse hover, allowing us to inspect points, discover patterns, and come up with new labels on the fly.
 
 ### **Show & Hide Subsets**
 
@@ -64,9 +68,11 @@ You may specify a *positive* regular expression to look for and/or a *negative* 
 
 In a particular kind of plots called `Finder` (see later in the tutorials), the search widget can directly operate on your selection as a filter.
 
-## **PUSH: synchronize from dataset to plots**
+## **The Plot and The Dataset**
 
-The plotted data is not in direct sync with the underlying dataset, which is a design choice for performance. Instead we will use a trigger called `PUSH` for this synchronization.
+When we apply labels through the annotator plot, it's acutally the `SupervisableDataset` behind the plot that gets immediately updated. The plot itself is not in direct sync with the dataset, which is a design choice for performance. Instead, we will use a trigger called `PUSH` for updating the data entries to the plot.
+
+### **PUSH: synchronize from dataset to plots**
 
 Below is the interface from the quickstart, where you can find a green "Push" button:
 
