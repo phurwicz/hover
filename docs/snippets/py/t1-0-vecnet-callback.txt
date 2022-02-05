@@ -10,7 +10,7 @@ def vecnet_callback(dataset):
     vecnet = VectorNet(vectorizer, LogisticRegression, "model.pt", dataset.classes)
     return vecnet
 
-vecnet = vecnet_callback(dataset, vectorizer)
+vecnet = vecnet_callback(dataset)
 
 # predict_proba accepts individual strings or list
 # text -> vector -> class probabilities
