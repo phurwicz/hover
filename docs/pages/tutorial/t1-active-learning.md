@@ -58,18 +58,21 @@ Now we invoke the `active_learning` recipe.
     Here are a few common recipes:
 
     === "active_learning"
+
         ::: hover.recipes.experimental.active_learning
             rendering:
               show_root_heading: false
               show_root_toc_entry: false
 
     === "simple_annotator"
+
         ::: hover.recipes.stable.simple_annotator
             rendering:
               show_root_heading: false
               show_root_toc_entry: false
 
     === "linked_annotator"
+
         ::: hover.recipes.stable.linked_annotator
             rendering:
               show_root_heading: false
