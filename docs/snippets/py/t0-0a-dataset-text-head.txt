@@ -1,2 +1,0 @@
-# each subset can be accessed as its own DataFrame
-dataset.dfs["raw"].head(5)
