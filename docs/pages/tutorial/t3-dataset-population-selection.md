@@ -1,6 +1,6 @@
 > `SupervisableDataset` holds your data throughout the labeling process.
 >
-> :speedboat: Let's take a look at its common usage.
+> :speedboat: Let's take a look at its core mechanisms.
 
 {!docs/snippets/html/thebe.html!}
 {!docs/snippets/markdown/binder-kernel.md!}
