@@ -8,7 +8,6 @@ PY_SNIPPET_HOME = "docs/snippets/py"
 SCRIPT_TO_SNIPPETS = {
     "tutorial-t0": [
         "t0-0-dataset-text.txt",
-        "t0-0a-dataset-text-head.txt",
         "t0-1-vectorizer.txt",
         "t0-2-reduction.txt",
         "t0-3-simple-annotator.txt",
@@ -32,11 +31,20 @@ SCRIPT_TO_SNIPPETS = {
         "t0-0-dataset-text.txt",
         "t0-1-vectorizer.txt",
         "t0-2-reduction.txt",
-        "t4-0-annotator-figure.txt",
+        "tz-bokeh-notebook.txt",
+        "t4-0-annotator-basics.txt",
         "t4-1-annotator-subset-toggle.txt",
         "t4-2-annotator-selection-option.txt",
         "t4-3-annotator-search-box.txt",
         "t0-3-simple-annotator.txt",
+    ],
+    "tutorial-t5": [
+        "t0-0-dataset-text.txt",
+        "t0-1-vectorizer.txt",
+        "t0-2-reduction.txt",
+        "tz-bokeh-notebook.txt",
+        "t5-0-finder-toggle.txt",
+        "t5-1-finder-figure.txt",
     ],
 }
 
