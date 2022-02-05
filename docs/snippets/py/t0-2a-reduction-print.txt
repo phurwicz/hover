@@ -1,0 +1,3 @@
+# What we did adds 'x' and 'y' columns to the DataFrames in dataset.dfs
+# One could alternatively pre-compute these columns using any approach
+dataset.dfs["raw"].head(5)

@@ -1,0 +1,4 @@
+show(column(
+    row(finder.search_pos, finder.search_neg),
+    finder.figure,
+), notebook_url=notebook_url)
