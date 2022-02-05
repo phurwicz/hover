@@ -27,9 +27,9 @@ nav:
         - 'Dataset Mechanisms': 'pages/tutorial/t3-dataset-population-selection.md'
         - 'Annotator & Plot Tools': 'pages/tutorial/t4-annotator-dataset-interaction.md'
         - 'Finder & Selection Filter': 'pages/tutorial/t5-finder-filter.md'
-    - 'Topics':
+    #- 'Topics':
         #- 'Why Hover': 'pages/topics/what-hover-is.md'
-        - 'Managing Data (under work)': 'pages/topics/managing-data.md' # jupyter illustration of ideas & best practices around SupervisableDataset
+        #- 'Managing Data (under work)': 'pages/topics/managing-data.md' # jupyter illustration of ideas & best practices around SupervisableDataset
         #- 'Customized Usage':
         #    - 'API Levels': 'pages/topics/api-levels.md' # discuss the interaction between recipe / dataset / explorer
         #    - 'Custom Recipe': 'pages/topics/custom-recipe.md' # discuss the caveats when making a recipe
