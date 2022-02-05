@@ -36,15 +36,24 @@ SCRIPT_TO_SNIPPETS = {
         "t4-1-annotator-subset-toggle.txt",
         "t4-2-annotator-selection-option.txt",
         "t4-3-annotator-search-box.txt",
-        "t0-3-simple-annotator.txt",
+        "t4-4-dataset-view.txt",
     ],
     "tutorial-t5": [
         "t0-0-dataset-text.txt",
         "t0-1-vectorizer.txt",
         "t0-2-reduction.txt",
         "tz-bokeh-notebook.txt",
-        "t5-0-finder-toggle.txt",
+        "t5-0-finder-filter.txt",
         "t5-1-finder-figure.txt",
+    ],
+    "tutorial-t6": [
+        "t0-0-dataset-text.txt",
+        "t0-1-vectorizer.txt",
+        "t0-2-reduction.txt",
+        "tz-bokeh-notebook.txt",
+        "t6-0-softlabel-figure.txt",
+        "t6-1-softlabel-filter.txt",
+        "t6-2-active-learning-real.txt",
     ],
 }
 
