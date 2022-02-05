@@ -14,7 +14,7 @@ We turn it into a [`SupervisableDataset`](../../reference/core-dataset/#hover.co
 <pre data-executable>
 {!docs/snippets/py/t0-0-dataset-text.txt!}
 
-{!docs/snippets/py/t0-0a-dataset-text-head.txt!}
+{!docs/snippets/py/t0-0a-dataset-text-print.txt!}
 </pre>
 
 ???+ info "FAQ"
@@ -51,6 +51,8 @@ In particular, let's define a `data -> embedding vector` function.
 
 <pre data-executable>
 {!docs/snippets/py/t0-1-vectorizer.txt!}
+
+{!docs/snippets/py/t0-1-vectorizer-print.txt!}
 </pre>
 
 ???+ tip "Tips"
@@ -121,6 +123,8 @@ Hover has built-in methods for calling [umap](https://umap-learn.readthedocs.io/
 
 <pre data-executable>
 {!docs/snippets/py/t0-2-reduction.txt!}
+
+{!docs/snippets/py/t0-2-reduction-print.txt!}
 </pre>
 
 

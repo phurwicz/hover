@@ -9,3 +9,9 @@ As always, start with a 2D-embedded dataset:
 
 {!docs/snippets/py/t0-2-reduction.txt!}
 </pre><br>
+
+Also, configure bokeh to plot to this page:
+
+<pre data-executable>
+{!docs/snippets/py/tz-bokeh-notebook.txt!}
+</pre><br>
