@@ -57,7 +57,8 @@ markdown_extensions:
   - pymdownx.details
   - pymdownx.emoji
   - pymdownx.superfences
-  - pymdownx.tabbed
+  - pymdownx.tabbed:
+      alternate_style: true
 
 plugins:
   - macros
