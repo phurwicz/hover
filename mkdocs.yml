@@ -28,9 +28,11 @@ nav:
         - 'Annotator & Plot Tools': 'pages/tutorial/t4-annotator-dataset-interaction.md'
         - 'Finder & Selection Filter': 'pages/tutorial/t5-finder-filter.md'
         - 'Soft Label & Joint Filters': 'pages/tutorial/t6-softlabel-joint-filter.md'
-    #- 'Topics':
+    - 'Topics':
+        - 'Data Type: Image': 'pages/topics/datatype-image.md'
+        - 'Data Type: Audio': 'pages/topics/datatype-audio.md'
+        - 'Data Type: Multimodal': 'pages/topics/datatype-multimodal.md'
         #- 'Why Hover': 'pages/topics/what-hover-is.md'
-        #- 'Managing Data (under work)': 'pages/topics/managing-data.md' # jupyter illustration of ideas & best practices around SupervisableDataset
         #- 'Customized Usage':
         #    - 'API Levels': 'pages/topics/api-levels.md' # discuss the interaction between recipe / dataset / explorer
         #    - 'Custom Recipe': 'pages/topics/custom-recipe.md' # discuss the caveats when making a recipe
