@@ -20,7 +20,7 @@ import numpy as np
 def snorkel_crosscheck(dataset, lf_list, **kwargs):
     """
     ???+ note "Display the dataset for annotation, cross-checking with labeling functions."
-        Use the dev set to check labeling functions; use the labeling functions to hint at potential annotation.
+        Use the train set to check labeling functions; use the labeling functions to hint at potential annotation.
 
         | Param     | Type     | Description                          |
         | :-------- | :------- | :----------------------------------- |
@@ -55,7 +55,7 @@ def _snorkel_crosscheck(dataset, lf_list, layout_style="horizontal", **kwargs):
     snorkel.link_xy_range(annotator)
     snorkel.link_selection_options(annotator)
     snorkel.link_selection("raw", annotator, "raw")
-    snorkel.link_selection("labeled", annotator, "dev")
+    snorkel.link_selection("labeled", annotator, "train")
 
     sidebar = dataset.view()
     layout = recipe_layout(

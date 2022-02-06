@@ -156,7 +156,7 @@ def standard_snorkel(dataset, **kwargs):
 
         The snorkel explorer has a few standard interactions with the dataset:
 
-        -   read "raw" and "dev" subsets of the dataset, interpreting "dev" as "labeled"
+        -   read "raw" and "train" subsets of the dataset, interpreting "train" as "labeled"
         -   subscribe to all updates in those subsets
 
         | Param      | Type     | Description                          |
@@ -171,14 +171,14 @@ def standard_snorkel(dataset, **kwargs):
     # first "static" version of the plot
     snorkel = explorer_cls.from_dataset(
         dataset,
-        {"raw": "raw", "dev": "labeled"},
+        {"raw": "raw", "train": "labeled"},
         title="Snorkel: square for correct, x for incorrect, + for missed, o for hit; click on legends to hide or show LF",
         **kwargs,
     )
     snorkel.plot()
 
     # subscribe to dataset widgets
-    dataset.subscribe_update_push(snorkel, {"raw": "raw", "dev": "labeled"})
+    dataset.subscribe_update_push(snorkel, {"raw": "raw", "train": "labeled"})
     return snorkel
 
 
