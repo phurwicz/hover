@@ -467,8 +467,7 @@ class SupervisableDataset(Loggable):
             self._good(
                 f"Selection table: evicted {len(raw_indicies)} points from selection."
             )
-            # un-toggle within the selection table, then refresh the table
-            self.sel_table.source.selected.indices = []
+            # refresh the selection table
             callback_view()
 
         self.selection_viewer.on_click(callback_view)
