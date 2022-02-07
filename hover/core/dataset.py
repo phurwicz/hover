@@ -316,6 +316,7 @@ class SupervisableDataset(Loggable):
             self.dedup_trigger.disabled = True
             # empty the selection table, then allow PATCH and EVICT
             self.sel_table.source.data = dict()
+            self.sel_table.source.selected.indices = []
             self.selection_patcher.disabled = False
             self.selection_evictor.disabled = False
 
@@ -436,7 +437,7 @@ class SupervisableDataset(Loggable):
         def callback_view():
             sel_slices = []
             for subset in subsets:
-                selected_idx = explorer.sources[subset].selected.indices
+                selected_idx = sorted(explorer.sources[subset].selected.indices)
                 sub_slice = explorer.dfs[subset].iloc[selected_idx]
                 sel_slices.append(sub_slice)
 
@@ -653,6 +654,8 @@ class SupervisableDataset(Loggable):
             To be triggered as a subroutine of `self.selection_viewer`.
             """
             sel_source.data = selected_df.to_dict(orient="list")
+            # now that selection table has changed, clear sub-selection
+            sel_source.selected.indices = []
 
             self._good(
                 f"Selection table: latest selection with {selected_df.shape[0]} entries."
