@@ -3,7 +3,7 @@
 """
 import numpy as np
 from collections import OrderedDict
-from bokeh.models import CDSView, IndexFilter
+from bokeh.models import CDSView, IndexFilter, Dropdown, Button
 from bokeh.palettes import Category20
 from bokeh.layouts import row
 from hover import module_config
@@ -528,8 +528,8 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
             | `**kwargs`  |        | forwarded to `bokeh.plotting.figure` |
         """
         super().__init__(df_dict, **kwargs)
-
-        self.palette = Category20[20]
+        self.palette = list(Category20[20])
+        self._subscribed_lf_list = None
 
     def _setup_sources(self):
         """
@@ -539,19 +539,76 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
         self.lf_data = OrderedDict()
         super()._setup_sources()
 
+    @property
+    def subscribed_lf_list(self):
+        """
+        ???+ note "A list of LFs to which the explorer can be lazily synchronized."
+
+            Intended for recipes where the user can modify LFs without having access to the explorer.
+        """
+        return self._subscribed_lf_list
+
+    @subscribed_lf_list.setter
+    def subscribed_lf_list(self, lf_list):
+        """
+        ???+ note "Subscribe to a list of LFs."
+        """
+        assert isinstance(lf_list, list), f"Expected a list of LFs, got {lf_list}"
+        if self.subscribed_lf_list is None:
+            self._good("Subscribed to a labeling function list BY REFERENCE.")
+        else:
+            self._warn("Changing labeling function list subscription.")
+        self._subscribed_lf_list = lf_list
+
     def _setup_widgets(self):
         """
         ???+ note "Create labeling function support widgets and assign Python callbacks."
         """
-        from bokeh.models import Dropdown, Button
-
         super()._setup_widgets()
+        self._subroutine_setup_lf_list_refresher()
+        self._subroutine_setup_lf_apply_trigger()
+        self._subroutine_setup_lf_filter_trigger()
 
+    def _subroutine_setup_lf_list_refresher(self):
+        """
+        ???+ note "Create widget for refreshing LF list and replotting."
+        """
         self.lf_list_refresher = Button(
             label="Refresh Functions",
             height_policy="fit",
             width_policy="min",
         )
+
+        def callback_refresh_lf_plot():
+            """
+            Re-plot according to subscribed_lf_list.
+            """
+            if self.subscribed_lf_list is None:
+                self._warn("cannot refresh LF plot without subscribed LF list.")
+                return
+            lf_names_to_keep = set([_lf.name for _lf in self.subscribed_lf_list])
+            lf_names_to_drop = set(self.lf_data.keys()).difference(lf_names_to_keep)
+            for _lf_name in lf_names_to_drop:
+                self.unplot_lf(_lf_name)
+            for _lf in self.subscribed_lf_list:
+                self.plot_lf(_lf)
+
+        def callback_refresh_lf_menu():
+            """
+            The menu was assigned by value and needs to stay consistent with LF updates.
+            To be triggered in self.plot_new_lf() and self.unplot_lf().
+            """
+            self.lf_apply_trigger.menu = list(self.lf_data.keys())
+            self.lf_filter_trigger.menu = list(self.lf_data.keys())
+
+        self._callback_refresh_lf_menu = callback_refresh_lf_menu
+        self.lf_list_refresher.on_click(callback_refresh_lf_plot)
+        # self.lf_list_refresher.on_click(callback_refresh_lf_menu)
+
+    def _subroutine_setup_lf_apply_trigger(self):
+        """
+        ???+ note "Create widget for applying LFs on data."
+        """
         self.lf_apply_trigger = Dropdown(
             label="Apply Labels",
             button_type="warning",
@@ -559,20 +616,6 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
             height_policy="fit",
             width_policy="min",
         )
-        self.lf_filter_trigger = Dropdown(
-            label="Use as Selection Filter",
-            button_type="primary",
-            menu=list(self.lf_data.keys()),
-            height_policy="fit",
-            width_policy="min",
-        )
-
-        def callback_refresh():
-            """
-            The menu was assigned by value and needs to stay consistent with LF updates.
-            """
-            self.lf_apply_trigger.menu = list(self.lf_data.keys())
-            self.lf_filter_trigger.menu = list(self.lf_data.keys())
 
         def callback_apply(event):
             """
@@ -605,6 +648,20 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
                 f"applied {num_nontrivial}/{len(labels)} annotations by func {lf.name}"
             )
 
+        self.lf_apply_trigger.on_click(callback_apply)
+
+    def _subroutine_setup_lf_filter_trigger(self):
+        """
+        ???+ note "Create widget for using LFs to filter data."
+        """
+        self.lf_filter_trigger = Dropdown(
+            label="Use as Selection Filter",
+            button_type="primary",
+            menu=list(self.lf_data.keys()),
+            height_policy="fit",
+            width_policy="min",
+        )
+
         def callback_filter(event):
             """
             A callback on clicking the 'self.lf_filter_trigger' button.
@@ -624,9 +681,6 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
                 ]
                 self.sources[_key].selected.indices = _kept
 
-        self._callback_refresh_lf = callback_refresh
-        self.lf_list_refresher.on_click(callback_refresh)
-        self.lf_apply_trigger.on_click(callback_apply)
         self.lf_filter_trigger.on_click(callback_filter)
 
     def _postprocess_sources(self):
@@ -655,6 +709,9 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
         """
         # keep track of added LF
         if lf.name in self.lf_data:
+            # skip if the functions are identical
+            if self.lf_data[lf.name]["lf"] is lf:
+                return
             # overwrite the function and refresh glyphs
             self.lf_data[lf.name]["lf"] = lf
             self.refresh_glyphs(lf.name)
@@ -662,17 +719,61 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
 
         self.plot_new_lf(lf, **kwargs)
 
+    def unplot_lf(self, lf_name):
+        """
+        ???+ note "Remove a single labeling function from the plot."
+            | Param     | Type   | Description               |
+            | :-------- | :----- | :------------------------ |
+            | `lf_name` | `str`  | name of labeling function |
+        """
+        assert lf_name in self.lf_data, f"trying to remove non-existing LF: {lf_name}"
+
+        data_dict = self.lf_data.pop(lf_name)
+        lf, glyph_dict = data_dict["lf"], data_dict["glyphs"]
+        assert lf.name == lf_name, f"LF name mismatch: {lf.name} vs {lf_name}"
+
+        # remove from legend, checking that there is exactly one entry
+        legend_idx_to_pop = None
+        for i, _item in enumerate(self.figure.legend.items):
+            _label = _item.label.get("value", "")
+            if _label == lf_name:
+                assert legend_idx_to_pop is None, f"Legend collision: {lf_name}"
+                legend_idx_to_pop = i
+        assert isinstance(legend_idx_to_pop, int), f"Missing from legend: {lf_name}"
+        self.figure.legend.items.pop(legend_idx_to_pop)
+
+        # remove from renderers
+        # get indices to pop in ascending order
+        renderer_indices_to_pop = []
+        for i, _renderer in enumerate(self.figure.renderers):
+            if lf_name in _renderer.glyph.tags:
+                renderer_indices_to_pop.append(i)
+        # check that the number of glyphs founded matches expected value
+        num_fnd, num_exp = len(renderer_indices_to_pop), len(glyph_dict)
+        assert num_fnd == num_exp, f"Glyph mismatch: {num_fnd} vs. {num_exp}"
+        # process indices in descending order to avoid shifts
+        for i in renderer_indices_to_pop[::-1]:
+            self.figure.renderers.pop(i)
+
+        # return color to palette so that another LF can use it
+        self.palette.append(data_dict["color"])
+
+        self._callback_refresh_lf_menu()
+        self._good(f"Unplotted LF {lf_name}")
+
     def refresh_glyphs(self, lf_name):
         """
         ???+ note "Refresh the glyph(s) of a single LF based on its name."
-            | Param   | Type   | Description               |
-            | :------ | :----- | :------------------------ |
-            | `lf`    | `str`  | name of labeling function |
+            | Param     | Type   | Description               |
+            | :-------- | :----- | :------------------------ |
+            | `lf_name` | `str`  | name of labeling function |
 
             Assumes that specified C/I/M/H glyphs are stored.
             1. re-compute L_raw/L_labeled and CDSViews
             2. update the view for each glyph
         """
+        assert lf_name in self.lf_data, f"trying to refresh non-existing LF: {lf_name}"
+
         lf = self.lf_data[lf_name]["lf"]
         L_raw = self.dfs["raw"].apply(lf, axis=1).values
         L_labeled = self.dfs["labeled"].apply(lf, axis=1).values
@@ -690,6 +791,8 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
         if "H" in glyph_codes:
             h_view = self._view_hit(L_raw)
             self.lf_data[lf_name]["glyphs"]["H"].view = h_view
+
+        self._good(f"Refreshed the glyphs of LF {lf_name}")
 
     def plot_new_lf(
         self, lf, L_raw=None, L_labeled=None, include=("C", "I", "M"), **kwargs
@@ -710,6 +813,9 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
             - L_labeled: numpy.ndarray
             - include: subsets to show, which can be correct(C)/incorrect(I)/missed(M)/hit(H).
         """
+        # existing LF should not trigger this method
+        assert lf.name not in self.lf_data, f"LF collision: {lf.name}"
+
         # calculate predicted labels if not provided
         if L_raw is None:
             L_raw = self.dfs["raw"].apply(lf, axis=1).values
@@ -717,10 +823,9 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
             L_labeled = self.dfs["labeled"].apply(lf, axis=1).values
 
         # prepare plot settings
-        # TODO: this below setting will be problematic when LF targets change
-        # legend_label = f"{', '.join(lf.targets)} | {lf.name}"
+        assert self.palette, f"Palette depleted, # LFs: {len(self.lf_data)}"
         legend_label = lf.name
-        color = self.palette[len(self.lf_data) - 1]
+        color = self.palette.pop(0)
 
         raw_glyph_kwargs = self.glyph_kwargs["raw"].copy()
         raw_glyph_kwargs["legend_label"] = legend_label
@@ -733,7 +838,7 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
         labeled_glyph_kwargs.update(kwargs)
 
         # create dictionary to prepare for dynamic lf & glyph updates
-        data_dict = {"lf": lf, "glyphs": {}}
+        data_dict = {"lf": lf, "color": color, "glyphs": {}}
 
         # add correct/incorrect/missed/hit glyphs
         if "C" in include:
@@ -784,7 +889,9 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
         # assign the completed dictionary
         self.lf_data[lf.name] = data_dict
         # reflect LF update in widgets
-        self._callback_refresh_lf()
+        self._callback_refresh_lf_menu()
+
+        self._good(f"Plotted new LF {lf.name}")
 
     def _view_correct(self, L_labeled):
         """
