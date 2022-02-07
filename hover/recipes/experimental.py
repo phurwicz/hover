@@ -44,6 +44,7 @@ def _snorkel_crosscheck(dataset, lf_list, layout_style="horizontal", **kwargs):
     """
     # building-block subroutines
     snorkel = standard_snorkel(dataset, **kwargs)
+    snorkel.subscribed_lf_list = lf_list
     annotator = standard_annotator(dataset, **kwargs)
 
     # plot labeling functions
