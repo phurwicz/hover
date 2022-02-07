@@ -31,14 +31,20 @@ def test_simple_annotator(mini_supervisable_text_dataset_embedded):
     # view selected points in selection table
     view_data = action_view_selection(dataset)
     assert len(view_data["label"]) == len(raw_view_select)
+    dataset.sel_table.source.selected.indices = [0]
+    # check that selection view is idempotent
+    assert view_data == action_view_selection(dataset)
+    # check that re-showing selection clears subselection
+    assert dataset.sel_table.source.selected.indices == []
 
     # evict a point from selection
     evict_idx = 5
     # prepare expected texts post eviction
     expected_texts = dataset.dfs["raw"].loc[raw_view_select, "text"].tolist()
     expected_texts.pop(evict_idx)
-    # execute eviction
+    # make sub-selection
     dataset.sel_table.source.selected.indices = [evict_idx]
+    # execute eviction
     old_view_data, new_view_data = action_evict_selection(dataset)
     # check the number of points before/after eviction
     assert len(old_view_data["label"]) == len(raw_view_select)
