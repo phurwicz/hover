@@ -5,8 +5,11 @@
 
     -   functions for creating individual standard explorers appropriate for a dataset.
 """
+import numpy as np
 import hover.core.explorer as hovex
 from bokeh.layouts import row, column
+from bokeh.models import Button
+from rich.console import Console
 
 
 EXPLORER_CATALOG = {
@@ -215,3 +218,99 @@ def standard_softlabel(dataset, **kwargs):
     # subscribe to dataset widgets
     dataset.subscribe_update_push(softlabel, {_k: _k for _k in subsets})
     return softlabel
+
+
+def active_learning_components(dataset, vecnet_callback, **kwargs):
+    """
+    ???+ note "Active-learning specific components of a recipe."
+
+        | Param      | Type     | Description                          |
+        | :--------- | :------- | :----------------------------------- |
+        | `dataset`  | `SupervisableDataset` | the dataset to link to  |
+        | `vecnet_callback` | `function` | function for creating `VectorNet` dynamically |
+        | `**kwargs` | | kwargs to forward to the `BokehSoftLabelExplorer` |
+    """
+    console = Console()
+    softlabel = standard_softlabel(dataset, **kwargs)
+    feature_key = dataset.__class__.FEATURE_KEY
+
+    # patch coordinates for representational similarity analysis
+    softlabel.value_patch("x", "x_traj", title="Manifold trajectory step")
+    softlabel.value_patch("y", "y_traj")
+
+    # recipe-specific widget
+    model = vecnet_callback(dataset)
+    model_trainer = Button(label="Train model", button_type="primary")
+
+    def retrain_model():
+        """
+        Callback subfunction 1 of 2.
+        """
+        model_trainer.disabled = True
+        console.print("Start training... button will be disabled temporarily.")
+        dataset.setup_label_coding()
+        model.auto_adjust_classes(dataset.classes)
+
+        train_loader = model.prepare_loader(dataset, "train", smoothing_coeff=0.2)
+        if dataset.dfs["dev"].shape[0] > 0:
+            dev_loader = model.prepare_loader(dataset, "dev")
+        else:
+            dataset._warn("dev set is empty, borrowing train set for validation.")
+            dev_loader = train_loader
+
+        _ = model.train(train_loader, dev_loader)
+        model.save()
+        console.print("-- 1/2: retrained model")
+
+    def update_softlabel_plot():
+        """
+        Callback subfunction 2 of 2.
+        """
+        # combine inputs and compute outputs of all non-test subsets
+        use_subsets = ("raw", "train", "dev")
+        inps = []
+        for _key in use_subsets:
+            inps.extend(dataset.dfs[_key][feature_key].tolist())
+
+        probs = model.predict_proba(inps)
+        labels = [dataset.label_decoder[_val] for _val in probs.argmax(axis=-1)]
+        scores = probs.max(axis=-1).tolist()
+        traj_arr, seq_arr, disparity_arr = model.manifold_trajectory(
+            inps,
+            points_per_step=5,
+        )
+
+        offset = 0
+        for _key in use_subsets:
+            _length = dataset.dfs[_key].shape[0]
+            # skip subset if empty
+            if _length > 0:
+                _slice = slice(offset, offset + _length)
+                dataset.dfs[_key]["pred_label"] = labels[_slice]
+                dataset.dfs[_key]["pred_score"] = scores[_slice]
+                # for each dimension: all steps, selected slice
+                _x_traj = traj_arr[:, _slice, 0]
+                _y_traj = traj_arr[:, _slice, 1]
+                # for each dimension: selected slice, all steps
+                _x_traj = list(np.swapaxes(_x_traj, 0, 1))
+                _y_traj = list(np.swapaxes(_y_traj, 0, 1))
+                dataset.dfs[_key]["x_traj"] = _x_traj
+                dataset.dfs[_key]["y_traj"] = _y_traj
+
+                offset += _length
+
+        softlabel._dynamic_callbacks["adjust_patch_slider"]()
+        softlabel._update_sources()
+        model_trainer.disabled = False
+        console.print("-- 2/2: updated predictions. Training button is re-enabled.")
+
+    def callback_sequence():
+        """
+        Overall callback function.
+        """
+        retrain_model()
+        update_softlabel_plot()
+
+    model_trainer.on_click(callback_sequence)
+
+    return softlabel, model_trainer, model
