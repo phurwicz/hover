@@ -44,7 +44,7 @@ def example_margin_df(example_raw_df):
 
 
 @pytest.fixture
-def example_dev_df(generate_df_with_coords):
+def example_labeled_df(generate_df_with_coords):
     df = generate_df_with_coords(100)
     df["label"] = df.apply(RANDOM_LABEL, axis=1)
     return df
@@ -53,7 +53,7 @@ def example_dev_df(generate_df_with_coords):
 @pytest.mark.core
 class TestBokehBaseExplorer:
     @staticmethod
-    def test_comprehensive(example_raw_df, example_dev_df):
+    def test_comprehensive(example_raw_df, example_labeled_df):
         """
         Some methods are the same across child classes.
 
@@ -76,9 +76,9 @@ class TestBokehBaseExplorer:
 
         df_dict = {
             "raw": example_raw_df.copy(),
-            "train": example_dev_df.copy(),
-            "dev": example_dev_df.copy(),
-            "test": example_dev_df.copy(),
+            "train": example_labeled_df.copy(),
+            "dev": example_labeled_df.copy(),
+            "test": example_labeled_df.copy(),
         }
 
         for _key in ["test", "dev", "train", "raw"]:
@@ -233,23 +233,24 @@ class TestBokehTextMargin:
 @pytest.mark.core
 class TestBokehTextSnorkel:
     @staticmethod
-    def test_init(example_raw_df, example_dev_df):
+    def test_init(example_raw_df, example_labeled_df):
         for _feature in MAIN_FEATURES:
             _cls = get_explorer_class("snorkel", _feature)
-            _explorer = _cls({"raw": example_raw_df, "labeled": example_dev_df})
+            _explorer = _cls({"raw": example_raw_df, "labeled": example_labeled_df})
             _explorer.plot()
             _explorer.plot_lf(RANDOM_LABEL_LF, include=("C", "I", "M", "H"))
             _ = _explorer.view()
 
     @staticmethod
-    def test_lf_labeling(example_raw_df, example_dev_df):
+    def test_lf_labeling(example_raw_df, example_labeled_df):
         explorer = get_explorer_class("snorkel", "text")(
             {
                 "raw": example_raw_df,
-                "labeled": example_dev_df,
+                "labeled": example_labeled_df,
             }
         )
         explorer.plot()
+        initial_palette_size = len(explorer.palette)
 
         # create some dummy rules for predictable outcome
         texts = explorer.dfs["raw"]["text"].tolist()
@@ -280,23 +281,30 @@ class TestBokehTextSnorkel:
                 return "B"
             return module_config.ABSTAIN_DECODED
 
-        # add two rules, check menu
-        explorer.plot_lf(narrow_rule_a)
-        explorer.plot_lf(broad_rule_a)
+        # add a rule, check menu
+        explorer.plot_lf(narrow_rule_b)
+        assert explorer.lf_apply_trigger.menu == ["narrow_rule_b"]
+        assert explorer.lf_filter_trigger.menu == ["narrow_rule_b"]
+
+        # subscribe to a LF list, refresh, and check again
+        lf_list = [narrow_rule_a, broad_rule_a]
+        explorer.subscribed_lf_list = lf_list
+        refresh_event = ButtonClick(explorer.lf_list_refresher)
+        explorer.lf_list_refresher._trigger_event(refresh_event)
         lf_names_so_far = ["narrow_rule_a", "broad_rule_a"]
         assert explorer.lf_apply_trigger.menu == lf_names_so_far
         assert explorer.lf_filter_trigger.menu == lf_names_so_far
 
-        # add an existing rules, should trigger overwrite
+        # add an existing rule, should stay the same
         explorer.plot_lf(narrow_rule_a)
         assert explorer.lf_apply_trigger.menu == lf_names_so_far
         assert explorer.lf_filter_trigger.menu == lf_names_so_far
 
         # empty click: nothing selected
-        _event = MenuItemClick(explorer.lf_filter_trigger, item="broad_rule_a")
-        _event = MenuItemClick(explorer.lf_apply_trigger, item="narrow_rule_a")
-        explorer.lf_filter_trigger._trigger_event(_event)
-        explorer.lf_apply_trigger._trigger_event(_event)
+        filter_event = MenuItemClick(explorer.lf_filter_trigger, item="broad_rule_a")
+        apply_event = MenuItemClick(explorer.lf_apply_trigger, item="narrow_rule_a")
+        explorer.lf_filter_trigger._trigger_event(filter_event)
+        explorer.lf_apply_trigger._trigger_event(apply_event)
 
         # emulate selection by user
         # slice to first ten, then assign A to first six
@@ -310,15 +318,16 @@ class TestBokehTextSnorkel:
         assert explorer.sources["raw"].selected.indices == all_raw_idx
 
         # actually triggering LFs on a valid selection
-        explorer.lf_filter_trigger._trigger_event(_event)
-        explorer.lf_apply_trigger._trigger_event(_event)
+        explorer.lf_filter_trigger._trigger_event(filter_event)
+        explorer.lf_apply_trigger._trigger_event(apply_event)
 
         first_six_labels = explorer.dfs["raw"]["label"].iloc[:6].tolist()
         assert first_six_labels == ["A"] * 6
 
         # add more rules, check menu again
-        explorer.plot_lf(narrow_rule_b)
-        explorer.plot_lf(broad_rule_b)
+        lf_list.append(narrow_rule_b)
+        lf_list.append(broad_rule_b)
+        explorer.lf_list_refresher._trigger_event(refresh_event)
 
         lf_names_so_far = [
             "narrow_rule_a",
@@ -342,3 +351,9 @@ class TestBokehTextSnorkel:
 
         first_six_labels = explorer.dfs["raw"]["label"].iloc[:6].tolist()
         assert first_six_labels == ["B"] * 6
+
+        # use two pops to check against misremoval of renderers
+        lf_list.pop()
+        lf_list.pop()
+        explorer.lf_list_refresher._trigger_event(refresh_event)
+        assert len(explorer.palette) == initial_palette_size - len(lf_list)
