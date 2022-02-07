@@ -89,16 +89,9 @@ class VectorNet(BaseVectorNet):
             verbose, int
         ), f"Expected verbose as int, got {type(verbose)} {verbose}"
         self.verbose = verbose
-
-        # set up label conversion
-        self.label_encoder = {_label: i for i, _label in enumerate(labels)}
-        self.label_decoder = {i: _label for i, _label in enumerate(labels)}
-        self.num_classes = len(self.label_encoder)
-
-        # set up vectorizer and the neural network with appropriate dimensions
         self.vectorizer = vectorizer
-        vec_dim = self.vectorizer("").shape[0]
-        self.nn = architecture(vec_dim, self.num_classes)
+        self.architecture = architecture
+        self.auto_adjust_classes(labels)
 
         # if a state dict exists, load it and create a backup copy
         import os
@@ -131,6 +124,29 @@ class VectorNet(BaseVectorNet):
         ), f"Expected an optimizer, got {type(self.nn_optimizer)}"
         self._dynamic_params = {"optimizer": optimizer_kwargs}
         self._setup_widgets()
+
+    def auto_adjust_classes(self, labels):
+        """
+        ???+ note "Auto-(re)create label encoder/decoder and neural net."
+            | Param             | Type       | Description                          |
+            | :---------------- | :--------- | :----------------------------------- |
+            | `labels`          | `list`     | list of `str` classification labels  |
+        """
+        # sanity check and skip
+        assert isinstance(labels, list), f"Expected a list of labels, got {labels}"
+        if set(labels) == set(self.label_encoder.keys()):
+            return
+
+        # set up label conversion
+        self.label_encoder = {_label: i for i, _label in enumerate(labels)}
+        self.label_decoder = {i: _label for i, _label in enumerate(labels)}
+        self.num_classes = len(self.label_encoder)
+
+        # set up vectorizer and the neural network with appropriate dimensions
+        vec_dim = self.vectorizer("").shape[0]
+        self.nn = self.architecture(vec_dim, self.num_classes)
+
+        self._good("adjusted to new set of labels.")
 
     @classmethod
     def from_module(cls, model_module, labels, **kwargs):
@@ -427,6 +443,16 @@ class MultiVectorNet(BaseVectorNet):
         self._warn(
             "this class is in preview and is not sufficiently tested. Use with caution."
         )
+
+    def auto_adjust_classes(self, labels):
+        """
+        ???+ note "Auto-(re)create label encoder/decoder and neural net."
+            | Param             | Type       | Description                          |
+            | :---------------- | :--------- | :----------------------------------- |
+            | `labels`          | `list`     | list of `str` classification labels  |
+        """
+        for _net in self.vector_nets:
+            _net.auto_adjust_classes(labels)
 
     def save(self, save_path=None):
         """
