@@ -194,7 +194,7 @@ class VectorNet(BaseVectorNet):
                 self.save()
                 self._info(f"overwrote state dict {self.nn_update_path}.")
 
-        self._good(f"reset neural net: in {vec_dim} out {len(self.num_classes)}.")
+        self._good(f"reset neural net: in {vec_dim} out {self.num_classes}.")
 
     def load(self, load_path=None):
         """
