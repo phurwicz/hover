@@ -1,4 +1,4 @@
 from hover.recipes.experimental import active_learning
 
-interactive_plot = active_learning(dataset, vecnet_callback)
+interactive_plot = active_learning(dataset, vecnet)
 show(interactive_plot, notebook_url='https://localhost:port')
