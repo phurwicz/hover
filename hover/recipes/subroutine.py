@@ -248,7 +248,7 @@ def active_learning_components(dataset, vecnet, **kwargs):
         model_trainer.disabled = True
         console.print("Start training... button will be disabled temporarily.")
         dataset.setup_label_coding()
-        vecnet.auto_adjust_classes(dataset.classes)
+        vecnet.auto_adjust_setup(dataset.classes)
 
         train_loader = vecnet.prepare_loader(dataset, "train", smoothing_coeff=0.2)
         if dataset.dfs["dev"].shape[0] > 0:
