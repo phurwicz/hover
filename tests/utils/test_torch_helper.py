@@ -5,8 +5,10 @@ from hover.utils.torch_helper import (
     label_smoothing,
 )
 import numpy as np
+import pytest
 
 
+@pytest.mark.lite
 def test_vector_dataset(num_entries=100, dim_inp=128, dim_out=3):
     vec_inp = np.random.rand(num_entries, dim_inp)
     vec_out = np.random.rand(num_entries, dim_out)
@@ -21,12 +23,14 @@ def test_vector_dataset(num_entries=100, dim_inp=128, dim_out=3):
     assert loader
 
 
+@pytest.mark.lite
 def test_one_hot():
     categorical_labels = [0, 1, 2, 1]
     one_hot_labels = one_hot(categorical_labels, 3)
     assert one_hot_labels.shape == (4, 3)
 
 
+@pytest.mark.lite
 def test_label_smoothing(num_entries=100, num_classes=3, coeff=0.1):
     assert num_classes >= 2
     assert coeff >= 0.0

@@ -1,6 +1,7 @@
 from hover.utils.common_nn import MLP, LogisticRegression
 import numpy as np
 import torch
+import pytest
 
 
 def architecture_subroutine(architecture, dim_inp=300, dim_out=2, num_vecs=10):
@@ -15,9 +16,11 @@ def architecture_subroutine(architecture, dim_inp=300, dim_out=2, num_vecs=10):
     assert out.shape == (num_vecs, dim_out)
 
 
+@pytest.mark.lite
 def test_MLP():
     architecture_subroutine(MLP)
 
 
+@pytest.mark.lite
 def test_LR():
     architecture_subroutine(LogisticRegression)

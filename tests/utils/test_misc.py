@@ -1,6 +1,8 @@
 from hover.utils.misc import current_time, NodeUnionFind, RootUnionFind
+import pytest
 
 
+@pytest.mark.lite
 def test_current_time():
     timestamp = current_time()
     assert isinstance(timestamp, str)
@@ -27,6 +29,7 @@ def check_unionfind(arr, nodes, finds, counts):
     assert counts_from_uf_array(arr) == counts
 
 
+@pytest.mark.lite
 def test_nodeunionfind():
     arr = [NodeUnionFind(i) for i in range(8)]
     assert repr(arr[0]) == "0"
@@ -64,6 +67,7 @@ def test_nodeunionfind():
     )
 
 
+@pytest.mark.lite
 def test_rootunionfind():
     arr = [RootUnionFind(i) for i in range(8)]
 

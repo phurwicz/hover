@@ -1,6 +1,8 @@
 from hover.utils.snorkel_helper import labeling_function
+import pytest
 
 
+@pytest.mark.lite
 def test_labeling_function(mini_df_text):
     def original(row):
         return "long" if len(row["text"]) > 5 else "short"

@@ -59,6 +59,7 @@ class TestVectorNet(object):
     For the VectorNet base class.
     """
 
+    @pytest.mark.lite
     @staticmethod
     def test_save_and_load(example_vecnet, example_vecnet_args):
         default_path = example_vecnet.nn_update_path
@@ -66,6 +67,7 @@ class TestVectorNet(object):
         loaded_vecnet = VectorNet.from_module(*example_vecnet_args)
         loaded_vecnet.save()
 
+    @pytest.mark.lite
     @staticmethod
     def test_auto_adjust_setup(blank_vecnet, mini_supervisable_text_dataset):
         targets = mini_supervisable_text_dataset.classes
@@ -88,10 +90,12 @@ class TestVectorNet(object):
         assert third_nn is not second_nn
         blank_vecnet.auto_adjust_setup(old_classes)
 
+    @pytest.mark.lite
     @staticmethod
     def test_adjust_optimier_params(example_vecnet):
         example_vecnet.adjust_optimizer_params()
 
+    @pytest.mark.lite
     @staticmethod
     def test_predict_proba(example_vecnet, mini_supervisable_text_dataset):
         subroutine_predict_proba(example_vecnet, mini_supervisable_text_dataset)
@@ -129,6 +133,7 @@ class TestMultiVectorNet(object):
     For the MultiVectorNet class.
     """
 
+    @pytest.mark.lite
     @staticmethod
     def test_basics(example_multivecnet):
         # use unique paths to avoid unwanted interaction with other tests
@@ -141,6 +146,7 @@ class TestMultiVectorNet(object):
         # TODO: make tests below more meaningful
         _ = example_multivecnet.view()
 
+    @pytest.mark.lite
     @staticmethod
     def test_predict_proba(example_multivecnet, mini_supervisable_text_dataset):
         subroutine_predict_proba(example_multivecnet, mini_supervisable_text_dataset)

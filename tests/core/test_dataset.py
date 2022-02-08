@@ -27,6 +27,7 @@ class TestSupervisableTextDataset:
 
     EFFECTIVE_CLASSES = 7
 
+    @pytest.mark.lite
     def test_init(self):
         dataset = SupervisableTextDataset(
             self.__class__.RAW_DICTL[:],
@@ -45,6 +46,7 @@ class TestSupervisableTextDataset:
         # check the number of classes
         assert len(dataset.classes) == self.__class__.EFFECTIVE_CLASSES
 
+    @pytest.mark.lite
     @staticmethod
     def test_basic_logging(mini_supervisable_text_dataset):
         dataset = mini_supervisable_text_dataset.copy()
@@ -54,6 +56,7 @@ class TestSupervisableTextDataset:
         dataset._warn("testing _warn(); expecting yellow")
         dataset._fail("testing _fail(); expecting red")
 
+    @pytest.mark.lite
     @staticmethod
     def test_export_import(mini_supervisable_text_dataset):
         dataset = mini_supervisable_text_dataset.copy()
@@ -82,6 +85,7 @@ class TestSupervisableTextDataset:
         dataset.compute_2d_embedding(dummy_vectorizer, "umap")
         dataset.compute_2d_embedding(dummy_vectorizer, "ivis")
 
+    @pytest.mark.lite
     @staticmethod
     def test_loader(mini_supervisable_text_dataset, dummy_vectorizer):
         from torch.utils.data import DataLoader

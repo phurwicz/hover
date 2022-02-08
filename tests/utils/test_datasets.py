@@ -1,6 +1,8 @@
 from hover.utils.datasets import newsgroups_dictl
+import pytest
 
 
+@pytest.mark.lite
 def test_20_newsgroups():
     my_20ng, label_encoder, label_decoder = newsgroups_dictl()
 

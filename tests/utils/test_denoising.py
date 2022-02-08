@@ -33,12 +33,14 @@ def example_info_dict():
     }
 
 
+@pytest.mark.lite
 def test_identity_adjacency(example_info_dict):
     adjacency_list = identity_adjacency(example_info_dict)
     for i, _neighbors in enumerate(adjacency_list):
         assert _neighbors == [i], "Expected identity adjacency"
 
 
+@pytest.mark.lite
 def test_cyclic_adjacency(example_info_dict):
     adjacency_list = cyclic_adjacency(example_info_dict)
     num_nodes = len(example_info_dict["accuracy"])
@@ -46,6 +48,7 @@ def test_cyclic_adjacency(example_info_dict):
         assert _neighbors == [(i + 1) % num_nodes], "Expected cyclic adjacency"
 
 
+@pytest.mark.lite
 def test_cyclic_except_last(example_info_dict):
     adjacency_list = cyclic_except_last(example_info_dict)
     num_nodes = len(example_info_dict["accuracy"])
@@ -58,6 +61,7 @@ def test_cyclic_except_last(example_info_dict):
             assert _neighbors == [i], f"Expected identity on node {i}"
 
 
+@pytest.mark.lite
 def test_accuracy_priority(example_info_dict):
     adjacency_list = accuracy_priority(example_info_dict)
     assert adjacency_list == [
@@ -68,6 +72,7 @@ def test_accuracy_priority(example_info_dict):
     ], "Expected every node to point to the one with best accuracy except itself"
 
 
+@pytest.mark.lite
 def test_disagreement_priority(example_info_dict):
     adjacency_list = disagreement_priority(example_info_dict)
     assert adjacency_list == [
