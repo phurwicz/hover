@@ -10,9 +10,10 @@ def test_builtin_servable_recipes(
     dummy_labeling_function_list,
 ):
     dataset = mini_supervisable_text_dataset_embedded.copy()
+    vecnet = dummy_vecnet_callback(dataset)
     simple = simple_annotator(dataset)
     linked = linked_annotator(dataset)
-    active = active_learning(dataset, dummy_vecnet_callback)
+    active = active_learning(dataset, vecnet)
     snorkel = snorkel_crosscheck(dataset, dummy_labeling_function_list)
     app_dict = {
         "simple": simple,

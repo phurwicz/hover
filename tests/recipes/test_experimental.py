@@ -7,7 +7,8 @@ def test_active_learning(
     mini_supervisable_text_dataset_embedded, dummy_vecnet_callback
 ):
     dataset = mini_supervisable_text_dataset_embedded.copy()
-    layout, objects = _active_learning(dataset, dummy_vecnet_callback)
+    vecnet = dummy_vecnet_callback(dataset)
+    layout, objects = _active_learning(dataset, vecnet)
     assert layout.visible
 
     initial_scores = dataset.dfs["raw"]["pred_score"].values.copy()

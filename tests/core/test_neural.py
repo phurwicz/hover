@@ -13,6 +13,12 @@ def example_vecnet_args(mini_supervisable_text_dataset):
 
 
 @pytest.fixture
+def blank_vecnet():
+    model = VectorNet.from_module("fixture_module.vector_net", [], verbose=10)
+    return model
+
+
+@pytest.fixture
 def example_vecnet(example_vecnet_args):
     model = VectorNet.from_module(*example_vecnet_args, verbose=10)
     return model
@@ -59,6 +65,28 @@ class TestVectorNet(object):
         example_vecnet.save(f"{default_path}.test")
         loaded_vecnet = VectorNet.from_module(*example_vecnet_args)
         loaded_vecnet.save()
+
+    @staticmethod
+    def test_auto_adjust_classes(blank_vecnet, mini_supervisable_text_dataset):
+        targets = mini_supervisable_text_dataset.classes
+        old_classes = sorted(
+            blank_vecnet.label_encoder.keys(),
+            key=lambda k: blank_vecnet.label_encoder[k],
+        )
+        old_nn = blank_vecnet.nn
+        # normal change of classes should create a new NN
+        blank_vecnet.auto_adjust_classes(targets)
+        first_nn = blank_vecnet.nn
+        assert first_nn is not old_nn
+        # identical classes should trigger autoskip
+        blank_vecnet.auto_adjust_classes(targets)
+        second_nn = blank_vecnet.nn
+        assert second_nn is first_nn
+        # change of class order should create a new NN
+        blank_vecnet.auto_adjust_classes(targets[1:] + targets[:1])
+        third_nn = blank_vecnet.nn
+        assert third_nn is not second_nn
+        blank_vecnet.auto_adjust_classes(old_classes)
 
     @staticmethod
     def test_adjust_optimier_params(example_vecnet):

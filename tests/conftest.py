@@ -2,6 +2,7 @@ import pytest
 import random
 import spacy
 import faker
+import uuid
 import re
 import pandas as pd
 from hover.utils.datasets import newsgroups_dictl, newsgroups_reduced_dictl
@@ -37,7 +38,10 @@ def dummy_vecnet_callback(dummy_vectorizer):
 
     def callback(dataset):
         vecnet = VectorNet(
-            dummy_vectorizer, LogisticRegression, ".model.test.pt", dataset.classes
+            dummy_vectorizer,
+            LogisticRegression,
+            f".model.test.{uuid.uuid1()}.pt",
+            dataset.classes,
         )
         return vecnet
 
