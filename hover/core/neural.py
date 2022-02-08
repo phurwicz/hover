@@ -97,9 +97,8 @@ class VectorNet(BaseVectorNet):
         self.vectorizer = vectorizer
         self.example_input = example_input
         self.architecture = architecture
-        self.label_encoder, self.label_decoder = {}, {}
+        self.setup_label_conversion(labels)
         self._dynamic_params = {}
-        self.auto_adjust_setup(labels, auto_skip=False)
 
         # set a path to store updated parameters
         self.nn_update_path = state_dict_path
@@ -148,13 +147,22 @@ class VectorNet(BaseVectorNet):
         if auto_skip and label_match_flag:
             return
 
-        # set up label conversion
-        self.label_encoder = {_label: i for i, _label in enumerate(labels)}
-        self.label_decoder = {i: _label for i, _label in enumerate(labels)}
-        self.num_classes = len(self.label_encoder)
+        self.setup_label_conversion(labels)
         self.setup_nn(use_existing_state_dict=False)
 
         self._good(f"adjusted to new list of labels: {labels}")
+
+    def setup_label_conversion(self, labels):
+        """
+        ???+ note "Set up label encoder/decoder and number of classes."
+
+            | Param             | Type       | Description                          |
+            | :---------------- | :--------- | :----------------------------------- |
+            | `labels`          | `list`     | list of `str` classification labels  |
+        """
+        self.label_encoder = {_label: i for i, _label in enumerate(labels)}
+        self.label_decoder = {i: _label for i, _label in enumerate(labels)}
+        self.num_classes = len(self.label_encoder)
 
     def setup_nn(self, use_existing_state_dict=True):
         """
