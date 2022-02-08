@@ -19,6 +19,8 @@ from abc import abstractmethod
 from bokeh.models import Slider, FuncTickFormatter
 from sklearn.metrics import confusion_matrix
 import numpy as np
+import os
+from shutil import copyfile
 
 
 class BaseVectorNet(Loggable):
@@ -70,9 +72,11 @@ class VectorNet(BaseVectorNet):
         optimizer_cls=None,
         optimizer_kwargs=None,
         verbose=0,
+        example_input="",
     ):
         """
         ???+ note "Create the `VectorNet`, loading parameters if available."
+
             | Param             | Type       | Description                          |
             | :---------------- | :--------- | :----------------------------------- |
             | `vectorizer`      | `callable` | the feature -> vector function       |
@@ -83,6 +87,7 @@ class VectorNet(BaseVectorNet):
             | `optimizer_cls`   | `subclass of torch.optim.Optimizer` | pytorch optimizer class |
             | `optimizer_kwargs`  | `dict`   | pytorch optimizer kwargs             |
             | `verbose`         | `int`      | logging verbosity level              |
+            | `example_input`   | any        | example input to the vectorizer      |
         """
 
         assert isinstance(
@@ -90,43 +95,40 @@ class VectorNet(BaseVectorNet):
         ), f"Expected verbose as int, got {type(verbose)} {verbose}"
         self.verbose = verbose
         self.vectorizer = vectorizer
+        self.example_input = example_input
         self.architecture = architecture
         self.label_encoder, self.label_decoder = {}, {}
-        self.auto_adjust_classes(labels, auto_skip=False)
-
-        # if a state dict exists, load it and create a backup copy
-        import os
-
-        if os.path.isfile(state_dict_path):
-            from shutil import copyfile
-
-            try:
-                self.nn.load_state_dict(torch.load(state_dict_path))
-            except Exception as e:
-                self._warn(f"Load VectorNet state path failed with {type(e)}: {e}")
-
-            if backup_state_dict:
-                state_dict_backup_path = (
-                    f"{state_dict_path}.{current_time('%Y%m%d%H%M%S')}"
-                )
-                copyfile(state_dict_path, state_dict_backup_path)
+        self._dynamic_params = {}
+        self.auto_adjust_setup(labels, auto_skip=False)
 
         # set a path to store updated parameters
         self.nn_update_path = state_dict_path
+
+        if backup_state_dict and os.path.isfile(state_dict_path):
+            state_dict_backup_path = f"{state_dict_path}.{current_time('%Y%m%d%H%M%S')}"
+            copyfile(state_dict_path, state_dict_backup_path)
 
         # initialize an optimizer object and a dict to hold dynamic parameters
         optimizer_cls = optimizer_cls or self.__class__.DEFAULT_OPTIM_CLS
         optimizer_kwargs = (
             optimizer_kwargs or self.__class__.DEFAULT_OPTIM_KWARGS.copy()
         )
-        self.nn_optimizer = optimizer_cls(self.nn.parameters())
-        assert isinstance(
-            self.nn_optimizer, torch.optim.Optimizer
-        ), f"Expected an optimizer, got {type(self.nn_optimizer)}"
-        self._dynamic_params = {"optimizer": optimizer_kwargs}
+
+        def callback_reset_nn_optimizer():
+            """
+            Callback function which has access to optimizer init settings.
+            """
+            self.nn_optimizer = optimizer_cls(self.nn.parameters())
+            assert isinstance(
+                self.nn_optimizer, torch.optim.Optimizer
+            ), f"Expected an optimizer, got {type(self.nn_optimizer)}"
+            self._dynamic_params["optimizer"] = optimizer_kwargs
+
+        self._callback_reset_nn_optimizer = callback_reset_nn_optimizer
+        self.setup_nn(use_existing_state_dict=True)
         self._setup_widgets()
 
-    def auto_adjust_classes(self, labels, auto_skip=True):
+    def auto_adjust_setup(self, labels, auto_skip=True):
         """
         ???+ note "Auto-(re)create label encoder/decoder and neural net."
 
@@ -135,7 +137,7 @@ class VectorNet(BaseVectorNet):
             | Param             | Type       | Description                          |
             | :---------------- | :--------- | :----------------------------------- |
             | `labels`          | `list`     | list of `str` classification labels  |
-            | `auto_skip`          | `bool`     | whether to   |
+            | `auto_skip`       | `bool`     | skip when labels did not change      |
         """
         # sanity check and skip
         assert isinstance(labels, list), f"Expected a list of labels, got {labels}"
@@ -150,12 +152,59 @@ class VectorNet(BaseVectorNet):
         self.label_encoder = {_label: i for i, _label in enumerate(labels)}
         self.label_decoder = {i: _label for i, _label in enumerate(labels)}
         self.num_classes = len(self.label_encoder)
+        self.setup_nn(use_existing_state_dict=False)
 
+        self._good(f"adjusted to new list of labels: {labels}")
+
+    def setup_nn(self, use_existing_state_dict=True):
+        """
+        ???+ note "Set up neural network and optimizers."
+
+            Intended to be called in and out of the constructor.
+
+            -   will try to load parameters from state dict by default
+            -   option to override and discard previous state dict
+                -   often used when the classification targets have changed
+
+            | Param                     | Type       | Description                          |
+            | :------------------------ | :--------- | :----------------------------------- |
+            | `labels`                  | `list`     | list of `str` classification labels  |
+            | `use_existing_state_dict` | `bool`     | whether to use existing state dict   |
+        """
         # set up vectorizer and the neural network with appropriate dimensions
-        vec_dim = self.vectorizer("").shape[0]
+        vec_dim = self.vectorizer(self.example_input).shape[0]
         self.nn = self.architecture(vec_dim, self.num_classes)
+        self._callback_reset_nn_optimizer()
 
-        self._good("adjusted to new set of labels.")
+        state_dict_exists = os.path.isfile(self.nn_update_path)
+        # if state dict exists, load it (when consistent) or overwrite
+        if state_dict_exists:
+            if use_existing_state_dict:
+                self.load()
+                self._info(f"loaded state dict {self.nn_update_path}.")
+            else:
+                self.save()
+                self._info(f"overwrote state dict {self.nn_update_path}.")
+
+        self._good(f"reset neural net: in {vec_dim} out {len(self.num_classes)}.")
+
+    def load(self, load_path=None):
+        """
+        ???+ note "Load neural net parameters if possible."
+
+            Can be directed to a custom state dict.
+
+            | Param       | Type       | Description                  |
+            | :---------- | :--------- | :--------------------------- |
+            | `load_path` | `str`      | path to a `torch` state dict |
+        """
+        if load_path is None:
+            load_path or self.nn_update_path
+        # if the architecture cannot match the state dict, skip the load and warn
+        try:
+            self.nn.load_state_dict(torch.load(load_path))
+        except Exception as e:
+            self._warn(f"load VectorNet state path failed with {type(e)}: {e}")
 
     @classmethod
     def from_module(cls, model_module, labels, **kwargs):
@@ -453,7 +502,7 @@ class MultiVectorNet(BaseVectorNet):
             "this class is in preview and is not sufficiently tested. Use with caution."
         )
 
-    def auto_adjust_classes(self, labels):
+    def auto_adjust_setup(self, labels):
         """
         ???+ note "Auto-(re)create label encoder/decoder and neural net."
             | Param             | Type       | Description                          |
@@ -461,7 +510,7 @@ class MultiVectorNet(BaseVectorNet):
             | `labels`          | `list`     | list of `str` classification labels  |
         """
         for _net in self.vector_nets:
-            _net.auto_adjust_classes(labels)
+            _net.auto_adjust_setup(labels)
 
     def save(self, save_path=None):
         """
