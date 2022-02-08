@@ -67,7 +67,7 @@ class TestVectorNet(object):
         loaded_vecnet.save()
 
     @staticmethod
-    def test_auto_adjust_classes(blank_vecnet, mini_supervisable_text_dataset):
+    def test_auto_adjust_setup(blank_vecnet, mini_supervisable_text_dataset):
         targets = mini_supervisable_text_dataset.classes
         old_classes = sorted(
             blank_vecnet.label_encoder.keys(),
@@ -75,18 +75,18 @@ class TestVectorNet(object):
         )
         old_nn = blank_vecnet.nn
         # normal change of classes should create a new NN
-        blank_vecnet.auto_adjust_classes(targets)
+        blank_vecnet.auto_adjust_setup(targets)
         first_nn = blank_vecnet.nn
         assert first_nn is not old_nn
         # identical classes should trigger autoskip
-        blank_vecnet.auto_adjust_classes(targets)
+        blank_vecnet.auto_adjust_setup(targets)
         second_nn = blank_vecnet.nn
         assert second_nn is first_nn
         # change of class order should create a new NN
-        blank_vecnet.auto_adjust_classes(targets[1:] + targets[:1])
+        blank_vecnet.auto_adjust_setup(targets[1:] + targets[:1])
         third_nn = blank_vecnet.nn
         assert third_nn is not second_nn
-        blank_vecnet.auto_adjust_classes(old_classes)
+        blank_vecnet.auto_adjust_setup(old_classes)
 
     @staticmethod
     def test_adjust_optimier_params(example_vecnet):
