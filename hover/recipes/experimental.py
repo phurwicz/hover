@@ -17,7 +17,6 @@ from hover.utils.bokeh_helper import servable
 def snorkel_crosscheck(dataset, lf_list, **kwargs):
     """
     ???+ note "Display the dataset for annotation, cross-checking with labeling functions."
-        Use the train set to check labeling functions; use the labeling functions to hint at potential annotation.
 
         | Param     | Type     | Description                          |
         | :-------- | :------- | :----------------------------------- |
@@ -27,9 +26,9 @@ def snorkel_crosscheck(dataset, lf_list, **kwargs):
 
         Expected visual layout:
 
-        | SupervisableDataset | BokehSnorkelExplorer       | BokehDataAnnotator |
-        | :------------------ | :------------------------- | :----------------- |
-        | manage data subsets | inspect labeling functions | make annotations   |
+        | SupervisableDataset | BokehSnorkelExplorer       | BokehDataAnnotator | BokehDataFinder     |
+        | :------------------ | :------------------------- | :----------------- | :------------------ |
+        | manage data subsets | inspect labeling functions | make annotations   | search and filter   |
     """
     layout, _ = _snorkel_crosscheck(dataset, lf_list, **kwargs)
     return layout
@@ -43,6 +42,7 @@ def _snorkel_crosscheck(dataset, lf_list, layout_style="horizontal", **kwargs):
     snorkel = standard_snorkel(dataset, **kwargs)
     snorkel.subscribed_lf_list = lf_list
     annotator = standard_annotator(dataset, **kwargs)
+    finder = standard_finder(dataset, **kwargs)
 
     # plot labeling functions
     for _lf in lf_list:
@@ -50,19 +50,24 @@ def _snorkel_crosscheck(dataset, lf_list, layout_style="horizontal", **kwargs):
     snorkel.figure.legend.click_policy = "hide"
 
     # link coordinates and selections
-    snorkel.link_xy_range(annotator)
-    snorkel.link_selection_options(annotator)
+    for _explorer in [annotator, snorkel]:
+        finder.link_xy_range(_explorer)
+        finder.link_selection_options(_explorer)
+    # note that SnorkelExplorer has different subsets
+    for _key in ["raw", "train", "dev", "test"]:
+        finder.link_selection(_key, annotator, _key)
     snorkel.link_selection("raw", annotator, "raw")
     snorkel.link_selection("labeled", annotator, "train")
 
     sidebar = dataset.view()
     layout = recipe_layout(
-        sidebar, snorkel.view(), annotator.view(), style=layout_style
+        sidebar, snorkel.view(), annotator.view(), finder.view(), style=layout_style
     )
 
     objects = {
         "dataset": dataset,
         "annotator": annotator,
+        "finder": finder,
         "snorkel": snorkel,
         "sidebar": sidebar,
     }
@@ -85,7 +90,7 @@ def active_learning(dataset, vecnet, **kwargs):
 
         | SupervisableDataset | BokehSoftLabelExplorer    | BokehDataAnnotator | BokehDataFinder     |
         | :------------------ | :------------------------ | :----------------- | :------------------ |
-        | manage data subsets | inspect model predictions | make annotations   | search -> highlight |
+        | manage data subsets | inspect model predictions | make annotations   | search and filter   |
     """
     layout, _ = _active_learning(dataset, vecnet, **kwargs)
     return layout
