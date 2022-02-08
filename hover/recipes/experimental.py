@@ -70,7 +70,7 @@ def _snorkel_crosscheck(dataset, lf_list, layout_style="horizontal", **kwargs):
 
 
 @servable(title="Active Learning")
-def active_learning(dataset, vecnet_callback, **kwargs):
+def active_learning(dataset, vecnet, **kwargs):
     """
     ???+ note "Display the dataset for annotation, putting a classification model in the loop."
         Currently works most smoothly with `VectorNet`.
@@ -78,7 +78,7 @@ def active_learning(dataset, vecnet_callback, **kwargs):
         | Param     | Type     | Description                          |
         | :-------- | :------- | :----------------------------------- |
         | `dataset` | `SupervisableDataset` | the dataset to link to  |
-        | `vecnet_callback` | `callable` | function that creates a `VecNet` based on a `SupervisableDataset`|
+        | `vecnet`  | `VectorNet` | model to use in the loop          |
         | `**kwargs` |         | forwarded to each Bokeh figure       |
 
         Expected visual layout:
@@ -87,11 +87,11 @@ def active_learning(dataset, vecnet_callback, **kwargs):
         | :------------------ | :------------------------ | :----------------- | :------------------ |
         | manage data subsets | inspect model predictions | make annotations   | search -> highlight |
     """
-    layout, _ = _active_learning(dataset, vecnet_callback, **kwargs)
+    layout, _ = _active_learning(dataset, vecnet, **kwargs)
     return layout
 
 
-def _active_learning(dataset, vecnet_callback, layout_style="horizontal", **kwargs):
+def _active_learning(dataset, vecnet, layout_style="horizontal", **kwargs):
     """
     ???+ note "Cousin of active_learning which exposes objects in the layout."
     """
@@ -99,9 +99,7 @@ def _active_learning(dataset, vecnet_callback, layout_style="horizontal", **kwar
     # building-block subroutines
     annotator = standard_annotator(dataset, **kwargs)
     finder = standard_finder(dataset, **kwargs)
-    softlabel, model_trainer, model = active_learning_components(
-        dataset, vecnet_callback, **kwargs
-    )
+    softlabel, model_trainer = active_learning_components(dataset, vecnet, **kwargs)
 
     # link coordinates, omitting the softlabel
     finder.link_xy_range(annotator)
@@ -114,7 +112,7 @@ def _active_learning(dataset, vecnet_callback, layout_style="horizontal", **kwar
         softlabel.link_selection(_key, finder, _key)
     finder.link_selection("test", annotator, "test")
 
-    sidebar = column(model_trainer, model.view(), dataset.view())
+    sidebar = column(model_trainer, vecnet.view(), dataset.view())
     layout = recipe_layout(
         sidebar,
         *[_plot.view() for _plot in [softlabel, annotator, finder]],
@@ -127,7 +125,7 @@ def _active_learning(dataset, vecnet_callback, layout_style="horizontal", **kwar
         "finder": finder,
         "sidebar": sidebar,
         "softlabel": softlabel,
-        "model": model,
+        "model": vecnet,
         "model_trainer": model_trainer,
     }
     return layout, objects

@@ -220,14 +220,14 @@ def standard_softlabel(dataset, **kwargs):
     return softlabel
 
 
-def active_learning_components(dataset, vecnet_callback, **kwargs):
+def active_learning_components(dataset, vecnet, **kwargs):
     """
     ???+ note "Active-learning specific components of a recipe."
 
         | Param      | Type     | Description                          |
         | :--------- | :------- | :----------------------------------- |
         | `dataset`  | `SupervisableDataset` | the dataset to link to  |
-        | `vecnet_callback` | `function` | function for creating `VectorNet` dynamically |
+        | `vecnet`   | `VectorNet` | vecnet to use in the loop          |
         | `**kwargs` | | kwargs to forward to the `BokehSoftLabelExplorer` |
     """
     console = Console()
@@ -239,28 +239,27 @@ def active_learning_components(dataset, vecnet_callback, **kwargs):
     softlabel.value_patch("y", "y_traj")
 
     # recipe-specific widget
-    model = vecnet_callback(dataset)
     model_trainer = Button(label="Train model", button_type="primary")
 
-    def retrain_model():
+    def retrain_vecnet():
         """
         Callback subfunction 1 of 2.
         """
         model_trainer.disabled = True
         console.print("Start training... button will be disabled temporarily.")
         dataset.setup_label_coding()
-        model.auto_adjust_classes(dataset.classes)
+        vecnet.auto_adjust_classes(dataset.classes)
 
-        train_loader = model.prepare_loader(dataset, "train", smoothing_coeff=0.2)
+        train_loader = vecnet.prepare_loader(dataset, "train", smoothing_coeff=0.2)
         if dataset.dfs["dev"].shape[0] > 0:
-            dev_loader = model.prepare_loader(dataset, "dev")
+            dev_loader = vecnet.prepare_loader(dataset, "dev")
         else:
             dataset._warn("dev set is empty, borrowing train set for validation.")
             dev_loader = train_loader
 
-        _ = model.train(train_loader, dev_loader)
-        model.save()
-        console.print("-- 1/2: retrained model")
+        _ = vecnet.train(train_loader, dev_loader)
+        vecnet.save()
+        console.print("-- 1/2: retrained vecnet")
 
     def update_softlabel_plot():
         """
@@ -272,10 +271,10 @@ def active_learning_components(dataset, vecnet_callback, **kwargs):
         for _key in use_subsets:
             inps.extend(dataset.dfs[_key][feature_key].tolist())
 
-        probs = model.predict_proba(inps)
+        probs = vecnet.predict_proba(inps)
         labels = [dataset.label_decoder[_val] for _val in probs.argmax(axis=-1)]
         scores = probs.max(axis=-1).tolist()
-        traj_arr, seq_arr, disparity_arr = model.manifold_trajectory(
+        traj_arr, seq_arr, disparity_arr = vecnet.manifold_trajectory(
             inps,
             points_per_step=5,
         )
@@ -308,9 +307,9 @@ def active_learning_components(dataset, vecnet_callback, **kwargs):
         """
         Overall callback function.
         """
-        retrain_model()
+        retrain_vecnet()
         update_softlabel_plot()
 
     model_trainer.on_click(callback_sequence)
 
-    return softlabel, model_trainer, model
+    return softlabel, model_trainer

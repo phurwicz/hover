@@ -91,7 +91,8 @@ class VectorNet(BaseVectorNet):
         self.verbose = verbose
         self.vectorizer = vectorizer
         self.architecture = architecture
-        self.auto_adjust_classes(labels)
+        self.label_encoder, self.label_decoder = {}, {}
+        self.auto_adjust_classes(labels, auto_skip=False)
 
         # if a state dict exists, load it and create a backup copy
         import os
@@ -125,16 +126,24 @@ class VectorNet(BaseVectorNet):
         self._dynamic_params = {"optimizer": optimizer_kwargs}
         self._setup_widgets()
 
-    def auto_adjust_classes(self, labels):
+    def auto_adjust_classes(self, labels, auto_skip=True):
         """
         ???+ note "Auto-(re)create label encoder/decoder and neural net."
+
+            Intended to be called in and out of the constructor.
+
             | Param             | Type       | Description                          |
             | :---------------- | :--------- | :----------------------------------- |
             | `labels`          | `list`     | list of `str` classification labels  |
+            | `auto_skip`          | `bool`     | whether to   |
         """
         # sanity check and skip
         assert isinstance(labels, list), f"Expected a list of labels, got {labels}"
-        if set(labels) == set(self.label_encoder.keys()):
+        # if the sequence of labels matches label encoder exactly, skip
+        label_match_flag = labels == sorted(
+            self.label_encoder.keys(), key=lambda k: self.label_encoder[k]
+        )
+        if auto_skip and label_match_flag:
             return
 
         # set up label conversion
