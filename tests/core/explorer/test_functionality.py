@@ -4,7 +4,6 @@ Therefore we need to emulate user interaction through bokeh.events objects.
 """
 
 from hover import module_config
-from hover.utils.snorkel_helper import labeling_function
 from hover.recipes.subroutine import get_explorer_class
 from bokeh.events import ButtonClick, MenuItemClick
 from .local_helper import (
@@ -14,6 +13,7 @@ from .local_helper import (
     RANDOM_LABEL_LF,
     almost_global_select,
     subroutine_selection_filter,
+    subroutine_rules_from_text_df,
 )
 import pytest
 import random
@@ -263,34 +263,11 @@ class TestBokehTextSnorkel:
         initial_palette_size = len(explorer.palette)
 
         # create some dummy rules for predictable outcome
-        texts = explorer.dfs["raw"]["text"].tolist()
-        first_six_texts = set(texts[:6])
-        first_ten_texts = set(texts[:10])
-
-        @labeling_function(targets=["A"])
-        def narrow_rule_a(row):
-            if row["text"] in first_six_texts:
-                return "A"
-            return module_config.ABSTAIN_DECODED
-
-        @labeling_function(targets=["A"])
-        def broad_rule_a(row):
-            if row["text"] in first_ten_texts:
-                return "A"
-            return module_config.ABSTAIN_DECODED
-
-        @labeling_function(targets=["B"])
-        def narrow_rule_b(row):
-            if row["text"] in first_six_texts:
-                return "B"
-            return module_config.ABSTAIN_DECODED
-
-        @labeling_function(targets=["B"])
-        def broad_rule_b(row):
-            if row["text"] in first_ten_texts:
-                return "B"
-            return module_config.ABSTAIN_DECODED
-
+        lf_collection = subroutine_rules_from_text_df(explorer.dfs["raw"])
+        narrow_rule_a = lf_collection["narrow_a"]
+        narrow_rule_b = lf_collection["narrow_b"]
+        broad_rule_a = lf_collection["broad_a"]
+        broad_rule_b = lf_collection["broad_b"]
         # add a rule, check menu
         explorer.plot_lf(narrow_rule_b)
         assert explorer.lf_apply_trigger.menu == ["narrow_rule_b"]
@@ -305,10 +282,28 @@ class TestBokehTextSnorkel:
         assert explorer.lf_apply_trigger.menu == lf_names_so_far
         assert explorer.lf_filter_trigger.menu == lf_names_so_far
 
-        # add an existing rule, should stay the same
+        # add an existing rule: menu, glyph, and view should stay the same
+        old_narrow_a_lf = explorer.lf_data["narrow_rule_a"]["lf"]
+        old_narrow_a_glyph_c = explorer.lf_data["narrow_rule_a"]["glyphs"]["C"]
+        old_narrow_a_view_c = old_narrow_a_glyph_c.view
         explorer.plot_lf(narrow_rule_a)
         assert explorer.lf_apply_trigger.menu == lf_names_so_far
         assert explorer.lf_filter_trigger.menu == lf_names_so_far
+        narrow_a_data_dict = explorer.lf_data["narrow_rule_a"]
+        assert narrow_a_data_dict["lf"] is old_narrow_a_lf
+        assert narrow_a_data_dict["glyphs"]["C"] is old_narrow_a_glyph_c
+        assert narrow_a_data_dict["glyphs"]["C"].view is old_narrow_a_view_c
+
+        # overwrite a rule: the dict reference in lf_data should stay the same
+        # menu items and glyph references should stay the same
+        # the view references of the glyphs should have changed
+        narrow_rule_a = lf_collection["narrow_a_clone"]
+        explorer.plot_lf(narrow_rule_a)
+        assert explorer.lf_apply_trigger.menu == lf_names_so_far
+        assert explorer.lf_filter_trigger.menu == lf_names_so_far
+        assert narrow_a_data_dict["lf"] is not old_narrow_a_lf
+        assert narrow_a_data_dict["glyphs"]["C"] is old_narrow_a_glyph_c
+        assert narrow_a_data_dict["glyphs"]["C"].view is not old_narrow_a_view_c
 
         # empty click: nothing selected
         filter_event = MenuItemClick(explorer.lf_filter_trigger, item="broad_rule_a")

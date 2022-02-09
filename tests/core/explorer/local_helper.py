@@ -1,3 +1,4 @@
+from hover import module_config
 from hover.utils.snorkel_helper import labeling_function
 from bokeh.events import SelectionGeometry
 import random
@@ -88,3 +89,47 @@ def subroutine_selection_filter(explorer, filter_toggle, narrowing_callbacks):
     filter_toggle.active = []
     unfilter_select = explorer.sources["raw"].selected.indices[:]
     assert unfilter_select == initial_select
+
+
+def subroutine_rules_from_text_df(df):
+    """
+    Dummy rules for predictable outcome.
+    """
+    texts = df["text"].tolist()
+    assert len(texts) >= 20, f"Expected at least 20 texts, got {len(texts)}"
+    first_six_texts = set(texts[:6])
+    first_ten_texts = set(texts[:10])
+
+    def subroutine_lookup(query, pool, label):
+        if query in pool:
+            return label
+        return module_config.ABSTAIN_DECODED
+
+    @labeling_function(targets=["A"], name="narrow_rule_a")
+    def narrow_rule_a_clone(row):
+        return subroutine_lookup(row["text"], first_six_texts, "A")
+
+    @labeling_function(targets=["A"])
+    def narrow_rule_a(row):
+        return subroutine_lookup(row["text"], first_six_texts, "A")
+
+    @labeling_function(targets=["A"])
+    def broad_rule_a(row):
+        return subroutine_lookup(row["text"], first_ten_texts, "A")
+
+    @labeling_function(targets=["B"])
+    def narrow_rule_b(row):
+        return subroutine_lookup(row["text"], first_six_texts, "B")
+
+    @labeling_function(targets=["B"])
+    def broad_rule_b(row):
+        return subroutine_lookup(row["text"], first_ten_texts, "B")
+
+    lf_collection = {
+        "narrow_a_clone": narrow_rule_a_clone,
+        "narrow_a": narrow_rule_a,
+        "broad_a": broad_rule_a,
+        "narrow_b": narrow_rule_b,
+        "broad_b": broad_rule_b,
+    }
+    return lf_collection
