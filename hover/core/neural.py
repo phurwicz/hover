@@ -207,7 +207,7 @@ class VectorNet(BaseVectorNet):
             | `load_path` | `str`      | path to a `torch` state dict |
         """
         if load_path is None:
-            load_path or self.nn_update_path
+            load_path = self.nn_update_path
         # if the architecture cannot match the state dict, skip the load and warn
         try:
             self.nn.load_state_dict(torch.load(load_path))
