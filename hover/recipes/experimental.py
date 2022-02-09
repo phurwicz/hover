@@ -57,7 +57,7 @@ def _snorkel_crosscheck(dataset, lf_list, layout_style="horizontal", **kwargs):
     for _key in ["raw", "train", "dev", "test"]:
         finder.link_selection(_key, annotator, _key)
     snorkel.link_selection("raw", annotator, "raw")
-    snorkel.link_selection("labeled", annotator, "train")
+    snorkel.link_selection("labeled", annotator, "dev")
 
     sidebar = dataset.view()
     layout = recipe_layout(
