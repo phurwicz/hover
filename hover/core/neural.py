@@ -188,11 +188,9 @@ class VectorNet(BaseVectorNet):
         # if state dict exists, load it (when consistent) or overwrite
         if state_dict_exists:
             if use_existing_state_dict:
-                self.load()
-                self._info(f"loaded state dict {self.nn_update_path}.")
+                self.load(self.nn_update_path)
             else:
-                self.save()
-                self._info(f"overwrote state dict {self.nn_update_path}.")
+                self.save(self.nn_update_path)
 
         self._good(f"reset neural net: in {vec_dim} out {self.num_classes}.")
 
@@ -206,11 +204,11 @@ class VectorNet(BaseVectorNet):
             | :---------- | :--------- | :--------------------------- |
             | `load_path` | `str`      | path to a `torch` state dict |
         """
-        if load_path is None:
-            load_path = self.nn_update_path
+        load_path = load_path or self.nn_update_path
         # if the architecture cannot match the state dict, skip the load and warn
         try:
             self.nn.load_state_dict(torch.load(load_path))
+            self._info(f"loaded state dict {load_path}.")
         except Exception as e:
             self._warn(f"load VectorNet state path failed with {type(e)}: {e}")
 
@@ -248,9 +246,10 @@ class VectorNet(BaseVectorNet):
             | :---------- | :---- | :------------------------------------ |
             | `save_path` | `str` | option alternative path to state dict |
         """
-        if save_path is None:
-            save_path = self.nn_update_path
+        save_path = save_path or self.nn_update_path
         torch.save(self.nn.state_dict(), save_path)
+        verb = "overwrote" if os.path.isfile(save_path) else "saved"
+        self._info(f"{verb} state dict {save_path}.")
 
     def _setup_widgets(self):
         """
@@ -654,11 +653,11 @@ class MultiVectorNet(BaseVectorNet):
         config = {
             "warmup_epochs": self.warmup_epochs_slider.value,
             "warmup_noise": self.warmup_noise_slider.value,
-            "warmup_lr": 0.1 ** self.warmup_loglr_slider.value,
+            "warmup_lr": 0.1**self.warmup_loglr_slider.value,
             "warmup_momentum": self.warmup_momentum_slider.value,
             "postwm_epochs": self.postwm_epochs_slider.value,
             "postwm_noise": self.postwm_noise_slider.value,
-            "postwm_lr": 0.1 ** self.postwm_loglr_slider.value,
+            "postwm_lr": 0.1**self.postwm_loglr_slider.value,
             "postwm_momentum": self.postwm_momentum_slider.value,
         }
         return config
