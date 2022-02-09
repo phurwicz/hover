@@ -98,7 +98,7 @@
 ### :exclamation: Backward Incompatibility
 
 -   [`hover.recipes.experimental.active_learning`](https://github.com/phurwicz/hover/blob/e5ef551445f99e7c2eae759066962d28fd48dbf1/hover/recipes/experimental.py#L45): signature change of an argument: [`vecnet_callback()` becomes `vecnet_callback(dataset, vectorizer)`](https://github.com/phurwicz/hover/commit/8391d76100870a13201c6a4be855fc178436b971#diff-b45bf51d118b093c078e2b2333eadd1c03d07a0801de85ecb40bc268b0a13288R76) for more flexibility
--   [`hover.core.explorer.reset_figure()`] has been removed after a period of deprecation.
+-   `hover.core.explorer.reset_figure()` has been removed after a period of deprecation.
 
 ### :warning: Deprecation / Naming Changes
 

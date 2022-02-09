@@ -153,7 +153,7 @@ class BokehDataAnnotator(BokehBaseExplorer):
         """
         ???+ note "Create annotator widgets and assign Python callbacks."
         """
-        from bokeh.models import TextInput, Button
+        from bokeh.models import TextInput
 
         super()._setup_widgets()
 
