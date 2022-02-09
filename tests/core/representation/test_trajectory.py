@@ -1,7 +1,9 @@
 from hover.core.representation.trajectory import spline, manifold_spline
 import numpy as np
+import pytest
 
 
+@pytest.mark.lite
 def test_spline(one_to_two_and_square):
     x, y = one_to_two_and_square
 
@@ -10,6 +12,7 @@ def test_spline(one_to_two_and_square):
     assert (np.absolute(traj_y - y) < 1e-2).all()
 
 
+@pytest.mark.lite
 def test_manifold_spline(one_to_two_and_square, num_points=100):
     # shape: dim-by-step
     arr = np.array(one_to_two_and_square)

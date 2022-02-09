@@ -53,6 +53,7 @@ def example_labeled_df(generate_df_with_coords):
 @pytest.mark.core
 class TestBokehBaseExplorer:
     @staticmethod
+    @pytest.mark.lite
     def test_comprehensive(example_raw_df, example_labeled_df):
         """
         Some methods are the same across child classes.
@@ -89,6 +90,7 @@ class TestBokehBaseExplorer:
 @pytest.mark.core
 class TestBokehDataFinder:
     @staticmethod
+    @pytest.mark.lite
     def test_init(example_raw_df):
         for _feature in MAIN_FEATURES:
             _cls = get_explorer_class("finder", _feature)
@@ -97,6 +99,7 @@ class TestBokehDataFinder:
             _ = _explorer.view()
 
     @staticmethod
+    @pytest.mark.lite
     def test_filter_text(example_raw_df):
         explorer = get_explorer_class("finder", "text")({"raw": example_raw_df})
         explorer.plot()
@@ -144,6 +147,7 @@ class TestBokehDataFinder:
 @pytest.mark.core
 class TestBokehDataAnnotator:
     @staticmethod
+    @pytest.mark.lite
     def test_init(example_raw_df):
         # test most methods for the class corresponding to each kind of feature
         for _feature in MAIN_FEATURES:
@@ -153,6 +157,7 @@ class TestBokehDataAnnotator:
             _ = _explorer.view()
 
     @staticmethod
+    @pytest.mark.lite
     def test_labeling(example_raw_df):
         feature = random.choice(MAIN_FEATURES)
         explorer = get_explorer_class("annotator", feature)({"raw": example_raw_df})
@@ -183,6 +188,7 @@ class TestBokehDataAnnotator:
 @pytest.mark.core
 class TestBokehTextSoftLabel:
     @staticmethod
+    @pytest.mark.lite
     def test_init(example_soft_label_df):
         for _feature in MAIN_FEATURES:
             _cls = get_explorer_class("softlabel", _feature)
@@ -195,6 +201,7 @@ class TestBokehTextSoftLabel:
             _ = _explorer.view()
 
     @staticmethod
+    @pytest.mark.lite
     def test_filter_score(example_soft_label_df):
         explorer = get_explorer_class("softlabel", "text")(
             {"raw": example_soft_label_df},
@@ -221,6 +228,7 @@ class TestBokehTextSoftLabel:
 @pytest.mark.core
 class TestBokehTextMargin:
     @staticmethod
+    @pytest.mark.lite
     def test_init(example_margin_df):
         for _feature in MAIN_FEATURES:
             _cls = get_explorer_class("margin", _feature)
@@ -233,6 +241,7 @@ class TestBokehTextMargin:
 @pytest.mark.core
 class TestBokehTextSnorkel:
     @staticmethod
+    @pytest.mark.lite
     def test_init(example_raw_df, example_labeled_df):
         for _feature in MAIN_FEATURES:
             _cls = get_explorer_class("snorkel", _feature)
@@ -242,6 +251,7 @@ class TestBokehTextSnorkel:
             _ = _explorer.view()
 
     @staticmethod
+    @pytest.mark.lite
     def test_lf_labeling(example_raw_df, example_labeled_df):
         explorer = get_explorer_class("snorkel", "text")(
             {
