@@ -1,7 +1,7 @@
 As always, start with a 2D-embedded dataset:
 
 <pre data-executable>
-{!docs/snippets/py/t0-0-dataset-text.txt!}
+{!docs/snippets/py/t0-z-dataset-text-full.txt!}
 </pre><br>
 
 <pre data-executable>
