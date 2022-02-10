@@ -230,21 +230,24 @@ def binder_proxy_app_url(app_path, port=5006):
     """
     ???+ note "Find the URL of Bokeh server app in the current Binder session."
 
+        Intended for visiting a Binder-hosted Bokeh server app.
+
         Will NOT work outside Binder.
     """
 
-    base_url = "https://hub.gke2.mybinder.org/user/"
     service_url_path = os.environ["JUPYTERHUB_SERVICE_PREFIX"]
     proxy_url_path = f"proxy/{port}/{app_path}"
 
-    service_url = urllib.parse.urljoin(base_url, service_url_path)
-    full_url = urllib.parse.urljoin(service_url, proxy_url_path)
+    base_url = "https://hub.gke2.mybinder.org/user"
+    full_url = f"{base_url}/{service_url_path}/{proxy_url_path}"
     return full_url
 
 
 def remote_jupyter_proxy_url(port):
     """
     ???+ note "Callable to configure Bokeh's show method when using a proxy (JupyterHub)."
+
+        Intended for rendering a in-notebook Bokeh app.
 
         Usage:
 
