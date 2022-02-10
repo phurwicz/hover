@@ -226,6 +226,22 @@ def bokeh_hover_tooltip(
     return divbox + script
 
 
+def binder_proxy_app_url(app_path, port=5006):
+    """
+    ???+ note "Find the URL of Bokeh server app in the current Binder session."
+
+        Will NOT work outside Binder.
+    """
+
+    base_url = "https://hub.gke2.mybinder.org/user/"
+    service_url_path = os.environ["JUPYTERHUB_SERVICE_PREFIX"]
+    proxy_url_path = f"proxy/{port}/{app_path}"
+
+    service_url = urllib.parse.urljoin(base_url, service_url_path)
+    full_url = urllib.parse.urljoin(service_url, proxy_url_path)
+    return full_url
+
+
 def remote_jupyter_proxy_url(port):
     """
     ???+ note "Callable to configure Bokeh's show method when using a proxy (JupyterHub)."
@@ -248,7 +264,7 @@ def remote_jupyter_proxy_url(port):
         return host
 
     service_url_path = os.environ.get("JUPYTERHUB_SERVICE_PREFIX", "")
-    proxy_url_path = "proxy/%d" % port
+    proxy_url_path = f"proxy/{port}"
 
     user_url = urllib.parse.urljoin(base_url, service_url_path)
     full_url = urllib.parse.urljoin(user_url, proxy_url_path)
