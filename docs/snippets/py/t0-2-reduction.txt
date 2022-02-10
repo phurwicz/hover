@@ -1,4 +1,4 @@
 # any kwargs will be passed onto the corresponding reduction
 # for umap: https://umap-learn.readthedocs.io/en/latest/parameters.html
 # for ivis: https://bering-ivis.readthedocs.io/en/latest/api.html
-dataset.compute_2d_embedding(vectorizer, "umap")
+reducer = dataset.compute_2d_embedding(vectorizer, "umap")

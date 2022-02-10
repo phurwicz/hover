@@ -52,7 +52,7 @@ In particular, let's define a `data -> embedding vector` function.
 <pre data-executable>
 {!docs/snippets/py/t0-1-vectorizer.txt!}
 
-{!docs/snippets/py/t0-1-vectorizer-print.txt!}
+{!docs/snippets/py/t0-1a-vectorizer-print.txt!}
 </pre>
 
 ???+ tip "Tips"
@@ -124,7 +124,7 @@ Hover has built-in methods for calling [umap](https://umap-learn.readthedocs.io/
 <pre data-executable>
 {!docs/snippets/py/t0-2-reduction.txt!}
 
-{!docs/snippets/py/t0-2-reduction-print.txt!}
+{!docs/snippets/py/t0-2a-reduction-print.txt!}
 </pre>
 
 
