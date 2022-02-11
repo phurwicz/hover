@@ -28,6 +28,7 @@ nav:
         - 'Annotator & Plot Tools': 'pages/tutorial/t4-annotator-dataset-interaction.md'
         - 'Finder & Selection Filter': 'pages/tutorial/t5-finder-filter.md'
         - 'Soft Label & Joint Filters': 'pages/tutorial/t6-softlabel-joint-filter.md'
+        - 'Custom Labeling Functions': 'pages/tutorial/t7-snorkel-improvise-rules.md'
     - 'Topics':
         - 'Data Type: Image': 'pages/topics/datatype-image.md'
         - 'Data Type: Audio': 'pages/topics/datatype-audio.md'
