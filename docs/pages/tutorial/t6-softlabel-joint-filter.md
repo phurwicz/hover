@@ -17,6 +17,8 @@ Active learning works by predicting labels and scores (i.e. soft labels) and uti
 `SoftLabelExplorer` delivers this functionality:
 
 <pre data-executable>
+{!docs/snippets/py/tz-bokeh-notebook.txt!}
+
 {!docs/snippets/py/t6-0-softlabel-figure.txt!}
 </pre><br>
 
