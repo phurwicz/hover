@@ -559,6 +559,7 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
         else:
             self._warn("Changing labeling function list subscription.")
         self._subscribed_lf_list = lf_list
+        self._callback_refresh_lf_menu()
 
     def _setup_widgets(self):
         """
