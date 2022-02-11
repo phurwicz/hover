@@ -57,6 +57,18 @@ SCRIPT_TO_SNIPPETS = {
         "t6-1-softlabel-filter.txt",
         "t6-2-active-learning-real.txt",
     ],
+    "tutorial-t7": [
+        "tz-dataset-text-full.txt",
+        "t0-1-vectorizer.txt",
+        "t0-2-reduction.txt",
+        "t7-0-lf-list.txt",
+        "t7-0a-lf-list-edit.txt",
+        "tz-bokeh-notebook.txt",
+        "t7-1-snorkel-apply-button.txt",
+        "t7-2-snorkel-filter-button.txt",
+        "t7-3-snorkel-crosscheck.txt",
+        "tz-bokeh-server-notebook.txt",
+    ],
 }
 
 
