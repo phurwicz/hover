@@ -7,12 +7,19 @@ import os
 @pytest.mark.lite
 def test_binder_proxy_app_url():
     """
-    Not a full test, rather just validating urls.
+    The function being tested is only intended for Binder.
     """
-    os.environ["JUPYTERHUB_SERVICE_PREFIX"] = "hover-binder"
+    env_var_flag = "JUPYTERHUB_SERVICE_PREFIX" in os.environ
+    # preprocessing: pretend to be in Binder environment
+    if not env_var_flag:
+        os.environ["JUPYTERHUB_SERVICE_PREFIX"] = "hover-binder"
+
     url = binder_proxy_app_url("simple-annotator", port=5007)
     _ = urlparse(url)
-    os.environ.pop("JUPYTERHUB_SERVICE_PREFIX")
+
+    # postprocessing: stop pretending to be in Binder environment
+    if not env_var_flag:
+        os.environ.pop("JUPYTERHUB_SERVICE_PREFIX")
 
 
 @pytest.mark.lite
