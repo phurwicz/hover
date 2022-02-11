@@ -13,7 +13,7 @@ We place unlabeled data and labeled data in different subsets: "raw", "train", "
 `SupervisableDataset` uses a "population table", `dataset.pop_table`, to show the size of each subset:
 
 <pre data-executable>
-{!docs/snippets/py/t0-0-dataset-text.txt!}
+{!docs/snippets/py/tz-dataset-text-full.txt!}
 </pre><br>
 
 <pre data-executable>

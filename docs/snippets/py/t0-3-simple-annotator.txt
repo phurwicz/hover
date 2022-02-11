@@ -1,18 +1,3 @@
 from hover.recipes.stable import simple_annotator
-from hover.utils.bokeh_helper import binder_proxy_app_url
-from bokeh.server.server import Server
 
-# ---------- SERVER MODE: for this documentation page ----------
-# because this tutorial is remotely hosted, we need explicit serving
 interactive_plot = simple_annotator(dataset)
-server = Server({'/my-app': interactive_plot}, port=5007, allow_websocket_origin='*')
-server.start()
-# visit this URL to see the interactive plot; locally you would just do "https://localhost:5007/my-app"
-binder_proxy_app_url('my-app', port=5007)
-
-# ---------- NOTEBOOK MODE: for your actual Jupyter environment ---------
-# this code will render the entire plot in Jupyter
-# from bokeh.io import show, output_notebook
-# output_notebook()
-# interactive_plot = simple_annotator(dataset)
-# show(interactive_plot, notebook_url='https://localhost:8888')

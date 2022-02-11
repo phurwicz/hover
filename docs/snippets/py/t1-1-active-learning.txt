@@ -1,16 +1,3 @@
-from hover.recipes.experimental import active_learning, _active_learning
-from hover.utils.bokeh_helper import remote_jupyter_proxy_url
-from bokeh.io import show, output_notebook
+from hover.recipes.experimental import active_learning
 
-output_notebook()
-
-# ---------- DEMO CODE: for this documentation page ----------
-# because this demo is remotely hosted, we need to handle proxy
-# static plot for demonstating the annotation interface
-static_plot, plot_objects = _active_learning(dataset, vecnet, layout_style="vertical")
-show(static_plot, notebook_url=remote_jupyter_proxy_url)
-
-# ---------- REAL CODE: for your actual Jupyter environment ---------
-# the real annotation interface enables Python callbacks
-# interactive_plot = active_learning(dataset, vecnet)
-# show(interactive_plot, notebook_url='https://localhost:port')
+interactive_plot = active_learning(dataset, vecnet)

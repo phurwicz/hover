@@ -13,10 +13,10 @@ The `SupervisableDataset` is assumed to have some data and embeddings.
 
 ## **Recap: Data & Embeddings**
 
-Let's preprare a dataset with embeddings. This is exactly the same as in the [quickstart](../t0-quickstart/):
+Let's preprare a dataset with embeddings. This is almost the same as in the [quickstart](../t0-quickstart/):
 
 <pre data-executable>
-{!docs/snippets/py/t0-0-dataset-text.txt!}
+{!docs/snippets/py/tz-dataset-text-full.txt!}
 </pre><br>
 
 <pre data-executable>
@@ -25,8 +25,7 @@ Let's preprare a dataset with embeddings. This is exactly the same as in the [qu
 
 <pre data-executable>
 {!docs/snippets/py/t0-2-reduction.txt!}
-</pre>
-
+</pre><br>
 
 ## **Recipe-Specific Ingredient**
 
@@ -90,10 +89,10 @@ Now we invoke the `active_learning` recipe.
 
     The recipe returns a `handle` function which `bokeh` can use to visualize an annotation interface in multiple settings.
 
-{!docs/snippets/markdown/jupyterlab-js-issue.md!}
-
 <pre data-executable>
 {!docs/snippets/py/t1-1-active-learning.txt!}
+
+{!docs/snippets/py/tz-bokeh-server-notebook.txt!}
 </pre>
 
 ???+ tip "Tips: annotation interface with multiple plots"

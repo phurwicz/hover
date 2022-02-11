@@ -4,6 +4,7 @@ import pandas as pd
 example_csv_path = "https://raw.githubusercontent.com/phurwicz/hover-gallery/main/0.5.0/20_newsgroups_raw.csv"
 # for fast, low-memory demonstration purpose, sample the data
 df_raw = pd.read_csv(example_csv_path).sample(1000)
+df_raw["text"] = df_raw["text"].astype(str)
 
 # data is divided into 4 subsets: "raw" / "train" / "dev" / "test"
 # this example assumes no labeled data available., i.e. only "raw"

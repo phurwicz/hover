@@ -132,10 +132,10 @@ Hover has built-in methods for calling [umap](https://umap-learn.readthedocs.io/
 
 We are ready for the annotation interface!
 
-{!docs/snippets/markdown/jupyterlab-js-issue.md!}
-
 <pre data-executable>
 {!docs/snippets/py/t0-3-simple-annotator.txt!}
+
+{!docs/snippets/py/tz-bokeh-server-notebook.txt!}
 </pre>
 
 ???+ tip "Tips: annotation interface basics"
