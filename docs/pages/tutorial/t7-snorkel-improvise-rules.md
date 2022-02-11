@@ -23,6 +23,10 @@ Inside the function one can do many things, but let's start with simple keywords
 {!docs/snippets/py/t7-0-lf-list.txt!}
 </pre><br>
 
+<pre data-executable>
+{!docs/snippets/py/t7-0a-lf-list-edit.txt!}
+</pre><br>
+
 ### **Using a Function to Apply Labels**
 
 Hover's `SnorkelExplorer` (short as `snorkel`) can take the labeling functions above and apply them on areas of data that you choose. The widget below is responsible for labeling:
@@ -41,11 +45,28 @@ Any function that labels is also a function that filters. The filter condition i
 {!docs/snippets/py/t7-2-snorkel-filter-button.txt!}
 </pre><br>
 
-#### **Unlike Filter Toggles, This is One-Time**
+Unlike the toggled filters for `finder` and `softlabel`, filtering with functions is on a per-click basis. In other words, this particular filtration doesn't persist when you select another area.
 
-## **In Jupyter: Change Function List Dynamically**
+## **Dynamic List of Functions**
 
-Excellent for improvisation of new rules.
+Python lists are mutable, and we are going to take advantage of that for improvising and editing labeling functions on the fly.
 
+Run the block below and open the resulting URL to launch a recipe.
+
+-   Then, come back and edit the list of labeling functions **in-place**.
+-   Then, Go to the launched app and refresh the functions!
+
+<pre data-executable>
+{!docs/snippets/py/t7-3-snorkel-crosscheck.txt!}
+
+{!docs/snippets/py/tz-bokeh-server-notebook.txt!}
+</pre>
+
+What's really cool is that in your local environment, this update-and-refresh operation can be done all in a notebook. So now you can
+
+-   interactively evaluate and revise labeling functions
+-   visually assign specific data regions to apply those functions
+
+which is, as this tutorial claims, *the* two things that significantly boost the accuracy of labeling functions.
 
 {!docs/snippets/html/stylesheet.html!}

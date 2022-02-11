@@ -1,0 +1,3 @@
+from hover.recipes.experimental import snorkel_crosscheck
+
+interactive_plot = snorkel_crosscheck(dataset, LABELING_FUNCTIONS)
