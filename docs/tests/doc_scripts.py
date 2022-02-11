@@ -11,24 +11,26 @@ SCRIPT_TO_SNIPPETS = {
         "t0-1-vectorizer.txt",
         "t0-2-reduction.txt",
         "t0-3-simple-annotator.txt",
+        "tz-bokeh-server-notebook.txt",
     ],
     "tutorial-t1": [
-        "t0-0-dataset-text.txt",
+        "tz-dataset-text-full.txt",
         "t0-1-vectorizer.txt",
         "t0-2-reduction.txt",
         "t1-0-vecnet-callback.txt",
         "t1-1-active-learning.txt",
+        "tz-bokeh-server-notebook.txt",
     ],
     # t2 has no script currently
     "tutorial-t3": [
-        "t0-0-dataset-text.txt",
+        "tz-dataset-text-full.txt",
         "t3-0-dataset-population-table.txt",
         "t3-1-dataset-commit-dedup.txt",
         "t3-2-dataset-selection-table.txt",
         "t3-3-dataset-evict-patch.txt",
     ],
     "tutorial-t4": [
-        "t0-0-dataset-text.txt",
+        "tz-dataset-text-full.txt",
         "t0-1-vectorizer.txt",
         "t0-2-reduction.txt",
         "tz-bokeh-notebook.txt",
@@ -39,7 +41,7 @@ SCRIPT_TO_SNIPPETS = {
         "t4-4-dataset-view.txt",
     ],
     "tutorial-t5": [
-        "t0-0-dataset-text.txt",
+        "tz-dataset-text-full.txt",
         "t0-1-vectorizer.txt",
         "t0-2-reduction.txt",
         "tz-bokeh-notebook.txt",
@@ -47,7 +49,7 @@ SCRIPT_TO_SNIPPETS = {
         "t5-1-finder-figure.txt",
     ],
     "tutorial-t6": [
-        "t0-0-dataset-text.txt",
+        "tz-dataset-text-full.txt",
         "t0-1-vectorizer.txt",
         "t0-2-reduction.txt",
         "tz-bokeh-notebook.txt",
