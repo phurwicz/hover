@@ -550,7 +550,7 @@ class SupervisableDataset(Loggable):
                 timestamp = current_time("%Y%m%d%H%M%S")
                 path_root = f"hover-dataset-export-{timestamp}"
 
-            export_df = self.to_pandas(use_df=True)
+            export_df = self.to_pandas()
 
             if export_format == "Excel":
                 export_path = f"{path_root}.xlsx"

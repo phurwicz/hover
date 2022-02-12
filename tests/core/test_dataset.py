@@ -61,8 +61,7 @@ class TestSupervisableTextDataset:
     def test_export_import(mini_supervisable_text_dataset):
         dataset = mini_supervisable_text_dataset.copy()
 
-        df = dataset.to_pandas(use_df=True)
-        df = dataset.to_pandas(use_df=False)
+        df = dataset.to_pandas()
         dataset = SupervisableTextDataset.from_pandas(df)
 
         # trigger callback through button click (UI behavior)
