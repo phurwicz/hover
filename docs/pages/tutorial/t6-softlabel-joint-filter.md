@@ -36,9 +36,9 @@ When we plot multiple `explorer`s for the same `dataset`, it makes sense to sync
 
 -   :tada: This also works with cumulative selections. Consequently, the cumulative toggle is synchronized too.
 
-Since each filter is narrowing down the selections we make, joint filters is just set intersection
+Since each filter is narrowing down the selections we make, joint filters is just set intersection, extended
 
--   going from two sets (original selection + filter)
+-   from two sets (original selection + filter)
 -   to N sets (original selection + filter A + filter B + ...)
 
 The `active_learning` recipe is built of `softlabel + annotator + finder`, plus a few widgets for iterating the model-in-loop.
