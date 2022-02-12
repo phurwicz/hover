@@ -73,7 +73,7 @@ def parse_script_and_run(script_name, source_rel_path):
         f_script.write(script)
 
     try:
-        subprocess.run([f"python {script_tmp_path}"], check=True)
+        subprocess.run(["python", script_tmp_path], check=True)
         return None
     except Exception as e:
         CONSOLE.print(f"!!!!!!!! Error in {script_name} !!!!!!!!", style="red bold")
