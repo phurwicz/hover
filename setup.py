@@ -20,7 +20,7 @@ setuptools.setup(
     author="Pavel",
     author_email="pavelhurwicz@gmail.com",
     url="https://github.com/phurwicz/hover",
-    packages=setuptools.find_packages(),
+    packages=setuptools.find_packages(include=["hover*"]),
     install_requires=[
         # interactive/static visualization
         "bokeh>=2.3.3",
