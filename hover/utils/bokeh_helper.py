@@ -232,10 +232,10 @@ def binder_proxy_app_url(app_path, port=5006):
 
         Intended for visiting a Binder-hosted Bokeh server app.
 
-        Will NOT work outside Binder.
+        Will NOT work outside of Binder.
     """
 
-    service_url_path = os.environ["JUPYTERHUB_SERVICE_PREFIX"]
+    service_url_path = os.environ.get("JUPYTERHUB_SERVICE_PREFIX", "hover-binder")
     proxy_url_path = f"proxy/{port}/{app_path}"
 
     base_url = "https://hub.gke2.mybinder.org/user"
