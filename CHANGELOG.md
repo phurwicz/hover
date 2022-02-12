@@ -1,30 +1,42 @@
 # CHANGELOG
 
-## 0.6.0 - In Progress
+## 0.6.0 - Feb 12, 2022
 
 ### :tada: Features Added
 
--   all `Loggable` subclasses
+-   [`SupervisableDataset`](https://phurwicz.github.io/hover/pages/reference/core-dataset/#hover.core.dataset.SupervisableDataset)
+    -   you can now edit selections, like kicking points from current selection or updating cells on the fly.
+
+-   [`snorkel_crosscheck`](https://phurwicz.github.io/hover/pages/reference/recipes/#hover.recipes.experimental.snorkel_crosscheck)
+    -   allows you to label and filter through functions.
+    -   you can change those functions dynamically without having to replot!
+
+-   all `Loggable` subclasses, i.e. datasets and explorers
     -   traceback handling for all methods has switched to [`rich`](https://rich.readthedocs.io/en/stable/traceback.html).
 
--   all `BokehBaseExplorer` subclasses
+-   all [`BokehBaseExplorer`](https://phurwicz.github.io/hover/pages/reference/core-explorer-base/) subclasses
     -   Selections can now be made cumulatively. Tap on multiple points to view or label at once, without the overhead of re-plotting in between.
         -   this option is invoked through a checkbox toggle.
-        -   By default, built-in recipes link the toggle between all explorers in the recipe.
+        -   by default, built-in recipes link the toggle between all explorers in the recipe.
 
--   `VectorNet`
+-   [`VectorNet`](https://phurwicz.github.io/hover/pages/reference/core-neural/#hover.core.neural.MultiVectorNet)
     -   now has widgets for configuring training hyperparameters.
         -   currently only supports changing epochs.
         -   will support changing learning rate and momentum.
     -   added a method prepare_loader() that takes `SupervisableDataset` and returns a torch `DataLoader`.
 
--   `MultiVectorNet` **new class**
+-   [`MultiVectorNet`](https://phurwicz.github.io/hover/pages/reference/core-neural/#hover.core.neural.MultiVectorNet) **new class under experimentation**
     -   makes use of multiple VectorNets trained simutaneously, inspired by the [Coteaching research](https://arxiv.org/abs/1804.06872).
 
 ### :exclamation: Backward Incompatibility
 
--   `active_learning` **signature change**
-    -   no longer takes `vectorizer` as an input. Instead, `VectorNet`/`MultiVectorNet` produced by `vecnet_callback` will handle the vectorization of raw input data.
+-   [`SupervisableDataset`](https://phurwicz.github.io/hover/pages/reference/core-dataset/#hover.core.dataset.SupervisableDataset)
+    -   used to have dual data structure: dataframes and lists of dictionaries
+        -   now only uses dataframes, i.e. `dataset.dfs` stays but `dataset.dictls` is removed.
+
+-   [`active_learning`])(https://phurwicz.github.io/hover/pages/reference/recipes/#hover.recipes.experimental.active_learning) **signature change**
+    -   no longer takes `vectorizer` or `vecnet_callback` as inputs
+    -   will instead take `VectorNet` directly.
 
 ## 0.5.0 - Apr 30, 2021
 
