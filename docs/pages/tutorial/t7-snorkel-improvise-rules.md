@@ -53,8 +53,10 @@ Python lists are mutable, and we are going to take advantage of that for improvi
 
 Run the block below and open the resulting URL to launch a recipe.
 
--   Then, come back and edit the list of labeling functions **in-place**.
--   Then, Go to the launched app and refresh the functions!
+-   labeling functions are evaluated against the `dev` set.
+    -   hence you are advised to send the labels produced by these functions to the `train` set, not the `dev` set.
+-   come back and edit the list of labeling functions **in-place** in one of the code cells above.
+    -   then go to the launched app and refresh the functions!
 
 <pre data-executable>
 {!docs/snippets/py/t7-3-snorkel-crosscheck.txt!}
