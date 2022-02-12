@@ -1,6 +1,6 @@
 package:
   name: hover
-  version: "0.5.3a"
+  version: "0.6.0"
 
 source:
   git_url: https://github.com/phurwicz/hover
@@ -31,9 +31,10 @@ test:
   imports:
     - hover
   commands:
-    - pip check
+    - tox -e test_api_lite
   requires:
     - pip
+    - tox
 
 about:
   home: https://phurwicz.github.io/hover
