@@ -33,26 +33,27 @@ MARKDOWN_INCLUDE = MarkdownInclude(
 
 THEBE_PATTERN = r"(?<=<pre data-executable>)[\s\S]*?(?=</pre>)"
 
-CONSOLE = Console()
-
 
 def main():
     """
     Test all code blocks in the scripts listed in this file.
     Collect all exceptions along the way.
     """
-    exceptions = {}
+    all_success = True
+    console = Console()
+
     for _name, _path in NAME_TO_SCRIPT.items():
-        CONSOLE.print(f"======== Running {_name} ========")
-        _retval = parse_script_and_run(_name, _path)
-        if isinstance(_retval, Exception):
-            exceptions[_name] = _retval
+        console.print(f"======== Running {_name} ========")
+        _script, _process = parse_script_and_run(_name, _path)
+        _success = _process.returncode == 0
+        all_success = all_success and _success
 
-    if exceptions:
-        for _name, _exception in exceptions.items():
-            CONSOLE.print(f"Caught error from {_name}: {_exception}")
+        if not _success:
+            console.print(f"!!!!!!!! Error from {_name} !!!!!!!!", style="red bold")
+            console.print(f"{_script}\n\n", style="blue")
+            console.print(f"{_process.stderr}\n\n", style="red")
 
-        CONSOLE.print("Please check rich traceback above.")
+    if not all_success:
         raise RuntimeError("Script test failed.")
 
 
@@ -72,14 +73,10 @@ def parse_script_and_run(script_name, source_rel_path):
     with open(script_tmp_path, "w") as f_script:
         f_script.write(script)
 
-    try:
-        subprocess.run(["python", script_tmp_path], check=True)
-        return None
-    except Exception as e:
-        CONSOLE.print(f"!!!!!!!! Error in {script_name} !!!!!!!!", style="red bold")
-        CONSOLE.print(script, style="blue")
-        CONSOLE.print_exception(show_locals=False)
-        return e
+    process = subprocess.run(
+        ["python", script_tmp_path], capture_output=True, timeout=1200
+    )
+    return script, process
 
 
 if __name__ == "__main__":
