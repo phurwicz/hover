@@ -3,6 +3,6 @@ from bokeh.layouts import row, column
 
 annotator = standard_annotator(dataset)
 show(column(
-    row(self.annotator_input, self.annotator_apply),
+    row(annotator.annotator_input, annotator.annotator_apply),
     annotator.figure,
 ), notebook_url=notebook_url)
