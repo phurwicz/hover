@@ -6,9 +6,10 @@
     Icing on the cake: unify the syntax across different kinds of reducers.
 """
 import numpy as np
+from hover.core import Loggable
 
 
-class DimensionalityReducer(object):
+class DimensionalityReducer(Loggable):
     AVAILABLE_METHODS = {"umap", "ivis"}
     METHOD_ERROR_MSG = "Expected 'umap' or 'ivis' as reduction method"
 
@@ -31,22 +32,13 @@ class DimensionalityReducer(object):
             | `**kwargs` |        | forwarded to the reducer |
         """
         if method == "umap":
-            try:
-                import umap
+            import umap
 
-                reducer = umap.UMAP(*args, **kwargs)
-            except ModuleNotFoundError:
-                raise ModuleNotFoundError("Please install umap-learn via pip.")
-
+            reducer = umap.UMAP(*args, **kwargs)
         elif method == "ivis":
-            try:
-                import ivis
+            import ivis
 
-                reducer = ivis.Ivis(*args, **kwargs)
-            except ModuleNotFoundError:
-                raise ModuleNotFoundError(
-                    "Please install ivis[cpu] or ivis[gpu] via pip."
-                )
+            reducer = ivis.Ivis(*args, **kwargs)
         else:
             raise ValueError(self.__class__.METHOD_ERROR_MSG)
 
