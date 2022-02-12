@@ -41,12 +41,8 @@ Since each filter is narrowing down the selections we make, joint filters is jus
 -   from two sets (original selection + filter)
 -   to N sets (original selection + filter A + filter B + ...)
 
-The `active_learning` recipe is built of `softlabel + annotator + finder`, plus a few widgets for iterating the model-in-loop.
+The [`active_learning` recipe]((../t1-active-learning/)) is built of `softlabel + annotator + finder`, plus a few widgets for iterating the model-in-loop.
 
-{!docs/snippets/markdown/jupyterlab-js-issue-lite.md!}
-
-<pre data-executable>
-{!docs/snippets/py/t6-2-active-learning-real.txt!}
-</pre><br>
+In the next tutorial(s), we will see more recipes taking advantage of linked selections and joint filters. Powerful indeed!
 
 {!docs/snippets/html/stylesheet.html!}
