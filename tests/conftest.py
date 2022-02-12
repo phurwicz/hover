@@ -120,8 +120,6 @@ def mini_supervisable_text_dataset_embedded(
     dataset = mini_supervisable_text_dataset.copy()
 
     dataset.compute_2d_embedding(dummy_vectorizer, "umap")
-    dataset.synchronize_df_to_dictl()
-
     return dataset
 
 
@@ -146,5 +144,4 @@ def noisy_supervisable_text_dataset():
         return value
 
     dataset.dfs["train"]["label"] = dataset.dfs["train"]["label"].apply(mutate)
-    dataset.synchronize_df_to_dictl()
     return dataset
