@@ -1,0 +1,44 @@
+from hover.utils.snorkel_helper import labeling_function
+from hover.module_config import ABSTAIN_DECODED as ABSTAIN
+import re
+
+
+@labeling_function(targets=["rec.autos"])
+def auto_keywords(row):
+    flag = re.search(
+        r"(?i)(diesel|gasoline|automobile|vehicle|drive|driving)", row.text
+    )
+    return "rec.autos" if flag else ABSTAIN
+
+
+@labeling_function(targets=["rec.sport.baseball"])
+def baseball_keywords(row):
+    flag = re.search(r"(?i)(baseball|stadium|\ bat\ |\ base\ )", row.text)
+    return "rec.sport.baseball" if flag else ABSTAIN
+
+
+@labeling_function(targets=["sci.crypt"])
+def crypt_keywords(row):
+    flag = re.search(r"(?i)(crypt|math|encode|decode|key)", row.text)
+    return "sci.crypt" if flag else ABSTAIN
+
+
+@labeling_function(targets=["talk.politics.guns"])
+def guns_keywords(row):
+    flag = re.search(r"(?i)(gun|rifle|ammunition|violence|shoot)", row.text)
+    return "talk.politics.guns" if flag else ABSTAIN
+
+
+@labeling_function(targets=["misc.forsale"])
+def forsale_keywords(row):
+    flag = re.search(r"(?i)(sale|deal|price|discount)", row.text)
+    return "misc.forsale" if flag else ABSTAIN
+
+
+LABELING_FUNCTIONS = [
+    auto_keywords,
+    baseball_keywords,
+    crypt_keywords,
+    guns_keywords,
+    forsale_keywords,
+]

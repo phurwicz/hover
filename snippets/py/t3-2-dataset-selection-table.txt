@@ -1,0 +1,3 @@
+dataset._callback_update_selection(dataset.dfs["raw"].loc[:10])
+
+show(dataset.sel_table, notebook_url=notebook_url)

@@ -1,0 +1,1207 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Hover and label data rapidly.">
+      
+      
+      
+        <link rel="canonical" href="https://phurwicz.github.io/hover/pages/tutorial/t7-snorkel-improvise-rules/">
+      
+      <link rel="icon" href="../../../images/favicon.png">
+      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.1.9">
+    
+    
+      
+        <title>Custom Labeling Functions - Hover</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.2b4465f4.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.e6a45f82.min.css">
+        
+      
+    
+    
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+  
+
+
+  
+  
+
+
+  <script>window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga("create","UA-211167044-1","auto"),ga("set","anonymizeIp",!0),ga("send","pageview"),document.addEventListener("DOMContentLoaded",function(){document.forms.search&&document.forms.search.query.addEventListener("blur",function(){var e;this.value&&(e=document.location.pathname,ga("send","pageview",e+"?q="+this.value))}),"undefined"!=typeof location$&&location$.subscribe(function(e){ga("send","pageview",e.pathname)})})</script>
+  <script async src="https://www.google-analytics.com/analytics.js"></script>
+
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="none" data-md-color-accent="none">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#preparation" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="Hover" class="md-header__button md-logo" aria-label="Hover" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9 7v10h2v-4h2v4h2V7h-2v4h-2V7H9M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Hover
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Custom Labeling Functions
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/phurwicz/hover.git/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    phurwicz/hover
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-tabs__inner md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../.." class="md-tabs__link">
+      Home
+    </a>
+  </li>
+
+      
+        
+  
+  
+    
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../t0-quickstart/" class="md-tabs__link md-tabs__link--active">
+        Tutorial
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../reference/recipes/" class="md-tabs__link">
+        API Reference
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Hover" class="md-nav__button md-logo" aria-label="Hover" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9 7v10h2v-4h2v4h2V7h-2v4h-2V7H9M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/></svg>
+
+    </a>
+    Hover
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/phurwicz/hover.git/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    phurwicz/hover
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2">
+          Tutorial
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Tutorial" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          Tutorial
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../t0-quickstart/" class="md-nav__link">
+        Quickstart
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../t1-active-learning/" class="md-nav__link">
+        Using Recipes
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../t2-bokeh-app/" class="md-nav__link">
+        Server Options
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../t3-dataset-population-selection/" class="md-nav__link">
+        Dataset Mechanisms
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../t4-annotator-dataset-interaction/" class="md-nav__link">
+        Annotator & Plot Tools
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../t5-finder-filter/" class="md-nav__link">
+        Finder & Selection Filter
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../t6-softlabel-joint-filter/" class="md-nav__link">
+        Soft Label & Joint Filters
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Custom Labeling Functions
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Custom Labeling Functions
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#preparation" class="md-nav__link">
+    Preparation
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#labeling-functions" class="md-nav__link">
+    Labeling Functions
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hover.utils.snorkel_helper.labeling_function" class="md-nav__link">
+    labeling_function()
+  </a>
+  
+    <nav class="md-nav" aria-label="labeling_function()">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#using-a-function-to-apply-labels" class="md-nav__link">
+    Using a Function to Apply Labels
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-a-function-to-apply-filters" class="md-nav__link">
+    Using a Function to Apply Filters
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dynamic-list-of-functions" class="md-nav__link">
+    Dynamic List of Functions
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" data-md-state="indeterminate" type="checkbox" id="__nav_3" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3">
+          API Reference
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="API Reference" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          API Reference
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/recipes/" class="md-nav__link">
+        hover.recipes
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_2" data-md-state="indeterminate" type="checkbox" id="__nav_3_2" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_2">
+          hover.core
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="hover.core" data-md-level="2">
+        <label class="md-nav__title" for="__nav_3_2">
+          <span class="md-nav__icon md-icon"></span>
+          hover.core
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/core-dataset/" class="md-nav__link">
+        hover.core.dataset
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_2_2" data-md-state="indeterminate" type="checkbox" id="__nav_3_2_2" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_2_2">
+          hover.core.explorer
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="hover.core.explorer" data-md-level="3">
+        <label class="md-nav__title" for="__nav_3_2_2">
+          <span class="md-nav__icon md-icon"></span>
+          hover.core.explorer
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/core-explorer-base/" class="md-nav__link">
+        .base
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/core-explorer-feature/" class="md-nav__link">
+        .feature
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/core-explorer-functionality/" class="md-nav__link">
+        .functionality
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/core-explorer-specialization/" class="md-nav__link">
+        .specialization
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/core-neural/" class="md-nav__link">
+        hover.core.neural
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/core-representation/" class="md-nav__link">
+        hover.core.representation
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_3" data-md-state="indeterminate" type="checkbox" id="__nav_3_3" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_3">
+          hover.utils
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="hover.utils" data-md-level="2">
+        <label class="md-nav__title" for="__nav_3_3">
+          <span class="md-nav__icon md-icon"></span>
+          hover.utils
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/utils-bokeh_helper/" class="md-nav__link">
+        hover.utils.bokeh_helper
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/utils-snorkel_helper/" class="md-nav__link">
+        hover.utils.snorkel_helper
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+<a href="https://github.com/phurwicz/hover.git/edit/master/docs/pages/tutorial/t7-snorkel-improvise-rules.md" title="Edit this page" class="md-content__button md-icon">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
+</a>
+
+
+  <h1>Custom Labeling Functions</h1>
+
+<blockquote>
+<p>Suppose we have some custom functions for labeling or filtering data, which resembles <a href="https://github.com/snorkel-team/snorkel"><code>snorkel</code></a>'s typical scenario.</p>
+<p><img alt="🚤" class="emojione" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.2.7/assets/png/1f6a4.png" title=":speedboat:" /> Let's see how these functions can be combined with <code>hover</code>.</p>
+</blockquote>
+<script src="../../../plugins/thebe-custom/index.js"></script>
+<script type="text/x-thebe-config">
+  {
+    bootstrap: true,
+    mountStatusWidget: true,
+    mountActivateWidget: false,
+    mountRunButton: false,
+    mountRestartButton: false,
+    mountRestartallButton: false,
+    requestKernel: true,
+    binderOptions: {
+      repo: "phurwicz/hover-binder",
+      ref: "dev",
+      <!-- ref: "master", -->
+      codeMirrorConfig: {
+        theme: "monokai",
+        indentUnit: 4,
+      }
+    },
+  }
+</script>
+<details class="info" open="open">
+<summary>Running Python right here</summary>
+<p>Think of this page as <em>almost</em> a Jupyter notebook. You can edit code and press <code>Shift+Enter</code> to execute.</p>
+<p>Behind the scene is a <a href="https://mybinder.org/">Binder</a>-hosted Python environment. Below is the status of the kernel:
+<div class="thebe-status"></div><div class="thebe-activate"></div></p>
+</details>
+<details class="info" open="open">
+<summary>This page addresses a <strong>single component</strong> of <code>hover</code></summary>
+<p>We are using code snippets to pick out parts of the annotation interface, so that the documentation can explain what they do.</p>
+<ul>
+<li>Please be aware that this is NOT how one would typically use <code>hover</code>.</li>
+<li>Typical usage deals with <a href="../../tutorial/t1-active-learning">recipes</a> where the individual parts have been tied together.</li>
+</ul>
+</details>
+<h2 id="preparation"><strong>Preparation</strong></h2>
+<p>As always, start with a 2D-embedded dataset:</p>
+<pre data-executable>
+from hover.core.dataset import SupervisableTextDataset
+import pandas as pd
+
+raw_csv_path = "https://raw.githubusercontent.com/phurwicz/hover-gallery/main/0.5.0/20_newsgroups_raw.csv"
+train_csv_path = "https://raw.githubusercontent.com/phurwicz/hover-gallery/main/0.5.0/20_newsgroups_train.csv"
+
+# for fast, low-memory demonstration purpose, sample the data
+df_raw = pd.read_csv(raw_csv_path).sample(400)
+df_raw["SUBSET"] = "raw"
+df_train = pd.read_csv(train_csv_path).sample(400)
+df_train["SUBSET"] = "train"
+df_dev = pd.read_csv(train_csv_path).sample(100)
+df_dev["SUBSET"] = "dev"
+df_test = pd.read_csv(train_csv_path).sample(100)
+df_test["SUBSET"] = "test"
+
+# build overall dataframe and ensure feature type
+df = pd.concat([df_raw, df_train, df_dev, df_test])
+df["text"] = df["text"].astype(str)
+
+# this class stores the dataset throught the labeling process
+dataset = SupervisableTextDataset.from_pandas(df, feature_key="text", label_key="label")
+</pre>
+<p><br></p>
+<pre data-executable>
+import spacy
+import re
+
+# use your preferred embedding for the task
+nlp = spacy.load("en_core_web_md")
+
+# raw data (str in this case) -> np.array
+def vectorizer(text):
+    clean_text = re.sub(r"[\s]+", r" ", str(text))
+    return nlp(clean_text, disable=nlp.pipe_names).vector
+
+# any kwargs will be passed onto the corresponding reduction
+# for umap: https://umap-learn.readthedocs.io/en/latest/parameters.html
+# for ivis: https://bering-ivis.readthedocs.io/en/latest/api.html
+reducer = dataset.compute_2d_embedding(vectorizer, "umap")
+</pre>
+<p><br></p>
+<h2 id="labeling-functions"><strong>Labeling Functions</strong></h2>
+<p>Labeling functions are functions that <strong>take a <code>pd.DataFrame</code> row and return a label or abstain</strong>.</p>
+<p>Inside the function one can do many things, but let's start with simple keywords wrapped in regex:</p>
+<details class="info">
+<summary>About the decorator @labeling_function</summary>
+<div class="mkdocstrings">
+
+  <div class="doc doc-object doc-function">
+
+
+
+<h2 id="hover.utils.snorkel_helper.labeling_function" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">hover</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">snorkel_helper</span><span class="o">.</span><span class="n">labeling_function</span><span class="p">(</span><span class="n">targets</span><span class="p">,</span> <span class="n">label_encoder</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
+
+
+</h2>
+
+    <div class="doc doc-contents first">
+
+      <details class="note" open="open">
+<summary>Hover's flavor of the Snorkel labeling_function decorator.</summary>
+<p>However, due to the dynamic label encoding nature of hover,
+the decorated function should return the original string label, not its encoding integer.</p>
+<ul>
+<li>assigns a UUID for easy identification</li>
+<li>keeps track of LF targets</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="left">Param</th>
+<th align="left">Type</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code>targets</code></td>
+<td align="left"><code>list</code> of <code>str</code></td>
+<td align="left">labels that the labeling function is intended to create</td>
+</tr>
+<tr>
+<td align="left"><code>label_encoder</code></td>
+<td align="left"><code>dict</code></td>
+<td align="left">{decoded_label -&gt; encoded_label} mapping, if you also want an original snorkel-style labeling function linked as a <code>.snorkel</code> attribute</td>
+</tr>
+<tr>
+<td align="left"><code>**kwargs</code></td>
+<td align="left"></td>
+<td align="left">forwarded to <code>snorkel</code>'s <code>labeling_function()</code></td>
+</tr>
+</tbody>
+</table>
+</details>
+
+        <details class="quote">
+          <summary>Source code in <code>hover/utils/snorkel_helper.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">labeling_function</span><span class="p">(</span><span class="n">targets</span><span class="p">,</span> <span class="n">label_encoder</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ???+ note &quot;Hover&#39;s flavor of the Snorkel labeling_function decorator.&quot;</span>
+<span class="sd">        However, due to the dynamic label encoding nature of hover,</span>
+<span class="sd">        the decorated function should return the original string label, not its encoding integer.</span>
+
+<span class="sd">        - assigns a UUID for easy identification</span>
+<span class="sd">        - keeps track of LF targets</span>
+
+<span class="sd">        | Param           | Type   | Description                          |</span>
+<span class="sd">        | :-------------- | :----- | :----------------------------------- |</span>
+<span class="sd">        | `targets`       | `list` of `str` | labels that the labeling function is intended to create |</span>
+<span class="sd">        | `label_encoder` | `dict` | {decoded_label -&gt; encoded_label} mapping, if you also want an original snorkel-style labeling function linked as a `.snorkel` attribute |</span>
+<span class="sd">        | `**kwargs`      |        | forwarded to `snorkel`&#39;s `labeling_function()` |</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># lazy import so that the package does not require snorkel</span>
+    <span class="c1"># Feb 3, 2022: snorkel&#39;s dependency handling is too strict</span>
+    <span class="c1"># for other dependencies like NumPy, SciPy, SpaCy, etc.</span>
+    <span class="c1"># Let&#39;s cite Snorkel and lazy import or copy functions.</span>
+    <span class="c1"># DO NOT explicitly depend on Snorkel without confirming</span>
+    <span class="c1"># that all builds/tests pass by Anaconda standards, else</span>
+    <span class="c1"># we risk having to drop conda support.</span>
+    <span class="kn">from</span> <span class="nn">snorkel.labeling</span> <span class="kn">import</span> <span class="p">(</span>
+        <span class="n">labeling_function</span> <span class="k">as</span> <span class="n">snorkel_lf</span><span class="p">,</span>
+        <span class="n">LabelingFunction</span> <span class="k">as</span> <span class="n">SnorkelLF</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+        <span class="c1"># set up kwargs for Snorkel&#39;s LF</span>
+        <span class="c1"># a default name that can be overridden</span>
+        <span class="n">snorkel_kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">func</span><span class="o">.</span><span class="vm">__name__</span><span class="p">}</span>
+        <span class="n">snorkel_kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="c1"># return value of hover&#39;s decorator</span>
+        <span class="n">lf</span> <span class="o">=</span> <span class="n">SnorkelLF</span><span class="p">(</span><span class="n">f</span><span class="o">=</span><span class="n">func</span><span class="p">,</span> <span class="o">**</span><span class="n">snorkel_kwargs</span><span class="p">)</span>
+
+        <span class="c1"># additional attributes</span>
+        <span class="n">lf</span><span class="o">.</span><span class="n">uuid</span> <span class="o">=</span> <span class="n">uuid</span><span class="o">.</span><span class="n">uuid1</span><span class="p">()</span>
+        <span class="n">lf</span><span class="o">.</span><span class="n">targets</span> <span class="o">=</span> <span class="n">targets</span><span class="p">[:]</span>
+
+        <span class="c1"># link a snorkel-style labeling function if applicable</span>
+        <span class="k">if</span> <span class="n">label_encoder</span><span class="p">:</span>
+            <span class="n">lf</span><span class="o">.</span><span class="n">label_encoder</span> <span class="o">=</span> <span class="n">label_encoder</span>
+
+            <span class="k">def</span> <span class="nf">snorkel_style_func</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">lf</span><span class="o">.</span><span class="n">label_encoder</span><span class="p">[</span><span class="n">func</span><span class="p">(</span><span class="n">x</span><span class="p">)]</span>
+
+            <span class="n">lf</span><span class="o">.</span><span class="n">snorkel</span> <span class="o">=</span> <span class="n">snorkel_lf</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)(</span><span class="n">snorkel_style_func</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">lf</span><span class="o">.</span><span class="n">label_encoder</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">lf</span><span class="o">.</span><span class="n">snorkel</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">return</span> <span class="n">lf</span>
+
+    <span class="k">return</span> <span class="n">wrapper</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+<h2 class="doc doc-heading" data-role="function" id="hover.utils.snorkel_helper.labeling_function"></h2>
+</div>
+</details>
+<pre data-executable>
+from hover.utils.snorkel_helper import labeling_function
+from hover.module_config import ABSTAIN_DECODED as ABSTAIN
+import re
+
+
+@labeling_function(targets=["rec.autos"])
+def auto_keywords(row):
+    flag = re.search(
+        r"(?i)(diesel|gasoline|automobile|vehicle|drive|driving)", row.text
+    )
+    return "rec.autos" if flag else ABSTAIN
+
+
+@labeling_function(targets=["rec.sport.baseball"])
+def baseball_keywords(row):
+    flag = re.search(r"(?i)(baseball|stadium|\ bat\ |\ base\ )", row.text)
+    return "rec.sport.baseball" if flag else ABSTAIN
+
+
+@labeling_function(targets=["sci.crypt"])
+def crypt_keywords(row):
+    flag = re.search(r"(?i)(crypt|math|encode|decode|key)", row.text)
+    return "sci.crypt" if flag else ABSTAIN
+
+
+@labeling_function(targets=["talk.politics.guns"])
+def guns_keywords(row):
+    flag = re.search(r"(?i)(gun|rifle|ammunition|violence|shoot)", row.text)
+    return "talk.politics.guns" if flag else ABSTAIN
+
+
+@labeling_function(targets=["misc.forsale"])
+def forsale_keywords(row):
+    flag = re.search(r"(?i)(sale|deal|price|discount)", row.text)
+    return "misc.forsale" if flag else ABSTAIN
+
+
+LABELING_FUNCTIONS = [
+    auto_keywords,
+    baseball_keywords,
+    crypt_keywords,
+    guns_keywords,
+    forsale_keywords,
+]
+</pre>
+<p><br></p>
+<pre data-executable>
+# we will come back to this block later on
+# LABELING_FUNCTIONS.pop(-1)
+</pre>
+<p><br></p>
+<h3 id="using-a-function-to-apply-labels"><strong>Using a Function to Apply Labels</strong></h3>
+<p>Hover's <code>SnorkelExplorer</code> (short as <code>snorkel</code>) can take the labeling functions above and apply them on areas of data that you choose. The widget below is responsible for labeling:</p>
+<pre data-executable>
+from hover.utils.bokeh_helper import remote_jupyter_proxy_url
+from bokeh.io import show, output_notebook
+
+output_notebook()
+
+# special configuration for this remotely hosted tutorial
+notebook_url = remote_jupyter_proxy_url
+# normally your would skip notebook_url or use Jupyter address
+# notebook_url = 'localhost:8888'
+
+from hover.recipes.subroutine import standard_snorkel
+
+snorkel_plot = standard_snorkel(dataset)
+snorkel_plot.subscribed_lf_list = LABELING_FUNCTIONS
+show(snorkel_plot.lf_apply_trigger, notebook_url=notebook_url)
+</pre>
+<p><br></p>
+<h3 id="using-a-function-to-apply-filters"><strong>Using a Function to Apply Filters</strong></h3>
+<p>Any function that labels is also a function that filters. The filter condition is <code>"keep if did not abstain"</code>. The widget below handles filtering:</p>
+<pre data-executable>
+show(snorkel_plot.lf_filter_trigger, notebook_url=notebook_url)
+</pre>
+<p><br></p>
+<p>Unlike the toggled filters for <code>finder</code> and <code>softlabel</code>, filtering with functions is on a per-click basis. In other words, this particular filtration doesn't persist when you select another area.</p>
+<h2 id="dynamic-list-of-functions"><strong>Dynamic List of Functions</strong></h2>
+<p>Python lists are mutable, and we are going to take advantage of that for improvising and editing labeling functions on the fly.</p>
+<p>Run the block below and open the resulting URL to launch a recipe.</p>
+<ul>
+<li>labeling functions are evaluated against the <code>dev</code> set.<ul>
+<li>hence you are advised to send the labels produced by these functions to the <code>train</code> set, not the <code>dev</code> set.</li>
+</ul>
+</li>
+<li>come back and edit the list of labeling functions <strong>in-place</strong> in one of the code cells above.<ul>
+<li>then go to the launched app and refresh the functions!</li>
+</ul>
+</li>
+</ul>
+<pre data-executable>
+from hover.recipes.experimental import snorkel_crosscheck
+
+interactive_plot = snorkel_crosscheck(dataset, LABELING_FUNCTIONS)
+
+# ---------- SERVER MODE: for this documentation page ----------
+# because this tutorial is remotely hosted, we need explicit serving to expose the plot to you
+from hover.utils.bokeh_helper import binder_proxy_app_url
+from bokeh.server.server import Server
+server = Server({'/my-app': interactive_plot}, port=5007, allow_websocket_origin=['*'])
+server.start()
+# visit this URL printed in cell output to see the interactive plot; locally you would just do "https://localhost:5007/my-app"
+binder_proxy_app_url('my-app', port=5007)
+
+# ---------- NOTEBOOK MODE: for your actual Jupyter environment ---------
+# if you'd like, this code will render the entire plot in Jupyter
+# from bokeh.io import show, output_notebook
+# output_notebook()
+# show(interactive_plot, notebook_url='https://localhost:8888')
+</pre>
+
+<p>What's really cool is that in your local environment, this update-and-refresh operation can be done all in a notebook. So now you can</p>
+<ul>
+<li>interactively evaluate and revise labeling functions</li>
+<li>visually assign specific data regions to apply those functions</li>
+</ul>
+<p>which is, as this tutorial claims, <em>the</em> two things that significantly boost the accuracy of labeling functions.</p>
+<style type="text/css">
+    @import url("../../../styles/monokai.css");
+</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js"></script>
+
+              
+            </article>
+          </div>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        
+        <a href="../t6-softlabel-joint-filter/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Soft Label &amp; Joint Filters" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Soft Label & Joint Filters
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../../reference/recipes/" class="md-footer__link md-footer__link--next" aria-label="Next: hover.recipes" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              hover.recipes
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.expand", "navigation.tabs", "search.suggest", "toc.integrate"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../../assets/javascripts/workers/search.22074ed6.min.js"}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.960e086b.min.js"></script>
+      
+    
+  </body>
+</html>

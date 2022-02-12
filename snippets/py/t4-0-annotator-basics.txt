@@ -1,0 +1,8 @@
+from hover.recipes.subroutine import standard_annotator
+from bokeh.layouts import row, column
+
+annotator = standard_annotator(dataset)
+show(column(
+    row(annotator.annotator_input, annotator.annotator_apply),
+    annotator.figure,
+), notebook_url=notebook_url)

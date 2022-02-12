@@ -1,0 +1,1 @@
+show(dataset.pop_table, notebook_url=notebook_url)

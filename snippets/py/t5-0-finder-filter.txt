@@ -1,0 +1,8 @@
+from hover.recipes.subroutine import standard_finder
+from bokeh.layouts import row, column
+
+finder = standard_finder(dataset)
+show(row(
+    column(finder.search_pos, finder.search_neg),
+    finder.search_filter_box,
+), notebook_url=notebook_url)

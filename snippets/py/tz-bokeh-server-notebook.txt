@@ -1,0 +1,14 @@
+# ---------- SERVER MODE: for this documentation page ----------
+# because this tutorial is remotely hosted, we need explicit serving to expose the plot to you
+from hover.utils.bokeh_helper import binder_proxy_app_url
+from bokeh.server.server import Server
+server = Server({'/my-app': interactive_plot}, port=5007, allow_websocket_origin=['*'])
+server.start()
+# visit this URL printed in cell output to see the interactive plot; locally you would just do "https://localhost:5007/my-app"
+binder_proxy_app_url('my-app', port=5007)
+
+# ---------- NOTEBOOK MODE: for your actual Jupyter environment ---------
+# if you'd like, this code will render the entire plot in Jupyter
+# from bokeh.io import show, output_notebook
+# output_notebook()
+# show(interactive_plot, notebook_url='https://localhost:8888')

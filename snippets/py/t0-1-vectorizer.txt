@@ -8,8 +8,3 @@ nlp = spacy.load("en_core_web_md")
 def vectorizer(text):
     clean_text = re.sub(r"[\s]+", r" ", str(text))
     return nlp(clean_text, disable=nlp.pipe_names).vector
-
-text = dataset.dfs["raw"].loc[0, "text"]
-vec = vectorizer(text)
-print(f"Text: {text}")
-print(f"Vector shape: {vec.shape}")

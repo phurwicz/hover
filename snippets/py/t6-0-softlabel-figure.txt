@@ -1,0 +1,5 @@
+from hover.recipes.subroutine import standard_softlabel
+from bokeh.layouts import row, column
+
+softlabel = standard_softlabel(dataset)
+show(softlabel.figure, notebook_url=notebook_url)

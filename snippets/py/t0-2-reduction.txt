@@ -1,8 +1,4 @@
 # any kwargs will be passed onto the corresponding reduction
 # for umap: https://umap-learn.readthedocs.io/en/latest/parameters.html
 # for ivis: https://bering-ivis.readthedocs.io/en/latest/api.html
-dataset.compute_2d_embedding(vectorizer, "umap")
-
-# What we did adds 'x' and 'y' columns to the DataFrames in dataset.dfs
-# One could alternatively pre-compute these columns using any approach
-dataset.dfs["raw"].head(5)
+reducer = dataset.compute_2d_embedding(vectorizer, "umap")

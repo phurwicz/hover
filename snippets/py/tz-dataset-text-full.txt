@@ -1,0 +1,22 @@
+from hover.core.dataset import SupervisableTextDataset
+import pandas as pd
+
+raw_csv_path = "https://raw.githubusercontent.com/phurwicz/hover-gallery/main/0.5.0/20_newsgroups_raw.csv"
+train_csv_path = "https://raw.githubusercontent.com/phurwicz/hover-gallery/main/0.5.0/20_newsgroups_train.csv"
+
+# for fast, low-memory demonstration purpose, sample the data
+df_raw = pd.read_csv(raw_csv_path).sample(400)
+df_raw["SUBSET"] = "raw"
+df_train = pd.read_csv(train_csv_path).sample(400)
+df_train["SUBSET"] = "train"
+df_dev = pd.read_csv(train_csv_path).sample(100)
+df_dev["SUBSET"] = "dev"
+df_test = pd.read_csv(train_csv_path).sample(100)
+df_test["SUBSET"] = "test"
+
+# build overall dataframe and ensure feature type
+df = pd.concat([df_raw, df_train, df_dev, df_test])
+df["text"] = df["text"].astype(str)
+
+# this class stores the dataset throught the labeling process
+dataset = SupervisableTextDataset.from_pandas(df, feature_key="text", label_key="label")

@@ -2,8 +2,9 @@ from hover.core.dataset import SupervisableTextDataset
 import pandas as pd
 
 example_csv_path = "https://raw.githubusercontent.com/phurwicz/hover-gallery/main/0.5.0/20_newsgroups_raw.csv"
-# for fast demonstration purpose, sample the data
-df_raw = pd.read_csv(example_csv_path).sample(2000)
+# for fast, low-memory demonstration purpose, sample the data
+df_raw = pd.read_csv(example_csv_path).sample(1000)
+df_raw["text"] = df_raw["text"].astype(str)
 
 # data is divided into 4 subsets: "raw" / "train" / "dev" / "test"
 # this example assumes no labeled data available., i.e. only "raw"
@@ -11,6 +12,3 @@ df_raw["SUBSET"] = "raw"
 
 # this class stores the dataset throught the labeling process
 dataset = SupervisableTextDataset.from_pandas(df_raw, feature_key="text", label_key="label")
-
-# each subset can be accessed as its own DataFrame
-dataset.dfs["raw"].head(5)
