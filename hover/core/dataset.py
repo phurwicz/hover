@@ -57,7 +57,24 @@ class SupervisableDataset(Loggable):
 
     FEATURE_KEY = "feature"
 
-    def __init__(
+    def __init__(self, *args, **kwargs):
+        """
+        ???+ note "Set up data subsets, widgets, and supplementary data structures."
+
+            See `self.setup_dfs` for parameter details.
+        """
+        self._info("Initializing...")
+        self.setup_dfs(*args, **kwargs)
+        self.df_deduplicate()
+        self.compute_feature_index()
+        self.setup_widgets()
+        # self.setup_label_coding() # redundant if setup_pop_table() immediately calls this again
+        self.setup_file_export()
+        self.setup_pop_table(width_policy="fit", height_policy="fit")
+        self.setup_sel_table(width_policy="fit", height_policy="fit")
+        self._good(f"{self.__class__.__name__}: finished initialization.")
+
+    def setup_dfs(
         self,
         raw_dictl,
         train_dictl=None,
@@ -67,7 +84,8 @@ class SupervisableDataset(Loggable):
         label_key="label",
     ):
         """
-        ???+ note "Create (1) dictl and df forms and (2) the mapping between categorical and string labels."
+        ???+ note "Subroutine of the constructor that creates standard-format DataFrames."
+
             | Param         | Type   | Description                          |
             | :------------ | :----- | :----------------------------------- |
             | `raw_dictl`   | `list` | list of dicts holding the **to-be-supervised** raw data |
@@ -77,7 +95,6 @@ class SupervisableDataset(Loggable):
             | `feature_key` | `str`  | the key for the feature in each piece of data |
             | `label_key`   | `str`  | the key for the `**str**` label in supervised data |
         """
-        self._info("Initializing...")
 
         def dictl_transform(dictl, labels=True):
             """
@@ -108,41 +125,31 @@ class SupervisableDataset(Loggable):
 
             return [burner(_d) for _d in dictl]
 
-        self.dictls = {
+        # standardize records
+        dictls = {
             "raw": dictl_transform(raw_dictl, labels=False),
             "train": dictl_transform(train_dictl),
             "dev": dictl_transform(dev_dictl),
             "test": dictl_transform(test_dictl),
         }
 
-        self.synchronize_dictl_to_df()
-        self.df_deduplicate()
-        self.synchronize_df_to_dictl()
-        self.compute_feature_index()
-        self.setup_widgets()
-        # self.setup_label_coding() # redundant if setup_pop_table() immediately calls this again
-        self.setup_file_export()
-        self.setup_pop_table(width_policy="fit", height_policy="fit")
-        self.setup_sel_table(width_policy="fit", height_policy="fit")
-        self._good(f"{self.__class__.__name__}: finished initialization.")
+        # initialize dataframes
+        self.dfs = dict()
+        for _key, _dictl in dictls.items():
+            if _dictl:
+                _df = pd.DataFrame(_dictl)
+                assert self.__class__.FEATURE_KEY in _df.columns
+                assert "label" in _df.columns
+            else:
+                _df = pd.DataFrame(columns=[self.__class__.FEATURE_KEY, "label"])
 
-    def copy(self, use_df=True):
+            self.dfs[_key] = _df
+
+    def copy(self):
         """
         ???+ note "Create another instance, copying over the data entries."
-            | Param    | Type   | Description                          |
-            | :------- | :----- | :----------------------------------- |
-            | `use_df` | `bool` | whether to use the df or dictl form  |
         """
-        if use_df:
-            self.synchronize_df_to_dictl()
-        return self.__class__(
-            raw_dictl=self.dictls["raw"],
-            train_dictl=self.dictls["train"],
-            dev_dictl=self.dictls["dev"],
-            test_dictl=self.dictls["test"],
-            feature_key=self.__class__.FEATURE_KEY,
-            label_key="label",
-        )
+        return self.__class__.from_pandas(self.to_pandas())
 
     def compute_feature_index(self):
         """
@@ -180,15 +187,10 @@ class SupervisableDataset(Loggable):
                 raise ValueError("locate_by_feature_value mismatch.")
         return subset, index
 
-    def to_pandas(self, use_df=True):
+    def to_pandas(self):
         """
         ???+ note "Export to a pandas DataFrame."
-            | Param    | Type   | Description                          |
-            | :------- | :----- | :----------------------------------- |
-            | `use_df` | `bool` | whether to use the df or dictl form  |
         """
-        if not use_df:
-            self.synchronize_dictl_to_df()
         dfs = []
         for _subset in ["raw", "train", "dev", "test"]:
             _df = self.dfs[_subset].copy()
@@ -718,29 +720,6 @@ class SupervisableDataset(Loggable):
 
         self.compute_feature_index()
 
-    def synchronize_dictl_to_df(self):
-        """
-        ???+ note "Re-make dataframes from lists of dictionaries."
-        """
-        self.dfs = dict()
-        for _key, _dictl in self.dictls.items():
-            if _dictl:
-                _df = pd.DataFrame(_dictl)
-                assert self.__class__.FEATURE_KEY in _df.columns
-                assert "label" in _df.columns
-            else:
-                _df = pd.DataFrame(columns=[self.__class__.FEATURE_KEY, "label"])
-
-            self.dfs[_key] = _df
-
-    def synchronize_df_to_dictl(self):
-        """
-        ???+ note "Re-make lists of dictionaries from dataframes."
-        """
-        self.dictls = dict()
-        for _key, _df in self.dfs.items():
-            self.dictls[_key] = _df.to_dict(orient="records")
-
     def compute_2d_embedding(self, vectorizer, method, **kwargs):
         """
         ???+ note "Get embeddings in the xy-plane and return the dimensionality reducer."
@@ -866,6 +845,30 @@ class SupervisableDataset(Loggable):
             f"Prepared {key} loader with {len(features)} examples; {len(vectorizers)} vectors per feature, batch size {batch_size}"
         )
         return loader
+
+
+#    def synchronize_dictl_to_df(self):
+#        """
+#        ???+ note "Re-make dataframes from lists of dictionaries."
+#        """
+#        self.dfs = dict()
+#        for _key, _dictl in self.dictls.items():
+#            if _dictl:
+#                _df = pd.DataFrame(_dictl)
+#                assert self.__class__.FEATURE_KEY in _df.columns
+#                assert "label" in _df.columns
+#            else:
+#                _df = pd.DataFrame(columns=[self.__class__.FEATURE_KEY, "label"])
+#
+#            self.dfs[_key] = _df
+#
+#    def synchronize_df_to_dictl(self):
+#        """
+#        ???+ note "Re-make lists of dictionaries from dataframes."
+#        """
+#        self.dictls = dict()
+#        for _key, _df in self.dfs.items():
+#            self.dictls[_key] = _df.to_dict(orient="records")
 
 
 class SupervisableTextDataset(SupervisableDataset):
