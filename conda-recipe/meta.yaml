@@ -1,9 +1,14 @@
+{% set name = "hover" %}
+{% set version = "0.6.0" %}
+
+
 package:
-  name: hover
-  version: "0.6.0"
+  name: {{ name }}
+  version: {{ version }}
 
 source:
-  git_url: https://github.com/phurwicz/hover
+  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  sha256: 2f84d974b13cbe2ae857782e1a18f2f40404ad750df87edde08cb99e3a44d9e0
 
 build:
   number: 0

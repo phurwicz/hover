@@ -3,6 +3,10 @@ repos:
     rev: v4.1.0
     hooks:
     -   id: check-yaml
+        exclude: |
+            (?x)^(
+                conda-recipe/meta.yaml
+            )$
     -   id: end-of-file-fixer
     -   id: trailing-whitespace
 -   repo: https://github.com/psf/black
