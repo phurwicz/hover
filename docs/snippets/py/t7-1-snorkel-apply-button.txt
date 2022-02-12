@@ -2,4 +2,4 @@ from hover.recipes.subroutine import standard_snorkel
 
 snorkel_plot = standard_snorkel(dataset)
 snorkel_plot.subscribed_lf_list = LABELING_FUNCTIONS
-show(snorkel_plot.lf_apply_trigger), notebook_url=notebook_url)
+show(snorkel_plot.lf_apply_trigger, notebook_url=notebook_url)
