@@ -21,6 +21,8 @@ Let's preprare a dataset with embeddings. This is almost the same as in the [qui
 
 <pre data-executable>
 {!docs/snippets/py/t0-1-vectorizer.txt!}
+
+{!docs/snippets/py/t0-1a-vectorizer-print.txt!}
 </pre><br>
 
 <pre data-executable>
