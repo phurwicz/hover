@@ -2,91 +2,84 @@
 Tests the scripts in the docs.
 """
 import os
+import re
 import uuid
+import markdown
+import subprocess
+from rich.console import Console
+from markdown_include.include import MarkdownInclude
 
-PY_SNIPPET_HOME = "docs/snippets/py"
-SCRIPT_TO_SNIPPETS = {
-    "tutorial-t0": [
-        "t0-0-dataset-text.txt",
-        "t0-1-vectorizer.txt",
-        "t0-2-reduction.txt",
-        "t0-3-simple-annotator.txt",
-        "tz-bokeh-server-notebook.txt",
-    ],
-    "tutorial-t1": [
-        "tz-dataset-text-full.txt",
-        "t0-1-vectorizer.txt",
-        "t0-2-reduction.txt",
-        "t1-0-vecnet-callback.txt",
-        "t1-1-active-learning.txt",
-        "tz-bokeh-server-notebook.txt",
-    ],
-    # t2 has no script currently
-    "tutorial-t3": [
-        "tz-dataset-text-full.txt",
-        "t3-0-dataset-population-table.txt",
-        "t3-1-dataset-commit-dedup.txt",
-        "t3-2-dataset-selection-table.txt",
-        "t3-3-dataset-evict-patch.txt",
-    ],
-    "tutorial-t4": [
-        "tz-dataset-text-full.txt",
-        "t0-1-vectorizer.txt",
-        "t0-2-reduction.txt",
-        "tz-bokeh-notebook.txt",
-        "t4-0-annotator-basics.txt",
-        "t4-1-annotator-subset-toggle.txt",
-        "t4-2-annotator-selection-option.txt",
-        "t4-3-annotator-search-box.txt",
-        "t4-4-dataset-view.txt",
-    ],
-    "tutorial-t5": [
-        "tz-dataset-text-full.txt",
-        "t0-1-vectorizer.txt",
-        "t0-2-reduction.txt",
-        "tz-bokeh-notebook.txt",
-        "t5-0-finder-filter.txt",
-        "t5-1-finder-figure.txt",
-    ],
-    "tutorial-t6": [
-        "tz-dataset-text-full.txt",
-        "t0-1-vectorizer.txt",
-        "t0-2-reduction.txt",
-        "tz-bokeh-notebook.txt",
-        "t6-0-softlabel-figure.txt",
-        "t6-1-softlabel-filter.txt",
-        "t6-2-active-learning-real.txt",
-    ],
-    "tutorial-t7": [
-        "tz-dataset-text-full.txt",
-        "t0-1-vectorizer.txt",
-        "t0-2-reduction.txt",
-        "t7-0-lf-list.txt",
-        "t7-0a-lf-list-edit.txt",
-        "tz-bokeh-notebook.txt",
-        "t7-1-snorkel-apply-button.txt",
-        "t7-2-snorkel-filter-button.txt",
-        "t7-3-snorkel-crosscheck.txt",
-        "tz-bokeh-server-notebook.txt",
-    ],
+
+DIR_PATH = os.path.dirname(__file__)
+NAME_TO_SCRIPT = {
+    "tutorial-t0": "../pages/tutorial/t0-quickstart.md",
+    "tutorial-t1": "../pages/tutorial/t1-active-learning.md",
+    # tutorial-t2 has no script currently
+    "tutorial-t3": "../pages/tutorial/t3-dataset-population-selection.md",
+    "tutorial-t4": "../pages/tutorial/t4-annotator-dataset-interaction.md",
+    "tutorial-t5": "../pages/tutorial/t5-finder-filter.md",
+    "tutorial-t6": "../pages/tutorial/t6-softlabel-joint-filter.md",
+    "tutorial-t7": "../pages/tutorial/t7-snorkel-improvise-rules.md",
+    "tutorial-t8": "../pages/tutorial/t8-recipe-structure-customization.md",
 }
 
 
+MARKDOWN_INCLUDE = MarkdownInclude(
+    configs={
+        "base_path": os.path.join(DIR_PATH, "../../"),
+        "encoding": "utf-8",
+    }
+)
+
+THEBE_PATTERN = r"(?<=<pre data-executable>)[\s\S]*?(?=</pre>)"
+
+CONSOLE = Console()
+
+
 def main():
-    for _script_name, _snippet_paths in SCRIPT_TO_SNIPPETS.items():
-        print(f"======== Running {_script_name} ========")
-        create_script_and_run(_script_name, _snippet_paths)
+    """
+    Test all code blocks in the scripts listed in this file.
+    Collect all exceptions along the way.
+    """
+    exceptions = {}
+    for _name, _path in NAME_TO_SCRIPT.items():
+        CONSOLE.print(f"======== Running {_name} ========")
+        _retval = parse_script_and_run(_name, _path)
+        if isinstance(_retval, Exception):
+            exceptions[_name] = _retval
+
+    if exceptions:
+        for _name, _exception in exceptions.items():
+            CONSOLE.print(f"Caught error from {_name}: {_exception}")
+
+        CONSOLE.print("Please check rich traceback above.")
+        raise RuntimeError("Script test failed.")
 
 
-def create_script_and_run(script_name, snippet_paths):
-    script_path = f"{script_name}-{uuid.uuid1()}.py"
-    with open(script_path, "w") as f_script:
-        for _path in snippet_paths:
-            with open(os.path.join(PY_SNIPPET_HOME, _path), "r") as f_snippet:
-                f_script.write(f_snippet.read())
-                f_script.write("\n")
+def parse_script_and_run(script_name, source_rel_path):
+    """
+    Retrieve and run code blocks from documentation file.
+    Note that the doc file can  using markdown-include.
+    """
+    source_abs_path = os.path.join(DIR_PATH, source_rel_path)
+    script_tmp_path = f"{script_name}-{uuid.uuid1()}.py"
 
-    os.system(f"python {script_path}")
+    with open(source_abs_path, "r") as f_source:
+        source = f_source.read()
+        html = markdown.markdown(source, extensions=[MARKDOWN_INCLUDE])
+        script = "\n".join(re.findall(THEBE_PATTERN, html))
+
+    with open(script_tmp_path, "w") as f_script:
+        f_script.write(script)
+
+    try:
+        subprocess.run([f"python {script_tmp_path}"], check=True)
+        return None
+    except Exception as e:
+        CONSOLE.print(f"!!!!!!!! Error in {script_name} !!!!!!!!", style="red bold")
+        CONSOLE.print(script, style="blue")
+        CONSOLE.print_exception(show_locals=False)
+        return e
 
 
 if __name__ == "__main__":
