@@ -44,12 +44,12 @@ Check out [@phurwicz/hover-binder](https://github.com/phurwicz/hover-binder) for
 >
 > OS: Linux & Mac & Windows
 
-To get the latest release version: `pip install hover`
+PyPI (for all releases): `pip install hover`
 
-Starting on version 0.6.0, we are also on conda: `conda install -c conda-forge hover`
+Conda (for 0.6.0 and above): `conda install -c conda-forge hover`
 
 For Windows users, we recommend [Windows Subsystem for Linux](https://docs.microsoft.com/en-us/windows/wsl/about).
--   On Windows itself you will need [C++ build tools](https://visualstudio.microsoft.com/downloads/) for dependencies like `umap-learn`.
+-   On Windows itself you will need [C++ build tools](https://visualstudio.microsoft.com/downloads/) for dependencies.
 
 ## :book: Resources
 
