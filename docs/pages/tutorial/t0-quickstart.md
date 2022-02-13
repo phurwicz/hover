@@ -149,11 +149,11 @@ We are ready for the annotation interface!
             -   `push`: push `Dataset` updates to the bokeh plots.
             -   `commit`: add data entries selected in the `Annotator` to a specified subset.
             -   `dedup`: deduplicate across subsets by `feature` (last in gets kept).
+            -   `export`: save your data (all subsets) in a specified format.
 
         === "BokehDataAnnotator"
             -   `raw`/`train`/`dev`/`test`: choose which subsets to display or hide.
             -   `apply`: apply the `label` input to the selected points in the `raw` subset only.
-            -   `export`: save your data (all subsets) in a specified format.
 
         We've essentially put the data into neighborboods based on the vectorizer, but the quality (homogeneity of labels) of such neighborhoods can vary.
 
