@@ -76,6 +76,22 @@ For Windows users, we recommend [Windows Subsystem for Linux](https://docs.micro
 
 ### Contributing
 
--   All feedbacks are welcome :hugs: Especially what you find frustrating and want fixed!
+-   All feedbacks are welcome, **especially what you find lacking and want it fixed!**
 -   `./requirements-dev.txt` lists required packages for development.
 -   Pull requests are advised to use a superset of the pre-commit hooks listed in [.pre-commit-config.yaml](https://github.com/phurwicz/hover/blob/main/.pre-commit-config.yaml).
+
+### Citation
+
+If you have found `hover` useful to your work, please [let us know](https://github.com/phurwicz/hover/discussions) :hugs:
+
+```tex
+@misc{hover,
+  title={{hover}: label data at scale},
+  url={https://github.com/phurwicz/hover},
+  note={Open software from https://github.com/phurwicz/hover},
+  author={
+    Pavel Hurwicz and
+    Haochuan Wei},
+  year={2021},
+}
+```
