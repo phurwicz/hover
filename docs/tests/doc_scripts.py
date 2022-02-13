@@ -1,5 +1,6 @@
 """
 Tests the scripts in the docs.
+Intended for a Binder environment, and should be used in conjunction with a local libary in phurwicz/hover-binder.
 """
 import os
 import re
