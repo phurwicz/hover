@@ -25,7 +25,21 @@ jobs:
         os: [ubuntu-latest]
 
     steps:
-    - uses: actions/checkout@v2
+    - name: Clone hover
+      uses: actions/checkout@v2
+
+    - name: Clone hover's Binder repo
+      uses: actions/checkout@v2
+      with:
+        repository: phurwicz/hover-binder
+        ref: master
+        path: .hover-binder
+
+    - name: Pick local library from Binder repo
+      run: |
+        cp -r .hover-binder/local_lib ./local_lib
+        rm -rf .hover-binder
+
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v2
       with:
