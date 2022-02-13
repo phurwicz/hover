@@ -872,8 +872,16 @@ reducer = dataset.compute_2d_embedding(vectorizer, "umap")
 <h2 id="filter-toggles"><strong>Filter Toggles</strong></h2>
 <p>When we use lasso or polygon select, we are describing a shape. Sometimes that shape is not accurate enough -- we need extra conditions to narrow down the data.</p>
 <p>Just like <code>annotator</code>, <code>finder</code> has search widgets. But unlike <code>annotator</code>, <code>finder</code> has a <strong>filter toggle</strong> which can directly <strong>intersect</strong> <em>what we selected</em> with <em>what meets the search criteria</em>.</p>
+<details class="info" open="open">
+<summary>Doc-page limitation</summary>
+<p><mark class="critic"> Plotted widgets on this page are for illustration. </mark></p>
+<ul>
+<li>Due to event listener limitations, the widgets here will not trigger Python callbacks.</li>
+<li>In a normal environment like an actual notebook, this will be fully functional.</li>
+</ul>
+</details>
 <pre data-executable>
-from hover.utils.bokeh_helper import remote_jupyter_proxy_url
+from local_lib.binder_helper import remote_jupyter_proxy_url
 from bokeh.io import show, output_notebook
 
 output_notebook()
@@ -902,8 +910,12 @@ show(row(
 <h2 id="stronger-highlight-for-search"><strong>Stronger Highlight for Search</strong></h2>
 <p><code>finder</code> also colors data points based on search criteria, making them easier to find.</p>
 <details class="info" open="open">
-<summary>Time to <code>pip install hover</code></summary>
-<p><mark class="critic"> At this point you know the browser limitations, take the snippet and play in your local environment <img alt="😎" class="emojione" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.2.7/assets/png/1f60e.png" title=":sunglasses:" /> </mark></p>
+<summary>Doc-page limitation</summary>
+<p><mark class="critic"> Plotted widgets on this page are for illustration. </mark></p>
+<ul>
+<li>Due to event listener limitations, the widgets here will not trigger Python callbacks.</li>
+<li>In a normal environment like an actual notebook, this will be fully functional.</li>
+</ul>
 </details>
 <pre data-executable>
 show(column(

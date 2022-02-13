@@ -1063,7 +1063,7 @@ LABELING_FUNCTIONS = [
 <h3 id="using-a-function-to-apply-labels"><strong>Using a Function to Apply Labels</strong></h3>
 <p>Hover's <code>SnorkelExplorer</code> (short as <code>snorkel</code>) can take the labeling functions above and apply them on areas of data that you choose. The widget below is responsible for labeling:</p>
 <pre data-executable>
-from hover.utils.bokeh_helper import remote_jupyter_proxy_url
+from local_lib.binder_helper import remote_jupyter_proxy_url
 from bokeh.io import show, output_notebook
 
 output_notebook()
@@ -1107,7 +1107,7 @@ interactive_plot = snorkel_crosscheck(dataset, LABELING_FUNCTIONS)
 
 # ---------- SERVER MODE: for this documentation page ----------
 # because this tutorial is remotely hosted, we need explicit serving to expose the plot to you
-from hover.utils.bokeh_helper import binder_proxy_app_url
+from local_lib.binder_helper import binder_proxy_app_url
 from bokeh.server.server import Server
 server = Server({'/my-app': interactive_plot}, port=5007, allow_websocket_origin=['*'])
 server.start()

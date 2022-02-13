@@ -932,8 +932,16 @@ reducer = dataset.compute_2d_embedding(vectorizer, "umap")
 <h2 id="scatter-plot-semantically-similar-points-are-close-together"><strong>Scatter Plot: Semantically Similar Points are Close Together</strong></h2>
 <p><code>hover</code> labels data points in bulk, which requires selecting groups of homogeneous data.</p>
 <p>The core of the annotator is a scatter plot and labeling widgets:</p>
+<details class="info" open="open">
+<summary>Doc-page limitation</summary>
+<p><mark class="critic"> Plotted widgets on this page are for illustration. </mark></p>
+<ul>
+<li>Due to event listener limitations, the widgets here will not trigger Python callbacks.</li>
+<li>In a normal environment like an actual notebook, this will be fully functional.</li>
+</ul>
+</details>
 <pre data-executable>
-from hover.utils.bokeh_helper import remote_jupyter_proxy_url
+from local_lib.binder_helper import remote_jupyter_proxy_url
 from bokeh.io import show, output_notebook
 
 output_notebook()
@@ -957,14 +965,11 @@ show(column(
 <h3 id="show-hide-subsets"><strong>Show &amp; Hide Subsets</strong></h3>
 <p>Showing labeled subsets can tell you which parts of the data has been explored and which ones have not. With toggle buttons, you can turn on/off the display for any subset.</p>
 <details class="info" open="open">
-<summary>In-browser limitation</summary>
-<p><mark class="critic"> If running the code in your browser: </mark></p>
+<summary>Doc-page limitation</summary>
+<p><mark class="critic"> Plotted widgets on this page are for illustration. </mark></p>
 <ul>
-<li>The plotted widget <em>here</em> is for illustration only.<ul>
-<li>Due to event listener limitations of this page, it cannot trigger most callbacks.</li>
-<li>In a normal Python environment, this will be fully functional.</li>
-</ul>
-</li>
+<li>Due to event listener limitations, the widgets here will not trigger Python callbacks.</li>
+<li>In a normal environment like an actual notebook, this will be fully functional.</li>
 </ul>
 </details>
 <pre data-executable>
@@ -977,14 +982,11 @@ show(annotator.data_key_button_group, notebook_url=notebook_url)
 <p>Ever selected multiple files in your file system using <kbd>Ctrl</kbd>/<kbd>Command</kbd>?</p>
 <p>Similarly in <code>hover</code>, you can make cumulative selections by toggleing a checkbox.</p>
 <details class="info" open="open">
-<summary>In-browser limitation</summary>
-<p><mark class="critic"> If running the code in your browser: </mark></p>
+<summary>Doc-page limitation</summary>
+<p><mark class="critic"> Plotted widgets on this page are for illustration. </mark></p>
 <ul>
-<li>The plotted widget <em>here</em> is for illustration only.<ul>
-<li>Due to event listener limitations of this page, it cannot trigger most callbacks.</li>
-<li>In a normal Python environment, this will be fully functional.</li>
-</ul>
-</li>
+<li>Due to event listener limitations, the widgets here will not trigger Python callbacks.</li>
+<li>In a normal environment like an actual notebook, this will be fully functional.</li>
 </ul>
 </details>
 <pre data-executable>
@@ -995,14 +997,11 @@ show(annotator.selection_option_box, notebook_url=notebook_url)
 <p>Keywords or regular expressions can be great starting points for identifying a cluster of similar points based on domain expertise.</p>
 <p>You may specify a <em>positive</em> regular expression to look for and/or a <em>negative</em> one to not look for.</p>
 <details class="info" open="open">
-<summary>In-browser limitation</summary>
-<p><mark class="critic"> If running the code in your browser: </mark></p>
+<summary>Doc-page limitation</summary>
+<p><mark class="critic"> Plotted widgets on this page are for illustration. </mark></p>
 <ul>
-<li>The plotted widget <em>here</em> is for illustration only.<ul>
-<li>Due to event listener limitations of this page, it cannot trigger most callbacks.</li>
-<li>In a normal Python environment, this will be fully functional.</li>
-</ul>
-</li>
+<li>Due to event listener limitations, the widgets here will not trigger Python callbacks.</li>
+<li>In a normal environment like an actual notebook, this will be fully functional.</li>
 </ul>
 </details>
 <pre data-executable>

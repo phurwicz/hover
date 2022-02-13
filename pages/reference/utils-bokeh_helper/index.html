@@ -886,11 +886,14 @@
 <span class="sd">        Will NOT work outside of Binder.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">service_url_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;JUPYTERHUB_SERVICE_PREFIX&quot;</span><span class="p">,</span> <span class="s2">&quot;hover-binder&quot;</span><span class="p">)</span>
+    <span class="n">service_url_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+        <span class="s2">&quot;JUPYTERHUB_SERVICE_PREFIX&quot;</span><span class="p">,</span> <span class="s2">&quot;/user/hover-binder/&quot;</span>
+    <span class="p">)</span>
     <span class="n">proxy_url_path</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;proxy/</span><span class="si">{</span><span class="n">port</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">app_path</span><span class="si">}</span><span class="s2">&quot;</span>
 
-    <span class="n">base_url</span> <span class="o">=</span> <span class="s2">&quot;https://hub.gke2.mybinder.org/user&quot;</span>
-    <span class="n">full_url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">base_url</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">service_url_path</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">proxy_url_path</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="n">base_url</span> <span class="o">=</span> <span class="s2">&quot;https://hub.gke2.mybinder.org&quot;</span>
+    <span class="n">user_url_path</span> <span class="o">=</span> <span class="n">urljoin</span><span class="p">(</span><span class="n">service_url_path</span><span class="p">,</span> <span class="n">proxy_url_path</span><span class="p">)</span>
+    <span class="n">full_url</span> <span class="o">=</span> <span class="n">urljoin</span><span class="p">(</span><span class="n">base_url</span><span class="p">,</span> <span class="n">user_url_path</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">full_url</span>
 </code></pre></div>
         </details>
@@ -1072,19 +1075,19 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># find JupyterHub base (external) url, default to Binder</span>
-    <span class="n">base_url</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
-        <span class="s2">&quot;JUPYTERHUB_BASE_URL&quot;</span><span class="p">,</span> <span class="s2">&quot;https://hub.gke2.mybinder.org/user/&quot;</span>
-    <span class="p">)</span>
-    <span class="n">host</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">urlparse</span><span class="p">(</span><span class="n">base_url</span><span class="p">)</span><span class="o">.</span><span class="n">netloc</span>
+    <span class="n">base_url</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;JUPYTERHUB_BASE_URL&quot;</span><span class="p">,</span> <span class="s2">&quot;https://hub.gke2.mybinder.org&quot;</span><span class="p">)</span>
+    <span class="n">host</span> <span class="o">=</span> <span class="n">urlparse</span><span class="p">(</span><span class="n">base_url</span><span class="p">)</span><span class="o">.</span><span class="n">netloc</span>
 
     <span class="k">if</span> <span class="n">port</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">host</span>
 
-    <span class="n">service_url_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;JUPYTERHUB_SERVICE_PREFIX&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">service_url_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+        <span class="s2">&quot;JUPYTERHUB_SERVICE_PREFIX&quot;</span><span class="p">,</span> <span class="s2">&quot;/user/hover-binder/&quot;</span>
+    <span class="p">)</span>
     <span class="n">proxy_url_path</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;proxy/</span><span class="si">{</span><span class="n">port</span><span class="si">}</span><span class="s2">&quot;</span>
 
-    <span class="n">user_url</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">urljoin</span><span class="p">(</span><span class="n">base_url</span><span class="p">,</span> <span class="n">service_url_path</span><span class="p">)</span>
-    <span class="n">full_url</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">urljoin</span><span class="p">(</span><span class="n">user_url</span><span class="p">,</span> <span class="n">proxy_url_path</span><span class="p">)</span>
+    <span class="n">user_url</span> <span class="o">=</span> <span class="n">urljoin</span><span class="p">(</span><span class="n">base_url</span><span class="p">,</span> <span class="n">service_url_path</span><span class="p">)</span>
+    <span class="n">full_url</span> <span class="o">=</span> <span class="n">urljoin</span><span class="p">(</span><span class="n">user_url</span><span class="p">,</span> <span class="n">proxy_url_path</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">full_url</span>
 </code></pre></div>
         </details>

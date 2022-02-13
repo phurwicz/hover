@@ -877,7 +877,7 @@ reducer = dataset.compute_2d_embedding(vectorizer, "umap")
 <p>Active learning works by predicting labels and scores (i.e. soft labels) and utilizing that prediction. An intuitive way to plot soft labels is to color-code labels and use opacity ("alpha" by <code>bokeh</code> terminology) to represent scores.</p>
 <p><code>SoftLabelExplorer</code> delivers this functionality:</p>
 <pre data-executable>
-from hover.utils.bokeh_helper import remote_jupyter_proxy_url
+from local_lib.binder_helper import remote_jupyter_proxy_url
 from bokeh.io import show, output_notebook
 
 output_notebook()

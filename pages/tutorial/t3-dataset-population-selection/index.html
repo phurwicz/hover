@@ -863,7 +863,7 @@ dataset = SupervisableTextDataset.from_pandas(df, feature_key="text", label_key=
 </pre>
 <p><br></p>
 <pre data-executable>
-from hover.utils.bokeh_helper import remote_jupyter_proxy_url
+from local_lib.binder_helper import remote_jupyter_proxy_url
 from bokeh.io import show, output_notebook
 
 output_notebook()
@@ -928,14 +928,11 @@ show(dataset.sel_table, notebook_url=notebook_url)
 </ul>
 <p>Let's plot the forementioned buttons along with the selection table. Toggle any number of rows in the table, then click the button to <code>EVICT</code> or <code>PATCH</code> those rows:</p>
 <details class="info" open="open">
-<summary>In-browser limitation</summary>
-<p><mark class="critic"> If running the code in your browser: </mark></p>
+<summary>Doc-page limitation</summary>
+<p><mark class="critic"> Plotted widgets on this page are for illustration. </mark></p>
 <ul>
-<li>The plotted widget <em>here</em> is for illustration only.<ul>
-<li>Due to event listener limitations of this page, it cannot trigger most callbacks.</li>
-<li>In a normal Python environment, this will be fully functional.</li>
-</ul>
-</li>
+<li>Due to event listener limitations, the widgets here will not trigger Python callbacks.</li>
+<li>In a normal environment like an actual notebook, this will be fully functional.</li>
 </ul>
 </details>
 <pre data-executable>
