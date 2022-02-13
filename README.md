@@ -11,6 +11,7 @@
 [![Codacy Coverage](https://img.shields.io/codacy/coverage/689827d9077b43ac8721c7658d122d1a/main?logo=codacy&logoColor=white)](https://app.codacy.com/gh/phurwicz/hover/dashboard)
 
 `hover` speeds up data labeling through `embedding + visualization + callbacks`.
+
 -   all you need to supply is raw data and a vectorizer function.
 
 ![Demo](https://raw.githubusercontent.com/phurwicz/hover-gallery/main/0.5.0/trailer.gif)
