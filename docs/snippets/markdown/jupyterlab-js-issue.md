@@ -1,6 +1,5 @@
-???+ info "In-browser limitation"
-    {== If running the code in your browser: ==}
+???+ info "Doc-page limitation"
+    {== Plotted widgets on this page are for illustration. ==}
 
-    -   The plotted widget *here* is for illustration only.
-        -   Due to event listener limitations of this page, it cannot trigger most callbacks.
-        -   In a normal Python environment, this will be fully functional.
+    -   Due to event listener limitations, the widgets here will not trigger Python callbacks.
+    -   In a normal environment like an actual notebook, this will be fully functional.

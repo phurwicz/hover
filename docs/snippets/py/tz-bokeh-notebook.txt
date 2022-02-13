@@ -1,4 +1,4 @@
-from hover.utils.bokeh_helper import remote_jupyter_proxy_url
+from local_lib.binder_helper import remote_jupyter_proxy_url
 from bokeh.io import show, output_notebook
 
 output_notebook()

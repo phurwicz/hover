@@ -20,6 +20,8 @@ When we use lasso or polygon select, we are describing a shape. Sometimes that s
 
 Just like `annotator`, `finder` has search widgets. But unlike `annotator`, `finder` has a **filter toggle** which can directly **intersect** *what we selected* with *what meets the search criteria*.
 
+{!docs/snippets/markdown/jupyterlab-js-issue.md!}
+
 <pre data-executable>
 {!docs/snippets/py/tz-bokeh-notebook.txt!}
 
@@ -37,7 +39,7 @@ Next to the search widgets is a checkbox. The filter will stay active as long as
 
 `finder` also colors data points based on search criteria, making them easier to find.
 
-{!docs/snippets/markdown/jupyterlab-js-issue-lite.md!}
+{!docs/snippets/markdown/jupyterlab-js-issue.md!}
 
 <pre data-executable>
 {!docs/snippets/py/t5-1-finder-figure.txt!}

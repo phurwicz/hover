@@ -18,6 +18,8 @@
 
 The core of the annotator is a scatter plot and labeling widgets:
 
+{!docs/snippets/markdown/jupyterlab-js-issue.md!}
+
 <pre data-executable>
 {!docs/snippets/py/tz-bokeh-notebook.txt!}
 
