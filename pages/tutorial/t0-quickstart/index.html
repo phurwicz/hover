@@ -961,7 +961,7 @@ interactive_plot = simple_annotator(dataset)
 # because this tutorial is remotely hosted, we need explicit serving to expose the plot to you
 from local_lib.binder_helper import binder_proxy_app_url
 from bokeh.server.server import Server
-server = Server({'/my-app': interactive_plot}, port=5007, allow_websocket_origin=['*'])
+server = Server({'/my-app': interactive_plot}, port=5007, allow_websocket_origin=['*'], use_xheaders=True)
 server.start()
 # visit this URL printed in cell output to see the interactive plot; locally you would just do "https://localhost:5007/my-app"
 binder_proxy_app_url('my-app', port=5007)
