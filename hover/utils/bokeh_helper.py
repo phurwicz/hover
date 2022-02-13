@@ -2,10 +2,10 @@
 ???+ note "Useful subroutines for working with bokeh in general."
 """
 import os
-import urllib
 import warnings
 from functools import wraps
 from traceback import format_exc
+from urllib.parse import urljoin, urlparse
 from bokeh.models import PreText
 from bokeh.layouts import column
 from bokeh.palettes import Category10, Category20
@@ -235,11 +235,14 @@ def binder_proxy_app_url(app_path, port=5006):
         Will NOT work outside of Binder.
     """
 
-    service_url_path = os.environ.get("JUPYTERHUB_SERVICE_PREFIX", "hover-binder")
+    service_url_path = os.environ.get(
+        "JUPYTERHUB_SERVICE_PREFIX", "/user/hover-binder/"
+    )
     proxy_url_path = f"proxy/{port}/{app_path}"
 
-    base_url = "https://hub.gke2.mybinder.org/user"
-    full_url = f"{base_url}/{service_url_path}/{proxy_url_path}"
+    base_url = "https://hub.gke2.mybinder.org"
+    user_url_path = urljoin(service_url_path, proxy_url_path)
+    full_url = urljoin(base_url, user_url_path)
     return full_url
 
 
@@ -258,17 +261,17 @@ def remote_jupyter_proxy_url(port):
     """
 
     # find JupyterHub base (external) url, default to Binder
-    base_url = os.environ.get(
-        "JUPYTERHUB_BASE_URL", "https://hub.gke2.mybinder.org/user/"
-    )
-    host = urllib.parse.urlparse(base_url).netloc
+    base_url = os.environ.get("JUPYTERHUB_BASE_URL", "https://hub.gke2.mybinder.org")
+    host = urlparse(base_url).netloc
 
     if port is None:
         return host
 
-    service_url_path = os.environ.get("JUPYTERHUB_SERVICE_PREFIX", "")
+    service_url_path = os.environ.get(
+        "JUPYTERHUB_SERVICE_PREFIX", "/user/hover-binder/"
+    )
     proxy_url_path = f"proxy/{port}"
 
-    user_url = urllib.parse.urljoin(base_url, service_url_path)
-    full_url = urllib.parse.urljoin(user_url, proxy_url_path)
+    user_url = urljoin(base_url, service_url_path)
+    full_url = urljoin(user_url, proxy_url_path)
     return full_url
