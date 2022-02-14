@@ -55,8 +55,6 @@ Check out [@phurwicz/hover-binder](https://github.com/phurwicz/hover-binder) for
 
 PyPI (for all releases): `pip install hover`
 
-Conda (for 0.6.0 and above): `conda install -c conda-forge hover`
-
 For Windows users, we recommend [Windows Subsystem for Linux](https://docs.microsoft.com/en-us/windows/wsl/about).
 -   On Windows itself you will need [C++ build tools](https://visualstudio.microsoft.com/downloads/) for dependencies.
 
