@@ -1,9 +1,11 @@
+import time
+import pytest
 from hover.recipes.stable import simple_annotator, linked_annotator
 from hover.recipes.experimental import active_learning, snorkel_crosscheck
 from bokeh.server.server import Server
-import time
 
 
+@pytest.mark.lite
 def test_builtin_servable_recipes(
     mini_supervisable_text_dataset_embedded,
     dummy_vecnet_callback,

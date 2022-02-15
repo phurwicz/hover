@@ -35,9 +35,9 @@ test:
   imports:
     - hover
   commands:
-    - python -m spacy download encore_web_md
+    - python -m spacy download en_core_web_md
     - pip install ivis[cpu]>=1.7 wrappy>=0.2.6
-    - pytest
+    - pytest -m lite
   requires:
     - pip
     - pytest

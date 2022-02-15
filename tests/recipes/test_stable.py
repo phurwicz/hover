@@ -1,3 +1,4 @@
+import pytest
 from hover.recipes.stable import (
     _simple_annotator,
     _linked_annotator,
@@ -16,6 +17,7 @@ from tests.recipes.local_helper import (
 )
 
 
+@pytest.mark.lite
 def test_simple_annotator(mini_supervisable_text_dataset_embedded):
     dataset = mini_supervisable_text_dataset_embedded.copy()
     layout, objects = _simple_annotator(dataset, layout_style="horizontal")
@@ -96,6 +98,7 @@ def test_simple_annotator(mini_supervisable_text_dataset_embedded):
     assert dataset.dfs[subset_to_patch].at[idx_to_patch, "label"] == new_label
 
 
+@pytest.mark.lite
 def test_linked_annotator(mini_supervisable_text_dataset_embedded):
     dataset = mini_supervisable_text_dataset_embedded.copy()
     layout, objects = _linked_annotator(dataset, layout_style="vertical")
@@ -107,6 +110,7 @@ def test_linked_annotator(mini_supervisable_text_dataset_embedded):
     assert annotator.sources["raw"].selected.indices == [0, 1, 2]
 
 
+@pytest.mark.lite
 def test_servable_stable(mini_supervisable_text_dataset_embedded):
     for _recipe in [simple_annotator, linked_annotator]:
         dataset = mini_supervisable_text_dataset_embedded.copy()
