@@ -1,5 +1,7 @@
 # automation
 tox
+tox-conda
+tox-gh-actions
 pre-commit
 # documentation
 mkdocs

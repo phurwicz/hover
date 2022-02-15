@@ -5,7 +5,8 @@ repos:
     -   id: check-yaml
         exclude: |
             (?x)^(
-                conda-recipe/meta.yaml
+                conda-recipe/meta.yaml|
+                conda-recipe/stable.yaml
             )$
     -   id: end-of-file-fixer
     -   id: trailing-whitespace

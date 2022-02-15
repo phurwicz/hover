@@ -1,5 +1,5 @@
 {% set name = "hover" %}
-{% set version = "0.6.1a" %}
+{% set version = "0.6.0" %}
 
 
 package:
@@ -7,7 +7,8 @@ package:
   version: {{ version }}
 
 source:
-  git_url: https://github.com/phurwicz/hover.git
+  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  sha256: 26b9b4bcc4582a88910b14240002d88fe05b9e816db52a93202691ec72f26055
 
 build:
   number: 0
@@ -35,12 +36,9 @@ test:
   imports:
     - hover
   commands:
-    - tox -e test_api_conda
+    - pip check
   requires:
     - pip
-    - tox
-    - tox-gh-actions
-    - tox-conda
 
 about:
   home: https://phurwicz.github.io/hover

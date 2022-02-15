@@ -45,7 +45,7 @@ jobs:
     - name: Test and make coverage report
       run: |
         pip install --upgrade pip
-        pip install --upgrade tox tox-gh-actions
+        pip install --upgrade tox tox-gh-actions tox-conda
         tox -e test_api
 
     - name: Codacy Coverage Reporter
