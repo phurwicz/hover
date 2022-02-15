@@ -36,7 +36,7 @@ test:
     - hover
   commands:
     - python -m spacy download en_core_web_md
-    - pip install ivis[cpu]>=1.7 wrappy>=0.2.6
+    - pip install wrappy>=0.2.6
     - pytest -m lite
   requires:
     - pip
@@ -48,6 +48,7 @@ test:
   source_files:
     - fixture_module
     - tests
+    - pytest.ini
 
 about:
   home: https://phurwicz.github.io/hover
