@@ -35,12 +35,16 @@ test:
   imports:
     - hover
   commands:
-    - tox -e test_api_conda
+    - python -m spacy download encore_web_md
+    - pip install ivis[cpu]>=1.7 wrappy>=0.2.6
+    - pytest
   requires:
     - pip
-    - tox
-    - tox-gh-actions
-    - tox-conda
+    - pytest
+    - faker
+    - spacy
+    - snorkel>=0.9.8
+    - openpyxl
 
 about:
   home: https://phurwicz.github.io/hover
