@@ -45,6 +45,9 @@ test:
     - spacy
     - snorkel>=0.9.8
     - openpyxl
+  source_files:
+    - fixture_module
+    - tests
 
 about:
   home: https://phurwicz.github.io/hover
