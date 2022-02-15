@@ -29,7 +29,7 @@ jobs:
     - name: Install tox
       run: |
         pip install --upgrade pip
-        pip install --upgrade tox tox-gh-actions tox-conda
+        pip install --upgrade tox tox-gh-actions
 
     - name: Install hover
       run: |
