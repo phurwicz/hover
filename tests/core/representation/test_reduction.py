@@ -1,5 +1,23 @@
 from hover.core.representation.reduction import DimensionalityReducer
 import numpy as np
+import pytest
+
+
+@pytest.mark.lite
+def test_create_reducer(n_points=1000):
+    # if marked as lite, only test the default reducer library
+    from umap import UMAP
+
+    reducer = DimensionalityReducer.create_reducer(
+        "umap",
+        dimension=4,
+        n_neighbors=10,
+    )
+    assert isinstance(reducer, UMAP)
+    # dimension is expected to override n_components (default 2)
+    assert reducer.n_components == 4
+    # other kwargs are expected to simply get forwarded
+    assert reducer.n_neighbors == 10
 
 
 def test_dimensionality_reduction(n_points=1000):
@@ -8,13 +26,13 @@ def test_dimensionality_reduction(n_points=1000):
     reducer = DimensionalityReducer(arr)
 
     reducer.fit_transform(
-        "umap", n_neighbors=3, min_dist=0.01, n_components=2, metric="euclidean"
+        "umap", n_neighbors=3, min_dist=0.01, dimension=3, metric="euclidean"
     )
     embedding = reducer.transform(arr, "umap")
-    assert embedding.shape == (n_points, 2)
+    assert embedding.shape == (n_points, 3)
 
     reducer.fit_transform(
-        "ivis", embedding_dims=2, k=3, distance="pn", batch_size=16, epochs=20
+        "ivis", dimension=4, k=3, distance="pn", batch_size=16, epochs=20
     )
     embedding = reducer.transform(arr, "ivis")
-    assert embedding.shape == (n_points, 2)
+    assert embedding.shape == (n_points, 4)

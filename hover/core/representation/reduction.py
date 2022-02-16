@@ -7,12 +7,10 @@
 """
 import numpy as np
 from hover.core import Loggable
+from .local_config import KWARG_TRANSLATOR
 
 
 class DimensionalityReducer(Loggable):
-    AVAILABLE_METHODS = {"umap", "ivis"}
-    METHOD_ERROR_MSG = "Expected 'umap' or 'ivis' as reduction method"
-
     def __init__(self, array):
         """
         ???+ note "Link self to the shared input array for reduction methods."
@@ -21,6 +19,39 @@ class DimensionalityReducer(Loggable):
             | `array` | `np.ndarray` | the input array to fit on     |
         """
         self.reference_array = array
+
+    @staticmethod
+    def create_reducer(method, *args, **kwargs):
+        """
+        ???+ note "Handle kwarg translation and dynamic imports."
+
+            | Param      | Type   | Description              |
+            | :--------- | :----- | :----------------------- |
+            | `method`   | `str`  | `"umap"` or `"ivis"`     |
+            | `*args`    |        | forwarded to the reducer |
+            | `**kwargs` |        | translated and forwarded |
+        """
+        if method == "umap":
+            import umap
+
+            reducer_cls = umap.UMAP
+        elif method == "ivis":
+            import ivis
+
+            reducer_cls = ivis.Ivis
+        else:
+            raise ValueError("Expected 'umap' or 'ivis' as reduction method")
+
+        translated_kwargs = kwargs.copy()
+        for _key, _value in kwargs.items():
+            _trans_dict = KWARG_TRANSLATOR.get(_key, {})
+            if method in _trans_dict:
+                _trans_key = _trans_dict[method]
+                translated_kwargs.pop(_key)
+                translated_kwargs[_trans_key] = _value
+
+        reducer = reducer_cls(*args, **translated_kwargs)
+        return reducer
 
     def fit_transform(self, method, *args, **kwargs):
         """
@@ -31,17 +62,7 @@ class DimensionalityReducer(Loggable):
             | `*args`    |        | forwarded to the reducer |
             | `**kwargs` |        | forwarded to the reducer |
         """
-        if method == "umap":
-            import umap
-
-            reducer = umap.UMAP(*args, **kwargs)
-        elif method == "ivis":
-            import ivis
-
-            reducer = ivis.Ivis(*args, **kwargs)
-        else:
-            raise ValueError(self.__class__.METHOD_ERROR_MSG)
-
+        reducer = DimensionalityReducer.create_reducer(method, *args, **kwargs)
         embedding = reducer.fit_transform(self.reference_array)
         setattr(self, method, reducer)
         return embedding
