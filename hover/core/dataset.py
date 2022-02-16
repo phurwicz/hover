@@ -720,15 +720,16 @@ class SupervisableDataset(Loggable):
 
         self.compute_feature_index()
 
-    def compute_2d_embedding(self, vectorizer, method, **kwargs):
+    def compute_nd_embedding(self, vectorizer, method, dimension=2, **kwargs):
         """
-        ???+ note "Get embeddings in the xy-plane and return the dimensionality reducer."
+        ???+ note "Get embeddings in n-dimensional space and return the dimensionality reducer."
             Reference: [`DimensionalityReducer`](https://github.com/phurwicz/hover/blob/main/hover/core/representation/reduction.py)
 
             | Param        | Type       | Description                        |
             | :----------- | :--------- | :--------------------------------- |
             | `vectorizer` | `callable` | the feature -> vector function     |
             | `method`     | `str`      | arg for `DimensionalityReducer`    |
+            | `dimension`  | `int`      | dimension of output embedding      |
             | `**kwargs`   |            | kwargs for `DimensionalityReducer` |
         """
         from hover.core.representation.reduction import DimensionalityReducer
@@ -738,20 +739,23 @@ class SupervisableDataset(Loggable):
         trans_subset = [*self.__class__.PRIVATE_SUBSETS]
 
         assert not set(fit_subset).intersection(set(trans_subset)), "Unexpected overlap"
+        assert isinstance(dimension, int) and dimension >= 2
 
         # compute vectors and keep track which where to slice the array for fitting
         feature_inp = []
         for _key in fit_subset:
-            feature_inp += self.dfs[_key][self.__class__.FEATURE_KEY].tolist()
+            feature_inp.extend(self.dfs[_key][self.__class__.FEATURE_KEY].tolist())
         fit_num = len(feature_inp)
         for _key in trans_subset:
-            feature_inp += self.dfs[_key][self.__class__.FEATURE_KEY].tolist()
-        trans_arr = np.array([vectorizer(_inp) for _inp in tqdm(feature_inp)])
+            feature_inp.extend(self.dfs[_key][self.__class__.FEATURE_KEY].tolist())
+        trans_arr = np.array(
+            [vectorizer(_inp) for _inp in tqdm(feature_inp, desc="Vectorizing")]
+        )
 
         # initialize and fit manifold learning reducer using specified subarray
         self._info(f"Fit-transforming {method.upper()} on {fit_num} samples...")
         reducer = DimensionalityReducer(trans_arr[:fit_num])
-        fit_embedding = reducer.fit_transform(method, **kwargs)
+        fit_embedding = reducer.fit_transform(method, dimension=dimension, **kwargs)
 
         # compute embedding of the whole dataset
         self._info(
@@ -774,14 +778,30 @@ class SupervisableDataset(Loggable):
                 continue
             for _key in _subset:
                 _length = self.dfs[_key].shape[0]
-                self.dfs[_key]["x"] = pd.Series(
-                    _embedding[start_idx : (start_idx + _length), 0]
-                )
-                self.dfs[_key]["y"] = pd.Series(
-                    _embedding[start_idx : (start_idx + _length), 1]
-                )
+                for _i in range(dimension):
+                    _col = f"embed{dimension}d_{_i}"
+                    self.dfs[_key][_col] = pd.Series(
+                        _embedding[start_idx : (start_idx + _length), _i]
+                    )
                 start_idx += _length
 
+        return reducer
+
+    def compute_2d_embedding(self, vectorizer, method, **kwargs):
+        """
+        ???+ note "Get embeddings in the xy-plane and return the dimensionality reducer."
+            A special case of `compute_nd_embedding`.
+
+            | Param        | Type       | Description                        |
+            | :----------- | :--------- | :--------------------------------- |
+            | `vectorizer` | `callable` | the feature -> vector function     |
+            | `method`     | `str`      | arg for `DimensionalityReducer`    |
+            | `**kwargs`   |            | kwargs for `DimensionalityReducer` |
+        """
+        reducer = self.compute_nd_embedding(vectorizer, method, dimension=2, **kwargs)
+        for _subset in self.dfs.keys():
+            self.dfs[_subset]["x"] = self.dfs[_subset]["embed2d_0"]
+            self.dfs[_subset]["y"] = self.dfs[_subset]["embed2d_1"]
         return reducer
 
     def loader(self, key, *vectorizers, batch_size=64, smoothing_coeff=0.0):
@@ -826,7 +846,7 @@ class SupervisableDataset(Loggable):
         input_vector_lists = []
         for _vec_func in vectorizers:
             self._info(f"Preparing {key} input vectors...")
-            _input_vecs = [_vec_func(_f) for _f in tqdm(features)]
+            _input_vecs = [_vec_func(_f) for _f in tqdm(features, desc="Vectorizing")]
             input_vector_lists.append(_input_vecs)
 
         self._info(f"Preparing {key} data loader...")
@@ -845,30 +865,6 @@ class SupervisableDataset(Loggable):
             f"Prepared {key} loader with {len(features)} examples; {len(vectorizers)} vectors per feature, batch size {batch_size}"
         )
         return loader
-
-
-#    def synchronize_dictl_to_df(self):
-#        """
-#        ???+ note "Re-make dataframes from lists of dictionaries."
-#        """
-#        self.dfs = dict()
-#        for _key, _dictl in self.dictls.items():
-#            if _dictl:
-#                _df = pd.DataFrame(_dictl)
-#                assert self.__class__.FEATURE_KEY in _df.columns
-#                assert "label" in _df.columns
-#            else:
-#                _df = pd.DataFrame(columns=[self.__class__.FEATURE_KEY, "label"])
-#
-#            self.dfs[_key] = _df
-#
-#    def synchronize_df_to_dictl(self):
-#        """
-#        ???+ note "Re-make lists of dictionaries from dataframes."
-#        """
-#        self.dictls = dict()
-#        for _key, _df in self.dfs.items():
-#            self.dictls[_key] = _df.to_dict(orient="records")
 
 
 class SupervisableTextDataset(SupervisableDataset):
