@@ -87,9 +87,10 @@ class BokehDataFinder(BokehBaseExplorer):
         """
         ???+ note "Plot all data points."
         """
+        xy_axes = self.find_embedding_fields()[:2]
         for _key, _source in self.sources.items():
             self.figure.circle(
-                "x", "y", name=_key, source=_source, **self.glyph_kwargs[_key]
+                *xy_axes, name=_key, source=_source, **self.glyph_kwargs[_key]
             )
             self._good(f"Plotted subset {_key} with {self.dfs[_key].shape[0]} points")
 
@@ -199,10 +200,10 @@ class BokehDataAnnotator(BokehBaseExplorer):
             Overrides the parent method.
             Determines the label -> color mapping dynamically.
         """
+        xy_axes = self.find_embedding_fields()[:2]
         for _key, _source in self.sources.items():
             self.figure.circle(
-                "x",
-                "y",
+                *xy_axes,
                 name=_key,
                 color=SOURCE_COLOR_FIELD,
                 source=_source,
@@ -375,6 +376,7 @@ class BokehSoftLabelExplorer(BokehBaseExplorer):
             | :--------- | :----- | :--------------------------- |
             | `**kwargs` |        | forwarded to plotting markers |
         """
+        xy_axes = self.find_embedding_fields()[:2]
         for _key, _source in self.sources.items():
             # prepare plot settings
             preset_kwargs = {
@@ -385,7 +387,7 @@ class BokehSoftLabelExplorer(BokehBaseExplorer):
             eff_kwargs.update(preset_kwargs)
             eff_kwargs.update(kwargs)
 
-            self.figure.circle("x", "y", name=_key, source=_source, **eff_kwargs)
+            self.figure.circle(*xy_axes, name=_key, source=_source, **eff_kwargs)
             self._good(f"Plotted subset {_key} with {self.dfs[_key].shape[0]} points")
 
 
@@ -452,6 +454,7 @@ class BokehMarginExplorer(BokehBaseExplorer):
             | `**kwargs` |        | forwarded to plotting markers |
         """
 
+        xy_axes = self.find_embedding_fields()[:2]
         for _key, _source in self.sources.items():
             # prepare plot settings
             eff_kwargs = self.glyph_kwargs[_key].copy()
@@ -483,7 +486,7 @@ class BokehMarginExplorer(BokehBaseExplorer):
             for _dict in to_plot:
                 _view = _dict["view"]
                 _marker = _dict["marker"]
-                _marker("x", "y", name=_key, source=_source, view=_view, **eff_kwargs)
+                _marker(*xy_axes, name=_key, source=_source, view=_view, **eff_kwargs)
 
 
 class BokehSnorkelExplorer(BokehBaseExplorer):
@@ -695,8 +698,9 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
         """
         ???+ note "Plot the raw subset in the background."
         """
+        xy_axes = self.find_embedding_fields()[:2]
         self.figure.circle(
-            "x", "y", name="raw", source=self.sources["raw"], **self.glyph_kwargs["raw"]
+            *xy_axes, name="raw", source=self.sources["raw"], **self.glyph_kwargs["raw"]
         )
         self._good(f"Plotted subset raw with {self.dfs['raw'].shape[0]} points")
 
@@ -827,6 +831,7 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
         assert self.palette, f"Palette depleted, # LFs: {len(self.lf_data)}"
         legend_label = lf.name
         color = self.palette.pop(0)
+        xy_axes = self.find_embedding_fields()[:2]
 
         raw_glyph_kwargs = self.glyph_kwargs["raw"].copy()
         raw_glyph_kwargs["legend_label"] = legend_label
@@ -845,8 +850,7 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
         if "C" in include:
             view = self._view_correct(L_labeled)
             data_dict["glyphs"]["C"] = self.figure.square(
-                "x",
-                "y",
+                *xy_axes,
                 source=view.source,
                 view=view,
                 name="labeled",
@@ -856,8 +860,7 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
         if "I" in include:
             view = self._view_incorrect(L_labeled)
             data_dict["glyphs"]["I"] = self.figure.x(
-                "x",
-                "y",
+                *xy_axes,
                 source=view.source,
                 view=view,
                 name="labeled",
@@ -867,8 +870,7 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
         if "M" in include:
             view = self._view_missed(L_labeled, lf.targets)
             data_dict["glyphs"]["M"] = self.figure.cross(
-                "x",
-                "y",
+                *xy_axes,
                 source=view.source,
                 view=view,
                 name="labeled",
@@ -878,8 +880,7 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
         if "H" in include:
             view = self._view_hit(L_raw)
             data_dict["glyphs"]["H"] = self.figure.circle(
-                "x",
-                "y",
+                *xy_axes,
                 source=view.source,
                 view=view,
                 name="raw",

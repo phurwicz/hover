@@ -7,6 +7,7 @@ from bokeh.events import SelectionGeometry
 from bokeh.models import ColumnDataSource, Slider
 from bokeh.plotting import figure
 from hover.core import Loggable
+from hover.core.local_config import is_embedding_field
 from hover.utils.bokeh_helper import bokeh_hover_tooltip
 from hover.utils.meta.traceback import RichTracebackABCMeta
 from hover.utils.misc import RootUnionFind
@@ -130,6 +131,7 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
         self._setup_search_highlight()
         self._setup_selection_option()
         self._setup_subset_toggle()
+        self._setup_axes_dropdown()
 
     @abstractmethod
     def _layout_widgets(self):
@@ -180,6 +182,27 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
             self.data_key_button_group.active
         )
         self.data_key_button_group.on_click(update_data_key_display)
+
+    def _setup_axes_dropdown(self):
+        """
+        ???+ note "Find embedding fields and allow any of them to be set as the x or y axis."
+        """
+        from bokeh.models import Dropdown
+
+        embedding_cols = self.find_embedding_fields()
+        self.dropdown_x_axis = Dropdown(label="X coordinate", menu=embedding_cols)
+        self.dropdown_y_axis = Dropdown(label="Y coordinate", menu=embedding_cols)
+
+        def change_x(event):
+            for _renderer in self.figure.renderers:
+                _renderer.glyph.x = event.item
+
+        def change_y(event):
+            for _renderer in self.figure.renderers:
+                _renderer.glyph.y = event.item
+
+        self.dropdown_x_axis.on_click(change_x)
+        self.dropdown_y_axis.on_click(change_y)
 
     def value_patch_by_slider(self, col_original, col_patch, **kwargs):
         """
@@ -562,6 +585,23 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
             | `**kwargs` |       | left to child classes |
         """
         pass
+
+    def find_embedding_fields(self):
+        """
+        ???+ note "Find embedding fields from dataframes."
+
+            Intended for scenarios where the embedding is higher than two-dimensional.
+        """
+        embedding_cols = None
+        for _key, _df in self.dfs.items():
+            # automatically find embedding columns
+            _emb_cols = sorted(filter(is_embedding_field, _df.columns))
+            if embedding_cols is None:
+                embedding_cols = _emb_cols
+            else:
+                # embedding columns must be the same across subsets
+                assert embedding_cols == _emb_cols, "Inconsistent embedding columns"
+        return embedding_cols
 
     def auto_color_mapping(self):
         """

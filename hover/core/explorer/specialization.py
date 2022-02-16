@@ -11,7 +11,6 @@ from .functionality import (
 )
 from .feature import BokehForText, BokehForAudio, BokehForImage
 from bokeh.layouts import column, row
-from deprecated import deprecated
 
 
 class BokehTextFinder(BokehDataFinder, BokehForText):
@@ -31,6 +30,7 @@ class BokehTextFinder(BokehDataFinder, BokehForText):
                 column(self.search_pos, self.search_neg),
                 column(self.search_filter_box),
             ),
+            row(self.dropdown_x_axis, self.dropdown_y_axis),
             row(*self._dynamic_widgets.values()),
         )
         return column(*layout_rows)
@@ -51,6 +51,7 @@ class BokehTextAnnotator(BokehDataAnnotator, BokehForText):
             row(self.data_key_button_group, self.selection_option_box),
             row(self.search_pos, self.search_neg),
             row(self.annotator_input, self.annotator_apply),
+            row(self.dropdown_x_axis, self.dropdown_y_axis),
             row(*self._dynamic_widgets.values()),
         )
         return column(*layout_rows)
@@ -71,6 +72,7 @@ class BokehTextSoftLabel(BokehSoftLabelExplorer, BokehForText):
             row(self.data_key_button_group, self.selection_option_box),
             row(self.search_pos, self.search_neg),
             row(self.score_filter),
+            row(self.dropdown_x_axis, self.dropdown_y_axis),
             row(*self._dynamic_widgets.values()),
         )
         return column(*layout_rows)
@@ -101,6 +103,7 @@ class BokehTextSnorkel(BokehSnorkelExplorer, BokehForText):
             row(self.data_key_button_group, self.selection_option_box),
             row(self.search_pos, self.search_neg),
             row(self.lf_apply_trigger, self.lf_filter_trigger, self.lf_list_refresher),
+            row(self.dropdown_x_axis, self.dropdown_y_axis),
             row(*self._dynamic_widgets.values()),
         )
         return column(*layout_rows)
@@ -130,6 +133,7 @@ class BokehAudioAnnotator(BokehDataAnnotator, BokehForAudio):
         layout_rows = (
             row(self.data_key_button_group, self.selection_option_box),
             row(self.annotator_input, self.annotator_apply),
+            row(self.dropdown_x_axis, self.dropdown_y_axis),
             row(*self._dynamic_widgets.values()),
         )
         return column(*layout_rows)
@@ -149,6 +153,7 @@ class BokehAudioSoftLabel(BokehSoftLabelExplorer, BokehForAudio):
         layout_rows = (
             row(self.data_key_button_group, self.selection_option_box),
             row(self.score_filter),
+            row(self.dropdown_x_axis, self.dropdown_y_axis),
             row(*self._dynamic_widgets.values()),
         )
         return column(*layout_rows)
@@ -198,6 +203,7 @@ class BokehImageAnnotator(BokehDataAnnotator, BokehForImage):
         layout_rows = (
             row(self.data_key_button_group, self.selection_option_box),
             row(self.annotator_input, self.annotator_apply),
+            row(self.dropdown_x_axis, self.dropdown_y_axis),
             row(*self._dynamic_widgets.values()),
         )
         return column(*layout_rows)
@@ -217,6 +223,7 @@ class BokehImageSoftLabel(BokehSoftLabelExplorer, BokehForImage):
         layout_rows = (
             row(self.data_key_button_group, self.selection_option_box),
             row(self.score_filter),
+            row(self.dropdown_x_axis, self.dropdown_y_axis),
             row(*self._dynamic_widgets.values()),
         )
         return column(*layout_rows)
@@ -240,19 +247,3 @@ class BokehImageSnorkel(BokehSnorkelExplorer, BokehForImage):
     TOOLTIP_KWARGS = BokehForImage.TOOLTIP_KWARGS
     MANDATORY_COLUMNS = BokehForImage.MANDATORY_COLUMNS
     SUBSET_GLYPH_KWARGS = BokehSnorkelExplorer.SUBSET_GLYPH_KWARGS
-
-
-@deprecated(
-    version="0.4.0",
-    reason="will be removed in a future version; please use BokehTextFinder instead.",
-)
-class BokehCorpusExplorer(BokehTextFinder):
-    pass
-
-
-@deprecated(
-    version="0.4.0",
-    reason="will be removed in a future version; please use BokehTextFinder instead.",
-)
-class BokehCorpusAnnotator(BokehTextAnnotator):
-    pass
