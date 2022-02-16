@@ -316,6 +316,33 @@
     Features
   </a>
   
+    <nav class="md-nav" aria-label="Features">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#its-fast-because-it-labels-in-bulk" class="md-nav__link">
+    It's fast because it labels in bulk.
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#its-accurate-because-you-can-filter-and-extend" class="md-nav__link">
+    It's accurate because you can filter and extend.
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#its-fun-because-the-process-never-gets-old" class="md-nav__link">
+    It's fun because the process never gets old.
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -384,6 +411,13 @@
           <li class="md-nav__item">
   <a href="#contributing" class="md-nav__link">
     Contributing
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#citation" class="md-nav__link">
+    Citation
   </a>
   
 </li>
@@ -844,30 +878,34 @@
 <p>Get enough to feed your model in no time.</p>
 </blockquote>
 <p><a href="https://pypi.org/project/hover/"><img alt="PyPI Version" src="https://img.shields.io/pypi/v/hover?logo=pypi&amp;logoColor=white" /></a>
-<a href="https://pepy.tech/project/hover"><img alt="Downloads" src="https://static.pepy.tech/personalized-badge/hover?period=total&amp;units=international_system&amp;left_color=grey&amp;right_color=brightgreen&amp;left_text=Downloads" /></a>
+<a href="https://github.com/conda-forge/hover-feedstock"><img alt="Conda Version" src="https://img.shields.io/conda/vn/conda-forge/hover" /></a>
+<a href="https://pepy.tech/project/hover"><img alt="Downloads" src="https://static.pepy.tech/personalized-badge/hover?period=total&amp;units=international_system&amp;left_color=grey&amp;right_color=brightgreen&amp;left_text=pypi%20downloads" /></a>
 <a href="https://github.com/phurwicz/hover/actions"><img alt="Build Status" src="https://img.shields.io/github/workflow/status/phurwicz/hover/python-package?logo=github&amp;logoColor=white" /></a>
 <a href="https://app.codacy.com/gh/phurwicz/hover/dashboard"><img alt="Codacy Grade" src="https://img.shields.io/codacy/grade/689827d9077b43ac8721c7658d122d1a?logo=codacy&amp;logoColor=white" /></a>
 <a href="https://app.codacy.com/gh/phurwicz/hover/dashboard"><img alt="Codacy Coverage" src="https://img.shields.io/codacy/coverage/689827d9077b43ac8721c7658d122d1a/main?logo=codacy&amp;logoColor=white" /></a></p>
-<p><code>hover</code> speeds up data labeling through <code>embedding + visualization + callbacks</code>. You just need raw data and a vectorizer function to get started.</p>
+<p><code>hover</code> speeds up data labeling through <code>embedding + visualization + callbacks</code>. You just need raw data and an embedding to start.</p>
 <p><img alt="Demo" src="https://raw.githubusercontent.com/phurwicz/hover-gallery/main/0.5.0/trailer.gif" /></p>
 <h2 id="features"><img alt="✨" class="emojione" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.2.7/assets/png/2728.png" title=":sparkles:" /> Features</h2>
+<blockquote>
+<h3 id="its-fast-because-it-labels-in-bulk">It's fast because it labels in bulk.</h3>
+</blockquote>
+<p><img alt="🔭" class="emojione" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.2.7/assets/png/1f52d.png" title=":telescope:" /> A 2D-embedded view of your dataset for labeling, equipped with
+-   <strong>Tooltip</strong> for each point and <strong>table view</strong> for groups of points.
+-   <strong>Search</strong> widgets for ad-hoc highlight of data matching search criteria.
+-   <strong>Toggle</strong> buttons that clearly distinguish data subsets ("raw"/"train"/"dev"/"test").</p>
+<blockquote>
+<h3 id="its-accurate-because-you-can-filter-and-extend">It's accurate because you can filter and extend.</h3>
+</blockquote>
+<p><img alt="🔬" class="emojione" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.2.7/assets/png/1f52c.png" title=":microscope:" /> Supplementary views to provide further labeling precision, such as
+-   Advanced search view which can <strong>filter points by search criteria</strong> and provides stronger highlight.
+-   Active learning view which puts a model in the loop and can <strong>filter by confidence score</strong>.
+-   Function-based view which can leverage <strong>custom functions for labeling and filtering</strong>.</p>
+<blockquote>
+<h3 id="its-fun-because-the-process-never-gets-old">It's fun because the process never gets old.</h3>
+</blockquote>
 <ul>
-<li>
-<p><img alt="🔭" class="emojione" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.2.7/assets/png/1f52d.png" title=":telescope:" /> A 2D-embedded view of your dataset for labeling, equipped with</p>
-<ul>
-<li><strong>Tooltip</strong> for each point and <strong>table view</strong> for groups of points.</li>
-<li><strong>Search</strong> widgets for ad-hoc highlight of data matching search criteria.</li>
-<li><strong>Toggle</strong> buttons that clearly distinguish data subsets ("raw"/"train"/"dev"/"test").</li>
-</ul>
-</li>
-<li>
-<p><img alt="🔬" class="emojione" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.2.7/assets/png/1f52c.png" title=":microscope:" /> Supplementary views to provide further labeling precision, such as</p>
-<ul>
-<li>Advanced search view which can <strong>filter points by search criteria</strong> and provides stronger highlight.</li>
-<li>Active learning view which puts a model in the loop and can <strong>filter by confidence score</strong>.</li>
-<li>Function-based view which can leverage <strong>custom functions for labeling and filtering</strong>.</li>
-</ul>
-</li>
+<li>Explore the map to find out which "zones" are easy and which ones are tricky.</li>
+<li>Join the conquest of your data by coloring all of those zones through wisdom!</li>
 </ul>
 <p>Check out <a href="https://github.com/phurwicz/hover-binder">@phurwicz/hover-binder</a> for a list of demo apps.</p>
 <h2 id="quickstart"><img alt="🚀" class="emojione" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.2.7/assets/png/1f680.png" title=":rocket:" /> Quickstart</h2>
@@ -885,7 +923,7 @@
 <p>OS: Linux &amp; Mac &amp; Windows</p>
 </blockquote>
 <p>PyPI (for all releases): <code>pip install hover</code></p>
-<p>Conda (for 0.6.0 and above): <code>conda install -c conda-forge hover</code></p>
+<p>Conda-forge (for 0.6.0 and above): <code>conda install -c conda-forge hover</code></p>
 <p>For Windows users, we recommend <a href="https://docs.microsoft.com/en-us/windows/wsl/about">Windows Subsystem for Linux</a>.
 -   On Windows itself you will need <a href="https://visualstudio.microsoft.com/downloads/">C++ build tools</a> for dependencies.</p>
 <h2 id="resources"><img alt="📖" class="emojione" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.2.7/assets/png/1f4d6.png" title=":book:" /> Resources</h2>
@@ -914,10 +952,22 @@
 </ul>
 <h3 id="contributing">Contributing</h3>
 <ul>
-<li>All feedbacks are welcome :hugs: Especially what you find frustrating and want fixed!</li>
+<li>All feedbacks are welcome, <strong>especially what you find lacking and want it fixed!</strong></li>
 <li><code>./requirements-dev.txt</code> lists required packages for development.</li>
 <li>Pull requests are advised to use a superset of the pre-commit hooks listed in <a href="https://github.com/phurwicz/hover/blob/main/.pre-commit-config.yaml">.pre-commit-config.yaml</a>.</li>
 </ul>
+<h3 id="citation">Citation</h3>
+<p>If you have found <code>hover</code> useful to your work, please <a href="https://github.com/phurwicz/hover/discussions">let us know</a> :hugs:</p>
+<div class="highlight"><pre><span></span><code>@misc<span class="nb">{</span>hover,
+  title=<span class="nb">{{</span>hover<span class="nb">}</span>: label data at scale<span class="nb">}</span>,
+  url=<span class="nb">{</span>https://github.com/phurwicz/hover<span class="nb">}</span>,
+  note=<span class="nb">{</span>Open software from https://github.com/phurwicz/hover<span class="nb">}</span>,
+  author=<span class="nb">{</span>
+    Pavel Hurwicz and
+    Haochuan Wei<span class="nb">}</span>,
+  year=<span class="nb">{</span>2021<span class="nb">}</span>,
+<span class="nb">}</span>
+</code></pre></div>
 
               
             </article>
