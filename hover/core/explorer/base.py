@@ -47,7 +47,7 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
 
     SUBSET_GLYPH_KWARGS = {}
 
-    MANDATORY_COLUMNS = ["label", "x", "y"]
+    MANDATORY_COLUMNS = ["label"]
     TOOLTIP_KWARGS = {"label": True, "coords": True, "index": True}
 
     def __init__(self, df_dict, **kwargs):
@@ -601,6 +601,9 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
             else:
                 # embedding columns must be the same across subsets
                 assert embedding_cols == _emb_cols, "Inconsistent embedding columns"
+        assert (
+            len(embedding_cols) >= 2
+        ), f"Expected at least two embedding columns, found {embedding_cols}"
         return embedding_cols
 
     def auto_color_mapping(self):

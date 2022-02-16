@@ -741,6 +741,7 @@ class SupervisableDataset(Loggable):
 
         assert not set(fit_subset).intersection(set(trans_subset)), "Unexpected overlap"
         assert isinstance(dimension, int) and dimension >= 2
+        embedding_cols = [embedding_field(dimension, i) for i in range(dimension)]
 
         # compute vectors and keep track which where to slice the array for fitting
         feature_inp = []
@@ -780,12 +781,13 @@ class SupervisableDataset(Loggable):
             for _key in _subset:
                 _length = self.dfs[_key].shape[0]
                 for _i in range(dimension):
-                    _col = embedding_field(dimension, _i)
+                    _col = embedding_cols[_i]
                     self.dfs[_key][_col] = pd.Series(
                         _embedding[start_idx : (start_idx + _length), _i]
                     )
                 start_idx += _length
 
+        self._good(f"Computed {dimension}-d embedding in columns {embedding_cols}")
         return reducer
 
     def compute_2d_embedding(self, vectorizer, method, **kwargs):

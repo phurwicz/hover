@@ -21,7 +21,7 @@ class BokehForText(BokehBaseExplorer):
         - what the explorer serves to do.
     """
 
-    MANDATORY_COLUMNS = ["text", "label", "x", "y"]
+    MANDATORY_COLUMNS = ["text", "label"]
     TOOLTIP_KWARGS = {"label": True, "text": True, "coords": True, "index": True}
 
     def _setup_search_highlight(self):
@@ -204,7 +204,7 @@ class BokehForAudio(BokehBaseExplorer):
         - what the explorer serves to do.
     """
 
-    MANDATORY_COLUMNS = ["audio", "label", "x", "y"]
+    MANDATORY_COLUMNS = ["audio", "label"]
     TOOLTIP_KWARGS = {"label": True, "audio": True, "coords": True, "index": True}
 
     def _setup_search_highlight(self):
@@ -262,7 +262,7 @@ class BokehForImage(BokehBaseExplorer):
         - what the explorer serves to do.
     """
 
-    MANDATORY_COLUMNS = ["image", "label", "x", "y"]
+    MANDATORY_COLUMNS = ["image", "label"]
     TOOLTIP_KWARGS = {"label": True, "image": True, "coords": True, "index": True}
 
     def _setup_search_highlight(self):
