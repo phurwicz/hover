@@ -802,9 +802,6 @@ class SupervisableDataset(Loggable):
             | `**kwargs`   |            | kwargs for `DimensionalityReducer` |
         """
         reducer = self.compute_nd_embedding(vectorizer, method, dimension=2, **kwargs)
-        for _subset in self.dfs.keys():
-            self.dfs[_subset]["x"] = self.dfs[_subset][embedding_field(2, 0)]
-            self.dfs[_subset]["y"] = self.dfs[_subset][embedding_field(2, 1)]
         return reducer
 
     def loader(self, key, *vectorizers, batch_size=64, smoothing_coeff=0.0):
