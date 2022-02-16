@@ -5,6 +5,7 @@
 
     -   functions for creating individual standard explorers appropriate for a dataset.
 """
+import re
 import numpy as np
 import hover.core.explorer as hovex
 from bokeh.layouts import row, column
@@ -235,8 +236,20 @@ def active_learning_components(dataset, vecnet, **kwargs):
     feature_key = dataset.__class__.FEATURE_KEY
 
     # patch coordinates for representational similarity analysis
-    softlabel.value_patch_by_slider("x", "x_traj", title="Manifold trajectory step")
-    softlabel.value_patch_by_slider("y", "y_traj")
+    # some datasets may have multiple embeddings; use the one with lowest dimension
+    embedding_cols = sorted(softlabel.find_embedding_fields())
+    manifold_dim, _ = re.findall(r"\d+", embedding_cols[0])
+    manifold_dim = int(manifold_dim)
+    manifold_traj_cols = embedding_cols[:manifold_dim]
+    for _col in manifold_traj_cols:
+        _total_dim, _ = re.findall(r"\d+", _col)
+        _total_dim = int(_total_dim)
+        assert (
+            _total_dim == manifold_dim
+        ), f"Dim mismatch: {_total_dim} vs. {manifold_dim}"
+        softlabel.value_patch_by_slider(
+            _col, f"{_col}_traj", title="Manifold trajectory step"
+        )
 
     # recipe-specific widget
     model_trainer = Button(label="Train model", button_type="primary")
@@ -276,7 +289,9 @@ def active_learning_components(dataset, vecnet, **kwargs):
         scores = probs.max(axis=-1).tolist()
         traj_arr, seq_arr, disparity_arr = vecnet.manifold_trajectory(
             inps,
-            points_per_step=5,
+            method="umap",
+            reducer_kwargs=dict(dimension=manifold_dim),
+            spline_kwargs=dict(points_per_step=5),
         )
 
         offset = 0
@@ -288,14 +303,12 @@ def active_learning_components(dataset, vecnet, **kwargs):
             _slice = slice(offset, offset + _length)
             dataset.dfs[_key]["pred_label"] = labels[_slice]
             dataset.dfs[_key]["pred_score"] = scores[_slice]
-            # for each dimension: all steps, selected slice
-            _x_traj = traj_arr[:, _slice, 0]
-            _y_traj = traj_arr[:, _slice, 1]
-            # for each dimension: selected slice, all steps
-            _x_traj = list(np.swapaxes(_x_traj, 0, 1))
-            _y_traj = list(np.swapaxes(_y_traj, 0, 1))
-            dataset.dfs[_key]["x_traj"] = _x_traj
-            dataset.dfs[_key]["y_traj"] = _y_traj
+            for i, _col in enumerate(manifold_traj_cols):
+                # all steps, selected slice
+                _traj = traj_arr[:, _slice, i]
+                # selected slice, all steps
+                _traj = list(np.swapaxes(_traj, 0, 1))
+                dataset.dfs[_key][f"{_col}_traj"] = _traj
 
             offset += _length
 

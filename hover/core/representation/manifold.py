@@ -7,15 +7,6 @@ from tqdm import tqdm
 from scipy.spatial import procrustes
 from hover.core import Loggable
 
-DEFAULT_UMAP_PARAMS = {
-    "n_components": 2,
-    "n_neighbors": 30,
-    "min_dist": 0.1,
-    "metric": "euclidean",
-    "random_state": 0,
-    "transform_seed": 0,
-}
-
 
 class LayerwiseManifold(Loggable):
     """
@@ -60,23 +51,17 @@ class LayerwiseManifold(Loggable):
         self.arrays = [transform(_arr) for _arr in self.arrays]
         self._good("Standardized input arrays")
 
-    def unfold(self, method="umap", reducer_kwargs=None):
+    def unfold(self, method="umap", **kwargs):
         """
         Compute lower-dimensional manifolds using UMAP.
         :param method: the dimensionality reduction method to use.
         :type method: str
         """
-        assert method in {"umap", "ivis"}
-        if method == "umap":
-            reducer_kwargs = reducer_kwargs or DEFAULT_UMAP_PARAMS
-        else:
-            reducer_kwargs = reducer_kwargs or dict()
-
         self.manifolds = []
         self._info(f"Running {method}...")
         for _arr in tqdm(self.arrays, total=len(self.arrays)):
             _reducer = DimensionalityReducer(_arr)
-            _manifold = _reducer.fit_transform(method, **reducer_kwargs)
+            _manifold = _reducer.fit_transform(method, **kwargs)
             self.manifolds.append(_manifold)
         self._good("Successfully unfolded arrays into manifolds")
 

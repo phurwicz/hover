@@ -51,7 +51,6 @@ def _snorkel_crosscheck(dataset, lf_list, layout_style="horizontal", **kwargs):
 
     # link coordinates and selections
     for _explorer in [annotator, snorkel]:
-        finder.link_xy_range(_explorer)
         finder.link_selection_options(_explorer)
     # note that SnorkelExplorer has different subsets
     for _key in ["raw", "train", "dev", "test"]:
@@ -105,9 +104,6 @@ def _active_learning(dataset, vecnet, layout_style="horizontal", **kwargs):
     annotator = standard_annotator(dataset, **kwargs)
     finder = standard_finder(dataset, **kwargs)
     softlabel, model_trainer = active_learning_components(dataset, vecnet, **kwargs)
-
-    # link coordinates, omitting the softlabel
-    finder.link_xy_range(annotator)
 
     # link selections, noting that softlabel does not take "test"
     finder.link_selection_options(annotator)

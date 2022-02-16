@@ -304,13 +304,15 @@ class VectorNet(BaseVectorNet):
 
         return probs
 
-    def manifold_trajectory(self, inps, method="umap", **kwargs):
+    def manifold_trajectory(
+        self, inps, method="umap", reducer_kwargs=None, spline_kwargs=None
+    ):
         """
         ???+ note "Compute a propagation trajectory of the dataset manifold through the neural net."
 
             1. vectorize inps
             2. forward propagate, keeping intermediates
-            3. fit intermediates to 2D manifolds
+            3. fit intermediates to N-D manifolds
             4. fit manifolds using Procrustes shape analysis
             5. fit shapes to trajectory splines
 
@@ -318,10 +320,14 @@ class VectorNet(BaseVectorNet):
             | :------- | :------ | :----------------------------------- |
             | `inps`   | dynamic | (a list of) input features to vectorize |
             | `method` | `str`   | reduction method: `"umap"` or `"ivis"`  |
-            | `**kwargs` | | kwargs to forward to dimensionality reduction |
+            | `reducer_kwargs` | | kwargs to forward to dimensionality reduction |
+            | `spline_kwargs` | | kwargs to forward to spline calculation |
         """
         from hover.core.representation.manifold import LayerwiseManifold
         from hover.core.representation.trajectory import manifold_spline
+
+        reducer_kwargs = reducer_kwargs or {}
+        spline_kwargs = spline_kwargs or {}
 
         # step 1 & 2
         vectors = torch.Tensor([self.vectorizer(_inp) for _inp in inps])
@@ -331,12 +337,12 @@ class VectorNet(BaseVectorNet):
 
         # step 3 & 4
         LM = LayerwiseManifold(intermediates)
-        LM.unfold(method=method)
+        LM.unfold(method=method, **reducer_kwargs)
         seq_arr, disparities = LM.procrustes()
         seq_arr = np.array(seq_arr)
 
         # step 5
-        traj_arr = manifold_spline(np.array(seq_arr), **kwargs)
+        traj_arr = manifold_spline(np.array(seq_arr), **spline_kwargs)
 
         return traj_arr, seq_arr, disparities
 
