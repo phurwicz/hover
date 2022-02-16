@@ -181,7 +181,7 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
         )
         self.data_key_button_group.on_click(update_data_key_display)
 
-    def value_patch(self, col_original, col_patch, **kwargs):
+    def value_patch_by_slider(self, col_original, col_patch, **kwargs):
         """
         ???+ note "Allow source values to be dynamically patched through a slider."
             | Param            | Type   | Description                  |

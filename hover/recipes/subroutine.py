@@ -235,8 +235,8 @@ def active_learning_components(dataset, vecnet, **kwargs):
     feature_key = dataset.__class__.FEATURE_KEY
 
     # patch coordinates for representational similarity analysis
-    softlabel.value_patch("x", "x_traj", title="Manifold trajectory step")
-    softlabel.value_patch("y", "y_traj")
+    softlabel.value_patch_by_slider("x", "x_traj", title="Manifold trajectory step")
+    softlabel.value_patch_by_slider("y", "y_traj")
 
     # recipe-specific widget
     model_trainer = Button(label="Train model", button_type="primary")
@@ -283,20 +283,21 @@ def active_learning_components(dataset, vecnet, **kwargs):
         for _key in use_subsets:
             _length = dataset.dfs[_key].shape[0]
             # skip subset if empty
-            if _length > 0:
-                _slice = slice(offset, offset + _length)
-                dataset.dfs[_key]["pred_label"] = labels[_slice]
-                dataset.dfs[_key]["pred_score"] = scores[_slice]
-                # for each dimension: all steps, selected slice
-                _x_traj = traj_arr[:, _slice, 0]
-                _y_traj = traj_arr[:, _slice, 1]
-                # for each dimension: selected slice, all steps
-                _x_traj = list(np.swapaxes(_x_traj, 0, 1))
-                _y_traj = list(np.swapaxes(_y_traj, 0, 1))
-                dataset.dfs[_key]["x_traj"] = _x_traj
-                dataset.dfs[_key]["y_traj"] = _y_traj
+            if _length == 0:
+                continue
+            _slice = slice(offset, offset + _length)
+            dataset.dfs[_key]["pred_label"] = labels[_slice]
+            dataset.dfs[_key]["pred_score"] = scores[_slice]
+            # for each dimension: all steps, selected slice
+            _x_traj = traj_arr[:, _slice, 0]
+            _y_traj = traj_arr[:, _slice, 1]
+            # for each dimension: selected slice, all steps
+            _x_traj = list(np.swapaxes(_x_traj, 0, 1))
+            _y_traj = list(np.swapaxes(_y_traj, 0, 1))
+            dataset.dfs[_key]["x_traj"] = _x_traj
+            dataset.dfs[_key]["y_traj"] = _y_traj
 
-                offset += _length
+            offset += _length
 
         softlabel._dynamic_callbacks["adjust_patch_slider"]()
         softlabel._update_sources()
