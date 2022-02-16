@@ -181,8 +181,13 @@ class TestBokehDataAnnotator:
         assert explorer.sources["raw"].selected.indices == [0, 1]
 
         # actual labeling
+        assert (
+            explorer.dfs["raw"].loc[[0, 1], "label"]
+            == [module_config.ABSTAIN_DECODED] * 2
+        ).all()
         explorer.annotator_input.value = "A"
         explorer.annotator_apply._trigger_event(apply_event)
+        assert (explorer.dfs["raw"].loc[[0, 1], "label"] == ["A"] * 2).all()
 
 
 @pytest.mark.core

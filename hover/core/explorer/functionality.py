@@ -178,12 +178,12 @@ class BokehDataAnnotator(BokehBaseExplorer):
                     "attempting annotation: did not select any data points. Eligible subset is 'raw'."
                 )
                 return
+            self._info(f"applying {len(selected_idx)} annotations...")
 
             # update label in both the df and the data source
             self.dfs["raw"].loc[selected_idx, "label"] = label
-            for _idx in selected_idx:
-                _idx = int(_idx)
-                self.sources["raw"].patch({"label": [(_idx, label)]})
+            patch_to_apply = [(_idx, label) for _idx in selected_idx]
+            self.sources["raw"].patch({"label": patch_to_apply})
             self._good(f"applied {len(selected_idx)} annotations: {label}")
 
             self._update_colors()
