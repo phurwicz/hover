@@ -1,3 +1,4 @@
+import re
 from bokeh.models import (
     Div,
     TableColumn,
@@ -13,6 +14,17 @@ COLOR_GLYPH_TEMPLATE = """
     <%= "&#9608;&#9608;&#9608;" %>
 </p>
 """
+
+EMBEDDING_FIELD_PREFIX = "embed_"
+EMBEDDING_FIELD_REGEX = r"^" + EMBEDDING_FIELD_PREFIX + r"\d+d_\d+$"
+
+
+def embedding_field(total_dim, specific_dim):
+    return f"{EMBEDDING_FIELD_PREFIX}{total_dim}d_{specific_dim}"
+
+
+def is_embedding_field(column_name):
+    return re.search(EMBEDDING_FIELD_REGEX, column_name)
 
 
 def dataset_help_widget():

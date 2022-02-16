@@ -31,6 +31,7 @@ from .local_config import (
     dataset_default_sel_table_kwargs,
     COLOR_GLYPH_TEMPLATE,
     DATASET_SUBSET_FIELD,
+    embedding_field,
 )
 
 
@@ -779,7 +780,7 @@ class SupervisableDataset(Loggable):
             for _key in _subset:
                 _length = self.dfs[_key].shape[0]
                 for _i in range(dimension):
-                    _col = f"embed{dimension}d_{_i}"
+                    _col = embedding_field(dimension, _i)
                     self.dfs[_key][_col] = pd.Series(
                         _embedding[start_idx : (start_idx + _length), _i]
                     )
@@ -800,8 +801,8 @@ class SupervisableDataset(Loggable):
         """
         reducer = self.compute_nd_embedding(vectorizer, method, dimension=2, **kwargs)
         for _subset in self.dfs.keys():
-            self.dfs[_subset]["x"] = self.dfs[_subset]["embed2d_0"]
-            self.dfs[_subset]["y"] = self.dfs[_subset]["embed2d_1"]
+            self.dfs[_subset]["x"] = self.dfs[_subset][embedding_field(2, 0)]
+            self.dfs[_subset]["y"] = self.dfs[_subset][embedding_field(2, 1)]
         return reducer
 
     def loader(self, key, *vectorizers, batch_size=64, smoothing_coeff=0.0):
