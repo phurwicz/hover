@@ -337,12 +337,6 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
             Setup callbacks that interact with manual selections.
         """
 
-        def cumulative_selection_flag():
-            """
-            Determine whether cumulative selection is enabled.
-            """
-            return bool(0 in self.selection_option_box.active)
-
         def store_selection():
             """
             Keep track of the last manual selection.
