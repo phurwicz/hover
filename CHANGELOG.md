@@ -34,7 +34,7 @@
     -   used to have dual data structure: dataframes and lists of dictionaries
         -   now only uses dataframes, i.e. `dataset.dfs` stays but `dataset.dictls` is removed.
 
--   [`active_learning`])(https://phurwicz.github.io/hover/pages/reference/recipes/#hover.recipes.experimental.active_learning) **signature change**
+-   [`active_learning`](https://phurwicz.github.io/hover/pages/reference/recipes/#hover.recipes.experimental.active_learning) **signature change**
     -   no longer takes `vectorizer` or `vecnet_callback` as inputs
     -   will instead take `VectorNet` directly.
 
