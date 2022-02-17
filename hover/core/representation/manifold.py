@@ -16,6 +16,13 @@ class LayerwiseManifold(Loggable):
             run Procrustes analysis for fitting to the previous array. The first array is fitted to itself.
     """
 
+    DEFAULT_UNFOLD_KWARGS = {
+        "umap": {
+            "random_state": 0,
+            "transform_seed": 0,
+        }
+    }
+
     def __init__(self, seq_arr):
         """
         :param seq_arr: sequence of arrays to fit the manifold with.
@@ -35,7 +42,6 @@ class LayerwiseManifold(Loggable):
         self.n_vecs = self.arrays[0].shape[0]
         for _arr in self.arrays:
             assert _arr.shape[0] == self.n_vecs
-        self._good("Validated dimensions of input arrays")
 
     def standardize(self):
         """
@@ -49,7 +55,6 @@ class LayerwiseManifold(Loggable):
             return matrix
 
         self.arrays = [transform(_arr) for _arr in self.arrays]
-        self._good("Standardized input arrays")
 
     def unfold(self, method="umap", **kwargs):
         """
@@ -57,13 +62,17 @@ class LayerwiseManifold(Loggable):
         :param method: the dimensionality reduction method to use.
         :type method: str
         """
+        # default kwargs should fix random state and seed
+        # so that randomness does not introduce disparity
+        use_kwargs = self.__class__.DEFAULT_UNFOLD_KWARGS.get(method, {}).copy()
+        use_kwargs.update(kwargs)
         self.manifolds = []
         self._info(f"Running {method}...")
         for _arr in tqdm(self.arrays, total=len(self.arrays)):
             _reducer = DimensionalityReducer(_arr)
-            _manifold = _reducer.fit_transform(method, **kwargs)
+            _manifold = _reducer.fit_transform(method, **use_kwargs)
             self.manifolds.append(_manifold)
-        self._good("Successfully unfolded arrays into manifolds")
+        self._good("unfolded arrays into manifolds")
 
     def procrustes(self, arrays=None):
         """
@@ -84,5 +93,5 @@ class LayerwiseManifold(Loggable):
             disparities.append(_disparity)
             fit_arrays.append(_matrix)
 
-        self._good("Successfully carried out Procrustes analysis")
+        self._good("carried out Procrustes analysis")
         return fit_arrays, disparities
