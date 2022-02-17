@@ -5,12 +5,11 @@ import numpy as np
 import torch
 import torch.nn.functional as F
 from torch.utils.data import Dataset, DataLoader
-from deprecated import deprecated
 
 
 class VectorDataset(Dataset):
     """
-    PyTorch Dataset of vectors.
+    PyTorch Dataset of vectors and probabilistic classification targets.
     """
 
     DEFAULT_LOADER_KWARGS = dict(batch_size=64, shuffle=True, drop_last=False)
@@ -37,7 +36,7 @@ class VectorDataset(Dataset):
 
 class MultiVectorDataset(Dataset):
     """
-    PyTorch Dataset of vectors.
+    PyTorch Dataset of multi-vectors and probabilistic classification targets.
     """
 
     DEFAULT_LOADER_KWARGS = dict(batch_size=64, shuffle=True, drop_last=False)
@@ -66,27 +65,6 @@ class MultiVectorDataset(Dataset):
         return DataLoader(dataset=self, **keyword_args)
 
 
-@deprecated(
-    version="0.6.0",
-    reason="will be removed in a future version; please use VectorDataset.loader() instead.",
-)
-def vector_dataloader(input_vectors, output_vectors, batch_size=64):
-    """
-    Loads data for training a torch nn.
-
-    :param input_vectors: list of vectorized input.
-    :type input_vectors: list of numpy.array
-    :param output_vectors: list of vectorized output, e.g. classification labels in one-hot or probability vector format.
-    :type output_vectors: list of numpy.array
-    :param batch_size: size of each batch.
-    :type batch_size: int
-    """
-    dataset = VectorDataset(input_vectors, output_vectors)
-    return DataLoader(
-        dataset=dataset, batch_size=batch_size, shuffle=True, drop_last=False
-    )
-
-
 def one_hot(encoded_labels, num_classes):
     """
     One-hot encoding into a float form.
@@ -96,7 +74,7 @@ def one_hot(encoded_labels, num_classes):
     :param num_classes: the number of classes to encode.
     :type num_classes: int
     """
-    return F.one_hot(torch.LongTensor(encoded_labels), num_classes=num_classes).float()
+    return F.one_hot(torch.IntTensor(encoded_labels), num_classes=num_classes).float()
 
 
 def label_smoothing(probabilistic_labels, coefficient=0.1):

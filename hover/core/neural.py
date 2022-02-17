@@ -12,7 +12,6 @@ from bokeh.models import Slider, FuncTickFormatter
 from sklearn.metrics import confusion_matrix
 from shutil import copyfile
 from hover.core import Loggable
-from hover.utils.copied.snorkel import cross_entropy_with_probs
 from hover.utils.metrics import classification_accuracy
 from hover.utils.misc import current_time
 
@@ -422,7 +421,7 @@ class VectorNet(BaseVectorNet):
 
         # compute logits
         logits = self.nn(input_tensor)
-        loss = cross_entropy_with_probs(logits, output_tensor)
+        loss = F.cross_entropy(logits, output_tensor)
 
         self.nn_optimizer.zero_grad()
         loss.backward()
