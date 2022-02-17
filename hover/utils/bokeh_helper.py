@@ -96,7 +96,7 @@ def servable(title=None):
                     """
                     If still loading, show some progress.
                     """
-                    if spinner in layout:
+                    if spinner in layout.children:
                         spinner.text += "."
 
                 def load():
