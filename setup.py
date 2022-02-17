@@ -27,7 +27,7 @@ setuptools.setup(
         # preprocessors
         "scikit-learn>=0.20.0",
         # neural stuff
-        "torch>=1.4.0",
+        "torch>=1.10.0",
         # data handling
         "pandas>=1.3.0;python_version>='3.8.0'",
         "pandas>=1.3.0,<=1.3.5;python_version<'3.8.0'",

@@ -2,7 +2,6 @@
 ???+ note "Useful subroutines for working with bokeh in general."
 """
 import os
-import warnings
 from functools import wraps
 from traceback import format_exc
 from urllib.parse import urljoin, urlparse
@@ -94,18 +93,15 @@ def servable(title=None):
                 layout = column(spinner)
 
                 def progress():
-                    spinner.text += "."
+                    """
+                    If still loading, show some progress.
+                    """
+                    if spinner in layout:
+                        spinner.text += "."
 
                 def load():
                     try:
                         bokeh_model = func(*args, **kwargs)
-                        # remove spinner and its update
-                        try:
-                            doc.remove_periodic_callback(progress)
-                        except Exception as e:
-                            warnings.warn(
-                                f"@servable: trying to remove periodic callback, got {type(e)}: {e}"
-                            )
                         layout.children.append(bokeh_model)
                         layout.children.pop(0)
                     except Exception as e:
