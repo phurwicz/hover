@@ -251,7 +251,7 @@ class VectorNet(BaseVectorNet):
         """
         self.epochs_slider = Slider(start=1, end=50, value=1, step=1, title="# epochs")
         self.loglr_slider = Slider(
-            title="# warmup learning rate",
+            title="learning rate",
             start=1.0,
             end=7.0,
             value=self.__class__.DEFAULT_OPTIM_LOGLR,
@@ -301,7 +301,7 @@ class VectorNet(BaseVectorNet):
 
         # the actual prediction
         self.nn.eval()
-        vectors = torch.Tensor([self.vectorizer(_inp) for _inp in inps])
+        vectors = torch.Tensor(np.array([self.vectorizer(_inp) for _inp in inps]))
         logits = self.nn(vectors)
         probs = F.softmax(logits, dim=-1).detach().numpy()
 
