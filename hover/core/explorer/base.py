@@ -23,9 +23,6 @@ STANDARD_PLOT_TOOLS = [
     "lasso_select",
     # make inspections
     "hover",
-    # navigate changes
-    "undo",
-    "redo",
 ]
 
 
