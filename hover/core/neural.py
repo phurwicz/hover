@@ -29,7 +29,9 @@ class BaseVectorNet(Loggable):
         pass
 
     @abstractmethod
-    def manifold_trajectory(self, inps, method="umap", **kwargs):
+    def manifold_trajectory(
+        self, inps, method="umap", reducer_kwargs=None, spline_kwargs=None
+    ):
         pass
 
     @abstractmethod
@@ -37,7 +39,7 @@ class BaseVectorNet(Loggable):
         pass
 
     @abstractmethod
-    def train(self, train_loader, dev_loader=None, **kwargs):
+    def train(self, train_loader, dev_loader=None, epochs=None, **kwargs):
         pass
 
 
