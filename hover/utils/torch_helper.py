@@ -74,7 +74,7 @@ def one_hot(encoded_labels, num_classes):
     :param num_classes: the number of classes to encode.
     :type num_classes: int
     """
-    return F.one_hot(torch.IntTensor(encoded_labels), num_classes=num_classes).float()
+    return F.one_hot(torch.LongTensor(encoded_labels), num_classes=num_classes).float()
 
 
 def label_smoothing(probabilistic_labels, coefficient=0.1):
