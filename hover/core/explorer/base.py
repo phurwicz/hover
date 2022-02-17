@@ -189,15 +189,18 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
         """
         from bokeh.models import Dropdown
 
-        embedding_cols = self.find_embedding_fields()
-        self.dropdown_x_axis = Dropdown(label="X coordinate", menu=embedding_cols)
-        self.dropdown_y_axis = Dropdown(label="Y coordinate", menu=embedding_cols)
+        embed_cols = self.find_embedding_fields()
+        init_x, init_y = embed_cols[:2]
+        self.dropdown_x_axis = Dropdown(label=f"X coord: {init_x}", menu=embed_cols)
+        self.dropdown_y_axis = Dropdown(label=f"Y coord: {init_y}", menu=embed_cols)
 
         def change_x(event):
+            self.dropdown_x_axis.label = f"X coord: {event.item}"
             for _renderer in self.figure.renderers:
                 _renderer.glyph.x = event.item
 
         def change_y(event):
+            self.dropdown_y_axis.label = f"Y coord: {event.item}"
             for _renderer in self.figure.renderers:
                 _renderer.glyph.y = event.item
 
