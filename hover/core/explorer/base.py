@@ -153,21 +153,27 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
         """
         ???+ note "Create a group of checkbox(es) for advanced selection options."
         """
-        from bokeh.models import CheckboxGroup
+        from bokeh.models import RadioGroup
 
-        self.selection_option_box = CheckboxGroup(
-            labels=["cumulative selection"], active=[]
+        self.selection_option_box = RadioGroup(
+            labels=["keep selecting: none", "union", "intersection", "difference"],
+            active=0,
         )
 
     def _setup_subset_toggle(self):
         """
         ???+ note "Create a group of buttons for toggling which data subsets to show."
         """
-        from bokeh.models import CheckboxButtonGroup
+        from bokeh.models import CheckboxButtonGroup, Div
+        from bokeh.layouts import column
 
         data_keys = list(self.__class__.SUBSET_GLYPH_KWARGS.keys())
         self.data_key_button_group = CheckboxButtonGroup(
             labels=data_keys, active=list(range(len(data_keys)))
+        )
+        self.data_key_button_group_help = Div(text="Toggle data subset display")
+        self.subset_toggle_widget_column = column(
+            self.data_key_button_group_help, self.data_key_button_group
         )
 
         def update_data_key_display(active):
@@ -342,16 +348,23 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
             Keep track of the last manual selection.
             Useful for applying cumulation / filters dynamically.
             """
-            # store selection indices
+            # determine selection mode
+            selection_option_code = self.selection_option_box.active
+
             for _key, _source in self.sources.items():
                 _selected = _source.selected.indices
-                # use clear() and update() instead of assignment to keep clean references
-                if not cumulative_selection_flag():
+                # use sets' in-place methods instead of assignment
+                if selection_option_code == 1:
+                    self._last_selections[_key].data.update(_selected)
+                elif selection_option_code == 2:
+                    self._last_selections[_key].data.intersection_update(_selected)
+                elif selection_option_code == 3:
+                    self._last_selections[_key].data.difference_update(_selected)
+                else:
+                    assert selection_option_code == 0
                     self._last_selections[_key].data.clear()
                     self._last_selections[_key].data.update(_selected)
-                else:
-                    self._last_selections[_key].data.update(_selected)
-                    _source.selected.indices = list(self._last_selections[_key].data)
+                _source.selected.indices = list(self._last_selections[_key].data)
 
         self._store_selection = store_selection
         self.figure.on_event(
@@ -554,10 +567,10 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
         """
 
         def left_to_right(attr, old, new):
-            other.selection_option_box.active = self.selection_option_box.active[:]
+            other.selection_option_box.active = self.selection_option_box.active
 
         def right_to_left(attr, old, new):
-            self.selection_option_box.active = other.selection_option_box.active[:]
+            self.selection_option_box.active = other.selection_option_box.active
 
         self.selection_option_box.on_change("active", left_to_right)
         other.selection_option_box.on_change("active", right_to_left)
