@@ -17,21 +17,21 @@
 
 ## :sparkles: Features
 
-> ### It's fast because it labels in bulk.
+> **It's fast because it labels in bulk.**
 
 :telescope: A 2D-embedded view of your dataset for labeling, equipped with
 -   **Tooltip** for each point and **table view** for groups of points.
 -   **Search** widgets for ad-hoc highlight of data matching search criteria.
 -   **Toggle** buttons that clearly distinguish data subsets ("raw"/"train"/"dev"/"test").
 
-> ### It's accurate because you can filter and extend.
+> **It's accurate because you can filter and extend.**
 
 :microscope: Supplementary views to provide further labeling precision, such as
 -   Advanced search view which can **filter points by search criteria** and provides stronger highlight.
 -   Active learning view which puts a model in the loop and can **filter by confidence score**.
 -   Function-based view which can leverage **custom functions for labeling and filtering**.
 
-> ### It's fun because the process never gets old.
+> **It's fun because the process never gets old.**
 
 -   Explore the map to find out which "zones" are easy and which ones are tricky.
 -   Join the conquest of your data by coloring all of those zones through wisdom!
