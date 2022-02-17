@@ -166,19 +166,22 @@ class TestBokehDataAnnotator:
         apply_event = ButtonClick(explorer.annotator_apply)
         explorer.annotator_apply._trigger_event(apply_event)
 
-        # test non-cumulative selection
-        explorer.sources["raw"].selected.indices = [0]
-        explorer._store_selection()
-        assert explorer.sources["raw"].selected.indices == [0]
-        explorer.sources["raw"].selected.indices = [1]
-        explorer._store_selection()
-        assert explorer.sources["raw"].selected.indices == [1]
-
-        # test cumulative selection
-        explorer.selection_option_box.active = [0]
-        explorer.sources["raw"].selected.indices = [0]
-        explorer._store_selection()
-        assert explorer.sources["raw"].selected.indices == [0, 1]
+        # test standard selection
+        for (_option_code, _selection, _expected_selected) in [
+            (0, [0], [0]),
+            # standard selection
+            (0, [1], [1]),
+            # set-union selection
+            (1, [0, 2, 3], [0, 1, 2, 3]),
+            # set-intersection selection
+            (2, [0, 1, 2, 4], [0, 1, 2]),
+            # set-difference selection
+            (3, [2, 3], [0, 1]),
+        ]:
+            explorer.selection_option_box.active = _option_code
+            explorer.sources["raw"].selected.indices = _selection
+            explorer._store_selection()
+            assert explorer.sources["raw"].selected.indices == _expected_selected
 
         # actual labeling
         assert (
