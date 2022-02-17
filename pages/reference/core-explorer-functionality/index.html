@@ -1054,12 +1054,12 @@ BokehDataAnnotator            (<a title="hover.core.explorer.base.BokehBaseExplo
                     <span class="s2">&quot;attempting annotation: did not select any data points. Eligible subset is &#39;raw&#39;.&quot;</span>
                 <span class="p">)</span>
                 <span class="k">return</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;applying </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">selected_idx</span><span class="p">)</span><span class="si">}</span><span class="s2"> annotations...&quot;</span><span class="p">)</span>
 
             <span class="c1"># update label in both the df and the data source</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">dfs</span><span class="p">[</span><span class="s2">&quot;raw&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">selected_idx</span><span class="p">,</span> <span class="s2">&quot;label&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">label</span>
-            <span class="k">for</span> <span class="n">_idx</span> <span class="ow">in</span> <span class="n">selected_idx</span><span class="p">:</span>
-                <span class="n">_idx</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">_idx</span><span class="p">)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">[</span><span class="s2">&quot;raw&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">patch</span><span class="p">({</span><span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="p">[(</span><span class="n">_idx</span><span class="p">,</span> <span class="n">label</span><span class="p">)]})</span>
+            <span class="n">patch_to_apply</span> <span class="o">=</span> <span class="p">[(</span><span class="n">_idx</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span> <span class="k">for</span> <span class="n">_idx</span> <span class="ow">in</span> <span class="n">selected_idx</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">[</span><span class="s2">&quot;raw&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">patch</span><span class="p">({</span><span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="n">patch_to_apply</span><span class="p">})</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_good</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;applied </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">selected_idx</span><span class="p">)</span><span class="si">}</span><span class="s2"> annotations: </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">_update_colors</span><span class="p">()</span>
@@ -1075,10 +1075,10 @@ BokehDataAnnotator            (<a title="hover.core.explorer.base.BokehBaseExplo
 <span class="sd">            Overrides the parent method.</span>
 <span class="sd">            Determines the label -&gt; color mapping dynamically.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">xy_axes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_embedding_fields</span><span class="p">()[:</span><span class="mi">2</span><span class="p">]</span>
         <span class="k">for</span> <span class="n">_key</span><span class="p">,</span> <span class="n">_source</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span>
-                <span class="s2">&quot;x&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;y&quot;</span><span class="p">,</span>
+                <span class="o">*</span><span class="n">xy_axes</span><span class="p">,</span>
                 <span class="n">name</span><span class="o">=</span><span class="n">_key</span><span class="p">,</span>
                 <span class="n">color</span><span class="o">=</span><span class="n">SOURCE_COLOR_FIELD</span><span class="p">,</span>
                 <span class="n">source</span><span class="o">=</span><span class="n">_source</span><span class="p">,</span>
@@ -1127,10 +1127,10 @@ Determines the label -&gt; color mapping dynamically.</p>
 <span class="sd">        Overrides the parent method.</span>
 <span class="sd">        Determines the label -&gt; color mapping dynamically.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">xy_axes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_embedding_fields</span><span class="p">()[:</span><span class="mi">2</span><span class="p">]</span>
     <span class="k">for</span> <span class="n">_key</span><span class="p">,</span> <span class="n">_source</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span>
-            <span class="s2">&quot;x&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;y&quot;</span><span class="p">,</span>
+            <span class="o">*</span><span class="n">xy_axes</span><span class="p">,</span>
             <span class="n">name</span><span class="o">=</span><span class="n">_key</span><span class="p">,</span>
             <span class="n">color</span><span class="o">=</span><span class="n">SOURCE_COLOR_FIELD</span><span class="p">,</span>
             <span class="n">source</span><span class="o">=</span><span class="n">_source</span><span class="p">,</span>
@@ -1254,9 +1254,10 @@ BokehDataFinder            (<a title="hover.core.explorer.base.BokehBaseExplorer
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        ???+ note &quot;Plot all data points.&quot;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">xy_axes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_embedding_fields</span><span class="p">()[:</span><span class="mi">2</span><span class="p">]</span>
         <span class="k">for</span> <span class="n">_key</span><span class="p">,</span> <span class="n">_source</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span>
-                <span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">_key</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="n">_source</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">glyph_kwargs</span><span class="p">[</span><span class="n">_key</span><span class="p">]</span>
+                <span class="o">*</span><span class="n">xy_axes</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">_key</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="n">_source</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">glyph_kwargs</span><span class="p">[</span><span class="n">_key</span><span class="p">]</span>
             <span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_good</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Plotted subset </span><span class="si">{</span><span class="n">_key</span><span class="si">}</span><span class="s2"> with </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">dfs</span><span class="p">[</span><span class="n">_key</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> points&quot;</span><span class="p">)</span>
 </code></pre></div>
@@ -1297,9 +1298,10 @@ BokehDataFinder            (<a title="hover.core.explorer.base.BokehBaseExplorer
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    ???+ note &quot;Plot all data points.&quot;</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">xy_axes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_embedding_fields</span><span class="p">()[:</span><span class="mi">2</span><span class="p">]</span>
     <span class="k">for</span> <span class="n">_key</span><span class="p">,</span> <span class="n">_source</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span>
-            <span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">_key</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="n">_source</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">glyph_kwargs</span><span class="p">[</span><span class="n">_key</span><span class="p">]</span>
+            <span class="o">*</span><span class="n">xy_axes</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">_key</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="n">_source</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">glyph_kwargs</span><span class="p">[</span><span class="n">_key</span><span class="p">]</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_good</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Plotted subset </span><span class="si">{</span><span class="n">_key</span><span class="si">}</span><span class="s2"> with </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">dfs</span><span class="p">[</span><span class="n">_key</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> points&quot;</span><span class="p">)</span>
 </code></pre></div>
@@ -1410,6 +1412,7 @@ BokehMarginExplorer            (<a title="hover.core.explorer.base.BokehBaseExpl
 <span class="sd">            | `**kwargs` |        | forwarded to plotting markers |</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
+        <span class="n">xy_axes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_embedding_fields</span><span class="p">()[:</span><span class="mi">2</span><span class="p">]</span>
         <span class="k">for</span> <span class="n">_key</span><span class="p">,</span> <span class="n">_source</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="c1"># prepare plot settings</span>
             <span class="n">eff_kwargs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">glyph_kwargs</span><span class="p">[</span><span class="n">_key</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
@@ -1441,7 +1444,7 @@ BokehMarginExplorer            (<a title="hover.core.explorer.base.BokehBaseExpl
             <span class="k">for</span> <span class="n">_dict</span> <span class="ow">in</span> <span class="n">to_plot</span><span class="p">:</span>
                 <span class="n">_view</span> <span class="o">=</span> <span class="n">_dict</span><span class="p">[</span><span class="s2">&quot;view&quot;</span><span class="p">]</span>
                 <span class="n">_marker</span> <span class="o">=</span> <span class="n">_dict</span><span class="p">[</span><span class="s2">&quot;marker&quot;</span><span class="p">]</span>
-                <span class="n">_marker</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">_key</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="n">_source</span><span class="p">,</span> <span class="n">view</span><span class="o">=</span><span class="n">_view</span><span class="p">,</span> <span class="o">**</span><span class="n">eff_kwargs</span><span class="p">)</span>
+                <span class="n">_marker</span><span class="p">(</span><span class="o">*</span><span class="n">xy_axes</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">_key</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="n">_source</span><span class="p">,</span> <span class="n">view</span><span class="o">=</span><span class="n">_view</span><span class="p">,</span> <span class="o">**</span><span class="n">eff_kwargs</span><span class="p">)</span>
 </code></pre></div>
         </details>
 
@@ -1589,6 +1592,7 @@ the input dataframe should contain:</p>
 <span class="sd">        | `**kwargs` |        | forwarded to plotting markers |</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
+    <span class="n">xy_axes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_embedding_fields</span><span class="p">()[:</span><span class="mi">2</span><span class="p">]</span>
     <span class="k">for</span> <span class="n">_key</span><span class="p">,</span> <span class="n">_source</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="c1"># prepare plot settings</span>
         <span class="n">eff_kwargs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">glyph_kwargs</span><span class="p">[</span><span class="n">_key</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
@@ -1620,7 +1624,7 @@ the input dataframe should contain:</p>
         <span class="k">for</span> <span class="n">_dict</span> <span class="ow">in</span> <span class="n">to_plot</span><span class="p">:</span>
             <span class="n">_view</span> <span class="o">=</span> <span class="n">_dict</span><span class="p">[</span><span class="s2">&quot;view&quot;</span><span class="p">]</span>
             <span class="n">_marker</span> <span class="o">=</span> <span class="n">_dict</span><span class="p">[</span><span class="s2">&quot;marker&quot;</span><span class="p">]</span>
-            <span class="n">_marker</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">_key</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="n">_source</span><span class="p">,</span> <span class="n">view</span><span class="o">=</span><span class="n">_view</span><span class="p">,</span> <span class="o">**</span><span class="n">eff_kwargs</span><span class="p">)</span>
+            <span class="n">_marker</span><span class="p">(</span><span class="o">*</span><span class="n">xy_axes</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">_key</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="n">_source</span><span class="p">,</span> <span class="n">view</span><span class="o">=</span><span class="n">_view</span><span class="p">,</span> <span class="o">**</span><span class="n">eff_kwargs</span><span class="p">)</span>
 </code></pre></div>
         </details>
     </div>
@@ -1878,8 +1882,9 @@ BokehSnorkelExplorer            (<a title="hover.core.explorer.base.BokehBaseExp
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        ???+ note &quot;Plot the raw subset in the background.&quot;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">xy_axes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_embedding_fields</span><span class="p">()[:</span><span class="mi">2</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span>
-            <span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;raw&quot;</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">[</span><span class="s2">&quot;raw&quot;</span><span class="p">],</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">glyph_kwargs</span><span class="p">[</span><span class="s2">&quot;raw&quot;</span><span class="p">]</span>
+            <span class="o">*</span><span class="n">xy_axes</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;raw&quot;</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">[</span><span class="s2">&quot;raw&quot;</span><span class="p">],</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">glyph_kwargs</span><span class="p">[</span><span class="s2">&quot;raw&quot;</span><span class="p">]</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_good</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Plotted subset raw with </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">dfs</span><span class="p">[</span><span class="s1">&#39;raw&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> points&quot;</span><span class="p">)</span>
 
@@ -2010,6 +2015,7 @@ BokehSnorkelExplorer            (<a title="hover.core.explorer.base.BokehBaseExp
         <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">palette</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Palette depleted, # LFs: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lf_data</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
         <span class="n">legend_label</span> <span class="o">=</span> <span class="n">lf</span><span class="o">.</span><span class="n">name</span>
         <span class="n">color</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">palette</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">xy_axes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_embedding_fields</span><span class="p">()[:</span><span class="mi">2</span><span class="p">]</span>
 
         <span class="n">raw_glyph_kwargs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">glyph_kwargs</span><span class="p">[</span><span class="s2">&quot;raw&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="n">raw_glyph_kwargs</span><span class="p">[</span><span class="s2">&quot;legend_label&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">legend_label</span>
@@ -2028,8 +2034,7 @@ BokehSnorkelExplorer            (<a title="hover.core.explorer.base.BokehBaseExp
         <span class="k">if</span> <span class="s2">&quot;C&quot;</span> <span class="ow">in</span> <span class="n">include</span><span class="p">:</span>
             <span class="n">view</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_view_correct</span><span class="p">(</span><span class="n">L_labeled</span><span class="p">)</span>
             <span class="n">data_dict</span><span class="p">[</span><span class="s2">&quot;glyphs&quot;</span><span class="p">][</span><span class="s2">&quot;C&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">square</span><span class="p">(</span>
-                <span class="s2">&quot;x&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;y&quot;</span><span class="p">,</span>
+                <span class="o">*</span><span class="n">xy_axes</span><span class="p">,</span>
                 <span class="n">source</span><span class="o">=</span><span class="n">view</span><span class="o">.</span><span class="n">source</span><span class="p">,</span>
                 <span class="n">view</span><span class="o">=</span><span class="n">view</span><span class="p">,</span>
                 <span class="n">name</span><span class="o">=</span><span class="s2">&quot;labeled&quot;</span><span class="p">,</span>
@@ -2039,8 +2044,7 @@ BokehSnorkelExplorer            (<a title="hover.core.explorer.base.BokehBaseExp
         <span class="k">if</span> <span class="s2">&quot;I&quot;</span> <span class="ow">in</span> <span class="n">include</span><span class="p">:</span>
             <span class="n">view</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_view_incorrect</span><span class="p">(</span><span class="n">L_labeled</span><span class="p">)</span>
             <span class="n">data_dict</span><span class="p">[</span><span class="s2">&quot;glyphs&quot;</span><span class="p">][</span><span class="s2">&quot;I&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">x</span><span class="p">(</span>
-                <span class="s2">&quot;x&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;y&quot;</span><span class="p">,</span>
+                <span class="o">*</span><span class="n">xy_axes</span><span class="p">,</span>
                 <span class="n">source</span><span class="o">=</span><span class="n">view</span><span class="o">.</span><span class="n">source</span><span class="p">,</span>
                 <span class="n">view</span><span class="o">=</span><span class="n">view</span><span class="p">,</span>
                 <span class="n">name</span><span class="o">=</span><span class="s2">&quot;labeled&quot;</span><span class="p">,</span>
@@ -2050,8 +2054,7 @@ BokehSnorkelExplorer            (<a title="hover.core.explorer.base.BokehBaseExp
         <span class="k">if</span> <span class="s2">&quot;M&quot;</span> <span class="ow">in</span> <span class="n">include</span><span class="p">:</span>
             <span class="n">view</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_view_missed</span><span class="p">(</span><span class="n">L_labeled</span><span class="p">,</span> <span class="n">lf</span><span class="o">.</span><span class="n">targets</span><span class="p">)</span>
             <span class="n">data_dict</span><span class="p">[</span><span class="s2">&quot;glyphs&quot;</span><span class="p">][</span><span class="s2">&quot;M&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span>
-                <span class="s2">&quot;x&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;y&quot;</span><span class="p">,</span>
+                <span class="o">*</span><span class="n">xy_axes</span><span class="p">,</span>
                 <span class="n">source</span><span class="o">=</span><span class="n">view</span><span class="o">.</span><span class="n">source</span><span class="p">,</span>
                 <span class="n">view</span><span class="o">=</span><span class="n">view</span><span class="p">,</span>
                 <span class="n">name</span><span class="o">=</span><span class="s2">&quot;labeled&quot;</span><span class="p">,</span>
@@ -2061,8 +2064,7 @@ BokehSnorkelExplorer            (<a title="hover.core.explorer.base.BokehBaseExp
         <span class="k">if</span> <span class="s2">&quot;H&quot;</span> <span class="ow">in</span> <span class="n">include</span><span class="p">:</span>
             <span class="n">view</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_view_hit</span><span class="p">(</span><span class="n">L_raw</span><span class="p">)</span>
             <span class="n">data_dict</span><span class="p">[</span><span class="s2">&quot;glyphs&quot;</span><span class="p">][</span><span class="s2">&quot;H&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span>
-                <span class="s2">&quot;x&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;y&quot;</span><span class="p">,</span>
+                <span class="o">*</span><span class="n">xy_axes</span><span class="p">,</span>
                 <span class="n">source</span><span class="o">=</span><span class="n">view</span><span class="o">.</span><span class="n">source</span><span class="p">,</span>
                 <span class="n">view</span><span class="o">=</span><span class="n">view</span><span class="p">,</span>
                 <span class="n">name</span><span class="o">=</span><span class="s2">&quot;raw&quot;</span><span class="p">,</span>
@@ -2262,8 +2264,9 @@ BokehSnorkelExplorer            (<a title="hover.core.explorer.base.BokehBaseExp
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    ???+ note &quot;Plot the raw subset in the background.&quot;</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">xy_axes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_embedding_fields</span><span class="p">()[:</span><span class="mi">2</span><span class="p">]</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span>
-        <span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;raw&quot;</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">[</span><span class="s2">&quot;raw&quot;</span><span class="p">],</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">glyph_kwargs</span><span class="p">[</span><span class="s2">&quot;raw&quot;</span><span class="p">]</span>
+        <span class="o">*</span><span class="n">xy_axes</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;raw&quot;</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">[</span><span class="s2">&quot;raw&quot;</span><span class="p">],</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">glyph_kwargs</span><span class="p">[</span><span class="s2">&quot;raw&quot;</span><span class="p">]</span>
     <span class="p">)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_good</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Plotted subset raw with </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">dfs</span><span class="p">[</span><span class="s1">&#39;raw&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> points&quot;</span><span class="p">)</span>
 </code></pre></div>
@@ -2432,6 +2435,7 @@ BokehSnorkelExplorer            (<a title="hover.core.explorer.base.BokehBaseExp
     <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">palette</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Palette depleted, # LFs: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lf_data</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
     <span class="n">legend_label</span> <span class="o">=</span> <span class="n">lf</span><span class="o">.</span><span class="n">name</span>
     <span class="n">color</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">palette</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">xy_axes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_embedding_fields</span><span class="p">()[:</span><span class="mi">2</span><span class="p">]</span>
 
     <span class="n">raw_glyph_kwargs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">glyph_kwargs</span><span class="p">[</span><span class="s2">&quot;raw&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
     <span class="n">raw_glyph_kwargs</span><span class="p">[</span><span class="s2">&quot;legend_label&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">legend_label</span>
@@ -2450,8 +2454,7 @@ BokehSnorkelExplorer            (<a title="hover.core.explorer.base.BokehBaseExp
     <span class="k">if</span> <span class="s2">&quot;C&quot;</span> <span class="ow">in</span> <span class="n">include</span><span class="p">:</span>
         <span class="n">view</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_view_correct</span><span class="p">(</span><span class="n">L_labeled</span><span class="p">)</span>
         <span class="n">data_dict</span><span class="p">[</span><span class="s2">&quot;glyphs&quot;</span><span class="p">][</span><span class="s2">&quot;C&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">square</span><span class="p">(</span>
-            <span class="s2">&quot;x&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;y&quot;</span><span class="p">,</span>
+            <span class="o">*</span><span class="n">xy_axes</span><span class="p">,</span>
             <span class="n">source</span><span class="o">=</span><span class="n">view</span><span class="o">.</span><span class="n">source</span><span class="p">,</span>
             <span class="n">view</span><span class="o">=</span><span class="n">view</span><span class="p">,</span>
             <span class="n">name</span><span class="o">=</span><span class="s2">&quot;labeled&quot;</span><span class="p">,</span>
@@ -2461,8 +2464,7 @@ BokehSnorkelExplorer            (<a title="hover.core.explorer.base.BokehBaseExp
     <span class="k">if</span> <span class="s2">&quot;I&quot;</span> <span class="ow">in</span> <span class="n">include</span><span class="p">:</span>
         <span class="n">view</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_view_incorrect</span><span class="p">(</span><span class="n">L_labeled</span><span class="p">)</span>
         <span class="n">data_dict</span><span class="p">[</span><span class="s2">&quot;glyphs&quot;</span><span class="p">][</span><span class="s2">&quot;I&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">x</span><span class="p">(</span>
-            <span class="s2">&quot;x&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;y&quot;</span><span class="p">,</span>
+            <span class="o">*</span><span class="n">xy_axes</span><span class="p">,</span>
             <span class="n">source</span><span class="o">=</span><span class="n">view</span><span class="o">.</span><span class="n">source</span><span class="p">,</span>
             <span class="n">view</span><span class="o">=</span><span class="n">view</span><span class="p">,</span>
             <span class="n">name</span><span class="o">=</span><span class="s2">&quot;labeled&quot;</span><span class="p">,</span>
@@ -2472,8 +2474,7 @@ BokehSnorkelExplorer            (<a title="hover.core.explorer.base.BokehBaseExp
     <span class="k">if</span> <span class="s2">&quot;M&quot;</span> <span class="ow">in</span> <span class="n">include</span><span class="p">:</span>
         <span class="n">view</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_view_missed</span><span class="p">(</span><span class="n">L_labeled</span><span class="p">,</span> <span class="n">lf</span><span class="o">.</span><span class="n">targets</span><span class="p">)</span>
         <span class="n">data_dict</span><span class="p">[</span><span class="s2">&quot;glyphs&quot;</span><span class="p">][</span><span class="s2">&quot;M&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span>
-            <span class="s2">&quot;x&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;y&quot;</span><span class="p">,</span>
+            <span class="o">*</span><span class="n">xy_axes</span><span class="p">,</span>
             <span class="n">source</span><span class="o">=</span><span class="n">view</span><span class="o">.</span><span class="n">source</span><span class="p">,</span>
             <span class="n">view</span><span class="o">=</span><span class="n">view</span><span class="p">,</span>
             <span class="n">name</span><span class="o">=</span><span class="s2">&quot;labeled&quot;</span><span class="p">,</span>
@@ -2483,8 +2484,7 @@ BokehSnorkelExplorer            (<a title="hover.core.explorer.base.BokehBaseExp
     <span class="k">if</span> <span class="s2">&quot;H&quot;</span> <span class="ow">in</span> <span class="n">include</span><span class="p">:</span>
         <span class="n">view</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_view_hit</span><span class="p">(</span><span class="n">L_raw</span><span class="p">)</span>
         <span class="n">data_dict</span><span class="p">[</span><span class="s2">&quot;glyphs&quot;</span><span class="p">][</span><span class="s2">&quot;H&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span>
-            <span class="s2">&quot;x&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;y&quot;</span><span class="p">,</span>
+            <span class="o">*</span><span class="n">xy_axes</span><span class="p">,</span>
             <span class="n">source</span><span class="o">=</span><span class="n">view</span><span class="o">.</span><span class="n">source</span><span class="p">,</span>
             <span class="n">view</span><span class="o">=</span><span class="n">view</span><span class="p">,</span>
             <span class="n">name</span><span class="o">=</span><span class="s2">&quot;raw&quot;</span><span class="p">,</span>
@@ -2867,6 +2867,7 @@ BokehSoftLabelExplorer            (<a title="hover.core.explorer.base.BokehBaseE
 <span class="sd">            | :--------- | :----- | :--------------------------- |</span>
 <span class="sd">            | `**kwargs` |        | forwarded to plotting markers |</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">xy_axes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_embedding_fields</span><span class="p">()[:</span><span class="mi">2</span><span class="p">]</span>
         <span class="k">for</span> <span class="n">_key</span><span class="p">,</span> <span class="n">_source</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="c1"># prepare plot settings</span>
             <span class="n">preset_kwargs</span> <span class="o">=</span> <span class="p">{</span>
@@ -2877,7 +2878,7 @@ BokehSoftLabelExplorer            (<a title="hover.core.explorer.base.BokehBaseE
             <span class="n">eff_kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">preset_kwargs</span><span class="p">)</span>
             <span class="n">eff_kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
 
-            <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">_key</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="n">_source</span><span class="p">,</span> <span class="o">**</span><span class="n">eff_kwargs</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span><span class="o">*</span><span class="n">xy_axes</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">_key</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="n">_source</span><span class="p">,</span> <span class="o">**</span><span class="n">eff_kwargs</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_good</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Plotted subset </span><span class="si">{</span><span class="n">_key</span><span class="si">}</span><span class="s2"> with </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">dfs</span><span class="p">[</span><span class="n">_key</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> points&quot;</span><span class="p">)</span>
 </code></pre></div>
         </details>
@@ -3020,6 +3021,7 @@ the input dataframe should contain:</p>
 <span class="sd">        | :--------- | :----- | :--------------------------- |</span>
 <span class="sd">        | `**kwargs` |        | forwarded to plotting markers |</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">xy_axes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_embedding_fields</span><span class="p">()[:</span><span class="mi">2</span><span class="p">]</span>
     <span class="k">for</span> <span class="n">_key</span><span class="p">,</span> <span class="n">_source</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="c1"># prepare plot settings</span>
         <span class="n">preset_kwargs</span> <span class="o">=</span> <span class="p">{</span>
@@ -3030,7 +3032,7 @@ the input dataframe should contain:</p>
         <span class="n">eff_kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">preset_kwargs</span><span class="p">)</span>
         <span class="n">eff_kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">_key</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="n">_source</span><span class="p">,</span> <span class="o">**</span><span class="n">eff_kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span><span class="o">*</span><span class="n">xy_axes</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">_key</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="n">_source</span><span class="p">,</span> <span class="o">**</span><span class="n">eff_kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_good</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Plotted subset </span><span class="si">{</span><span class="n">_key</span><span class="si">}</span><span class="s2"> with </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">dfs</span><span class="p">[</span><span class="n">_key</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> points&quot;</span><span class="p">)</span>
 </code></pre></div>
         </details>

@@ -617,6 +617,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#hover.core.explorer.base.BokehBaseExplorer.find_embedding_fields" class="md-nav__link">
+    find_embedding_fields()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#hover.core.explorer.base.BokehBaseExplorer.from_dataset" class="md-nav__link">
     from_dataset()
   </a>
@@ -652,8 +659,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#hover.core.explorer.base.BokehBaseExplorer.value_patch" class="md-nav__link">
-    value_patch()
+  <a href="#hover.core.explorer.base.BokehBaseExplorer.value_patch_by_slider" class="md-nav__link">
+    value_patch_by_slider()
   </a>
   
 </li>
@@ -924,7 +931,7 @@ BokehBaseExplorer            (<span title="hover.core.Loggable">Loggable</span>,
 
     <span class="n">SUBSET_GLYPH_KWARGS</span> <span class="o">=</span> <span class="p">{}</span>
 
-    <span class="n">MANDATORY_COLUMNS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;label&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">]</span>
+    <span class="n">MANDATORY_COLUMNS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;label&quot;</span><span class="p">]</span>
     <span class="n">TOOLTIP_KWARGS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;coords&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;index&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df_dict</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -1008,6 +1015,7 @@ BokehBaseExplorer            (<span title="hover.core.Loggable">Loggable</span>,
         <span class="bp">self</span><span class="o">.</span><span class="n">_setup_search_highlight</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_setup_selection_option</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_setup_subset_toggle</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_setup_axes_dropdown</span><span class="p">()</span>
 
     <span class="nd">@abstractmethod</span>
     <span class="k">def</span> <span class="nf">_layout_widgets</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1029,21 +1037,27 @@ BokehBaseExplorer            (<span title="hover.core.Loggable">Loggable</span>,
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        ???+ note &quot;Create a group of checkbox(es) for advanced selection options.&quot;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="kn">from</span> <span class="nn">bokeh.models</span> <span class="kn">import</span> <span class="n">CheckboxGroup</span>
+        <span class="kn">from</span> <span class="nn">bokeh.models</span> <span class="kn">import</span> <span class="n">RadioGroup</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">selection_option_box</span> <span class="o">=</span> <span class="n">CheckboxGroup</span><span class="p">(</span>
-            <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;cumulative selection&quot;</span><span class="p">],</span> <span class="n">active</span><span class="o">=</span><span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">selection_option_box</span> <span class="o">=</span> <span class="n">RadioGroup</span><span class="p">(</span>
+            <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;keep selecting: none&quot;</span><span class="p">,</span> <span class="s2">&quot;union&quot;</span><span class="p">,</span> <span class="s2">&quot;intersection&quot;</span><span class="p">,</span> <span class="s2">&quot;difference&quot;</span><span class="p">],</span>
+            <span class="n">active</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
         <span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_setup_subset_toggle</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        ???+ note &quot;Create a group of buttons for toggling which data subsets to show.&quot;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="kn">from</span> <span class="nn">bokeh.models</span> <span class="kn">import</span> <span class="n">CheckboxButtonGroup</span>
+        <span class="kn">from</span> <span class="nn">bokeh.models</span> <span class="kn">import</span> <span class="n">CheckboxButtonGroup</span><span class="p">,</span> <span class="n">Div</span>
+        <span class="kn">from</span> <span class="nn">bokeh.layouts</span> <span class="kn">import</span> <span class="n">column</span>
 
         <span class="n">data_keys</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">SUBSET_GLYPH_KWARGS</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">data_key_button_group</span> <span class="o">=</span> <span class="n">CheckboxButtonGroup</span><span class="p">(</span>
             <span class="n">labels</span><span class="o">=</span><span class="n">data_keys</span><span class="p">,</span> <span class="n">active</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data_keys</span><span class="p">)))</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_key_button_group_help</span> <span class="o">=</span> <span class="n">Div</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s2">&quot;Toggle data subset display&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">subset_toggle_widget_column</span> <span class="o">=</span> <span class="n">column</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data_key_button_group_help</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_key_button_group</span>
         <span class="p">)</span>
 
         <span class="k">def</span> <span class="nf">update_data_key_display</span><span class="p">(</span><span class="n">active</span><span class="p">):</span>
@@ -1059,7 +1073,31 @@ BokehBaseExplorer            (<span title="hover.core.Loggable">Loggable</span>,
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">data_key_button_group</span><span class="o">.</span><span class="n">on_click</span><span class="p">(</span><span class="n">update_data_key_display</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">value_patch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">col_original</span><span class="p">,</span> <span class="n">col_patch</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_setup_axes_dropdown</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        ???+ note &quot;Find embedding fields and allow any of them to be set as the x or y axis.&quot;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">bokeh.models</span> <span class="kn">import</span> <span class="n">Dropdown</span>
+
+        <span class="n">embed_cols</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_embedding_fields</span><span class="p">()</span>
+        <span class="n">init_x</span><span class="p">,</span> <span class="n">init_y</span> <span class="o">=</span> <span class="n">embed_cols</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dropdown_x_axis</span> <span class="o">=</span> <span class="n">Dropdown</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;X coord: </span><span class="si">{</span><span class="n">init_x</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">menu</span><span class="o">=</span><span class="n">embed_cols</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dropdown_y_axis</span> <span class="o">=</span> <span class="n">Dropdown</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Y coord: </span><span class="si">{</span><span class="n">init_y</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">menu</span><span class="o">=</span><span class="n">embed_cols</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">change_x</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dropdown_x_axis</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;X coord: </span><span class="si">{</span><span class="n">event</span><span class="o">.</span><span class="n">item</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="k">for</span> <span class="n">_renderer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">renderers</span><span class="p">:</span>
+                <span class="n">_renderer</span><span class="o">.</span><span class="n">glyph</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">item</span>
+
+        <span class="k">def</span> <span class="nf">change_y</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dropdown_y_axis</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Y coord: </span><span class="si">{</span><span class="n">event</span><span class="o">.</span><span class="n">item</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="k">for</span> <span class="n">_renderer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">renderers</span><span class="p">:</span>
+                <span class="n">_renderer</span><span class="o">.</span><span class="n">glyph</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">item</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">dropdown_x_axis</span><span class="o">.</span><span class="n">on_click</span><span class="p">(</span><span class="n">change_x</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dropdown_y_axis</span><span class="o">.</span><span class="n">on_click</span><span class="p">(</span><span class="n">change_y</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">value_patch_by_slider</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">col_original</span><span class="p">,</span> <span class="n">col_patch</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        ???+ note &quot;Allow source values to be dynamically patched through a slider.&quot;</span>
 <span class="sd">            | Param            | Type   | Description                  |</span>
@@ -1183,27 +1221,28 @@ BokehBaseExplorer            (<span title="hover.core.Loggable">Loggable</span>,
 <span class="sd">            Setup callbacks that interact with manual selections.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="k">def</span> <span class="nf">cumulative_selection_flag</span><span class="p">():</span>
-            <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">            Determine whether cumulative selection is enabled.</span>
-<span class="sd">            &quot;&quot;&quot;</span>
-            <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="mi">0</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">selection_option_box</span><span class="o">.</span><span class="n">active</span><span class="p">)</span>
-
         <span class="k">def</span> <span class="nf">store_selection</span><span class="p">():</span>
             <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            Keep track of the last manual selection.</span>
 <span class="sd">            Useful for applying cumulation / filters dynamically.</span>
 <span class="sd">            &quot;&quot;&quot;</span>
-            <span class="c1"># store selection indices</span>
+            <span class="c1"># determine selection mode</span>
+            <span class="n">selection_option_code</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">selection_option_box</span><span class="o">.</span><span class="n">active</span>
+
             <span class="k">for</span> <span class="n">_key</span><span class="p">,</span> <span class="n">_source</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
                 <span class="n">_selected</span> <span class="o">=</span> <span class="n">_source</span><span class="o">.</span><span class="n">selected</span><span class="o">.</span><span class="n">indices</span>
-                <span class="c1"># use clear() and update() instead of assignment to keep clean references</span>
-                <span class="k">if</span> <span class="ow">not</span> <span class="n">cumulative_selection_flag</span><span class="p">():</span>
+                <span class="c1"># use sets&#39; in-place methods instead of assignment</span>
+                <span class="k">if</span> <span class="n">selection_option_code</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_last_selections</span><span class="p">[</span><span class="n">_key</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">_selected</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">selection_option_code</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_last_selections</span><span class="p">[</span><span class="n">_key</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">intersection_update</span><span class="p">(</span><span class="n">_selected</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">selection_option_code</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_last_selections</span><span class="p">[</span><span class="n">_key</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">difference_update</span><span class="p">(</span><span class="n">_selected</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">assert</span> <span class="n">selection_option_code</span> <span class="o">==</span> <span class="mi">0</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">_last_selections</span><span class="p">[</span><span class="n">_key</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">_last_selections</span><span class="p">[</span><span class="n">_key</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">_selected</span><span class="p">)</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">_last_selections</span><span class="p">[</span><span class="n">_key</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">_selected</span><span class="p">)</span>
-                    <span class="n">_source</span><span class="o">.</span><span class="n">selected</span><span class="o">.</span><span class="n">indices</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_last_selections</span><span class="p">[</span><span class="n">_key</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+                <span class="n">_source</span><span class="o">.</span><span class="n">selected</span><span class="o">.</span><span class="n">indices</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_last_selections</span><span class="p">[</span><span class="n">_key</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_store_selection</span> <span class="o">=</span> <span class="n">store_selection</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">on_event</span><span class="p">(</span>
@@ -1406,10 +1445,10 @@ BokehBaseExplorer            (<span title="hover.core.Loggable">Loggable</span>,
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">def</span> <span class="nf">left_to_right</span><span class="p">(</span><span class="n">attr</span><span class="p">,</span> <span class="n">old</span><span class="p">,</span> <span class="n">new</span><span class="p">):</span>
-            <span class="n">other</span><span class="o">.</span><span class="n">selection_option_box</span><span class="o">.</span><span class="n">active</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">selection_option_box</span><span class="o">.</span><span class="n">active</span><span class="p">[:]</span>
+            <span class="n">other</span><span class="o">.</span><span class="n">selection_option_box</span><span class="o">.</span><span class="n">active</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">selection_option_box</span><span class="o">.</span><span class="n">active</span>
 
         <span class="k">def</span> <span class="nf">right_to_left</span><span class="p">(</span><span class="n">attr</span><span class="p">,</span> <span class="n">old</span><span class="p">,</span> <span class="n">new</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">selection_option_box</span><span class="o">.</span><span class="n">active</span> <span class="o">=</span> <span class="n">other</span><span class="o">.</span><span class="n">selection_option_box</span><span class="o">.</span><span class="n">active</span><span class="p">[:]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">selection_option_box</span><span class="o">.</span><span class="n">active</span> <span class="o">=</span> <span class="n">other</span><span class="o">.</span><span class="n">selection_option_box</span><span class="o">.</span><span class="n">active</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">selection_option_box</span><span class="o">.</span><span class="n">on_change</span><span class="p">(</span><span class="s2">&quot;active&quot;</span><span class="p">,</span> <span class="n">left_to_right</span><span class="p">)</span>
         <span class="n">other</span><span class="o">.</span><span class="n">selection_option_box</span><span class="o">.</span><span class="n">on_change</span><span class="p">(</span><span class="s2">&quot;active&quot;</span><span class="p">,</span> <span class="n">right_to_left</span><span class="p">)</span>
@@ -1440,6 +1479,26 @@ BokehBaseExplorer            (<span title="hover.core.Loggable">Loggable</span>,
 <span class="sd">            | `**kwargs` |       | left to child classes |</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">find_embedding_fields</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        ???+ note &quot;Find embedding fields from dataframes.&quot;</span>
+
+<span class="sd">            Intended for scenarios where the embedding is higher than two-dimensional.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">embedding_cols</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">for</span> <span class="n">_key</span><span class="p">,</span> <span class="n">_df</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dfs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="c1"># automatically find embedding columns</span>
+            <span class="n">_emb_cols</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="n">is_embedding_field</span><span class="p">,</span> <span class="n">_df</span><span class="o">.</span><span class="n">columns</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">embedding_cols</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">embedding_cols</span> <span class="o">=</span> <span class="n">_emb_cols</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># embedding columns must be the same across subsets</span>
+                <span class="k">assert</span> <span class="n">embedding_cols</span> <span class="o">==</span> <span class="n">_emb_cols</span><span class="p">,</span> <span class="s2">&quot;Inconsistent embedding columns&quot;</span>
+        <span class="k">assert</span> <span class="p">(</span>
+            <span class="nb">len</span><span class="p">(</span><span class="n">embedding_cols</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">2</span>
+        <span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;Expected at least two embedding columns, found </span><span class="si">{</span><span class="n">embedding_cols</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">return</span> <span class="n">embedding_cols</span>
 
     <span class="k">def</span> <span class="nf">auto_color_mapping</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -1729,6 +1788,52 @@ BokehBaseExplorer            (<span title="hover.core.Loggable">Loggable</span>,
 
 
 
+<h3 id="hover.core.explorer.base.BokehBaseExplorer.find_embedding_fields" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">find_embedding_fields</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></code>
+
+
+</h3>
+
+    <div class="doc doc-contents ">
+
+      <details class="note" open="open">
+<summary>Find embedding fields from dataframes.</summary>
+<p>Intended for scenarios where the embedding is higher than two-dimensional.</p>
+</details>
+
+        <details class="quote">
+          <summary>Source code in <code>hover/core/explorer/base.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">find_embedding_fields</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ???+ note &quot;Find embedding fields from dataframes.&quot;</span>
+
+<span class="sd">        Intended for scenarios where the embedding is higher than two-dimensional.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">embedding_cols</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">for</span> <span class="n">_key</span><span class="p">,</span> <span class="n">_df</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dfs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="c1"># automatically find embedding columns</span>
+        <span class="n">_emb_cols</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="n">is_embedding_field</span><span class="p">,</span> <span class="n">_df</span><span class="o">.</span><span class="n">columns</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">embedding_cols</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">embedding_cols</span> <span class="o">=</span> <span class="n">_emb_cols</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># embedding columns must be the same across subsets</span>
+            <span class="k">assert</span> <span class="n">embedding_cols</span> <span class="o">==</span> <span class="n">_emb_cols</span><span class="p">,</span> <span class="s2">&quot;Inconsistent embedding columns&quot;</span>
+    <span class="k">assert</span> <span class="p">(</span>
+        <span class="nb">len</span><span class="p">(</span><span class="n">embedding_cols</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">2</span>
+    <span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;Expected at least two embedding columns, found </span><span class="si">{</span><span class="n">embedding_cols</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="k">return</span> <span class="n">embedding_cols</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
 <h3 id="hover.core.explorer.base.BokehBaseExplorer.from_dataset" class="doc doc-heading">
 <code class="highlight language-python"><span class="n">from_dataset</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">subset_mapping</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
 
@@ -1927,10 +2032,10 @@ BokehBaseExplorer            (<span title="hover.core.Loggable">Loggable</span>,
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">left_to_right</span><span class="p">(</span><span class="n">attr</span><span class="p">,</span> <span class="n">old</span><span class="p">,</span> <span class="n">new</span><span class="p">):</span>
-        <span class="n">other</span><span class="o">.</span><span class="n">selection_option_box</span><span class="o">.</span><span class="n">active</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">selection_option_box</span><span class="o">.</span><span class="n">active</span><span class="p">[:]</span>
+        <span class="n">other</span><span class="o">.</span><span class="n">selection_option_box</span><span class="o">.</span><span class="n">active</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">selection_option_box</span><span class="o">.</span><span class="n">active</span>
 
     <span class="k">def</span> <span class="nf">right_to_left</span><span class="p">(</span><span class="n">attr</span><span class="p">,</span> <span class="n">old</span><span class="p">,</span> <span class="n">new</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">selection_option_box</span><span class="o">.</span><span class="n">active</span> <span class="o">=</span> <span class="n">other</span><span class="o">.</span><span class="n">selection_option_box</span><span class="o">.</span><span class="n">active</span><span class="p">[:]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">selection_option_box</span><span class="o">.</span><span class="n">active</span> <span class="o">=</span> <span class="n">other</span><span class="o">.</span><span class="n">selection_option_box</span><span class="o">.</span><span class="n">active</span>
 
     <span class="bp">self</span><span class="o">.</span><span class="n">selection_option_box</span><span class="o">.</span><span class="n">on_change</span><span class="p">(</span><span class="s2">&quot;active&quot;</span><span class="p">,</span> <span class="n">left_to_right</span><span class="p">)</span>
     <span class="n">other</span><span class="o">.</span><span class="n">selection_option_box</span><span class="o">.</span><span class="n">on_change</span><span class="p">(</span><span class="s2">&quot;active&quot;</span><span class="p">,</span> <span class="n">right_to_left</span><span class="p">)</span>
@@ -2044,8 +2149,8 @@ BokehBaseExplorer            (<span title="hover.core.Loggable">Loggable</span>,
 
 
 
-<h3 id="hover.core.explorer.base.BokehBaseExplorer.value_patch" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">value_patch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">col_original</span><span class="p">,</span> <span class="n">col_patch</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
+<h3 id="hover.core.explorer.base.BokehBaseExplorer.value_patch_by_slider" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">value_patch_by_slider</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">col_original</span><span class="p">,</span> <span class="n">col_patch</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
 
 
 </h3>
@@ -2085,7 +2190,7 @@ BokehBaseExplorer            (<span title="hover.core.Loggable">Loggable</span>,
 
         <details class="quote">
           <summary>Source code in <code>hover/core/explorer/base.py</code></summary>
-          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">value_patch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">col_original</span><span class="p">,</span> <span class="n">col_patch</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">value_patch_by_slider</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">col_original</span><span class="p">,</span> <span class="n">col_patch</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    ???+ note &quot;Allow source values to be dynamically patched through a slider.&quot;</span>
 <span class="sd">        | Param            | Type   | Description                  |</span>
@@ -2212,12 +2317,13 @@ BokehBaseExplorer            (<span title="hover.core.Loggable">Loggable</span>,
 <h3 class="doc doc-heading" data-role="method" id="hover.core.explorer.base.BokehBaseExplorer.__init__"></h3>
 <h3 class="doc doc-heading" data-role="method" id="hover.core.explorer.base.BokehBaseExplorer.activate_search"></h3>
 <h3 class="doc doc-heading" data-role="method" id="hover.core.explorer.base.BokehBaseExplorer.auto_color_mapping"></h3>
+<h3 class="doc doc-heading" data-role="method" id="hover.core.explorer.base.BokehBaseExplorer.find_embedding_fields"></h3>
 <h3 class="doc doc-heading" data-role="method" id="hover.core.explorer.base.BokehBaseExplorer.from_dataset"></h3>
 <h3 class="doc doc-heading" data-role="method" id="hover.core.explorer.base.BokehBaseExplorer.link_selection"></h3>
 <h3 class="doc doc-heading" data-role="method" id="hover.core.explorer.base.BokehBaseExplorer.link_selection_options"></h3>
 <h3 class="doc doc-heading" data-role="method" id="hover.core.explorer.base.BokehBaseExplorer.link_xy_range"></h3>
 <h3 class="doc doc-heading" data-role="method" id="hover.core.explorer.base.BokehBaseExplorer.plot"></h3>
-<h3 class="doc doc-heading" data-role="method" id="hover.core.explorer.base.BokehBaseExplorer.value_patch"></h3>
+<h3 class="doc doc-heading" data-role="method" id="hover.core.explorer.base.BokehBaseExplorer.value_patch_by_slider"></h3>
 <h3 class="doc doc-heading" data-role="method" id="hover.core.explorer.base.BokehBaseExplorer.view"></h3>
 </div>
 </li>

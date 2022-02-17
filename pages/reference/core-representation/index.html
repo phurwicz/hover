@@ -679,6 +679,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#hover.core.representation.reduction.DimensionalityReducer.create_reducer" class="md-nav__link">
+    create_reducer()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#hover.core.representation.reduction.DimensionalityReducer.fit_transform" class="md-nav__link">
     fit_transform()
   </a>
@@ -856,9 +863,6 @@ DimensionalityReducer            (<span title="hover.core.Loggable">Loggable</sp
         <details class="quote">
           <summary>Source code in <code>hover/core/representation/reduction.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">DimensionalityReducer</span><span class="p">(</span><span class="n">Loggable</span><span class="p">):</span>
-    <span class="n">AVAILABLE_METHODS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;umap&quot;</span><span class="p">,</span> <span class="s2">&quot;ivis&quot;</span><span class="p">}</span>
-    <span class="n">METHOD_ERROR_MSG</span> <span class="o">=</span> <span class="s2">&quot;Expected &#39;umap&#39; or &#39;ivis&#39; as reduction method&quot;</span>
-
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">array</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        ???+ note &quot;Link self to the shared input array for reduction methods.&quot;</span>
@@ -867,6 +871,39 @@ DimensionalityReducer            (<span title="hover.core.Loggable">Loggable</sp
 <span class="sd">            | `array` | `np.ndarray` | the input array to fit on     |</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">reference_array</span> <span class="o">=</span> <span class="n">array</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">create_reducer</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        ???+ note &quot;Handle kwarg translation and dynamic imports.&quot;</span>
+
+<span class="sd">            | Param      | Type   | Description              |</span>
+<span class="sd">            | :--------- | :----- | :----------------------- |</span>
+<span class="sd">            | `method`   | `str`  | `&quot;umap&quot;` or `&quot;ivis&quot;`     |</span>
+<span class="sd">            | `*args`    |        | forwarded to the reducer |</span>
+<span class="sd">            | `**kwargs` |        | translated and forwarded |</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;umap&quot;</span><span class="p">:</span>
+            <span class="kn">import</span> <span class="nn">umap</span>
+
+            <span class="n">reducer_cls</span> <span class="o">=</span> <span class="n">umap</span><span class="o">.</span><span class="n">UMAP</span>
+        <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;ivis&quot;</span><span class="p">:</span>
+            <span class="kn">import</span> <span class="nn">ivis</span>
+
+            <span class="n">reducer_cls</span> <span class="o">=</span> <span class="n">ivis</span><span class="o">.</span><span class="n">Ivis</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Expected &#39;umap&#39; or &#39;ivis&#39; as reduction method&quot;</span><span class="p">)</span>
+
+        <span class="n">translated_kwargs</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">_key</span><span class="p">,</span> <span class="n">_value</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">_trans_dict</span> <span class="o">=</span> <span class="n">KWARG_TRANSLATOR</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">_key</span><span class="p">,</span> <span class="p">{})</span>
+            <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="n">_trans_dict</span><span class="p">:</span>
+                <span class="n">_trans_key</span> <span class="o">=</span> <span class="n">_trans_dict</span><span class="p">[</span><span class="n">method</span><span class="p">]</span>
+                <span class="n">translated_kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">_key</span><span class="p">)</span>
+                <span class="n">translated_kwargs</span><span class="p">[</span><span class="n">_trans_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">_value</span>
+
+        <span class="n">reducer</span> <span class="o">=</span> <span class="n">reducer_cls</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">translated_kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">reducer</span>
 
     <span class="k">def</span> <span class="nf">fit_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -877,17 +914,7 @@ DimensionalityReducer            (<span title="hover.core.Loggable">Loggable</sp
 <span class="sd">            | `*args`    |        | forwarded to the reducer |</span>
 <span class="sd">            | `**kwargs` |        | forwarded to the reducer |</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;umap&quot;</span><span class="p">:</span>
-            <span class="kn">import</span> <span class="nn">umap</span>
-
-            <span class="n">reducer</span> <span class="o">=</span> <span class="n">umap</span><span class="o">.</span><span class="n">UMAP</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;ivis&quot;</span><span class="p">:</span>
-            <span class="kn">import</span> <span class="nn">ivis</span>
-
-            <span class="n">reducer</span> <span class="o">=</span> <span class="n">ivis</span><span class="o">.</span><span class="n">Ivis</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">METHOD_ERROR_MSG</span><span class="p">)</span>
-
+        <span class="n">reducer</span> <span class="o">=</span> <span class="n">DimensionalityReducer</span><span class="o">.</span><span class="n">create_reducer</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="n">embedding</span> <span class="o">=</span> <span class="n">reducer</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reference_array</span><span class="p">)</span>
         <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">reducer</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">embedding</span>
@@ -914,8 +941,6 @@ DimensionalityReducer            (<span title="hover.core.Loggable">Loggable</sp
 
 
   <div class="doc doc-children">
-
-
 
 
 
@@ -982,6 +1007,93 @@ DimensionalityReducer            (<span title="hover.core.Loggable">Loggable</sp
 
 
 
+<h4 id="hover.core.representation.reduction.DimensionalityReducer.create_reducer" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">create_reducer</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-staticmethod"><code>staticmethod</code></small>
+  </span>
+
+</h4>
+
+    <div class="doc doc-contents ">
+
+      <details class="note" open="open">
+<summary>Handle kwarg translation and dynamic imports.</summary>
+<table>
+<thead>
+<tr>
+<th align="left">Param</th>
+<th align="left">Type</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code>method</code></td>
+<td align="left"><code>str</code></td>
+<td align="left"><code>"umap"</code> or <code>"ivis"</code></td>
+</tr>
+<tr>
+<td align="left"><code>*args</code></td>
+<td align="left"></td>
+<td align="left">forwarded to the reducer</td>
+</tr>
+<tr>
+<td align="left"><code>**kwargs</code></td>
+<td align="left"></td>
+<td align="left">translated and forwarded</td>
+</tr>
+</tbody>
+</table>
+</details>
+
+        <details class="quote">
+          <summary>Source code in <code>hover/core/representation/reduction.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="nd">@staticmethod</span>
+<span class="k">def</span> <span class="nf">create_reducer</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ???+ note &quot;Handle kwarg translation and dynamic imports.&quot;</span>
+
+<span class="sd">        | Param      | Type   | Description              |</span>
+<span class="sd">        | :--------- | :----- | :----------------------- |</span>
+<span class="sd">        | `method`   | `str`  | `&quot;umap&quot;` or `&quot;ivis&quot;`     |</span>
+<span class="sd">        | `*args`    |        | forwarded to the reducer |</span>
+<span class="sd">        | `**kwargs` |        | translated and forwarded |</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;umap&quot;</span><span class="p">:</span>
+        <span class="kn">import</span> <span class="nn">umap</span>
+
+        <span class="n">reducer_cls</span> <span class="o">=</span> <span class="n">umap</span><span class="o">.</span><span class="n">UMAP</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;ivis&quot;</span><span class="p">:</span>
+        <span class="kn">import</span> <span class="nn">ivis</span>
+
+        <span class="n">reducer_cls</span> <span class="o">=</span> <span class="n">ivis</span><span class="o">.</span><span class="n">Ivis</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Expected &#39;umap&#39; or &#39;ivis&#39; as reduction method&quot;</span><span class="p">)</span>
+
+    <span class="n">translated_kwargs</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">_key</span><span class="p">,</span> <span class="n">_value</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">_trans_dict</span> <span class="o">=</span> <span class="n">KWARG_TRANSLATOR</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">_key</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="n">_trans_dict</span><span class="p">:</span>
+            <span class="n">_trans_key</span> <span class="o">=</span> <span class="n">_trans_dict</span><span class="p">[</span><span class="n">method</span><span class="p">]</span>
+            <span class="n">translated_kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">_key</span><span class="p">)</span>
+            <span class="n">translated_kwargs</span><span class="p">[</span><span class="n">_trans_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">_value</span>
+
+    <span class="n">reducer</span> <span class="o">=</span> <span class="n">reducer_cls</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">translated_kwargs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">reducer</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
 <h4 id="hover.core.representation.reduction.DimensionalityReducer.fit_transform" class="doc doc-heading">
 <code class="highlight language-python"><span class="n">fit_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
 
@@ -1031,17 +1143,7 @@ DimensionalityReducer            (<span title="hover.core.Loggable">Loggable</sp
 <span class="sd">        | `*args`    |        | forwarded to the reducer |</span>
 <span class="sd">        | `**kwargs` |        | forwarded to the reducer |</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;umap&quot;</span><span class="p">:</span>
-        <span class="kn">import</span> <span class="nn">umap</span>
-
-        <span class="n">reducer</span> <span class="o">=</span> <span class="n">umap</span><span class="o">.</span><span class="n">UMAP</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;ivis&quot;</span><span class="p">:</span>
-        <span class="kn">import</span> <span class="nn">ivis</span>
-
-        <span class="n">reducer</span> <span class="o">=</span> <span class="n">ivis</span><span class="o">.</span><span class="n">Ivis</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">METHOD_ERROR_MSG</span><span class="p">)</span>
-
+    <span class="n">reducer</span> <span class="o">=</span> <span class="n">DimensionalityReducer</span><span class="o">.</span><span class="n">create_reducer</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="n">embedding</span> <span class="o">=</span> <span class="n">reducer</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reference_array</span><span class="p">)</span>
     <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">reducer</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">embedding</span>
@@ -1139,6 +1241,7 @@ DimensionalityReducer            (<span title="hover.core.Loggable">Loggable</sp
 <h2 class="doc doc-heading" data-role="module" id="hover.core.representation.reduction"></h2>
 <h3 class="doc doc-heading" data-role="class" id="hover.core.representation.reduction.DimensionalityReducer"></h3>
 <h4 class="doc doc-heading" data-role="method" id="hover.core.representation.reduction.DimensionalityReducer.__init__"></h4>
+<h4 class="doc doc-heading" data-role="method" id="hover.core.representation.reduction.DimensionalityReducer.create_reducer"></h4>
 <h4 class="doc doc-heading" data-role="method" id="hover.core.representation.reduction.DimensionalityReducer.fit_transform"></h4>
 <h4 class="doc doc-heading" data-role="method" id="hover.core.representation.reduction.DimensionalityReducer.transform"></h4>
 </div>

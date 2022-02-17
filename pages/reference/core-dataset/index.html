@@ -575,6 +575,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#hover.core.dataset.SupervisableDataset.compute_nd_embedding" class="md-nav__link">
+    compute_nd_embedding()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#hover.core.dataset.SupervisableDataset.copy" class="md-nav__link">
     copy()
   </a>
@@ -1669,15 +1676,16 @@ SupervisableDataset            (<span title="hover.core.Loggable">Loggable</span
 
         <span class="bp">self</span><span class="o">.</span><span class="n">compute_feature_index</span><span class="p">()</span>
 
-    <span class="k">def</span> <span class="nf">compute_2d_embedding</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vectorizer</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">compute_nd_embedding</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vectorizer</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        ???+ note &quot;Get embeddings in the xy-plane and return the dimensionality reducer.&quot;</span>
+<span class="sd">        ???+ note &quot;Get embeddings in n-dimensional space and return the dimensionality reducer.&quot;</span>
 <span class="sd">            Reference: [`DimensionalityReducer`](https://github.com/phurwicz/hover/blob/main/hover/core/representation/reduction.py)</span>
 
 <span class="sd">            | Param        | Type       | Description                        |</span>
 <span class="sd">            | :----------- | :--------- | :--------------------------------- |</span>
 <span class="sd">            | `vectorizer` | `callable` | the feature -&gt; vector function     |</span>
 <span class="sd">            | `method`     | `str`      | arg for `DimensionalityReducer`    |</span>
+<span class="sd">            | `dimension`  | `int`      | dimension of output embedding      |</span>
 <span class="sd">            | `**kwargs`   |            | kwargs for `DimensionalityReducer` |</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="kn">from</span> <span class="nn">hover.core.representation.reduction</span> <span class="kn">import</span> <span class="n">DimensionalityReducer</span>
@@ -1687,20 +1695,24 @@ SupervisableDataset            (<span title="hover.core.Loggable">Loggable</span
         <span class="n">trans_subset</span> <span class="o">=</span> <span class="p">[</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">PRIVATE_SUBSETS</span><span class="p">]</span>
 
         <span class="k">assert</span> <span class="ow">not</span> <span class="nb">set</span><span class="p">(</span><span class="n">fit_subset</span><span class="p">)</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">trans_subset</span><span class="p">)),</span> <span class="s2">&quot;Unexpected overlap&quot;</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dimension</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">and</span> <span class="n">dimension</span> <span class="o">&gt;=</span> <span class="mi">2</span>
+        <span class="n">embedding_cols</span> <span class="o">=</span> <span class="p">[</span><span class="n">embedding_field</span><span class="p">(</span><span class="n">dimension</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">dimension</span><span class="p">)]</span>
 
         <span class="c1"># compute vectors and keep track which where to slice the array for fitting</span>
         <span class="n">feature_inp</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">_key</span> <span class="ow">in</span> <span class="n">fit_subset</span><span class="p">:</span>
-            <span class="n">feature_inp</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dfs</span><span class="p">[</span><span class="n">_key</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">FEATURE_KEY</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+            <span class="n">feature_inp</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dfs</span><span class="p">[</span><span class="n">_key</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">FEATURE_KEY</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
         <span class="n">fit_num</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">feature_inp</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">_key</span> <span class="ow">in</span> <span class="n">trans_subset</span><span class="p">:</span>
-            <span class="n">feature_inp</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dfs</span><span class="p">[</span><span class="n">_key</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">FEATURE_KEY</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
-        <span class="n">trans_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">vectorizer</span><span class="p">(</span><span class="n">_inp</span><span class="p">)</span> <span class="k">for</span> <span class="n">_inp</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">feature_inp</span><span class="p">)])</span>
+            <span class="n">feature_inp</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dfs</span><span class="p">[</span><span class="n">_key</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">FEATURE_KEY</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+        <span class="n">trans_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+            <span class="p">[</span><span class="n">vectorizer</span><span class="p">(</span><span class="n">_inp</span><span class="p">)</span> <span class="k">for</span> <span class="n">_inp</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">feature_inp</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Vectorizing&quot;</span><span class="p">)]</span>
+        <span class="p">)</span>
 
         <span class="c1"># initialize and fit manifold learning reducer using specified subarray</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Fit-transforming </span><span class="si">{</span><span class="n">method</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="si">}</span><span class="s2"> on </span><span class="si">{</span><span class="n">fit_num</span><span class="si">}</span><span class="s2"> samples...&quot;</span><span class="p">)</span>
         <span class="n">reducer</span> <span class="o">=</span> <span class="n">DimensionalityReducer</span><span class="p">(</span><span class="n">trans_arr</span><span class="p">[:</span><span class="n">fit_num</span><span class="p">])</span>
-        <span class="n">fit_embedding</span> <span class="o">=</span> <span class="n">reducer</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">fit_embedding</span> <span class="o">=</span> <span class="n">reducer</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="n">dimension</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
         <span class="c1"># compute embedding of the whole dataset</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_info</span><span class="p">(</span>
@@ -1723,14 +1735,28 @@ SupervisableDataset            (<span title="hover.core.Loggable">Loggable</span
                 <span class="k">continue</span>
             <span class="k">for</span> <span class="n">_key</span> <span class="ow">in</span> <span class="n">_subset</span><span class="p">:</span>
                 <span class="n">_length</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dfs</span><span class="p">[</span><span class="n">_key</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">dfs</span><span class="p">[</span><span class="n">_key</span><span class="p">][</span><span class="s2">&quot;x&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span>
-                    <span class="n">_embedding</span><span class="p">[</span><span class="n">start_idx</span> <span class="p">:</span> <span class="p">(</span><span class="n">start_idx</span> <span class="o">+</span> <span class="n">_length</span><span class="p">),</span> <span class="mi">0</span><span class="p">]</span>
-                <span class="p">)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">dfs</span><span class="p">[</span><span class="n">_key</span><span class="p">][</span><span class="s2">&quot;y&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span>
-                    <span class="n">_embedding</span><span class="p">[</span><span class="n">start_idx</span> <span class="p">:</span> <span class="p">(</span><span class="n">start_idx</span> <span class="o">+</span> <span class="n">_length</span><span class="p">),</span> <span class="mi">1</span><span class="p">]</span>
-                <span class="p">)</span>
+                <span class="k">for</span> <span class="n">_i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">dimension</span><span class="p">):</span>
+                    <span class="n">_col</span> <span class="o">=</span> <span class="n">embedding_cols</span><span class="p">[</span><span class="n">_i</span><span class="p">]</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">dfs</span><span class="p">[</span><span class="n">_key</span><span class="p">][</span><span class="n">_col</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span>
+                        <span class="n">_embedding</span><span class="p">[</span><span class="n">start_idx</span> <span class="p">:</span> <span class="p">(</span><span class="n">start_idx</span> <span class="o">+</span> <span class="n">_length</span><span class="p">),</span> <span class="n">_i</span><span class="p">]</span>
+                    <span class="p">)</span>
                 <span class="n">start_idx</span> <span class="o">+=</span> <span class="n">_length</span>
 
+        <span class="bp">self</span><span class="o">.</span><span class="n">_good</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Computed </span><span class="si">{</span><span class="n">dimension</span><span class="si">}</span><span class="s2">-d embedding in columns </span><span class="si">{</span><span class="n">embedding_cols</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">reducer</span>
+
+    <span class="k">def</span> <span class="nf">compute_2d_embedding</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vectorizer</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        ???+ note &quot;Get embeddings in the xy-plane and return the dimensionality reducer.&quot;</span>
+<span class="sd">            A special case of `compute_nd_embedding`.</span>
+
+<span class="sd">            | Param        | Type       | Description                        |</span>
+<span class="sd">            | :----------- | :--------- | :--------------------------------- |</span>
+<span class="sd">            | `vectorizer` | `callable` | the feature -&gt; vector function     |</span>
+<span class="sd">            | `method`     | `str`      | arg for `DimensionalityReducer`    |</span>
+<span class="sd">            | `**kwargs`   |            | kwargs for `DimensionalityReducer` |</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">reducer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_nd_embedding</span><span class="p">(</span><span class="n">vectorizer</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">reducer</span>
 
     <span class="k">def</span> <span class="nf">loader</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="o">*</span><span class="n">vectorizers</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">smoothing_coeff</span><span class="o">=</span><span class="mf">0.0</span><span class="p">):</span>
@@ -1775,7 +1801,7 @@ SupervisableDataset            (<span title="hover.core.Loggable">Loggable</span
         <span class="n">input_vector_lists</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">_vec_func</span> <span class="ow">in</span> <span class="n">vectorizers</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Preparing </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2"> input vectors...&quot;</span><span class="p">)</span>
-            <span class="n">_input_vecs</span> <span class="o">=</span> <span class="p">[</span><span class="n">_vec_func</span><span class="p">(</span><span class="n">_f</span><span class="p">)</span> <span class="k">for</span> <span class="n">_f</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">features</span><span class="p">)]</span>
+            <span class="n">_input_vecs</span> <span class="o">=</span> <span class="p">[</span><span class="n">_vec_func</span><span class="p">(</span><span class="n">_f</span><span class="p">)</span> <span class="k">for</span> <span class="n">_f</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Vectorizing&quot;</span><span class="p">)]</span>
             <span class="n">input_vector_lists</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_input_vecs</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Preparing </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2"> data loader...&quot;</span><span class="p">)</span>
@@ -1873,7 +1899,7 @@ SupervisableDataset            (<span title="hover.core.Loggable">Loggable</span
 
       <details class="note" open="open">
 <summary>Get embeddings in the xy-plane and return the dimensionality reducer.</summary>
-<p>Reference: <a href="https://github.com/phurwicz/hover/blob/main/hover/core/representation/reduction.py"><code>DimensionalityReducer</code></a></p>
+<p>A special case of <code>compute_nd_embedding</code>.</p>
 <table>
 <thead>
 <tr>
@@ -1907,7 +1933,7 @@ SupervisableDataset            (<span title="hover.core.Loggable">Loggable</span
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">compute_2d_embedding</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vectorizer</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    ???+ note &quot;Get embeddings in the xy-plane and return the dimensionality reducer.&quot;</span>
-<span class="sd">        Reference: [`DimensionalityReducer`](https://github.com/phurwicz/hover/blob/main/hover/core/representation/reduction.py)</span>
+<span class="sd">        A special case of `compute_nd_embedding`.</span>
 
 <span class="sd">        | Param        | Type       | Description                        |</span>
 <span class="sd">        | :----------- | :--------- | :--------------------------------- |</span>
@@ -1915,57 +1941,7 @@ SupervisableDataset            (<span title="hover.core.Loggable">Loggable</span
 <span class="sd">        | `method`     | `str`      | arg for `DimensionalityReducer`    |</span>
 <span class="sd">        | `**kwargs`   |            | kwargs for `DimensionalityReducer` |</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="kn">from</span> <span class="nn">hover.core.representation.reduction</span> <span class="kn">import</span> <span class="n">DimensionalityReducer</span>
-
-    <span class="c1"># prepare input vectors to manifold learning</span>
-    <span class="n">fit_subset</span> <span class="o">=</span> <span class="p">[</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">SCRATCH_SUBSETS</span><span class="p">,</span> <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">PUBLIC_SUBSETS</span><span class="p">]</span>
-    <span class="n">trans_subset</span> <span class="o">=</span> <span class="p">[</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">PRIVATE_SUBSETS</span><span class="p">]</span>
-
-    <span class="k">assert</span> <span class="ow">not</span> <span class="nb">set</span><span class="p">(</span><span class="n">fit_subset</span><span class="p">)</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">trans_subset</span><span class="p">)),</span> <span class="s2">&quot;Unexpected overlap&quot;</span>
-
-    <span class="c1"># compute vectors and keep track which where to slice the array for fitting</span>
-    <span class="n">feature_inp</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">_key</span> <span class="ow">in</span> <span class="n">fit_subset</span><span class="p">:</span>
-        <span class="n">feature_inp</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dfs</span><span class="p">[</span><span class="n">_key</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">FEATURE_KEY</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
-    <span class="n">fit_num</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">feature_inp</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">_key</span> <span class="ow">in</span> <span class="n">trans_subset</span><span class="p">:</span>
-        <span class="n">feature_inp</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dfs</span><span class="p">[</span><span class="n">_key</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">FEATURE_KEY</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
-    <span class="n">trans_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">vectorizer</span><span class="p">(</span><span class="n">_inp</span><span class="p">)</span> <span class="k">for</span> <span class="n">_inp</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">feature_inp</span><span class="p">)])</span>
-
-    <span class="c1"># initialize and fit manifold learning reducer using specified subarray</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">_info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Fit-transforming </span><span class="si">{</span><span class="n">method</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="si">}</span><span class="s2"> on </span><span class="si">{</span><span class="n">fit_num</span><span class="si">}</span><span class="s2"> samples...&quot;</span><span class="p">)</span>
-    <span class="n">reducer</span> <span class="o">=</span> <span class="n">DimensionalityReducer</span><span class="p">(</span><span class="n">trans_arr</span><span class="p">[:</span><span class="n">fit_num</span><span class="p">])</span>
-    <span class="n">fit_embedding</span> <span class="o">=</span> <span class="n">reducer</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-
-    <span class="c1"># compute embedding of the whole dataset</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">_info</span><span class="p">(</span>
-        <span class="sa">f</span><span class="s2">&quot;Transforming </span><span class="si">{</span><span class="n">method</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="si">}</span><span class="s2"> on </span><span class="si">{</span><span class="n">trans_arr</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">fit_num</span><span class="si">}</span><span class="s2"> samples...&quot;</span>
-    <span class="p">)</span>
-    <span class="n">trans_embedding</span> <span class="o">=</span> <span class="n">reducer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">trans_arr</span><span class="p">[</span><span class="n">fit_num</span><span class="p">:],</span> <span class="n">method</span><span class="p">)</span>
-
-    <span class="c1"># assign x and y coordinates to dataset</span>
-    <span class="n">start_idx</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="k">for</span> <span class="n">_subset</span><span class="p">,</span> <span class="n">_embedding</span> <span class="ow">in</span> <span class="p">[</span>
-        <span class="p">(</span><span class="n">fit_subset</span><span class="p">,</span> <span class="n">fit_embedding</span><span class="p">),</span>
-        <span class="p">(</span><span class="n">trans_subset</span><span class="p">,</span> <span class="n">trans_embedding</span><span class="p">),</span>
-    <span class="p">]:</span>
-        <span class="c1"># edge case: embedding is too small</span>
-        <span class="k">if</span> <span class="n">_embedding</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">_key</span> <span class="ow">in</span> <span class="n">_subset</span><span class="p">:</span>
-                <span class="k">assert</span> <span class="p">(</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">dfs</span><span class="p">[</span><span class="n">_key</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span>
-                <span class="p">),</span> <span class="s2">&quot;Expected empty df due to empty embedding&quot;</span>
-            <span class="k">continue</span>
-        <span class="k">for</span> <span class="n">_key</span> <span class="ow">in</span> <span class="n">_subset</span><span class="p">:</span>
-            <span class="n">_length</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dfs</span><span class="p">[</span><span class="n">_key</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">dfs</span><span class="p">[</span><span class="n">_key</span><span class="p">][</span><span class="s2">&quot;x&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span>
-                <span class="n">_embedding</span><span class="p">[</span><span class="n">start_idx</span> <span class="p">:</span> <span class="p">(</span><span class="n">start_idx</span> <span class="o">+</span> <span class="n">_length</span><span class="p">),</span> <span class="mi">0</span><span class="p">]</span>
-            <span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">dfs</span><span class="p">[</span><span class="n">_key</span><span class="p">][</span><span class="s2">&quot;y&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span>
-                <span class="n">_embedding</span><span class="p">[</span><span class="n">start_idx</span> <span class="p">:</span> <span class="p">(</span><span class="n">start_idx</span> <span class="o">+</span> <span class="n">_length</span><span class="p">),</span> <span class="mi">1</span><span class="p">]</span>
-            <span class="p">)</span>
-            <span class="n">start_idx</span> <span class="o">+=</span> <span class="n">_length</span>
-
+    <span class="n">reducer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_nd_embedding</span><span class="p">(</span><span class="n">vectorizer</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">reducer</span>
 </code></pre></div>
         </details>
@@ -2010,6 +1986,132 @@ SupervisableDataset            (<span title="hover.core.Loggable">Loggable</span
                 <span class="p">)</span>
             <span class="n">feature_to_subset_idx</span><span class="p">[</span><span class="n">_val</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">_subset</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">feature_to_subset_idx</span> <span class="o">=</span> <span class="n">feature_to_subset_idx</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 id="hover.core.dataset.SupervisableDataset.compute_nd_embedding" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">compute_nd_embedding</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vectorizer</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
+
+
+</h3>
+
+    <div class="doc doc-contents ">
+
+      <details class="note" open="open">
+<summary>Get embeddings in n-dimensional space and return the dimensionality reducer.</summary>
+<p>Reference: <a href="https://github.com/phurwicz/hover/blob/main/hover/core/representation/reduction.py"><code>DimensionalityReducer</code></a></p>
+<table>
+<thead>
+<tr>
+<th align="left">Param</th>
+<th align="left">Type</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code>vectorizer</code></td>
+<td align="left"><code>callable</code></td>
+<td align="left">the feature -&gt; vector function</td>
+</tr>
+<tr>
+<td align="left"><code>method</code></td>
+<td align="left"><code>str</code></td>
+<td align="left">arg for <code>DimensionalityReducer</code></td>
+</tr>
+<tr>
+<td align="left"><code>dimension</code></td>
+<td align="left"><code>int</code></td>
+<td align="left">dimension of output embedding</td>
+</tr>
+<tr>
+<td align="left"><code>**kwargs</code></td>
+<td align="left"></td>
+<td align="left">kwargs for <code>DimensionalityReducer</code></td>
+</tr>
+</tbody>
+</table>
+</details>
+
+        <details class="quote">
+          <summary>Source code in <code>hover/core/dataset.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">compute_nd_embedding</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vectorizer</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ???+ note &quot;Get embeddings in n-dimensional space and return the dimensionality reducer.&quot;</span>
+<span class="sd">        Reference: [`DimensionalityReducer`](https://github.com/phurwicz/hover/blob/main/hover/core/representation/reduction.py)</span>
+
+<span class="sd">        | Param        | Type       | Description                        |</span>
+<span class="sd">        | :----------- | :--------- | :--------------------------------- |</span>
+<span class="sd">        | `vectorizer` | `callable` | the feature -&gt; vector function     |</span>
+<span class="sd">        | `method`     | `str`      | arg for `DimensionalityReducer`    |</span>
+<span class="sd">        | `dimension`  | `int`      | dimension of output embedding      |</span>
+<span class="sd">        | `**kwargs`   |            | kwargs for `DimensionalityReducer` |</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span> <span class="nn">hover.core.representation.reduction</span> <span class="kn">import</span> <span class="n">DimensionalityReducer</span>
+
+    <span class="c1"># prepare input vectors to manifold learning</span>
+    <span class="n">fit_subset</span> <span class="o">=</span> <span class="p">[</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">SCRATCH_SUBSETS</span><span class="p">,</span> <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">PUBLIC_SUBSETS</span><span class="p">]</span>
+    <span class="n">trans_subset</span> <span class="o">=</span> <span class="p">[</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">PRIVATE_SUBSETS</span><span class="p">]</span>
+
+    <span class="k">assert</span> <span class="ow">not</span> <span class="nb">set</span><span class="p">(</span><span class="n">fit_subset</span><span class="p">)</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">trans_subset</span><span class="p">)),</span> <span class="s2">&quot;Unexpected overlap&quot;</span>
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dimension</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">and</span> <span class="n">dimension</span> <span class="o">&gt;=</span> <span class="mi">2</span>
+    <span class="n">embedding_cols</span> <span class="o">=</span> <span class="p">[</span><span class="n">embedding_field</span><span class="p">(</span><span class="n">dimension</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">dimension</span><span class="p">)]</span>
+
+    <span class="c1"># compute vectors and keep track which where to slice the array for fitting</span>
+    <span class="n">feature_inp</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">_key</span> <span class="ow">in</span> <span class="n">fit_subset</span><span class="p">:</span>
+        <span class="n">feature_inp</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dfs</span><span class="p">[</span><span class="n">_key</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">FEATURE_KEY</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+    <span class="n">fit_num</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">feature_inp</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">_key</span> <span class="ow">in</span> <span class="n">trans_subset</span><span class="p">:</span>
+        <span class="n">feature_inp</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dfs</span><span class="p">[</span><span class="n">_key</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">FEATURE_KEY</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+    <span class="n">trans_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+        <span class="p">[</span><span class="n">vectorizer</span><span class="p">(</span><span class="n">_inp</span><span class="p">)</span> <span class="k">for</span> <span class="n">_inp</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">feature_inp</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Vectorizing&quot;</span><span class="p">)]</span>
+    <span class="p">)</span>
+
+    <span class="c1"># initialize and fit manifold learning reducer using specified subarray</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Fit-transforming </span><span class="si">{</span><span class="n">method</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="si">}</span><span class="s2"> on </span><span class="si">{</span><span class="n">fit_num</span><span class="si">}</span><span class="s2"> samples...&quot;</span><span class="p">)</span>
+    <span class="n">reducer</span> <span class="o">=</span> <span class="n">DimensionalityReducer</span><span class="p">(</span><span class="n">trans_arr</span><span class="p">[:</span><span class="n">fit_num</span><span class="p">])</span>
+    <span class="n">fit_embedding</span> <span class="o">=</span> <span class="n">reducer</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="n">dimension</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="c1"># compute embedding of the whole dataset</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_info</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;Transforming </span><span class="si">{</span><span class="n">method</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="si">}</span><span class="s2"> on </span><span class="si">{</span><span class="n">trans_arr</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">fit_num</span><span class="si">}</span><span class="s2"> samples...&quot;</span>
+    <span class="p">)</span>
+    <span class="n">trans_embedding</span> <span class="o">=</span> <span class="n">reducer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">trans_arr</span><span class="p">[</span><span class="n">fit_num</span><span class="p">:],</span> <span class="n">method</span><span class="p">)</span>
+
+    <span class="c1"># assign x and y coordinates to dataset</span>
+    <span class="n">start_idx</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">_subset</span><span class="p">,</span> <span class="n">_embedding</span> <span class="ow">in</span> <span class="p">[</span>
+        <span class="p">(</span><span class="n">fit_subset</span><span class="p">,</span> <span class="n">fit_embedding</span><span class="p">),</span>
+        <span class="p">(</span><span class="n">trans_subset</span><span class="p">,</span> <span class="n">trans_embedding</span><span class="p">),</span>
+    <span class="p">]:</span>
+        <span class="c1"># edge case: embedding is too small</span>
+        <span class="k">if</span> <span class="n">_embedding</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">_key</span> <span class="ow">in</span> <span class="n">_subset</span><span class="p">:</span>
+                <span class="k">assert</span> <span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">dfs</span><span class="p">[</span><span class="n">_key</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span>
+                <span class="p">),</span> <span class="s2">&quot;Expected empty df due to empty embedding&quot;</span>
+            <span class="k">continue</span>
+        <span class="k">for</span> <span class="n">_key</span> <span class="ow">in</span> <span class="n">_subset</span><span class="p">:</span>
+            <span class="n">_length</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dfs</span><span class="p">[</span><span class="n">_key</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">_i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">dimension</span><span class="p">):</span>
+                <span class="n">_col</span> <span class="o">=</span> <span class="n">embedding_cols</span><span class="p">[</span><span class="n">_i</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">dfs</span><span class="p">[</span><span class="n">_key</span><span class="p">][</span><span class="n">_col</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span>
+                    <span class="n">_embedding</span><span class="p">[</span><span class="n">start_idx</span> <span class="p">:</span> <span class="p">(</span><span class="n">start_idx</span> <span class="o">+</span> <span class="n">_length</span><span class="p">),</span> <span class="n">_i</span><span class="p">]</span>
+                <span class="p">)</span>
+            <span class="n">start_idx</span> <span class="o">+=</span> <span class="n">_length</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">_good</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Computed </span><span class="si">{</span><span class="n">dimension</span><span class="si">}</span><span class="s2">-d embedding in columns </span><span class="si">{</span><span class="n">embedding_cols</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">reducer</span>
 </code></pre></div>
         </details>
     </div>
@@ -2278,7 +2380,7 @@ SupervisableDataset            (<span title="hover.core.Loggable">Loggable</span
     <span class="n">input_vector_lists</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">_vec_func</span> <span class="ow">in</span> <span class="n">vectorizers</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Preparing </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2"> input vectors...&quot;</span><span class="p">)</span>
-        <span class="n">_input_vecs</span> <span class="o">=</span> <span class="p">[</span><span class="n">_vec_func</span><span class="p">(</span><span class="n">_f</span><span class="p">)</span> <span class="k">for</span> <span class="n">_f</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">features</span><span class="p">)]</span>
+        <span class="n">_input_vecs</span> <span class="o">=</span> <span class="p">[</span><span class="n">_vec_func</span><span class="p">(</span><span class="n">_f</span><span class="p">)</span> <span class="k">for</span> <span class="n">_f</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Vectorizing&quot;</span><span class="p">)]</span>
         <span class="n">input_vector_lists</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_input_vecs</span><span class="p">)</span>
 
     <span class="bp">self</span><span class="o">.</span><span class="n">_info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Preparing </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2"> data loader...&quot;</span><span class="p">)</span>
@@ -3431,6 +3533,7 @@ SupervisableTextDataset            (<a title="hover.core.dataset.SupervisableDat
 <h3 class="doc doc-heading" data-role="method" id="hover.core.dataset.SupervisableDataset.__init__"></h3>
 <h3 class="doc doc-heading" data-role="method" id="hover.core.dataset.SupervisableDataset.compute_2d_embedding"></h3>
 <h3 class="doc doc-heading" data-role="method" id="hover.core.dataset.SupervisableDataset.compute_feature_index"></h3>
+<h3 class="doc doc-heading" data-role="method" id="hover.core.dataset.SupervisableDataset.compute_nd_embedding"></h3>
 <h3 class="doc doc-heading" data-role="method" id="hover.core.dataset.SupervisableDataset.copy"></h3>
 <h3 class="doc doc-heading" data-role="method" id="hover.core.dataset.SupervisableDataset.df_deduplicate"></h3>
 <h3 class="doc doc-heading" data-role="method" id="hover.core.dataset.SupervisableDataset.from_pandas"></h3>

@@ -1223,18 +1223,15 @@
                 <span class="n">layout</span> <span class="o">=</span> <span class="n">column</span><span class="p">(</span><span class="n">spinner</span><span class="p">)</span>
 
                 <span class="k">def</span> <span class="nf">progress</span><span class="p">():</span>
-                    <span class="n">spinner</span><span class="o">.</span><span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;.&quot;</span>
+                    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">                    If still loading, show some progress.</span>
+<span class="sd">                    &quot;&quot;&quot;</span>
+                    <span class="k">if</span> <span class="n">spinner</span> <span class="ow">in</span> <span class="n">layout</span><span class="o">.</span><span class="n">children</span><span class="p">:</span>
+                        <span class="n">spinner</span><span class="o">.</span><span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;.&quot;</span>
 
                 <span class="k">def</span> <span class="nf">load</span><span class="p">():</span>
                     <span class="k">try</span><span class="p">:</span>
                         <span class="n">bokeh_model</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-                        <span class="c1"># remove spinner and its update</span>
-                        <span class="k">try</span><span class="p">:</span>
-                            <span class="n">doc</span><span class="o">.</span><span class="n">remove_periodic_callback</span><span class="p">(</span><span class="n">progress</span><span class="p">)</span>
-                        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-                            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-                                <span class="sa">f</span><span class="s2">&quot;@servable: trying to remove periodic callback, got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span>
-                            <span class="p">)</span>
                         <span class="n">layout</span><span class="o">.</span><span class="n">children</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">bokeh_model</span><span class="p">)</span>
                         <span class="n">layout</span><span class="o">.</span><span class="n">children</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
                     <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>

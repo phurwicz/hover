@@ -928,8 +928,9 @@ BokehAudioAnnotator            (<a title="hover.core.explorer.functionality.Boke
     <span class="k">def</span> <span class="nf">_layout_widgets</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Define the layout of widgets.&quot;&quot;&quot;</span>
         <span class="n">layout_rows</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">row</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_key_button_group</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">selection_option_box</span><span class="p">),</span>
+            <span class="n">row</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">subset_toggle_widget_column</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">selection_option_box</span><span class="p">),</span>
             <span class="n">row</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">annotator_input</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">annotator_apply</span><span class="p">),</span>
+            <span class="n">row</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dropdown_x_axis</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dropdown_y_axis</span><span class="p">),</span>
             <span class="n">row</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_dynamic_widgets</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span>
         <span class="p">)</span>
         <span class="k">return</span> <span class="n">column</span><span class="p">(</span><span class="o">*</span><span class="n">layout_rows</span><span class="p">)</span>
@@ -1165,8 +1166,9 @@ BokehAudioSoftLabel            (<a title="hover.core.explorer.functionality.Boke
     <span class="k">def</span> <span class="nf">_layout_widgets</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Define the layout of widgets.&quot;&quot;&quot;</span>
         <span class="n">layout_rows</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">row</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_key_button_group</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">selection_option_box</span><span class="p">),</span>
+            <span class="n">row</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">subset_toggle_widget_column</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">selection_option_box</span><span class="p">),</span>
             <span class="n">row</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">score_filter</span><span class="p">),</span>
+            <span class="n">row</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dropdown_x_axis</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dropdown_y_axis</span><span class="p">),</span>
             <span class="n">row</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_dynamic_widgets</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span>
         <span class="p">)</span>
         <span class="k">return</span> <span class="n">column</span><span class="p">(</span><span class="o">*</span><span class="n">layout_rows</span><span class="p">)</span>
@@ -1195,8 +1197,6 @@ BokehAudioSoftLabel            (<a title="hover.core.explorer.functionality.Boke
     </div>
 
   </div>
-
-
 
 
 
@@ -1233,8 +1233,9 @@ BokehImageAnnotator            (<a title="hover.core.explorer.functionality.Boke
     <span class="k">def</span> <span class="nf">_layout_widgets</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Define the layout of widgets.&quot;&quot;&quot;</span>
         <span class="n">layout_rows</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">row</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_key_button_group</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">selection_option_box</span><span class="p">),</span>
+            <span class="n">row</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">subset_toggle_widget_column</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">selection_option_box</span><span class="p">),</span>
             <span class="n">row</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">annotator_input</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">annotator_apply</span><span class="p">),</span>
+            <span class="n">row</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dropdown_x_axis</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dropdown_y_axis</span><span class="p">),</span>
             <span class="n">row</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_dynamic_widgets</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span>
         <span class="p">)</span>
         <span class="k">return</span> <span class="n">column</span><span class="p">(</span><span class="o">*</span><span class="n">layout_rows</span><span class="p">)</span>
@@ -1470,8 +1471,9 @@ BokehImageSoftLabel            (<a title="hover.core.explorer.functionality.Boke
     <span class="k">def</span> <span class="nf">_layout_widgets</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Define the layout of widgets.&quot;&quot;&quot;</span>
         <span class="n">layout_rows</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">row</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_key_button_group</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">selection_option_box</span><span class="p">),</span>
+            <span class="n">row</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">subset_toggle_widget_column</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">selection_option_box</span><span class="p">),</span>
             <span class="n">row</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">score_filter</span><span class="p">),</span>
+            <span class="n">row</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dropdown_x_axis</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dropdown_y_axis</span><span class="p">),</span>
             <span class="n">row</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_dynamic_widgets</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span>
         <span class="p">)</span>
         <span class="k">return</span> <span class="n">column</span><span class="p">(</span><span class="o">*</span><span class="n">layout_rows</span><span class="p">)</span>
@@ -1536,9 +1538,10 @@ BokehTextAnnotator            (<a title="hover.core.explorer.functionality.Bokeh
     <span class="k">def</span> <span class="nf">_layout_widgets</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Define the layout of widgets.&quot;&quot;&quot;</span>
         <span class="n">layout_rows</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">row</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_key_button_group</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">selection_option_box</span><span class="p">),</span>
+            <span class="n">row</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">subset_toggle_widget_column</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">selection_option_box</span><span class="p">),</span>
             <span class="n">row</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">search_pos</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">search_neg</span><span class="p">),</span>
             <span class="n">row</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">annotator_input</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">annotator_apply</span><span class="p">),</span>
+            <span class="n">row</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dropdown_x_axis</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dropdown_y_axis</span><span class="p">),</span>
             <span class="n">row</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_dynamic_widgets</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span>
         <span class="p">)</span>
         <span class="k">return</span> <span class="n">column</span><span class="p">(</span><span class="o">*</span><span class="n">layout_rows</span><span class="p">)</span>
@@ -1603,11 +1606,12 @@ BokehTextFinder            (<a title="hover.core.explorer.functionality.BokehDat
     <span class="k">def</span> <span class="nf">_layout_widgets</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Define the layout of widgets.&quot;&quot;&quot;</span>
         <span class="n">layout_rows</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">row</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_key_button_group</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">selection_option_box</span><span class="p">),</span>
+            <span class="n">row</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">subset_toggle_widget_column</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">selection_option_box</span><span class="p">),</span>
             <span class="n">row</span><span class="p">(</span>
                 <span class="n">column</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">search_pos</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">search_neg</span><span class="p">),</span>
                 <span class="n">column</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">search_filter_box</span><span class="p">),</span>
             <span class="p">),</span>
+            <span class="n">row</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dropdown_x_axis</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dropdown_y_axis</span><span class="p">),</span>
             <span class="n">row</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_dynamic_widgets</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span>
         <span class="p">)</span>
         <span class="k">return</span> <span class="n">column</span><span class="p">(</span><span class="o">*</span><span class="n">layout_rows</span><span class="p">)</span>
@@ -1729,9 +1733,10 @@ BokehTextSnorkel            (<a title="hover.core.explorer.functionality.BokehSn
     <span class="k">def</span> <span class="nf">_layout_widgets</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Define the layout of widgets.&quot;&quot;&quot;</span>
         <span class="n">layout_rows</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">row</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_key_button_group</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">selection_option_box</span><span class="p">),</span>
+            <span class="n">row</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">subset_toggle_widget_column</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">selection_option_box</span><span class="p">),</span>
             <span class="n">row</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">search_pos</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">search_neg</span><span class="p">),</span>
             <span class="n">row</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lf_apply_trigger</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">lf_filter_trigger</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">lf_list_refresher</span><span class="p">),</span>
+            <span class="n">row</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dropdown_x_axis</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dropdown_y_axis</span><span class="p">),</span>
             <span class="n">row</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_dynamic_widgets</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span>
         <span class="p">)</span>
         <span class="k">return</span> <span class="n">column</span><span class="p">(</span><span class="o">*</span><span class="n">layout_rows</span><span class="p">)</span>
@@ -1796,9 +1801,10 @@ BokehTextSoftLabel            (<a title="hover.core.explorer.functionality.Bokeh
     <span class="k">def</span> <span class="nf">_layout_widgets</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Define the layout of widgets.&quot;&quot;&quot;</span>
         <span class="n">layout_rows</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">row</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_key_button_group</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">selection_option_box</span><span class="p">),</span>
+            <span class="n">row</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">subset_toggle_widget_column</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">selection_option_box</span><span class="p">),</span>
             <span class="n">row</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">search_pos</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">search_neg</span><span class="p">),</span>
             <span class="n">row</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">score_filter</span><span class="p">),</span>
+            <span class="n">row</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dropdown_x_axis</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dropdown_y_axis</span><span class="p">),</span>
             <span class="n">row</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_dynamic_widgets</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span>
         <span class="p">)</span>
         <span class="k">return</span> <span class="n">column</span><span class="p">(</span><span class="o">*</span><span class="n">layout_rows</span><span class="p">)</span>
