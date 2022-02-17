@@ -11,7 +11,9 @@
 [![Codacy Grade](https://img.shields.io/codacy/grade/689827d9077b43ac8721c7658d122d1a?logo=codacy&logoColor=white)](https://app.codacy.com/gh/phurwicz/hover/dashboard)
 [![Codacy Coverage](https://img.shields.io/codacy/coverage/689827d9077b43ac8721c7658d122d1a/main?logo=codacy&logoColor=white)](https://app.codacy.com/gh/phurwicz/hover/dashboard)
 
-`hover` speeds up data labeling through `embedding + visualization + callbacks`. You just need raw data and an embedding to start.
+`hover` speeds up data labeling through `embedding + visualization + callbacks`.
+
+-   You just need raw data and an embedding to start.
 
 ![Demo](https://raw.githubusercontent.com/phurwicz/hover-gallery/main/0.5.0/trailer.gif)
 
@@ -20,6 +22,7 @@
 > **It's fast because it labels in bulk.**
 
 :telescope: A 2D-embedded view of your dataset for labeling, equipped with
+
 -   **Tooltip** for each point and **table view** for groups of points.
 -   **Search** widgets for ad-hoc highlight of data matching search criteria.
 -   **Toggle** buttons that clearly distinguish data subsets ("raw"/"train"/"dev"/"test").
@@ -27,6 +30,7 @@
 > **It's accurate because you can filter and extend.**
 
 :microscope: Supplementary views to provide further labeling precision, such as
+
 -   Advanced search view which can **filter points by search criteria** and provides stronger highlight.
 -   Active learning view which puts a model in the loop and can **filter by confidence score**.
 -   Function-based view which can leverage **custom functions for labeling and filtering**.
@@ -59,6 +63,7 @@ PyPI (for all releases): `pip install hover`
 Conda-forge (for 0.6.0 and above): `conda install -c conda-forge hover`
 
 For Windows users, we recommend [Windows Subsystem for Linux](https://docs.microsoft.com/en-us/windows/wsl/about).
+
 -   On Windows itself you will need [C++ build tools](https://visualstudio.microsoft.com/downloads/) for dependencies.
 
 ## :book: Resources
