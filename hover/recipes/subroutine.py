@@ -287,7 +287,7 @@ def active_learning_components(dataset, vecnet, **kwargs):
         probs = vecnet.predict_proba(inps)
         labels = [dataset.label_decoder[_val] for _val in probs.argmax(axis=-1)]
         scores = probs.max(axis=-1).tolist()
-        traj_arr, seq_arr, disparity_arr = vecnet.manifold_trajectory(
+        traj_arr, _, _ = vecnet.manifold_trajectory(
             inps,
             method="umap",
             reducer_kwargs=dict(dimension=manifold_dim),
