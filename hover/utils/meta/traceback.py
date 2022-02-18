@@ -27,6 +27,7 @@ class RichTracebackMeta(type):
                         style="red bold",
                     )
                     console.print_exception(show_locals=False)
+                    raise e_original
 
             return wrapped
 
