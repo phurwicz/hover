@@ -23,22 +23,10 @@ class RichTracebackMeta(type):
                 except Exception as e_original:
                     func_name = f"{func.__module__}.{func.__qualname__}"
                     console.print(
-                        f":red_circle: {func_name} failed.",
+                        f":red_circle: {func_name} failed: {e_original}",
                         style="red bold",
                     )
-                    try:
-                        locals_flag = (
-                            console.input(
-                                "Show local variables in traceback? y/N",
-                            ).lower()
-                            == "y"
-                        )
-                        # similarly to e_original, will stop further code
-                        console.print_exception(show_locals=locals_flag)
-                    # sometimes (pytest for example) input can be forbidden
-                    # and the original exception is appropriate
-                    except Exception:
-                        raise e_original
+                    console.print_exception(show_locals=False)
 
             return wrapped
 
