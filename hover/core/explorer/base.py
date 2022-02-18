@@ -1,6 +1,7 @@
 """
 ???+ note "Base class(es) for ALL explorer implementations."
 """
+import pandas as pd
 from abc import ABC, abstractmethod
 from collections import OrderedDict, defaultdict
 from bokeh.events import SelectionGeometry
