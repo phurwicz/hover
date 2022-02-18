@@ -65,7 +65,6 @@ class BokehForText(BokehBaseExplorer):
         """
         ???+ note "Enables string/regex search-and-highlight mechanism."
             Modifies the plotting source in-place.
-            Using a JS callback (instead of Python) so that it also works in standalone HTML.
 
             | Param           | Type    | Description                   |
             | :-------------- | :------ | :---------------------------  |
