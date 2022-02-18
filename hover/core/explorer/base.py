@@ -299,6 +299,7 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
         expected_keys = set(self.__class__.SUBSET_GLYPH_KWARGS.keys())
 
         # perform high-level df key checks
+        expected_and_supplied = supplied_keys.intersection(expected_keys)
         supplied_not_expected = supplied_keys.difference(expected_keys)
         expected_not_supplied = expected_keys.difference(supplied_keys)
 
@@ -311,19 +312,23 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
                 f"{self.__class__.__name__}.__init__(): missing expected df key {_key}"
             )
 
-        # create df with column checks
+        # assign df with column checks
         self.dfs = dict()
-        for _key, _df in df_dict.items():
-            if _key in expected_keys:
-                for _col in self.__class__.MANDATORY_COLUMNS:
-                    if _col not in _df.columns:
-                        # edge case: DataFrame has zero rows
-                        assert (
-                            _df.shape[0] == 0
-                        ), f"Missing column '{_col}' from non-empty {_key} DataFrame: found {list(_df.columns)}"
-                        _df[_col] = None
-
-                self.dfs[_key] = _df.copy() if copy else _df
+        for _key in expected_and_supplied:
+            _df = df_dict[_key]
+            for _col in self.__class__.MANDATORY_COLUMNS:
+                if _col not in _df.columns:
+                    # edge case: DataFrame has zero rows
+                    assert (
+                        _df.shape[0] == 0
+                    ), f"Missing column '{_col}' from non-empty {_key} DataFrame: found {list(_df.columns)}"
+                    _df[_col] = None
+            self.dfs[_key] = _df.copy() if copy else _df
+            
+        # expected dfs must be present
+        for _key in expected_not_supplied:
+            _df = pd.DataFrame(columns=self.__class__.MANDATORY_COLUMNS)
+            self.dfs[_key] = _df
 
     def _setup_sources(self):
         """
