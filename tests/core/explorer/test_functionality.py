@@ -102,6 +102,7 @@ class TestBokehDataFinder:
     @pytest.mark.lite
     def test_filter_text(example_raw_df):
         explorer = get_explorer_class("finder", "text")({"raw": example_raw_df})
+        explorer.activate_search()
         explorer.plot()
 
         # dynamically construct patterns with predictable outcome
