@@ -1,4 +1,7 @@
-"""Example importable module holding customized ingredients of a workflow with hover."""
+"""
+Example importable module holding customized ingredients of a workflow with hover.
+Specifically for text data.
+"""
 
 import os
 import re
@@ -8,14 +11,6 @@ import wrappy
 CACHE_PATH = os.path.join(os.path.dirname(__file__), "vecs.pkl")
 
 
-def dummy_vectorizer(text):
-    """
-    A 'minimal' text vectorizer.
-    """
-    return np.random.rand(128)
-
-
-@wrappy.guard(fallback_retval=dummy_vectorizer)
 def get_vectorizer():
     """
     :returns: a text vectorizer.
