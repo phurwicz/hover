@@ -19,7 +19,8 @@ class BokehDataFinder(BokehBaseExplorer):
 
         Features:
 
-        -   the search widgets will highlight the results through a change of color, which gives arguably the best focus.
+        -   the search widgets will highlight the results through a change of color.
+        -   the search results can be used as a filter condition.
     """
 
     SUBSET_GLYPH_KWARGS = {

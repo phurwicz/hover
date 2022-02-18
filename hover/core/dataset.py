@@ -13,6 +13,7 @@
 import pandas as pd
 import numpy as np
 from tqdm import tqdm
+from collections import OrderedDict
 from hover import module_config
 from hover.core import Loggable
 from hover.utils.bokeh_helper import auto_label_color
@@ -73,6 +74,7 @@ class SupervisableDataset(Loggable):
         self.setup_file_export()
         self.setup_pop_table(width_policy="fit", height_policy="fit")
         self.setup_sel_table(width_policy="fit", height_policy="fit")
+        self._vectorizer_lookup = OrderedDict()
         self._good(f"{self.__class__.__name__}: finished initialization.")
 
     def setup_dfs(
@@ -366,6 +368,8 @@ class SupervisableDataset(Loggable):
             Note: the reason we need this is due to `self.dfs[key] = ...`-like assignments. If DF operations were all in-place, then the explorers could directly access the updates through their `self.dfs` references.
         """
 
+        explorer.link_dataset(self)
+
         def callback_push():
             df_dict = {_v: self.dfs[_k] for _k, _v in subset_mapping.items()}
             explorer._setup_dfs(df_dict)
@@ -384,6 +388,8 @@ class SupervisableDataset(Loggable):
             | `explorer`       | `BokehBaseExplorer` | the explorer to register  |
             | `subset_mapping` | `dict` | `dataset` -> `explorer` subset mapping |
         """
+
+        explorer.link_dataset(self)
 
         def callback_commit(event):
             for sub_k, sub_v in subset_mapping.items():
@@ -436,6 +442,8 @@ class SupervisableDataset(Loggable):
         assert (
             isinstance(subsets, list) and len(subsets) > 0
         ), "Expected a non-empty list of subsets"
+
+        explorer.link_dataset(self)
 
         def callback_view():
             sel_slices = []
@@ -721,6 +729,14 @@ class SupervisableDataset(Loggable):
 
         self.compute_feature_index()
 
+    @property
+    def vectorizer_lookup(self):
+        return self._vectorizer_lookup
+
+    @vectorizer_lookup.setter
+    def vectorizer_lookup(self, *args, **kwargs):
+        self._fail("assigning vectorizer lookup by reference is forbidden.")
+
     def compute_nd_embedding(self, vectorizer, method, dimension=2, **kwargs):
         """
         ???+ note "Get embeddings in n-dimensional space and return the dimensionality reducer."
@@ -734,6 +750,9 @@ class SupervisableDataset(Loggable):
             | `**kwargs`   |            | kwargs for `DimensionalityReducer` |
         """
         from hover.core.representation.reduction import DimensionalityReducer
+
+        # register the vectorizer for scenarios that may need it
+        self.vectorizer_lookup[dimension] = vectorizer
 
         # prepare input vectors to manifold learning
         fit_subset = [*self.__class__.SCRATCH_SUBSETS, *self.__class__.PUBLIC_SUBSETS]

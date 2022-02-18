@@ -5,7 +5,6 @@ import re
 from bokeh.models import TextInput
 from bokeh.layouts import column, row
 from .base import BokehBaseExplorer
-from .local_config import SEARCH_SCORE_FIELD
 
 
 class BokehForText(BokehBaseExplorer):
@@ -21,7 +20,8 @@ class BokehForText(BokehBaseExplorer):
         - what the explorer serves to do.
     """
 
-    MANDATORY_COLUMNS = ["text", "label"]
+    PRIMARY_FEATURE = "text"
+    MANDATORY_COLUMNS = [PRIMARY_FEATURE, "label"]
     TOOLTIP_KWARGS = {"label": True, "text": True, "coords": True, "index": True}
 
     def _setup_search_highlight(self):
@@ -61,58 +61,29 @@ class BokehForText(BokehBaseExplorer):
             row(*self._dynamic_widgets.values()),
         )
 
-    def activate_search(self, subset, kwargs, altered_param=("size", 10, 5, 7)):
+    def activate_search(self):
         """
-        ???+ note "Enables string/regex search-and-highlight mechanism."
-            Modifies the plotting source in-place.
+        ???+ note "Assign Highlighting callbacks to search results."
 
-            | Param           | Type    | Description                   |
-            | :-------------- | :------ | :---------------------------  |
-            | `subset`        | `str`   | the subset to activate search on |
-            | `kwargs`        | `bool`  | kwargs for the plot to add to |
-            | `altered_param` | `tuple` | (attribute, positive, negative, default) |
+            No special setup for text since regex search is simple.
         """
-        assert isinstance(kwargs, dict)
-        updated_kwargs = kwargs.copy()
+        super().activate_search()
 
-        param_key, param_pos, param_neg, param_default = altered_param
-        num_points = len(self.sources[subset].data["text"])
-        self.sources[subset].add([param_default] * num_points, f"{param_key}")
-        self._extra_source_cols[subset][param_key] = param_default
+    def _get_search_score_function(self):
+        """
+        ???+ note "Dynamically create a single-argument scoring function."
+        """
+        pos_regex, neg_regex = self.search_pos.value, self.search_neg.value
 
-        updated_kwargs[param_key] = param_key
+        def regex_score(text):
+            score = 0
+            if len(pos_regex) > 0:
+                score += 1 if re.search(pos_regex, text) else -2
+            if len(neg_regex) > 0:
+                score += -2 if re.search(neg_regex, text) else 1
+            return score
 
-        def search_response(attr, old, new):
-            pos_regex, neg_regex = self.search_pos.value, self.search_neg.value
-
-            def regex_score(text):
-                score = 0
-                if len(pos_regex) > 0:
-                    score += 1 if re.search(pos_regex, text) else -2
-                if len(neg_regex) > 0:
-                    score += -2 if re.search(neg_regex, text) else 1
-                return score
-
-            def score_to_param(score):
-                if score > 0:
-                    return param_pos
-                elif score == 0:
-                    return param_default
-                else:
-                    return param_neg
-
-            patch_slice = slice(len(self.sources[subset].data["text"]))
-            search_scores = list(map(regex_score, self.sources[subset].data["text"]))
-            search_params = list(map(score_to_param, search_scores))
-            self.sources[subset].patch(
-                {SEARCH_SCORE_FIELD: [(patch_slice, search_scores)]}
-            )
-            self.sources[subset].patch({param_key: [(patch_slice, search_params)]})
-            return
-
-        # assign dynamic callback
-        self._dynamic_callbacks["search_response"][subset] = search_response
-        return updated_kwargs
+        return regex_score
 
 
 class BokehForAudio(BokehBaseExplorer):
@@ -128,7 +99,8 @@ class BokehForAudio(BokehBaseExplorer):
         - what the explorer serves to do.
     """
 
-    MANDATORY_COLUMNS = ["audio", "label"]
+    PRIMARY_FEATURE = "audio"
+    MANDATORY_COLUMNS = [PRIMARY_FEATURE, "label"]
     TOOLTIP_KWARGS = {"label": True, "audio": True, "coords": True, "index": True}
 
     def _setup_search_highlight(self):
@@ -169,6 +141,7 @@ class BokehForAudio(BokehBaseExplorer):
             | `kwargs`        | `bool`  | kwargs for the plot to add to |
             | `altered_param` | `tuple` | (attribute, positive, negative, default) |
         """
+        super().activate_search()
         self._warn("no search highlight available.")
         return kwargs
 
@@ -186,7 +159,8 @@ class BokehForImage(BokehBaseExplorer):
         - what the explorer serves to do.
     """
 
-    MANDATORY_COLUMNS = ["image", "label"]
+    PRIMARY_FEATURE = "image"
+    MANDATORY_COLUMNS = [PRIMARY_FEATURE, "label"]
     TOOLTIP_KWARGS = {"label": True, "image": True, "coords": True, "index": True}
 
     def _setup_search_highlight(self):
@@ -214,18 +188,9 @@ class BokehForImage(BokehBaseExplorer):
             row(*self._dynamic_widgets.values()),
         )
 
-    def activate_search(self, subset, kwargs, altered_param=("size", 10, 5, 7)):
+    def activate_search(self):
         """
-        ???+ help "Help wanted"
-            Trivial implementation until we figure out how to search images.
-
-            [Create an issue](https://github.com/phurwicz/hover/issues/new) if you have an idea :)
-
-            | Param           | Type    | Description                   |
-            | :-------------- | :------ | :---------------------------  |
-            | `subset`        | `str`   | the subset to activate search on |
-            | `kwargs`        | `bool`  | kwargs for the plot to add to |
-            | `altered_param` | `tuple` | (attribute, positive, negative, default) |
+        ???+ note "Assign Highlighting callbacks to search results."
         """
+        super().activate_search()
         self._warn("no search highlight available.")
-        return kwargs

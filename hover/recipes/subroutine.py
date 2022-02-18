@@ -108,6 +108,7 @@ def standard_annotator(dataset, **kwargs):
         title="Annotator: apply labels to the selected points",
         **kwargs,
     )
+    annotator.activate_search()
     annotator.plot()
 
     # subscribe for df updates
@@ -147,6 +148,7 @@ def standard_finder(dataset, **kwargs):
         title="Finder: use the search widget for highlights",
         **kwargs,
     )
+    finder.activate_search()
     finder.plot()
 
     # subscribe for df updates
@@ -179,6 +181,7 @@ def standard_snorkel(dataset, **kwargs):
         title="Snorkel: square for correct, x for incorrect, + for missed, o for hit; click on legends to hide or show LF",
         **kwargs,
     )
+    snorkel.activate_search()
     snorkel.plot()
 
     # subscribe to dataset widgets
@@ -214,6 +217,7 @@ def standard_softlabel(dataset, **kwargs):
         title="SoftLabel: inspect predictions and scores",
         **kwargs,
     )
+    softlabel.activate_search()
     softlabel.plot()
 
     # subscribe to dataset widgets

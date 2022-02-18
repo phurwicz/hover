@@ -44,6 +44,7 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
 
     SUBSET_GLYPH_KWARGS = {}
 
+    PRIMARY_FEATURE = None
     MANDATORY_COLUMNS = ["label"]
     TOOLTIP_KWARGS = {"label": True, "coords": True, "index": True}
 
@@ -57,9 +58,9 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
 
             1. settle the figure settings by using child class defaults & kwargs overrides
             2. settle the glyph settings by using child class defaults
-            3. create widgets that child classes can override
-            4. create data sources the correspond to class-specific data subsets.
-            5. activate builtin search callbacks depending on the child class.
+            3. set up dataframes to sync with
+            4. create widgets that child classes can override
+            5. create data sources the correspond to class-specific data subsets.
             6. initialize a figure under the settings above
         """
         self.figure_kwargs = {
@@ -77,7 +78,6 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
         self._setup_dfs(df_dict)
         self._setup_sources()
         self._setup_widgets()
-        self._activate_search_builtin()
 
     @classmethod
     def from_dataset(cls, dataset, subset_mapping, *args, **kwargs):
@@ -95,7 +95,18 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
 
         assert isinstance(dataset, SupervisableDataset)
         df_dict = {_v: dataset.dfs[_k] for _k, _v in subset_mapping.items()}
-        return cls(df_dict, *args, **kwargs)
+        explorer = cls(df_dict, *args, **kwargs)
+        explorer.link_dataset(dataset)
+        return explorer
+
+    def link_dataset(self, dataset):
+        """
+        ???+ note "Get tied to a dataset, which is common for explorers."
+        """
+        if not hasattr(self, "linked_dataset"):
+            self.linked_dataset = dataset
+        else:
+            assert self.linked_dataset is dataset, "cannot link to two datasets"
 
     def view(self):
         """
@@ -125,6 +136,7 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
         self._info("Setting up widgets")
         self._dynamic_widgets = OrderedDict()
         self._dynamic_callbacks = OrderedDict()
+        self._dynamic_resources = OrderedDict()
         self._setup_search_highlight()
         self._setup_selection_option()
         self._setup_subset_toggle()
@@ -463,42 +475,43 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
         """
         pass
 
-    def _activate_search_builtin(self, verbose=True):
+    def activate_search(self):
         """
-        ???+ note "Assign Highlighting callbacks to search results in a manner built into the class."
-            Typically called once during initialization.
+        ???+ note "Assign Highlighting callbacks to search results."
 
-            Note that this is a template method which heavily depends on class attributes.
-            | Param       | Type   | Description                  |
-            | :---------- | :----- | :--------------------------- |
-            | `verbose`   | `bool` | whether to log verbosely     |
+            This is a parent method which takes care of common denominators of parent methods.
+
+            Child methods may inherit the logic here and preprocess/postprocess as needed.
         """
         for _key, _dict in self.__class__.SUBSET_GLYPH_KWARGS.items():
-            if _key in self.sources.keys():
-                # determine responding attributes
-                _responding = list(_dict["search"].keys())
+            # create a field that holds search results that could be used elsewhere
+            _num_points = len(self.sources[_key].data["label"])
+            self._extra_source_cols[_key][SEARCH_SCORE_FIELD] = 0
+            self.sources[_key].add([0] * _num_points, SEARCH_SCORE_FIELD)
 
-                # create a field that holds search results that could be used elsewhere
-                _num_points = len(self.sources[_key].data["label"])
-                self._extra_source_cols[_key][SEARCH_SCORE_FIELD] = 0
-                self.sources[_key].add([0] * _num_points, SEARCH_SCORE_FIELD)
-
-                # make attributes respond to search
-                for _flag, _params in _dict["search"].items():
-                    self.glyph_kwargs[_key] = self.activate_search(
-                        _key,
-                        self.glyph_kwargs[_key],
-                        altered_param=_params,
-                    )
-                if verbose:
-                    self._info(
-                        f"Activated {_responding} on subset {_key} to respond to the search widgets."
-                    )
+            # make attributes respond to search
+            for _, _params in _dict["search"].items():
+                _updated_kwargs = self._subroutine_activate_search(
+                    _key,
+                    self.glyph_kwargs[_key],
+                    altered_param=_params,
+                )
+                self.glyph_kwargs[_key].clear()
+                self.glyph_kwargs[_key].update(_updated_kwargs)
 
     @abstractmethod
-    def activate_search(self, subset, kwargs, altered_param=("size", 10, 5, 7)):
+    def _get_search_score_function(self):
         """
-        ???+ note "Left to child classes that have a specific feature format."
+        ???+ note "Dynamically create a single-argument scoring function."
+        """
+        pass
+
+    def _subroutine_activate_search(
+        self, subset, kwargs, altered_param=("size", 10, 5, 7)
+    ):
+        """
+        ???+ note "Subroutine of `activate_search()` on a specific subset."
+            Modifies the plotting source in-place.
 
             | Param           | Type    | Description                   |
             | :-------------- | :------ | :---------------------------  |
@@ -506,7 +519,42 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
             | `kwargs`        | `bool`  | kwargs for the plot to add to |
             | `altered_param` | `tuple` | (attribute, positive, negative, default) |
         """
-        pass
+        assert isinstance(kwargs, dict)
+        updated_kwargs = kwargs.copy()
+
+        feature_key = self.__class__.PRIMARY_FEATURE
+        param_key, param_pos, param_neg, param_default = altered_param
+        initial_num = len(self.sources[subset].data[feature_key])
+        self.sources[subset].add([param_default] * initial_num, param_key)
+        self._extra_source_cols[subset][param_key] = param_default
+
+        updated_kwargs[param_key] = param_key
+
+        def score_to_param(score):
+            if score > 0:
+                return param_pos
+            elif score == 0:
+                return param_default
+            else:
+                return param_neg
+
+        def search_response(attr, old, new):
+            search_score_func = self._get_search_score_function()
+
+            patch_slice = slice(len(self.sources[subset].data[feature_key]))
+            search_scores = list(
+                map(search_score_func, self.sources[subset].data["text"])
+            )
+            search_params = list(map(score_to_param, search_scores))
+            self.sources[subset].patch(
+                {SEARCH_SCORE_FIELD: [(patch_slice, search_scores)]}
+            )
+            self.sources[subset].patch({param_key: [(patch_slice, search_params)]})
+            return
+
+        # assign dynamic callback
+        self._dynamic_callbacks["search_response"][subset] = search_response
+        return updated_kwargs
 
     def _prelink_check(self, other):
         """
