@@ -601,6 +601,9 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
         """
         embedding_cols = None
         for _key, _df in self.dfs.items():
+            # edge case: dataframe is empty
+            if _df.shape[0] == 0:
+                continue
             # automatically find embedding columns
             _emb_cols = sorted(filter(is_embedding_field, _df.columns))
             if embedding_cols is None:
