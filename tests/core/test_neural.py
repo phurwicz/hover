@@ -6,14 +6,14 @@ from hover.core.neural import VectorNet
 
 @pytest.fixture
 def example_vecnet_args(mini_supervisable_text_dataset):
-    module_name = "fixture_module.vector_net"
+    module_name = "fixture_module.text_vector_net"
     target_labels = mini_supervisable_text_dataset.classes[:]
     return (module_name, target_labels)
 
 
 @pytest.fixture
 def blank_vecnet():
-    model = VectorNet.from_module("fixture_module.vector_net", [], verbose=10)
+    model = VectorNet.from_module("fixture_module.text_vector_net", [], verbose=10)
     return model
 
 
