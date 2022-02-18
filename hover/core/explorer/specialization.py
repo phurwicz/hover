@@ -118,6 +118,15 @@ class BokehAudioFinder(BokehDataFinder, BokehForAudio):
     MANDATORY_COLUMNS = BokehForAudio.MANDATORY_COLUMNS
     SUBSET_GLYPH_KWARGS = BokehDataFinder.SUBSET_GLYPH_KWARGS
 
+    def _layout_widgets(self):
+        """Define the layout of widgets."""
+        layout_rows = (
+            row(self.subset_toggle_widget_column, self.selection_option_box),
+            row(self.dropdown_x_axis, self.dropdown_y_axis),
+            row(*self._dynamic_widgets.values()),
+        )
+        return column(*layout_rows)
+
 
 class BokehAudioAnnotator(BokehDataAnnotator, BokehForAudio):
     """
@@ -178,6 +187,16 @@ class BokehAudioSnorkel(BokehSnorkelExplorer, BokehForAudio):
     MANDATORY_COLUMNS = BokehForAudio.MANDATORY_COLUMNS
     SUBSET_GLYPH_KWARGS = BokehSnorkelExplorer.SUBSET_GLYPH_KWARGS
 
+    def _layout_widgets(self):
+        """Define the layout of widgets."""
+        layout_rows = (
+            row(self.subset_toggle_widget_column, self.selection_option_box),
+            row(self.lf_apply_trigger, self.lf_filter_trigger, self.lf_list_refresher),
+            row(self.dropdown_x_axis, self.dropdown_y_axis),
+            row(*self._dynamic_widgets.values()),
+        )
+        return column(*layout_rows)
+
 
 class BokehImageFinder(BokehDataFinder, BokehForImage):
     """
@@ -187,6 +206,15 @@ class BokehImageFinder(BokehDataFinder, BokehForImage):
     TOOLTIP_KWARGS = BokehForImage.TOOLTIP_KWARGS
     MANDATORY_COLUMNS = BokehForImage.MANDATORY_COLUMNS
     SUBSET_GLYPH_KWARGS = BokehDataFinder.SUBSET_GLYPH_KWARGS
+
+    def _layout_widgets(self):
+        """Define the layout of widgets."""
+        layout_rows = (
+            row(self.subset_toggle_widget_column, self.selection_option_box),
+            row(self.dropdown_x_axis, self.dropdown_y_axis),
+            row(*self._dynamic_widgets.values()),
+        )
+        return column(*layout_rows)
 
 
 class BokehImageAnnotator(BokehDataAnnotator, BokehForImage):
@@ -247,3 +275,13 @@ class BokehImageSnorkel(BokehSnorkelExplorer, BokehForImage):
     TOOLTIP_KWARGS = BokehForImage.TOOLTIP_KWARGS
     MANDATORY_COLUMNS = BokehForImage.MANDATORY_COLUMNS
     SUBSET_GLYPH_KWARGS = BokehSnorkelExplorer.SUBSET_GLYPH_KWARGS
+
+    def _layout_widgets(self):
+        """Define the layout of widgets."""
+        layout_rows = (
+            row(self.subset_toggle_widget_column, self.selection_option_box),
+            row(self.lf_apply_trigger, self.lf_filter_trigger, self.lf_list_refresher),
+            row(self.dropdown_x_axis, self.dropdown_y_axis),
+            row(*self._dynamic_widgets.values()),
+        )
+        return column(*layout_rows)
