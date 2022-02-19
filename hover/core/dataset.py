@@ -151,8 +151,12 @@ class SupervisableDataset(Loggable):
     def copy(self):
         """
         ???+ note "Create another instance, copying over the data entries."
+
+            Also copy data structures that don't get created in the new instance.
         """
-        return self.__class__.from_pandas(self.to_pandas())
+        dataset = self.__class__.from_pandas(self.to_pandas())
+        dataset._vectorizer_lookup.update(self._vectorizer_lookup)
+        return dataset
 
     def compute_feature_index(self):
         """
