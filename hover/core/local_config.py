@@ -27,6 +27,10 @@ def is_embedding_field(column_name):
     return re.search(EMBEDDING_FIELD_REGEX, column_name)
 
 
+def blank_callback_on_change(attr, old, new):
+    return None
+
+
 def dataset_help_widget():
     text = 'Dataset Widgets <a href="https://phurwicz.github.io/hover/" target="_blank" rel="noreferrer noopener">Help</a>'
     return Div(text=text)
