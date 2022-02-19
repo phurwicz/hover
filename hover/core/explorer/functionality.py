@@ -74,7 +74,7 @@ class BokehDataFinder(BokehBaseExplorer):
             self._trigger_selection_filters() if filter_flag() else None
 
         # when toggled as active, search changes trigger selection filter
-        for _widget in self._search_input_widgets():
+        for _widget in self._search_watch_widgets():
             _widget.on_change(
                 "value",
                 lambda attr, old, new: self._trigger_selection_filters()
