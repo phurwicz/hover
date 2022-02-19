@@ -47,6 +47,12 @@ class BokehDataFinder(BokehBaseExplorer):
             labels=["use as selection filter"], active=[]
         )
 
+    def _subroutine_search_activate_callbacks(self):
+        """
+        ???+ note "Activate search callback functions by binding them to widgets."
+        """
+        super()._subroutine_search_activate_callbacks()
+
         def filter_flag():
             return bool(0 in self.search_filter_box.active)
 
@@ -54,30 +60,27 @@ class BokehDataFinder(BokehBaseExplorer):
             """
             Filter selection with search results on a subset.
             """
+            if not filter_flag():
+                return indices
+
             search_scores = self.sources[subset].data[SEARCH_SCORE_FIELD]
             matched = set(np.where(np.array(search_scores) > 0)[0])
             return indices.intersection(matched)
 
         for _key in self.sources.keys():
-            self._selection_filters[_key].data.add(
-                lambda indices, subset: filter_by_search(indices, subset)
-                if filter_flag()
-                else indices
-            )
+            self._selection_filters[_key].data.add(filter_by_search)
+
+        def filter_callback_on_change(attr, old, new):
+            self._trigger_selection_filters() if filter_flag() else None
 
         # when toggled as active, search changes trigger selection filter
-        self.search_pos.on_change(
-            "value",
-            lambda attr, old, new: self._trigger_selection_filters()
-            if filter_flag()
-            else None,
-        )
-        self.search_neg.on_change(
-            "value",
-            lambda attr, old, new: self._trigger_selection_filters()
-            if filter_flag()
-            else None,
-        )
+        for _widget in self._search_input_widgets():
+            _widget.on_change(
+                "value",
+                lambda attr, old, new: self._trigger_selection_filters()
+                if filter_flag()
+                else None,
+            )
 
         # active toggles always trigger selection filter
         self.search_filter_box.on_change(
@@ -345,16 +348,15 @@ class BokehSoftLabelExplorer(BokehBaseExplorer):
             """
             Filter selection with slider range on a subset.
             """
+            if not filter_flag():
+                return indices
+
             in_range = subroutine(self.dfs[subset], *self.score_range.value)
             return indices.intersection(in_range)
 
         # selection change triggers score filter on the changed subset IFF filter box is toggled
         for _key in self.sources.keys():
-            self._selection_filters[_key].data.add(
-                lambda indices, subset: filter_by_score(indices, subset)
-                if filter_flag()
-                else indices
-            )
+            self._selection_filters[_key].data.add(filter_by_score)
 
         # when toggled as active, score range change triggers selection filter
         self.score_range.on_change(

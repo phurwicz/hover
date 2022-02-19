@@ -9,11 +9,13 @@ from bokeh.models import ColumnDataSource, Slider
 from bokeh.plotting import figure
 from tqdm import tqdm
 from hover.core import Loggable
-from hover.core.local_config import is_embedding_field
+from hover.core.local_config import (
+    is_embedding_field,
+    blank_callback_on_change as blank,
+)
 from hover.utils.bokeh_helper import bokeh_hover_tooltip
 from hover.utils.meta.traceback import RichTracebackABCMeta
 from hover.utils.misc import RootUnionFind
-from hover.core.local_config import blank_callback_on_change as blank
 from .local_config import SEARCH_SCORE_FIELD
 
 STANDARD_PLOT_TOOLS = [
@@ -505,6 +507,13 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
 
             Child methods may inherit the logic here and preprocess/postprocess as needed.
         """
+        self._subroutine_search_create_callbacks()
+        self._subroutine_search_activate_callbacks()
+
+    def _subroutine_search_create_callbacks(self):
+        """
+        ???+ note "Create search callback functions based on feature attributes."
+        """
         # allow dynamically updated search response through dict element retrieval
         self._dynamic_callbacks["search_response"] = dict()
 
@@ -524,13 +533,28 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
 
             # make attributes respond to search
             for _, _params in _dict["search"].items():
-                _updated_kwargs = self._subroutine_activate_search(
+                _updated_kwargs = self._subroutine_search_source_change(
                     _key,
                     self.glyph_kwargs[_key],
                     altered_param=_params,
                 )
                 self.glyph_kwargs[_key].clear()
                 self.glyph_kwargs[_key].update(_updated_kwargs)
+
+    def _subroutine_search_activate_callbacks(self):
+        """
+        ???+ note "Activate search callback functions by binding them to widgets."
+        """
+        for _widget in self._search_input_widgets():
+            _widget.on_change("value", self.search_base_response)
+
+    @abstractmethod
+    def _search_input_widgets(self):
+        """
+        ???+ note "Find search input widgets, which can be different across subclasses."
+
+            Intended for binding callback functions to widgets.
+        """
 
     @abstractmethod
     def _get_search_score_function(self):
@@ -539,7 +563,7 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
         """
         pass
 
-    def _subroutine_activate_search(
+    def _subroutine_search_source_change(
         self, subset, kwargs, altered_param=("size", 10, 5, 7)
     ):
         """

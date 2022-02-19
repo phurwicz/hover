@@ -34,6 +34,9 @@ class BokehForText(BokehBaseExplorer):
         self.search_pos = TextInput(title=pos_title, **common_kwargs)
         self.search_neg = TextInput(title=neg_title, **common_kwargs)
 
+    def _search_input_widgets(self):
+        return [self.search_pos, self.search_neg]
+
     def activate_search(self):
         """
         ???+ note "Bind search response callbacks to widgets."
@@ -69,10 +72,14 @@ class BokehForVector(BokehBaseExplorer):
         ???+ note "Create similarity search widgets."
         """
         self.search_sim = TextInput(
-            title=f"{self.__class__.PRMARY_FEATURE} similarity search",
+            title=f"{self.__class__.PRIMARY_FEATURE} similarity search",
             width_policy="fit",
             height_policy="fit",
         )
+        self._search_widgets = [self.search_sim]
+
+    def _search_input_widgets(self):
+        return [self.search_pos, self.search_neg]
 
     def _setup_search_resource(self):
         """
@@ -98,13 +105,12 @@ class BokehForVector(BokehBaseExplorer):
 
         self._dynamic_resources["normalized_vectorizer"] = normalized_vectorizer
 
-    def activate_search(self):
+    def _subroutine_search_create_callbacks(self):
         """
-        ???+ note "Bind search response callbacks to widgets."
+        ???+ note "Create search callback functions based on feature attributes."
         """
         self._setup_search_resources()
-        super().activate_search()
-        self.search_sim.on_change("value", self.search_base_response)
+        super()._subroutine_search_create_callbacks()
 
     def _get_search_score_function(self):
         """
