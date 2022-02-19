@@ -7,7 +7,6 @@ from collections import OrderedDict, defaultdict
 from bokeh.events import SelectionGeometry
 from bokeh.models import ColumnDataSource, Slider
 from bokeh.plotting import figure
-from tqdm import tqdm
 from hover.core import Loggable
 from hover.core.local_config import (
     is_embedding_field,
@@ -545,16 +544,24 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
         """
         ???+ note "Activate search callback functions by binding them to widgets."
         """
-        for _widget in self._search_input_widgets():
+        for _widget in self._search_watch_widgets():
             _widget.on_change("value", self.search_base_response)
+            self._info(f"activated search base response on {_widget}")
 
     @abstractmethod
-    def _search_input_widgets(self):
+    def _search_watch_widgets(self):
         """
-        ???+ note "Find search input widgets, which can be different across subclasses."
+        ???+ note "Widgets to trigger search callbacks automatically, which can be different across subclasses."
 
             Intended for binding callback functions to widgets.
         """
+
+    @abstractmethod
+    def _validate_search_input(self):
+        """
+        ???+ note "Check the search input, skipping callbacks if it's invalid."
+        """
+        pass
 
     @abstractmethod
     def _get_search_score_function(self):
@@ -596,12 +603,16 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
                 return param_neg
 
         def search_response(attr, old, new):
+            valid_flag = self._validate_search_input()
+            if not valid_flag:
+                return
             score_func = self._get_search_score_function()
 
             patch_slice = slice(len(self.sources[subset].data[feature_key]))
             features = self.sources[subset].data[self.__class__.PRIMARY_FEATURE]
             # score_func is potentially slow; track its progress
-            search_scores = list(map(score_func, tqdm(features, desc="Search score")))
+            # search_scores = list(map(score_func, tqdm(features, desc="Search score")))
+            search_scores = list(map(score_func, features))
             search_params = list(map(score_to_param, search_scores))
             self.sources[subset].patch(
                 {SEARCH_SCORE_FIELD: [(patch_slice, search_scores)]}
