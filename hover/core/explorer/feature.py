@@ -4,7 +4,7 @@
 import re
 import numpy as np
 from functools import lru_cache
-from bokeh.models import TextInput
+from bokeh.models import TextInput, Slider
 from .base import BokehBaseExplorer
 
 
@@ -34,16 +34,14 @@ class BokehForText(BokehBaseExplorer):
         self.search_pos = TextInput(title=pos_title, **common_kwargs)
         self.search_neg = TextInput(title=neg_title, **common_kwargs)
 
-    def _search_input_widgets(self):
+    def _search_watch_widgets(self):
         return [self.search_pos, self.search_neg]
 
-    def activate_search(self):
+    def _validate_search_input(self):
         """
-        ???+ note "Bind search response callbacks to widgets."
+        ???+ note "Text uses regex search, for which any string can be considered valid."
         """
-        super().activate_search()
-        self.search_pos.on_change("value", self.search_base_response)
-        self.search_neg.on_change("value", self.search_base_response)
+        return True
 
     def _get_search_score_function(self):
         """
@@ -76,17 +74,24 @@ class BokehForVector(BokehBaseExplorer):
             width_policy="fit",
             height_policy="fit",
         )
-        self._search_widgets = [self.search_sim]
+        self.search_threshold = Slider(
+            start=0.3,
+            end=1.0,
+            value=0.9,
+            # fewer steps allowed because refreshing search result can be expensive
+            step=0.1,
+            title="Similarity threshold",
+        )
 
-    def _search_input_widgets(self):
-        return [self.search_pos, self.search_neg]
+    def _search_watch_widgets(self):
+        return [self.search_sim, self.search_threshold]
 
-    def _setup_search_resource(self):
+    def _subroutine_search_create_callbacks(self):
         """
-        ???+ note "Create nearest neighbors data structure."
+        ???+ note "Create search callback functions based on feature attributes."
         """
         # determine cache size for normalized vectorizer
-        num_points = sum([_df.shape[0] for _df in self.dfs])
+        num_points = sum([_df.shape[0] for _df in self.dfs.values()])
         cache_size = min(num_points, int(1e5))
 
         # find vectorizer
@@ -99,17 +104,16 @@ class BokehForVector(BokehBaseExplorer):
         # gain speed up by caching and normalization
         @lru_cache(maxsize=cache_size)
         def normalized_vectorizer(feature):
-            vec = raw_vectorizer(feature)
+            try:
+                vec = raw_vectorizer(feature)
+            except Exception as e:
+                self._warn(f"vectorizer crashed: {e}; assigning None as vector.")
+                return None
             norm = np.linalg.norm(vec)
-            return vec / (np.sqrt(norm) + 1e-16)
+            return vec / (norm + 1e-16)
 
         self._dynamic_resources["normalized_vectorizer"] = normalized_vectorizer
 
-    def _subroutine_search_create_callbacks(self):
-        """
-        ???+ note "Create search callback functions based on feature attributes."
-        """
-        self._setup_search_resources()
         super()._subroutine_search_create_callbacks()
 
     def _get_search_score_function(self):
@@ -118,21 +122,21 @@ class BokehForVector(BokehBaseExplorer):
         """
         vectorizer = self._dynamic_resources["normalized_vectorizer"]
         img_query = self.search_sim.value
+        sim_thresh = self.search_threshold.value
         vec_query = vectorizer(img_query)
-        assert isinstance(
-            vec_query, np.array
-        ), f"vector should be np.array, got {type(vec_query)}"
 
-        def cosine_based_score(img_doc, pos_thresh=0.9, neg_thresh=0.7):
+        def cosine_based_score(img_doc):
+            # edge case: query or doc is invalid for vectorization
             vec_doc = vectorizer(img_doc)
-            query_doc_sim = np.dot(vec_query, vec_doc)
-
-            if query_doc_sim > pos_thresh:
-                return 1
-            elif query_doc_sim < neg_thresh:
-                return -1
-            else:
+            if vec_query is None or vec_doc is None:
                 return 0
+
+            # common case: query and doc are both valid
+            query_doc_sim = np.dot(vec_query, vec_doc)
+            if query_doc_sim >= sim_thresh:
+                return 1
+            else:
+                return -1
 
         return cosine_based_score
 
@@ -154,6 +158,12 @@ class BokehForAudio(BokehForVector):
     MANDATORY_COLUMNS = [PRIMARY_FEATURE, "label"]
     TOOLTIP_KWARGS = {"label": True, "audio": True, "coords": True, "index": True}
 
+    def _validate_search_input(self):
+        """
+        ???+ note "Text uses regex search, for which any string can be considered valid."
+        """
+        return True
+
 
 class BokehForImage(BokehForVector):
     """
@@ -171,3 +181,9 @@ class BokehForImage(BokehForVector):
     PRIMARY_FEATURE = "image"
     MANDATORY_COLUMNS = [PRIMARY_FEATURE, "label"]
     TOOLTIP_KWARGS = {"label": True, "image": True, "coords": True, "index": True}
+
+    def _validate_search_input(self):
+        """
+        ???+ note "Text uses regex search, for which any string can be considered valid."
+        """
+        return True
