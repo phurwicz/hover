@@ -7,11 +7,13 @@ from collections import OrderedDict, defaultdict
 from bokeh.events import SelectionGeometry
 from bokeh.models import ColumnDataSource, Slider
 from bokeh.plotting import figure
+from tqdm import tqdm
 from hover.core import Loggable
 from hover.core.local_config import is_embedding_field
 from hover.utils.bokeh_helper import bokeh_hover_tooltip
 from hover.utils.meta.traceback import RichTracebackABCMeta
 from hover.utils.misc import RootUnionFind
+from hover.core.local_config import blank_callback_on_change as blank
 from .local_config import SEARCH_SCORE_FIELD
 
 STANDARD_PLOT_TOOLS = [
@@ -138,7 +140,7 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
         self._dynamic_widgets = OrderedDict()
         self._dynamic_callbacks = OrderedDict()
         self._dynamic_resources = OrderedDict()
-        self._setup_search_highlight()
+        self._setup_search_widgets()
         self._setup_selection_option()
         self._setup_subset_toggle()
         self._setup_axes_dropdown()
@@ -152,9 +154,9 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
         pass
 
     @abstractmethod
-    def _setup_search_highlight(self):
+    def _setup_search_widgets(self):
         """
-        ???+ note "Define how to search and highlight data points."
+        ???+ note "Define how to search data points."
             Left to child classes that have a specific feature format.
         """
         pass
@@ -232,7 +234,7 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
             | `col_patch`      | `str`  | column of list of values to use as patches |
             | `**kwargs`       |        | forwarded to the slider |
 
-            [Reference](https://github.com/bokeh/bokeh/blob/2.3.0/examples/howto/patch_app.py)
+            [Reference](https://github.com/bokeh/bokeh/blob/2.4.2/examples/howto/patch_app.py)
         """
         # add a patch slider to widgets, if none exist
         if "patch_slider" not in self._dynamic_widgets:
@@ -497,15 +499,26 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
 
     def activate_search(self):
         """
-        ???+ note "Assign Highlighting callbacks to search results."
+        ???+ note "Assign search response callbacks to search results. Child methods should bind those callbacks to search widgets."
 
             This is a parent method which takes care of common denominators of parent methods.
 
             Child methods may inherit the logic here and preprocess/postprocess as needed.
         """
+        # allow dynamically updated search response through dict element retrieval
+        self._dynamic_callbacks["search_response"] = dict()
+
+        def search_base_response(attr, old, new):
+            for _subset in self.sources.keys():
+                _func = self._dynamic_callbacks["search_response"].get(_subset, blank)
+                _func(attr, old, new)
+            return
+
+        self.search_base_response = search_base_response
+
         for _key, _dict in self.__class__.SUBSET_GLYPH_KWARGS.items():
             # create a field that holds search results that could be used elsewhere
-            _num_points = len(self.sources[_key].data["label"])
+            _num_points = len(self.sources[_key].data[self.__class__.PRIMARY_FEATURE])
             self._extra_source_cols[_key][SEARCH_SCORE_FIELD] = 0
             self.sources[_key].add([0] * _num_points, SEARCH_SCORE_FIELD)
 
@@ -559,12 +572,12 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
                 return param_neg
 
         def search_response(attr, old, new):
-            search_score_func = self._get_search_score_function()
+            score_func = self._get_search_score_function()
 
             patch_slice = slice(len(self.sources[subset].data[feature_key]))
-            search_scores = list(
-                map(search_score_func, self.sources[subset].data["text"])
-            )
+            features = self.sources[subset].data[self.__class__.PRIMARY_FEATURE]
+            # score_func is potentially slow; track its progress
+            search_scores = list(map(score_func, tqdm(features, desc="Search score")))
             search_params = list(map(score_to_param, search_scores))
             self.sources[subset].patch(
                 {SEARCH_SCORE_FIELD: [(patch_slice, search_scores)]}
