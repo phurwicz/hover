@@ -132,7 +132,10 @@ class BokehAudioFinder(BokehDataFinder, BokehForAudio):
         """Define the layout of widgets."""
         layout_rows = (
             row(self.subset_toggle_widget_column, self.selection_option_box),
-            row(self.search_sim, self.search_filter_box),
+            row(
+                column(self.search_sim, self.search_threshold),
+                column(self.search_filter_box),
+            ),
             row(self.dropdown_x_axis, self.dropdown_y_axis),
             row(*self._dynamic_widgets.values()),
         )
@@ -152,7 +155,7 @@ class BokehAudioAnnotator(BokehDataAnnotator, BokehForAudio):
         """Define the layout of widgets."""
         layout_rows = (
             row(self.subset_toggle_widget_column, self.selection_option_box),
-            row(self.search_sim),
+            row(self.search_sim, self.search_threshold),
             row(self.annotator_input, self.annotator_apply),
             row(self.dropdown_x_axis, self.dropdown_y_axis),
             row(*self._dynamic_widgets.values()),
@@ -173,7 +176,7 @@ class BokehAudioSoftLabel(BokehSoftLabelExplorer, BokehForAudio):
         """Define the layout of widgets."""
         layout_rows = (
             row(self.subset_toggle_widget_column, self.selection_option_box),
-            row(self.search_sim),
+            row(self.search_sim, self.search_threshold),
             row(self.score_filter),
             row(self.dropdown_x_axis, self.dropdown_y_axis),
             row(*self._dynamic_widgets.values()),
@@ -194,7 +197,7 @@ class BokehAudioMargin(BokehMarginExplorer, BokehForAudio):
         """Define the layout of widgets."""
         layout_rows = (
             row(self.subset_toggle_widget_column, self.selection_option_box),
-            row(self.search_sim),
+            row(self.search_sim, self.search_threshold),
             row(self.dropdown_x_axis, self.dropdown_y_axis),
             row(*self._dynamic_widgets.values()),
         )
@@ -214,7 +217,7 @@ class BokehAudioSnorkel(BokehSnorkelExplorer, BokehForAudio):
         """Define the layout of widgets."""
         layout_rows = (
             row(self.subset_toggle_widget_column, self.selection_option_box),
-            row(self.search_sim),
+            row(self.search_sim, self.search_threshold),
             row(self.lf_apply_trigger, self.lf_filter_trigger, self.lf_list_refresher),
             row(self.dropdown_x_axis, self.dropdown_y_axis),
             row(*self._dynamic_widgets.values()),
@@ -235,7 +238,10 @@ class BokehImageFinder(BokehDataFinder, BokehForImage):
         """Define the layout of widgets."""
         layout_rows = (
             row(self.subset_toggle_widget_column, self.selection_option_box),
-            row(self.search_sim, self.search_filter_box),
+            row(
+                column(self.search_sim, self.search_threshold),
+                column(self.search_filter_box),
+            ),
             row(self.dropdown_x_axis, self.dropdown_y_axis),
             row(*self._dynamic_widgets.values()),
         )
@@ -255,7 +261,7 @@ class BokehImageAnnotator(BokehDataAnnotator, BokehForImage):
         """Define the layout of widgets."""
         layout_rows = (
             row(self.subset_toggle_widget_column, self.selection_option_box),
-            row(self.search_sim),
+            row(self.search_sim, self.search_threshold),
             row(self.annotator_input, self.annotator_apply),
             row(self.dropdown_x_axis, self.dropdown_y_axis),
             row(*self._dynamic_widgets.values()),
@@ -276,7 +282,7 @@ class BokehImageSoftLabel(BokehSoftLabelExplorer, BokehForImage):
         """Define the layout of widgets."""
         layout_rows = (
             row(self.subset_toggle_widget_column, self.selection_option_box),
-            row(self.search_sim),
+            row(self.search_sim, self.search_threshold),
             row(self.score_filter),
             row(self.dropdown_x_axis, self.dropdown_y_axis),
             row(*self._dynamic_widgets.values()),
@@ -297,7 +303,7 @@ class BokehImageMargin(BokehMarginExplorer, BokehForImage):
         """Define the layout of widgets."""
         layout_rows = (
             row(self.subset_toggle_widget_column, self.selection_option_box),
-            row(self.search_sim),
+            row(self.search_sim, self.search_threshold),
             row(self.dropdown_x_axis, self.dropdown_y_axis),
             row(*self._dynamic_widgets.values()),
         )
@@ -317,7 +323,7 @@ class BokehImageSnorkel(BokehSnorkelExplorer, BokehForImage):
         """Define the layout of widgets."""
         layout_rows = (
             row(self.subset_toggle_widget_column, self.selection_option_box),
-            row(self.search_sim),
+            row(self.search_sim, self.search_threshold),
             row(self.lf_apply_trigger, self.lf_filter_trigger, self.lf_list_refresher),
             row(self.dropdown_x_axis, self.dropdown_y_axis),
             row(*self._dynamic_widgets.values()),
