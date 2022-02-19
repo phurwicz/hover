@@ -285,6 +285,14 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
         slider.on_change("value", update_patch)
         self._good(f"Patching {col_original} using {col_patch}")
 
+    def _mandatory_column_defaults(self):
+        """
+        ???+ note "Mandatory columns and default values."
+
+            If default value is None, will raise exception if the column is not found.
+        """
+        return {_col: None for _col in self.__class__.MANDATORY_COLUMNS}
+
     def _setup_dfs(self, df_dict, copy=False):
         """
         ???+ note "Check and store DataFrames **by reference by default**."
@@ -315,20 +323,26 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
 
         # assign df with column checks
         self.dfs = dict()
+        mandatory_col_to_default = self._mandatory_column_defaults()
         for _key in expected_and_supplied:
             _df = df_dict[_key]
-            for _col in self.__class__.MANDATORY_COLUMNS:
-                if _col not in _df.columns:
+            for _col, _default in mandatory_col_to_default.items():
+                # column exists: all good
+                if _col in _df.columns:
+                    continue
+                # no default value: column must be explicitly provided
+                if _default is None:
                     # edge case: DataFrame has zero rows
-                    assert (
-                        _df.shape[0] == 0
-                    ), f"Missing column '{_col}' from non-empty {_key} DataFrame: found {list(_df.columns)}"
-                    _df[_col] = None
+                    _msg = f"Expecting column '{_col}' from {_key} df: found {list(_df.columns)}"
+                    assert _df.shape[0] == 0, _msg
+                # default value available, will use it to create column
+                else:
+                    _df[_col] = _default
             self.dfs[_key] = _df.copy() if copy else _df
-            
+
         # expected dfs must be present
         for _key in expected_not_supplied:
-            _df = pd.DataFrame(columns=self.__class__.MANDATORY_COLUMNS)
+            _df = pd.DataFrame(columns=list(mandatory_col_to_default.keys()))
             self.dfs[_key] = _df
 
     def _setup_sources(self):

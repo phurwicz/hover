@@ -262,21 +262,20 @@ class BokehSoftLabelExplorer(BokehBaseExplorer):
         )
         return f"{standard}\n{extra}"
 
-    def _setup_dfs(self, df_dict, **kwargs):
+    def _mandatory_column_defaults(self):
         """
-        ???+ note "On top of the parent method, add filler values to additional columns."
-            | Param      | Type   | Description                  |
-            | :--------- | :----- | :--------------------------- |
-            | `df_dict`  | `dict` | `str` -> `DataFrame` mapping |
-            | `**kwargs` |        | forwarded to the parent method |
-        """
-        super()._setup_dfs(df_dict, **kwargs)
+        ???+ note "Mandatory columns and default values."
 
-        for _key, _df in self.dfs.items():
-            if self.label_col not in _df.columns:
-                _df[self.label_col] = module_config.ABSTAIN_DECODED
-            if self.score_col not in _df.columns:
-                _df[self.score_col] = 0.5
+            If default value is None, will raise exception if the column is not found.
+        """
+        column_to_value = super()._mandatory_column_defaults()
+        column_to_value.update(
+            {
+                self.label_col: module_config.ABSTAIN_DECODED,
+                self.score_col: 0.5,
+            }
+        )
+        return column_to_value
 
     def _postprocess_sources(self):
         """
@@ -430,21 +429,20 @@ class BokehMarginExplorer(BokehBaseExplorer):
         self.label_col_b = label_col_b
         super().__init__(df_dict, **kwargs)
 
-    def _setup_dfs(self, df_dict, **kwargs):
+    def _mandatory_column_defaults(self):
         """
-        ???+ note "On top of the parent method, add column checks."
-            | Param      | Type   | Description                  |
-            | :--------- | :----- | :--------------------------- |
-            | `df_dict`  | `dict` | `str` -> `DataFrame` mapping |
-            | `**kwargs` |        | forwarded to the parent method |
-        """
-        super()._setup_dfs(df_dict, **kwargs)
+        ???+ note "Mandatory columns and default values."
 
-        for _key, _df in self.dfs.items():
-            for _col in [self.label_col_a, self.label_col_b]:
-                assert (
-                    _col in _df.columns
-                ), f"Expected column {_col} among {list(_df.columns)}"
+            If default value is None, will raise exception if the column is not found.
+        """
+        column_to_value = super()._mandatory_column_defaults()
+        column_to_value.update(
+            {
+                self.label_col_a: None,
+                self.label_col_b: None,
+            }
+        )
+        return column_to_value
 
     def plot(self, label, **kwargs):
         """
