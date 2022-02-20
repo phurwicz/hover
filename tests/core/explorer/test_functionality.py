@@ -1,6 +1,6 @@
 """
-Note that the whole point of explorers is to allow interaction.
-Therefore we need to emulate user interaction through bokeh.events objects.
+Corresponds to the `hover.core.explorer.functionality` module.
+For mechanisms that are invariant across `hover.core.explorer.feature`.
 """
 
 from hover import module_config
@@ -8,8 +8,6 @@ from hover.recipes.subroutine import get_explorer_class
 from bokeh.events import ButtonClick, MenuItemClick
 from .local_helper import (
     MAIN_FEATURES,
-    RANDOM_LABEL,
-    RANDOM_SCORE,
     RANDOM_LABEL_LF,
     almost_global_select,
     subroutine_selection_filter,
@@ -18,36 +16,6 @@ from .local_helper import (
 import pytest
 import random
 import re
-
-
-@pytest.fixture
-def example_raw_df(generate_df_with_coords):
-    df = generate_df_with_coords(300)
-    df["label"] = module_config.ABSTAIN_DECODED
-    return df
-
-
-@pytest.fixture
-def example_soft_label_df(example_raw_df):
-    df = example_raw_df.copy()
-    df["pred_label"] = df.apply(RANDOM_LABEL, axis=1)
-    df["pred_score"] = df.apply(RANDOM_SCORE, axis=1)
-    return df
-
-
-@pytest.fixture
-def example_margin_df(example_raw_df):
-    df = example_raw_df.copy()
-    df["label_1"] = df.apply(RANDOM_LABEL, axis=1)
-    df["label_2"] = df.apply(RANDOM_LABEL, axis=1)
-    return df
-
-
-@pytest.fixture
-def example_labeled_df(generate_df_with_coords):
-    df = generate_df_with_coords(100)
-    df["label"] = df.apply(RANDOM_LABEL, axis=1)
-    return df
 
 
 @pytest.mark.core
@@ -61,9 +29,9 @@ class TestBokehBaseExplorer:
         Test as many of those as possible here.
         """
 
-        def subroutine(df_dict):
-            explorer = get_explorer_class("finder", "text")(df_dict)
-            annotator = get_explorer_class("annotator", "text")(df_dict)
+        def subroutine(df_dict, feature_type):
+            explorer = get_explorer_class("finder", feature_type)(df_dict)
+            annotator = get_explorer_class("annotator", feature_type)(df_dict)
 
             explorer.plot()
 
@@ -82,13 +50,16 @@ class TestBokehBaseExplorer:
             "test": example_labeled_df.copy(),
         }
 
+        # test four subset combinations of df_dicts
         for _key in ["test", "dev", "train", "raw"]:
-            subroutine(df_dict)
+            # test all main features
+            for _feature in MAIN_FEATURES:
+                subroutine(df_dict, _feature)
             df_dict.pop(_key)
 
 
 @pytest.mark.core
-class TestBokehDataFinder:
+class TestBokehFinder:
     @staticmethod
     @pytest.mark.lite
     def test_init(example_raw_df):
@@ -101,6 +72,10 @@ class TestBokehDataFinder:
     @staticmethod
     @pytest.mark.lite
     def test_filter_text(example_raw_df):
+        """
+        Filtration given search has no difference across text / image / audio.
+        Use text here for an example.
+        """
         explorer = get_explorer_class("finder", "text")({"raw": example_raw_df})
         explorer.activate_search()
         explorer.plot()
@@ -146,7 +121,7 @@ class TestBokehDataFinder:
 
 
 @pytest.mark.core
-class TestBokehDataAnnotator:
+class TestBokehAnnotator:
     @staticmethod
     @pytest.mark.lite
     def test_init(example_raw_df):
@@ -160,6 +135,10 @@ class TestBokehDataAnnotator:
     @staticmethod
     @pytest.mark.lite
     def test_labeling(example_raw_df):
+        """
+        No difference across text / image / audio.
+        Pick the feature at random.
+        """
         feature = random.choice(MAIN_FEATURES)
         explorer = get_explorer_class("annotator", feature)({"raw": example_raw_df})
 
@@ -195,7 +174,7 @@ class TestBokehDataAnnotator:
 
 
 @pytest.mark.core
-class TestBokehTextSoftLabel:
+class TestBokehSoftLabel:
     @staticmethod
     @pytest.mark.lite
     def test_init(example_soft_label_df):
@@ -212,7 +191,12 @@ class TestBokehTextSoftLabel:
     @staticmethod
     @pytest.mark.lite
     def test_filter_score(example_soft_label_df):
-        explorer = get_explorer_class("softlabel", "text")(
+        """
+        No difference across text / image / audio.
+        Pick the feature at random.
+        """
+        feature = random.choice(MAIN_FEATURES)
+        explorer = get_explorer_class("softlabel", feature)(
             {"raw": example_soft_label_df},
             "pred_label",
             "pred_score",
@@ -235,7 +219,7 @@ class TestBokehTextSoftLabel:
 
 
 @pytest.mark.core
-class TestBokehTextMargin:
+class TestBokehMargin:
     @staticmethod
     @pytest.mark.lite
     def test_init(example_margin_df):
@@ -248,7 +232,7 @@ class TestBokehTextMargin:
 
 
 @pytest.mark.core
-class TestBokehTextSnorkel:
+class TestBokehSnorkel:
     @staticmethod
     @pytest.mark.lite
     def test_init(example_raw_df, example_labeled_df):
@@ -262,6 +246,10 @@ class TestBokehTextSnorkel:
     @staticmethod
     @pytest.mark.lite
     def test_lf_labeling(example_raw_df, example_labeled_df):
+        """
+        No difference across text / image / audio.
+        Just using text should suffice.
+        """
         explorer = get_explorer_class("snorkel", "text")(
             {
                 "raw": example_raw_df,
