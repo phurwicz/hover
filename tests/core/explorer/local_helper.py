@@ -1,10 +1,18 @@
 from hover import module_config
+from hover.core.explorer.local_config import SEARCH_SCORE_FIELD
 from hover.utils.snorkel_helper import labeling_function
 from bokeh.events import SelectionGeometry
 import random
 
 
 MAIN_FEATURES = ["text", "image", "audio"]
+FUNCTIONALITY_TO_SPECIAL_ARGS = {
+    "annotator": tuple(),
+    "finder": tuple(),
+    "margin": ("label_1", "label_2"),
+    "snorkel": tuple(),
+    "softlabel": ("pred_label", "pred_score"),
+}
 
 PSEUDO_LABELS = ["A", "B"]
 
@@ -46,6 +54,22 @@ def almost_none_select(figure):
         },
     )
     return select_event
+
+
+def subroutine_search_source_response(explorer, search_callbacks):
+    """
+    Assumes search callbacks should be nontrivial, i.e. explorer sources are expected to change.
+    """
+    # initialize in-loop variable for comparison
+    source = explorer.sources["raw"]
+    _prev_scores = source.data[SEARCH_SCORE_FIELD].copy()
+    for _callback in search_callbacks:
+        _callback()
+        _scores = source.data[SEARCH_SCORE_FIELD].copy()
+        assert (
+            _scores != _prev_scores
+        ), f"Expected search scores to change, got {_prev_scores} (old) vs. {_scores} (new)"
+        _prev_scores = _scores
 
 
 def subroutine_selection_filter(explorer, filter_toggle, narrowing_callbacks):
