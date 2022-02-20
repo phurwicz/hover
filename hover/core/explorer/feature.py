@@ -60,7 +60,7 @@ class BokehForText(BokehBaseExplorer):
         return regex_score
 
 
-class BokehForVector(BokehBaseExplorer):
+class BokehForUrlToVector(BokehBaseExplorer):
     """
     ???+ note "A layer of abstraction for `BokehBaseExplorer` subclasses whose feature-type-specific mechanisms work the same way through vectors."
     """
@@ -121,13 +121,13 @@ class BokehForVector(BokehBaseExplorer):
         ???+ note "Dynamically create a single-argument scoring function."
         """
         vectorizer = self._dynamic_resources["normalized_vectorizer"]
-        img_query = self.search_sim.value
+        url_query = self.search_sim.value
         sim_thresh = self.search_threshold.value
-        vec_query = vectorizer(img_query)
+        vec_query = vectorizer(url_query)
 
-        def cosine_based_score(img_doc):
+        def cosine_based_score(url_doc):
             # edge case: query or doc is invalid for vectorization
-            vec_doc = vectorizer(img_doc)
+            vec_doc = vectorizer(url_doc)
             if vec_query is None or vec_doc is None:
                 return 0
 
@@ -140,10 +140,23 @@ class BokehForVector(BokehBaseExplorer):
 
         return cosine_based_score
 
+    def _validate_search_input(self):
+        """
+        ???+ note "Must be some url pointing to a suffixed file."
 
-class BokehForAudio(BokehForVector):
+            For speed, avoid sending web requests in this validation step.
+        """
+        from urllib.parse import urlparse
+        from pathlib import Path
+
+        url_query = self.search_sim.value
+        file_path = Path(urlparse(url_query).path)
+        return bool(file_path.suffix)
+
+
+class BokehForAudio(BokehForUrlToVector):
     """
-    ???+ note "`BokehForVector` with `audio` (path like `"http://"` or `"file:///"`) as the main feature."
+    ???+ note "`BokehForUrlToVector` with `audio` (path like `"http://"` or `"file:///"`) as the main feature."
         Assumes on top of its parent class:
 
         - in supplied dataframes
@@ -158,16 +171,10 @@ class BokehForAudio(BokehForVector):
     MANDATORY_COLUMNS = [PRIMARY_FEATURE, "label"]
     TOOLTIP_KWARGS = {"label": True, "audio": True, "coords": True, "index": True}
 
-    def _validate_search_input(self):
-        """
-        ???+ note "Text uses regex search, for which any string can be considered valid."
-        """
-        return True
 
-
-class BokehForImage(BokehForVector):
+class BokehForImage(BokehForUrlToVector):
     """
-    ???+ note "`BokehForVector` with `image` (path like `"http://"` or `"file:///"`) as the main feature."
+    ???+ note "`BokehForUrlToVector` with `image` (path like `"http://"` or `"file:///"`) as the main feature."
         Assumes on top of its parent class:
 
         - in supplied dataframes
@@ -181,9 +188,3 @@ class BokehForImage(BokehForVector):
     PRIMARY_FEATURE = "image"
     MANDATORY_COLUMNS = [PRIMARY_FEATURE, "label"]
     TOOLTIP_KWARGS = {"label": True, "image": True, "coords": True, "index": True}
-
-    def _validate_search_input(self):
-        """
-        ???+ note "Text uses regex search, for which any string can be considered valid."
-        """
-        return True
