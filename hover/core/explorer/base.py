@@ -47,6 +47,7 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
     """
 
     SUBSET_GLYPH_KWARGS = {}
+    DEFAULT_SUBSET_MAPPING = {_k: _k for _k in ["raw", "train", "dev", "test"]}
 
     PRIMARY_FEATURE = None
     MANDATORY_COLUMNS = ["label"]

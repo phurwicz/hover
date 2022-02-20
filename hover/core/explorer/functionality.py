@@ -231,6 +231,7 @@ class BokehSoftLabelExplorer(BokehBaseExplorer):
         _key: {"constant": {"line_alpha": 0.5}, "search": {"size": ("size", 10, 5, 7)}}
         for _key in ["raw", "train", "dev"]
     }
+    DEFAULT_SUBSET_MAPPING = {_k: _k for _k in ["raw", "train", "dev"]}
 
     def __init__(self, df_dict, label_col, score_col, **kwargs):
         """
@@ -411,6 +412,7 @@ class BokehMarginExplorer(BokehBaseExplorer):
         }
         for _key in ["raw", "train", "dev"]
     }
+    DEFAULT_SUBSET_MAPPING = {_k: _k for _k in ["raw", "train", "dev"]}
 
     def __init__(self, df_dict, label_col_a, label_col_b, **kwargs):
         """
@@ -517,6 +519,7 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
             "search": {"size": ("size", 10, 5, 7)},
         },
     }
+    DEFAULT_SUBSET_MAPPING = {"raw": "raw", "dev": "labeled"}
 
     def __init__(self, df_dict, **kwargs):
         """
