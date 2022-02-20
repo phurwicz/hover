@@ -4,7 +4,9 @@ import spacy
 import faker
 import uuid
 import re
+import numpy as np
 import pandas as pd
+from functools import lru_cache
 from hover.utils.datasets import newsgroups_dictl, newsgroups_reduced_dictl
 from hover.core.dataset import SupervisableTextDataset
 from hover.core.local_config import embedding_field
@@ -20,14 +22,23 @@ def spacy_en_md():
 
 @pytest.fixture(scope="module")
 def dummy_vectorizer(spacy_en_md):
-    def vectorizer(text):
-        clean_text = re.sub(r"[\t\n]", r" ", text)
-        to_disable = spacy_en_md.pipe_names
-        doc = spacy_en_md(clean_text, disable=to_disable)
-        return doc.vector
+    from hashlib import sha1, sha224, sha256, sha384, sha512, md5
 
-    trial_vector = vectorizer("hi")
-    assert trial_vector.shape == (300,)
+    use_hashes = [sha1, sha224, sha256, sha384, sha512, md5]
+    max_plus_ones = [2 ** (_hash().digest_size * 8) for _hash in use_hashes]
+
+    @lru_cache(maxsize=int(1e5))
+    def vectorizer(in_str):
+        """
+        Vectorizer with no semantic meaning but works for any string feature.
+        """
+        arr = []
+        seed = in_str.encode()
+        for _hash, _max_plus_one in zip(use_hashes, max_plus_ones):
+            _hash_digest = _hash(seed).digest()
+            _hash_int = int.from_bytes(_hash_digest, "big")
+            arr.append(_hash_int / _max_plus_one)
+        return np.array(arr)
 
     return vectorizer
 
@@ -76,8 +87,8 @@ def generate_df_with_coords():
             [
                 {
                     "text": fake_en.paragraph(3),
-                    "audio": "https://www.soundjay.com/button/beep-01a.mp3",
-                    "image": "https://docs.chainer.org/en/stable/_images/5.png",
+                    "audio": f"https://dom.ain/path/to/audio/file-{uuid.uuid1()}.mp3",
+                    "image": f"https://dom.ain/path/to/image/file-{uuid.uuid1()}.jpg",
                     embedding_field(3, 0): random.uniform(-1.0, 1.0),
                     embedding_field(3, 1): random.uniform(-1.0, 1.0),
                     embedding_field(3, 2): random.uniform(-1.0, 1.0),
