@@ -78,11 +78,11 @@ class TestSupervisableTextDataset:
             assert len(_f_new) == len(_f_old) + 1
 
     @staticmethod
-    def test_compute_2d_embedding(mini_supervisable_text_dataset, dummy_vectorizer):
+    def test_compute_nd_embedding(mini_supervisable_text_dataset, dummy_vectorizer):
         dataset = mini_supervisable_text_dataset.copy()
 
-        dataset.compute_2d_embedding(dummy_vectorizer, "umap")
-        dataset.compute_2d_embedding(dummy_vectorizer, "ivis")
+        dataset.compute_nd_embedding(dummy_vectorizer, "umap", dimension=3)
+        dataset.compute_nd_embedding(dummy_vectorizer, "ivis", dimension=2)
 
     @staticmethod
     @pytest.mark.lite

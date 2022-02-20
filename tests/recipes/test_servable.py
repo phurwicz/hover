@@ -7,11 +7,11 @@ from bokeh.server.server import Server
 
 @pytest.mark.lite
 def test_builtin_servable_recipes(
-    mini_supervisable_text_dataset_embedded,
+    example_text_dataset,
     dummy_vecnet_callback,
     dummy_labeling_function_list,
 ):
-    dataset = mini_supervisable_text_dataset_embedded.copy()
+    dataset = example_text_dataset.copy()
     vecnet = dummy_vecnet_callback(dataset)
     simple = simple_annotator(dataset)
     linked = linked_annotator(dataset)
@@ -25,5 +25,5 @@ def test_builtin_servable_recipes(
     }
     server = Server(app_dict)
     server.start()
-    time.sleep(20)
+    time.sleep(15)
     server.stop()

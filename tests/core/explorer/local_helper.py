@@ -2,7 +2,7 @@ from hover import module_config
 from hover.core.explorer.local_config import SEARCH_SCORE_FIELD
 from hover.utils.snorkel_helper import labeling_function
 from bokeh.events import SelectionGeometry
-import random
+from tests.local_config import RANDOM_LABEL, PSEUDO_LABELS
 
 
 MAIN_FEATURES = ["text", "image", "audio"]
@@ -13,17 +13,6 @@ FUNCTIONALITY_TO_SPECIAL_ARGS = {
     "snorkel": tuple(),
     "softlabel": ("pred_label", "pred_score"),
 }
-
-PSEUDO_LABELS = ["A", "B"]
-
-
-def RANDOM_LABEL(row):
-    return random.choice(PSEUDO_LABELS)
-
-
-def RANDOM_SCORE(row):
-    return random.uniform(0.2, 1.0)
-
 
 RANDOM_LABEL_LF = labeling_function(targets=PSEUDO_LABELS)(RANDOM_LABEL)
 

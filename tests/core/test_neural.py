@@ -5,9 +5,9 @@ from hover.core.neural import VectorNet
 
 
 @pytest.fixture
-def example_vecnet_args(mini_supervisable_text_dataset):
+def example_vecnet_args(example_text_dataset):
     module_name = "fixture_module.text_vector_net"
-    target_labels = mini_supervisable_text_dataset.classes[:]
+    target_labels = example_text_dataset.classes[:]
     return (module_name, target_labels)
 
 
@@ -48,9 +48,9 @@ class TestVectorNet(object):
 
     @staticmethod
     @pytest.mark.lite
-    def test_auto_adjust_setup(blank_vecnet, mini_supervisable_text_dataset):
+    def test_auto_adjust_setup(blank_vecnet, example_text_dataset):
         vecnet = deepcopy(blank_vecnet)
-        targets = mini_supervisable_text_dataset.classes
+        targets = example_text_dataset.classes
         old_classes = sorted(
             vecnet.label_encoder.keys(),
             key=lambda k: vecnet.label_encoder[k],
@@ -77,14 +77,14 @@ class TestVectorNet(object):
 
     @staticmethod
     @pytest.mark.lite
-    def test_predict_proba(example_vecnet, mini_supervisable_text_dataset):
-        subroutine_predict_proba(example_vecnet, mini_supervisable_text_dataset)
+    def test_predict_proba(example_vecnet, example_text_dataset):
+        subroutine_predict_proba(example_vecnet, example_text_dataset)
 
     @staticmethod
-    def test_manifold_trajectory(example_vecnet, mini_df_text):
+    def test_manifold_trajectory(example_vecnet, example_raw_df):
         for _method in ["umap", "ivis"]:
             traj_arr, seq_arr, disparities = example_vecnet.manifold_trajectory(
-                mini_df_text["text"].tolist()
+                example_raw_df["text"].tolist()
             )
             assert isinstance(traj_arr, np.ndarray)
             assert isinstance(seq_arr, np.ndarray)
@@ -92,9 +92,9 @@ class TestVectorNet(object):
             assert isinstance(disparities[0], float)
 
     @staticmethod
-    def test_train_and_evaluate(example_vecnet, mini_supervisable_text_dataset):
+    def test_train_and_evaluate(example_vecnet, example_text_dataset):
         vecnet = deepcopy(example_vecnet)
-        dataset = mini_supervisable_text_dataset
+        dataset = example_text_dataset
         dev_loader = dataset.loader("dev", example_vecnet.vectorizer)
         test_loader = dataset.loader("test", example_vecnet.vectorizer)
 

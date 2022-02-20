@@ -6,6 +6,7 @@ from hover.recipes.stable import (
     linked_annotator,
 )
 from bokeh.document import Document
+from tests.local_config import PSEUDO_LABELS
 from tests.recipes.local_helper import (
     action_view_selection,
     action_evict_selection,
@@ -17,9 +18,8 @@ from tests.recipes.local_helper import (
 )
 
 
-@pytest.mark.lite
-def test_simple_annotator(mini_supervisable_text_dataset_embedded):
-    dataset = mini_supervisable_text_dataset_embedded.copy()
+def subroutine_common_test(dataset):
+    feature = dataset.__class__.FEATURE_KEY
     layout, objects = _simple_annotator(dataset, layout_style="horizontal")
     assert layout.visible
 
@@ -28,7 +28,7 @@ def test_simple_annotator(mini_supervisable_text_dataset_embedded):
 
     raw_view_select = [0, 1, 2, 3, 6, 10]
     annotator.sources["raw"].selected.indices = raw_view_select[:]
-    annotator.annotator_input.value = "alt.atheism"
+    annotator.annotator_input.value = PSEUDO_LABELS[0]
 
     # view selected points in selection table
     view_data = action_view_selection(dataset)
@@ -41,8 +41,8 @@ def test_simple_annotator(mini_supervisable_text_dataset_embedded):
 
     # evict a point from selection
     evict_idx = 5
-    # prepare expected texts post eviction
-    expected_texts = dataset.dfs["raw"].loc[raw_view_select, "text"].tolist()
+    # prepare expected values post eviction
+    expected_texts = dataset.dfs["raw"].loc[raw_view_select, feature].tolist()
     expected_texts.pop(evict_idx)
     # make sub-selection
     dataset.sel_table.source.selected.indices = [evict_idx]
@@ -52,7 +52,7 @@ def test_simple_annotator(mini_supervisable_text_dataset_embedded):
     assert len(old_view_data["label"]) == len(raw_view_select)
     assert len(new_view_data["label"]) == len(raw_view_select) - 1
     # check specific feature values
-    assert new_view_data["text"] == expected_texts
+    assert new_view_data[feature] == expected_texts
 
     # apply label(s)
     labeled_slice = action_apply_labels(annotator)
@@ -81,21 +81,35 @@ def test_simple_annotator(mini_supervisable_text_dataset_embedded):
 
     # check feature-based lookup
     raw_idx_to_patch = 5
-    text_to_patch = dataset.sel_table.source.data["text"][raw_idx_to_patch]
+    text_to_patch = dataset.sel_table.source.data[feature][raw_idx_to_patch]
     subset_to_patch, idx_to_patch = dataset.locate_by_feature_value(text_to_patch)
     assert subset_to_patch == "train"
     assert idx_to_patch == (raw_view_select + train_view_select)[raw_idx_to_patch]
     # prepare an edit patch
     old_label = dataset.dfs[subset_to_patch].at[idx_to_patch, "label"]
-    new_label = "alt.atheism"
+    new_label = PSEUDO_LABELS[0]
     if old_label == new_label:
-        new_label = "rec.autos"
+        new_label = PSEUDO_LABELS[1]
     dataset.sel_table.source.data["label"][raw_idx_to_patch] = new_label
     dataset.sel_table.source.selected.indices = [raw_idx_to_patch]
     # execute patch
     assert dataset.dfs[subset_to_patch].at[idx_to_patch, "label"] != new_label
     action_patch_selection(dataset)
     assert dataset.dfs[subset_to_patch].at[idx_to_patch, "label"] == new_label
+
+
+@pytest.mark.lite
+def test_simple_annotator(
+    example_text_dataset,
+    example_image_dataset,
+    example_audio_dataset,
+):
+    for dataset in [
+        example_text_dataset,
+        example_image_dataset,
+        example_audio_dataset,
+    ]:
+        subroutine_common_test(dataset.copy())
 
 
 @pytest.mark.lite

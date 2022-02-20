@@ -1,4 +1,10 @@
 import pytest
+from hover.core.explorer.functionality import (
+    BokehDataAnnotator,
+    BokehDataFinder,
+    BokehSoftLabelExplorer,
+    BokehSnorkelExplorer,
+)
 from hover.recipes.subroutine import (
     standard_annotator,
     standard_finder,
@@ -8,28 +14,26 @@ from hover.recipes.subroutine import (
 
 
 @pytest.mark.lite
-def test_standard_annotator(mini_supervisable_text_dataset_embedded):
-    dataset = mini_supervisable_text_dataset_embedded.copy()
-    annotator = standard_annotator(dataset)
-    assert annotator
+def test_autobuild_explorer(
+    example_text_dataset,
+    example_image_dataset,
+    example_audio_dataset,
+):
+    for dataset in [
+        example_text_dataset,
+        example_image_dataset,
+        example_audio_dataset,
+    ]:
+        dataset = dataset.copy()
 
+        annotator = standard_annotator(dataset)
+        assert isinstance(annotator, BokehDataAnnotator)
 
-@pytest.mark.lite
-def test_standard_finder(mini_supervisable_text_dataset_embedded):
-    dataset = mini_supervisable_text_dataset_embedded.copy()
-    finder = standard_finder(dataset)
-    assert finder
+        finder = standard_finder(dataset)
+        assert isinstance(finder, BokehDataFinder)
 
+        softlabel = standard_softlabel(dataset)
+        assert isinstance(softlabel, BokehSoftLabelExplorer)
 
-@pytest.mark.lite
-def test_standard_snorkel(mini_supervisable_text_dataset_embedded):
-    dataset = mini_supervisable_text_dataset_embedded.copy()
-    snorkel = standard_snorkel(dataset)
-    assert snorkel
-
-
-@pytest.mark.lite
-def test_standard_softlabel(mini_supervisable_text_dataset_embedded):
-    dataset = mini_supervisable_text_dataset_embedded.copy()
-    softlabel = standard_softlabel(dataset)
-    assert softlabel
+        snorkel = standard_snorkel(dataset)
+        assert isinstance(snorkel, BokehSnorkelExplorer)
