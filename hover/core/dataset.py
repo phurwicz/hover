@@ -892,7 +892,7 @@ class SupervisableDataset(Loggable):
 
 class SupervisableTextDataset(SupervisableDataset):
     """
-    ???+ note "Can add text-specific methods."
+    ???+ note "`SupervisableDataset` whose primary feature is `text`."
     """
 
     FEATURE_KEY = "text"
@@ -900,7 +900,15 @@ class SupervisableTextDataset(SupervisableDataset):
 
 class SupervisableImageDataset(SupervisableDataset):
     """
-    ???+ note "Can add text-specific methods."
+    ???+ note "`SupervisableDataset` whose primary feature is `image`."
     """
 
     FEATURE_KEY = "image"
+
+
+class SupervisableAudioDataset(SupervisableDataset):
+    """
+    ???+ note "`SupervisableDataset` whose primary feature is `audio`."
+    """
+
+    FEATURE_KEY = "audio"
