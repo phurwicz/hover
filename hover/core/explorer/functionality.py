@@ -906,9 +906,12 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
             | :---------- | :----------- | :--------------------------- |
             | `L_labeled` | `np.ndarray` | predictions on the labeled subset |
         """
-        agreed = self.dfs["labeled"]["label"].values == L_labeled
-        attempted = L_labeled != module_config.ABSTAIN_DECODED
-        indices = np.where(np.multiply(agreed, attempted))[0].tolist()
+        if L_labeled.shape[0] == 0:
+            indices = []
+        else:
+            agreed = self.dfs["labeled"]["label"].values == L_labeled
+            attempted = L_labeled != module_config.ABSTAIN_DECODED
+            indices = np.where(np.multiply(agreed, attempted))[0].tolist()
         view = CDSView(source=self.sources["labeled"], filters=[IndexFilter(indices)])
         return view
 
@@ -919,9 +922,12 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
             | :---------- | :----------- | :--------------------------- |
             | `L_labeled` | `np.ndarray` | predictions on the labeled subset |
         """
-        disagreed = self.dfs["labeled"]["label"].values != L_labeled
-        attempted = L_labeled != module_config.ABSTAIN_DECODED
-        indices = np.where(np.multiply(disagreed, attempted))[0].tolist()
+        if L_labeled.shape[0] == 0:
+            indices = []
+        else:
+            disagreed = self.dfs["labeled"]["label"].values != L_labeled
+            attempted = L_labeled != module_config.ABSTAIN_DECODED
+            indices = np.where(np.multiply(disagreed, attempted))[0].tolist()
         view = CDSView(source=self.sources["labeled"], filters=[IndexFilter(indices)])
         return view
 
@@ -933,9 +939,12 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
             | `L_labeled` | `np.ndarray`  | predictions on the labeled subset |
             | `targets` | `list` of `str` | labels that the function aims for |
         """
-        targetable = np.isin(self.dfs["labeled"]["label"], targets)
-        abstained = L_labeled == module_config.ABSTAIN_DECODED
-        indices = np.where(np.multiply(targetable, abstained))[0].tolist()
+        if L_labeled.shape[0] == 0:
+            indices = []
+        else:
+            targetable = np.isin(self.dfs["labeled"]["label"], targets)
+            abstained = L_labeled == module_config.ABSTAIN_DECODED
+            indices = np.where(np.multiply(targetable, abstained))[0].tolist()
         view = CDSView(source=self.sources["labeled"], filters=[IndexFilter(indices)])
         return view
 
@@ -946,6 +955,9 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
             | :---------- | :----------- | :--------------------------- |
             | `L_raw`     | `np.ndarray` | predictions on the raw subset |
         """
-        indices = np.where(L_raw != module_config.ABSTAIN_DECODED)[0].tolist()
+        if L_raw.shape[0] == 0:
+            indices = []
+        else:
+            indices = np.where(L_raw != module_config.ABSTAIN_DECODED)[0].tolist()
         view = CDSView(source=self.sources["raw"], filters=[IndexFilter(indices)])
         return view
