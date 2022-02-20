@@ -78,8 +78,9 @@ def generate_df_with_coords():
                     "text": fake_en.paragraph(3),
                     "audio": "https://www.soundjay.com/button/beep-01a.mp3",
                     "image": "https://docs.chainer.org/en/stable/_images/5.png",
-                    embedding_field(2, 0): random.uniform(-1.0, 1.0),
-                    embedding_field(2, 1): random.uniform(-1.0, 1.0),
+                    embedding_field(3, 0): random.uniform(-1.0, 1.0),
+                    embedding_field(3, 1): random.uniform(-1.0, 1.0),
+                    embedding_field(3, 2): random.uniform(-1.0, 1.0),
                 }
                 for i in range(size)
             ]
