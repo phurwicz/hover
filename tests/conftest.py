@@ -173,16 +173,19 @@ def example_labeled_df(generate_df_with_coords):
 
 
 @pytest.fixture(scope="module")
-def example_everything_df(example_raw_df, example_labeled_df):
+def example_everything_df(example_raw_df, generate_df_with_coords):
     raw_df = example_raw_df.copy()
     raw_df[DATASET_SUBSET_FIELD] = "raw"
-    labeled_df = example_labeled_df.copy()
+    labeled_df = generate_df_with_coords(200)
+    labeled_df["label"] = labeled_df.apply(RANDOM_LABEL, axis=1)
     labeled_df[DATASET_SUBSET_FIELD] = "train"
+    labeled_df.loc[100:150, DATASET_SUBSET_FIELD] = "dev"
+    labeled_df.loc[150:, DATASET_SUBSET_FIELD] = "test"
 
     # should have these columns at this point:
     # - all features (text / image / audio)
     # - label, subset, and embeddings
-    df = pd.concat([raw_df, labeled_df], axis=0)
+    df = pd.concat([raw_df, labeled_df], axis=0).reset_index(drop=True)
 
     # prepare columns for special functionalities
     df["pred_label"] = df.apply(RANDOM_LABEL, axis=1)
