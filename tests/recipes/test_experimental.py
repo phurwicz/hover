@@ -3,8 +3,8 @@ from hover.recipes.experimental import _active_learning, _snorkel_crosscheck
 from bokeh.events import ButtonClick, SelectionGeometry
 
 
-def test_active_learning(example_image_dataset, dummy_vecnet_callback):
-    dataset = example_image_dataset.copy()
+def test_active_learning(example_text_dataset, dummy_vecnet_callback):
+    dataset = example_text_dataset.copy()
     vecnet = dummy_vecnet_callback(dataset)
     layout, objects = _active_learning(dataset, vecnet)
     assert layout.visible
