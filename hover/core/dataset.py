@@ -580,7 +580,7 @@ class SupervisableDataset(Loggable):
             else:
                 raise ValueError(f"Unexpected export format {export_format}")
 
-            self._good(f"Saved DataFrame to {export_path}")
+            self._good(f"saved Pandas DataFrame version to {export_path}")
 
         # assign the callback, keeping its reference
         self._callback_export = callback_export
