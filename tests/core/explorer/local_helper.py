@@ -47,19 +47,21 @@ def almost_none_select(figure):
     return select_event
 
 
-def subroutine_search_source_response(explorer, search_callbacks):
+def subroutine_search_source_response(explorer, searchs_and_change_bools):
     """
-    Assumes search callbacks should be nontrivial, i.e. explorer sources are expected to change.
+    Run search callbacks and check whether the score changes are expected.
+    Flag = True when search scores are expected to have changed.
     """
     # initialize in-loop variable for comparison
     source = explorer.sources["raw"]
     _prev_scores = source.data[SEARCH_SCORE_FIELD].copy()
-    for _callback in search_callbacks:
+    for _callback, _change_bool in searchs_and_change_bools:
+        _expected = "change" if _change_bool else "not change"
         _callback()
         _scores = source.data[SEARCH_SCORE_FIELD].copy()
         assert (
             _scores != _prev_scores
-        ), f"Expected search scores to change, got {_prev_scores} (old) vs. {_scores} (new)"
+        ) == _change_bool, f"Expected search scores to {_expected}, got {_prev_scores} (old) vs. {_scores} (new)"
         _prev_scores = _scores
 
 

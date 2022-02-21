@@ -6,6 +6,7 @@ For mechanisms that are invariant across `hover.core.explorer.functionality`.
 import pytest
 import math
 from hover.recipes.subroutine import get_explorer_class
+from tests.local_config import VECTORIZER_BREAKER
 from .local_helper import (
     FUNCTIONALITY_TO_SPECIAL_ARGS,
     subroutine_search_source_response,
@@ -43,7 +44,10 @@ class TestBokehForText:
 
             subroutine_search_source_response(
                 _explorer,
-                [search_a, desearch_a],
+                [
+                    (search_a, True),
+                    (desearch_a, True),
+                ],
             )
 
 
@@ -65,9 +69,16 @@ class TestBokehForImage:
             def enter_second_image():
                 _explorer.search_sim.value = _explorer.dfs["raw"]["image"][1]
 
+            def invalid_search():
+                _explorer.search_sim.value = VECTORIZER_BREAKER
+
             subroutine_search_source_response(
                 _explorer,
-                [enter_first_image, enter_second_image],
+                [
+                    (enter_first_image, True),
+                    (enter_second_image, True),
+                    (invalid_search, False),
+                ],
             )
 
 
@@ -92,5 +103,8 @@ class TestBokehForAudio:
 
             subroutine_search_source_response(
                 _explorer,
-                [enter_first_audio, alter_sim_thresh],
+                [
+                    (enter_first_audio, True),
+                    (alter_sim_thresh, True),
+                ],
             )

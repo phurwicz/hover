@@ -19,6 +19,7 @@ from hover.core.local_config import (
 from .local_config import (
     RANDOM_LABEL,
     RANDOM_SCORE,
+    VECTORIZER_BREAKER,
 )
 
 
@@ -34,6 +35,9 @@ def dummy_vectorizer():
         """
         Vectorizer with no semantic meaning but works for any string feature.
         """
+        if in_str == VECTORIZER_BREAKER:
+            raise ValueError("Special string made to break the test vectorizer")
+
         arr = []
         seed = in_str.encode()
         for _hash, _max_plus_one in zip(use_hashes, max_plus_ones):
