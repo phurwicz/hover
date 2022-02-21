@@ -70,9 +70,6 @@ class BokehDataFinder(BokehBaseExplorer):
         for _key in self.sources.keys():
             self._selection_filters[_key].data.add(filter_by_search)
 
-        def filter_callback_on_change(attr, old, new):
-            self._trigger_selection_filters() if filter_flag() else None
-
         # when toggled as active, search changes trigger selection filter
         for _widget in self._search_watch_widgets():
             _widget.on_change(
