@@ -48,8 +48,8 @@ class TestSupervisableTextDataset:
 
     @staticmethod
     @pytest.mark.lite
-    def test_basic_logging(mini_supervisable_text_dataset):
-        dataset = mini_supervisable_text_dataset.copy()
+    def test_basic_logging(example_text_dataset):
+        dataset = example_text_dataset.copy()
         dataset._print("testing _print(); not expecting color")
         dataset._good("testing _good(); expecting green")
         dataset._info("testing _info(); expecting blue")
@@ -58,8 +58,31 @@ class TestSupervisableTextDataset:
 
     @staticmethod
     @pytest.mark.lite
-    def test_export_import(mini_supervisable_text_dataset):
-        dataset = mini_supervisable_text_dataset.copy()
+    def test_setup_label_coding(example_text_dataset):
+        dataset = example_text_dataset.copy()
+        dataset.setup_label_coding(verbose=True, debug=True)
+
+        assert len(dataset.classes) + 1 == len(dataset.label_encoder)
+        assert len(dataset.label_encoder) == len(dataset.label_decoder)
+
+    @staticmethod
+    @pytest.mark.lite
+    def test_validate_labels(example_text_dataset):
+        dataset = example_text_dataset.copy()
+        dataset.dfs["train"].at[0, "label"] = "invalid_label"
+
+        try:
+            dataset.validate_labels()
+            pytest.fail("Expected exception caused by label uncaught by encoder")
+        except ValueError:
+            pass
+
+        dataset.validate_labels(raise_exception=False)
+
+    @staticmethod
+    @pytest.mark.lite
+    def test_export_import(example_text_dataset):
+        dataset = example_text_dataset.copy()
 
         df = dataset.to_pandas()
         dataset = SupervisableTextDataset.from_pandas(df)
@@ -78,8 +101,8 @@ class TestSupervisableTextDataset:
             assert len(_f_new) == len(_f_old) + 1
 
     @staticmethod
-    def test_compute_nd_embedding(mini_supervisable_text_dataset, dummy_vectorizer):
-        dataset = mini_supervisable_text_dataset.copy()
+    def test_compute_nd_embedding(example_text_dataset, dummy_vectorizer):
+        dataset = example_text_dataset.copy()
 
         dataset.compute_nd_embedding(dummy_vectorizer, "umap", dimension=3)
         dataset.compute_2d_embedding(dummy_vectorizer, "umap")
@@ -88,12 +111,23 @@ class TestSupervisableTextDataset:
         dataset.dfs["test"] = dataset.dfs["test"].loc[0:0]
         dataset.compute_nd_embedding(dummy_vectorizer, "ivis", dimension=2)
 
+        assert len(dataset.vectorizer_lookup) > 0
+
     @staticmethod
     @pytest.mark.lite
-    def test_loader(mini_supervisable_text_dataset, dummy_vectorizer):
+    def test_vectorizer_lookup(example_text_dataset):
+        dataset = example_text_dataset.copy()
+        to_assign = dict()
+        # this assignment should get prevented
+        dataset.vectorizer_lookup = to_assign
+        assert dataset.vectorizer_lookup is not to_assign
+
+    @staticmethod
+    @pytest.mark.lite
+    def test_loader(example_text_dataset, dummy_vectorizer):
         from torch.utils.data import DataLoader
 
-        dataset = mini_supervisable_text_dataset.copy()
+        dataset = example_text_dataset.copy()
 
         try:
             loader = dataset.loader("raw", dummy_vectorizer, smoothing_coeff=0.1)

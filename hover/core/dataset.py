@@ -534,11 +534,14 @@ class SupervisableDataset(Loggable):
         for _key in [*self.__class__.PUBLIC_SUBSETS, *self.__class__.PRIVATE_SUBSETS]:
             _invalid_indices = None
             assert "label" in self.dfs[_key].columns
-            _mask = self.dfs[_key]["label"].apply(lambda x: x in self.label_encoder)
-            _invalid_indices = np.where(_mask is False)[0].tolist()
+            _mask = self.dfs[_key]["label"].apply(
+                lambda x: int(x in self.label_encoder)
+            )
+            # DO NOT change the "==" to "is"; False in pandas is not False below
+            _invalid_indices = np.where(_mask == 0)[0].tolist()
             if _invalid_indices:
                 self._fail(f"Subset {_key} has invalid labels:")
-                self._print({self.dfs[_key].loc[_invalid_indices]})
+                self._print(self.dfs[_key].loc[_invalid_indices])
                 if raise_exception:
                     raise ValueError("invalid labels")
 
