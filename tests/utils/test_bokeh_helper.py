@@ -23,7 +23,7 @@ def test_remote_jupyter_proxy_url():
     Not a full test, rather just validating urls.
     """
     for port in [8888, None]:
-        url = remote_jupyter_proxy_url(8888)
+        url = remote_jupyter_proxy_url(port)
         _ = urlparse(url)
 
 
