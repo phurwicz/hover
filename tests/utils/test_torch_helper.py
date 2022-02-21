@@ -1,3 +1,4 @@
+from torch.utils.data import Dataset, DataLoader
 from hover.utils.torch_helper import (
     VectorDataset,
     MultiVectorDataset,
@@ -12,15 +13,16 @@ import pytest
 def test_vector_dataset(num_entries=100, dim_inp=128, dim_out=3):
     vec_inp = np.random.rand(num_entries, dim_inp)
     vec_out = np.random.rand(num_entries, dim_out)
-    loader = VectorDataset(vec_inp, vec_out).loader(batch_size=min(num_entries, 16))
-    # no further assertions at the moment
-    assert loader
 
-    loader = MultiVectorDataset([vec_inp] * 2, vec_out).loader(
-        batch_size=min(num_entries, 16)
-    )
-    # no further assertions at the moment
-    assert loader
+    for dataset in [
+        VectorDataset(vec_inp, vec_out),
+        MultiVectorDataset([vec_inp] * 2, vec_out),
+    ]:
+        loader = dataset.loader(batch_size=min(num_entries, 16))
+        assert isinstance(dataset, Dataset)
+        assert isinstance(loader, DataLoader)
+        assert len(dataset) == num_entries
+        inp, out, idx = dataset[0]
 
 
 @pytest.mark.lite

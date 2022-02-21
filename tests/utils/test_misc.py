@@ -67,6 +67,15 @@ def test_nodeunionfind():
         arr[_l].union(arr[_r])
         check_unionfind(arr, _nodes, _finds, _counts)
 
+    # test data assignment
+    arr[0].data = 8
+    check_unionfind(
+        arr,
+        [8, 1, 2, 3, 4, 5, 6, 7],
+        [8, 8, 8, 8, 8, 5, 6, 7],
+        [5, 5, 5, 5, 5, 1, 1, 1],
+    )
+
 
 @pytest.mark.lite
 def test_rootunionfind():
