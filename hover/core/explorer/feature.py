@@ -75,7 +75,7 @@ class BokehForUrlToVector(BokehBaseExplorer):
             height_policy="fit",
         )
         self.search_threshold = Slider(
-            start=0.3,
+            start=0.0,
             end=1.0,
             value=0.9,
             # fewer steps allowed because refreshing search result can be expensive
@@ -132,7 +132,7 @@ class BokehForUrlToVector(BokehBaseExplorer):
                 return 0
 
             # common case: query and doc are both valid
-            query_doc_sim = np.dot(vec_query, vec_doc)
+            query_doc_sim = (np.dot(vec_query, vec_doc) + 1.0) / 2.0
             if query_doc_sim >= sim_thresh:
                 return 1
             else:
