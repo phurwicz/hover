@@ -22,8 +22,9 @@ def test_remote_jupyter_proxy_url():
     """
     Not a full test, rather just validating urls.
     """
-    url = remote_jupyter_proxy_url(8888)
-    _ = urlparse(url)
+    for port in [8888, None]:
+        url = remote_jupyter_proxy_url(8888)
+        _ = urlparse(url)
 
 
 @pytest.mark.lite
