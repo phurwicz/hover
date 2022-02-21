@@ -30,9 +30,17 @@ def test_dimensionality_reduction(n_points=1000):
     )
     embedding = reducer.transform(arr, "umap")
     assert embedding.shape == (n_points, 3)
+    embedding = reducer.transform(np.array([]), "umap")
+    assert embedding.shape == (0,)
 
     reducer.fit_transform(
         "ivis", dimension=4, k=3, distance="pn", batch_size=16, epochs=20
     )
     embedding = reducer.transform(arr, "ivis")
     assert embedding.shape == (n_points, 4)
+
+    try:
+        reducer.fit_transform("invalid_method")
+        pytest.fail("Expected exception from invalid reduction method.")
+    except ValueError:
+        pass
