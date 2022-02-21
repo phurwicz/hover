@@ -66,6 +66,9 @@ def subroutine_common_test(dataset):
     new_sizes = {_key: _df.shape[0] for _key, _df in dataset.dfs.items()}
     assert new_sizes["raw"] == initial_sizes["raw"] - expected_labeled_count
     assert new_sizes["train"] == initial_sizes["train"] + expected_labeled_count
+    # this is an empty commit, which should not break anything
+    action_commit_selection(dataset, subset="train")
+    action_deduplicate(dataset)
 
     # refresh explorers
     action_push_data(dataset)
