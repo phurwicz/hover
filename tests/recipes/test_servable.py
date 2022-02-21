@@ -1,5 +1,5 @@
-import time
 import pytest
+import requests
 from hover.recipes.stable import simple_annotator, linked_annotator
 from hover.recipes.experimental import active_learning, snorkel_crosscheck
 from bokeh.server.server import Server
@@ -23,7 +23,9 @@ def test_builtin_servable_recipes(
         "active": active,
         "snorkel": snorkel,
     }
-    server = Server(app_dict)
+    server = Server(app_dict, port=5007)
     server.start()
-    time.sleep(15)
+    for _app in app_dict.keys():
+        _response = requests.get(f"http://localhost:5007/{_app}")
+        assert _response.status_code == 200
     server.stop()
