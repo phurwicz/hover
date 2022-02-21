@@ -73,11 +73,40 @@ class TestSupervisableTextDataset:
 
         try:
             dataset.validate_labels()
-            pytest.fail("Expected exception caused by label uncaught by encoder")
+            pytest.fail("Expected exception caused by label uncaught by encoder.")
         except ValueError:
             pass
 
         dataset.validate_labels(raise_exception=False)
+
+    @staticmethod
+    @pytest.mark.lite
+    def test_compute_feature_index(example_text_dataset):
+        dataset = example_text_dataset.copy()
+        dataset.dfs["raw"].at[0, "text"] = dataset.dfs["raw"].at[1, "text"]
+
+        try:
+            dataset.compute_feature_index()
+            pytest.fail("Expected exception caused by duplicate feature.")
+        except ValueError:
+            pass
+
+    @staticmethod
+    @pytest.mark.lite
+    def test_locate_by_feature_value(example_text_dataset):
+        dataset = example_text_dataset.copy()
+        feature_value = dataset.dfs["raw"].at[0, "text"]
+        subset, index = dataset.locate_by_feature_value(feature_value)
+        assert subset == "raw" and index == 0
+
+        dataset.feature_to_subset_idx[feature_value] = ("raw", 1)
+
+        try:
+            dataset.locate_by_feature_value(feature_value, auto_recompute=False)
+            pytest.fail("Expected exception caused by inconsistent feature index.")
+        except ValueError:
+            # auto-recompute should restore consistency
+            dataset.locate_by_feature_value(feature_value)
 
     @staticmethod
     @pytest.mark.lite
