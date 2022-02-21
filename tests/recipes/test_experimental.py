@@ -1,6 +1,13 @@
+import pytest
 import numpy as np
-from hover.recipes.experimental import _active_learning, _snorkel_crosscheck
+from hover.recipes.experimental import (
+    _active_learning,
+    _snorkel_crosscheck,
+    active_learning,
+    snorkel_crosscheck,
+)
 from bokeh.events import ButtonClick, SelectionGeometry
+from .local_helper import execute_handle_function
 
 
 def test_active_learning(example_text_dataset, dummy_vecnet_callback):
@@ -89,3 +96,21 @@ def test_snorkel_crosscheck(example_audio_dataset, dummy_labeling_function_list)
 
     # TODO: add emulations of user activity
     assert objects
+
+
+@pytest.mark.lite
+def test_servable_experimental(
+    example_text_dataset,
+    dummy_vecnet_callback,
+    dummy_labeling_function_list,
+):
+    # one dataset for each recipe
+    dataset = example_text_dataset.copy()
+    vecnet = dummy_vecnet_callback(dataset)
+    active = active_learning(dataset, vecnet)
+
+    dataset = example_text_dataset.copy()
+    snorkel = snorkel_crosscheck(dataset, dummy_labeling_function_list)
+
+    for handle in [active, snorkel]:
+        execute_handle_function(handle)

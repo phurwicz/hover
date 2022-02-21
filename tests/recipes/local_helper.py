@@ -1,3 +1,5 @@
+import time
+from bokeh.document import Document
 from bokeh.events import ButtonClick, MenuItemClick
 from hover import module_config
 
@@ -47,3 +49,12 @@ def action_deduplicate(dataset):
 def action_push_data(dataset):
     push_event = ButtonClick(dataset.update_pusher)
     dataset.update_pusher._trigger_event(push_event)
+
+
+def execute_handle_function(handle):
+    doc = Document()
+    handle(doc)
+    # a few seconds to activate timed callcacks
+    time.sleep(10)
+    for wrapped_callback in doc.session_callbacks:
+        wrapped_callback.callback()

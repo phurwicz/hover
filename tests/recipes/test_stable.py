@@ -5,7 +5,6 @@ from hover.recipes.stable import (
     simple_annotator,
     linked_annotator,
 )
-from bokeh.document import Document
 from tests.local_config import PSEUDO_LABELS
 from tests.recipes.local_helper import (
     action_view_selection,
@@ -16,6 +15,7 @@ from tests.recipes.local_helper import (
     action_deduplicate,
     action_push_data,
 )
+from .local_helper import execute_handle_function
 
 
 def subroutine_common_test(dataset):
@@ -113,8 +113,8 @@ def test_simple_annotator(
 
 
 @pytest.mark.lite
-def test_linked_annotator(mini_supervisable_text_dataset_embedded):
-    dataset = mini_supervisable_text_dataset_embedded.copy()
+def test_linked_annotator(example_text_dataset):
+    dataset = example_text_dataset.copy()
     layout, objects = _linked_annotator(dataset, layout_style="vertical")
     assert layout.visible
 
@@ -125,9 +125,8 @@ def test_linked_annotator(mini_supervisable_text_dataset_embedded):
 
 
 @pytest.mark.lite
-def test_servable_stable(mini_supervisable_text_dataset_embedded):
-    for _recipe in [simple_annotator, linked_annotator]:
-        dataset = mini_supervisable_text_dataset_embedded.copy()
-        doc = Document()
-        handle = _recipe(dataset)
-        handle(doc)
+def test_servable_stable(example_text_dataset):
+    for recipe in [simple_annotator, linked_annotator]:
+        dataset = example_text_dataset.copy()
+        handle = recipe(dataset)
+        execute_handle_function(handle)
