@@ -6,6 +6,7 @@ from hover.recipes.stable import (
     linked_annotator,
 )
 from tests.local_config import PSEUDO_LABELS
+from tests.core.explorer.local_helper import almost_global_select
 from tests.recipes.local_helper import (
     action_view_selection,
     action_evict_selection,
@@ -14,8 +15,8 @@ from tests.recipes.local_helper import (
     action_commit_selection,
     action_deduplicate,
     action_push_data,
+    execute_handle_function,
 )
-from .local_helper import execute_handle_function
 
 
 def subroutine_common_test(dataset):
@@ -119,8 +120,21 @@ def test_linked_annotator(example_text_dataset):
     assert layout.visible
 
     annotator, finder = objects["annotator"], objects["finder"]
+    select_event = almost_global_select(finder.figure)
     assert annotator.sources["raw"].selected.indices == []
     finder.sources["raw"].selected.indices = [0, 1, 2]
+    finder.figure._trigger_event(select_event)
+    assert annotator.sources["raw"].selected.indices == [0, 1, 2]
+    finder.sources["raw"].selected.indices = [1, 2]
+    finder.figure._trigger_event(select_event)
+    assert annotator.sources["raw"].selected.indices == [1, 2]
+
+    # selection option is expected to sync
+    assert annotator.selection_option_box.active == 0
+    finder.selection_option_box.active = 1
+    assert annotator.selection_option_box.active == 1
+    finder.sources["raw"].selected.indices = [0]
+    finder.figure._trigger_event(select_event)
     assert annotator.sources["raw"].selected.indices == [0, 1, 2]
 
 
