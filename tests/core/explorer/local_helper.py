@@ -27,6 +27,7 @@ def almost_global_select(figure):
             "sx": [None, None, None, None],
             "sy": [None, None, None, None],
         },
+        final=True,
     )
     return select_event
 
@@ -41,6 +42,7 @@ def almost_none_select(figure):
             "sx": [None, None, None, None],
             "sy": [None, None, None, None],
         },
+        final=True,
     )
     return select_event
 
