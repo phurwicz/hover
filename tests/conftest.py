@@ -6,7 +6,6 @@ import numpy as np
 import pandas as pd
 from functools import lru_cache
 from hover import module_config
-from hover.utils.datasets import newsgroups_dictl, newsgroups_reduced_dictl
 from hover.core.dataset import (
     SupervisableTextDataset,
     SupervisableImageDataset,
@@ -109,41 +108,6 @@ def generate_df_with_coords():
         return df
 
     return random_df_with_coords
-
-
-@pytest.fixture(scope="module")
-def mini_df_text():
-    my_20ng, _, _ = newsgroups_reduced_dictl()
-
-    mini_dictl = random.sample(my_20ng["train"], k=1000)
-    mini_df = pd.DataFrame(mini_dictl)
-
-    return mini_df
-
-
-@pytest.fixture(scope="module")
-def mini_supervisable_text_dataset():
-    my_20ng, _, _ = newsgroups_dictl()
-
-    split_idx = int(0.05 * len(my_20ng["train"]))
-    dataset = SupervisableTextDataset(
-        raw_dictl=my_20ng["train"][:split_idx],
-        train_dictl=my_20ng["train"][split_idx : int(split_idx * 1.5)],
-        dev_dictl=my_20ng["train"][int(split_idx * 1.5) : int(split_idx * 1.7)],
-        test_dictl=my_20ng["test"][: int(split_idx * 0.2)],
-    )
-
-    return dataset
-
-
-@pytest.fixture(scope="module")
-def mini_supervisable_text_dataset_embedded(
-    mini_supervisable_text_dataset, dummy_vectorizer
-):
-    dataset = mini_supervisable_text_dataset.copy()
-
-    dataset.compute_2d_embedding(dummy_vectorizer, "umap")
-    return dataset
 
 
 @pytest.fixture(scope="module")
