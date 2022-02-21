@@ -22,14 +22,6 @@ def test_embedding_field():
 def test_blank_callback_on_change():
     blank_callback_on_change("value", 0, 1)
 
-    try:
-        blank_callback_on_change()
-        pytest.fail(
-            "Expected blank_callback_on_change to have signature attr, old, new."
-        )
-    except TypeError:
-        pass
-
 
 @pytest.mark.lite
 def test_dataset_default_sel_table_columns():
