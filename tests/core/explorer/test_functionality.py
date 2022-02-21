@@ -30,18 +30,36 @@ class TestBokehBaseExplorer:
         """
 
         def subroutine(df_dict, feature_type):
-            explorer = get_explorer_class("finder", feature_type)(df_dict)
+            finder = get_explorer_class("finder", feature_type)(df_dict)
             annotator = get_explorer_class("annotator", feature_type)(df_dict)
 
-            explorer.plot()
+            finder.plot()
+            annotator.plot()
 
-            explorer.dfs["raw"] = example_raw_df.copy()
-            explorer._update_sources()
+            finder.dfs["raw"] = example_raw_df.copy()
+            finder._update_sources()
 
-            explorer.link_selection("raw", annotator, "raw")
-            explorer.link_xy_range(annotator)
+            finder.link_selection("raw", annotator, "raw")
+            finder.link_selection_options(annotator)
+            finder.link_xy_range(annotator)
 
-            _ = explorer.view()
+            # change axes and check source and glyph
+            # the source should not change, just glyph axes
+            embed_cols = annotator.find_embedding_fields()
+            prev_source_data = annotator.sources["raw"].data.copy()
+            inspect_renderer = annotator.figure.renderers[0]
+
+            for _axis, _from_idx, _to_idx in [
+                ("x", 0, 1),
+                ("y", 1, 0),
+            ]:
+                _widget = getattr(annotator, f"dropdown_{_axis}_axis")
+                _click_event = MenuItemClick(_widget, item=embed_cols[_to_idx])
+                assert getattr(inspect_renderer.glyph, _axis) == embed_cols[_from_idx]
+                _widget._trigger_event(_click_event)
+                assert getattr(inspect_renderer.glyph, _axis) == embed_cols[_to_idx]
+                assert annotator.sources["raw"].data is not prev_source_data
+                assert annotator.sources["raw"].data == prev_source_data
 
         df_dict = {
             "raw": example_raw_df.copy(),
