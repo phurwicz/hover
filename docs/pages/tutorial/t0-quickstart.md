@@ -33,14 +33,7 @@ We turn it into a [`SupervisableDataset`](../../reference/core-dataset/#hover.co
         ```
 
     ??? help "Can I use audio or image data?"
-        In the not-too-far future, yes!
-
-        Some mechanisms can get tricky with audios/images, but we are working on it:
-
-        -   display tooltips: as of 0.4.0, [tooltips are supported in the low-level APIs](https://github.com/phurwicz/hover/blob/main/hover/core/explorer/local_config.py).
-        -   [search and highlight](../../reference/core-explorer/#hover.core.explorer.feature.BokehForAudio.activate_search): pending (and open to contributions!)
-        -   high-level API like `SupervisableImageDataset`: pending
-
+        Yes! Please check out the "Guides" section.
 
 
 ## **Ingredient 2 / 3: Embedding**

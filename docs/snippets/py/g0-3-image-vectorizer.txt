@@ -1,0 +1,34 @@
+import torch
+from efficientnet_pytorch import EfficientNet
+from torchvision import transforms
+
+# EfficientNet is a series of pre-trained models
+# https://github.com/lukemelas/EfficientNet-PyTorch
+model = EfficientNet.from_pretrained("efficientnet-b0")
+model.eval()
+
+# standard transformations for ImageNet-trained models
+tfms = transforms.Compose(
+    [
+        transforms.Resize(224),
+        transforms.ToTensor(),
+        transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225]),
+    ]
+)
+
+# memoization can be useful if the function takes a while to run, which is common for images
+@wrappy.memoize(
+    cache_limit=10000,
+    persist_path='.cache/image_to_vector.pkl',
+    persist_batch_size=100,
+)
+def vectorizer(url):
+    """
+    Using logits on ImageNet-1000 classes.
+    """
+    img = tfms(url_to_image(url)).unsqueeze(0)
+
+    with torch.no_grad():
+        outputs = model(img)
+
+    return outputs.detach().numpy().flatten()
