@@ -105,7 +105,7 @@ def standard_annotator(dataset, **kwargs):
     annotator = explorer_cls.from_dataset(
         dataset,
         {_k: _k for _k in subsets},
-        title="Annotator: apply labels to the selected points",
+        title="Annotator: apply labels to selected RAW points",
         **kwargs,
     )
     annotator.activate_search()
@@ -145,7 +145,7 @@ def standard_finder(dataset, **kwargs):
     finder = explorer_cls.from_dataset(
         dataset,
         {_k: _k for _k in subsets},
-        title="Finder: use the search widget for highlights",
+        title="Finder: use search for highlight and filter",
         **kwargs,
     )
     finder.activate_search()
@@ -178,7 +178,7 @@ def standard_snorkel(dataset, **kwargs):
     snorkel = explorer_cls.from_dataset(
         dataset,
         {"raw": "raw", "dev": "labeled"},
-        title="Snorkel: square for correct, x for incorrect, + for missed, o for hit; click on legends to hide or show LF",
+        title="Snorkel: □ for correct, x for incorrect, + for missed, o for hit; click on legends to hide or show LF",
         **kwargs,
     )
     snorkel.activate_search()
@@ -201,7 +201,7 @@ def standard_softlabel(dataset, **kwargs):
         | Param      | Type     | Description                          |
         | :--------- | :------- | :----------------------------------- |
         | `dataset`  | `SupervisableDataset` | the dataset to link to  |
-        | `**kwargs` | | kwargs to forward to the `BokehSoftLabelExplorer` |
+        | `**kwargs` | | kwargs to forward to `BokehSoftLabelExplorer` |
     """
     # auto-detect the (main) feature to use
     feature = dataset.__class__.FEATURE_KEY
@@ -214,7 +214,7 @@ def standard_softlabel(dataset, **kwargs):
         {_k: _k for _k in subsets},
         "pred_label",
         "pred_score",
-        title="SoftLabel: inspect predictions and scores",
+        title="SoftLabel: inspect predictions and use score range as filter",
         **kwargs,
     )
     softlabel.activate_search()
