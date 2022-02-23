@@ -121,6 +121,23 @@ def servable(title=None):
     return wrapper
 
 
+def show_as_interactive(obj, **kwargs):
+    """
+    ???+ note "Wrap a bokeh LayoutDOM as an application to allow Python callbacks."
+
+        Must have the same signature as `bokeh.io.show()`[https://docs.bokeh.org/en/latest/docs/reference/io.html#bokeh.io.show].
+    """
+    from bokeh.io import show
+    from bokeh.models.layouts import LayoutDOM
+
+    assert isinstance(obj, LayoutDOM), f"Expected Bokeh LayoutDOM, got {type(obj)}"
+
+    def handle(doc):
+        doc.add_root(column(obj))
+
+    return show(handle, **kwargs)
+
+
 def bokeh_hover_tooltip(
     label=False,
     text=False,
@@ -133,13 +150,13 @@ def bokeh_hover_tooltip(
     """
     ???+ note "Create a Bokeh hover tooltip from a template."
 
-        - param label: whether to expect and show a "label" field.
-        - param text: whether to expect and show a "text" field.
-        - param image: whether to expect and show an "image" (url/path) field.
-        - param audio: whether to expect and show an "audio" (url/path) field.
-        - param coords: whether to show xy-coordinates.
-        - param index: whether to show indices in the dataset.
-        - param custom: {display: column} mapping of additional (text) tooltips.
+        - label: whether to expect and show a "label" field.
+        - text: whether to expect and show a "text" field.
+        - image: whether to expect and show an "image" (url/path) field.
+        - audio: whether to expect and show an "audio" (url/path) field.
+        - coords: whether to show xy-coordinates.
+        - index: whether to show indices in the dataset.
+        - custom: {display: column} mapping of additional (text) tooltips.
     """
     # initialize mutable default value
     custom = custom or dict()
