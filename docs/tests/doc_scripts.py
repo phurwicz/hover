@@ -21,7 +21,7 @@ NAME_TO_SCRIPT = {
     "tutorial-t5": "../pages/tutorial/t5-finder-filter.md",
     "tutorial-t6": "../pages/tutorial/t6-softlabel-joint-filter.md",
     "tutorial-t7": "../pages/tutorial/t7-snorkel-improvise-rules.md",
-    "tutorial-t8": "../pages/tutorial/t8-recipe-structure-customization.md",
+    "guide-g0": "../pages/guides/g0-datatype-image.md",
 }
 
 
@@ -61,7 +61,7 @@ def main():
 def parse_script_and_run(script_name, source_rel_path):
     """
     Retrieve and run code blocks from documentation file.
-    Note that the doc file can  using markdown-include.
+    Note that the doc file can be using markdown-include.
     """
     source_abs_path = os.path.join(DIR_PATH, source_rel_path)
     script_tmp_path = f"{script_name}-{uuid.uuid1()}.py"
