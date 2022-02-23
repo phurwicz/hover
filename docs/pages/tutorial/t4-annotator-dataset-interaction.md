@@ -85,7 +85,7 @@ You may specify a *positive* regular expression to look for and/or a *negative* 
 {!docs/snippets/markdown/jupyterlab-js-issue.md!}
 
 <pre data-executable>
-{!docs/snippets/py/t4-3-annotator-search-box.txt!}
+{!docs/snippets/py/t4-4-annotator-search-box.txt!}
 </pre><br>
 
 ### **Preview: Use Search for Selection in Finder**
@@ -96,12 +96,12 @@ In a particular kind of plots called `Finder` (see later in the tutorials), the 
 
 When we apply labels through the annotator plot, it's acutally the `dataset` behind the plot that gets immediately updated. The plot itself is not in direct sync with the dataset, which is a design choice for performance. Instead, we will use a trigger called `PUSH` for updating the data entries to the plot.
 
-### **PUSH: synchronize from dataset to plots**
+### **PUSH: Synchronize from Dataset to Plots**
 
 Below is the full interface of the `dataset`, where you can find a green "Push" button:
 
 <pre data-executable>
-{!docs/snippets/py/t4-4-dataset-view.txt!}
+{!docs/snippets/py/t4-5-dataset-view.txt!}
 </pre>
 
 In a built-in `recipe`, the "Push" button will update the latest data to every `explorer` linked to the `dataset`.

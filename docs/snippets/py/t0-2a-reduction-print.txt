@@ -1,3 +1,2 @@
-# What we did adds 'x' and 'y' columns to the DataFrames in dataset.dfs
-# One could alternatively pre-compute these columns using any approach
+# what we did adds 'embed_2d_0' and 'embed_2d_1' columns to the DataFrames in dataset.dfs
 dataset.dfs["raw"].head(5)
