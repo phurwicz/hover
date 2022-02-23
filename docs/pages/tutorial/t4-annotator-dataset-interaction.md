@@ -38,20 +38,42 @@ Showing labeled subsets can tell you which parts of the data has been explored a
 {!docs/snippets/py/t4-1-annotator-subset-toggle.txt!}
 </pre><br>
 
-## **Selection Tools: Tap, Polygon, Lasso**
+### **Select Points on the Plot**
 
-On the right of the scatter plot, you can find selection tools. Feel free to play with them for a bit.
+On the right of the scatter plot, you can find tap, polygon, and lasso tools which can select data points.
 
-### **Making Cumulative Selections**
+## **Make Consecutive Selections**
 
-Ever selected multiple files in your file system using <kbd>Ctrl</kbd>/<kbd>Command</kbd>?
+Ever selected multiple (non-adjacent) files in your file system using <kbd>Ctrl</kbd>/<kbd>Command</kbd>?
 
-Similarly in `hover`, you can make cumulative selections by toggleing a checkbox.
+Similarly but more powerfully, you can make consecutive selections with a "keep selecting" option.
+
+-   `none`: the default, where a new selection `B` simply replaces the old one `A`.
+-   `union`: `A ∪ B`, the new selection gets unioned with the old one.
+    -   this resembles the <kbd>Ctrl</kbd>/<kbd>Command</kbd> mentioned above.
+-   `intersection`: `A ∩ B`, the new selection gets intersected with the old one.
+    -   this is particularly useful when joining different 2D plot views.
+-   `difference`: `A ∖ B`, the new selection gets subtracted from the old one.
+    -   this is for de-selecting outliers.
 
 {!docs/snippets/markdown/jupyterlab-js-issue.md!}
 
 <pre data-executable>
 {!docs/snippets/py/t4-2-annotator-selection-option.txt!}
+</pre><br>
+
+## **Change Plot Axes**
+
+`hover` supports dynamically choosing which embedding dimensions to use for your 2D plot. This becomes nontrivial when we have a 3D embedding:
+
+<pre data-executable>
+{!docs/snippets/py/t0-2z-reduction-3d.txt!}
+</pre><br>
+
+{!docs/snippets/markdown/jupyterlab-js-issue.md!}
+
+<pre data-executable>
+{!docs/snippets/py/t4-3-annotator-choose-axes.txt!}
 </pre><br>
 
 ## **Text Search Widget: Include/Exclude**
