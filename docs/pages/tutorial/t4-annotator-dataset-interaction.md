@@ -26,6 +26,12 @@ The core of the annotator is a scatter plot and labeling widgets:
 {!docs/snippets/py/t4-0-annotator-basics.txt!}
 </pre><br>
 
+### **Select Points on the Plot**
+
+On the right of the scatter plot, you can find tap, polygon, and lasso tools which can select data points.
+
+### **View Tooltips with Mouse Hover**
+
 Embeddings are helpful but rarely perfect. This is why we have tooltips that show the detail of each point on mouse hover, allowing us to inspect points, discover patterns, and come up with new labels on the fly.
 
 ### **Show & Hide Subsets**
@@ -38,23 +44,11 @@ Showing labeled subsets can tell you which parts of the data has been explored a
 {!docs/snippets/py/t4-1-annotator-subset-toggle.txt!}
 </pre><br>
 
-### **Select Points on the Plot**
-
-On the right of the scatter plot, you can find tap, polygon, and lasso tools which can select data points.
-
 ## **Make Consecutive Selections**
 
 Ever selected multiple (non-adjacent) files in your file system using <kbd>Ctrl</kbd>/<kbd>Command</kbd>?
 
 Similarly but more powerfully, you can make consecutive selections with a "keep selecting" option.
-
--   `none`: the default, where a new selection `B` simply replaces the old one `A`.
--   `union`: `A ∪ B`, the new selection gets unioned with the old one.
-    -   this resembles the <kbd>Ctrl</kbd>/<kbd>Command</kbd> mentioned above.
--   `intersection`: `A ∩ B`, the new selection gets intersected with the old one.
-    -   this is particularly useful when joining different 2D plot views.
--   `difference`: `A ∖ B`, the new selection gets subtracted from the old one.
-    -   this is for de-selecting outliers.
 
 {!docs/snippets/markdown/jupyterlab-js-issue.md!}
 
@@ -62,17 +56,24 @@ Similarly but more powerfully, you can make consecutive selections with a "keep 
 {!docs/snippets/py/t4-2-annotator-selection-option.txt!}
 </pre><br>
 
+???+ info "Selection option values: what do they do?"
+    Basic set operations on your old & new selection. [Quick intro here](https://www.geeksforgeeks.org/python-set-operations-union-intersection-difference-symmetric-difference/)
+
+    -   `none`: the default, where a new selection `B` simply replaces the old one `A`.
+    -   `union`: `A ∪ B`, the new selection gets unioned with the old one.
+        -   this resembles the <kbd>Ctrl</kbd>/<kbd>Command</kbd> mentioned above.
+    -   `intersection`: `A ∩ B`, the new selection gets intersected with the old one.
+        -   this is particularly useful when going beyond simple 2D plots.
+    -   `difference`: `A ∖ B`, the new selection gets subtracted from the old one.
+        -   this is for de-selecting outliers.
+
 ## **Change Plot Axes**
 
-`hover` supports dynamically choosing which embedding dimensions to use for your 2D plot. This becomes nontrivial when we have a 3D embedding:
+`hover` supports dynamically choosing which embedding dimensions to use for your 2D plot. This becomes nontrivial, and sometimes very useful, when we have a 3D embedding (or higher):
 
 <pre data-executable>
 {!docs/snippets/py/t0-2z-reduction-3d.txt!}
-</pre><br>
 
-{!docs/snippets/markdown/jupyterlab-js-issue.md!}
-
-<pre data-executable>
 {!docs/snippets/py/t4-3-annotator-choose-axes.txt!}
 </pre><br>
 
@@ -82,6 +83,8 @@ Keywords or regular expressions can be great starting points for identifying a c
 
 You may specify a *positive* regular expression to look for and/or a *negative* one to not look for.
 
+The `annotator` will amplify the sizes of positive-match data points and shrink those of negative matches.
+
 {!docs/snippets/markdown/jupyterlab-js-issue.md!}
 
 <pre data-executable>
@@ -90,7 +93,7 @@ You may specify a *positive* regular expression to look for and/or a *negative* 
 
 ### **Preview: Use Search for Selection in Finder**
 
-In a particular kind of plots called `Finder` (see later in the tutorials), the search widget can directly operate on your selection as a filter.
+In a particular kind of plots called `finder` (see later in the tutorials), the search widget can directly operate on your selection as a filter.
 
 ## **The Plot and The Dataset**
 

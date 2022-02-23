@@ -22,7 +22,7 @@ Active learning works by predicting labels and scores (i.e. soft labels) and uti
 {!docs/snippets/py/t6-0-softlabel-figure.txt!}
 </pre><br>
 
-### **Filter Selection by Score Range**
+## **Filter Selection by Score Range**
 
 Similarly to `finder`, a `softlabel` plot has its own selection filter. The difference lies in the filter condition:
 

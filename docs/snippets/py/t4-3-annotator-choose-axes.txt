@@ -1,1 +1,6 @@
-show(row(annotator.dropdown_x_axis, annotator.dropdown_y_axis), notebook_url=notebook_url)
+annotator = standard_annotator(dataset)
+
+show(column(
+    row(annotator.dropdown_x_axis, annotator.dropdown_y_axis),
+    annotator.figure,
+), notebook_url=notebook_url)
