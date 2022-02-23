@@ -227,6 +227,12 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
         self.dropdown_x_axis.on_click(change_x)
         self.dropdown_y_axis.on_click(change_y)
 
+        # consider allowing dynamic menu refreshment
+        # def refresh_axes_list():
+        #    embed_cols = self.find_embedding_fields()
+        #    self.dropdown_x_axis.menu = embed_cols[:]
+        #    self.dropdown_y_axis.menu = embed_cols[:]
+
     def value_patch_by_slider(self, col_original, col_patch, **kwargs):
         """
         ???+ note "Allow source values to be dynamically patched through a slider."
