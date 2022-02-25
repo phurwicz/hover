@@ -1,0 +1,1 @@
+reducer = dataset.compute_nd_embedding(vectorizer, "umap", dimension=3)

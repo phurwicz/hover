@@ -1,0 +1,10 @@
+import requests
+from functools import lru_cache
+
+@lru_cache(maxsize=10000)
+def url_to_content(url):
+    """
+    Turn a URL to response content.
+    """
+    response = requests.get(url)
+    return response.content

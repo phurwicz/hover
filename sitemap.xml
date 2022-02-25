@@ -2,147 +2,142 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://phurwicz.github.io/hover/</loc>
-         <lastmod>2022-02-17</lastmod>
+         <lastmod>2022-02-25</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://phurwicz.github.io/hover/pages/guides/datatype-multimodal/</loc>
+         <lastmod>2022-02-25</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://phurwicz.github.io/hover/pages/guides/g0-datatype-image/</loc>
+         <lastmod>2022-02-25</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://phurwicz.github.io/hover/pages/guides/g1-datatype-audio/</loc>
+         <lastmod>2022-02-25</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://phurwicz.github.io/hover/pages/reference/core-dataset/</loc>
-         <lastmod>2022-02-17</lastmod>
+         <lastmod>2022-02-25</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://phurwicz.github.io/hover/pages/reference/core-explorer-base/</loc>
-         <lastmod>2022-02-17</lastmod>
+         <lastmod>2022-02-25</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://phurwicz.github.io/hover/pages/reference/core-explorer-feature/</loc>
-         <lastmod>2022-02-17</lastmod>
+         <lastmod>2022-02-25</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://phurwicz.github.io/hover/pages/reference/core-explorer-functionality/</loc>
-         <lastmod>2022-02-17</lastmod>
+         <lastmod>2022-02-25</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://phurwicz.github.io/hover/pages/reference/core-explorer-specialization/</loc>
-         <lastmod>2022-02-17</lastmod>
+         <lastmod>2022-02-25</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://phurwicz.github.io/hover/pages/reference/core-neural/</loc>
-         <lastmod>2022-02-17</lastmod>
+         <lastmod>2022-02-25</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://phurwicz.github.io/hover/pages/reference/core-representation/</loc>
-         <lastmod>2022-02-17</lastmod>
+         <lastmod>2022-02-25</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://phurwicz.github.io/hover/pages/reference/recipes/</loc>
-         <lastmod>2022-02-17</lastmod>
+         <lastmod>2022-02-25</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://phurwicz.github.io/hover/pages/reference/utils-bokeh_helper/</loc>
-         <lastmod>2022-02-17</lastmod>
+         <lastmod>2022-02-25</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://phurwicz.github.io/hover/pages/reference/utils-snorkel_helper/</loc>
-         <lastmod>2022-02-17</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
-         <loc>https://phurwicz.github.io/hover/pages/topics/datatype-audio/</loc>
-         <lastmod>2022-02-17</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
-         <loc>https://phurwicz.github.io/hover/pages/topics/datatype-image/</loc>
-         <lastmod>2022-02-17</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
-         <loc>https://phurwicz.github.io/hover/pages/topics/datatype-multimodal/</loc>
-         <lastmod>2022-02-17</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
-         <loc>https://phurwicz.github.io/hover/pages/topics/what-hover-is/</loc>
-         <lastmod>2022-02-17</lastmod>
+         <lastmod>2022-02-25</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://phurwicz.github.io/hover/pages/tutorial/t0-quickstart/</loc>
-         <lastmod>2022-02-17</lastmod>
+         <lastmod>2022-02-25</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://phurwicz.github.io/hover/pages/tutorial/t1-active-learning/</loc>
-         <lastmod>2022-02-17</lastmod>
+         <lastmod>2022-02-25</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://phurwicz.github.io/hover/pages/tutorial/t2-bokeh-app/</loc>
-         <lastmod>2022-02-17</lastmod>
+         <lastmod>2022-02-25</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://phurwicz.github.io/hover/pages/tutorial/t3-dataset-population-selection/</loc>
-         <lastmod>2022-02-17</lastmod>
+         <lastmod>2022-02-25</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://phurwicz.github.io/hover/pages/tutorial/t4-annotator-dataset-interaction/</loc>
-         <lastmod>2022-02-17</lastmod>
+         <lastmod>2022-02-25</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://phurwicz.github.io/hover/pages/tutorial/t5-finder-filter/</loc>
-         <lastmod>2022-02-17</lastmod>
+         <lastmod>2022-02-25</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://phurwicz.github.io/hover/pages/tutorial/t6-softlabel-joint-filter/</loc>
-         <lastmod>2022-02-17</lastmod>
+         <lastmod>2022-02-25</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://phurwicz.github.io/hover/pages/tutorial/t7-snorkel-improvise-rules/</loc>
-         <lastmod>2022-02-17</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
-         <loc>https://phurwicz.github.io/hover/pages/tutorial/t8-recipe-structure-customization/</loc>
-         <lastmod>2022-02-17</lastmod>
+         <lastmod>2022-02-25</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://phurwicz.github.io/hover/snippets/markdown/binder-kernel/</loc>
-         <lastmod>2022-02-17</lastmod>
+         <lastmod>2022-02-25</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://phurwicz.github.io/hover/snippets/markdown/component-tutorial/</loc>
-         <lastmod>2022-02-17</lastmod>
+         <lastmod>2022-02-25</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://phurwicz.github.io/hover/snippets/markdown/dataset-prep/</loc>
-         <lastmod>2022-02-17</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
-         <loc>https://phurwicz.github.io/hover/snippets/markdown/jupyterlab-js-issue-lite/</loc>
-         <lastmod>2022-02-17</lastmod>
+         <lastmod>2022-02-25</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://phurwicz.github.io/hover/snippets/markdown/jupyterlab-js-issue/</loc>
-         <lastmod>2022-02-17</lastmod>
+         <lastmod>2022-02-25</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://phurwicz.github.io/hover/snippets/markdown/tutorial-required/</loc>
+         <lastmod>2022-02-25</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://phurwicz.github.io/hover/snippets/markdown/wrappy-cache/</loc>
+         <lastmod>2022-02-25</lastmod>
          <changefreq>daily</changefreq>
     </url>
 </urlset>

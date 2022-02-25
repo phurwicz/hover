@@ -1,10 +1,12 @@
 import spacy
 import re
+from functools import lru_cache
 
 # use your preferred embedding for the task
 nlp = spacy.load("en_core_web_md")
 
 # raw data (str in this case) -> np.array
+@lru_cache(maxsize=int(1e+4))
 def vectorizer(text):
     clean_text = re.sub(r"[\s]+", r" ", str(text))
     return nlp(clean_text, disable=nlp.pipe_names).vector

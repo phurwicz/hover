@@ -1,0 +1,13 @@
+from hover.core.dataset import SupervisableImageDataset
+import pandas as pd
+
+# this is a 1000-image-url set of ImageNet data
+# with custom labels: animal, object, food
+example_csv_path = "https://raw.githubusercontent.com/phurwicz/hover-gallery/main/0.7.0/imagenet_custom.csv"
+df = pd.read_csv(example_csv_path).sample(frac=1).reset_index(drop=True)
+df["SUBSET"] = "raw"
+df.loc[500:800, 'SUBSET'] = 'train'
+df.loc[800:900, 'SUBSET'] = 'dev'
+df.loc[900:, 'SUBSET'] = 'test'
+
+dataset = SupervisableImageDataset.from_pandas(df, feature_key="image", label_key="label")

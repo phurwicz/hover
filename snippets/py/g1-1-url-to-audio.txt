@@ -1,0 +1,10 @@
+import librosa
+from io import BytesIO
+
+@lru_cache(maxsize=10000)
+def url_to_audio(url):
+    """
+    Turn a URL to audio data.
+    """
+    data, sampling_rate = librosa.load(BytesIO(url_to_content(url)))
+    return data, sampling_rate

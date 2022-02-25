@@ -217,6 +217,22 @@
   
   
     <li class="md-tabs__item">
+      <a href="../../guides/g0-datatype-image/" class="md-tabs__link">
+        Guides
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
       <a href="../../reference/recipes/" class="md-tabs__link">
         API Reference
       </a>
@@ -528,12 +544,74 @@
       
       
         <label class="md-nav__link" for="__nav_3">
+          Guides
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Guides" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Guides
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/g0-datatype-image/" class="md-nav__link">
+        Image Data
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/g1-datatype-audio/" class="md-nav__link">
+        Audio Data
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" data-md-state="indeterminate" type="checkbox" id="__nav_4" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4">
           API Reference
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <nav class="md-nav" aria-label="API Reference" data-md-level="1">
-        <label class="md-nav__title" for="__nav_3">
+        <label class="md-nav__title" for="__nav_4">
           <span class="md-nav__icon md-icon"></span>
           API Reference
         </label>
@@ -562,18 +640,18 @@
     <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_2" data-md-state="indeterminate" type="checkbox" id="__nav_3_2" checked>
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2" data-md-state="indeterminate" type="checkbox" id="__nav_4_2" checked>
       
       
       
       
-        <label class="md-nav__link" for="__nav_3_2">
+        <label class="md-nav__link" for="__nav_4_2">
           hover.core
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <nav class="md-nav" aria-label="hover.core" data-md-level="2">
-        <label class="md-nav__title" for="__nav_3_2">
+        <label class="md-nav__title" for="__nav_4_2">
           <span class="md-nav__icon md-icon"></span>
           hover.core
         </label>
@@ -602,18 +680,18 @@
     <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_2_2" data-md-state="indeterminate" type="checkbox" id="__nav_3_2_2" checked>
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_2" data-md-state="indeterminate" type="checkbox" id="__nav_4_2_2" checked>
       
       
       
       
-        <label class="md-nav__link" for="__nav_3_2_2">
+        <label class="md-nav__link" for="__nav_4_2_2">
           hover.core.explorer
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <nav class="md-nav" aria-label="hover.core.explorer" data-md-level="3">
-        <label class="md-nav__title" for="__nav_3_2_2">
+        <label class="md-nav__title" for="__nav_4_2_2">
           <span class="md-nav__icon md-icon"></span>
           hover.core.explorer
         </label>
@@ -726,18 +804,18 @@
     <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_3" data-md-state="indeterminate" type="checkbox" id="__nav_3_3" checked>
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_3" data-md-state="indeterminate" type="checkbox" id="__nav_4_3" checked>
       
       
       
       
-        <label class="md-nav__link" for="__nav_3_3">
+        <label class="md-nav__link" for="__nav_4_3">
           hover.utils
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <nav class="md-nav" aria-label="hover.utils" data-md-level="2">
-        <label class="md-nav__title" for="__nav_3_3">
+        <label class="md-nav__title" for="__nav_4_3">
           <span class="md-nav__icon md-icon"></span>
           hover.utils
         </label>
@@ -834,8 +912,8 @@
 <p>Behind the scene is a <a href="https://mybinder.org/">Binder</a>-hosted Python environment. Below is the status of the kernel:
 <div class="thebe-status"></div><div class="thebe-activate"></div></p>
 </details>
-<details class="info" open="open">
-<summary>This page addresses a <strong>single component</strong> of <code>hover</code></summary>
+<details class="warning" open="open">
+<summary>This page addresses <strong>single components</strong> of <code>hover</code></summary>
 <p>We are using code snippets to pick out parts of the annotation interface, so that the documentation can explain what they do.</p>
 <ul>
 <li>Please be aware that this is NOT how one would typically use <code>hover</code>.</li>
@@ -843,7 +921,7 @@
 </ul>
 </details>
 <h2 id="preparation"><strong>Preparation</strong></h2>
-<p>As always, start with a 2D-embedded dataset:</p>
+<p>As always, start with a ready-for-plot dataset:</p>
 <pre data-executable>
 from hover.core.dataset import SupervisableTextDataset
 import pandas as pd
@@ -872,11 +950,13 @@ dataset = SupervisableTextDataset.from_pandas(df, feature_key="text", label_key=
 <pre data-executable>
 import spacy
 import re
+from functools import lru_cache
 
 # use your preferred embedding for the task
 nlp = spacy.load("en_core_web_md")
 
 # raw data (str in this case) -> np.array
+@lru_cache(maxsize=int(1e+4))
 def vectorizer(text):
     clean_text = re.sub(r"[\s]+", r" ", str(text))
     return nlp(clean_text, disable=nlp.pipe_names).vector
@@ -884,7 +964,7 @@ def vectorizer(text):
 # any kwargs will be passed onto the corresponding reduction
 # for umap: https://umap-learn.readthedocs.io/en/latest/parameters.html
 # for ivis: https://bering-ivis.readthedocs.io/en/latest/api.html
-reducer = dataset.compute_2d_embedding(vectorizer, "umap")
+reducer = dataset.compute_nd_embedding(vectorizer, "umap", dimension=2)
 </pre>
 <p><br></p>
 <h2 id="labeling-functions"><strong>Labeling Functions</strong></h2>
@@ -1062,6 +1142,19 @@ LABELING_FUNCTIONS = [
 <p><br></p>
 <h3 id="using-a-function-to-apply-labels"><strong>Using a Function to Apply Labels</strong></h3>
 <p>Hover's <code>SnorkelExplorer</code> (short as <code>snorkel</code>) can take the labeling functions above and apply them on areas of data that you choose. The widget below is responsible for labeling:</p>
+<details class="info">
+<summary>Showcase widgets here are not interactive</summary>
+<p><mark class="critic"> Plotted widgets <strong>on this page</strong> are not interactive, but only for illustration. </mark></p>
+<p>Widgets <mark class="critic"> will be interactive when you actually use them </mark> (in your local environment or server apps like in the quickstart).</p>
+<ul>
+<li>be sure to use a whole <code>recipe</code> rather than individual widgets.</li>
+<li>if you really want to plot interactive widgets on their own, try <code>from hover.utils.bokeh_helper import show_as_interactive as show</code> instead of <code>from bokeh.io import show</code>.<ul>
+<li>this works in your own environment but still not on the documentation page.</li>
+<li><a href="/hover/pages/reference/utils-bokeh_helper/#hover.utils.bokeh_helper.show_as_interactive"><code>show_as_interactive</code></a> is a simple tweak of <code>bokeh.io.show</code> by turning standalone LayoutDOM to an application.</li>
+</ul>
+</li>
+</ul>
+</details>
 <pre data-executable>
 from local_lib.binder_helper import remote_jupyter_proxy_url
 from bokeh.io import show, output_notebook
@@ -1082,6 +1175,19 @@ show(snorkel_plot.lf_apply_trigger, notebook_url=notebook_url)
 <p><br></p>
 <h3 id="using-a-function-to-apply-filters"><strong>Using a Function to Apply Filters</strong></h3>
 <p>Any function that labels is also a function that filters. The filter condition is <code>"keep if did not abstain"</code>. The widget below handles filtering:</p>
+<details class="info">
+<summary>Showcase widgets here are not interactive</summary>
+<p><mark class="critic"> Plotted widgets <strong>on this page</strong> are not interactive, but only for illustration. </mark></p>
+<p>Widgets <mark class="critic"> will be interactive when you actually use them </mark> (in your local environment or server apps like in the quickstart).</p>
+<ul>
+<li>be sure to use a whole <code>recipe</code> rather than individual widgets.</li>
+<li>if you really want to plot interactive widgets on their own, try <code>from hover.utils.bokeh_helper import show_as_interactive as show</code> instead of <code>from bokeh.io import show</code>.<ul>
+<li>this works in your own environment but still not on the documentation page.</li>
+<li><a href="/hover/pages/reference/utils-bokeh_helper/#hover.utils.bokeh_helper.show_as_interactive"><code>show_as_interactive</code></a> is a simple tweak of <code>bokeh.io.show</code> by turning standalone LayoutDOM to an application.</li>
+</ul>
+</li>
+</ul>
+</details>
 <pre data-executable>
 show(snorkel_plot.lf_filter_trigger, notebook_url=notebook_url)
 </pre>
@@ -1126,7 +1232,7 @@ binder_proxy_app_url('my-app', port=5007)
 <li>interactively evaluate and revise labeling functions</li>
 <li>visually assign specific data regions to apply those functions</li>
 </ul>
-<p>which is, as this tutorial claims, <em>the</em> two things that significantly boost the accuracy of labeling functions.</p>
+<p>which makes labeling functions significantly more accurate and applicable.</p>
 <style type="text/css">
     @import url("../../../styles/monokai.css");
 </style>
@@ -1161,13 +1267,13 @@ binder_proxy_app_url('my-app', port=5007)
       
       
         
-        <a href="../../reference/recipes/" class="md-footer__link md-footer__link--next" aria-label="Next: hover.recipes" rel="next">
+        <a href="../../guides/g0-datatype-image/" class="md-footer__link md-footer__link--next" aria-label="Next: Image Data" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 Next
               </span>
-              hover.recipes
+              Image Data
             </div>
           </div>
           <div class="md-footer__button md-icon">

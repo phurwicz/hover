@@ -1,0 +1,11 @@
+import wrappy
+
+@wrappy.memoize(cache_limit=10000, persist_path='custom_cache/audio_url_to_vector.pkl')
+def vectorizer(url):
+    """
+    Averaged MFCC over time.
+    Resembles word-embedding-average-as-doc-embedding for texts.
+    """
+    y, sr = url_to_audio(url)
+    mfcc = librosa.feature.mfcc(y=y, sr=sr, n_mfcc=32)
+    return mfcc.mean(axis=1)

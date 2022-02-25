@@ -217,6 +217,22 @@
   
   
     <li class="md-tabs__item">
+      <a href="../../guides/g0-datatype-image/" class="md-tabs__link">
+        Guides
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
       <a href="../../reference/recipes/" class="md-tabs__link">
         API Reference
       </a>
@@ -520,12 +536,74 @@
       
       
         <label class="md-nav__link" for="__nav_3">
+          Guides
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Guides" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Guides
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/g0-datatype-image/" class="md-nav__link">
+        Image Data
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/g1-datatype-audio/" class="md-nav__link">
+        Audio Data
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" data-md-state="indeterminate" type="checkbox" id="__nav_4" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4">
           API Reference
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <nav class="md-nav" aria-label="API Reference" data-md-level="1">
-        <label class="md-nav__title" for="__nav_3">
+        <label class="md-nav__title" for="__nav_4">
           <span class="md-nav__icon md-icon"></span>
           API Reference
         </label>
@@ -554,18 +632,18 @@
     <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_2" data-md-state="indeterminate" type="checkbox" id="__nav_3_2" checked>
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2" data-md-state="indeterminate" type="checkbox" id="__nav_4_2" checked>
       
       
       
       
-        <label class="md-nav__link" for="__nav_3_2">
+        <label class="md-nav__link" for="__nav_4_2">
           hover.core
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <nav class="md-nav" aria-label="hover.core" data-md-level="2">
-        <label class="md-nav__title" for="__nav_3_2">
+        <label class="md-nav__title" for="__nav_4_2">
           <span class="md-nav__icon md-icon"></span>
           hover.core
         </label>
@@ -594,18 +672,18 @@
     <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_2_2" data-md-state="indeterminate" type="checkbox" id="__nav_3_2_2" checked>
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_2" data-md-state="indeterminate" type="checkbox" id="__nav_4_2_2" checked>
       
       
       
       
-        <label class="md-nav__link" for="__nav_3_2_2">
+        <label class="md-nav__link" for="__nav_4_2_2">
           hover.core.explorer
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <nav class="md-nav" aria-label="hover.core.explorer" data-md-level="3">
-        <label class="md-nav__title" for="__nav_3_2_2">
+        <label class="md-nav__title" for="__nav_4_2_2">
           <span class="md-nav__icon md-icon"></span>
           hover.core.explorer
         </label>
@@ -718,18 +796,18 @@
     <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_3" data-md-state="indeterminate" type="checkbox" id="__nav_3_3" checked>
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_3" data-md-state="indeterminate" type="checkbox" id="__nav_4_3" checked>
       
       
       
       
-        <label class="md-nav__link" for="__nav_3_3">
+        <label class="md-nav__link" for="__nav_4_3">
           hover.utils
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <nav class="md-nav" aria-label="hover.utils" data-md-level="2">
-        <label class="md-nav__title" for="__nav_3_3">
+        <label class="md-nav__title" for="__nav_4_3">
           <span class="md-nav__icon md-icon"></span>
           hover.utils
         </label>
@@ -826,8 +904,8 @@
 <p>Behind the scene is a <a href="https://mybinder.org/">Binder</a>-hosted Python environment. Below is the status of the kernel:
 <div class="thebe-status"></div><div class="thebe-activate"></div></p>
 </details>
-<details class="info" open="open">
-<summary>This page addresses a <strong>single component</strong> of <code>hover</code></summary>
+<details class="warning" open="open">
+<summary>This page addresses <strong>single components</strong> of <code>hover</code></summary>
 <p>We are using code snippets to pick out parts of the annotation interface, so that the documentation can explain what they do.</p>
 <ul>
 <li>Please be aware that this is NOT how one would typically use <code>hover</code>.</li>
@@ -898,6 +976,19 @@ show(dataset.pop_table, notebook_url=notebook_url)
 </details>
 </details>
 <p>These mechanisms correspond to buttons in <code>hover</code>'s annotation interface, which you have encountered in the quickstart:</p>
+<details class="info">
+<summary>Showcase widgets here are not interactive</summary>
+<p><mark class="critic"> Plotted widgets <strong>on this page</strong> are not interactive, but only for illustration. </mark></p>
+<p>Widgets <mark class="critic"> will be interactive when you actually use them </mark> (in your local environment or server apps like in the quickstart).</p>
+<ul>
+<li>be sure to use a whole <code>recipe</code> rather than individual widgets.</li>
+<li>if you really want to plot interactive widgets on their own, try <code>from hover.utils.bokeh_helper import show_as_interactive as show</code> instead of <code>from bokeh.io import show</code>.<ul>
+<li>this works in your own environment but still not on the documentation page.</li>
+<li><a href="/hover/pages/reference/utils-bokeh_helper/#hover.utils.bokeh_helper.show_as_interactive"><code>show_as_interactive</code></a> is a simple tweak of <code>bokeh.io.show</code> by turning standalone LayoutDOM to an application.</li>
+</ul>
+</li>
+</ul>
+</details>
 <pre data-executable>
 from bokeh.layouts import row, column
 
@@ -927,12 +1018,17 @@ show(dataset.sel_table, notebook_url=notebook_url)
 <li>by default, labels can be edited but feature values cannot.</li>
 </ul>
 <p>Let's plot the forementioned buttons along with the selection table. Toggle any number of rows in the table, then click the button to <code>EVICT</code> or <code>PATCH</code> those rows:</p>
-<details class="info" open="open">
-<summary>Doc-page limitation</summary>
-<p><mark class="critic"> Plotted widgets on this page are for illustration. </mark></p>
+<details class="info">
+<summary>Showcase widgets here are not interactive</summary>
+<p><mark class="critic"> Plotted widgets <strong>on this page</strong> are not interactive, but only for illustration. </mark></p>
+<p>Widgets <mark class="critic"> will be interactive when you actually use them </mark> (in your local environment or server apps like in the quickstart).</p>
 <ul>
-<li>Due to event listener limitations, the widgets here will not trigger Python callbacks.</li>
-<li>In a normal environment like an actual notebook, this will be fully functional.</li>
+<li>be sure to use a whole <code>recipe</code> rather than individual widgets.</li>
+<li>if you really want to plot interactive widgets on their own, try <code>from hover.utils.bokeh_helper import show_as_interactive as show</code> instead of <code>from bokeh.io import show</code>.<ul>
+<li>this works in your own environment but still not on the documentation page.</li>
+<li><a href="/hover/pages/reference/utils-bokeh_helper/#hover.utils.bokeh_helper.show_as_interactive"><code>show_as_interactive</code></a> is a simple tweak of <code>bokeh.io.show</code> by turning standalone LayoutDOM to an application.</li>
+</ul>
+</li>
 </ul>
 </details>
 <pre data-executable>

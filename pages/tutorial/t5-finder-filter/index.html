@@ -217,6 +217,22 @@
   
   
     <li class="md-tabs__item">
+      <a href="../../guides/g0-datatype-image/" class="md-tabs__link">
+        Guides
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
       <a href="../../reference/recipes/" class="md-tabs__link">
         API Reference
       </a>
@@ -508,12 +524,74 @@
       
       
         <label class="md-nav__link" for="__nav_3">
+          Guides
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Guides" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Guides
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/g0-datatype-image/" class="md-nav__link">
+        Image Data
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/g1-datatype-audio/" class="md-nav__link">
+        Audio Data
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" data-md-state="indeterminate" type="checkbox" id="__nav_4" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4">
           API Reference
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <nav class="md-nav" aria-label="API Reference" data-md-level="1">
-        <label class="md-nav__title" for="__nav_3">
+        <label class="md-nav__title" for="__nav_4">
           <span class="md-nav__icon md-icon"></span>
           API Reference
         </label>
@@ -542,18 +620,18 @@
     <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_2" data-md-state="indeterminate" type="checkbox" id="__nav_3_2" checked>
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2" data-md-state="indeterminate" type="checkbox" id="__nav_4_2" checked>
       
       
       
       
-        <label class="md-nav__link" for="__nav_3_2">
+        <label class="md-nav__link" for="__nav_4_2">
           hover.core
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <nav class="md-nav" aria-label="hover.core" data-md-level="2">
-        <label class="md-nav__title" for="__nav_3_2">
+        <label class="md-nav__title" for="__nav_4_2">
           <span class="md-nav__icon md-icon"></span>
           hover.core
         </label>
@@ -582,18 +660,18 @@
     <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_2_2" data-md-state="indeterminate" type="checkbox" id="__nav_3_2_2" checked>
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2_2" data-md-state="indeterminate" type="checkbox" id="__nav_4_2_2" checked>
       
       
       
       
-        <label class="md-nav__link" for="__nav_3_2_2">
+        <label class="md-nav__link" for="__nav_4_2_2">
           hover.core.explorer
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <nav class="md-nav" aria-label="hover.core.explorer" data-md-level="3">
-        <label class="md-nav__title" for="__nav_3_2_2">
+        <label class="md-nav__title" for="__nav_4_2_2">
           <span class="md-nav__icon md-icon"></span>
           hover.core.explorer
         </label>
@@ -706,18 +784,18 @@
     <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_3" data-md-state="indeterminate" type="checkbox" id="__nav_3_3" checked>
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_3" data-md-state="indeterminate" type="checkbox" id="__nav_4_3" checked>
       
       
       
       
-        <label class="md-nav__link" for="__nav_3_3">
+        <label class="md-nav__link" for="__nav_4_3">
           hover.utils
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <nav class="md-nav" aria-label="hover.utils" data-md-level="2">
-        <label class="md-nav__title" for="__nav_3_3">
+        <label class="md-nav__title" for="__nav_4_3">
           <span class="md-nav__icon md-icon"></span>
           hover.utils
         </label>
@@ -814,8 +892,8 @@
 <p>Behind the scene is a <a href="https://mybinder.org/">Binder</a>-hosted Python environment. Below is the status of the kernel:
 <div class="thebe-status"></div><div class="thebe-activate"></div></p>
 </details>
-<details class="info" open="open">
-<summary>This page addresses a <strong>single component</strong> of <code>hover</code></summary>
+<details class="warning" open="open">
+<summary>This page addresses <strong>single components</strong> of <code>hover</code></summary>
 <p>We are using code snippets to pick out parts of the annotation interface, so that the documentation can explain what they do.</p>
 <ul>
 <li>Please be aware that this is NOT how one would typically use <code>hover</code>.</li>
@@ -825,7 +903,7 @@
 <h2 id="more-angles-better-results"><strong>More Angles -&gt; Better Results</strong></h2>
 <p><code>Explorer</code>s other than <code>annotator</code> are specialized in finding additional insight to help us understand the data. Having them juxtaposed with <code>annotator</code>, we can label more accurately, more confidently, and even faster.</p>
 <h2 id="preparation"><strong>Preparation</strong></h2>
-<p>As always, start with a 2D-embedded dataset:</p>
+<p>As always, start with a ready-for-plot dataset:</p>
 <pre data-executable>
 from hover.core.dataset import SupervisableTextDataset
 import pandas as pd
@@ -854,11 +932,13 @@ dataset = SupervisableTextDataset.from_pandas(df, feature_key="text", label_key=
 <pre data-executable>
 import spacy
 import re
+from functools import lru_cache
 
 # use your preferred embedding for the task
 nlp = spacy.load("en_core_web_md")
 
 # raw data (str in this case) -> np.array
+@lru_cache(maxsize=int(1e+4))
 def vectorizer(text):
     clean_text = re.sub(r"[\s]+", r" ", str(text))
     return nlp(clean_text, disable=nlp.pipe_names).vector
@@ -866,18 +946,23 @@ def vectorizer(text):
 # any kwargs will be passed onto the corresponding reduction
 # for umap: https://umap-learn.readthedocs.io/en/latest/parameters.html
 # for ivis: https://bering-ivis.readthedocs.io/en/latest/api.html
-reducer = dataset.compute_2d_embedding(vectorizer, "umap")
+reducer = dataset.compute_nd_embedding(vectorizer, "umap", dimension=2)
 </pre>
 <p><br></p>
 <h2 id="filter-toggles"><strong>Filter Toggles</strong></h2>
 <p>When we use lasso or polygon select, we are describing a shape. Sometimes that shape is not accurate enough -- we need extra conditions to narrow down the data.</p>
 <p>Just like <code>annotator</code>, <code>finder</code> has search widgets. But unlike <code>annotator</code>, <code>finder</code> has a <strong>filter toggle</strong> which can directly <strong>intersect</strong> <em>what we selected</em> with <em>what meets the search criteria</em>.</p>
-<details class="info" open="open">
-<summary>Doc-page limitation</summary>
-<p><mark class="critic"> Plotted widgets on this page are for illustration. </mark></p>
+<details class="info">
+<summary>Showcase widgets here are not interactive</summary>
+<p><mark class="critic"> Plotted widgets <strong>on this page</strong> are not interactive, but only for illustration. </mark></p>
+<p>Widgets <mark class="critic"> will be interactive when you actually use them </mark> (in your local environment or server apps like in the quickstart).</p>
 <ul>
-<li>Due to event listener limitations, the widgets here will not trigger Python callbacks.</li>
-<li>In a normal environment like an actual notebook, this will be fully functional.</li>
+<li>be sure to use a whole <code>recipe</code> rather than individual widgets.</li>
+<li>if you really want to plot interactive widgets on their own, try <code>from hover.utils.bokeh_helper import show_as_interactive as show</code> instead of <code>from bokeh.io import show</code>.<ul>
+<li>this works in your own environment but still not on the documentation page.</li>
+<li><a href="/hover/pages/reference/utils-bokeh_helper/#hover.utils.bokeh_helper.show_as_interactive"><code>show_as_interactive</code></a> is a simple tweak of <code>bokeh.io.show</code> by turning standalone LayoutDOM to an application.</li>
+</ul>
+</li>
 </ul>
 </details>
 <pre data-executable>
@@ -903,18 +988,44 @@ show(row(
 <p><br></p>
 <p>Next to the search widgets is a checkbox. The filter will stay active as long as the checkbox is.</p>
 <details class="info" open="open">
-<summary>How multiple checkboxes interact</summary>
-<p>Cool fact: the filter toggle works in conjunction with the <strong>cumulative select toggle</strong>.</p>
-<p>Actually, all of hover's toggles can be combined in an intuitive manner. In the later tutorials, we shall see multiple filters in action together.</p>
+<summary>How the filter interacts with selection options</summary>
+<p>Selection options apply before filters.</p>
+<p><code>hover</code> memorizes your pre-filter selections, so you can keep selecting without having to tweaking the filter toggle.</p>
+<ul>
+<li>
+<p>Example:</p>
+<ul>
+<li>suppose you have previously selected a set of points called <code>A</code>.</li>
+<li>then you toggled a filter <code>f</code>, giving you <code>A∩F</code> where <code>F</code> is the set satisfying <code>f</code>.</li>
+<li>now, with selection option "union", you select a set of points called <code>B</code>.</li>
+<li>your current selection will be <code>(A ∪ B) ∩ F</code>, i.e. <code>(A ∩ F) ∪ (B ∩ F)</code>.<ul>
+<li>similarly, you would get <code>(A ∩ B) ∩ F</code> for "intersection" and <code>(A ∖ B) ∩ F</code> for "difference".</li>
+</ul>
+</li>
+<li>if you untoggle the filter now, you selection would be <code>A ∪ B</code>.</li>
+</ul>
+</li>
+<li>
+<p>In the later tutorials, we shall see multiple filters in action together.</p>
+<ul>
+<li>spoiler: <code>F = F1 ∩ F2 ∩ ...</code> and that's it!</li>
+</ul>
+</li>
+</ul>
 </details>
 <h2 id="stronger-highlight-for-search"><strong>Stronger Highlight for Search</strong></h2>
 <p><code>finder</code> also colors data points based on search criteria, making them easier to find.</p>
-<details class="info" open="open">
-<summary>Doc-page limitation</summary>
-<p><mark class="critic"> Plotted widgets on this page are for illustration. </mark></p>
+<details class="info">
+<summary>Showcase widgets here are not interactive</summary>
+<p><mark class="critic"> Plotted widgets <strong>on this page</strong> are not interactive, but only for illustration. </mark></p>
+<p>Widgets <mark class="critic"> will be interactive when you actually use them </mark> (in your local environment or server apps like in the quickstart).</p>
 <ul>
-<li>Due to event listener limitations, the widgets here will not trigger Python callbacks.</li>
-<li>In a normal environment like an actual notebook, this will be fully functional.</li>
+<li>be sure to use a whole <code>recipe</code> rather than individual widgets.</li>
+<li>if you really want to plot interactive widgets on their own, try <code>from hover.utils.bokeh_helper import show_as_interactive as show</code> instead of <code>from bokeh.io import show</code>.<ul>
+<li>this works in your own environment but still not on the documentation page.</li>
+<li><a href="/hover/pages/reference/utils-bokeh_helper/#hover.utils.bokeh_helper.show_as_interactive"><code>show_as_interactive</code></a> is a simple tweak of <code>bokeh.io.show</code> by turning standalone LayoutDOM to an application.</li>
+</ul>
+</li>
 </ul>
 </details>
 <pre data-executable>
