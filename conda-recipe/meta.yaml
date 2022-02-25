@@ -35,14 +35,12 @@ test:
   imports:
     - hover
   commands:
-    - python -m spacy download en_core_web_md
     - pip install wrappy>=0.2.6
     - pytest -m lite
   requires:
     - pip
     - pytest
     - faker
-    - spacy
     - snorkel>=0.9.8
     - openpyxl
   source_files:
