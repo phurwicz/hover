@@ -1,5 +1,27 @@
 # CHANGELOG
 
+## 0.7.0 - Feb 25, 2022
+
+### :tada: Features Added
+
+-   Image and audio support through `SupervisableImageDataset` and `SupervisableAudioDataset`.
+    -   all other functionalities are similar to `SupervisableTextDataset`
+    -   `BokehForImage` and `BokehForAudio` implemented search based on vector similarity.
+
+-   [`SupervisableDataset`](https://phurwicz.github.io/hover/pages/reference/core-dataset/#hover.core.dataset.SupervisableDataset)
+    -   can compute arbitrary-dimensional embedding instead of only 2D.
+        -   this is through a new method: `compute_nd_embedding`.
+        -   same signature as `compute_2d_embedding` except for additional keyword argument `dimension=2`.
+    -   embedding column names have changed.
+        -   used to be `"x"` and `"y"`.
+        -   now will be `"embed_<n>d_<m>"` where m = 0, 1, 2, ..., n-1.
+
+### :exclamation: Backward Incompatibility
+
+-   [`MultiVectorNet`] is removed and no longer under experimentation.
+    -   we decided not to include noisy-label components in hover.
+    -   future built-in recipes may use those mechanisms from other libraries like [`cleanlab`](https://github.com/cleanlab/cleanlab).
+
 ## 0.6.0 - Feb 12, 2022
 
 ### :tada: Features Added
