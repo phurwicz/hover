@@ -35,10 +35,11 @@ MARKDOWN_INCLUDE = MarkdownInclude(
 
 THEBE_PATTERN = r"(?<=<pre data-executable>)[\s\S]*?(?=</pre>)"
 
-CACHE_DIR = ".cache/"
+CACHE_DIR = "custom_cache/"
 
 if not os.path.isdir(CACHE_DIR):
     os.mkdir(CACHE_DIR)
+
 
 def main():
     """

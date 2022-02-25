@@ -17,7 +17,7 @@ tfms = transforms.Compose(
     ]
 )
 
-@wrappy.memoize(cache_limit=10000, persist_path='.cache/image_url_to_vector.pkl')
+@wrappy.memoize(cache_limit=10000, persist_path='custom_cache/image_url_to_vector.pkl')
 def vectorizer(url):
     """
     Using logits on ImageNet-1000 classes.

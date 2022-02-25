@@ -1,6 +1,6 @@
 import wrappy
 
-@wrappy.memoize(cache_limit=10000, persist_path='.cache/audio_url_to_vector.pkl')
+@wrappy.memoize(cache_limit=10000, persist_path='custom_cache/audio_url_to_vector.pkl')
 def vectorizer(url):
     """
     Averaged MFCC over time.
