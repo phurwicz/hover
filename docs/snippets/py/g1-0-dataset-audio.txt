@@ -9,4 +9,4 @@ df.loc[500:800, 'SUBSET'] = 'train'
 df.loc[800:900, 'SUBSET'] = 'dev'
 df.loc[900:, 'SUBSET'] = 'test'
 
-dataset = SupervisableAudioDataset.from_pandas(df_raw, feature_key="audio", label_key="label")
+dataset = SupervisableAudioDataset.from_pandas(df, feature_key="audio", label_key="label")
