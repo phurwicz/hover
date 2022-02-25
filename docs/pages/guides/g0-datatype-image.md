@@ -10,7 +10,7 @@
 
 `hover` handles images through their URL addresses. URLs are strings which can be easily stored, hashed, and looked up against. They are also convenient for rendering tooltips in the annotation interface.
 
-Similarly to `SupervisabletextDataset`, we can build one for images:
+Similarly to `SupervisableTextDataset`, we can build one for images:
 
 <pre data-executable>
 {!docs/snippets/py/g0-0-dataset-image.txt!}
@@ -22,14 +22,7 @@ Similarly to `SupervisabletextDataset`, we can build one for images:
 
 We can follow a `URL -> content -> image object -> vector` path.
 
-???+ info "Caching and reading from disk"
-    This guide uses [`@wrappy.memoize`](https://erniethornhill.github.io/wrappy/) in place of `@functools.lru_cache` for caching.
-
-    -   The benefit is that `wrappy.memoize` can persist the cache to disk, speeding up code across sessions.
-
-    Cached values for this guide have been pre-computed, making it much master to run the guide.
-
-    -   Here we have cached every step, but you don't necessarily have to in your use case.
+{!docs/snippets/markdown/wrappy-cache.md!}
 
 <pre data-executable>
 {!docs/snippets/py/g0-1-url-to-content.txt!}
@@ -57,7 +50,7 @@ This is exactly the same as in the quickstart, just switching to image data:
 {!docs/snippets/py/tz-bokeh-server-notebook.txt!}
 </pre>
 
-???+ note "What's Different for Images?"
+???+ note "What's special for images?"
     **Tooltips**
 
     For text, the tooltip shows the original value.

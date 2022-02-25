@@ -1,0 +1,12 @@
+from hover.core.dataset import SupervisableAudioDataset
+import pandas as pd
+
+# this is a table of audio-MNIST (pronounced digit 0-9) urls, 100 audios per digit
+example_csv_path = "https://raw.githubusercontent.com/phurwicz/hover-gallery/main/0.7.0/audio_mnist.csv"
+df = pd.read_csv(example_csv_path).sample(frac=1).reset_index(drop=True)
+df["SUBSET"] = "raw"
+df.loc[500:800, 'SUBSET'] = 'train'
+df.loc[800:900, 'SUBSET'] = 'dev'
+df.loc[900:, 'SUBSET'] = 'test'
+
+dataset = SupervisableAudioDataset.from_pandas(df_raw, feature_key="audio", label_key="label")
