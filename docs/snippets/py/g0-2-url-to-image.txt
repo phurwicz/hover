@@ -1,6 +1,7 @@
 from PIL import Image
 from io import BytesIO
 
+@lru_cache(maxsize=10000)
 def url_to_image(url):
     """
     Turn a URL to a PIL Image.

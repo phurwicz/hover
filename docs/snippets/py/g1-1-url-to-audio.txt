@@ -1,6 +1,7 @@
 import librosa
 from io import BytesIO
 
+@lru_cache(maxsize=10000)
 def url_to_audio(url):
     """
     Turn a URL to audio data.
