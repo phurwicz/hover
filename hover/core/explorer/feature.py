@@ -70,7 +70,7 @@ class BokehForUrlToVector(BokehBaseExplorer):
         ???+ note "Create similarity search widgets."
         """
         self.search_sim = TextInput(
-            title=f"{self.__class__.PRIMARY_FEATURE} similarity search".capitalize(),
+            title=f"{self.__class__.PRIMARY_FEATURE} similarity search (enter URL)".capitalize(),
             width_policy="fit",
             height_policy="fit",
         )
