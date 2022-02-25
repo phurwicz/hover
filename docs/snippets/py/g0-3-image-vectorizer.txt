@@ -4,8 +4,8 @@ from torchvision import transforms
 
 # EfficientNet is a series of pre-trained models
 # https://github.com/lukemelas/EfficientNet-PyTorch
-model = EfficientNet.from_pretrained("efficientnet-b0")
-model.eval()
+effnet = EfficientNet.from_pretrained("efficientnet-b0")
+effnet.eval()
 
 # standard transformations for ImageNet-trained models
 tfms = transforms.Compose(
@@ -16,10 +16,9 @@ tfms = transforms.Compose(
     ]
 )
 
-# memoization can be useful if the function takes a while to run, which is common for images
 @wrappy.memoize(
     cache_limit=10000,
-    persist_path='.cache/image_to_vector.pkl',
+    persist_path='.cache/image_url_to_vector.pkl',
     persist_batch_size=100,
 )
 def vectorizer(url):
@@ -29,6 +28,6 @@ def vectorizer(url):
     img = tfms(url_to_image(url)).unsqueeze(0)
 
     with torch.no_grad():
-        outputs = model(img)
+        outputs = effnet(img)
 
     return outputs.detach().numpy().flatten()
