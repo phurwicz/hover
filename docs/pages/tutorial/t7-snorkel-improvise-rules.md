@@ -31,6 +31,8 @@ Inside the function one can do many things, but let's start with simple keywords
 
 Hover's `SnorkelExplorer` (short as `snorkel`) can take the labeling functions above and apply them on areas of data that you choose. The widget below is responsible for labeling:
 
+{!docs/snippets/markdown/jupyterlab-js-issue.md!}
+
 <pre data-executable>
 {!docs/snippets/py/tz-bokeh-notebook.txt!}
 
@@ -40,6 +42,8 @@ Hover's `SnorkelExplorer` (short as `snorkel`) can take the labeling functions a
 ### **Using a Function to Apply Filters**
 
 Any function that labels is also a function that filters. The filter condition is `"keep if did not abstain"`. The widget below handles filtering:
+
+{!docs/snippets/markdown/jupyterlab-js-issue.md!}
 
 <pre data-executable>
 {!docs/snippets/py/t7-2-snorkel-filter-button.txt!}
@@ -69,6 +73,6 @@ What's really cool is that in your local environment, this update-and-refresh op
 -   interactively evaluate and revise labeling functions
 -   visually assign specific data regions to apply those functions
 
-which is, as this tutorial claims, *the* two things that significantly boost the accuracy of labeling functions.
+which makes labeling functions significantly more accurate and applicable.
 
 {!docs/snippets/html/stylesheet.html!}

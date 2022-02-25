@@ -1,12 +1,6 @@
 from PIL import Image
 from io import BytesIO
 
-
-@wrappy.memoize(
-    cache_limit=10000,
-    persist_path='.cache/url_to_image.pkl',
-    persist_batch_size=100,
-)
 def url_to_image(url):
     """
     Turn a URL to a PIL Image.

@@ -1,4 +1,5 @@
 import torch
+import wrappy
 from efficientnet_pytorch import EfficientNet
 from torchvision import transforms
 
@@ -16,11 +17,7 @@ tfms = transforms.Compose(
     ]
 )
 
-@wrappy.memoize(
-    cache_limit=10000,
-    persist_path='.cache/image_url_to_vector.pkl',
-    persist_batch_size=100,
-)
+@wrappy.memoize(cache_limit=10000, persist_path='.cache/image_url_to_vector.pkl')
 def vectorizer(url):
     """
     Using logits on ImageNet-1000 classes.

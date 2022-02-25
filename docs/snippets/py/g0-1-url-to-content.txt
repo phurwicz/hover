@@ -1,16 +1,5 @@
-import wrappy
 import requests
-from PIL import Image
-from io import BytesIO
 
-
-# LRU cache that reads/writes to disk
-# a local cache is already prepared for you
-@wrappy.memoize(
-    cache_limit=50000,
-    persist_path='.cache/url_to_content.pkl',
-    persist_batch_size=100,
-)
 def url_to_content(url):
     """
     Turn a URL to response content.

@@ -47,9 +47,6 @@ def url_to_image(url):
 
 
 def get_vectorizer():
-    """
-    :returns: an image vectorizer.
-    """
     import torch
     from efficientnet_pytorch import EfficientNet
     from torchvision import transforms

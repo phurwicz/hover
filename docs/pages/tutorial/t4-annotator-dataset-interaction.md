@@ -71,6 +71,8 @@ Similarly but more powerfully, you can make consecutive selections with a "keep 
 
 `hover` supports dynamically choosing which embedding dimensions to use for your 2D plot. This becomes nontrivial, and sometimes very useful, when we have a 3D embedding (or higher):
 
+{!docs/snippets/markdown/jupyterlab-js-issue.md!}
+
 <pre data-executable>
 {!docs/snippets/py/t0-2z-reduction-3d.txt!}
 
@@ -102,6 +104,8 @@ When we apply labels through the annotator plot, it's acutally the `dataset` beh
 ### **PUSH: Synchronize from Dataset to Plots**
 
 Below is the full interface of the `dataset`, where you can find a green "Push" button:
+
+{!docs/snippets/markdown/jupyterlab-js-issue.md!}
 
 <pre data-executable>
 {!docs/snippets/py/t4-5-dataset-view.txt!}

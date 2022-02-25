@@ -40,6 +40,8 @@ We place unlabeled data and labeled data in different subsets: "raw", "train", "
 
 These mechanisms correspond to buttons in `hover`'s annotation interface, which you have encountered in the quickstart:
 
+{!docs/snippets/markdown/jupyterlab-js-issue.md!}
+
 <pre data-executable>
 {!docs/snippets/py/t3-1-dataset-commit-dedup.txt!}
 </pre><br>

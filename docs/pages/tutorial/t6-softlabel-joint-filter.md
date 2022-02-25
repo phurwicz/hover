@@ -26,6 +26,8 @@ Active learning works by predicting labels and scores (i.e. soft labels) and uti
 
 Similarly to `finder`, a `softlabel` plot has its own selection filter. The difference lies in the filter condition:
 
+{!docs/snippets/markdown/jupyterlab-js-issue.md!}
+
 <pre data-executable>
 {!docs/snippets/py/t6-1-softlabel-filter.txt!}
 </pre><br>

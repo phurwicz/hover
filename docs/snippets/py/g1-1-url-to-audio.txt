@@ -1,12 +1,6 @@
-from io import BytesIO
 import librosa
+from io import BytesIO
 
-
-@wrappy.memoize(
-    cache_limit=10000,
-    persist_path='.cache/url_to_audio.pkl',
-    persist_batch_size=100,
-)
 def url_to_audio(url):
     """
     Turn a URL to audio data.

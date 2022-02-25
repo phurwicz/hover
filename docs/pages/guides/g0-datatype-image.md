@@ -22,8 +22,6 @@ Similarly to `SupervisableTextDataset`, we can build one for images:
 
 We can follow a `URL -> content -> image object -> vector` path.
 
-{!docs/snippets/markdown/wrappy-cache.md!}
-
 <pre data-executable>
 {!docs/snippets/py/g0-1-url-to-content.txt!}
 </pre>
@@ -31,6 +29,8 @@ We can follow a `URL -> content -> image object -> vector` path.
 <pre data-executable>
 {!docs/snippets/py/g0-2-url-to-image.txt!}
 </pre>
+
+{!docs/snippets/markdown/wrappy-cache.md!}
 
 <pre data-executable>
 {!docs/snippets/py/g0-3-image-vectorizer.txt!}
