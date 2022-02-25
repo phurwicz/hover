@@ -22,6 +22,7 @@ NAME_TO_SCRIPT = {
     "tutorial-t6": "../pages/tutorial/t6-softlabel-joint-filter.md",
     "tutorial-t7": "../pages/tutorial/t7-snorkel-improvise-rules.md",
     "guide-g0": "../pages/guides/g0-datatype-image.md",
+    "guide-g1": "../pages/guides/g1-datatype-audio.md",
 }
 
 

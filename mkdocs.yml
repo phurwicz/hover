@@ -31,7 +31,7 @@ nav:
         - 'Custom Labeling Functions': 'pages/tutorial/t7-snorkel-improvise-rules.md'
     - 'Guides':
         - 'Image Data': 'pages/guides/g0-datatype-image.md'
-    #    - 'Data Type: Audio': 'pages/topics/datatype-audio.md'
+        - 'Audio Data': 'pages/guides/g1-datatype-audio.md'
     #    - 'Data Type: Multimodal': 'pages/topics/datatype-multimodal.md'
         #- 'Why Hover': 'pages/topics/what-hover-is.md'
         #- 'Customized Usage':
