@@ -16,6 +16,11 @@
         -   used to be `"x"` and `"y"`.
         -   now will be `"embed_<n>d_<m>"` where m = 0, 1, 2, ..., n-1.
 
+-   all explorers (`BokehBaseExplorer` subclasses) have more selection options.
+    -   in 0.6.0, you could toggle "cumulative select".
+        -   this corresponds to "union" in set operations.
+    -   starting 0.7.0, you could also choose "intersection" or "difference".
+
 ### :exclamation: Backward Incompatibility
 
 -   [`MultiVectorNet`] is removed and no longer under experimentation.
