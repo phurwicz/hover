@@ -13,32 +13,75 @@
 
 `hover` speeds up data labeling through `embedding + visualization + callbacks`.
 
--   You just need raw data and an embedding to start.
+-   You just need raw data and an embedding to get a map.
+-   Explore the map to find "zones" that are easy and those that are tricky.
+-   Start the conquest of your data by coloring the zones through wisdom!
 
-![Demo](https://raw.githubusercontent.com/phurwicz/hover-gallery/main/0.5.0/trailer.gif)
+![Demo](https://raw.githubusercontent.com/phurwicz/hover-gallery/main/0.5.0/trailer-short.gif)
 
 ## :sparkles: Features
 
-> **It's fast because it labels in bulk.**
+> **It's fast because it labels data in bulk.**
 
-:telescope: A 2D-embedded view of your dataset for labeling, equipped with
+:telescope: A semantic scatter plot of your data for labeling, equipped with
 
--   **Tooltip** for each point and **table view** for groups of points.
--   **Search** widgets for ad-hoc highlight of data matching search criteria.
--   **Toggle** buttons that clearly distinguish data subsets ("raw"/"train"/"dev"/"test").
+-   <details>
+      <summary> <b>Tooltip</b> for each point on mouse hover </summary>
+      <img src="https://raw.githubusercontent.com/phurwicz/hover-gallery/main/0.7.0/image-tooltip.gif">
+    </details>
 
-> **It's accurate because you can filter and extend.**
+-   <details>
+      <summary> <b>Table view</b> for inspecting all selected points </summary>
+      <img src="https://raw.githubusercontent.com/phurwicz/hover-gallery/main/0.7.0/selection-table.gif">
+    </details>
 
-:microscope: Supplementary views to provide further labeling precision, such as
+-   <details>
+      <summary> <b>Toggle</b> buttons that clearly distinguish data subsets </summary>
+      <img src="https://raw.githubusercontent.com/phurwicz/hover-gallery/main/0.7.0/subset-toggle.gif">
+    </details>
 
--   Advanced search view which can **filter points by search criteria** and provides stronger highlight.
--   Active learning view which puts a model in the loop and can **filter by confidence score**.
--   Function-based view which can leverage **custom functions for labeling and filtering**.
+-   <details>
+      <summary> <b>Search</b> widgets for ad-hoc data highlight </summary>
+      <img src="https://raw.githubusercontent.com/phurwicz/hover-gallery/main/0.7.0/text-search-response.gif">
+    </details>
 
-> **It's fun because the process never gets old.**
+> **It's accurate because multiple angles work together.**
 
--   Explore the map to find out which "zones" are easy and which ones are tricky.
--   Join the conquest of your data by coloring all of those zones through wisdom!
+:microscope: Supplementary views to use in conjunction with the annotator, including
+
+-   <details>
+      <summary> Finder: <b>filter data by search criteria</b></summary>
+      <img src="https://raw.githubusercontent.com/phurwicz/hover-gallery/main/0.7.0/finder-filter.gif">
+    </details>
+
+-   <details>
+      <summary> Softlabel: <b>active learning by in-the-loop model prediction score</b></summary>
+      <img src="https://raw.githubusercontent.com/phurwicz/hover-gallery/main/0.7.0/active-learning.gif">
+    </details>
+
+-   <details>
+      <summary> Snorkel: <b>custom functions for labeling and filtering</b></summary>
+      <img src="https://raw.githubusercontent.com/phurwicz/hover-gallery/main/0.7.0/labeling-function.gif">
+    </details>
+
+> **It's flexible (and fun!) because the process never gets old.**
+
+:toolbox: Additional tools and options that allow you to
+
+-   <details>
+      <summary> Go to <b>higher dimensions</b> (3D? 4D?) and choose your xy-axes </summary>
+      <img src="https://raw.githubusercontent.com/phurwicz/hover-gallery/main/0.7.0/change-axes.gif">
+    </details>
+
+-   <details>
+      <summary> <b>Consecutively select</b> across areas, dimensions, and views</summary>
+      <img src="https://raw.githubusercontent.com/phurwicz/hover-gallery/main/0.7.0/keep-selecting.gif">
+    </details>
+
+-   <details>
+      <summary> <b>Kick outliers</b> and <b>fix mistakes</b></summary>
+      <img src="https://raw.githubusercontent.com/phurwicz/hover-gallery/main/0.7.0/evict-and-patch.gif">
+    </details>
 
 Check out [@phurwicz/hover-binder](https://github.com/phurwicz/hover-binder) for a list of demo apps.
 
