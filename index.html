@@ -936,34 +936,89 @@
 <a href="https://app.codacy.com/gh/phurwicz/hover/dashboard"><img alt="Codacy Coverage" src="https://img.shields.io/codacy/coverage/689827d9077b43ac8721c7658d122d1a/main?logo=codacy&amp;logoColor=white" /></a></p>
 <p><code>hover</code> speeds up data labeling through <code>embedding + visualization + callbacks</code>.</p>
 <ul>
-<li>You just need raw data and an embedding to start.</li>
+<li>You just need raw data and an embedding to get a map.</li>
+<li>Explore the map to find "zones" that are easy and those that are tricky.</li>
+<li>Start the conquest of your data by coloring the zones through wisdom!</li>
 </ul>
-<p><img alt="Demo" src="https://raw.githubusercontent.com/phurwicz/hover-gallery/main/0.5.0/trailer.gif" /></p>
+<p><img alt="Demo" src="https://raw.githubusercontent.com/phurwicz/hover-gallery/main/0.5.0/trailer-short.gif" /></p>
 <h2 id="features"><img alt="✨" class="emojione" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.2.7/assets/png/2728.png" title=":sparkles:" /> Features</h2>
 <blockquote>
-<p><strong>It's fast because it labels in bulk.</strong></p>
+<p><strong>It's fast because it labels data in bulk.</strong></p>
 </blockquote>
-<p><img alt="🔭" class="emojione" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.2.7/assets/png/1f52d.png" title=":telescope:" /> A 2D-embedded view of your dataset for labeling, equipped with</p>
+<p><img alt="🔭" class="emojione" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.2.7/assets/png/1f52d.png" title=":telescope:" /> A semantic scatter plot of your data for labeling, equipped with</p>
 <ul>
-<li><strong>Tooltip</strong> for each point and <strong>table view</strong> for groups of points.</li>
-<li><strong>Search</strong> widgets for ad-hoc highlight of data matching search criteria.</li>
-<li><strong>Toggle</strong> buttons that clearly distinguish data subsets ("raw"/"train"/"dev"/"test").</li>
+<li>
+<p><details>
+      <summary> <b>Tooltip</b> for each point on mouse hover </summary>
+      <img src="https://raw.githubusercontent.com/phurwicz/hover-gallery/main/0.7.0/image-tooltip.gif">
+    </details></p>
+</li>
+<li>
+<p><details>
+      <summary> <b>Table view</b> for inspecting all selected points </summary>
+      <img src="https://raw.githubusercontent.com/phurwicz/hover-gallery/main/0.7.0/selection-table.gif">
+    </details></p>
+</li>
+<li>
+<p><details>
+      <summary> <b>Toggle</b> buttons that clearly distinguish data subsets </summary>
+      <img src="https://raw.githubusercontent.com/phurwicz/hover-gallery/main/0.7.0/subset-toggle.gif">
+    </details></p>
+</li>
+<li>
+<p><details>
+      <summary> <b>Search</b> widgets for ad-hoc data highlight </summary>
+      <img src="https://raw.githubusercontent.com/phurwicz/hover-gallery/main/0.7.0/text-search-response.gif">
+    </details></p>
+</li>
 </ul>
 <blockquote>
-<p><strong>It's accurate because you can filter and extend.</strong></p>
+<p><strong>It's accurate because multiple angles work together.</strong></p>
 </blockquote>
-<p><img alt="🔬" class="emojione" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.2.7/assets/png/1f52c.png" title=":microscope:" /> Supplementary views to provide further labeling precision, such as</p>
+<p><img alt="🔬" class="emojione" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.2.7/assets/png/1f52c.png" title=":microscope:" /> Supplementary views to use in conjunction with the annotator, including</p>
 <ul>
-<li>Advanced search view which can <strong>filter points by search criteria</strong> and provides stronger highlight.</li>
-<li>Active learning view which puts a model in the loop and can <strong>filter by confidence score</strong>.</li>
-<li>Function-based view which can leverage <strong>custom functions for labeling and filtering</strong>.</li>
+<li>
+<p><details>
+      <summary> Finder: <b>filter data by search criteria</b></summary>
+      <img src="https://raw.githubusercontent.com/phurwicz/hover-gallery/main/0.7.0/finder-filter.gif">
+    </details></p>
+</li>
+<li>
+<p><details>
+      <summary> Softlabel: <b>active learning by in-the-loop model prediction score</b></summary>
+      <img src="https://raw.githubusercontent.com/phurwicz/hover-gallery/main/0.7.0/active-learning.gif">
+    </details></p>
+</li>
+<li>
+<p><details>
+      <summary> Snorkel: <b>custom functions for labeling and filtering</b></summary>
+      <img src="https://raw.githubusercontent.com/phurwicz/hover-gallery/main/0.7.0/labeling-function.gif">
+    </details></p>
+</li>
 </ul>
 <blockquote>
-<p><strong>It's fun because the process never gets old.</strong></p>
+<p><strong>It's flexible (and fun!) because the process never gets old.</strong></p>
 </blockquote>
+<p>:toolbox: Additional tools and options that allow you to</p>
 <ul>
-<li>Explore the map to find out which "zones" are easy and which ones are tricky.</li>
-<li>Join the conquest of your data by coloring all of those zones through wisdom!</li>
+<li>
+<p><details>
+      <summary> Go to <b>higher dimensions</b> (3D? 4D?) and choose your xy-axes </summary>
+      <img src="https://raw.githubusercontent.com/phurwicz/hover-gallery/main/0.7.0/change-axes.gif">
+    </details></p>
+</li>
+<li>
+<p><details>
+      <summary> <b>Consecutively select</b> across areas, dimensions, and views</summary>
+      <img src="https://raw.githubusercontent.com/phurwicz/hover-gallery/main/0.7.0/keep-selecting.gif">
+    </details></p>
+</li>
+<li>
+<p><details>
+      <summary> <b>Kick outliers</b> and <b>fix mistakes</b></summary>
+      <img src="https://raw.githubusercontent.com/phurwicz/hover-gallery/main/0.7.0/evict-and-patch.gif">
+    </details></p>
+</li>
 </ul>
 <p>Check out <a href="https://github.com/phurwicz/hover-binder">@phurwicz/hover-binder</a> for a list of demo apps.</p>
 <h2 id="quickstart"><img alt="🚀" class="emojione" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.2.7/assets/png/1f680.png" title=":rocket:" /> Quickstart</h2>
