@@ -75,7 +75,6 @@ class DimensionalityReducer(Loggable):
             | `array`    | `np.ndarray` | the array to transform   |
             | `method`   | `str`        | `"umap"` or `"ivis"`     |
         """
-        assert method in ["umap", "ivis"], self.method_error_msg
         assert isinstance(array, np.ndarray), f"Expected np.ndarray, got {type(array)}"
         # edge case: array is too small
         if array.shape[0] < 1:
