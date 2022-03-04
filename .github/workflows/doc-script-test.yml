@@ -15,7 +15,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  doc-script:
 
     runs-on: ${{ matrix.os }}
     strategy:
@@ -44,7 +44,7 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: ${{ matrix.python-version }}
-    
+
     - name: Install Non-Python Dependencies
       run: |
         sudo apt-get update

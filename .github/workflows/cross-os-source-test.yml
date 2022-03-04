@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  test-api:
 
     runs-on: ${{ matrix.os }}
     strategy:
