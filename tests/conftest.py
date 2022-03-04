@@ -24,10 +24,9 @@ from .local_config import (
 
 @pytest.fixture(scope="module")
 def dummy_vectorizer():
-    from hashlib import sha1, sha224, sha256, sha384, sha512, md5
+    from shaffle import uniform
 
-    use_hashes = [sha1, sha224, sha256, sha384, sha512, md5]
-    max_plus_ones = [2 ** (_hash().digest_size * 8) for _hash in use_hashes]
+    use_hashes = ["sha1", "sha224", "sha256", "sha384", "sha512", "md5"]
 
     @lru_cache(maxsize=int(1e5))
     def vectorizer(in_str):
@@ -37,13 +36,7 @@ def dummy_vectorizer():
         if in_str == VECTORIZER_BREAKER:
             raise ValueError("Special string made to break the test vectorizer")
 
-        arr = []
-        seed = in_str.encode()
-        for _hash, _max_plus_one in zip(use_hashes, max_plus_ones):
-            _hash_digest = _hash(seed).digest()
-            _hash_int = int.from_bytes(_hash_digest, "big")
-            arr.append(_hash_int / _max_plus_one)
-        return np.array(arr)
+        return np.array([uniform(in_str, _method) for _method in use_hashes])
 
     return vectorizer
 
