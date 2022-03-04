@@ -83,7 +83,7 @@
       <img src="https://raw.githubusercontent.com/phurwicz/hover-gallery/main/0.7.0/evict-and-patch.gif">
     </details>
 
-Check out [@phurwicz/hover-binder](https://github.com/phurwicz/hover-binder) for a list of demo apps.
+:bulb: Click on the bullet points above to view GIFs!
 
 ## :rocket: Quickstart
 
