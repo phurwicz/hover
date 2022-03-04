@@ -91,7 +91,7 @@ Check out [@phurwicz/hover-binder](https://github.com/phurwicz/hover-binder) for
 
 -   edit & run code right in your browser, with guides along the way.
 
-### [**Jump to Labeling App**](https://mybinder.org/v2/gh/phurwicz/hover-binder/master?urlpath=/proxy/5006/app-linked-annotator)
+### [**Jump to Labeling App**](https://mybinder.org/v2/gh/phurwicz/hover-binder/master?urlpath=/proxy/5006/app-simple-annotator)
 
 -   interactive plot for labeling data, pre-built and hosted on Binder.
 
