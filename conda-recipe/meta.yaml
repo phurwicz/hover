@@ -1,5 +1,5 @@
 {% set name = "hover" %}
-{% set version = "0.6.1a" %}
+{% set version = "0.7.1a" %}
 
 
 package:
@@ -35,11 +35,13 @@ test:
   imports:
     - hover
   commands:
+    - python -m spacy download en_core_web_md
     - pip install wrappy>=0.2.6
     - pytest -m lite
   requires:
     - pip
     - pytest
+    - spacy
     - faker
     - snorkel>=0.9.8
     - openpyxl
