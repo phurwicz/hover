@@ -19,7 +19,7 @@
 
 ![Demo](https://raw.githubusercontent.com/phurwicz/hover-gallery/main/0.5.0/trailer-short.gif)
 
-## :sparkles: Features
+## :sparkles: Features (click on bullets for GIF demo)
 
 > **It's fast because it labels data in bulk.**
 
