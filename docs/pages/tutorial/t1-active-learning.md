@@ -4,6 +4,9 @@
 
 {!docs/snippets/html/thebe.html!}
 {!docs/snippets/markdown/binder-kernel.md!}
+{!docs/snippets/markdown/local-dependency.md!}
+{!docs/snippets/markdown/local-dep-text.md!}
+{!docs/snippets/markdown/local-dep-jupyter-bokeh.md!}
 
 ## **Fundamentals**
 
