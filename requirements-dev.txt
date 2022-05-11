@@ -8,6 +8,7 @@ mkdocs-material
 mkdocs-macros-plugin
 mkdocstrings
 markdown-include
+mike
 # interactive development
 jupyter
 jupyterlab

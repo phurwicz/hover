@@ -79,6 +79,8 @@ plugins:
         - hover
 
 extra:
+  version:
+    provider: mike
   analytics:
     provider: google
     property: UA-211167044-1
