@@ -83,6 +83,12 @@
       
     </div>
     
+      <div data-md-component="outdated" hidden>
+        <aside class="md-banner md-banner--warning">
+          
+        </aside>
+      </div>
+    
     
       
 
@@ -920,6 +926,24 @@
 <li>Typical usage deals with <a href="../../tutorial/t1-active-learning">recipes</a> where the individual parts have been tied together.</li>
 </ul>
 </details>
+<details class="info">
+<summary>Dependencies for <mark class="critic"> local environments </mark></summary>
+<p>When you copy code from this page to run locally, you may need to install additional packages.
+To run the text embedding code on this page, you need:
+<div class="highlight"><pre><span></span><code>pip install spacy
+python -m spacy download en_core_web_md
+</code></pre></div>
+To use <code>snorkel</code> labeling functions, you need:
+<div class="highlight"><pre><span></span><code>pip install snorkel
+</code></pre></div>
+To render <code>bokeh</code> plots in Jupyter, you need:
+<div class="highlight"><pre><span></span><code>pip install jupyter_bokeh
+</code></pre></div></p>
+<p>If you are using JupyterLab older than 3.0, use this instead (<a href="https://pypi.org/project/jupyter-bokeh/">reference</a>):
+<div class="highlight"><pre><span></span><code>jupyter labextension install @jupyter-widgets/jupyterlab-manager
+jupyter labextension install @bokeh/jupyter_bokeh
+</code></pre></div></p>
+</details>
 <h2 id="preparation"><strong>Preparation</strong></h2>
 <p>As always, start with a ready-for-plot dataset:</p>
 <pre data-executable>
@@ -1303,7 +1327,7 @@ binder_proxy_app_url('my-app', port=5007)
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.expand", "navigation.tabs", "search.suggest", "toc.integrate"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../../assets/javascripts/workers/search.22074ed6.min.js"}</script>
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.expand", "navigation.tabs", "search.suggest", "toc.integrate"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../../assets/javascripts/workers/search.22074ed6.min.js", "version": {"provider": "mike"}}</script>
     
     
       <script src="../../../assets/javascripts/bundle.960e086b.min.js"></script>
