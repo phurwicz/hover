@@ -19,7 +19,7 @@
 
 ![Demo](https://raw.githubusercontent.com/phurwicz/hover-gallery/main/0.5.0/trailer-short.gif)
 
-## :sparkles: Features
+## :sparkles: Features (click on bullets for GIF demo)
 
 > **It's fast because it labels data in bulk.**
 
@@ -116,7 +116,7 @@ For Windows users, we recommend [Windows Subsystem for Linux](https://docs.micro
 -   [Documentation](https://phurwicz.github.io/hover/)
 -   [Tutorials](https://phurwicz.github.io/hover/pages/tutorial/t0-quickstart/)
 
-## :flags: Project News
+## :flags: Announcements
 
 -   **Feb 25, 2022** version 0.7.0 is now available. Check out the [changelog](https://github.com/phurwicz/hover/blob/main/CHANGELOG.md) for details :partying_face:. Some tl-dr for the impatient:
     -   **audio and image support** supply audio/image files through URLs to label with `hover`!
