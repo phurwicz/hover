@@ -13,7 +13,7 @@ def get_description():
 
 setuptools.setup(
     name="hover",
-    version="0.7.0",
+    version="0.7.1",
     description="Label data at scale. Fun and precision included.",
     long_description=get_description(),
     long_description_content_type="text/markdown",
@@ -22,6 +22,7 @@ setuptools.setup(
     url="https://github.com/phurwicz/hover",
     packages=setuptools.find_packages(include=["hover*"]),
     install_requires=[
+        # python-version-specific example: "numpy>=1.14,<=1.21.5;python_version<'3.8.0'",
         # interactive/static visualization
         "bokeh>=2.3.3",
         # preprocessors
@@ -29,13 +30,10 @@ setuptools.setup(
         # neural stuff
         "torch>=1.10.0",
         # data handling
-        "pandas>=1.3.0;python_version>='3.8.0'",
-        "pandas>=1.3.0,<=1.3.5;python_version<'3.8.0'",
-        "numpy>=1.14;python_version>='3.8.0'",
-        "numpy>=1.14,<=1.21.5;python_version<'3.8.0'",
+        "pandas>=1.3.0",
+        "numpy>=1.22",
         # computations
-        "scipy>=1.3.2;python_version>='3.8.0'",
-        "scipy>=1.3.2,<=1.7.3;python_version<'3.8.0'",
+        "scipy>=1.3.2",
         # utilities
         "tqdm>=4.0",
         "rich>=11.0.0",
@@ -47,7 +45,7 @@ setuptools.setup(
         # optional: distant supervision
         # "snorkel>=0.9.8",
     ],
-    python_requires=">=3.7",
+    python_requires=">=3.8",
     classifiers=[
         "Programming Language :: Python :: 3",
         "Development Status :: 4 - Beta",
