@@ -9,6 +9,15 @@ from bokeh.models import PreText
 from bokeh.layouts import column
 from bokeh.palettes import Category10, Category20
 from hover import module_config
+from .local_config import (
+    TOOLTIP_TEXT_TEMPLATE,
+    TOOLTIP_IMAGE_TEMPLATE,
+    TOOLTIP_AUDIO_TEMPLATE,
+    TOOLTIP_CUSTOM_TEMPLATE,
+    TOOLTIP_LABEL_TEMPLATE,
+    TOOLTIP_COORDS_DIV,
+    TOOLTIP_INDEX_DIV,
+)
 
 
 def auto_label_color(labels):
@@ -139,26 +148,22 @@ def show_as_interactive(obj, **kwargs):
 
 
 def bokeh_hover_tooltip(
-    label=False,
-    text=False,
-    image=False,
-    audio=False,
+    label=None,
+    text=None,
+    image=None,
+    audio=None,
     coords=True,
     index=True,
     custom=None,
 ):
     """
     ???+ note "Create a Bokeh hover tooltip from a template."
-
-        - label: whether to expect and show a "label" field.
-        - text: whether to expect and show a "text" field.
-        - image: whether to expect and show an "image" (url/path) field.
-        - audio: whether to expect and show an "audio" (url/path) field.
-        - coords: whether to show xy-coordinates.
-        - index: whether to show indices in the dataset.
-        - custom: {display: column} mapping of additional (text) tooltips.
     """
-    # initialize mutable default value
+    # initialize default values of mutable type
+    label = label or dict(Label=label)
+    text = text or dict()
+    image = image or dict()
+    audio = audio or dict()
     custom = custom or dict()
 
     # prepare encapsulation of a div box and an associated script
@@ -170,69 +175,27 @@ def bokeh_hover_tooltip(
     # dynamically add contents to the div box and the script
     divbox = divbox_prefix
     script = script_prefix
-    if label:
-        divbox += """
-        <div>
-            <span style="font-size: 16px; color: #966;">
-                Label: @label
-            </span>
-        </div>
-        """
-    if text:
-        divbox += """
-        <div style="word-wrap: break-word; width: 95%; text-overflow: ellipsis; line-height: 90%">
-            <span style="font-size: 11px;">
-                Text: @text
-            </span>
-        </div>
-        """
-    if image:
-        divbox += """
-        <div>
-            <span style="font-size: 10px;">
-                Image: @image
-            </span>
-            <img
-                src="@image" height="60" alt="@image" width="60"
-                style="float: left; margin: 0px 0px 0px 0px;"
-                border="2"
-            ></img>
-        </div>
-        """
-    if audio:
-        divbox += """
-        <div>
-            <span style="font-size: 10px;">
-                Audio: @audio
-            </span>
-            <audio autoplay preload="auto" src="@audio">
-            </audio>
-        </div>
-        """
+
+    for _field, _key in label.items():
+        divbox += TOOLTIP_LABEL_TEMPLATE.format(field=_field, key=_key)
+
+    for _field, _key in text.items():
+        divbox += TOOLTIP_TEXT_TEMPLATE.format(field=_field, key=_key)
+
+    for _field, _size in image.items():
+        divbox += TOOLTIP_IMAGE_TEMPLATE.format(field=_field, size=_size)
+
+    for _field, _option in audio.items():
+        divbox += TOOLTIP_AUDIO_TEMPLATE.format(field=_field, option=_option)
+
     if coords:
-        divbox += """
-        <div>
-            <span style="font-size: 12px; color: #060;">
-                Coordinates: ($x, $y)
-            </span>
-        </div>
-        """
+        divbox += TOOLTIP_COORDS_DIV
+
     if index:
-        divbox += """
-        <div>
-            <span style="font-size: 12px; color: #066;">
-                Index: [$index]
-            </span>
-        </div>
-        """
-    for _key, _field in custom.items():
-        divbox += f"""
-        <div>
-            <span style="font-size: 12px; color: #606;">
-                {_key}: @{_field}
-            </span>
-        </div>
-        """
+        divbox += TOOLTIP_INDEX_DIV
+
+    for _field, _key in custom.items():
+        divbox += TOOLTIP_CUSTOM_TEMPLATE.format(field=_field, key=_key)
 
     divbox += divbox_suffix
     script += script_suffix

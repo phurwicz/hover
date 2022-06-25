@@ -23,7 +23,12 @@ class BokehForText(BokehBaseExplorer):
 
     PRIMARY_FEATURE = "text"
     MANDATORY_COLUMNS = [PRIMARY_FEATURE, "label"]
-    TOOLTIP_KWARGS = {"label": True, "text": True, "coords": True, "index": True}
+    TOOLTIP_KWARGS = {
+        "label": {"label": "Label"},
+        "text": {"text": "Text"},
+        "coords": True,
+        "index": True,
+    }
 
     def _setup_search_widgets(self):
         """
@@ -169,7 +174,12 @@ class BokehForAudio(BokehForUrlToVector):
 
     PRIMARY_FEATURE = "audio"
     MANDATORY_COLUMNS = [PRIMARY_FEATURE, "label"]
-    TOOLTIP_KWARGS = {"label": True, "audio": True, "coords": True, "index": True}
+    TOOLTIP_KWARGS = {
+        "label": {"label": "Label"},
+        "audio": {"audio": ""},
+        "coords": True,
+        "index": True,
+    }
 
 
 class BokehForImage(BokehForUrlToVector):
@@ -187,4 +197,9 @@ class BokehForImage(BokehForUrlToVector):
 
     PRIMARY_FEATURE = "image"
     MANDATORY_COLUMNS = [PRIMARY_FEATURE, "label"]
-    TOOLTIP_KWARGS = {"label": True, "image": True, "coords": True, "index": True}
+    TOOLTIP_KWARGS = {
+        "label": {"label": "Label"},
+        "image": {"image": 60},
+        "coords": True,
+        "index": True,
+    }

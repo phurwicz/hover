@@ -51,7 +51,11 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
 
     PRIMARY_FEATURE = None
     MANDATORY_COLUMNS = ["label"]
-    TOOLTIP_KWARGS = {"label": True, "coords": True, "index": True}
+    TOOLTIP_KWARGS = {
+        "label": {"label": "Label"},
+        "coords": True,
+        "index": True,
+    }
 
     def __init__(self, df_dict, **kwargs):
         """
@@ -121,18 +125,19 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
 
         return column(self._layout_widgets(), self.figure)
 
-    def _build_tooltip(self, extra):
+    def _build_tooltip(self, specified):
         """
         ???+ note "Define a windowed tooltip which shows inspection details."
             | Param            | Type   | Description                  |
             | :--------------- | :----- | :--------------------------- |
-            | `extra`          | `str`  | user-supplied extra HTML |
+            | `specified`      | `str`  | user-specified HTML          |
 
             Note that this is a method rather than a class attribute because
             child classes may involve instance attributes in the tooltip.
         """
-        standard = bokeh_hover_tooltip(**self.__class__.TOOLTIP_KWARGS)
-        return f"{standard}\n{extra}"
+        if not specified:
+            return bokeh_hover_tooltip(**self.__class__.TOOLTIP_KWARGS)
+        return specified
 
     def _setup_widgets(self):
         """
