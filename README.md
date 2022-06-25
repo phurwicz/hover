@@ -6,10 +6,10 @@
 
 [![PyPI Version](https://img.shields.io/pypi/v/hover?logo=pypi&logoColor=white)](https://pypi.org/project/hover/)
 [![Conda Version](https://img.shields.io/conda/vn/conda-forge/hover)](https://github.com/conda-forge/hover-feedstock)
-[![Downloads](https://static.pepy.tech/personalized-badge/hover?period=total&units=international_system&left_color=grey&right_color=brightgreen&left_text=pypi%20downloads)](https://pepy.tech/project/hover)
-[![Build Status](https://img.shields.io/github/workflow/status/phurwicz/hover/python-package?logo=github&logoColor=white)](https://github.com/phurwicz/hover/actions)
-[![Codacy Grade](https://img.shields.io/codacy/grade/689827d9077b43ac8721c7658d122d1a?logo=codacy&logoColor=white)](https://app.codacy.com/gh/phurwicz/hover/dashboard)
-[![Codacy Coverage](https://img.shields.io/codacy/coverage/689827d9077b43ac8721c7658d122d1a/main?logo=codacy&logoColor=white)](https://app.codacy.com/gh/phurwicz/hover/dashboard)
+![Downloads](https://static.pepy.tech/personalized-badge/hover?period=total&units=international_system&left_color=grey&right_color=brightgreen&left_text=pypi%20downloads)
+![Build Status](https://img.shields.io/github/workflow/status/phurwicz/hover/python-package?logo=github&logoColor=white)
+![Codacy Grade](https://img.shields.io/codacy/grade/689827d9077b43ac8721c7658d122d1a?logo=codacy&logoColor=white)
+![Codacy Coverage](https://img.shields.io/codacy/coverage/689827d9077b43ac8721c7658d122d1a/main?logo=codacy&logoColor=white)
 
 `hover` speeds up data labeling through `embedding + visualization + callbacks`.
 
@@ -19,7 +19,7 @@
 
 ![Demo](https://raw.githubusercontent.com/phurwicz/hover-gallery/main/0.5.0/trailer-short.gif)
 
-## :sparkles: Features (click on bullets for GIF demo)
+## :sparkles: Features *(click on bullets for GIF demo)*
 
 > **It's fast because it labels data in bulk.**
 
@@ -97,7 +97,7 @@
 
 ## :package: Install
 
-> Python: 3.7+
+> Python: 3.8+
 >
 > OS: Linux & Mac & Windows
 
