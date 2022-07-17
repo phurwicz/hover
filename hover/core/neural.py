@@ -339,7 +339,7 @@ class VectorNet(BaseVectorNet):
         spline_kwargs = spline_kwargs or {}
 
         # step 1 & 2
-        vectors = torch.Tensor([self.vectorizer(_inp) for _inp in inps])
+        vectors = torch.Tensor(np.array([self.vectorizer(_inp) for _inp in inps]))
         self.nn.eval()
         intermediates = self.nn.eval_per_layer(vectors)
         intermediates = [_tensor.detach().numpy() for _tensor in intermediates]
