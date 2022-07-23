@@ -3,6 +3,8 @@ Convert tutorial scripts to Jupyter notebooks.
 """
 import os
 import re
+import uuid
+import shutil
 import nbformat
 import subprocess
 from local_helper import batch_routine
@@ -139,9 +141,10 @@ def markdown_to_notebook(script_name, source_abs_path):
     """
     Turn a mkdocs-material markdown file into a notebook.
     """
-    notebook_name = f"{script_name}.ipynb"
-    notebook_path = os.path.join(GENERATED_DIR, notebook_name)
+    nb_tmp_path = f"{script_name}-{uuid.uuid1()}.ipynb"
+    nb_save_path = os.path.join(GENERATED_DIR, f"{script_name}.ipynb")
 
+    # collect markdown and python blocks
     with open(source_abs_path, "r") as f_source:
         source = preprocess_markdown(f_source.read())
         markdown_pieces = re.split(THEBE_PATTERN_WITH_TAGS, source)
@@ -152,6 +155,7 @@ def markdown_to_notebook(script_name, source_abs_path):
         len(markdown_pieces) == len(script_pieces) + 1
     ), "Expected exactly one more markdown piece than script"
 
+    # organize markdown and python blocks
     cells = []
     while script_pieces:
         text = postprocess_snippet(markdown_pieces.pop(0))
@@ -163,15 +167,23 @@ def markdown_to_notebook(script_name, source_abs_path):
         text = postprocess_snippet(markdown_pieces.pop(0))
         cells.append(nbformat.v4.new_markdown_cell(text))
 
+    # create notebook
     nb = nbformat.v4.new_notebook()
     nb["cells"] = cells
-    nbformat.write(nb, notebook_path)
+    nbformat.write(nb, nb_tmp_path)
 
     process = subprocess.run(
-        ["jupyter", "nbconvert", "--execute", "--inplace", notebook_path],
+        ["jupyter", "nbconvert", "--execute", "--inplace", nb_tmp_path],
         capture_output=True,
         timeout=1200,
     )
+
+    # if notebook run was successful, update the stored copy
+    if process.returncode == 0:
+        if os.path.isfile(nb_save_path):
+            os.remove(nb_save_path)
+        shutil.copy(nb_tmp_path, nb_save_path)
+
     return script, process
 
 
