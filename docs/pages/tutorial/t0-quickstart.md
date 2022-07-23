@@ -36,7 +36,7 @@ We turn it into a [`SupervisableDataset`](../../reference/core-dataset/#hover.co
         ```
 
     ??? help "Can I use audio or image data?"
-        Yes! Please check out the "Guides" section.
+        Yes! Please check out the "Guides" section of the documentation.
 
 
 ## **Ingredient 2 / 3: Embedding**

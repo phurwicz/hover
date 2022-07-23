@@ -1,4 +1,4 @@
-# ---------- SERVER MODE: for this documentation page ----------
+# ---------- SERVER MODE: for the documentation page ----------
 # because this tutorial is remotely hosted, we need explicit serving to expose the plot to you
 from local_lib.binder_helper import binder_proxy_app_url
 from bokeh.server.server import Server
