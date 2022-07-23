@@ -54,6 +54,7 @@ jobs:
       run: |
         pip install --upgrade pip
         pip install --upgrade tox tox-gh-actions
+        git branch pipeline/notebook-generation
         git checkout pipeline/notebook-generation
         git pull
         git merge main --commit
