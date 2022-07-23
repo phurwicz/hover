@@ -17,9 +17,19 @@
 -   Explore the map to find "zones" that are easy and those that are tricky.
 -   Start the conquest of your data by coloring the zones through wisdom!
 
-![Demo](https://raw.githubusercontent.com/phurwicz/hover-gallery/main/0.5.0/trailer-short.gif)
+![GIF Demo](https://raw.githubusercontent.com/phurwicz/hover-gallery/main/0.5.0/trailer-short.gif)
 
-## :sparkles: Features *(click on bullets for GIF demo)*
+## :rocket: Live Demos
+
+### [**With code**](https://phurwicz.github.io/hover/pages/tutorial/t0-quickstart/)
+
+-   edit & run code in your browser to get a labeling interface, with guides along the way.
+
+### [**Without code**](https://mybinder.org/v2/gh/phurwicz/hover-binder/master?urlpath=/proxy/5006/app-simple-annotator)
+
+-   go directly to a labeling interface, pre-coded and hosted on Binder.
+
+## :sparkles: Features *(click bullets to show GIF)*
 
 > **It's fast because it labels data in bulk.**
 
@@ -85,16 +95,6 @@
 
 :bulb: Click on the bullet points above to view GIFs!
 
-## :rocket: Quickstart
-
-### [**Code + Walkthrough -> Labeling App**](https://phurwicz.github.io/hover/pages/tutorial/t0-quickstart/)
-
--   edit & run code right in your browser, with guides along the way.
-
-### [**Jump to Labeling App**](https://mybinder.org/v2/gh/phurwicz/hover-binder/master?urlpath=/proxy/5006/app-simple-annotator)
-
--   interactive plot for labeling data, pre-built and hosted on Binder.
-
 ## :package: Install
 
 > Python: 3.8+
@@ -111,10 +111,10 @@ For Windows users, we recommend [Windows Subsystem for Linux](https://docs.micro
 
 ## :book: Resources
 
+-   [Tutorials](https://phurwicz.github.io/hover/pages/tutorial/t0-quickstart/)
 -   [Binder repo](https://github.com/phurwicz/hover-binder)
 -   [Changelog](https://github.com/phurwicz/hover/blob/main/CHANGELOG.md)
 -   [Documentation](https://phurwicz.github.io/hover/)
--   [Tutorials](https://phurwicz.github.io/hover/pages/tutorial/t0-quickstart/)
 
 ## :flags: Announcements
 
