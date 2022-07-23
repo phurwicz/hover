@@ -131,7 +131,9 @@ We are ready for the annotation interface!
 <pre data-executable>
 {!docs/snippets/py/t0-3-simple-annotator.txt!}
 
-{!docs/snippets/py/tz-bokeh-server-notebook.txt!}
+{!docs/snippets/py/tz-bokeh-show-server.txt!}
+
+{!docs/snippets/py/tz-bokeh-show-notebook.txt!}
 </pre>
 
 ???+ tip "Tips: annotation interface basics"

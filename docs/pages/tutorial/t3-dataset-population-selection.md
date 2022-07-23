@@ -19,7 +19,9 @@ We place unlabeled data and labeled data in different subsets: "raw", "train", "
 </pre><br>
 
 <pre data-executable>
-{!docs/snippets/py/tz-bokeh-notebook.txt!}
+{!docs/snippets/py/tz-bokeh-notebook-common.txt!}
+
+{!docs/snippets/py/tz-bokeh-notebook-remote.txt!}
 
 {!docs/snippets/py/t3-0-dataset-population-table.txt!}
 </pre><br>

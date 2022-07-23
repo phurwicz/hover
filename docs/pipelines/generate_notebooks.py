@@ -22,11 +22,13 @@ SNIPPETS_HOME = os.path.join(os.path.dirname(__file__), "../../")
 SNIPPETS_PATTERN = r"\{\!([^\n\{\!\}]+?)\!\}"
 
 SNIPPETS_TO_IGNORE = {
+    # snippets and stylesheets that only matter on the documentation site
+    "docs/snippets/html/stylesheet.html",
     "docs/snippets/html/thebe.html",
     "docs/snippets/markdown/binder-kernel.md",
-    # "docs/snippets/markdown/local-dependency.md",
-    # "docs/snippets/markdown/local-dep-text.md",
-    # "docs/snippets/markdown/local-dep-jupyter-bokeh.md",
+    "docs/snippets/markdown/jupyterlab-js-issue.md",
+    "docs/snippets/py/tz-bokeh-show-server.txt",
+    "docs/snippets/py/tz-bokeh-notebook-remote.txt",
 }
 
 SYNTAX_CAPTURE_TO_REPLACE = {

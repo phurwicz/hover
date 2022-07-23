@@ -1,0 +1,5 @@
+# ---------- NOTEBOOK MODE: for your actual Jupyter environment ---------
+# this code will render the entire plot in Jupyter
+# from bokeh.io import show, output_notebook
+# output_notebook()
+# show(interactive_plot, notebook_url='https://localhost:8888')

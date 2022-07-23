@@ -47,7 +47,9 @@ This is exactly the same as in the quickstart, just switching to image data:
 <pre data-executable>
 {!docs/snippets/py/t0-3-simple-annotator.txt!}
 
-{!docs/snippets/py/tz-bokeh-server-notebook.txt!}
+{!docs/snippets/py/tz-bokeh-show-server.txt!}
+
+{!docs/snippets/py/tz-bokeh-show-notebook.txt!}
 </pre>
 
 ???+ note "What's special for images?"
