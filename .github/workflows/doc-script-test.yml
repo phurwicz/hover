@@ -30,18 +30,18 @@ jobs:
     - name: Clone hover
       uses: actions/checkout@v2
 
-    - name: Clone hover-binder
-      uses: actions/checkout@v2
-      with:
-        repository: phurwicz/hover-binder
-        ref: master
-        path: .hover-binder
+        #- name: Clone hover-binder
+        #  uses: actions/checkout@v2
+        #  with:
+        #    repository: phurwicz/hover-binder
+        #    ref: master
+        #    path: .hover-binder
 
-    - name: Pick local library from Binder repo
-      run: |
-        cp -r .hover-binder/local_lib ./local_lib
-        cp -r .hover-binder/custom_cache ./custom_cache
-        rm -rf .hover-binder
+        #- name: Pick local library from Binder repo
+        #  run: |
+        #    cp -r .hover-binder/local_lib ./local_lib
+        #    cp -r .hover-binder/custom_cache ./custom_cache
+        #    rm -rf .hover-binder
 
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v2
@@ -59,7 +59,7 @@ jobs:
         git branch pipeline/notebook-generation
         git pull
         git checkout pipeline/notebook-generation
-        git merge main --commit
+        git merge main --no-edit
 
     - name: Test with Tox
       run: |

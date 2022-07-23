@@ -97,7 +97,9 @@ Now we invoke the `active_learning` recipe.
 <pre data-executable>
 {!docs/snippets/py/t1-1-active-learning.txt!}
 
-{!docs/snippets/py/tz-bokeh-server-notebook.txt!}
+{!docs/snippets/py/tz-bokeh-show-server.txt!}
+
+{!docs/snippets/py/tz-bokeh-show-notebook.txt!}
 </pre>
 
 ???+ tip "Tips: annotation interface with multiple plots"

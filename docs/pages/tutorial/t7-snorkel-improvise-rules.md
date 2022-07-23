@@ -38,7 +38,9 @@ Hover's `SnorkelExplorer` (short as `snorkel`) can take the labeling functions a
 {!docs/snippets/markdown/jupyterlab-js-issue.md!}
 
 <pre data-executable>
-{!docs/snippets/py/tz-bokeh-notebook.txt!}
+{!docs/snippets/py/tz-bokeh-notebook-common.txt!}
+
+{!docs/snippets/py/tz-bokeh-notebook-remote.txt!}
 
 {!docs/snippets/py/t7-1-snorkel-apply-button.txt!}
 </pre><br>
@@ -69,7 +71,9 @@ Run the block below and open the resulting URL to launch a recipe.
 <pre data-executable>
 {!docs/snippets/py/t7-3-snorkel-crosscheck.txt!}
 
-{!docs/snippets/py/tz-bokeh-server-notebook.txt!}
+{!docs/snippets/py/tz-bokeh-show-server.txt!}
+
+{!docs/snippets/py/tz-bokeh-show-notebook.txt!}
 </pre>
 
 What's really cool is that in your local environment, this update-and-refresh operation can be done all in a notebook. So now you can

@@ -26,7 +26,9 @@ Just like `annotator`, `finder` has search widgets. But unlike `annotator`, `fin
 {!docs/snippets/markdown/jupyterlab-js-issue.md!}
 
 <pre data-executable>
-{!docs/snippets/py/tz-bokeh-notebook.txt!}
+{!docs/snippets/py/tz-bokeh-notebook-common.txt!}
+
+{!docs/snippets/py/tz-bokeh-notebook-remote.txt!}
 
 {!docs/snippets/py/t5-0-finder-filter.txt!}
 </pre><br>

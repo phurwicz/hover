@@ -1,0 +1,3 @@
+# special configuration for this remotely hosted tutorial
+from local_lib.binder_helper import remote_jupyter_proxy_url
+notebook_url = remote_jupyter_proxy_url

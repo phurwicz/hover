@@ -1,0 +1,6 @@
+from bokeh.io import show, output_notebook
+
+output_notebook()
+
+# normally your would skip notebook_url or use Jupyter address
+notebook_url = 'localhost:8888'

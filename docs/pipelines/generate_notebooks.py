@@ -3,6 +3,8 @@ Convert tutorial scripts to Jupyter notebooks.
 """
 import os
 import re
+import uuid
+import shutil
 import nbformat
 import subprocess
 from local_helper import batch_routine
@@ -22,11 +24,13 @@ SNIPPETS_HOME = os.path.join(os.path.dirname(__file__), "../../")
 SNIPPETS_PATTERN = r"\{\!([^\n\{\!\}]+?)\!\}"
 
 SNIPPETS_TO_IGNORE = {
+    # snippets and stylesheets that only matter on the documentation site
+    "docs/snippets/html/stylesheet.html",
     "docs/snippets/html/thebe.html",
     "docs/snippets/markdown/binder-kernel.md",
-    # "docs/snippets/markdown/local-dependency.md",
-    # "docs/snippets/markdown/local-dep-text.md",
-    # "docs/snippets/markdown/local-dep-jupyter-bokeh.md",
+    "docs/snippets/markdown/jupyterlab-js-issue.md",
+    "docs/snippets/py/tz-bokeh-show-server.txt",
+    "docs/snippets/py/tz-bokeh-notebook-remote.txt",
 }
 
 SYNTAX_CAPTURE_TO_REPLACE = {
@@ -118,7 +122,13 @@ def preprocess_markdown(markdown_content):
     """
     Aggregate procedure for turning multi-plugin markdown into simple markdown.
     """
-    content = preprocess_markdown_include(markdown_content)
+    old_content = markdown_content
+    content = preprocess_markdown_include(old_content)
+    # take care of nested includes
+    while content != old_content:
+        old_content = content
+        content = preprocess_markdown_include(old_content)
+
     content = preprocess_mkdocs_material(content)
     return content
 
@@ -137,9 +147,10 @@ def markdown_to_notebook(script_name, source_abs_path):
     """
     Turn a mkdocs-material markdown file into a notebook.
     """
-    notebook_name = f"{script_name}.ipynb"
-    notebook_path = os.path.join(GENERATED_DIR, notebook_name)
+    nb_tmp_path = f"{script_name}-{uuid.uuid1()}.ipynb"
+    nb_save_path = os.path.join(GENERATED_DIR, f"{script_name}.ipynb")
 
+    # collect markdown and python blocks
     with open(source_abs_path, "r") as f_source:
         source = preprocess_markdown(f_source.read())
         markdown_pieces = re.split(THEBE_PATTERN_WITH_TAGS, source)
@@ -150,26 +161,43 @@ def markdown_to_notebook(script_name, source_abs_path):
         len(markdown_pieces) == len(script_pieces) + 1
     ), "Expected exactly one more markdown piece than script"
 
+    # organize markdown and python blocks
     cells = []
     while script_pieces:
         text = postprocess_snippet(markdown_pieces.pop(0))
         code = postprocess_snippet(script_pieces.pop(0))
-        cells.append(nbformat.v4.new_markdown_cell(text))
-        cells.append(nbformat.v4.new_code_cell(code))
+        if text:
+            cells.append(nbformat.v4.new_markdown_cell(text))
+        if code:
+            cells.append(nbformat.v4.new_code_cell(code))
 
     while markdown_pieces:
         text = postprocess_snippet(markdown_pieces.pop(0))
-        cells.append(nbformat.v4.new_markdown_cell(text))
+        if text:
+            cells.append(nbformat.v4.new_markdown_cell(text))
 
+    # create notebook
     nb = nbformat.v4.new_notebook()
     nb["cells"] = cells
-    nbformat.write(nb, notebook_path)
+    nbformat.write(nb, nb_tmp_path)
 
+    # process = subprocess.run(
+    #    ["jupyter", "nbconvert", "--execute", "--inplace", nb_tmp_path],
+    #    capture_output=True,
+    #    timeout=1200,
+    # )
     process = subprocess.run(
-        ["jupyter", "nbconvert", "--execute", "--inplace", notebook_path],
+        ["ls"],
         capture_output=True,
         timeout=1200,
     )
+
+    # if notebook run was successful, update the stored copy
+    if process.returncode == 0:
+        if os.path.isfile(nb_save_path):
+            os.remove(nb_save_path)
+        shutil.copy(nb_tmp_path, nb_save_path)
+
     return script, process
 
 
