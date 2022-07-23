@@ -12,6 +12,8 @@ on:
       - 'docs/**.*'
   pull_request:
     branches: [ main ]
+    paths:
+      - 'docs/**.*'
   workflow_dispatch:
 
 jobs:
@@ -50,17 +52,22 @@ jobs:
         sudo apt-get update
         sudo apt-get install libsndfile1
 
+    - name: Prepare Git
+      if: ${{ github.event_name == 'workflow_dispatch' ||github.event_name == 'schedule' }}
+      run: |
+        git branch pipeline/notebook-generation
+        git pull
+        git checkout pipeline/notebook-generation
+        git merge main --commit
+
     - name: Test with Tox
       run: |
         pip install --upgrade pip
         pip install --upgrade tox tox-gh-actions
-        git branch pipeline/notebook-generation
-        git checkout pipeline/notebook-generation
-        git pull
-        git merge main --commit
         tox -e test_doc_scripts
 
     - name: Update Generated Notebooks
+      if: ${{ github.event_name == 'workflow_dispatch' ||github.event_name == 'schedule' }}
       run: |
         git config --global user.name ${{ secrets.ACTIONS_GIT_USERNAME }}
         git config --global user.email ${{ secrets.ACTIONS_GIT_EMAIL }}
