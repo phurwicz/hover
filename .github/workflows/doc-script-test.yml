@@ -27,8 +27,6 @@ jobs:
     steps:
     - name: Clone hover
       uses: actions/checkout@v2
-      with:
-        ref: pipeline/notebook-generation
 
     - name: Clone hover-binder
       uses: actions/checkout@v2
@@ -57,6 +55,7 @@ jobs:
         pip install --upgrade pip
         pip install --upgrade tox tox-gh-actions
         git checkout pipeline/notebook-generation
+        git pull
         git merge main --commit
         tox -e test_doc_scripts
 
