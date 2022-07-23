@@ -181,13 +181,8 @@ def markdown_to_notebook(script_name, source_abs_path):
     nb["cells"] = cells
     nbformat.write(nb, nb_tmp_path)
 
-    # process = subprocess.run(
-    #    ["jupyter", "nbconvert", "--execute", "--inplace", nb_tmp_path],
-    #    capture_output=True,
-    #    timeout=1200,
-    # )
     process = subprocess.run(
-        ["ls"],
+        ["jupyter", "nbconvert", "--execute", "--inplace", nb_tmp_path],
         capture_output=True,
         timeout=1200,
     )
