@@ -57,7 +57,7 @@ jobs:
         pip install --upgrade pip
         pip install --upgrade tox tox-gh-actions
         git checkout pipeline/notebook-generation
-        git merge main
+        git merge main --commit
         tox -e test_doc_scripts
 
     - name: Update Generated Notebooks
