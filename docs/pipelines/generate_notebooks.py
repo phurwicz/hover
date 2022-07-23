@@ -122,7 +122,13 @@ def preprocess_markdown(markdown_content):
     """
     Aggregate procedure for turning multi-plugin markdown into simple markdown.
     """
-    content = preprocess_markdown_include(markdown_content)
+    old_content = markdown_content
+    content = preprocess_markdown_include(old_content)
+    # take care of nested includes
+    while content != old_content:
+        old_content = content
+        content = preprocess_markdown_include(old_content)
+
     content = preprocess_mkdocs_material(content)
     return content
 
@@ -160,20 +166,28 @@ def markdown_to_notebook(script_name, source_abs_path):
     while script_pieces:
         text = postprocess_snippet(markdown_pieces.pop(0))
         code = postprocess_snippet(script_pieces.pop(0))
-        cells.append(nbformat.v4.new_markdown_cell(text))
-        cells.append(nbformat.v4.new_code_cell(code))
+        if text:
+            cells.append(nbformat.v4.new_markdown_cell(text))
+        if code:
+            cells.append(nbformat.v4.new_code_cell(code))
 
     while markdown_pieces:
         text = postprocess_snippet(markdown_pieces.pop(0))
-        cells.append(nbformat.v4.new_markdown_cell(text))
+        if text:
+            cells.append(nbformat.v4.new_markdown_cell(text))
 
     # create notebook
     nb = nbformat.v4.new_notebook()
     nb["cells"] = cells
     nbformat.write(nb, nb_tmp_path)
 
+    # process = subprocess.run(
+    #    ["jupyter", "nbconvert", "--execute", "--inplace", nb_tmp_path],
+    #    capture_output=True,
+    #    timeout=1200,
+    # )
     process = subprocess.run(
-        ["jupyter", "nbconvert", "--execute", "--inplace", nb_tmp_path],
+        ["ls"],
         capture_output=True,
         timeout=1200,
     )
