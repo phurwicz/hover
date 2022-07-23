@@ -12,6 +12,11 @@ from local_config import (
     THEBE_PATTERN_CODE_ONLY,
 )
 
+GENERATED_DIR = os.path.join(os.path.dirname(__file__), "generated")
+
+if not os.path.isdir(GENERATED_DIR):
+    os.mkdir(GENERATED_DIR)
+
 SNIPPETS_HOME = os.path.join(os.path.dirname(__file__), "../../")
 
 SNIPPETS_PATTERN = r"\{\!([^\n\{\!\}]+?)\!\}"
@@ -132,7 +137,8 @@ def markdown_to_notebook(script_name, source_abs_path):
     """
     Turn a mkdocs-material markdown file into a notebook.
     """
-    notebook_path = f"{script_name}.ipynb"
+    notebook_name = f"{script_name}.ipynb"
+    notebook_path = os.path.join(GENERATED_DIR, notebook_name)
 
     with open(source_abs_path, "r") as f_source:
         source = preprocess_markdown(f_source.read())

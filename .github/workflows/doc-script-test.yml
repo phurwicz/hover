@@ -27,6 +27,8 @@ jobs:
     steps:
     - name: Clone hover
       uses: actions/checkout@v2
+      with:
+        ref: pipeline/notebook-generation
 
     - name: Clone hover-binder
       uses: actions/checkout@v2
@@ -54,4 +56,14 @@ jobs:
       run: |
         pip install --upgrade pip
         pip install --upgrade tox tox-gh-actions
+        git checkout pipeline/notebook-generation
+        git merge main
         tox -e test_doc_scripts
+
+    - name: Update Generated Notebooks
+      run: |
+        git config --global user.name ${{ secrets.ACTIONS_GIT_USERNAME }}
+        git config --global user.email ${{ secrets.ACTIONS_GIT_EMAIL }}
+        git add docs/pipelines/generated/*.ipynb
+        git commit -m "Automatic update of notebooks generated from documentation scripts"
+        git push
