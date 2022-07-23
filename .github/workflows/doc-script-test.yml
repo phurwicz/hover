@@ -40,6 +40,7 @@ jobs:
     - name: Pick local library from Binder repo
       run: |
         cp -r .hover-binder/local_lib ./local_lib
+        cp -r .hover-binder/custom_cache ./custom_cache
         rm -rf .hover-binder
 
     - name: Set up Python ${{ matrix.python-version }}
