@@ -74,4 +74,4 @@ jobs:
         git config --global user.email ${{ secrets.ACTIONS_GIT_EMAIL }}
         git add docs/pipelines/generated/*.ipynb
         git commit -m "Automatic update of notebooks generated from documentation scripts"
-        git push
+        git push --set-upstream origin pipeline/notebook-generation
