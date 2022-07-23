@@ -3,3 +3,5 @@
 
     Behind the scene is a [Binder](https://mybinder.org/)-hosted Python environment. Below is the status of the kernel:
     <div class="thebe-status"></div><div class="thebe-activate"></div>
+
+    To download a notebook file instead, visit [here](https://github.com/phurwicz/hover/tree/main/docs/pipelines/generated).
