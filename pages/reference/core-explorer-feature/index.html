@@ -946,7 +946,12 @@ BokehForAudio            (<a title="hover.core.explorer.feature.BokehForUrlToVec
 
     <span class="n">PRIMARY_FEATURE</span> <span class="o">=</span> <span class="s2">&quot;audio&quot;</span>
     <span class="n">MANDATORY_COLUMNS</span> <span class="o">=</span> <span class="p">[</span><span class="n">PRIMARY_FEATURE</span><span class="p">,</span> <span class="s2">&quot;label&quot;</span><span class="p">]</span>
-    <span class="n">TOOLTIP_KWARGS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;audio&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;coords&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;index&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
+    <span class="n">TOOLTIP_KWARGS</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;Label&quot;</span><span class="p">},</span>
+        <span class="s2">&quot;audio&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;audio&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">},</span>
+        <span class="s2">&quot;coords&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">&quot;index&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">}</span>
 </code></pre></div>
         </details>
 
@@ -1020,7 +1025,12 @@ BokehForImage            (<a title="hover.core.explorer.feature.BokehForUrlToVec
 
     <span class="n">PRIMARY_FEATURE</span> <span class="o">=</span> <span class="s2">&quot;image&quot;</span>
     <span class="n">MANDATORY_COLUMNS</span> <span class="o">=</span> <span class="p">[</span><span class="n">PRIMARY_FEATURE</span><span class="p">,</span> <span class="s2">&quot;label&quot;</span><span class="p">]</span>
-    <span class="n">TOOLTIP_KWARGS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;image&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;coords&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;index&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
+    <span class="n">TOOLTIP_KWARGS</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;Label&quot;</span><span class="p">},</span>
+        <span class="s2">&quot;image&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;image&quot;</span><span class="p">:</span> <span class="mi">60</span><span class="p">},</span>
+        <span class="s2">&quot;coords&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">&quot;index&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">}</span>
 </code></pre></div>
         </details>
 
@@ -1094,7 +1104,12 @@ BokehForText            (<a title="hover.core.explorer.base.BokehBaseExplorer" h
 
     <span class="n">PRIMARY_FEATURE</span> <span class="o">=</span> <span class="s2">&quot;text&quot;</span>
     <span class="n">MANDATORY_COLUMNS</span> <span class="o">=</span> <span class="p">[</span><span class="n">PRIMARY_FEATURE</span><span class="p">,</span> <span class="s2">&quot;label&quot;</span><span class="p">]</span>
-    <span class="n">TOOLTIP_KWARGS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;coords&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;index&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
+    <span class="n">TOOLTIP_KWARGS</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;Label&quot;</span><span class="p">},</span>
+        <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;Text&quot;</span><span class="p">},</span>
+        <span class="s2">&quot;coords&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">&quot;index&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">}</span>
 
     <span class="k">def</span> <span class="nf">_setup_search_widgets</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>

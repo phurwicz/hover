@@ -2841,18 +2841,22 @@ BokehSoftLabelExplorer            (<a title="hover.core.explorer.base.BokehBaseE
         <span class="bp">self</span><span class="o">.</span><span class="n">score_col</span> <span class="o">=</span> <span class="n">score_col</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">df_dict</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_build_tooltip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">extra</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_build_tooltip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">specified</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        ???+ note &quot;On top of the parent method, add the soft label fields to the tooltip.&quot;</span>
 <span class="sd">            | Param            | Type   | Description                  |</span>
 <span class="sd">            | :--------------- | :----- | :--------------------------- |</span>
-<span class="sd">            | `extra`          | `str`  | user-supplied extra HTML |</span>
+<span class="sd">            | `specified`      | `str`  | user-specified HTML          |</span>
+
+<span class="sd">            Note that this is a method rather than a class attribute because</span>
+<span class="sd">            child classes may involve instance attributes in the tooltip.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">standard</span> <span class="o">=</span> <span class="n">bokeh_hover_tooltip</span><span class="p">(</span>
-            <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">TOOLTIP_KWARGS</span><span class="p">,</span>
-            <span class="n">custom</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Soft Label&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">label_col</span><span class="p">,</span> <span class="s2">&quot;Soft Score&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">score_col</span><span class="p">},</span>
-        <span class="p">)</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">standard</span><span class="si">}</span><span class="se">\n</span><span class="si">{</span><span class="n">extra</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">specified</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">bokeh_hover_tooltip</span><span class="p">(</span>
+                <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">TOOLTIP_KWARGS</span><span class="p">,</span>
+                <span class="n">custom</span><span class="o">=</span><span class="p">{</span><span class="bp">self</span><span class="o">.</span><span class="n">label_col</span><span class="p">:</span> <span class="s2">&quot;Soft Label&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">score_col</span><span class="p">:</span> <span class="s2">&quot;Soft Score&quot;</span><span class="p">},</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">specified</span>
 
     <span class="k">def</span> <span class="nf">_mandatory_column_defaults</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>

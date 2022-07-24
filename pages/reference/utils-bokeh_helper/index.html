@@ -924,7 +924,7 @@
 </details>
 
         <details class="quote">
-          <summary>Source code in <code>hover/utils/bokeh_helper.py</code></summary>
+          <summary>Source code in <code>hover/utils/bokeh_helper/__init__.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">auto_label_color</span><span class="p">(</span><span class="n">labels</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    ???+ note &quot;Create a label-&gt;hex color mapping dict.&quot;</span>
@@ -967,7 +967,7 @@
 </details>
 
         <details class="quote">
-          <summary>Source code in <code>hover/utils/bokeh_helper.py</code></summary>
+          <summary>Source code in <code>hover/utils/bokeh_helper/__init__.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">binder_proxy_app_url</span><span class="p">(</span><span class="n">app_path</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">5006</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    ???+ note &quot;Find the URL of Bokeh server app in the current Binder session.&quot;</span>
@@ -999,7 +999,7 @@
 
 
 <h3 id="hover.utils.bokeh_helper.bokeh_hover_tooltip" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">bokeh_hover_tooltip</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">image</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">audio</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">coords</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">custom</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">bokeh_hover_tooltip</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">image</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">audio</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">coords</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">custom</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
 
 
 </h3>
@@ -1008,40 +1008,27 @@
 
       <details class="note" open="open">
 <summary>Create a Bokeh hover tooltip from a template.</summary>
-<ul>
-<li>label: whether to expect and show a "label" field.</li>
-<li>text: whether to expect and show a "text" field.</li>
-<li>image: whether to expect and show an "image" (url/path) field.</li>
-<li>audio: whether to expect and show an "audio" (url/path) field.</li>
-<li>coords: whether to show xy-coordinates.</li>
-<li>index: whether to show indices in the dataset.</li>
-<li>custom: {display: column} mapping of additional (text) tooltips.</li>
-</ul>
 </details>
 
         <details class="quote">
-          <summary>Source code in <code>hover/utils/bokeh_helper.py</code></summary>
+          <summary>Source code in <code>hover/utils/bokeh_helper/__init__.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">bokeh_hover_tooltip</span><span class="p">(</span>
-    <span class="n">label</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-    <span class="n">text</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-    <span class="n">image</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-    <span class="n">audio</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">text</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">image</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">audio</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">coords</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">custom</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
 <span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    ???+ note &quot;Create a Bokeh hover tooltip from a template.&quot;</span>
-
-<span class="sd">        - label: whether to expect and show a &quot;label&quot; field.</span>
-<span class="sd">        - text: whether to expect and show a &quot;text&quot; field.</span>
-<span class="sd">        - image: whether to expect and show an &quot;image&quot; (url/path) field.</span>
-<span class="sd">        - audio: whether to expect and show an &quot;audio&quot; (url/path) field.</span>
-<span class="sd">        - coords: whether to show xy-coordinates.</span>
-<span class="sd">        - index: whether to show indices in the dataset.</span>
-<span class="sd">        - custom: {display: column} mapping of additional (text) tooltips.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># initialize mutable default value</span>
+    <span class="c1"># initialize default values of mutable type</span>
+    <span class="n">label</span> <span class="o">=</span> <span class="n">label</span> <span class="ow">or</span> <span class="nb">dict</span><span class="p">(</span><span class="n">Label</span><span class="o">=</span><span class="n">label</span><span class="p">)</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">text</span> <span class="ow">or</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="n">image</span> <span class="o">=</span> <span class="n">image</span> <span class="ow">or</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="n">audio</span> <span class="o">=</span> <span class="n">audio</span> <span class="ow">or</span> <span class="nb">dict</span><span class="p">()</span>
     <span class="n">custom</span> <span class="o">=</span> <span class="n">custom</span> <span class="ow">or</span> <span class="nb">dict</span><span class="p">()</span>
 
     <span class="c1"># prepare encapsulation of a div box and an associated script</span>
@@ -1053,69 +1040,27 @@
     <span class="c1"># dynamically add contents to the div box and the script</span>
     <span class="n">divbox</span> <span class="o">=</span> <span class="n">divbox_prefix</span>
     <span class="n">script</span> <span class="o">=</span> <span class="n">script_prefix</span>
-    <span class="k">if</span> <span class="n">label</span><span class="p">:</span>
-        <span class="n">divbox</span> <span class="o">+=</span> <span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">        &lt;div&gt;</span>
-<span class="s2">            &lt;span style=&quot;font-size: 16px; color: #966;&quot;&gt;</span>
-<span class="s2">                Label: @label</span>
-<span class="s2">            &lt;/span&gt;</span>
-<span class="s2">        &lt;/div&gt;</span>
-<span class="s2">        &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">text</span><span class="p">:</span>
-        <span class="n">divbox</span> <span class="o">+=</span> <span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">        &lt;div style=&quot;word-wrap: break-word; width: 95%; text-overflow: ellipsis; line-height: 90%&quot;&gt;</span>
-<span class="s2">            &lt;span style=&quot;font-size: 11px;&quot;&gt;</span>
-<span class="s2">                Text: @text</span>
-<span class="s2">            &lt;/span&gt;</span>
-<span class="s2">        &lt;/div&gt;</span>
-<span class="s2">        &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">image</span><span class="p">:</span>
-        <span class="n">divbox</span> <span class="o">+=</span> <span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">        &lt;div&gt;</span>
-<span class="s2">            &lt;span style=&quot;font-size: 10px;&quot;&gt;</span>
-<span class="s2">                Image: @image</span>
-<span class="s2">            &lt;/span&gt;</span>
-<span class="s2">            &lt;img</span>
-<span class="s2">                src=&quot;@image&quot; height=&quot;60&quot; alt=&quot;@image&quot; width=&quot;60&quot;</span>
-<span class="s2">                style=&quot;float: left; margin: 0px 0px 0px 0px;&quot;</span>
-<span class="s2">                border=&quot;2&quot;</span>
-<span class="s2">            &gt;&lt;/img&gt;</span>
-<span class="s2">        &lt;/div&gt;</span>
-<span class="s2">        &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">audio</span><span class="p">:</span>
-        <span class="n">divbox</span> <span class="o">+=</span> <span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">        &lt;div&gt;</span>
-<span class="s2">            &lt;span style=&quot;font-size: 10px;&quot;&gt;</span>
-<span class="s2">                Audio: @audio</span>
-<span class="s2">            &lt;/span&gt;</span>
-<span class="s2">            &lt;audio autoplay preload=&quot;auto&quot; src=&quot;@audio&quot;&gt;</span>
-<span class="s2">            &lt;/audio&gt;</span>
-<span class="s2">        &lt;/div&gt;</span>
-<span class="s2">        &quot;&quot;&quot;</span>
+
+    <span class="k">for</span> <span class="n">_field</span><span class="p">,</span> <span class="n">_key</span> <span class="ow">in</span> <span class="n">label</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">divbox</span> <span class="o">+=</span> <span class="n">TOOLTIP_LABEL_TEMPLATE</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="n">_field</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">_key</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">_field</span><span class="p">,</span> <span class="n">_key</span> <span class="ow">in</span> <span class="n">text</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">divbox</span> <span class="o">+=</span> <span class="n">TOOLTIP_TEXT_TEMPLATE</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="n">_field</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">_key</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">_field</span><span class="p">,</span> <span class="n">_size</span> <span class="ow">in</span> <span class="n">image</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">divbox</span> <span class="o">+=</span> <span class="n">TOOLTIP_IMAGE_TEMPLATE</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="n">_field</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">_size</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">_field</span><span class="p">,</span> <span class="n">_option</span> <span class="ow">in</span> <span class="n">audio</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">divbox</span> <span class="o">+=</span> <span class="n">TOOLTIP_AUDIO_TEMPLATE</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="n">_field</span><span class="p">,</span> <span class="n">option</span><span class="o">=</span><span class="n">_option</span><span class="p">)</span>
+
     <span class="k">if</span> <span class="n">coords</span><span class="p">:</span>
-        <span class="n">divbox</span> <span class="o">+=</span> <span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">        &lt;div&gt;</span>
-<span class="s2">            &lt;span style=&quot;font-size: 12px; color: #060;&quot;&gt;</span>
-<span class="s2">                Coordinates: ($x, $y)</span>
-<span class="s2">            &lt;/span&gt;</span>
-<span class="s2">        &lt;/div&gt;</span>
-<span class="s2">        &quot;&quot;&quot;</span>
+        <span class="n">divbox</span> <span class="o">+=</span> <span class="n">TOOLTIP_COORDS_DIV</span>
+
     <span class="k">if</span> <span class="n">index</span><span class="p">:</span>
-        <span class="n">divbox</span> <span class="o">+=</span> <span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">        &lt;div&gt;</span>
-<span class="s2">            &lt;span style=&quot;font-size: 12px; color: #066;&quot;&gt;</span>
-<span class="s2">                Index: [$index]</span>
-<span class="s2">            &lt;/span&gt;</span>
-<span class="s2">        &lt;/div&gt;</span>
-<span class="s2">        &quot;&quot;&quot;</span>
-    <span class="k">for</span> <span class="n">_key</span><span class="p">,</span> <span class="n">_field</span> <span class="ow">in</span> <span class="n">custom</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-        <span class="n">divbox</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">        &lt;div&gt;</span>
-<span class="s2">            &lt;span style=&quot;font-size: 12px; color: #606;&quot;&gt;</span>
-<span class="s2">                </span><span class="si">{</span><span class="n">_key</span><span class="si">}</span><span class="s2">: @</span><span class="si">{</span><span class="n">_field</span><span class="si">}</span><span class="s2"></span>
-<span class="s2">            &lt;/span&gt;</span>
-<span class="s2">        &lt;/div&gt;</span>
-<span class="s2">        &quot;&quot;&quot;</span>
+        <span class="n">divbox</span> <span class="o">+=</span> <span class="n">TOOLTIP_INDEX_DIV</span>
+
+    <span class="k">for</span> <span class="n">_field</span><span class="p">,</span> <span class="n">_key</span> <span class="ow">in</span> <span class="n">custom</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">divbox</span> <span class="o">+=</span> <span class="n">TOOLTIP_CUSTOM_TEMPLATE</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="n">_field</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">_key</span><span class="p">)</span>
 
     <span class="n">divbox</span> <span class="o">+=</span> <span class="n">divbox_suffix</span>
     <span class="n">script</span> <span class="o">+=</span> <span class="n">script_suffix</span>
@@ -1150,7 +1095,7 @@
 </details>
 
         <details class="quote">
-          <summary>Source code in <code>hover/utils/bokeh_helper.py</code></summary>
+          <summary>Source code in <code>hover/utils/bokeh_helper/__init__.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">remote_jupyter_proxy_url</span><span class="p">(</span><span class="n">port</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    ???+ note &quot;Callable to configure Bokeh&#39;s show method when using a proxy (JupyterHub).&quot;</span>
@@ -1248,7 +1193,7 @@
 </details>
 
         <details class="quote">
-          <summary>Source code in <code>hover/utils/bokeh_helper.py</code></summary>
+          <summary>Source code in <code>hover/utils/bokeh_helper/__init__.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">servable</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    ???+ note &quot;Create a decorator which returns an app (or &quot;handle&quot; function) to be passed to bokeh.&quot;</span>
@@ -1366,7 +1311,7 @@
 </details>
 
         <details class="quote">
-          <summary>Source code in <code>hover/utils/bokeh_helper.py</code></summary>
+          <summary>Source code in <code>hover/utils/bokeh_helper/__init__.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">show_as_interactive</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    ???+ note &quot;Wrap a bokeh LayoutDOM as an application to allow Python callbacks.&quot;</span>
@@ -1387,6 +1332,7 @@
     </div>
 
   </div>
+
 
 
 

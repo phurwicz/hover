@@ -1025,7 +1025,11 @@ BokehBaseExplorer            (<span title="hover.core.Loggable">Loggable</span>,
 
     <span class="n">PRIMARY_FEATURE</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">MANDATORY_COLUMNS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;label&quot;</span><span class="p">]</span>
-    <span class="n">TOOLTIP_KWARGS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;coords&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;index&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
+    <span class="n">TOOLTIP_KWARGS</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;Label&quot;</span><span class="p">},</span>
+        <span class="s2">&quot;coords&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">&quot;index&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">}</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df_dict</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -1095,18 +1099,19 @@ BokehBaseExplorer            (<span title="hover.core.Loggable">Loggable</span>,
 
         <span class="k">return</span> <span class="n">column</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_layout_widgets</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_build_tooltip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">extra</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_build_tooltip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">specified</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        ???+ note &quot;Define a windowed tooltip which shows inspection details.&quot;</span>
 <span class="sd">            | Param            | Type   | Description                  |</span>
 <span class="sd">            | :--------------- | :----- | :--------------------------- |</span>
-<span class="sd">            | `extra`          | `str`  | user-supplied extra HTML |</span>
+<span class="sd">            | `specified`      | `str`  | user-specified HTML          |</span>
 
 <span class="sd">            Note that this is a method rather than a class attribute because</span>
 <span class="sd">            child classes may involve instance attributes in the tooltip.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">standard</span> <span class="o">=</span> <span class="n">bokeh_hover_tooltip</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">TOOLTIP_KWARGS</span><span class="p">)</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">standard</span><span class="si">}</span><span class="se">\n</span><span class="si">{</span><span class="n">extra</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">specified</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">bokeh_hover_tooltip</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">TOOLTIP_KWARGS</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">specified</span>
 
     <span class="k">def</span> <span class="nf">_setup_widgets</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>

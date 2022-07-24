@@ -897,6 +897,7 @@
 <p>Think of this page as <em>almost</em> a Jupyter notebook. You can edit code and press <code>Shift+Enter</code> to execute.</p>
 <p>Behind the scene is a <a href="https://mybinder.org/">Binder</a>-hosted Python environment. Below is the status of the kernel:
 <div class="thebe-status"></div><div class="thebe-activate"></div></p>
+<p>To download a notebook file instead, visit <a href="https://github.com/phurwicz/hover/tree/main/docs/pipelines/generated">here</a>.</p>
 </details>
 <details class="warning" open="open">
 <summary>This page addresses <strong>single components</strong> of <code>hover</code></summary>
@@ -908,7 +909,7 @@
 </details>
 <details class="info">
 <summary>Dependencies for <mark class="critic"> local environments </mark></summary>
-<p>When you copy code from this page to run locally, you may need to install additional packages.
+<p>When you run the code locally, you may need to install additional packages.
 To run the text embedding code on this page, you need:
 <div class="highlight"><pre><span></span><code>pip install spacy
 python -m spacy download en_core_web_md
@@ -987,15 +988,16 @@ reducer = dataset.compute_nd_embedding(vectorizer, "umap", dimension=2)
 </ul>
 </details>
 <pre data-executable>
-from local_lib.binder_helper import remote_jupyter_proxy_url
 from bokeh.io import show, output_notebook
 
 output_notebook()
 
-# special configuration for this remotely hosted tutorial
-notebook_url = remote_jupyter_proxy_url
 # normally your would skip notebook_url or use Jupyter address
-# notebook_url = 'localhost:8888'
+notebook_url = 'localhost:8888'
+
+# special configuration for this remotely hosted tutorial
+from local_lib.binder_helper import remote_jupyter_proxy_url
+notebook_url = remote_jupyter_proxy_url
 
 from hover.recipes.subroutine import standard_finder
 from bokeh.layouts import row, column

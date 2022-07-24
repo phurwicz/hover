@@ -1,9 +1,0 @@
-from local_lib.binder_helper import remote_jupyter_proxy_url
-from bokeh.io import show, output_notebook
-
-output_notebook()
-
-# special configuration for this remotely hosted tutorial
-notebook_url = remote_jupyter_proxy_url
-# normally your would skip notebook_url or use Jupyter address
-# notebook_url = 'localhost:8888'

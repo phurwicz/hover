@@ -894,6 +894,7 @@
 <p>Think of this page as <em>almost</em> a Jupyter notebook. You can edit code and press <code>Shift+Enter</code> to execute.</p>
 <p>Behind the scene is a <a href="https://mybinder.org/">Binder</a>-hosted Python environment. Below is the status of the kernel:
 <div class="thebe-status"></div><div class="thebe-activate"></div></p>
+<p>To download a notebook file instead, visit <a href="https://github.com/phurwicz/hover/tree/main/docs/pipelines/generated">here</a>.</p>
 </details>
 <h2 id="dataset-for-audios"><strong>Dataset for audios</strong></h2>
 <p><code>hover</code> handles audios through their URL addresses. URLs are strings which can be easily stored, hashed, and looked up against. They are also convenient for rendering tooltips in the annotation interface.</p>
@@ -980,7 +981,7 @@ from hover.recipes.stable import simple_annotator
 
 interactive_plot = simple_annotator(dataset)
 
-# ---------- SERVER MODE: for this documentation page ----------
+# ---------- SERVER MODE: for the documentation page ----------
 # because this tutorial is remotely hosted, we need explicit serving to expose the plot to you
 from local_lib.binder_helper import binder_proxy_app_url
 from bokeh.server.server import Server
@@ -990,7 +991,7 @@ server.start()
 binder_proxy_app_url('my-app', port=5007)
 
 # ---------- NOTEBOOK MODE: for your actual Jupyter environment ---------
-# if you'd like, this code will render the entire plot in Jupyter
+# this code will render the entire plot in Jupyter
 # from bokeh.io import show, output_notebook
 # output_notebook()
 # show(interactive_plot, notebook_url='https://localhost:8888')
