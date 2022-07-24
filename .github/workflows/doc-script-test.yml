@@ -30,19 +30,6 @@ jobs:
     - name: Clone hover
       uses: actions/checkout@v2
 
-        #- name: Clone hover-binder
-        #  uses: actions/checkout@v2
-        #  with:
-        #    repository: phurwicz/hover-binder
-        #    ref: master
-        #    path: .hover-binder
-
-        #- name: Pick local library from Binder repo
-        #  run: |
-        #    cp -r .hover-binder/local_lib ./local_lib
-        #    cp -r .hover-binder/custom_cache ./custom_cache
-        #    rm -rf .hover-binder
-
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v2
       with:
@@ -53,25 +40,8 @@ jobs:
         sudo apt-get update
         sudo apt-get install libsndfile1
 
-    - name: Prepare Git
-      if: ${{ github.event_name == 'workflow_dispatch' ||github.event_name == 'schedule' }}
-      run: |
-        git branch pipeline/notebook-generation
-        git pull
-        git checkout pipeline/notebook-generation
-        git merge main --no-edit
-
     - name: Test with Tox
       run: |
         pip install --upgrade pip
         pip install --upgrade tox tox-gh-actions
         tox -e test_doc_scripts
-
-    - name: Update Generated Notebooks
-      if: ${{ github.event_name == 'workflow_dispatch' ||github.event_name == 'schedule' }}
-      run: |
-        git config --global user.name ${{ secrets.ACTIONS_GIT_USERNAME }}
-        git config --global user.email ${{ secrets.ACTIONS_GIT_EMAIL }}
-        git add docs/pipelines/generated/*.ipynb
-        git commit -m "Automatic update of notebooks generated from documentation scripts"
-        git push --set-upstream origin pipeline/notebook-generation

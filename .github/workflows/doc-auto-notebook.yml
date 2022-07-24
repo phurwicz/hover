@@ -1,0 +1,54 @@
+# This workflow will generate Jupyter notebooks based on the code scripts in the documentation.
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
+
+name: Automatic Notebook Generation
+
+on:
+  schedule:
+    - cron: "0 0 * * 2"
+  workflow_dispatch:
+
+jobs:
+  auto-notebook:
+
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        python-version: ['3.8']
+        os: [ubuntu-latest]
+
+    steps:
+    - name: Clone hover
+      uses: actions/checkout@v2
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install Non-Python Dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install libsndfile1
+
+    - name: Prepare Git
+      run: |
+        git config --global user.name ${{ secrets.ACTIONS_GIT_USERNAME }}
+        git config --global user.email ${{ secrets.ACTIONS_GIT_EMAIL }}
+        git branch pipeline/notebook-generation --set-upstream-to origin pipeline/notebook-generation
+        git pull
+        git checkout pipeline/notebook-generation
+        git merge main --no-edit
+        git push
+
+    - name: Test with Tox
+      run: |
+        pip install --upgrade pip
+        pip install --upgrade tox tox-gh-actions
+        tox -e test_notebook_generation
+
+    - name: Update Generated Notebooks
+      run: |
+        git add docs/pipelines/generated/*.ipynb
+        git commit -m "Automatic update of notebooks generated from documentation scripts"
+        git push

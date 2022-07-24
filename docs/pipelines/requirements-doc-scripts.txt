@@ -1,0 +1,18 @@
+# auto-parse scripts in markdown files
+markdown
+markdown-include>=0.7.0
+# Jupyter environment
+jupyter
+jupyterlab
+# dependencies for specific code
+## distant supervision
+snorkel>=0.9.8
+## text vectorizer
+spacy
+## image vectorizer
+efficientnet_pytorch
+torchvision
+## audio handling
+librosa
+## disk-persistent caching
+wrappy>=0.2.6
