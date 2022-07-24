@@ -18,8 +18,10 @@ jobs:
         os: [ubuntu-latest]
 
     steps:
-    - name: Clone hover
-      uses: actions/checkout@v2
+    - name: Clone hover all branches
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
 
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v2
@@ -35,11 +37,9 @@ jobs:
       run: |
         git config --global user.name ${{ secrets.ACTIONS_GIT_USERNAME }}
         git config --global user.email ${{ secrets.ACTIONS_GIT_EMAIL }}
-        git branch pipeline/notebook-generation
-        git branch --set-upstream-to origin/pipeline/notebook-generation pipeline/notebook-generation
         git checkout pipeline/notebook-generation
-        git pull
-        git merge main --no-edit
+        #git branch --set-upstream-to origin/pipeline/notebook-generation pipeline/notebook-generation
+        git merge origin/main --no-edit
         git push
 
     - name: Test with Tox
