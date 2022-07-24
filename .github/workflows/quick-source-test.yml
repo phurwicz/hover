@@ -13,6 +13,11 @@ on:
       - 'fixture_module/**.py'
   pull_request:
     branches: [ main ]
+    paths:
+      - 'hover/**.py'
+      - 'tests/**.py'
+      - 'pytest.ini'
+      - 'fixture_module/**.py'
   workflow_dispatch:
 
 jobs:
@@ -50,6 +55,7 @@ jobs:
 
     - name: Codacy Coverage Reporter
       uses: codacy/codacy-coverage-reporter-action@master
+      if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'push' }}
       with:
         project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
         coverage-reports: cobertura.xml
