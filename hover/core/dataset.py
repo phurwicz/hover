@@ -20,6 +20,7 @@ from hover.utils.bokeh_helper import auto_label_color
 from hover.utils.misc import current_time
 from bokeh.models import (
     Button,
+    CheckboxGroup,
     Dropdown,
     ColumnDataSource,
     DataTable,
@@ -282,6 +283,11 @@ class SupervisableDataset(Loggable):
             width_policy="min",
         )
 
+        self.selection_table_refresh_box = CheckboxGroup(
+            labels=["auto refresh selection table"], active=[]
+        )
+        self.help_div = dataset_help_widget()
+
         def commit_base_callback():
             """
             COMMIT creates cross-duplicates between subsets.
@@ -333,8 +339,6 @@ class SupervisableDataset(Loggable):
         self.data_committer.on_click(commit_base_callback)
         self.dedup_trigger.on_click(dedup_base_callback)
 
-        self.help_div = dataset_help_widget()
-
     def view(self):
         """
         ???+ note "Defines the layout of `bokeh` objects when visualized."
@@ -357,6 +361,9 @@ class SupervisableDataset(Loggable):
                 self.selection_viewer,
                 self.selection_patcher,
                 self.selection_evictor,
+            ),
+            row(
+                self.selection_table_refresh_box,
             ),
             self.sel_table,
         )
@@ -459,6 +466,13 @@ class SupervisableDataset(Loggable):
             selected = pd.concat(sel_slices, axis=0)
             self._callback_update_selection(selected)
 
+        def callback_view_refresh(event):
+            if not event.final:
+                return
+
+            if 0 in self.selection_table_refresh_box.active:
+                callback_view()
+
         def callback_evict():
             # create sets for fast index discarding
             subset_to_indicies = {}
@@ -486,6 +500,7 @@ class SupervisableDataset(Loggable):
             callback_view()
 
         self.selection_viewer.on_click(callback_view)
+        explorer._register_selection_read_callback(callback_view_refresh)
         self.selection_evictor.on_click(callback_evict)
         self._good(
             f"Subscribed {explorer.__class__.__name__} to selection table: {subsets}"

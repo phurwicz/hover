@@ -375,6 +375,34 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
 
         self._setup_selection_tools()
 
+    def _setup_subroutine_selection_callback_queue(self):
+        """
+        ???+ note "For dynamically assigned callbacks triggered by making a selection on the figure."
+
+            -   "Write" operations post-process the selection.
+            -   "Read" operations reflect selection changes.
+            -   "Read" should happen after "Write".
+        """
+        self._selection_write_callbacks = []
+        self._selection_read_callbacks = []
+
+        def aggregate_callback(event):
+            for _callback in self._selection_write_callbacks:
+                _callback(event)
+            for _callback in self._selection_read_callbacks:
+                _callback(event)
+
+        self.figure.on_event(SelectionGeometry, aggregate_callback)
+
+        def register_write(callback):
+            self._selection_write_callbacks.append(callback)
+
+        def register_read(callback):
+            self._selection_read_callbacks.append(callback)
+
+        self._register_selection_write_callback = register_write
+        self._register_selection_read_callback = register_read
+
     def _setup_subroutine_selection_store(self):
         """
         ???+ note "Subroutine of `_setup_selection_tools`."
@@ -405,8 +433,7 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
                 _source.selected.indices = list(self._last_selections[_key].data)
 
         self._store_selection = store_selection
-        self.figure.on_event(
-            SelectionGeometry,
+        self._register_selection_write_callback(
             lambda event: self._store_selection() if event.final else None,
         )
 
@@ -436,8 +463,7 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
         # keep reference to trigger_selection_filter() for further access
         # for example, toggling filters should call the trigger
         self._trigger_selection_filters = trigger_selection_filters
-        self.figure.on_event(
-            SelectionGeometry,
+        self._register_selection_write_callback(
             lambda event: self._trigger_selection_filters() if event.final else None,
         )
 
@@ -474,6 +500,7 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
             _key: RootUnionFind(set()) for _key in self.sources.keys()
         }
 
+        self._setup_subroutine_selection_callback_queue()
         self._setup_subroutine_selection_store()
         self._setup_subroutine_selection_filter()
         self._setup_subroutine_selection_reset()
