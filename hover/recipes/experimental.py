@@ -49,14 +49,16 @@ def _snorkel_crosscheck(dataset, lf_list, layout_style="horizontal", **kwargs):
         snorkel.plot_lf(_lf)
     snorkel.figure.legend.click_policy = "hide"
 
-    # link coordinates and selections
-    for _explorer in [annotator, snorkel]:
-        finder.link_selection_options(_explorer)
+    # link selections
+    annotator.link_selection(
+        finder,
+        {_key: _key for _key in ["raw", "train", "dev", "test"]},
+    )
     # note that SnorkelExplorer has different subsets
-    for _key in ["raw", "train", "dev", "test"]:
-        finder.link_selection(_key, annotator, _key)
-    snorkel.link_selection("raw", annotator, "raw")
-    snorkel.link_selection("labeled", annotator, "dev")
+    annotator.link_selection(
+        snorkel,
+        {"raw": "raw", "dev": "labeled"},
+    )
 
     sidebar = dataset.view()
     layout = recipe_layout(
@@ -106,12 +108,14 @@ def _active_learning(dataset, vecnet, layout_style="horizontal", **kwargs):
     softlabel, model_trainer = active_learning_components(dataset, vecnet, **kwargs)
 
     # link selections, noting that softlabel does not take "test"
-    finder.link_selection_options(annotator)
-    finder.link_selection_options(softlabel)
-    for _key in ["raw", "train", "dev"]:
-        softlabel.link_selection(_key, annotator, _key)
-        softlabel.link_selection(_key, finder, _key)
-    finder.link_selection("test", annotator, "test")
+    annotator.link_selection(
+        finder,
+        {_key: _key for _key in ["raw", "train", "dev", "test"]},
+    )
+    annotator.link_selection(
+        softlabel,
+        {_key: _key for _key in ["raw", "train", "dev"]},
+    )
 
     sidebar = column(model_trainer, vecnet.view(), dataset.view())
     layout = recipe_layout(
