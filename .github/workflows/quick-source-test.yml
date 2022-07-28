@@ -5,14 +5,14 @@ name: Quick Source Test
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, nightly ]
     paths:
       - 'hover/**.py'
       - 'tests/**.py'
       - 'pytest.ini'
       - 'fixture_module/**.py'
   pull_request:
-    branches: [ main ]
+    branches: [ main, nightly ]
     paths:
       - 'hover/**.py'
       - 'tests/**.py'
