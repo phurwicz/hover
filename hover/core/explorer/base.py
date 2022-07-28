@@ -87,6 +87,7 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
         self._setup_dfs(df_dict)
         self._setup_sources()
         self._setup_widgets()
+        self._setup_status_flags()
 
     @classmethod
     def from_dataset(cls, dataset, subset_mapping, *args, **kwargs):
@@ -167,6 +168,20 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
             Left to child classes that have a specific feature format.
         """
         pass
+
+    def _setup_status_flags(self):
+        """
+        ???+ note "Status flags to permit or forbid certain operations."
+        """
+        self.status_flags = {
+            "selecting": False,
+            "selection_syncing_out": False,
+        }
+
+        def update_selecting_status(event):
+            self.status_flags["selecting"] = not event.final
+
+        self.figure.on_event(SelectionGeometry, update_selecting_status)
 
     def _setup_selection_option(self):
         """
@@ -380,36 +395,36 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
         ???+ note "For dynamically assigned callbacks triggered by making a selection on the figure."
 
             -   "Write" operations post-process the selection.
-            -   "Sync" operations synchronize the selected indices to linked explorers.
             -   "Read" operations reflect selection changes without changing anything on the explorer.
-            -   the order should be "Write" -> "Sync" -> "Read".
+            -   the order should be "Write" -> "Read".
         """
-        self._selection_write_callbacks = RootUnionFind(set())
-        self._selection_sync_callbacks = RootUnionFind(set())
-        self._selection_read_callbacks = RootUnionFind(set())
+        stages = ["pre", "write", "read", "post"]
 
-        def aggregate_callback(event):
-            for _callback in self._selection_write_callbacks:
-                _callback(event)
-            for _callback in self._selection_sync_callbacks:
-                _callback(event)
-            for _callback in self._selection_read_callbacks:
-                _callback(event)
+        self._selection_callbacks = {_k: RootUnionFind(set()) for _k in stages}
 
-        self.figure.on_event(SelectionGeometry, aggregate_callback)
+        def readall_callback():
+            for _callback in self._selection_callbacks["read"].data:
+                _callback()
 
-        def register_write(callback):
-            self._selection_write_callbacks.data.append(callback)
+        def unified_callback():
+            for _k in stages:
+                for _callback in self._selection_callbacks[_k].data:
+                    _callback()
 
-        def register_sync(callback):
-            self._selection_sync_callbacks.data.append(callback)
+        # expose the unified and readall callbacks externally
+        self._selection_unified_callback = unified_callback
+        self._selection_readall_callback = readall_callback
 
-        def register_read(callback):
-            self._selection_read_callbacks.data.append(callback)
+        self.figure.on_event(
+            SelectionGeometry,
+            lambda event: unified_callback() if event.final else None,
+        )
 
-        self._register_selection_write_callback = register_write
-        self._register_selection_sync_callback = register_sync
-        self._register_selection_read_callback = register_read
+        def register_selection_callback(stage, callback):
+            assert stage in stages, f"Invalid stage: {stage}, expected one of {stages}"
+            self._selection_callbacks[stage].data.add(callback)
+
+        self._register_selection_callback = register_selection_callback
 
     def _setup_subroutine_selection_store(self):
         """
@@ -441,9 +456,7 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
                 _source.selected.indices = list(self._last_selections[_key].data)
 
         self._store_selection = store_selection
-        self._register_selection_write_callback(
-            lambda event: self._store_selection() if event.final else None,
-        )
+        self._register_selection_callback("pre", self._store_selection)
 
     def _setup_subroutine_selection_filter(self):
         """
@@ -468,12 +481,7 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
                     _selected = _func(_selected, _key)
                 self.sources[_key].selected.indices = list(_selected)
 
-        # keep reference to trigger_selection_filter() for further access
-        # for example, toggling filters should call the trigger
-        self._trigger_selection_filters = trigger_selection_filters
-        self._register_selection_write_callback(
-            lambda event: self._trigger_selection_filters() if event.final else None,
-        )
+        self._register_selection_callback("write", trigger_selection_filters)
 
     def _setup_subroutine_selection_reset(self):
         """
@@ -684,6 +692,7 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
     def link_selection(self, other, subset_mapping):
         """
         ???+ note "Synchronize the selection mechanism between sources."
+
             This includes:
             -   the selected indices between subsets
             -   callbacks associated with selections
@@ -695,37 +704,85 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
             | `subset_mapping` | `dict` | mapping of subsets from `self` to `other` |
         """
         self._prelink_check(other)
+        self._subroutine_link_selection_callbacks(self, other)
+        self._subroutine_link_selection_indices(self, other, subset_mapping)
+        self._subroutine_link_selection_options(self, other)
 
-        # link selection write callbacks (pointing to the same set)
-        self._selection_write_callbacks.data.update(
-            other._selection_write_callbacks.data
-        )
-        self._selection_write_callbacks.union(other._selection_write_callbacks)
+    def _subroutine_link_selection_callbacks(self, other):
+        """
+        ???+ note "Subroutine of `link_selection`."
 
-        # DO NOT link selection sync callbacks
-        # the explorer in which SelectionGeometry happens shall sync
-        # its post-write selected indices to the other explorers
+            Union the callbacks triggered by selection event.
 
-        # link selection read callbacks (pointing to the same set)
-        self._selection_read_callbacks.data.update(other._selection_read_callbacks.data)
-        self._selection_read_callbacks.union(other._selection_read_callbacks)
+            | Param   | Type    | Description                    |
+            | :------ | :------ | :----------------------------- |
+            | `other` | `BokehBaseExplorer` | the other explorer |
+        """
+        # link selection callbacks (pointing to the same set)
+        for _k in ["pre", "write", "read", "post"]:
+            self._selection_callbacks[_k].data.update(
+                other._selection_callbacks[_k].data
+            )
+            self._selection_callbacks[_k].union(other._selection_callbacks[_k])
+
+    def _subroutine_link_selection_indices(self, other, subset_mapping):
+        """
+        ???+ note "Subroutine of `link_selection`."
+
+            Synchronize the manually selected indices and actually selected ones.
+
+            | Param   | Type    | Description                    |
+            | :------ | :------ | :----------------------------- |
+            | `other` | `BokehBaseExplorer` | the other explorer |
+            | `subset_mapping` | `dict` | mapping of subsets from `self` to `other` |
+        """
+
+        def link_selected_indices(kl, kr):
+            sl, sr = self.sources[_kl], other.sources[_kr]
+
+            # acyclic, DFS-like syncs
+            def left_to_right(attr, old, new):
+                # "acyclic"
+                if other.status_flags["selection_syncing_out"]:
+                    return
+
+                # "DFS-like"
+                if set(sr.selected.indices) ^ set(sl.selected.indices):
+                    self.status_flags["selection_syncing_out"] = True
+                    sr.selected.indices = sl.selected.indices[:]
+                    self.status_flags["selection_syncing_out"] = False
+
+            def right_to_left(attr, old, new):
+                # "acyclic"
+                if self.status_flags["selection_syncing_out"]:
+                    return
+
+                # "DFS-like"
+                if set(sl.selected.indices) ^ set(sr.selected.indices):
+                    other.status_flags["selection_syncing_out"] = True
+                    sl.selected.indices = sr.selected.indices[:]
+                    other.status_flags["selection_syncing_out"] = False
+
+            sl.selected.on_change("indices", left_to_right)
+            sr.selected.on_change("indices", right_to_left)
 
         for _kl, _kr in subset_mapping.items():
             # link last manual selections (pointing to the same set)
             self._last_selections[_kl].union(other._last_selections[_kr])
 
             # link selected indices; these are used by bokeh, not UnionFind-able
-            _sl, _sr = self.sources[_kl], other.sources[_kr]
+            link_selected_indices(self.sources[_kl], other.sources[_kr])
 
-            def idx_lr(attr, old, new):
-                _sr.selected.indices = _sl.selected.indices[:]
+    def _subroutine_link_selection_options(self, other):
+        """
+        ???+ note "Subroutine of `link_selection`."
 
-            def idx_rl(attr, old, new):
-                _sl.selected.indices = _sr.selected.indices[:]
+            Synchronize the option widget values associated with selection.
 
-            self._register_selection_sync_callback(idx_lr)
-            other._register_selection_sync_callback(idx_rl)
-
+            | Param   | Type    | Description                    |
+            | :------ | :------ | :----------------------------- |
+            | `other` | `BokehBaseExplorer` | the other explorer |
+        """
         # link selection option values
         def option_lr(attr, old, new):
             other.selection_option_box.active = self.selection_option_box.active

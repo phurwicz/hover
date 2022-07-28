@@ -74,14 +74,14 @@ class BokehDataFinder(BokehBaseExplorer):
         for _widget in self._search_watch_widgets():
             _widget.on_change(
                 "value",
-                lambda attr, old, new: self._trigger_selection_filters()
+                lambda attr, old, new: self._selection_unified_callback()
                 if filter_flag()
                 else None,
             )
 
         # active toggles always trigger selection filter
         self.search_filter_box.on_change(
-            "active", lambda attr, old, new: self._trigger_selection_filters()
+            "active", lambda attr, old, new: self._selection_unified_callback()
         )
 
     def plot(self):
@@ -363,14 +363,14 @@ class BokehSoftLabelExplorer(BokehBaseExplorer):
         # when toggled as active, score range change triggers selection filter
         self.score_range.on_change(
             "value",
-            lambda attr, old, new: self._trigger_selection_filters()
+            lambda attr, old, new: self._selection_unified_callback()
             if filter_flag()
             else None,
         )
 
         # active toggles always trigger selection filter
         self.score_filter_box.on_change(
-            "active", lambda attr, old, new: self._trigger_selection_filters()
+            "active", lambda attr, old, new: self._selection_unified_callback()
         )
 
     def plot(self, **kwargs):
@@ -689,6 +689,9 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
                     if _label != module_config.ABSTAIN_DECODED
                 ]
                 self.sources[_key].selected.indices = _kept
+
+            # selection reduced, need to trigger readall callbacks
+            self._selection_readall_callback()
 
         self.lf_filter_trigger.on_click(callback_filter)
 

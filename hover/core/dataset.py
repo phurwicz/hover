@@ -466,10 +466,7 @@ class SupervisableDataset(Loggable):
             selected = pd.concat(sel_slices, axis=0)
             self._callback_update_selection(selected)
 
-        def callback_view_refresh(event):
-            if not event.final:
-                return
-
+        def callback_view_refresh():
             if 0 in self.selection_table_refresh_box.active:
                 callback_view()
 
@@ -499,8 +496,8 @@ class SupervisableDataset(Loggable):
             # refresh the selection table
             callback_view()
 
+        explorer._register_selection_callback("read", callback_view_refresh)
         self.selection_viewer.on_click(callback_view)
-        explorer._register_selection_read_callback(callback_view_refresh)
         self.selection_evictor.on_click(callback_evict)
         self._good(
             f"Subscribed {explorer.__class__.__name__} to selection table: {subsets}"
