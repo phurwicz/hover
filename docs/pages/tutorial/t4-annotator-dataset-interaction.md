@@ -108,7 +108,7 @@ When we apply labels through the annotator plot, it's acutally the `dataset` beh
 
 ### **PUSH: Synchronize from Dataset to Plots**
 
-Below is the full interface of the `dataset`, where you can find a green "Push" button:
+Below is the full interface of the [`dataset`](https://www.scaler.com/topics/data-structures/graph-in-data-structure/), where you can find a green "Push" button:
 
 {!docs/snippets/markdown/jupyterlab-js-issue.md!}
 
