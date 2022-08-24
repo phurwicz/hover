@@ -46,7 +46,9 @@ def dataset_default_sel_table_columns(feature_key):
     # disable editing the feature through a blank editor
     feature_col_kwargs = dict(editor=CellEditor())
     if feature_key == "text":
-        pass
+        feature_col_kwargs["formatter"] = HTMLTemplateFormatter(
+                    template="""<span href="#" data-toggle="tooltip" title="<%= value %>"><%= value %></span>"""
+        )
     elif feature_key == "image":
         feature_col_kwargs["width"] = 200
         feature_col_kwargs["formatter"] = HTMLTemplateFormatter(
