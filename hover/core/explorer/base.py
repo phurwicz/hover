@@ -48,6 +48,7 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
 
     SUBSET_GLYPH_KWARGS = {}
     DEFAULT_SUBSET_MAPPING = {_k: _k for _k in ["raw", "train", "dev", "test"]}
+    SELECTION_PROCESSING_STAGES = ["save", "load", "write", "read"]
 
     PRIMARY_FEATURE = None
     MANDATORY_COLUMNS = ["label"]
@@ -393,35 +394,31 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
     def _setup_subroutine_selection_callback_queue(self):
         """
         ???+ note "For dynamically assigned callbacks triggered by making a selection on the figure."
-
-            -   "Write" operations post-process the selection.
-            -   "Read" operations reflect selection changes without changing anything on the explorer.
-            -   the order should be "Write" -> "Read".
         """
-        stages = ["pre", "write", "read", "post"]
+        all_stages = self.__class__.SELECTION_PROCESSING_STAGES
+        stage_to_order = {_stage: _i for _i, _stage in enumerate(all_stages)}
 
-        self._selection_callbacks = {_k: RootUnionFind(set()) for _k in stages}
+        self._selection_callbacks = {_k: RootUnionFind(set()) for _k in all_stages}
 
-        def readall_callback():
-            for _callback in self._selection_callbacks["read"].data:
-                _callback()
-
-        def unified_callback():
-            for _k in stages:
-                for _callback in self._selection_callbacks[_k].data:
+        def stages_callback(*stages):
+            prev_order = -1
+            for _stage in stages:
+                _order = stage_to_order[_stage]
+                assert _order > prev_order, f"Misordered stage sequence {stages}"
+                for _callback in self._selection_callbacks[_stage].data:
                     _callback()
 
-        # expose the unified and readall callbacks externally
-        self._selection_unified_callback = unified_callback
-        self._selection_readall_callback = readall_callback
+        self._selection_stages_callback = stages_callback
 
         self.figure.on_event(
             SelectionGeometry,
-            lambda event: unified_callback() if event.final else None,
+            lambda event: stages_callback(*all_stages) if event.final else None,
         )
 
         def register_selection_callback(stage, callback):
-            assert stage in stages, f"Invalid stage: {stage}, expected one of {stages}"
+            assert (
+                stage in all_stages
+            ), f"Invalid stage: {stage}, expected one of {all_stages}"
             self._selection_callbacks[stage].data.add(callback)
 
         self._register_selection_callback = register_selection_callback
@@ -455,8 +452,17 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
                     self._last_selections[_key].data.update(_selected)
                 _source.selected.indices = list(self._last_selections[_key].data)
 
+        def restore_selection():
+            """
+            Set current selection to the last manual selection.
+            Useful for applying cumulation / filters dynamically.
+            """
+            for _key, _source in self.sources.items():
+                _source.selected.indices = list(self._last_selections[_key].data)
+
         self._store_selection = store_selection
-        self._register_selection_callback("pre", self._store_selection)
+        self._register_selection_callback("save", store_selection)
+        self._register_selection_callback("load", restore_selection)
 
     def _setup_subroutine_selection_filter(self):
         """
@@ -476,10 +482,10 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
                 ), f"Expected subsets from {self.sources.keys()}"
 
             for _key in subsets:
-                _selected = self._last_selections[_key].data
+                _selected = set(self.sources[_key].selected.indices[:])
                 for _func in self._selection_filters[_key].data:
                     _selected = _func(_selected, _key)
-                self.sources[_key].selected.indices = list(_selected)
+                self.sources[_key].selected.indices = sorted(_selected)
 
         self._register_selection_callback("write", trigger_selection_filters)
 
@@ -719,7 +725,7 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
             | `other` | `BokehBaseExplorer` | the other explorer |
         """
         # link selection callbacks (pointing to the same set)
-        for _k in ["pre", "write", "read", "post"]:
+        for _k in self.__class__.SELECTION_PROCESSING_STAGES:
             self._selection_callbacks[_k].data.update(
                 other._selection_callbacks[_k].data
             )

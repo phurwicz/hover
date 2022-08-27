@@ -74,14 +74,19 @@ class BokehDataFinder(BokehBaseExplorer):
         for _widget in self._search_watch_widgets():
             _widget.on_change(
                 "value",
-                lambda attr, old, new: self._selection_unified_callback()
+                lambda attr, old, new: self._selection_stages_callback(
+                    "load", "write", "read"
+                )
                 if filter_flag()
                 else None,
             )
 
-        # active toggles always trigger selection filter
+        # change of toggles always trigger selection filter
         self.search_filter_box.on_change(
-            "active", lambda attr, old, new: self._selection_unified_callback()
+            "active",
+            lambda attr, old, new: self._selection_stages_callback(
+                "load", "write", "read"
+            ),
         )
 
     def plot(self):
@@ -363,14 +368,19 @@ class BokehSoftLabelExplorer(BokehBaseExplorer):
         # when toggled as active, score range change triggers selection filter
         self.score_range.on_change(
             "value",
-            lambda attr, old, new: self._selection_unified_callback()
+            lambda attr, old, new: self._selection_stages_callback(
+                "load", "write", "read"
+            )
             if filter_flag()
             else None,
         )
 
-        # active toggles always trigger selection filter
+        # changing toggles always re-evaluate selection filter
         self.score_filter_box.on_change(
-            "active", lambda attr, old, new: self._selection_unified_callback()
+            "active",
+            lambda attr, old, new: self._selection_stages_callback(
+                "load", "write", "read"
+            ),
         )
 
     def plot(self, **kwargs):
@@ -691,7 +701,7 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
                 self.sources[_key].selected.indices = _kept
 
             # selection reduced, need to trigger readall callbacks
-            self._selection_readall_callback()
+            self._selection_stages_callback("read")
 
         self.lf_filter_trigger.on_click(callback_filter)
 
