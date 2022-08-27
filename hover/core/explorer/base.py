@@ -704,9 +704,9 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
             | `subset_mapping` | `dict` | mapping of subsets from `self` to `other` |
         """
         self._prelink_check(other)
-        self._subroutine_link_selection_callbacks(self, other)
-        self._subroutine_link_selection_indices(self, other, subset_mapping)
-        self._subroutine_link_selection_options(self, other)
+        self._subroutine_link_selection_callbacks(other)
+        self._subroutine_link_selection_indices(other, subset_mapping)
+        self._subroutine_link_selection_options(other)
 
     def _subroutine_link_selection_callbacks(self, other):
         """
