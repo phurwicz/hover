@@ -31,7 +31,7 @@ def auto_label_color(labels):
     assert len(use_labels) <= 20, "Too many labels to support (max at 20)"
     palette = Category10[10] if len(use_labels) <= 10 else Category20[20]
     color_dict = {
-        module_config.ABSTAIN_DECODED: "#dcdcdc",  # gainsboro hex code
+        module_config.ABSTAIN_DECODED: module_config.ABSTAIN_HEXCOLOR,
         **{_l: _c for _l, _c in zip(use_labels, palette)},
     }
     return color_dict

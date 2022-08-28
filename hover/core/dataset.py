@@ -10,8 +10,9 @@
     -   getting a 2D embedding
     -   loading data for training models
 """
-import pandas as pd
+import os
 import numpy as np
+import pandas as pd
 from tqdm import tqdm
 from collections import OrderedDict
 from hover import module_config
@@ -576,7 +577,8 @@ class SupervisableDataset(Loggable):
             # auto-determine the export path root
             if path_root is None:
                 timestamp = current_time("%Y%m%d%H%M%S")
-                path_root = f"hover-dataset-export-{timestamp}"
+                export_dir = module_config.DATA_SAVE_DIR
+                path_root = os.path.join(export_dir, f"hover-dataset-{timestamp}")
 
             export_df = self.to_pandas()
 

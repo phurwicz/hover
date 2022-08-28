@@ -1,4 +1,5 @@
 import re
+import hover
 from bokeh.models import (
     Div,
     TableColumn,
@@ -7,7 +8,7 @@ from bokeh.models import (
 )
 
 
-DATASET_SUBSET_FIELD = "SUBSET"
+DATASET_SUBSET_FIELD = hover.config["core"]["dataset_subset_field"]
 
 COLOR_GLYPH_TEMPLATE = """
 <p style="color:<%= value %>;">
@@ -15,7 +16,7 @@ COLOR_GLYPH_TEMPLATE = """
 </p>
 """
 
-EMBEDDING_FIELD_PREFIX = "embed_"
+EMBEDDING_FIELD_PREFIX = hover.config["core"]["embedding_field_prefix"]
 EMBEDDING_FIELD_REGEX = r"^" + EMBEDDING_FIELD_PREFIX + r"\d+d_\d+$"
 
 
