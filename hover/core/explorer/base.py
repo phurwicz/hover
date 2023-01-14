@@ -211,18 +211,21 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
             self.data_key_button_group_help, self.data_key_button_group
         )
 
-        def update_data_key_display(active):
-            visible_keys = {self.data_key_button_group.labels[idx] for idx in active}
+        def update_data_key_display(subsets):
+            """
+            ???+ note "The parameter allows displayed subsets to be controlled from outside.
+            """
+            visible_keys = {self.data_key_button_group.labels[idx] for idx in subsets}
             for _renderer in self.figure.renderers:
                 # if the renderer has a name "on the list", update its visibility
                 if _renderer.name in self.__class__.SUBSET_GLYPH_KWARGS.keys():
                     _renderer.visible = _renderer.name in visible_keys
 
         # store the callback (useful, for example, during automated tests) and link it
-        self._callback_subset_display = lambda: update_data_key_display(
-            self.data_key_button_group.active
+        self._callback_subset_display = update_data_key_display
+        self.data_key_button_group.on_change(
+            "active", lambda: update_data_key_display(self.data_key_button_group.active)
         )
-        self.data_key_button_group.on_click(update_data_key_display)
 
     def _setup_axes_dropdown(self):
         """
