@@ -211,10 +211,8 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
             self.data_key_button_group_help, self.data_key_button_group
         )
 
-        def update_data_key_display(subsets):
-            """
-            ???+ note "The parameter allows displayed subsets to be controlled from outside.
-            """
+        def update_data_key_display():
+            subsets = self.data_key_button_group.active
             visible_keys = {self.data_key_button_group.labels[idx] for idx in subsets}
             for _renderer in self.figure.renderers:
                 # if the renderer has a name "on the list", update its visibility
@@ -224,7 +222,7 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
         # store the callback (useful, for example, during automated tests) and link it
         self._callback_subset_display = update_data_key_display
         self.data_key_button_group.on_change(
-            "active", lambda: update_data_key_display(self.data_key_button_group.active)
+            "active", lambda attr, old, new: update_data_key_display()
         )
 
     def _setup_axes_dropdown(self):
