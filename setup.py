@@ -24,7 +24,7 @@ setuptools.setup(
     install_requires=[
         # python-version-specific example: "numpy>=1.14,<=1.21.5;python_version<'3.8.0'",
         # interactive/static visualization
-        "bokeh>=2.3.3",
+        "bokeh>=3.0.3",
         # preprocessors
         "scikit-learn>=0.20.0",
         # neural stuff

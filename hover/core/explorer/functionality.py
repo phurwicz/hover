@@ -758,7 +758,7 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
         # remove from legend, checking that there is exactly one entry
         legend_idx_to_pop = None
         for i, _item in enumerate(self.figure.legend.items):
-            _label = _item.label.get("value", "")
+            _label = _item.label.value
             if _label == lf_name:
                 assert legend_idx_to_pop is None, f"Legend collision: {lf_name}"
                 legend_idx_to_pop = i
