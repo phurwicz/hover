@@ -2,11 +2,11 @@
 Module root where constants get configured.
 """
 import os
-from flexmod import AutolockedConfigValue, AutolockedConfig, AutolockedConfigIndex
+from flexmod import AutolockedConfigValue, Config, ConfigIndex
 
-config = AutolockedConfigIndex(
+config = ConfigIndex(
     [
-        AutolockedConfig(
+        Config(
             "io",
             [
                 AutolockedConfigValue(
@@ -16,7 +16,7 @@ config = AutolockedConfigIndex(
                 ),
             ],
         ),
-        AutolockedConfig(
+        Config(
             "visual",
             [
                 AutolockedConfigValue(
@@ -31,7 +31,7 @@ config = AutolockedConfigIndex(
                 ),
             ],
         ),
-        AutolockedConfig(
+        Config(
             "data.columns",
             [
                 AutolockedConfigValue(
@@ -66,7 +66,7 @@ config = AutolockedConfigIndex(
                 ),
             ],
         ),
-        AutolockedConfig(
+        Config(
             "data.values",
             [
                 AutolockedConfigValue(
