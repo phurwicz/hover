@@ -8,7 +8,7 @@ import numpy as np
 import torch
 import torch.nn.functional as F
 from abc import abstractmethod
-from bokeh.models import Slider, FuncTickFormatter
+from bokeh.models import Slider, CustomJSTickFormatter
 from sklearn.metrics import confusion_matrix
 from shutil import copyfile
 from hover.core import Loggable
@@ -258,7 +258,7 @@ class VectorNet(BaseVectorNet):
             end=7.0,
             value=self.__class__.DEFAULT_OPTIM_LOGLR,
             step=0.1,
-            format=FuncTickFormatter(code="return Math.pow(0.1, tick).toFixed(8)"),
+            format=CustomJSTickFormatter(code="return Math.pow(0.1, tick).toFixed(8)"),
         )
 
         def update_lr(attr, old, new):
