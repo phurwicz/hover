@@ -40,6 +40,8 @@ setuptools.setup(
         "deprecated>=1.1.0",
         # dimensionality reduction: UMAP is included
         "umap-learn>=0.3.10",
+        # module config customization
+        "flexmod>=0.0.2",
         # optional: more dimensionality reduction methods
         # "ivis[cpu]>=1.7",
         # optional: distant supervision

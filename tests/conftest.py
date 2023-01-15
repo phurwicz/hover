@@ -10,7 +10,7 @@ from functools import lru_cache
 # configure hover
 import hover
 
-hover.config.update(
+hover.config.load_override(
     random.choice(
         [
             os.path.join(os.path.dirname(__file__), _path)

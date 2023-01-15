@@ -8,7 +8,7 @@ from bokeh.models import (
 )
 
 
-DATASET_SUBSET_FIELD = hover.config["core"]["dataset_subset_field"]
+DATASET_SUBSET_FIELD = hover.config["data.columns"]["dataset_subset_field"]
 
 COLOR_GLYPH_TEMPLATE = """
 <p style="color:<%= value %>;">
@@ -16,7 +16,7 @@ COLOR_GLYPH_TEMPLATE = """
 </p>
 """
 
-EMBEDDING_FIELD_PREFIX = hover.config["core"]["embedding_field_prefix"]
+EMBEDDING_FIELD_PREFIX = hover.config["data.columns"]["embedding_field_prefix"]
 EMBEDDING_FIELD_REGEX = r"^" + EMBEDDING_FIELD_PREFIX + r"\d+d_\d+$"
 
 

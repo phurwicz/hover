@@ -2,12 +2,13 @@
 ???+ note "Useful subroutines for working with bokeh in general."
 """
 import os
+import numpy as np
 from functools import wraps
 from traceback import format_exc
 from urllib.parse import urljoin, urlparse
 from bokeh.models import PreText
 from bokeh.layouts import column
-from bokeh.palettes import Category10, Category20
+from bokeh.palettes import Category10, Category20, Turbo256
 from hover import module_config
 from .local_config import (
     TOOLTIP_TEXT_TEMPLATE,
@@ -28,11 +29,20 @@ def auto_label_color(labels):
     use_labels.discard(module_config.ABSTAIN_DECODED)
     use_labels = sorted(use_labels, reverse=False)
 
-    assert len(use_labels) <= 20, "Too many labels to support (max at 20)"
-    palette = Category10[10] if len(use_labels) <= 10 else Category20[20]
+    palette = module_config.BOKEH_PALETTE
+    assert len(use_labels) <= len(
+        palette
+    ), f"Too many labels to support (max at {len(palette)})"
+
+    use_palette_idx = np.linspace(0.0, len(palette) - 1.0, len(use_labels)).astype(int)
+    assert len(set(use_palette_idx)) == len(
+        use_palette_idx
+    ), "Found repeated palette index"
+
+    use_palette = [palette[i] for i in use_palette_idx]
     color_dict = {
         module_config.ABSTAIN_DECODED: module_config.ABSTAIN_HEXCOLOR,
-        **{_l: _c for _l, _c in zip(use_labels, palette)},
+        **{_l: _c for _l, _c in zip(use_labels, use_palette)},
     }
     return color_dict
 
