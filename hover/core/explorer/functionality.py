@@ -869,7 +869,7 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
             view = self._view_correct(L_labeled)
             data_dict["glyphs"]["C"] = self.figure.square(
                 *xy_axes,
-                source=view.source,
+                source=self.sources["labeled"],
                 view=view,
                 name="labeled",
                 tags=[lf.name],
@@ -879,7 +879,7 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
             view = self._view_incorrect(L_labeled)
             data_dict["glyphs"]["I"] = self.figure.x(
                 *xy_axes,
-                source=view.source,
+                source=self.sources["labeled"],
                 view=view,
                 name="labeled",
                 tags=[lf.name],
@@ -889,7 +889,7 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
             view = self._view_missed(L_labeled, lf.targets)
             data_dict["glyphs"]["M"] = self.figure.cross(
                 *xy_axes,
-                source=view.source,
+                source=self.sources["labeled"],
                 view=view,
                 name="labeled",
                 tags=[lf.name],
@@ -899,7 +899,7 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
             view = self._view_hit(L_raw)
             data_dict["glyphs"]["H"] = self.figure.circle(
                 *xy_axes,
-                source=view.source,
+                source=self.sources["raw"],
                 view=view,
                 name="raw",
                 tags=[lf.name],
