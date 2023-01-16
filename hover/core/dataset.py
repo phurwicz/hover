@@ -74,8 +74,8 @@ class SupervisableDataset(Loggable):
         self.setup_widgets()
         # self.setup_label_coding() # redundant if setup_pop_table() immediately calls this again
         self.setup_file_export()
-        self.setup_pop_table(width_policy="fit", height_policy="fit")
-        self.setup_sel_table(width_policy="fit", height_policy="fit")
+        self.setup_pop_table()
+        self.setup_sel_table()
         self._vectorizer_lookup = OrderedDict()
         self._good(f"{self.__class__.__name__}: finished initialization.")
 
@@ -250,38 +250,29 @@ class SupervisableDataset(Loggable):
             -   EVICT: remove a few rows from both VIEW result and linked `explorer` selection.
         """
         self.update_pusher = Button(
-            label="Push", button_type="success", height_policy="fit", width_policy="min"
+            label="Push",
+            button_type="success",
         )
         self.data_committer = Dropdown(
             label="Commit",
             button_type="warning",
             menu=[*self.__class__.PUBLIC_SUBSETS, *self.__class__.PRIVATE_SUBSETS],
-            height_policy="fit",
-            width_policy="min",
         )
         self.dedup_trigger = Button(
             label="Dedup",
             button_type="warning",
-            height_policy="fit",
-            width_policy="min",
         )
         self.selection_viewer = Button(
             label="View Selected",
             button_type="primary",
-            height_policy="fit",
-            width_policy="min",
         )
         self.selection_patcher = Button(
             label="Update Row Values",
             button_type="warning",
-            height_policy="fit",
-            width_policy="min",
         )
         self.selection_evictor = Button(
             label="Evict Rows from Selection",
             button_type="primary",
-            height_policy="fit",
-            width_policy="min",
         )
 
         self.selection_table_refresh_box = CheckboxGroup(
