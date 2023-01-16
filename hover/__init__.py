@@ -1,9 +1,8 @@
 """
 Module root where constants get configured.
 """
-import os
 from flexmod import AutolockedConfigValue, Config, ConfigIndex
-from bokeh.palettes import Category10, Category20, Turbo256
+from bokeh.palettes import Turbo256
 
 config = ConfigIndex(
     [
