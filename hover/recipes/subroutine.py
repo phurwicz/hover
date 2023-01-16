@@ -7,6 +7,7 @@
 """
 import re
 import numpy as np
+import hover
 import hover.core.explorer as hovex
 from bokeh.layouts import row, column
 from bokeh.models import Button
@@ -293,7 +294,7 @@ def active_learning_components(dataset, vecnet, **kwargs):
         scores = probs.max(axis=-1).tolist()
         traj_arr, _, _ = vecnet.manifold_trajectory(
             inps,
-            method="umap",
+            method=hover.config["data.embedding"]["default_reduction_method"],
             reducer_kwargs=dict(dimension=manifold_dim),
             spline_kwargs=dict(points_per_step=5),
         )
