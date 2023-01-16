@@ -48,6 +48,7 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
 
     SUBSET_GLYPH_KWARGS = {}
     DEFAULT_SUBSET_MAPPING = {_k: _k for _k in ["raw", "train", "dev", "test"]}
+    SELECTION_PROCESSING_STAGES = ["save", "load", "write", "read"]
 
     PRIMARY_FEATURE = None
     MANDATORY_COLUMNS = ["label"]
@@ -87,6 +88,7 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
         self._setup_dfs(df_dict)
         self._setup_sources()
         self._setup_widgets()
+        self._setup_status_flags()
 
     @classmethod
     def from_dataset(cls, dataset, subset_mapping, *args, **kwargs):
@@ -168,6 +170,20 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
         """
         pass
 
+    def _setup_status_flags(self):
+        """
+        ???+ note "Status flags to permit or forbid certain operations."
+        """
+        self.status_flags = {
+            "selecting": False,
+            "selection_syncing_out": False,
+        }
+
+        def update_selecting_status(event):
+            self.status_flags["selecting"] = not event.final
+
+        self.figure.on_event(SelectionGeometry, update_selecting_status)
+
     def _setup_selection_option(self):
         """
         ???+ note "Create a group of checkbox(es) for advanced selection options."
@@ -195,18 +211,19 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
             self.data_key_button_group_help, self.data_key_button_group
         )
 
-        def update_data_key_display(active):
-            visible_keys = {self.data_key_button_group.labels[idx] for idx in active}
+        def update_data_key_display():
+            subsets = self.data_key_button_group.active
+            visible_keys = {self.data_key_button_group.labels[idx] for idx in subsets}
             for _renderer in self.figure.renderers:
                 # if the renderer has a name "on the list", update its visibility
                 if _renderer.name in self.__class__.SUBSET_GLYPH_KWARGS.keys():
                     _renderer.visible = _renderer.name in visible_keys
 
         # store the callback (useful, for example, during automated tests) and link it
-        self._callback_subset_display = lambda: update_data_key_display(
-            self.data_key_button_group.active
+        self._callback_subset_display = update_data_key_display
+        self.data_key_button_group.on_change(
+            "active", lambda attr, old, new: update_data_key_display()
         )
-        self.data_key_button_group.on_click(update_data_key_display)
 
     def _setup_axes_dropdown(self):
         """
@@ -375,6 +392,38 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
 
         self._setup_selection_tools()
 
+    def _setup_subroutine_selection_callback_queue(self):
+        """
+        ???+ note "For dynamically assigned callbacks triggered by making a selection on the figure."
+        """
+        all_stages = self.__class__.SELECTION_PROCESSING_STAGES
+        stage_to_order = {_stage: _i for _i, _stage in enumerate(all_stages)}
+
+        self._selection_callbacks = {_k: RootUnionFind(set()) for _k in all_stages}
+
+        def stages_callback(*stages):
+            prev_order = -1
+            for _stage in stages:
+                _order = stage_to_order[_stage]
+                assert _order > prev_order, f"Misordered stage sequence {stages}"
+                for _callback in self._selection_callbacks[_stage].data:
+                    _callback()
+
+        self._selection_stages_callback = stages_callback
+
+        self.figure.on_event(
+            SelectionGeometry,
+            lambda event: stages_callback(*all_stages) if event.final else None,
+        )
+
+        def register_selection_callback(stage, callback):
+            assert (
+                stage in all_stages
+            ), f"Invalid stage: {stage}, expected one of {all_stages}"
+            self._selection_callbacks[stage].data.add(callback)
+
+        self._register_selection_callback = register_selection_callback
+
     def _setup_subroutine_selection_store(self):
         """
         ???+ note "Subroutine of `_setup_selection_tools`."
@@ -404,11 +453,17 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
                     self._last_selections[_key].data.update(_selected)
                 _source.selected.indices = list(self._last_selections[_key].data)
 
+        def restore_selection():
+            """
+            Set current selection to the last manual selection.
+            Useful for applying cumulation / filters dynamically.
+            """
+            for _key, _source in self.sources.items():
+                _source.selected.indices = list(self._last_selections[_key].data)
+
         self._store_selection = store_selection
-        self.figure.on_event(
-            SelectionGeometry,
-            lambda event: self._store_selection() if event.final else None,
-        )
+        self._register_selection_callback("save", store_selection)
+        self._register_selection_callback("load", restore_selection)
 
     def _setup_subroutine_selection_filter(self):
         """
@@ -428,18 +483,12 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
                 ), f"Expected subsets from {self.sources.keys()}"
 
             for _key in subsets:
-                _selected = self._last_selections[_key].data
+                _selected = set(self.sources[_key].selected.indices[:])
                 for _func in self._selection_filters[_key].data:
                     _selected = _func(_selected, _key)
-                self.sources[_key].selected.indices = list(_selected)
+                self.sources[_key].selected.indices = sorted(_selected)
 
-        # keep reference to trigger_selection_filter() for further access
-        # for example, toggling filters should call the trigger
-        self._trigger_selection_filters = trigger_selection_filters
-        self.figure.on_event(
-            SelectionGeometry,
-            lambda event: self._trigger_selection_filters() if event.final else None,
-        )
+        self._register_selection_callback("write", trigger_selection_filters)
 
     def _setup_subroutine_selection_reset(self):
         """
@@ -474,6 +523,7 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
             _key: RootUnionFind(set()) for _key in self.sources.keys()
         }
 
+        self._setup_subroutine_selection_callback_queue()
         self._setup_subroutine_selection_store()
         self._setup_subroutine_selection_filter()
         self._setup_subroutine_selection_reset()
@@ -646,53 +696,109 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
         assert other is not self, "Self-loops are fordidden"
         assert isinstance(other, BokehBaseExplorer), "Must link to BokehBaseExplorer"
 
-    def link_selection(self, key, other, other_key):
+    def link_selection(self, other, subset_mapping):
         """
-        ???+ note "Synchronize the selected indices between specified sources."
+        ???+ note "Synchronize the selection mechanism between sources."
+
+            This includes:
+            -   the selected indices between subsets
+            -   callbacks associated with selections
+            -   selection option values in the widgets
+
             | Param   | Type    | Description                    |
             | :------ | :------ | :----------------------------- |
-            | `key`   | `str`   | the key of the subset to link  |
             | `other` | `BokehBaseExplorer` | the other explorer |
-            | `other_key` | `str` | the key of the other subset  |
+            | `subset_mapping` | `dict` | mapping of subsets from `self` to `other` |
         """
         self._prelink_check(other)
-        # link selection in a bidirectional manner
-        sl, sr = self.sources[key], other.sources[other_key]
+        self._subroutine_link_selection_callbacks(other)
+        self._subroutine_link_selection_indices(other, subset_mapping)
+        self._subroutine_link_selection_options(other)
 
-        def left_to_right(attr, old, new):
-            sr.selected.indices = sl.selected.indices[:]
-
-        def right_to_left(attr, old, new):
-            sl.selected.indices = sr.selected.indices[:]
-
-        sl.selected.on_change("indices", left_to_right)
-        sr.selected.on_change("indices", right_to_left)
-
-        # link last manual selections (pointing to the same set)
-        self._last_selections[key].union(other._last_selections[other_key])
-
-        # link selection filter functions (pointing to the same set)
-        self._selection_filters[key].data.update(
-            other._selection_filters[other_key].data
-        )
-        self._selection_filters[key].union(other._selection_filters[other_key])
-
-    def link_selection_options(self, other):
+    def _subroutine_link_selection_callbacks(self, other):
         """
-        ???+ note "Synchronize the selection option values between explorers."
+        ???+ note "Subroutine of `link_selection`."
+
+            Union the callbacks triggered by selection event.
+
             | Param   | Type    | Description                    |
             | :------ | :------ | :----------------------------- |
             | `other` | `BokehBaseExplorer` | the other explorer |
         """
+        # link selection callbacks (pointing to the same set)
+        for _k in self.__class__.SELECTION_PROCESSING_STAGES:
+            self._selection_callbacks[_k].data.update(
+                other._selection_callbacks[_k].data
+            )
+            self._selection_callbacks[_k].union(other._selection_callbacks[_k])
 
-        def left_to_right(attr, old, new):
+    def _subroutine_link_selection_indices(self, other, subset_mapping):
+        """
+        ???+ note "Subroutine of `link_selection`."
+
+            Synchronize the manually selected indices and actually selected ones.
+
+            | Param   | Type    | Description                    |
+            | :------ | :------ | :----------------------------- |
+            | `other` | `BokehBaseExplorer` | the other explorer |
+            | `subset_mapping` | `dict` | mapping of subsets from `self` to `other` |
+        """
+
+        def link_selected_indices(kl, kr):
+            sl, sr = self.sources[_kl], other.sources[_kr]
+
+            # acyclic, DFS-like syncs
+            def left_to_right(attr, old, new):
+                # "acyclic"
+                if other.status_flags["selection_syncing_out"]:
+                    return
+
+                # "DFS-like"
+                if set(sr.selected.indices) ^ set(sl.selected.indices):
+                    self.status_flags["selection_syncing_out"] = True
+                    sr.selected.indices = sl.selected.indices[:]
+                    self.status_flags["selection_syncing_out"] = False
+
+            def right_to_left(attr, old, new):
+                # "acyclic"
+                if self.status_flags["selection_syncing_out"]:
+                    return
+
+                # "DFS-like"
+                if set(sl.selected.indices) ^ set(sr.selected.indices):
+                    other.status_flags["selection_syncing_out"] = True
+                    sl.selected.indices = sr.selected.indices[:]
+                    other.status_flags["selection_syncing_out"] = False
+
+            sl.selected.on_change("indices", left_to_right)
+            sr.selected.on_change("indices", right_to_left)
+
+        for _kl, _kr in subset_mapping.items():
+            # link last manual selections (pointing to the same set)
+            self._last_selections[_kl].union(other._last_selections[_kr])
+
+            # link selected indices; these are used by bokeh, not UnionFind-able
+            link_selected_indices(self.sources[_kl], other.sources[_kr])
+
+    def _subroutine_link_selection_options(self, other):
+        """
+        ???+ note "Subroutine of `link_selection`."
+
+            Synchronize the option widget values associated with selection.
+
+            | Param   | Type    | Description                    |
+            | :------ | :------ | :----------------------------- |
+            | `other` | `BokehBaseExplorer` | the other explorer |
+        """
+        # link selection option values
+        def option_lr(attr, old, new):
             other.selection_option_box.active = self.selection_option_box.active
 
-        def right_to_left(attr, old, new):
+        def option_rl(attr, old, new):
             self.selection_option_box.active = other.selection_option_box.active
 
-        self.selection_option_box.on_change("active", left_to_right)
-        other.selection_option_box.on_change("active", right_to_left)
+        self.selection_option_box.on_change("active", option_lr)
+        other.selection_option_box.on_change("active", option_rl)
 
     def link_xy_range(self, other):
         """

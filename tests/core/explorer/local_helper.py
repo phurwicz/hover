@@ -105,7 +105,7 @@ def subroutine_selection_filter(explorer, filter_toggle, narrowing_callbacks):
     # deactivate filter
     filter_toggle.active = []
     unfilter_select = explorer.sources["raw"].selected.indices[:]
-    assert unfilter_select == initial_select
+    assert unfilter_select == initial_select, f"{unfilter_select} vs. {initial_select}"
 
 
 def subroutine_rules_from_text_df(df):

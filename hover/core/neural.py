@@ -4,11 +4,12 @@
     `torch`-based template classes for implementing neural nets that work the most smoothly with `hover`.
 """
 import os
+import hover
 import numpy as np
 import torch
 import torch.nn.functional as F
 from abc import abstractmethod
-from bokeh.models import Slider, FuncTickFormatter
+from bokeh.models import Slider, CustomJSTickFormatter
 from sklearn.metrics import confusion_matrix
 from shutil import copyfile
 from hover.core import Loggable
@@ -30,7 +31,7 @@ class BaseVectorNet(Loggable):
 
     @abstractmethod
     def manifold_trajectory(
-        self, inps, method="umap", reducer_kwargs=None, spline_kwargs=None
+        self, inps, method=None, reducer_kwargs=None, spline_kwargs=None
     ):
         pass
 
@@ -258,7 +259,7 @@ class VectorNet(BaseVectorNet):
             end=7.0,
             value=self.__class__.DEFAULT_OPTIM_LOGLR,
             step=0.1,
-            format=FuncTickFormatter(code="return Math.pow(0.1, tick).toFixed(8)"),
+            format=CustomJSTickFormatter(code="return Math.pow(0.1, tick).toFixed(8)"),
         )
 
         def update_lr(attr, old, new):
@@ -314,7 +315,7 @@ class VectorNet(BaseVectorNet):
         return probs
 
     def manifold_trajectory(
-        self, inps, method="umap", reducer_kwargs=None, spline_kwargs=None
+        self, inps, method=None, reducer_kwargs=None, spline_kwargs=None
     ):
         """
         ???+ note "Compute a propagation trajectory of the dataset manifold through the neural net."
@@ -334,6 +335,9 @@ class VectorNet(BaseVectorNet):
         """
         from hover.core.representation.manifold import LayerwiseManifold
         from hover.core.representation.trajectory import manifold_spline
+
+        if method is None:
+            method = hover.config["data.embedding"]["default_reduction_method"]
 
         reducer_kwargs = reducer_kwargs or {}
         spline_kwargs = spline_kwargs or {}

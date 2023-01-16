@@ -39,8 +39,7 @@ class TestBokehBaseExplorer:
             finder.dfs["raw"] = example_raw_df.copy()
             finder._update_sources()
 
-            finder.link_selection("raw", annotator, "raw")
-            finder.link_selection_options(annotator)
+            finder.link_selection(annotator, {"raw": "raw"})
             finder.link_xy_range(annotator)
 
             # change axes and check source and glyph

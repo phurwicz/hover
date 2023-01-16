@@ -2,10 +2,11 @@
 Manifold similarity measures for any collection of sequences of vectors.
 Can be useful for improved interpretability of neural nets.
 """
-from .reduction import DimensionalityReducer
+import hover
 from tqdm import tqdm
 from scipy.spatial import procrustes
 from hover.core import Loggable
+from .reduction import DimensionalityReducer
 
 
 class LayerwiseManifold(Loggable):
@@ -56,12 +57,15 @@ class LayerwiseManifold(Loggable):
 
         self.arrays = [transform(_arr) for _arr in self.arrays]
 
-    def unfold(self, method="umap", **kwargs):
+    def unfold(self, method=None, **kwargs):
         """
-        Compute lower-dimensional manifolds using UMAP.
+        Compute lower-dimensional manifolds.
         :param method: the dimensionality reduction method to use.
         :type method: str
         """
+        if method is None:
+            method = hover.config["data.embedding"]["default_reduction_method"]
+
         # default kwargs should fix random state and seed
         # so that randomness does not introduce disparity
         use_kwargs = self.__class__.DEFAULT_UNFOLD_KWARGS.get(method, {}).copy()

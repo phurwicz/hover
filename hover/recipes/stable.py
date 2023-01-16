@@ -66,10 +66,11 @@ def _linked_annotator(dataset, layout_style="horizontal", **kwargs):
     finder = standard_finder(dataset, **kwargs)
     annotator = standard_annotator(dataset, **kwargs)
 
-    # link coordinates and selections
-    finder.link_selection_options(annotator)
-    for _key in ["raw", "train", "dev", "test"]:
-        finder.link_selection(_key, annotator, _key)
+    # link selections
+    annotator.link_selection(
+        finder,
+        {_key: _key for _key in ["raw", "train", "dev", "test"]},
+    )
 
     sidebar = dataset.view()
     layout = recipe_layout(sidebar, finder.view(), annotator.view(), style=layout_style)

@@ -74,14 +74,19 @@ class BokehDataFinder(BokehBaseExplorer):
         for _widget in self._search_watch_widgets():
             _widget.on_change(
                 "value",
-                lambda attr, old, new: self._trigger_selection_filters()
+                lambda attr, old, new: self._selection_stages_callback(
+                    "load", "write", "read"
+                )
                 if filter_flag()
                 else None,
             )
 
-        # active toggles always trigger selection filter
+        # change of toggles always trigger selection filter
         self.search_filter_box.on_change(
-            "active", lambda attr, old, new: self._trigger_selection_filters()
+            "active",
+            lambda attr, old, new: self._selection_stages_callback(
+                "load", "write", "read"
+            ),
         )
 
     def plot(self):
@@ -363,14 +368,19 @@ class BokehSoftLabelExplorer(BokehBaseExplorer):
         # when toggled as active, score range change triggers selection filter
         self.score_range.on_change(
             "value",
-            lambda attr, old, new: self._trigger_selection_filters()
+            lambda attr, old, new: self._selection_stages_callback(
+                "load", "write", "read"
+            )
             if filter_flag()
             else None,
         )
 
-        # active toggles always trigger selection filter
+        # changing toggles always re-evaluate selection filter
         self.score_filter_box.on_change(
-            "active", lambda attr, old, new: self._trigger_selection_filters()
+            "active",
+            lambda attr, old, new: self._selection_stages_callback(
+                "load", "write", "read"
+            ),
         )
 
     def plot(self, **kwargs):
@@ -690,6 +700,9 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
                 ]
                 self.sources[_key].selected.indices = _kept
 
+            # selection reduced, need to trigger readall callbacks
+            self._selection_stages_callback("read")
+
         self.lf_filter_trigger.on_click(callback_filter)
 
     def _postprocess_sources(self):
@@ -745,7 +758,7 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
         # remove from legend, checking that there is exactly one entry
         legend_idx_to_pop = None
         for i, _item in enumerate(self.figure.legend.items):
-            _label = _item.label.get("value", "")
+            _label = _item.label.value
             if _label == lf_name:
                 assert legend_idx_to_pop is None, f"Legend collision: {lf_name}"
                 legend_idx_to_pop = i
@@ -856,7 +869,7 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
             view = self._view_correct(L_labeled)
             data_dict["glyphs"]["C"] = self.figure.square(
                 *xy_axes,
-                source=view.source,
+                source=self.sources["labeled"],
                 view=view,
                 name="labeled",
                 tags=[lf.name],
@@ -866,7 +879,7 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
             view = self._view_incorrect(L_labeled)
             data_dict["glyphs"]["I"] = self.figure.x(
                 *xy_axes,
-                source=view.source,
+                source=self.sources["labeled"],
                 view=view,
                 name="labeled",
                 tags=[lf.name],
@@ -876,7 +889,7 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
             view = self._view_missed(L_labeled, lf.targets)
             data_dict["glyphs"]["M"] = self.figure.cross(
                 *xy_axes,
-                source=view.source,
+                source=self.sources["labeled"],
                 view=view,
                 name="labeled",
                 tags=[lf.name],
@@ -886,7 +899,7 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
             view = self._view_hit(L_raw)
             data_dict["glyphs"]["H"] = self.figure.circle(
                 *xy_axes,
-                source=view.source,
+                source=self.sources["raw"],
                 view=view,
                 name="raw",
                 tags=[lf.name],

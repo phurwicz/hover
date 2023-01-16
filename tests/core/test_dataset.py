@@ -134,11 +134,11 @@ class TestSupervisableTextDataset:
     def test_compute_nd_embedding(example_text_dataset, dummy_vectorizer):
         dataset = example_text_dataset.copy()
 
-        dataset.compute_nd_embedding(dummy_vectorizer, "umap", dimension=3)
+        dataset.compute_nd_embedding(dummy_vectorizer, "ivis", dimension=3)
 
         # empty one of the dfs; should not break the method
         dataset.dfs["test"] = dataset.dfs["test"].loc[0:0]
-        dataset.compute_2d_embedding(dummy_vectorizer, "umap")
+        dataset.compute_2d_embedding(dummy_vectorizer, "ivis")
 
         # verify that the vectorizer has been remembered
         assert len(dataset.vectorizer_lookup) > 0
