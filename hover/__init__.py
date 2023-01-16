@@ -3,6 +3,7 @@ Module root where constants get configured.
 """
 import os
 from flexmod import AutolockedConfigValue, Config, ConfigIndex
+from bokeh.palettes import Category10, Category20, Turbo256
 
 config = ConfigIndex(
     [
@@ -25,9 +26,19 @@ config = ConfigIndex(
                     "#dcdcdc",
                 ),
                 AutolockedConfigValue(
-                    "bokeh_palette_name",
+                    "bokeh_palette",
                     "The bokeh color palette to use for plotting.",
-                    "Turbo256",
+                    Turbo256,
+                ),
+            ],
+        ),
+        Config(
+            "data.embedding",
+            [
+                AutolockedConfigValue(
+                    "default_reduction_method",
+                    "Default method for dimensionality reduction. Currently either 'umap' or 'ivis'.",
+                    "umap",
                 ),
             ],
         ),
@@ -72,7 +83,7 @@ config = ConfigIndex(
                 AutolockedConfigValue(
                     "abstain_decoded",
                     "The placeholder label indicating 'no label yet'.",
-                    "#dcdcdc",
+                    "ABSTAIN",
                 ),
                 AutolockedConfigValue(
                     "abstain_encoded",

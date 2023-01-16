@@ -17,7 +17,7 @@ COLOR_GLYPH_TEMPLATE = """
 """
 
 EMBEDDING_FIELD_PREFIX = hover.config["data.columns"]["embedding_field_prefix"]
-EMBEDDING_FIELD_REGEX = r"^" + EMBEDDING_FIELD_PREFIX + r"\d+d_\d+$"
+EMBEDDING_FIELD_REGEX = r"\d+d_\d+$"
 
 
 def embedding_field(total_dim, specific_dim):
@@ -25,7 +25,9 @@ def embedding_field(total_dim, specific_dim):
 
 
 def is_embedding_field(column_name):
-    return re.search(EMBEDDING_FIELD_REGEX, column_name)
+    if not column_name.startswith(EMBEDDING_FIELD_PREFIX):
+        return False
+    return bool(re.search(EMBEDDING_FIELD_REGEX, column_name))
 
 
 def blank_callback_on_change(attr, old, new):
