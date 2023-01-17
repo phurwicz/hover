@@ -24,7 +24,7 @@ setuptools.setup(
     install_requires=[
         # python-version-specific example: "numpy>=1.14,<=1.21.5;python_version<'3.8.0'",
         # interactive/static visualization
-        "bokeh>=2.3.3",
+        "bokeh>=3.0.3",
         # preprocessors
         "scikit-learn>=0.20.0",
         # neural stuff
@@ -40,6 +40,8 @@ setuptools.setup(
         "deprecated>=1.1.0",
         # dimensionality reduction: UMAP is included
         "umap-learn>=0.3.10",
+        # module config customization
+        "flexmod>=0.1.0",
         # optional: more dimensionality reduction methods
         # "ivis[cpu]>=1.7",
         # optional: distant supervision

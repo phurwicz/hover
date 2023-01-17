@@ -2,9 +2,27 @@ import pytest
 import random
 import uuid
 import re
+import os
 import numpy as np
 import pandas as pd
 from functools import lru_cache
+
+# configure hover
+import hover
+
+hover.config.load_override(
+    random.choice(
+        [
+            os.path.join(os.path.dirname(__file__), _path)
+            for _path in [
+                "module_config/hover_alt_config_1.ini",
+                "module_config/hover_alt_config_2.ini",
+                "module_config/hover_alt_config_3.ini",
+            ]
+        ]
+    )
+)
+
 from hover import module_config
 from hover.core.dataset import (
     SupervisableTextDataset,

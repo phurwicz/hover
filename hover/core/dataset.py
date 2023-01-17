@@ -10,8 +10,9 @@
     -   getting a 2D embedding
     -   loading data for training models
 """
-import pandas as pd
+import os
 import numpy as np
+import pandas as pd
 from tqdm import tqdm
 from collections import OrderedDict
 from hover import module_config
@@ -20,6 +21,7 @@ from hover.utils.bokeh_helper import auto_label_color
 from hover.utils.misc import current_time
 from bokeh.models import (
     Button,
+    CheckboxGroup,
     Dropdown,
     ColumnDataSource,
     DataTable,
@@ -72,8 +74,8 @@ class SupervisableDataset(Loggable):
         self.setup_widgets()
         # self.setup_label_coding() # redundant if setup_pop_table() immediately calls this again
         self.setup_file_export()
-        self.setup_pop_table(width_policy="fit", height_policy="fit")
-        self.setup_sel_table(width_policy="fit", height_policy="fit")
+        self.setup_pop_table()
+        self.setup_sel_table()
         self._vectorizer_lookup = OrderedDict()
         self._good(f"{self.__class__.__name__}: finished initialization.")
 
@@ -248,39 +250,35 @@ class SupervisableDataset(Loggable):
             -   EVICT: remove a few rows from both VIEW result and linked `explorer` selection.
         """
         self.update_pusher = Button(
-            label="Push", button_type="success", height_policy="fit", width_policy="min"
+            label="Push",
+            button_type="success",
         )
         self.data_committer = Dropdown(
             label="Commit",
             button_type="warning",
             menu=[*self.__class__.PUBLIC_SUBSETS, *self.__class__.PRIVATE_SUBSETS],
-            height_policy="fit",
-            width_policy="min",
         )
         self.dedup_trigger = Button(
             label="Dedup",
             button_type="warning",
-            height_policy="fit",
-            width_policy="min",
         )
         self.selection_viewer = Button(
             label="View Selected",
             button_type="primary",
-            height_policy="fit",
-            width_policy="min",
         )
         self.selection_patcher = Button(
             label="Update Row Values",
             button_type="warning",
-            height_policy="fit",
-            width_policy="min",
         )
         self.selection_evictor = Button(
             label="Evict Rows from Selection",
             button_type="primary",
-            height_policy="fit",
-            width_policy="min",
         )
+
+        self.selection_table_refresh_box = CheckboxGroup(
+            labels=["auto refresh selection table"], active=[]
+        )
+        self.help_div = dataset_help_widget()
 
         def commit_base_callback():
             """
@@ -333,8 +331,6 @@ class SupervisableDataset(Loggable):
         self.data_committer.on_click(commit_base_callback)
         self.dedup_trigger.on_click(dedup_base_callback)
 
-        self.help_div = dataset_help_widget()
-
     def view(self):
         """
         ???+ note "Defines the layout of `bokeh` objects when visualized."
@@ -357,6 +353,9 @@ class SupervisableDataset(Loggable):
                 self.selection_viewer,
                 self.selection_patcher,
                 self.selection_evictor,
+            ),
+            row(
+                self.selection_table_refresh_box,
             ),
             self.sel_table,
         )
@@ -459,6 +458,10 @@ class SupervisableDataset(Loggable):
             selected = pd.concat(sel_slices, axis=0)
             self._callback_update_selection(selected)
 
+        def callback_view_refresh():
+            if 0 in self.selection_table_refresh_box.active:
+                callback_view()
+
         def callback_evict():
             # create sets for fast index discarding
             subset_to_indicies = {}
@@ -485,6 +488,7 @@ class SupervisableDataset(Loggable):
             # refresh the selection table
             callback_view()
 
+        explorer._register_selection_callback("read", callback_view_refresh)
         self.selection_viewer.on_click(callback_view)
         self.selection_evictor.on_click(callback_evict)
         self._good(
@@ -564,7 +568,8 @@ class SupervisableDataset(Loggable):
             # auto-determine the export path root
             if path_root is None:
                 timestamp = current_time("%Y%m%d%H%M%S")
-                path_root = f"hover-dataset-export-{timestamp}"
+                export_dir = module_config.DATA_SAVE_DIR
+                path_root = os.path.join(export_dir, f"hover-dataset-{timestamp}")
 
             export_df = self.to_pandas()
 

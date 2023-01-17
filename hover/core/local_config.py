@@ -1,4 +1,5 @@
 import re
+import hover
 from bokeh.models import (
     Div,
     TableColumn,
@@ -7,7 +8,7 @@ from bokeh.models import (
 )
 
 
-DATASET_SUBSET_FIELD = "SUBSET"
+DATASET_SUBSET_FIELD = hover.config["data.columns"]["dataset_subset_field"]
 
 COLOR_GLYPH_TEMPLATE = """
 <p style="color:<%= value %>;">
@@ -15,8 +16,8 @@ COLOR_GLYPH_TEMPLATE = """
 </p>
 """
 
-EMBEDDING_FIELD_PREFIX = "embed_"
-EMBEDDING_FIELD_REGEX = r"^" + EMBEDDING_FIELD_PREFIX + r"\d+d_\d+$"
+EMBEDDING_FIELD_PREFIX = hover.config["data.columns"]["embedding_field_prefix"]
+EMBEDDING_FIELD_REGEX = r"\d+d_\d+$"
 
 
 def embedding_field(total_dim, specific_dim):
@@ -24,7 +25,9 @@ def embedding_field(total_dim, specific_dim):
 
 
 def is_embedding_field(column_name):
-    return re.search(EMBEDDING_FIELD_REGEX, column_name)
+    if not column_name.startswith(EMBEDDING_FIELD_PREFIX):
+        return False
+    return bool(re.search(EMBEDDING_FIELD_REGEX, column_name))
 
 
 def blank_callback_on_change(attr, old, new):
@@ -46,7 +49,9 @@ def dataset_default_sel_table_columns(feature_key):
     # disable editing the feature through a blank editor
     feature_col_kwargs = dict(editor=CellEditor())
     if feature_key == "text":
-        pass
+        feature_col_kwargs["formatter"] = HTMLTemplateFormatter(
+            template="""<span href="#" data-toggle="tooltip" title="<%= value %>"><%= value %></span>"""
+        )
     elif feature_key == "image":
         feature_col_kwargs["width"] = 200
         feature_col_kwargs["formatter"] = HTMLTemplateFormatter(
