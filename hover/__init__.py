@@ -56,7 +56,7 @@ config = ConfigIndex(
                 ),
                 AutolockedConfigValue(
                     "embedding_field_prefix",
-                    "The column name for dataset subsets.",
+                    "The prefix of column names for embedding coordinates.",
                     "embed_",
                 ),
                 AutolockedConfigValue(
