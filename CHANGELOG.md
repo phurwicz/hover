@@ -10,6 +10,7 @@
 -   `hover.config` gives you the ability to customize the behavior of the package.
     -   Choose your own color palette by setting `hover.config["visual"]["bokeh_palette"]`.
     -   Change selection table image styles through `hover.config["visual"]["table_img_style"]`.
+    -   Change tooltip image styles through `hover.config["visual"]["tooltip_img_style"]`.
     -   try `hover.config.hint()` to list the possible options!
 
 ### :exclamation: Backward Incompatibility

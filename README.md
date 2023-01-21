@@ -119,11 +119,7 @@ For Windows users, we recommend [Windows Subsystem for Linux](https://docs.micro
 
 ## :flags: Announcements
 
--   **Feb 25, 2022** version 0.7.0 is now available. Check out the [changelog](https://github.com/phurwicz/hover/blob/main/CHANGELOG.md) for details :partying_face:. Some tl-dr for the impatient:
-    -   **audio and image support** supply audio/image files through URLs to label with `hover`!
-        -   any type supported by HTML (and your browser) will be supported here.
-    -   **high-dimensional support** you can now use higher-than-2D embeddings.
-        -   `hover` still plots in 2D, but you can dynamically choose which two dimension to use.
+-   **Jan 21, 2023** version 0.8.0 is now available. Check out the [changelog](https://github.com/phurwicz/hover/blob/main/CHANGELOG.md) for details :partying_face:.
 
 ## :bell: Remarks
 

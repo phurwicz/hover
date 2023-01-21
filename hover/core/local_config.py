@@ -54,7 +54,8 @@ def dataset_default_sel_table_columns(feature_key):
         )
     elif feature_key == "image":
         style = hover.config["visual"]["table_img_style"]
-        feature_col_kwargs["width"] = hover.config["visual"]["table_img_width"]
+        # width is easily adjustable on the UI, no need to make configurable here
+        feature_col_kwargs["width"] = 200
         feature_col_kwargs["formatter"] = HTMLTemplateFormatter(
             template=f"""<img src=<%= value %> style="{style}">""",
         )

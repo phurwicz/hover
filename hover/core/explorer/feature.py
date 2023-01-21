@@ -2,6 +2,7 @@
 ???+ note "Intermediate classes based on the main feature."
 """
 import re
+import hover
 import numpy as np
 from functools import lru_cache
 from bokeh.models import TextInput, Slider
@@ -199,7 +200,7 @@ class BokehForImage(BokehForUrlToVector):
     MANDATORY_COLUMNS = [PRIMARY_FEATURE, "label"]
     TOOLTIP_KWARGS = {
         "label": {"label": "Label"},
-        "image": {"image": 60},
+        "image": {"image": hover.config["visual"]["tooltip_img_style"]},
         "coords": True,
         "index": True,
     }
