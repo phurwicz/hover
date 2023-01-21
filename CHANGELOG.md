@@ -1,5 +1,22 @@
 # CHANGELOG
 
+## 0.8.0 - Jan 21, 2022
+
+### :tada: Features Added
+
+-   Tired of hitting "View Selected" over and over? You can now toggle "auto refresh selection table".
+    -   with the toggle active, the selection table will refresh whenever you make a select plotted data manually.
+
+-   `hover.config` gives you the ability to customize the behavior of the package.
+    -   Choose your own color palette by setting `hover.config["visual"]["bokeh_palette"]`.
+    -   Change selection table image styles through `hover.config["visual"]["table_img_style"]`.
+    -   try `hover.config.hint()` to list the possible options!
+
+### :exclamation: Backward Incompatibility
+
+-   `hover>=0.8.0` may not be compatible with `bokeh<3.0`.
+    -   This is because we made low-level `bokeh` function call changes to keep up with `3.0` in this version.
+
 ## 0.7.0 - Feb 25, 2022
 
 ### :tada: Features Added
