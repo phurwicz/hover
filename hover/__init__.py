@@ -36,7 +36,7 @@ config = ConfigIndex(
                 AutolockedConfigValue(
                     "table_img_style",
                     "HTML style of images shown in selection tables.",
-                    "object-fit: contain",
+                    "max-height: 100%; max-width: 100%; object-fit: contain",
                     preprocessor=lambda x: re.sub(r"(^[\'\"]|[\'\"]$)", "", x),
                 ),
                 AutolockedConfigValue(
