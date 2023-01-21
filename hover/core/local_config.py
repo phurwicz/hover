@@ -53,9 +53,10 @@ def dataset_default_sel_table_columns(feature_key):
             template="""<span href="#" data-toggle="tooltip" title="<%= value %>"><%= value %></span>"""
         )
     elif feature_key == "image":
-        feature_col_kwargs["width"] = 200
+        style = hover.config["visual"]["table_img_style"]
+        feature_col_kwargs["width"] = hover.config["visual"]["table_img_width"]
         feature_col_kwargs["formatter"] = HTMLTemplateFormatter(
-            template="""<img src=<%= value %>>""",
+            template=f"""<img src=<%= value %> style="{style}">""",
         )
     elif feature_key == "audio":
         feature_col_kwargs["width"] = 50
