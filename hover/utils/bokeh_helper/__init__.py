@@ -49,7 +49,6 @@ def auto_label_color(labels):
         module_config.ABSTAIN_DECODED: module_config.ABSTAIN_HEXCOLOR,
         **{_l: _c for _l, _c in zip(use_labels, use_palette)},
     }
-    print(color_dict)
     return color_dict
 
 
