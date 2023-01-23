@@ -509,6 +509,20 @@
 
             
           
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/g2-hover-config/" class="md-nav__link">
+        Custom Config
+      </a>
+    </li>
+  
+
+            
+          
         </ul>
       </nav>
     </li>
@@ -1170,8 +1184,8 @@ SupervisableDataset            (<span title="hover.core.Loggable">Loggable</span
         <span class="bp">self</span><span class="o">.</span><span class="n">setup_widgets</span><span class="p">()</span>
         <span class="c1"># self.setup_label_coding() # redundant if setup_pop_table() immediately calls this again</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">setup_file_export</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">setup_pop_table</span><span class="p">(</span><span class="n">width_policy</span><span class="o">=</span><span class="s2">&quot;fit&quot;</span><span class="p">,</span> <span class="n">height_policy</span><span class="o">=</span><span class="s2">&quot;fit&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">setup_sel_table</span><span class="p">(</span><span class="n">width_policy</span><span class="o">=</span><span class="s2">&quot;fit&quot;</span><span class="p">,</span> <span class="n">height_policy</span><span class="o">=</span><span class="s2">&quot;fit&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setup_pop_table</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setup_sel_table</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_vectorizer_lookup</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_good</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">: finished initialization.&quot;</span><span class="p">)</span>
 
@@ -1346,39 +1360,35 @@ SupervisableDataset            (<span title="hover.core.Loggable">Loggable</span
 <span class="sd">            -   EVICT: remove a few rows from both VIEW result and linked `explorer` selection.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">update_pusher</span> <span class="o">=</span> <span class="n">Button</span><span class="p">(</span>
-            <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Push&quot;</span><span class="p">,</span> <span class="n">button_type</span><span class="o">=</span><span class="s2">&quot;success&quot;</span><span class="p">,</span> <span class="n">height_policy</span><span class="o">=</span><span class="s2">&quot;fit&quot;</span><span class="p">,</span> <span class="n">width_policy</span><span class="o">=</span><span class="s2">&quot;min&quot;</span>
+            <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Push&quot;</span><span class="p">,</span>
+            <span class="n">button_type</span><span class="o">=</span><span class="s2">&quot;success&quot;</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">data_committer</span> <span class="o">=</span> <span class="n">Dropdown</span><span class="p">(</span>
             <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Commit&quot;</span><span class="p">,</span>
             <span class="n">button_type</span><span class="o">=</span><span class="s2">&quot;warning&quot;</span><span class="p">,</span>
             <span class="n">menu</span><span class="o">=</span><span class="p">[</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">PUBLIC_SUBSETS</span><span class="p">,</span> <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">PRIVATE_SUBSETS</span><span class="p">],</span>
-            <span class="n">height_policy</span><span class="o">=</span><span class="s2">&quot;fit&quot;</span><span class="p">,</span>
-            <span class="n">width_policy</span><span class="o">=</span><span class="s2">&quot;min&quot;</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dedup_trigger</span> <span class="o">=</span> <span class="n">Button</span><span class="p">(</span>
             <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Dedup&quot;</span><span class="p">,</span>
             <span class="n">button_type</span><span class="o">=</span><span class="s2">&quot;warning&quot;</span><span class="p">,</span>
-            <span class="n">height_policy</span><span class="o">=</span><span class="s2">&quot;fit&quot;</span><span class="p">,</span>
-            <span class="n">width_policy</span><span class="o">=</span><span class="s2">&quot;min&quot;</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">selection_viewer</span> <span class="o">=</span> <span class="n">Button</span><span class="p">(</span>
             <span class="n">label</span><span class="o">=</span><span class="s2">&quot;View Selected&quot;</span><span class="p">,</span>
             <span class="n">button_type</span><span class="o">=</span><span class="s2">&quot;primary&quot;</span><span class="p">,</span>
-            <span class="n">height_policy</span><span class="o">=</span><span class="s2">&quot;fit&quot;</span><span class="p">,</span>
-            <span class="n">width_policy</span><span class="o">=</span><span class="s2">&quot;min&quot;</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">selection_patcher</span> <span class="o">=</span> <span class="n">Button</span><span class="p">(</span>
             <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Update Row Values&quot;</span><span class="p">,</span>
             <span class="n">button_type</span><span class="o">=</span><span class="s2">&quot;warning&quot;</span><span class="p">,</span>
-            <span class="n">height_policy</span><span class="o">=</span><span class="s2">&quot;fit&quot;</span><span class="p">,</span>
-            <span class="n">width_policy</span><span class="o">=</span><span class="s2">&quot;min&quot;</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">selection_evictor</span> <span class="o">=</span> <span class="n">Button</span><span class="p">(</span>
             <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Evict Rows from Selection&quot;</span><span class="p">,</span>
             <span class="n">button_type</span><span class="o">=</span><span class="s2">&quot;primary&quot;</span><span class="p">,</span>
-            <span class="n">height_policy</span><span class="o">=</span><span class="s2">&quot;fit&quot;</span><span class="p">,</span>
-            <span class="n">width_policy</span><span class="o">=</span><span class="s2">&quot;min&quot;</span><span class="p">,</span>
         <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">selection_table_refresh_box</span> <span class="o">=</span> <span class="n">CheckboxGroup</span><span class="p">(</span>
+            <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;auto refresh selection table&quot;</span><span class="p">],</span> <span class="n">active</span><span class="o">=</span><span class="p">[]</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">help_div</span> <span class="o">=</span> <span class="n">dataset_help_widget</span><span class="p">()</span>
 
         <span class="k">def</span> <span class="nf">commit_base_callback</span><span class="p">():</span>
             <span class="sd">&quot;&quot;&quot;</span>
@@ -1431,8 +1441,6 @@ SupervisableDataset            (<span title="hover.core.Loggable">Loggable</span
         <span class="bp">self</span><span class="o">.</span><span class="n">data_committer</span><span class="o">.</span><span class="n">on_click</span><span class="p">(</span><span class="n">commit_base_callback</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dedup_trigger</span><span class="o">.</span><span class="n">on_click</span><span class="p">(</span><span class="n">dedup_base_callback</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">help_div</span> <span class="o">=</span> <span class="n">dataset_help_widget</span><span class="p">()</span>
-
     <span class="k">def</span> <span class="nf">view</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        ???+ note &quot;Defines the layout of `bokeh` objects when visualized.&quot;</span>
@@ -1455,6 +1463,9 @@ SupervisableDataset            (<span title="hover.core.Loggable">Loggable</span
                 <span class="bp">self</span><span class="o">.</span><span class="n">selection_viewer</span><span class="p">,</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">selection_patcher</span><span class="p">,</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">selection_evictor</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="n">row</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">selection_table_refresh_box</span><span class="p">,</span>
             <span class="p">),</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">sel_table</span><span class="p">,</span>
         <span class="p">)</span>
@@ -1557,6 +1568,10 @@ SupervisableDataset            (<span title="hover.core.Loggable">Loggable</span
             <span class="n">selected</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">sel_slices</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_callback_update_selection</span><span class="p">(</span><span class="n">selected</span><span class="p">)</span>
 
+        <span class="k">def</span> <span class="nf">callback_view_refresh</span><span class="p">():</span>
+            <span class="k">if</span> <span class="mi">0</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">selection_table_refresh_box</span><span class="o">.</span><span class="n">active</span><span class="p">:</span>
+                <span class="n">callback_view</span><span class="p">()</span>
+
         <span class="k">def</span> <span class="nf">callback_evict</span><span class="p">():</span>
             <span class="c1"># create sets for fast index discarding</span>
             <span class="n">subset_to_indicies</span> <span class="o">=</span> <span class="p">{}</span>
@@ -1583,6 +1598,7 @@ SupervisableDataset            (<span title="hover.core.Loggable">Loggable</span
             <span class="c1"># refresh the selection table</span>
             <span class="n">callback_view</span><span class="p">()</span>
 
+        <span class="n">explorer</span><span class="o">.</span><span class="n">_register_selection_callback</span><span class="p">(</span><span class="s2">&quot;read&quot;</span><span class="p">,</span> <span class="n">callback_view_refresh</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">selection_viewer</span><span class="o">.</span><span class="n">on_click</span><span class="p">(</span><span class="n">callback_view</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">selection_evictor</span><span class="o">.</span><span class="n">on_click</span><span class="p">(</span><span class="n">callback_evict</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_good</span><span class="p">(</span>
@@ -1662,7 +1678,8 @@ SupervisableDataset            (<span title="hover.core.Loggable">Loggable</span
             <span class="c1"># auto-determine the export path root</span>
             <span class="k">if</span> <span class="n">path_root</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">timestamp</span> <span class="o">=</span> <span class="n">current_time</span><span class="p">(</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">%H%M%S&quot;</span><span class="p">)</span>
-                <span class="n">path_root</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;hover-dataset-export-</span><span class="si">{</span><span class="n">timestamp</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="n">export_dir</span> <span class="o">=</span> <span class="n">module_config</span><span class="o">.</span><span class="n">DATA_SAVE_DIR</span>
+                <span class="n">path_root</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">export_dir</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;hover-dataset-</span><span class="si">{</span><span class="n">timestamp</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
             <span class="n">export_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span>
 
@@ -2044,8 +2061,8 @@ SupervisableDataset            (<span title="hover.core.Loggable">Loggable</span
     <span class="bp">self</span><span class="o">.</span><span class="n">setup_widgets</span><span class="p">()</span>
     <span class="c1"># self.setup_label_coding() # redundant if setup_pop_table() immediately calls this again</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">setup_file_export</span><span class="p">()</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">setup_pop_table</span><span class="p">(</span><span class="n">width_policy</span><span class="o">=</span><span class="s2">&quot;fit&quot;</span><span class="p">,</span> <span class="n">height_policy</span><span class="o">=</span><span class="s2">&quot;fit&quot;</span><span class="p">)</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">setup_sel_table</span><span class="p">(</span><span class="n">width_policy</span><span class="o">=</span><span class="s2">&quot;fit&quot;</span><span class="p">,</span> <span class="n">height_policy</span><span class="o">=</span><span class="s2">&quot;fit&quot;</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">setup_pop_table</span><span class="p">()</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">setup_sel_table</span><span class="p">()</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_vectorizer_lookup</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_good</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">: finished initialization.&quot;</span><span class="p">)</span>
 </code></pre></div>
@@ -3076,39 +3093,35 @@ SupervisableDataset            (<span title="hover.core.Loggable">Loggable</span
 <span class="sd">        -   EVICT: remove a few rows from both VIEW result and linked `explorer` selection.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">update_pusher</span> <span class="o">=</span> <span class="n">Button</span><span class="p">(</span>
-        <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Push&quot;</span><span class="p">,</span> <span class="n">button_type</span><span class="o">=</span><span class="s2">&quot;success&quot;</span><span class="p">,</span> <span class="n">height_policy</span><span class="o">=</span><span class="s2">&quot;fit&quot;</span><span class="p">,</span> <span class="n">width_policy</span><span class="o">=</span><span class="s2">&quot;min&quot;</span>
+        <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Push&quot;</span><span class="p">,</span>
+        <span class="n">button_type</span><span class="o">=</span><span class="s2">&quot;success&quot;</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">data_committer</span> <span class="o">=</span> <span class="n">Dropdown</span><span class="p">(</span>
         <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Commit&quot;</span><span class="p">,</span>
         <span class="n">button_type</span><span class="o">=</span><span class="s2">&quot;warning&quot;</span><span class="p">,</span>
         <span class="n">menu</span><span class="o">=</span><span class="p">[</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">PUBLIC_SUBSETS</span><span class="p">,</span> <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">PRIVATE_SUBSETS</span><span class="p">],</span>
-        <span class="n">height_policy</span><span class="o">=</span><span class="s2">&quot;fit&quot;</span><span class="p">,</span>
-        <span class="n">width_policy</span><span class="o">=</span><span class="s2">&quot;min&quot;</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">dedup_trigger</span> <span class="o">=</span> <span class="n">Button</span><span class="p">(</span>
         <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Dedup&quot;</span><span class="p">,</span>
         <span class="n">button_type</span><span class="o">=</span><span class="s2">&quot;warning&quot;</span><span class="p">,</span>
-        <span class="n">height_policy</span><span class="o">=</span><span class="s2">&quot;fit&quot;</span><span class="p">,</span>
-        <span class="n">width_policy</span><span class="o">=</span><span class="s2">&quot;min&quot;</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">selection_viewer</span> <span class="o">=</span> <span class="n">Button</span><span class="p">(</span>
         <span class="n">label</span><span class="o">=</span><span class="s2">&quot;View Selected&quot;</span><span class="p">,</span>
         <span class="n">button_type</span><span class="o">=</span><span class="s2">&quot;primary&quot;</span><span class="p">,</span>
-        <span class="n">height_policy</span><span class="o">=</span><span class="s2">&quot;fit&quot;</span><span class="p">,</span>
-        <span class="n">width_policy</span><span class="o">=</span><span class="s2">&quot;min&quot;</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">selection_patcher</span> <span class="o">=</span> <span class="n">Button</span><span class="p">(</span>
         <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Update Row Values&quot;</span><span class="p">,</span>
         <span class="n">button_type</span><span class="o">=</span><span class="s2">&quot;warning&quot;</span><span class="p">,</span>
-        <span class="n">height_policy</span><span class="o">=</span><span class="s2">&quot;fit&quot;</span><span class="p">,</span>
-        <span class="n">width_policy</span><span class="o">=</span><span class="s2">&quot;min&quot;</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">selection_evictor</span> <span class="o">=</span> <span class="n">Button</span><span class="p">(</span>
         <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Evict Rows from Selection&quot;</span><span class="p">,</span>
         <span class="n">button_type</span><span class="o">=</span><span class="s2">&quot;primary&quot;</span><span class="p">,</span>
-        <span class="n">height_policy</span><span class="o">=</span><span class="s2">&quot;fit&quot;</span><span class="p">,</span>
-        <span class="n">width_policy</span><span class="o">=</span><span class="s2">&quot;min&quot;</span><span class="p">,</span>
     <span class="p">)</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">selection_table_refresh_box</span> <span class="o">=</span> <span class="n">CheckboxGroup</span><span class="p">(</span>
+        <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;auto refresh selection table&quot;</span><span class="p">],</span> <span class="n">active</span><span class="o">=</span><span class="p">[]</span>
+    <span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">help_div</span> <span class="o">=</span> <span class="n">dataset_help_widget</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">commit_base_callback</span><span class="p">():</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -3160,8 +3173,6 @@ SupervisableDataset            (<span title="hover.core.Loggable">Loggable</span
     <span class="bp">self</span><span class="o">.</span><span class="n">update_pusher</span><span class="o">.</span><span class="n">on_click</span><span class="p">(</span><span class="n">push_base_callback</span><span class="p">)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">data_committer</span><span class="o">.</span><span class="n">on_click</span><span class="p">(</span><span class="n">commit_base_callback</span><span class="p">)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">dedup_trigger</span><span class="o">.</span><span class="n">on_click</span><span class="p">(</span><span class="n">dedup_base_callback</span><span class="p">)</span>
-
-    <span class="bp">self</span><span class="o">.</span><span class="n">help_div</span> <span class="o">=</span> <span class="n">dataset_help_widget</span><span class="p">()</span>
 </code></pre></div>
         </details>
     </div>
@@ -3330,6 +3341,10 @@ SupervisableDataset            (<span title="hover.core.Loggable">Loggable</span
         <span class="n">selected</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">sel_slices</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_callback_update_selection</span><span class="p">(</span><span class="n">selected</span><span class="p">)</span>
 
+    <span class="k">def</span> <span class="nf">callback_view_refresh</span><span class="p">():</span>
+        <span class="k">if</span> <span class="mi">0</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">selection_table_refresh_box</span><span class="o">.</span><span class="n">active</span><span class="p">:</span>
+            <span class="n">callback_view</span><span class="p">()</span>
+
     <span class="k">def</span> <span class="nf">callback_evict</span><span class="p">():</span>
         <span class="c1"># create sets for fast index discarding</span>
         <span class="n">subset_to_indicies</span> <span class="o">=</span> <span class="p">{}</span>
@@ -3356,6 +3371,7 @@ SupervisableDataset            (<span title="hover.core.Loggable">Loggable</span
         <span class="c1"># refresh the selection table</span>
         <span class="n">callback_view</span><span class="p">()</span>
 
+    <span class="n">explorer</span><span class="o">.</span><span class="n">_register_selection_callback</span><span class="p">(</span><span class="s2">&quot;read&quot;</span><span class="p">,</span> <span class="n">callback_view_refresh</span><span class="p">)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">selection_viewer</span><span class="o">.</span><span class="n">on_click</span><span class="p">(</span><span class="n">callback_view</span><span class="p">)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">selection_evictor</span><span class="o">.</span><span class="n">on_click</span><span class="p">(</span><span class="n">callback_evict</span><span class="p">)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_good</span><span class="p">(</span>
@@ -3579,6 +3595,9 @@ SupervisableDataset            (<span title="hover.core.Loggable">Loggable</span
             <span class="bp">self</span><span class="o">.</span><span class="n">selection_viewer</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">selection_patcher</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">selection_evictor</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="n">row</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">selection_table_refresh_box</span><span class="p">,</span>
         <span class="p">),</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sel_table</span><span class="p">,</span>
     <span class="p">)</span>

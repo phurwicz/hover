@@ -10,14 +10,14 @@
       
       
       
-        <link rel="canonical" href="https://phurwicz.github.io/hover/pages/guides/datatype-multimodal/">
+        <link rel="canonical" href="https://phurwicz.github.io/hover/pages/guides/g2-hover-config/">
       
       <link rel="icon" href="../../../images/favicon.png">
       <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.1.9">
     
     
       
-        <title>Datatype multimodal - Hover</title>
+        <title>Custom Config - Hover</title>
       
     
     
@@ -73,6 +73,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#color-palette-for-labeled-data-points" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -108,7 +113,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Datatype multimodal
+              Custom Config
             
           </span>
         </div>
@@ -210,13 +215,15 @@
         
   
   
+    
+  
 
 
   
   
   
     <li class="md-tabs__item">
-      <a href="../g0-datatype-image/" class="md-tabs__link">
+      <a href="../g0-datatype-image/" class="md-tabs__link md-tabs__link--active">
         Guides
       </a>
     </li>
@@ -452,12 +459,14 @@
 
   
   
+    
+  
   
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" data-md-state="indeterminate" type="checkbox" id="__nav_3" checked>
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" checked>
       
       
       
@@ -506,11 +515,69 @@
               
   
   
+    
   
-    <li class="md-nav__item">
-      <a href="../g2-hover-config/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Custom Config
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         Custom Config
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#color-palette-for-labeled-data-points" class="md-nav__link">
+    Color Palette for Labeled Data Points
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#color-of-unlabeled-data-points" class="md-nav__link">
+    Color of Unlabeled Data Points
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dimensionality-reduction-method" class="md-nav__link">
+    Dimensionality Reduction Method
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#browse-more-configs" class="md-nav__link">
+    Browse more configs
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -807,14 +874,103 @@
             <article class="md-content__inner md-typeset">
               
                 
-<a href="https://github.com/phurwicz/hover.git/edit/master/docs/pages/guides/datatype-multimodal.md" title="Edit this page" class="md-content__button md-icon">
+<a href="https://github.com/phurwicz/hover.git/edit/master/docs/pages/guides/g2-hover-config.md" title="Edit this page" class="md-content__button md-icon">
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
 </a>
 
 
-  <h1>Datatype multimodal</h1>
+  <h1>Custom Config</h1>
 
+<blockquote>
+<p><code>hover</code> can be customized through its module config.</p>
+<p><img alt="💡" class="emojione" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.2.7/assets/png/1f4a1.png" title=":bulb:" /> Let's explore a few use cases.</p>
+</blockquote>
+<details class="warning" open="open">
+<summary>This page assumes that you have know the basics</summary>
+<p>i.e. simple usage of <code>dataset</code> and <code>annotator</code>. Please visit the <a href="/hover/pages/tutorial/t0-quickstart">quickstart tutorial</a> if you haven't done so.</p>
+</details>
+<script src="../../../plugins/thebe-custom/index.js"></script>
+<script type="text/x-thebe-config">
+  {
+    bootstrap: true,
+    mountStatusWidget: true,
+    mountActivateWidget: false,
+    mountRunButton: false,
+    mountRestartButton: false,
+    mountRestartallButton: false,
+    requestKernel: true,
+    binderOptions: {
+      repo: "phurwicz/hover-binder",
+      ref: "master",
+      <!-- ref: "dev", -->
+      codeMirrorConfig: {
+        theme: "monokai",
+        indentUnit: 4,
+      }
+    },
+  }
+</script>
+<details class="info" open="open">
+<summary>Running Python right here</summary>
+<p>Think of this page as <em>almost</em> a Jupyter notebook. You can edit code and press <code>Shift+Enter</code> to execute.</p>
+<p>Behind the scene is a <a href="https://mybinder.org/">Binder</a>-hosted Python environment. Below is the status of the kernel:
+<div class="thebe-status"></div><div class="thebe-activate"></div></p>
+<p>To download a notebook file instead, visit <a href="https://github.com/phurwicz/hover/tree/main/docs/pipelines/generated">here</a>.</p>
+</details>
+<h2 id="color-palette-for-labeled-data-points"><strong>Color Palette for Labeled Data Points</strong></h2>
+<p>You may want to customize the color palette for better contrast or accessibility, which can depend on specific scenarios.</p>
+<p>The snippet below shows an example of default colors assigned to 6 classes. <code>hover</code> by default samples <a href="https://docs.bokeh.org/en/latest/docs/reference/palettes.html#large-palettes"><code>Turbo256</code></a> to accommodate a large number of classes while keeping good contrast.</p>
+<pre data-executable>
+import hover
+from hover.utils.bokeh_helper import auto_label_color
+from rich.console import Console
 
+console = Console()
+labels = ["A", "B", "C", "D", "E", "F"]
+color_dict = auto_label_color(labels)
+abstain = hover.config['data.values']['abstain_decoded']
+
+for _label in [abstain, *labels]:
+    console.print(f"\u2b24{_label}", style=color_dict[_label])
+</pre>
+
+<p>You can change the palette using any <code>bokeh</code> palette, or any iterable of hex colors like <code>"#000000"</code>.</p>
+<pre data-executable>
+hover.config["visual"]["abstain_hexcolor"] = "#bababa"
+</pre>
+
+<details class="note" open="open">
+<summary>Config changes should happen early</summary>
+<p><code>hover.config</code> assignments need to happen before plotting your data.</p>
+<ul>
+<li>This is because <code>hover</code> locks config values for consistency as soon as each config value is read by other code.</li>
+<li>Ideally you should change config immediately after <code>import hover</code>.</li>
+</ul>
+</details>
+<h2 id="color-of-unlabeled-data-points"><strong>Color of Unlabeled Data Points</strong></h2>
+<p>For unlabeled data points, <code>hover</code> uses a light gray color <code>"#dcdcdc"</code>. This is not configured in the color palette above, but here:</p>
+<pre data-executable>
+hover.config["visual"]["abstain_hexcolor"] = "#bababa"
+</pre>
+
+<h2 id="dimensionality-reduction-method"><strong>Dimensionality Reduction Method</strong></h2>
+<p><code>hover</code> uses dimensionality reduction in a lot of places. It can be cumbersome to find these places and use your preferred method. In such cases a module-level override can be handy:</p>
+<pre data-executable>
+hover.config["data.embedding"]["default_reduction_method"] = "ivis"
+</pre>
+
+<h2 id="browse-more-configs"><strong>Browse more configs</strong></h2>
+<p>There are more configurations that are more niche which we will skip here. You can find a full list of configurations, default values, and hints here:</p>
+<pre data-executable>
+hover.config.hint()
+</pre>
+
+<p>Happy customizing!</p>
+<style type="text/css">
+    @import url("../../../styles/monokai.css");
+</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js"></script>
 
               
             </article>
@@ -824,6 +980,41 @@
       </main>
       
         <footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        
+        <a href="../g1-datatype-audio/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Audio Data" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Audio Data
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../../reference/recipes/" class="md-footer__link md-footer__link--next" aria-label="Next: hover.recipes" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              hover.recipes
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
   
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">

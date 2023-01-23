@@ -509,6 +509,20 @@
 
             
           
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/g2-hover-config/" class="md-nav__link">
+        Custom Config
+      </a>
+    </li>
+  
+
+            
+          
         </ul>
       </nav>
     </li>
@@ -1326,14 +1340,19 @@ BokehDataFinder            (<a title="hover.core.explorer.base.BokehBaseExplorer
         <span class="k">for</span> <span class="n">_widget</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_search_watch_widgets</span><span class="p">():</span>
             <span class="n">_widget</span><span class="o">.</span><span class="n">on_change</span><span class="p">(</span>
                 <span class="s2">&quot;value&quot;</span><span class="p">,</span>
-                <span class="k">lambda</span> <span class="n">attr</span><span class="p">,</span> <span class="n">old</span><span class="p">,</span> <span class="n">new</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_trigger_selection_filters</span><span class="p">()</span>
+                <span class="k">lambda</span> <span class="n">attr</span><span class="p">,</span> <span class="n">old</span><span class="p">,</span> <span class="n">new</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_selection_stages_callback</span><span class="p">(</span>
+                    <span class="s2">&quot;load&quot;</span><span class="p">,</span> <span class="s2">&quot;write&quot;</span><span class="p">,</span> <span class="s2">&quot;read&quot;</span>
+                <span class="p">)</span>
                 <span class="k">if</span> <span class="n">filter_flag</span><span class="p">()</span>
                 <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
             <span class="p">)</span>
 
-        <span class="c1"># active toggles always trigger selection filter</span>
+        <span class="c1"># change of toggles always trigger selection filter</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">search_filter_box</span><span class="o">.</span><span class="n">on_change</span><span class="p">(</span>
-            <span class="s2">&quot;active&quot;</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">attr</span><span class="p">,</span> <span class="n">old</span><span class="p">,</span> <span class="n">new</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_trigger_selection_filters</span><span class="p">()</span>
+            <span class="s2">&quot;active&quot;</span><span class="p">,</span>
+            <span class="k">lambda</span> <span class="n">attr</span><span class="p">,</span> <span class="n">old</span><span class="p">,</span> <span class="n">new</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_selection_stages_callback</span><span class="p">(</span>
+                <span class="s2">&quot;load&quot;</span><span class="p">,</span> <span class="s2">&quot;write&quot;</span><span class="p">,</span> <span class="s2">&quot;read&quot;</span>
+            <span class="p">),</span>
         <span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1957,6 +1976,9 @@ BokehSnorkelExplorer            (<a title="hover.core.explorer.base.BokehBaseExp
                 <span class="p">]</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">[</span><span class="n">_key</span><span class="p">]</span><span class="o">.</span><span class="n">selected</span><span class="o">.</span><span class="n">indices</span> <span class="o">=</span> <span class="n">_kept</span>
 
+            <span class="c1"># selection reduced, need to trigger readall callbacks</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_selection_stages_callback</span><span class="p">(</span><span class="s2">&quot;read&quot;</span><span class="p">)</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">lf_filter_trigger</span><span class="o">.</span><span class="n">on_click</span><span class="p">(</span><span class="n">callback_filter</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_postprocess_sources</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -2012,7 +2034,7 @@ BokehSnorkelExplorer            (<a title="hover.core.explorer.base.BokehBaseExp
         <span class="c1"># remove from legend, checking that there is exactly one entry</span>
         <span class="n">legend_idx_to_pop</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">_item</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">legend</span><span class="o">.</span><span class="n">items</span><span class="p">):</span>
-            <span class="n">_label</span> <span class="o">=</span> <span class="n">_item</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="n">_label</span> <span class="o">=</span> <span class="n">_item</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">value</span>
             <span class="k">if</span> <span class="n">_label</span> <span class="o">==</span> <span class="n">lf_name</span><span class="p">:</span>
                 <span class="k">assert</span> <span class="n">legend_idx_to_pop</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Legend collision: </span><span class="si">{</span><span class="n">lf_name</span><span class="si">}</span><span class="s2">&quot;</span>
                 <span class="n">legend_idx_to_pop</span> <span class="o">=</span> <span class="n">i</span>
@@ -2123,7 +2145,7 @@ BokehSnorkelExplorer            (<a title="hover.core.explorer.base.BokehBaseExp
             <span class="n">view</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_view_correct</span><span class="p">(</span><span class="n">L_labeled</span><span class="p">)</span>
             <span class="n">data_dict</span><span class="p">[</span><span class="s2">&quot;glyphs&quot;</span><span class="p">][</span><span class="s2">&quot;C&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">square</span><span class="p">(</span>
                 <span class="o">*</span><span class="n">xy_axes</span><span class="p">,</span>
-                <span class="n">source</span><span class="o">=</span><span class="n">view</span><span class="o">.</span><span class="n">source</span><span class="p">,</span>
+                <span class="n">source</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">[</span><span class="s2">&quot;labeled&quot;</span><span class="p">],</span>
                 <span class="n">view</span><span class="o">=</span><span class="n">view</span><span class="p">,</span>
                 <span class="n">name</span><span class="o">=</span><span class="s2">&quot;labeled&quot;</span><span class="p">,</span>
                 <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="n">lf</span><span class="o">.</span><span class="n">name</span><span class="p">],</span>
@@ -2133,7 +2155,7 @@ BokehSnorkelExplorer            (<a title="hover.core.explorer.base.BokehBaseExp
             <span class="n">view</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_view_incorrect</span><span class="p">(</span><span class="n">L_labeled</span><span class="p">)</span>
             <span class="n">data_dict</span><span class="p">[</span><span class="s2">&quot;glyphs&quot;</span><span class="p">][</span><span class="s2">&quot;I&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">x</span><span class="p">(</span>
                 <span class="o">*</span><span class="n">xy_axes</span><span class="p">,</span>
-                <span class="n">source</span><span class="o">=</span><span class="n">view</span><span class="o">.</span><span class="n">source</span><span class="p">,</span>
+                <span class="n">source</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">[</span><span class="s2">&quot;labeled&quot;</span><span class="p">],</span>
                 <span class="n">view</span><span class="o">=</span><span class="n">view</span><span class="p">,</span>
                 <span class="n">name</span><span class="o">=</span><span class="s2">&quot;labeled&quot;</span><span class="p">,</span>
                 <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="n">lf</span><span class="o">.</span><span class="n">name</span><span class="p">],</span>
@@ -2143,7 +2165,7 @@ BokehSnorkelExplorer            (<a title="hover.core.explorer.base.BokehBaseExp
             <span class="n">view</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_view_missed</span><span class="p">(</span><span class="n">L_labeled</span><span class="p">,</span> <span class="n">lf</span><span class="o">.</span><span class="n">targets</span><span class="p">)</span>
             <span class="n">data_dict</span><span class="p">[</span><span class="s2">&quot;glyphs&quot;</span><span class="p">][</span><span class="s2">&quot;M&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span>
                 <span class="o">*</span><span class="n">xy_axes</span><span class="p">,</span>
-                <span class="n">source</span><span class="o">=</span><span class="n">view</span><span class="o">.</span><span class="n">source</span><span class="p">,</span>
+                <span class="n">source</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">[</span><span class="s2">&quot;labeled&quot;</span><span class="p">],</span>
                 <span class="n">view</span><span class="o">=</span><span class="n">view</span><span class="p">,</span>
                 <span class="n">name</span><span class="o">=</span><span class="s2">&quot;labeled&quot;</span><span class="p">,</span>
                 <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="n">lf</span><span class="o">.</span><span class="n">name</span><span class="p">],</span>
@@ -2153,7 +2175,7 @@ BokehSnorkelExplorer            (<a title="hover.core.explorer.base.BokehBaseExp
             <span class="n">view</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_view_hit</span><span class="p">(</span><span class="n">L_raw</span><span class="p">)</span>
             <span class="n">data_dict</span><span class="p">[</span><span class="s2">&quot;glyphs&quot;</span><span class="p">][</span><span class="s2">&quot;H&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span>
                 <span class="o">*</span><span class="n">xy_axes</span><span class="p">,</span>
-                <span class="n">source</span><span class="o">=</span><span class="n">view</span><span class="o">.</span><span class="n">source</span><span class="p">,</span>
+                <span class="n">source</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">[</span><span class="s2">&quot;raw&quot;</span><span class="p">],</span>
                 <span class="n">view</span><span class="o">=</span><span class="n">view</span><span class="p">,</span>
                 <span class="n">name</span><span class="o">=</span><span class="s2">&quot;raw&quot;</span><span class="p">,</span>
                 <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="n">lf</span><span class="o">.</span><span class="n">name</span><span class="p">],</span>
@@ -2556,7 +2578,7 @@ BokehSnorkelExplorer            (<a title="hover.core.explorer.base.BokehBaseExp
         <span class="n">view</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_view_correct</span><span class="p">(</span><span class="n">L_labeled</span><span class="p">)</span>
         <span class="n">data_dict</span><span class="p">[</span><span class="s2">&quot;glyphs&quot;</span><span class="p">][</span><span class="s2">&quot;C&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">square</span><span class="p">(</span>
             <span class="o">*</span><span class="n">xy_axes</span><span class="p">,</span>
-            <span class="n">source</span><span class="o">=</span><span class="n">view</span><span class="o">.</span><span class="n">source</span><span class="p">,</span>
+            <span class="n">source</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">[</span><span class="s2">&quot;labeled&quot;</span><span class="p">],</span>
             <span class="n">view</span><span class="o">=</span><span class="n">view</span><span class="p">,</span>
             <span class="n">name</span><span class="o">=</span><span class="s2">&quot;labeled&quot;</span><span class="p">,</span>
             <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="n">lf</span><span class="o">.</span><span class="n">name</span><span class="p">],</span>
@@ -2566,7 +2588,7 @@ BokehSnorkelExplorer            (<a title="hover.core.explorer.base.BokehBaseExp
         <span class="n">view</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_view_incorrect</span><span class="p">(</span><span class="n">L_labeled</span><span class="p">)</span>
         <span class="n">data_dict</span><span class="p">[</span><span class="s2">&quot;glyphs&quot;</span><span class="p">][</span><span class="s2">&quot;I&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">x</span><span class="p">(</span>
             <span class="o">*</span><span class="n">xy_axes</span><span class="p">,</span>
-            <span class="n">source</span><span class="o">=</span><span class="n">view</span><span class="o">.</span><span class="n">source</span><span class="p">,</span>
+            <span class="n">source</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">[</span><span class="s2">&quot;labeled&quot;</span><span class="p">],</span>
             <span class="n">view</span><span class="o">=</span><span class="n">view</span><span class="p">,</span>
             <span class="n">name</span><span class="o">=</span><span class="s2">&quot;labeled&quot;</span><span class="p">,</span>
             <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="n">lf</span><span class="o">.</span><span class="n">name</span><span class="p">],</span>
@@ -2576,7 +2598,7 @@ BokehSnorkelExplorer            (<a title="hover.core.explorer.base.BokehBaseExp
         <span class="n">view</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_view_missed</span><span class="p">(</span><span class="n">L_labeled</span><span class="p">,</span> <span class="n">lf</span><span class="o">.</span><span class="n">targets</span><span class="p">)</span>
         <span class="n">data_dict</span><span class="p">[</span><span class="s2">&quot;glyphs&quot;</span><span class="p">][</span><span class="s2">&quot;M&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span>
             <span class="o">*</span><span class="n">xy_axes</span><span class="p">,</span>
-            <span class="n">source</span><span class="o">=</span><span class="n">view</span><span class="o">.</span><span class="n">source</span><span class="p">,</span>
+            <span class="n">source</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">[</span><span class="s2">&quot;labeled&quot;</span><span class="p">],</span>
             <span class="n">view</span><span class="o">=</span><span class="n">view</span><span class="p">,</span>
             <span class="n">name</span><span class="o">=</span><span class="s2">&quot;labeled&quot;</span><span class="p">,</span>
             <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="n">lf</span><span class="o">.</span><span class="n">name</span><span class="p">],</span>
@@ -2586,7 +2608,7 @@ BokehSnorkelExplorer            (<a title="hover.core.explorer.base.BokehBaseExp
         <span class="n">view</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_view_hit</span><span class="p">(</span><span class="n">L_raw</span><span class="p">)</span>
         <span class="n">data_dict</span><span class="p">[</span><span class="s2">&quot;glyphs&quot;</span><span class="p">][</span><span class="s2">&quot;H&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span>
             <span class="o">*</span><span class="n">xy_axes</span><span class="p">,</span>
-            <span class="n">source</span><span class="o">=</span><span class="n">view</span><span class="o">.</span><span class="n">source</span><span class="p">,</span>
+            <span class="n">source</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">[</span><span class="s2">&quot;raw&quot;</span><span class="p">],</span>
             <span class="n">view</span><span class="o">=</span><span class="n">view</span><span class="p">,</span>
             <span class="n">name</span><span class="o">=</span><span class="s2">&quot;raw&quot;</span><span class="p">,</span>
             <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="n">lf</span><span class="o">.</span><span class="n">name</span><span class="p">],</span>
@@ -2734,7 +2756,7 @@ BokehSnorkelExplorer            (<a title="hover.core.explorer.base.BokehBaseExp
     <span class="c1"># remove from legend, checking that there is exactly one entry</span>
     <span class="n">legend_idx_to_pop</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">_item</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">legend</span><span class="o">.</span><span class="n">items</span><span class="p">):</span>
-        <span class="n">_label</span> <span class="o">=</span> <span class="n">_item</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="n">_label</span> <span class="o">=</span> <span class="n">_item</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">value</span>
         <span class="k">if</span> <span class="n">_label</span> <span class="o">==</span> <span class="n">lf_name</span><span class="p">:</span>
             <span class="k">assert</span> <span class="n">legend_idx_to_pop</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Legend collision: </span><span class="si">{</span><span class="n">lf_name</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="n">legend_idx_to_pop</span> <span class="o">=</span> <span class="n">i</span>
@@ -2954,14 +2976,19 @@ BokehSoftLabelExplorer            (<a title="hover.core.explorer.base.BokehBaseE
         <span class="c1"># when toggled as active, score range change triggers selection filter</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">score_range</span><span class="o">.</span><span class="n">on_change</span><span class="p">(</span>
             <span class="s2">&quot;value&quot;</span><span class="p">,</span>
-            <span class="k">lambda</span> <span class="n">attr</span><span class="p">,</span> <span class="n">old</span><span class="p">,</span> <span class="n">new</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_trigger_selection_filters</span><span class="p">()</span>
+            <span class="k">lambda</span> <span class="n">attr</span><span class="p">,</span> <span class="n">old</span><span class="p">,</span> <span class="n">new</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_selection_stages_callback</span><span class="p">(</span>
+                <span class="s2">&quot;load&quot;</span><span class="p">,</span> <span class="s2">&quot;write&quot;</span><span class="p">,</span> <span class="s2">&quot;read&quot;</span>
+            <span class="p">)</span>
             <span class="k">if</span> <span class="n">filter_flag</span><span class="p">()</span>
             <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
         <span class="p">)</span>
 
-        <span class="c1"># active toggles always trigger selection filter</span>
+        <span class="c1"># changing toggles always re-evaluate selection filter</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">score_filter_box</span><span class="o">.</span><span class="n">on_change</span><span class="p">(</span>
-            <span class="s2">&quot;active&quot;</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">attr</span><span class="p">,</span> <span class="n">old</span><span class="p">,</span> <span class="n">new</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_trigger_selection_filters</span><span class="p">()</span>
+            <span class="s2">&quot;active&quot;</span><span class="p">,</span>
+            <span class="k">lambda</span> <span class="n">attr</span><span class="p">,</span> <span class="n">old</span><span class="p">,</span> <span class="n">new</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_selection_stages_callback</span><span class="p">(</span>
+                <span class="s2">&quot;load&quot;</span><span class="p">,</span> <span class="s2">&quot;write&quot;</span><span class="p">,</span> <span class="s2">&quot;read&quot;</span>
+            <span class="p">),</span>
         <span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>

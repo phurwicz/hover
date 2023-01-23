@@ -509,6 +509,20 @@
 
             
           
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/g2-hover-config/" class="md-nav__link">
+        Custom Config
+      </a>
+    </li>
+  
+
+            
+          
         </ul>
       </nav>
     </li>
@@ -1549,7 +1563,7 @@
         <span class="n">scores</span> <span class="o">=</span> <span class="n">probs</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
         <span class="n">traj_arr</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">vecnet</span><span class="o">.</span><span class="n">manifold_trajectory</span><span class="p">(</span>
             <span class="n">inps</span><span class="p">,</span>
-            <span class="n">method</span><span class="o">=</span><span class="s2">&quot;umap&quot;</span><span class="p">,</span>
+            <span class="n">method</span><span class="o">=</span><span class="n">hover</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;data.embedding&quot;</span><span class="p">][</span><span class="s2">&quot;default_reduction_method&quot;</span><span class="p">],</span>
             <span class="n">reducer_kwargs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">dimension</span><span class="o">=</span><span class="n">manifold_dim</span><span class="p">),</span>
             <span class="n">spline_kwargs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">points_per_step</span><span class="o">=</span><span class="mi">5</span><span class="p">),</span>
         <span class="p">)</span>
@@ -2107,7 +2121,7 @@
     <nav class="md-footer__inner md-grid" aria-label="Footer">
       
         
-        <a href="../../guides/g1-datatype-audio/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Audio Data" rel="prev">
+        <a href="../../guides/g2-hover-config/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Custom Config" rel="prev">
           <div class="md-footer__button md-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
           </div>
@@ -2116,7 +2130,7 @@
               <span class="md-footer__direction">
                 Previous
               </span>
-              Audio Data
+              Custom Config
             </div>
           </div>
         </a>

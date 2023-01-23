@@ -509,6 +509,20 @@
 
             
           
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/g2-hover-config/" class="md-nav__link">
+        Custom Config
+      </a>
+    </li>
+  
+
+            
+          
         </ul>
       </nav>
     </li>
@@ -724,13 +738,6 @@
           <li class="md-nav__item">
   <a href="#hover.core.explorer.base.BokehBaseExplorer.link_selection" class="md-nav__link">
     link_selection()
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#hover.core.explorer.base.BokehBaseExplorer.link_selection_options" class="md-nav__link">
-    link_selection_options()
   </a>
   
 </li>
@@ -1022,6 +1029,7 @@ BokehBaseExplorer            (<span title="hover.core.Loggable">Loggable</span>,
 
     <span class="n">SUBSET_GLYPH_KWARGS</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="n">DEFAULT_SUBSET_MAPPING</span> <span class="o">=</span> <span class="p">{</span><span class="n">_k</span><span class="p">:</span> <span class="n">_k</span> <span class="k">for</span> <span class="n">_k</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;raw&quot;</span><span class="p">,</span> <span class="s2">&quot;train&quot;</span><span class="p">,</span> <span class="s2">&quot;dev&quot;</span><span class="p">,</span> <span class="s2">&quot;test&quot;</span><span class="p">]}</span>
+    <span class="n">SELECTION_PROCESSING_STAGES</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;save&quot;</span><span class="p">,</span> <span class="s2">&quot;load&quot;</span><span class="p">,</span> <span class="s2">&quot;write&quot;</span><span class="p">,</span> <span class="s2">&quot;read&quot;</span><span class="p">]</span>
 
     <span class="n">PRIMARY_FEATURE</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">MANDATORY_COLUMNS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;label&quot;</span><span class="p">]</span>
@@ -1061,6 +1069,7 @@ BokehBaseExplorer            (<span title="hover.core.Loggable">Loggable</span>,
         <span class="bp">self</span><span class="o">.</span><span class="n">_setup_dfs</span><span class="p">(</span><span class="n">df_dict</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_setup_sources</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_setup_widgets</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_setup_status_flags</span><span class="p">()</span>
 
     <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">from_dataset</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">subset_mapping</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -1142,6 +1151,20 @@ BokehBaseExplorer            (<span title="hover.core.Loggable">Loggable</span>,
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">pass</span>
 
+    <span class="k">def</span> <span class="nf">_setup_status_flags</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        ???+ note &quot;Status flags to permit or forbid certain operations.&quot;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">status_flags</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;selecting&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+            <span class="s2">&quot;selection_syncing_out&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="k">def</span> <span class="nf">update_selecting_status</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">status_flags</span><span class="p">[</span><span class="s2">&quot;selecting&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">event</span><span class="o">.</span><span class="n">final</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">on_event</span><span class="p">(</span><span class="n">SelectionGeometry</span><span class="p">,</span> <span class="n">update_selecting_status</span><span class="p">)</span>
+
     <span class="k">def</span> <span class="nf">_setup_selection_option</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        ???+ note &quot;Create a group of checkbox(es) for advanced selection options.&quot;</span>
@@ -1169,18 +1192,19 @@ BokehBaseExplorer            (<span title="hover.core.Loggable">Loggable</span>,
             <span class="bp">self</span><span class="o">.</span><span class="n">data_key_button_group_help</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_key_button_group</span>
         <span class="p">)</span>
 
-        <span class="k">def</span> <span class="nf">update_data_key_display</span><span class="p">(</span><span class="n">active</span><span class="p">):</span>
-            <span class="n">visible_keys</span> <span class="o">=</span> <span class="p">{</span><span class="bp">self</span><span class="o">.</span><span class="n">data_key_button_group</span><span class="o">.</span><span class="n">labels</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">active</span><span class="p">}</span>
+        <span class="k">def</span> <span class="nf">update_data_key_display</span><span class="p">():</span>
+            <span class="n">subsets</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_key_button_group</span><span class="o">.</span><span class="n">active</span>
+            <span class="n">visible_keys</span> <span class="o">=</span> <span class="p">{</span><span class="bp">self</span><span class="o">.</span><span class="n">data_key_button_group</span><span class="o">.</span><span class="n">labels</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">subsets</span><span class="p">}</span>
             <span class="k">for</span> <span class="n">_renderer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">renderers</span><span class="p">:</span>
                 <span class="c1"># if the renderer has a name &quot;on the list&quot;, update its visibility</span>
                 <span class="k">if</span> <span class="n">_renderer</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">SUBSET_GLYPH_KWARGS</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
                     <span class="n">_renderer</span><span class="o">.</span><span class="n">visible</span> <span class="o">=</span> <span class="n">_renderer</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="n">visible_keys</span>
 
         <span class="c1"># store the callback (useful, for example, during automated tests) and link it</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_callback_subset_display</span> <span class="o">=</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">update_data_key_display</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">data_key_button_group</span><span class="o">.</span><span class="n">active</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_callback_subset_display</span> <span class="o">=</span> <span class="n">update_data_key_display</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_key_button_group</span><span class="o">.</span><span class="n">on_change</span><span class="p">(</span>
+            <span class="s2">&quot;active&quot;</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">attr</span><span class="p">,</span> <span class="n">old</span><span class="p">,</span> <span class="n">new</span><span class="p">:</span> <span class="n">update_data_key_display</span><span class="p">()</span>
         <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">data_key_button_group</span><span class="o">.</span><span class="n">on_click</span><span class="p">(</span><span class="n">update_data_key_display</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_setup_axes_dropdown</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -1349,6 +1373,38 @@ BokehBaseExplorer            (<span title="hover.core.Loggable">Loggable</span>,
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_setup_selection_tools</span><span class="p">()</span>
 
+    <span class="k">def</span> <span class="nf">_setup_subroutine_selection_callback_queue</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        ???+ note &quot;For dynamically assigned callbacks triggered by making a selection on the figure.&quot;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">all_stages</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">SELECTION_PROCESSING_STAGES</span>
+        <span class="n">stage_to_order</span> <span class="o">=</span> <span class="p">{</span><span class="n">_stage</span><span class="p">:</span> <span class="n">_i</span> <span class="k">for</span> <span class="n">_i</span><span class="p">,</span> <span class="n">_stage</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">all_stages</span><span class="p">)}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_selection_callbacks</span> <span class="o">=</span> <span class="p">{</span><span class="n">_k</span><span class="p">:</span> <span class="n">RootUnionFind</span><span class="p">(</span><span class="nb">set</span><span class="p">())</span> <span class="k">for</span> <span class="n">_k</span> <span class="ow">in</span> <span class="n">all_stages</span><span class="p">}</span>
+
+        <span class="k">def</span> <span class="nf">stages_callback</span><span class="p">(</span><span class="o">*</span><span class="n">stages</span><span class="p">):</span>
+            <span class="n">prev_order</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+            <span class="k">for</span> <span class="n">_stage</span> <span class="ow">in</span> <span class="n">stages</span><span class="p">:</span>
+                <span class="n">_order</span> <span class="o">=</span> <span class="n">stage_to_order</span><span class="p">[</span><span class="n">_stage</span><span class="p">]</span>
+                <span class="k">assert</span> <span class="n">_order</span> <span class="o">&gt;</span> <span class="n">prev_order</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Misordered stage sequence </span><span class="si">{</span><span class="n">stages</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="k">for</span> <span class="n">_callback</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_selection_callbacks</span><span class="p">[</span><span class="n">_stage</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
+                    <span class="n">_callback</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_selection_stages_callback</span> <span class="o">=</span> <span class="n">stages_callback</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">on_event</span><span class="p">(</span>
+            <span class="n">SelectionGeometry</span><span class="p">,</span>
+            <span class="k">lambda</span> <span class="n">event</span><span class="p">:</span> <span class="n">stages_callback</span><span class="p">(</span><span class="o">*</span><span class="n">all_stages</span><span class="p">)</span> <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">final</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">register_selection_callback</span><span class="p">(</span><span class="n">stage</span><span class="p">,</span> <span class="n">callback</span><span class="p">):</span>
+            <span class="k">assert</span> <span class="p">(</span>
+                <span class="n">stage</span> <span class="ow">in</span> <span class="n">all_stages</span>
+            <span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;Invalid stage: </span><span class="si">{</span><span class="n">stage</span><span class="si">}</span><span class="s2">, expected one of </span><span class="si">{</span><span class="n">all_stages</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_selection_callbacks</span><span class="p">[</span><span class="n">stage</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">callback</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_register_selection_callback</span> <span class="o">=</span> <span class="n">register_selection_callback</span>
+
     <span class="k">def</span> <span class="nf">_setup_subroutine_selection_store</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        ???+ note &quot;Subroutine of `_setup_selection_tools`.&quot;</span>
@@ -1378,11 +1434,17 @@ BokehBaseExplorer            (<span title="hover.core.Loggable">Loggable</span>,
                     <span class="bp">self</span><span class="o">.</span><span class="n">_last_selections</span><span class="p">[</span><span class="n">_key</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">_selected</span><span class="p">)</span>
                 <span class="n">_source</span><span class="o">.</span><span class="n">selected</span><span class="o">.</span><span class="n">indices</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_last_selections</span><span class="p">[</span><span class="n">_key</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
 
+        <span class="k">def</span> <span class="nf">restore_selection</span><span class="p">():</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Set current selection to the last manual selection.</span>
+<span class="sd">            Useful for applying cumulation / filters dynamically.</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="k">for</span> <span class="n">_key</span><span class="p">,</span> <span class="n">_source</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">_source</span><span class="o">.</span><span class="n">selected</span><span class="o">.</span><span class="n">indices</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_last_selections</span><span class="p">[</span><span class="n">_key</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">_store_selection</span> <span class="o">=</span> <span class="n">store_selection</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">on_event</span><span class="p">(</span>
-            <span class="n">SelectionGeometry</span><span class="p">,</span>
-            <span class="k">lambda</span> <span class="n">event</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_store_selection</span><span class="p">()</span> <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">final</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_register_selection_callback</span><span class="p">(</span><span class="s2">&quot;save&quot;</span><span class="p">,</span> <span class="n">store_selection</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_register_selection_callback</span><span class="p">(</span><span class="s2">&quot;load&quot;</span><span class="p">,</span> <span class="n">restore_selection</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_setup_subroutine_selection_filter</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -1402,18 +1464,12 @@ BokehBaseExplorer            (<span title="hover.core.Loggable">Loggable</span>,
                 <span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;Expected subsets from </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span>
 
             <span class="k">for</span> <span class="n">_key</span> <span class="ow">in</span> <span class="n">subsets</span><span class="p">:</span>
-                <span class="n">_selected</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_last_selections</span><span class="p">[</span><span class="n">_key</span><span class="p">]</span><span class="o">.</span><span class="n">data</span>
+                <span class="n">_selected</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">[</span><span class="n">_key</span><span class="p">]</span><span class="o">.</span><span class="n">selected</span><span class="o">.</span><span class="n">indices</span><span class="p">[:])</span>
                 <span class="k">for</span> <span class="n">_func</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_selection_filters</span><span class="p">[</span><span class="n">_key</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
                     <span class="n">_selected</span> <span class="o">=</span> <span class="n">_func</span><span class="p">(</span><span class="n">_selected</span><span class="p">,</span> <span class="n">_key</span><span class="p">)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">[</span><span class="n">_key</span><span class="p">]</span><span class="o">.</span><span class="n">selected</span><span class="o">.</span><span class="n">indices</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">_selected</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">[</span><span class="n">_key</span><span class="p">]</span><span class="o">.</span><span class="n">selected</span><span class="o">.</span><span class="n">indices</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">_selected</span><span class="p">)</span>
 
-        <span class="c1"># keep reference to trigger_selection_filter() for further access</span>
-        <span class="c1"># for example, toggling filters should call the trigger</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_trigger_selection_filters</span> <span class="o">=</span> <span class="n">trigger_selection_filters</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">on_event</span><span class="p">(</span>
-            <span class="n">SelectionGeometry</span><span class="p">,</span>
-            <span class="k">lambda</span> <span class="n">event</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_trigger_selection_filters</span><span class="p">()</span> <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">final</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_register_selection_callback</span><span class="p">(</span><span class="s2">&quot;write&quot;</span><span class="p">,</span> <span class="n">trigger_selection_filters</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_setup_subroutine_selection_reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -1448,6 +1504,7 @@ BokehBaseExplorer            (<span title="hover.core.Loggable">Loggable</span>,
             <span class="n">_key</span><span class="p">:</span> <span class="n">RootUnionFind</span><span class="p">(</span><span class="nb">set</span><span class="p">())</span> <span class="k">for</span> <span class="n">_key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
         <span class="p">}</span>
 
+        <span class="bp">self</span><span class="o">.</span><span class="n">_setup_subroutine_selection_callback_queue</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_setup_subroutine_selection_store</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_setup_subroutine_selection_filter</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_setup_subroutine_selection_reset</span><span class="p">()</span>
@@ -1620,53 +1677,109 @@ BokehBaseExplorer            (<span title="hover.core.Loggable">Loggable</span>,
         <span class="k">assert</span> <span class="n">other</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;Self-loops are fordidden&quot;</span>
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">BokehBaseExplorer</span><span class="p">),</span> <span class="s2">&quot;Must link to BokehBaseExplorer&quot;</span>
 
-    <span class="k">def</span> <span class="nf">link_selection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="n">other_key</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">link_selection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="n">subset_mapping</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        ???+ note &quot;Synchronize the selected indices between specified sources.&quot;</span>
+<span class="sd">        ???+ note &quot;Synchronize the selection mechanism between sources.&quot;</span>
+
+<span class="sd">            This includes:</span>
+<span class="sd">            -   the selected indices between subsets</span>
+<span class="sd">            -   callbacks associated with selections</span>
+<span class="sd">            -   selection option values in the widgets</span>
+
 <span class="sd">            | Param   | Type    | Description                    |</span>
 <span class="sd">            | :------ | :------ | :----------------------------- |</span>
-<span class="sd">            | `key`   | `str`   | the key of the subset to link  |</span>
 <span class="sd">            | `other` | `BokehBaseExplorer` | the other explorer |</span>
-<span class="sd">            | `other_key` | `str` | the key of the other subset  |</span>
+<span class="sd">            | `subset_mapping` | `dict` | mapping of subsets from `self` to `other` |</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_prelink_check</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
-        <span class="c1"># link selection in a bidirectional manner</span>
-        <span class="n">sl</span><span class="p">,</span> <span class="n">sr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">other</span><span class="o">.</span><span class="n">sources</span><span class="p">[</span><span class="n">other_key</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_subroutine_link_selection_callbacks</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_subroutine_link_selection_indices</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">subset_mapping</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_subroutine_link_selection_options</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
 
-        <span class="k">def</span> <span class="nf">left_to_right</span><span class="p">(</span><span class="n">attr</span><span class="p">,</span> <span class="n">old</span><span class="p">,</span> <span class="n">new</span><span class="p">):</span>
-            <span class="n">sr</span><span class="o">.</span><span class="n">selected</span><span class="o">.</span><span class="n">indices</span> <span class="o">=</span> <span class="n">sl</span><span class="o">.</span><span class="n">selected</span><span class="o">.</span><span class="n">indices</span><span class="p">[:]</span>
-
-        <span class="k">def</span> <span class="nf">right_to_left</span><span class="p">(</span><span class="n">attr</span><span class="p">,</span> <span class="n">old</span><span class="p">,</span> <span class="n">new</span><span class="p">):</span>
-            <span class="n">sl</span><span class="o">.</span><span class="n">selected</span><span class="o">.</span><span class="n">indices</span> <span class="o">=</span> <span class="n">sr</span><span class="o">.</span><span class="n">selected</span><span class="o">.</span><span class="n">indices</span><span class="p">[:]</span>
-
-        <span class="n">sl</span><span class="o">.</span><span class="n">selected</span><span class="o">.</span><span class="n">on_change</span><span class="p">(</span><span class="s2">&quot;indices&quot;</span><span class="p">,</span> <span class="n">left_to_right</span><span class="p">)</span>
-        <span class="n">sr</span><span class="o">.</span><span class="n">selected</span><span class="o">.</span><span class="n">on_change</span><span class="p">(</span><span class="s2">&quot;indices&quot;</span><span class="p">,</span> <span class="n">right_to_left</span><span class="p">)</span>
-
-        <span class="c1"># link last manual selections (pointing to the same set)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_last_selections</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">_last_selections</span><span class="p">[</span><span class="n">other_key</span><span class="p">])</span>
-
-        <span class="c1"># link selection filter functions (pointing to the same set)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_selection_filters</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
-            <span class="n">other</span><span class="o">.</span><span class="n">_selection_filters</span><span class="p">[</span><span class="n">other_key</span><span class="p">]</span><span class="o">.</span><span class="n">data</span>
-        <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_selection_filters</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">_selection_filters</span><span class="p">[</span><span class="n">other_key</span><span class="p">])</span>
-
-    <span class="k">def</span> <span class="nf">link_selection_options</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_subroutine_link_selection_callbacks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        ???+ note &quot;Synchronize the selection option values between explorers.&quot;</span>
+<span class="sd">        ???+ note &quot;Subroutine of `link_selection`.&quot;</span>
+
+<span class="sd">            Union the callbacks triggered by selection event.</span>
+
 <span class="sd">            | Param   | Type    | Description                    |</span>
 <span class="sd">            | :------ | :------ | :----------------------------- |</span>
 <span class="sd">            | `other` | `BokehBaseExplorer` | the other explorer |</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># link selection callbacks (pointing to the same set)</span>
+        <span class="k">for</span> <span class="n">_k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">SELECTION_PROCESSING_STAGES</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_selection_callbacks</span><span class="p">[</span><span class="n">_k</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+                <span class="n">other</span><span class="o">.</span><span class="n">_selection_callbacks</span><span class="p">[</span><span class="n">_k</span><span class="p">]</span><span class="o">.</span><span class="n">data</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_selection_callbacks</span><span class="p">[</span><span class="n">_k</span><span class="p">]</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">_selection_callbacks</span><span class="p">[</span><span class="n">_k</span><span class="p">])</span>
 
-        <span class="k">def</span> <span class="nf">left_to_right</span><span class="p">(</span><span class="n">attr</span><span class="p">,</span> <span class="n">old</span><span class="p">,</span> <span class="n">new</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_subroutine_link_selection_indices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="n">subset_mapping</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        ???+ note &quot;Subroutine of `link_selection`.&quot;</span>
+
+<span class="sd">            Synchronize the manually selected indices and actually selected ones.</span>
+
+<span class="sd">            | Param   | Type    | Description                    |</span>
+<span class="sd">            | :------ | :------ | :----------------------------- |</span>
+<span class="sd">            | `other` | `BokehBaseExplorer` | the other explorer |</span>
+<span class="sd">            | `subset_mapping` | `dict` | mapping of subsets from `self` to `other` |</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">def</span> <span class="nf">link_selected_indices</span><span class="p">(</span><span class="n">kl</span><span class="p">,</span> <span class="n">kr</span><span class="p">):</span>
+            <span class="n">sl</span><span class="p">,</span> <span class="n">sr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">[</span><span class="n">_kl</span><span class="p">],</span> <span class="n">other</span><span class="o">.</span><span class="n">sources</span><span class="p">[</span><span class="n">_kr</span><span class="p">]</span>
+
+            <span class="c1"># acyclic, DFS-like syncs</span>
+            <span class="k">def</span> <span class="nf">left_to_right</span><span class="p">(</span><span class="n">attr</span><span class="p">,</span> <span class="n">old</span><span class="p">,</span> <span class="n">new</span><span class="p">):</span>
+                <span class="c1"># &quot;acyclic&quot;</span>
+                <span class="k">if</span> <span class="n">other</span><span class="o">.</span><span class="n">status_flags</span><span class="p">[</span><span class="s2">&quot;selection_syncing_out&quot;</span><span class="p">]:</span>
+                    <span class="k">return</span>
+
+                <span class="c1"># &quot;DFS-like&quot;</span>
+                <span class="k">if</span> <span class="nb">set</span><span class="p">(</span><span class="n">sr</span><span class="o">.</span><span class="n">selected</span><span class="o">.</span><span class="n">indices</span><span class="p">)</span> <span class="o">^</span> <span class="nb">set</span><span class="p">(</span><span class="n">sl</span><span class="o">.</span><span class="n">selected</span><span class="o">.</span><span class="n">indices</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">status_flags</span><span class="p">[</span><span class="s2">&quot;selection_syncing_out&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="n">sr</span><span class="o">.</span><span class="n">selected</span><span class="o">.</span><span class="n">indices</span> <span class="o">=</span> <span class="n">sl</span><span class="o">.</span><span class="n">selected</span><span class="o">.</span><span class="n">indices</span><span class="p">[:]</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">status_flags</span><span class="p">[</span><span class="s2">&quot;selection_syncing_out&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+
+            <span class="k">def</span> <span class="nf">right_to_left</span><span class="p">(</span><span class="n">attr</span><span class="p">,</span> <span class="n">old</span><span class="p">,</span> <span class="n">new</span><span class="p">):</span>
+                <span class="c1"># &quot;acyclic&quot;</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">status_flags</span><span class="p">[</span><span class="s2">&quot;selection_syncing_out&quot;</span><span class="p">]:</span>
+                    <span class="k">return</span>
+
+                <span class="c1"># &quot;DFS-like&quot;</span>
+                <span class="k">if</span> <span class="nb">set</span><span class="p">(</span><span class="n">sl</span><span class="o">.</span><span class="n">selected</span><span class="o">.</span><span class="n">indices</span><span class="p">)</span> <span class="o">^</span> <span class="nb">set</span><span class="p">(</span><span class="n">sr</span><span class="o">.</span><span class="n">selected</span><span class="o">.</span><span class="n">indices</span><span class="p">):</span>
+                    <span class="n">other</span><span class="o">.</span><span class="n">status_flags</span><span class="p">[</span><span class="s2">&quot;selection_syncing_out&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="n">sl</span><span class="o">.</span><span class="n">selected</span><span class="o">.</span><span class="n">indices</span> <span class="o">=</span> <span class="n">sr</span><span class="o">.</span><span class="n">selected</span><span class="o">.</span><span class="n">indices</span><span class="p">[:]</span>
+                    <span class="n">other</span><span class="o">.</span><span class="n">status_flags</span><span class="p">[</span><span class="s2">&quot;selection_syncing_out&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+
+            <span class="n">sl</span><span class="o">.</span><span class="n">selected</span><span class="o">.</span><span class="n">on_change</span><span class="p">(</span><span class="s2">&quot;indices&quot;</span><span class="p">,</span> <span class="n">left_to_right</span><span class="p">)</span>
+            <span class="n">sr</span><span class="o">.</span><span class="n">selected</span><span class="o">.</span><span class="n">on_change</span><span class="p">(</span><span class="s2">&quot;indices&quot;</span><span class="p">,</span> <span class="n">right_to_left</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">_kl</span><span class="p">,</span> <span class="n">_kr</span> <span class="ow">in</span> <span class="n">subset_mapping</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="c1"># link last manual selections (pointing to the same set)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_last_selections</span><span class="p">[</span><span class="n">_kl</span><span class="p">]</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">_last_selections</span><span class="p">[</span><span class="n">_kr</span><span class="p">])</span>
+
+            <span class="c1"># link selected indices; these are used by bokeh, not UnionFind-able</span>
+            <span class="n">link_selected_indices</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">[</span><span class="n">_kl</span><span class="p">],</span> <span class="n">other</span><span class="o">.</span><span class="n">sources</span><span class="p">[</span><span class="n">_kr</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">_subroutine_link_selection_options</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        ???+ note &quot;Subroutine of `link_selection`.&quot;</span>
+
+<span class="sd">            Synchronize the option widget values associated with selection.</span>
+
+<span class="sd">            | Param   | Type    | Description                    |</span>
+<span class="sd">            | :------ | :------ | :----------------------------- |</span>
+<span class="sd">            | `other` | `BokehBaseExplorer` | the other explorer |</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># link selection option values</span>
+        <span class="k">def</span> <span class="nf">option_lr</span><span class="p">(</span><span class="n">attr</span><span class="p">,</span> <span class="n">old</span><span class="p">,</span> <span class="n">new</span><span class="p">):</span>
             <span class="n">other</span><span class="o">.</span><span class="n">selection_option_box</span><span class="o">.</span><span class="n">active</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">selection_option_box</span><span class="o">.</span><span class="n">active</span>
 
-        <span class="k">def</span> <span class="nf">right_to_left</span><span class="p">(</span><span class="n">attr</span><span class="p">,</span> <span class="n">old</span><span class="p">,</span> <span class="n">new</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">option_rl</span><span class="p">(</span><span class="n">attr</span><span class="p">,</span> <span class="n">old</span><span class="p">,</span> <span class="n">new</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">selection_option_box</span><span class="o">.</span><span class="n">active</span> <span class="o">=</span> <span class="n">other</span><span class="o">.</span><span class="n">selection_option_box</span><span class="o">.</span><span class="n">active</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">selection_option_box</span><span class="o">.</span><span class="n">on_change</span><span class="p">(</span><span class="s2">&quot;active&quot;</span><span class="p">,</span> <span class="n">left_to_right</span><span class="p">)</span>
-        <span class="n">other</span><span class="o">.</span><span class="n">selection_option_box</span><span class="o">.</span><span class="n">on_change</span><span class="p">(</span><span class="s2">&quot;active&quot;</span><span class="p">,</span> <span class="n">right_to_left</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">selection_option_box</span><span class="o">.</span><span class="n">on_change</span><span class="p">(</span><span class="s2">&quot;active&quot;</span><span class="p">,</span> <span class="n">option_lr</span><span class="p">)</span>
+        <span class="n">other</span><span class="o">.</span><span class="n">selection_option_box</span><span class="o">.</span><span class="n">on_change</span><span class="p">(</span><span class="s2">&quot;active&quot;</span><span class="p">,</span> <span class="n">option_rl</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">link_xy_range</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -1814,6 +1927,7 @@ BokehBaseExplorer            (<span title="hover.core.Loggable">Loggable</span>,
 
 
 
+
   <div class="doc doc-object doc-method">
 
 
@@ -1894,6 +2008,7 @@ BokehBaseExplorer            (<span title="hover.core.Loggable">Loggable</span>,
     <span class="bp">self</span><span class="o">.</span><span class="n">_setup_dfs</span><span class="p">(</span><span class="n">df_dict</span><span class="p">)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_setup_sources</span><span class="p">()</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_setup_widgets</span><span class="p">()</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_setup_status_flags</span><span class="p">()</span>
 </code></pre></div>
         </details>
     </div>
@@ -2144,7 +2259,7 @@ BokehBaseExplorer            (<span title="hover.core.Loggable">Loggable</span>,
 
 
 <h3 id="hover.core.explorer.base.BokehBaseExplorer.link_selection" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">link_selection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="n">other_key</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">link_selection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="n">subset_mapping</span><span class="p">)</span></code>
 
 
 </h3>
@@ -2152,7 +2267,11 @@ BokehBaseExplorer            (<span title="hover.core.Loggable">Loggable</span>,
     <div class="doc doc-contents ">
 
       <details class="note" open="open">
-<summary>Synchronize the selected indices between specified sources.</summary>
+<summary>Synchronize the selection mechanism between sources.</summary>
+<p>This includes:
+-   the selected indices between subsets
+-   callbacks associated with selections
+-   selection option values in the widgets</p>
 <table>
 <thead>
 <tr>
@@ -2163,19 +2282,14 @@ BokehBaseExplorer            (<span title="hover.core.Loggable">Loggable</span>,
 </thead>
 <tbody>
 <tr>
-<td align="left"><code>key</code></td>
-<td align="left"><code>str</code></td>
-<td align="left">the key of the subset to link</td>
-</tr>
-<tr>
 <td align="left"><code>other</code></td>
 <td align="left"><code>BokehBaseExplorer</code></td>
 <td align="left">the other explorer</td>
 </tr>
 <tr>
-<td align="left"><code>other_key</code></td>
-<td align="left"><code>str</code></td>
-<td align="left">the key of the other subset</td>
+<td align="left"><code>subset_mapping</code></td>
+<td align="left"><code>dict</code></td>
+<td align="left">mapping of subsets from <code>self</code> to <code>other</code></td>
 </tr>
 </tbody>
 </table>
@@ -2183,94 +2297,24 @@ BokehBaseExplorer            (<span title="hover.core.Loggable">Loggable</span>,
 
         <details class="quote">
           <summary>Source code in <code>hover/core/explorer/base.py</code></summary>
-          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">link_selection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="n">other_key</span><span class="p">):</span>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">link_selection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="n">subset_mapping</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    ???+ note &quot;Synchronize the selected indices between specified sources.&quot;</span>
+<span class="sd">    ???+ note &quot;Synchronize the selection mechanism between sources.&quot;</span>
+
+<span class="sd">        This includes:</span>
+<span class="sd">        -   the selected indices between subsets</span>
+<span class="sd">        -   callbacks associated with selections</span>
+<span class="sd">        -   selection option values in the widgets</span>
+
 <span class="sd">        | Param   | Type    | Description                    |</span>
 <span class="sd">        | :------ | :------ | :----------------------------- |</span>
-<span class="sd">        | `key`   | `str`   | the key of the subset to link  |</span>
 <span class="sd">        | `other` | `BokehBaseExplorer` | the other explorer |</span>
-<span class="sd">        | `other_key` | `str` | the key of the other subset  |</span>
+<span class="sd">        | `subset_mapping` | `dict` | mapping of subsets from `self` to `other` |</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_prelink_check</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
-    <span class="c1"># link selection in a bidirectional manner</span>
-    <span class="n">sl</span><span class="p">,</span> <span class="n">sr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">other</span><span class="o">.</span><span class="n">sources</span><span class="p">[</span><span class="n">other_key</span><span class="p">]</span>
-
-    <span class="k">def</span> <span class="nf">left_to_right</span><span class="p">(</span><span class="n">attr</span><span class="p">,</span> <span class="n">old</span><span class="p">,</span> <span class="n">new</span><span class="p">):</span>
-        <span class="n">sr</span><span class="o">.</span><span class="n">selected</span><span class="o">.</span><span class="n">indices</span> <span class="o">=</span> <span class="n">sl</span><span class="o">.</span><span class="n">selected</span><span class="o">.</span><span class="n">indices</span><span class="p">[:]</span>
-
-    <span class="k">def</span> <span class="nf">right_to_left</span><span class="p">(</span><span class="n">attr</span><span class="p">,</span> <span class="n">old</span><span class="p">,</span> <span class="n">new</span><span class="p">):</span>
-        <span class="n">sl</span><span class="o">.</span><span class="n">selected</span><span class="o">.</span><span class="n">indices</span> <span class="o">=</span> <span class="n">sr</span><span class="o">.</span><span class="n">selected</span><span class="o">.</span><span class="n">indices</span><span class="p">[:]</span>
-
-    <span class="n">sl</span><span class="o">.</span><span class="n">selected</span><span class="o">.</span><span class="n">on_change</span><span class="p">(</span><span class="s2">&quot;indices&quot;</span><span class="p">,</span> <span class="n">left_to_right</span><span class="p">)</span>
-    <span class="n">sr</span><span class="o">.</span><span class="n">selected</span><span class="o">.</span><span class="n">on_change</span><span class="p">(</span><span class="s2">&quot;indices&quot;</span><span class="p">,</span> <span class="n">right_to_left</span><span class="p">)</span>
-
-    <span class="c1"># link last manual selections (pointing to the same set)</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">_last_selections</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">_last_selections</span><span class="p">[</span><span class="n">other_key</span><span class="p">])</span>
-
-    <span class="c1"># link selection filter functions (pointing to the same set)</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">_selection_filters</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
-        <span class="n">other</span><span class="o">.</span><span class="n">_selection_filters</span><span class="p">[</span><span class="n">other_key</span><span class="p">]</span><span class="o">.</span><span class="n">data</span>
-    <span class="p">)</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">_selection_filters</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">_selection_filters</span><span class="p">[</span><span class="n">other_key</span><span class="p">])</span>
-</code></pre></div>
-        </details>
-    </div>
-
-  </div>
-
-
-
-  <div class="doc doc-object doc-method">
-
-
-
-<h3 id="hover.core.explorer.base.BokehBaseExplorer.link_selection_options" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">link_selection_options</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">)</span></code>
-
-
-</h3>
-
-    <div class="doc doc-contents ">
-
-      <details class="note" open="open">
-<summary>Synchronize the selection option values between explorers.</summary>
-<table>
-<thead>
-<tr>
-<th align="left">Param</th>
-<th align="left">Type</th>
-<th align="left">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td align="left"><code>other</code></td>
-<td align="left"><code>BokehBaseExplorer</code></td>
-<td align="left">the other explorer</td>
-</tr>
-</tbody>
-</table>
-</details>
-
-        <details class="quote">
-          <summary>Source code in <code>hover/core/explorer/base.py</code></summary>
-          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">link_selection_options</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    ???+ note &quot;Synchronize the selection option values between explorers.&quot;</span>
-<span class="sd">        | Param   | Type    | Description                    |</span>
-<span class="sd">        | :------ | :------ | :----------------------------- |</span>
-<span class="sd">        | `other` | `BokehBaseExplorer` | the other explorer |</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="k">def</span> <span class="nf">left_to_right</span><span class="p">(</span><span class="n">attr</span><span class="p">,</span> <span class="n">old</span><span class="p">,</span> <span class="n">new</span><span class="p">):</span>
-        <span class="n">other</span><span class="o">.</span><span class="n">selection_option_box</span><span class="o">.</span><span class="n">active</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">selection_option_box</span><span class="o">.</span><span class="n">active</span>
-
-    <span class="k">def</span> <span class="nf">right_to_left</span><span class="p">(</span><span class="n">attr</span><span class="p">,</span> <span class="n">old</span><span class="p">,</span> <span class="n">new</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">selection_option_box</span><span class="o">.</span><span class="n">active</span> <span class="o">=</span> <span class="n">other</span><span class="o">.</span><span class="n">selection_option_box</span><span class="o">.</span><span class="n">active</span>
-
-    <span class="bp">self</span><span class="o">.</span><span class="n">selection_option_box</span><span class="o">.</span><span class="n">on_change</span><span class="p">(</span><span class="s2">&quot;active&quot;</span><span class="p">,</span> <span class="n">left_to_right</span><span class="p">)</span>
-    <span class="n">other</span><span class="o">.</span><span class="n">selection_option_box</span><span class="o">.</span><span class="n">on_change</span><span class="p">(</span><span class="s2">&quot;active&quot;</span><span class="p">,</span> <span class="n">right_to_left</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_subroutine_link_selection_callbacks</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_subroutine_link_selection_indices</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">subset_mapping</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_subroutine_link_selection_options</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
 </code></pre></div>
         </details>
     </div>
@@ -2553,7 +2597,6 @@ BokehBaseExplorer            (<span title="hover.core.Loggable">Loggable</span>,
 <h3 class="doc doc-heading" data-role="method" id="hover.core.explorer.base.BokehBaseExplorer.from_dataset"></h3>
 <h3 class="doc doc-heading" data-role="method" id="hover.core.explorer.base.BokehBaseExplorer.link_dataset"></h3>
 <h3 class="doc doc-heading" data-role="method" id="hover.core.explorer.base.BokehBaseExplorer.link_selection"></h3>
-<h3 class="doc doc-heading" data-role="method" id="hover.core.explorer.base.BokehBaseExplorer.link_selection_options"></h3>
 <h3 class="doc doc-heading" data-role="method" id="hover.core.explorer.base.BokehBaseExplorer.link_xy_range"></h3>
 <h3 class="doc doc-heading" data-role="method" id="hover.core.explorer.base.BokehBaseExplorer.plot"></h3>
 <h3 class="doc doc-heading" data-role="method" id="hover.core.explorer.base.BokehBaseExplorer.value_patch_by_slider"></h3>

@@ -509,6 +509,20 @@
 
             
           
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/g2-hover-config/" class="md-nav__link">
+        Custom Config
+      </a>
+    </li>
+  
+
+            
+          
         </ul>
       </nav>
     </li>
@@ -933,11 +947,25 @@
     <span class="n">use_labels</span><span class="o">.</span><span class="n">discard</span><span class="p">(</span><span class="n">module_config</span><span class="o">.</span><span class="n">ABSTAIN_DECODED</span><span class="p">)</span>
     <span class="n">use_labels</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">use_labels</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
-    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">use_labels</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">20</span><span class="p">,</span> <span class="s2">&quot;Too many labels to support (max at 20)&quot;</span>
-    <span class="n">palette</span> <span class="o">=</span> <span class="n">Category10</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">use_labels</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">10</span> <span class="k">else</span> <span class="n">Category20</span><span class="p">[</span><span class="mi">20</span><span class="p">]</span>
+    <span class="n">palette</span> <span class="o">=</span> <span class="n">hover</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;visual&quot;</span><span class="p">][</span><span class="s2">&quot;bokeh_palette&quot;</span><span class="p">]</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">use_labels</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="nb">len</span><span class="p">(</span>
+        <span class="n">palette</span>
+    <span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;Too many labels to support (max at </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">palette</span><span class="p">)</span><span class="si">}</span><span class="s2">)&quot;</span>
+
+    <span class="n">use_palette_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">palette</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">use_labels</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)[</span>
+        <span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span>
+    <span class="p">]</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">use_palette_idx</span><span class="p">))</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span>
+        <span class="n">use_palette_idx</span>
+    <span class="p">),</span> <span class="s2">&quot;Found repeated palette index&quot;</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">use_palette_idx</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span>
+        <span class="n">use_labels</span>
+    <span class="p">),</span> <span class="s2">&quot;Number of labels vs. palette colors must equal.&quot;</span>
+
+    <span class="n">use_palette</span> <span class="o">=</span> <span class="p">[</span><span class="n">palette</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">use_palette_idx</span><span class="p">]</span>
     <span class="n">color_dict</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="n">module_config</span><span class="o">.</span><span class="n">ABSTAIN_DECODED</span><span class="p">:</span> <span class="s2">&quot;#dcdcdc&quot;</span><span class="p">,</span>  <span class="c1"># gainsboro hex code</span>
-        <span class="o">**</span><span class="p">{</span><span class="n">_l</span><span class="p">:</span> <span class="n">_c</span> <span class="k">for</span> <span class="n">_l</span><span class="p">,</span> <span class="n">_c</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">use_labels</span><span class="p">,</span> <span class="n">palette</span><span class="p">)},</span>
+        <span class="n">module_config</span><span class="o">.</span><span class="n">ABSTAIN_DECODED</span><span class="p">:</span> <span class="n">module_config</span><span class="o">.</span><span class="n">ABSTAIN_HEXCOLOR</span><span class="p">,</span>
+        <span class="o">**</span><span class="p">{</span><span class="n">_l</span><span class="p">:</span> <span class="n">_c</span> <span class="k">for</span> <span class="n">_l</span><span class="p">,</span> <span class="n">_c</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">use_labels</span><span class="p">,</span> <span class="n">use_palette</span><span class="p">)},</span>
     <span class="p">}</span>
     <span class="k">return</span> <span class="n">color_dict</span>
 </code></pre></div>
@@ -1047,8 +1075,8 @@
     <span class="k">for</span> <span class="n">_field</span><span class="p">,</span> <span class="n">_key</span> <span class="ow">in</span> <span class="n">text</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="n">divbox</span> <span class="o">+=</span> <span class="n">TOOLTIP_TEXT_TEMPLATE</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="n">_field</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">_key</span><span class="p">)</span>
 
-    <span class="k">for</span> <span class="n">_field</span><span class="p">,</span> <span class="n">_size</span> <span class="ow">in</span> <span class="n">image</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-        <span class="n">divbox</span> <span class="o">+=</span> <span class="n">TOOLTIP_IMAGE_TEMPLATE</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="n">_field</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">_size</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">_field</span><span class="p">,</span> <span class="n">_style</span> <span class="ow">in</span> <span class="n">image</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">divbox</span> <span class="o">+=</span> <span class="n">TOOLTIP_IMAGE_TEMPLATE</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="n">_field</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="n">_style</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">_field</span><span class="p">,</span> <span class="n">_option</span> <span class="ow">in</span> <span class="n">audio</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="n">divbox</span> <span class="o">+=</span> <span class="n">TOOLTIP_AUDIO_TEMPLATE</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="n">_field</span><span class="p">,</span> <span class="n">option</span><span class="o">=</span><span class="n">_option</span><span class="p">)</span>

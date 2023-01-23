@@ -1,0 +1,1 @@
+hover.config["data.embedding"]["default_reduction_method"] = "ivis"

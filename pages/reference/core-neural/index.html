@@ -509,6 +509,20 @@
 
             
           
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/g2-hover-config/" class="md-nav__link">
+        Custom Config
+      </a>
+    </li>
+  
+
+            
+          
         </ul>
       </nav>
     </li>
@@ -1060,7 +1074,7 @@ BaseVectorNet            (<span title="hover.core.Loggable">Loggable</span>)
 
     <span class="nd">@abstractmethod</span>
     <span class="k">def</span> <span class="nf">manifold_trajectory</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">inps</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;umap&quot;</span><span class="p">,</span> <span class="n">reducer_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">spline_kwargs</span><span class="o">=</span><span class="kc">None</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">inps</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">reducer_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">spline_kwargs</span><span class="o">=</span><span class="kc">None</span>
     <span class="p">):</span>
         <span class="k">pass</span>
 
@@ -1341,7 +1355,7 @@ VectorNet            (<a title="hover.core.neural.BaseVectorNet" href="#hover.co
             <span class="n">end</span><span class="o">=</span><span class="mf">7.0</span><span class="p">,</span>
             <span class="n">value</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">DEFAULT_OPTIM_LOGLR</span><span class="p">,</span>
             <span class="n">step</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
-            <span class="nb">format</span><span class="o">=</span><span class="n">FuncTickFormatter</span><span class="p">(</span><span class="n">code</span><span class="o">=</span><span class="s2">&quot;return Math.pow(0.1, tick).toFixed(8)&quot;</span><span class="p">),</span>
+            <span class="nb">format</span><span class="o">=</span><span class="n">CustomJSTickFormatter</span><span class="p">(</span><span class="n">code</span><span class="o">=</span><span class="s2">&quot;return Math.pow(0.1, tick).toFixed(8)&quot;</span><span class="p">),</span>
         <span class="p">)</span>
 
         <span class="k">def</span> <span class="nf">update_lr</span><span class="p">(</span><span class="n">attr</span><span class="p">,</span> <span class="n">old</span><span class="p">,</span> <span class="n">new</span><span class="p">):</span>
@@ -1397,7 +1411,7 @@ VectorNet            (<a title="hover.core.neural.BaseVectorNet" href="#hover.co
         <span class="k">return</span> <span class="n">probs</span>
 
     <span class="k">def</span> <span class="nf">manifold_trajectory</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">inps</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;umap&quot;</span><span class="p">,</span> <span class="n">reducer_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">spline_kwargs</span><span class="o">=</span><span class="kc">None</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">inps</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">reducer_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">spline_kwargs</span><span class="o">=</span><span class="kc">None</span>
     <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        ???+ note &quot;Compute a propagation trajectory of the dataset manifold through the neural net.&quot;</span>
@@ -1417,6 +1431,9 @@ VectorNet            (<a title="hover.core.neural.BaseVectorNet" href="#hover.co
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="kn">from</span> <span class="nn">hover.core.representation.manifold</span> <span class="kn">import</span> <span class="n">LayerwiseManifold</span>
         <span class="kn">from</span> <span class="nn">hover.core.representation.trajectory</span> <span class="kn">import</span> <span class="n">manifold_spline</span>
+
+        <span class="k">if</span> <span class="n">method</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">method</span> <span class="o">=</span> <span class="n">hover</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;data.embedding&quot;</span><span class="p">][</span><span class="s2">&quot;default_reduction_method&quot;</span><span class="p">]</span>
 
         <span class="n">reducer_kwargs</span> <span class="o">=</span> <span class="n">reducer_kwargs</span> <span class="ow">or</span> <span class="p">{}</span>
         <span class="n">spline_kwargs</span> <span class="o">=</span> <span class="n">spline_kwargs</span> <span class="ow">or</span> <span class="p">{}</span>
@@ -2440,7 +2457,7 @@ and returns the loss.</p></td>
 
 
 <h3 id="hover.core.neural.VectorNet.manifold_trajectory" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">manifold_trajectory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inps</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;umap&#39;</span><span class="p">,</span> <span class="n">reducer_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">spline_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">manifold_trajectory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inps</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">reducer_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">spline_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
 
 
 </h3>
@@ -2492,7 +2509,7 @@ and returns the loss.</p></td>
         <details class="quote">
           <summary>Source code in <code>hover/core/neural.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">manifold_trajectory</span><span class="p">(</span>
-    <span class="bp">self</span><span class="p">,</span> <span class="n">inps</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;umap&quot;</span><span class="p">,</span> <span class="n">reducer_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">spline_kwargs</span><span class="o">=</span><span class="kc">None</span>
+    <span class="bp">self</span><span class="p">,</span> <span class="n">inps</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">reducer_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">spline_kwargs</span><span class="o">=</span><span class="kc">None</span>
 <span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    ???+ note &quot;Compute a propagation trajectory of the dataset manifold through the neural net.&quot;</span>
@@ -2512,6 +2529,9 @@ and returns the loss.</p></td>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="kn">from</span> <span class="nn">hover.core.representation.manifold</span> <span class="kn">import</span> <span class="n">LayerwiseManifold</span>
     <span class="kn">from</span> <span class="nn">hover.core.representation.trajectory</span> <span class="kn">import</span> <span class="n">manifold_spline</span>
+
+    <span class="k">if</span> <span class="n">method</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">method</span> <span class="o">=</span> <span class="n">hover</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;data.embedding&quot;</span><span class="p">][</span><span class="s2">&quot;default_reduction_method&quot;</span><span class="p">]</span>
 
     <span class="n">reducer_kwargs</span> <span class="o">=</span> <span class="n">reducer_kwargs</span> <span class="ow">or</span> <span class="p">{}</span>
     <span class="n">spline_kwargs</span> <span class="o">=</span> <span class="n">spline_kwargs</span> <span class="ow">or</span> <span class="p">{}</span>
