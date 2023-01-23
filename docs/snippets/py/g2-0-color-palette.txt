@@ -1,0 +1,11 @@
+import hover
+from hover.utils.bokeh_helper import auto_label_color
+from rich.console import Console
+
+console = Console()
+labels = ["A", "B", "C", "D", "E", "F"]
+color_dict = auto_label_color(labels)
+abstain = hover.config['data.values']['abstain_decoded']
+
+for _label in [abstain, *labels]:
+    console.print(f"\u2b24{_label}", style=color_dict[_label])

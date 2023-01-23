@@ -32,6 +32,7 @@ nav:
     - 'Guides':
         - 'Image Data': 'pages/guides/g0-datatype-image.md'
         - 'Audio Data': 'pages/guides/g1-datatype-audio.md'
+        - 'Custom Config': 'pages/guides/g2-hover-config.md'
     #    - 'Data Type: Multimodal': 'pages/topics/datatype-multimodal.md'
         #- 'Why Hover': 'pages/topics/what-hover-is.md'
         #- 'Customized Usage':
