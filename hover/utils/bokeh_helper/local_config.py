@@ -9,8 +9,7 @@ TOOLTIP_TEXT_TEMPLATE = """
 TOOLTIP_IMAGE_TEMPLATE = """
     <div>
         <img
-            src="@{field}" height="{size}" alt="@{field}" width="{size}"
-            style="float: left; margin: 2px 2px 2px 2px;"
+            src="@{field}" alt="@{field}" style="{style}"
             border="1"
         ></img>
     </div>

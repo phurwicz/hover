@@ -49,7 +49,6 @@ def auto_label_color(labels):
         module_config.ABSTAIN_DECODED: module_config.ABSTAIN_HEXCOLOR,
         **{_l: _c for _l, _c in zip(use_labels, use_palette)},
     }
-    print(color_dict)
     return color_dict
 
 
@@ -198,8 +197,8 @@ def bokeh_hover_tooltip(
     for _field, _key in text.items():
         divbox += TOOLTIP_TEXT_TEMPLATE.format(field=_field, key=_key)
 
-    for _field, _size in image.items():
-        divbox += TOOLTIP_IMAGE_TEMPLATE.format(field=_field, size=_size)
+    for _field, _style in image.items():
+        divbox += TOOLTIP_IMAGE_TEMPLATE.format(field=_field, style=_style)
 
     for _field, _option in audio.items():
         divbox += TOOLTIP_AUDIO_TEMPLATE.format(field=_field, option=_option)
