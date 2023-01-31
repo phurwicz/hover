@@ -37,8 +37,7 @@ test:
     - hover
   commands:
     - python -m spacy download en_core_web_md
-    - pip install wrappy>=0.2.6
-    - pip install shaffle>=0.0.1
+    - pip install ivis[cpu]
     - pytest -m lite
   requires:
     - pip
@@ -47,6 +46,8 @@ test:
     - faker
     - snorkel>=0.9.8
     - openpyxl
+    - wrappy
+    - shaffle
   source_files:
     - fixture_module
     - tests
