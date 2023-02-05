@@ -28,15 +28,15 @@ def test_dimensionality_reduction(n_points=1000):
     reducer.fit_transform(
         "umap", n_neighbors=3, min_dist=0.01, dimension=3, metric="euclidean"
     )
-    embedding = reducer.transform(arr, "umap")
+    embedding = reducer.transform(arr)
     assert embedding.shape == (n_points, 3)
-    embedding = reducer.transform(np.array([]), "umap")
+    embedding = reducer.transform(np.array([]))
     assert embedding.shape == (0,)
 
     reducer.fit_transform(
-        "ivis", dimension=4, k=3, distance="pn", batch_size=16, epochs=20
+        "umap", dimension=4, k=3, distance="pn", batch_size=16, epochs=20
     )
-    embedding = reducer.transform(arr, "ivis")
+    embedding = reducer.transform(arr, "umap")
     assert embedding.shape == (n_points, 4)
 
     try:

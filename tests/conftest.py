@@ -1,5 +1,4 @@
 import pytest
-import random
 import uuid
 import re
 import os
@@ -10,34 +9,41 @@ from functools import lru_cache
 # configure hover
 import hover
 
-hover.config.load_override(
-    random.choice(
-        [
-            os.path.join(os.path.dirname(__file__), _path)
-            for _path in [
-                "module_config/hover_alt_config_1.ini",
-                "module_config/hover_alt_config_2.ini",
-                "module_config/hover_alt_config_3.ini",
-            ]
-        ]
-    )
-)
+# hover.config.load_override(
+#    random.choice(
+#        [
+#            os.path.join(os.path.dirname(__file__), _path)
+#            for _path in [
+#                "module_config/hover_alt_config_1.ini",
+#                "module_config/hover_alt_config_2.ini",
+#                "module_config/hover_alt_config_3.ini",
+#            ]
+#        ]
+#    )
+# )
 
-from hover import module_config
-from hover.core.dataset import (
-    SupervisableTextDataset,
-    SupervisableImageDataset,
-    SupervisableAudioDataset,
-)
-from hover.core.local_config import (
-    embedding_field,
-    DATASET_SUBSET_FIELD,
-)
 from .local_config import (
     RANDOM_LABEL,
     RANDOM_SCORE,
     VECTORIZER_BREAKER,
 )
+
+
+def pytest_addoption(parser):
+    parser.addoption(
+        "--hover-ini",
+        action="store",
+        default="",
+        help="Optional path to alternative hover config ini file",
+    )
+
+
+def pytest_configure(config):
+    alt_config_path = os.path.join(os.getcwd(), config.getoption("--hover-ini"))
+    if os.path.isfile(alt_config_path):
+        hover.config.load_override(alt_config_path)
+    else:
+        raise ValueError
 
 
 @pytest.fixture(scope="module")
@@ -99,23 +105,24 @@ def dummy_labeling_function_list():
 @pytest.fixture(scope="module")
 def generate_df_with_coords():
     import faker
+    from hover.core.local_config import embedding_field
 
     fake_en = faker.Faker("en")
 
-    def random_df_with_coords(size=300):
+    def random_df_with_coords(size=300, embedding_dim=3):
         df = pd.DataFrame(
             [
                 {
                     "text": fake_en.paragraph(3),
                     "audio": f"https://dom.ain/path/to/audio/file-{uuid.uuid1()}.mp3",
                     "image": f"https://dom.ain/path/to/image/file-{uuid.uuid1()}.jpg",
-                    embedding_field(3, 0): random.uniform(-1.0, 1.0),
-                    embedding_field(3, 1): random.uniform(-1.0, 1.0),
-                    embedding_field(3, 2): random.uniform(-1.0, 1.0),
                 }
                 for i in range(size)
             ]
         )
+        for i in range(embedding_dim):
+            _col = embedding_field(embedding_dim, i)
+            df[_col] = np.random.normal(loc=0.0, scale=1.0, size=df.shape[0])
         return df
 
     return random_df_with_coords
@@ -123,8 +130,10 @@ def generate_df_with_coords():
 
 @pytest.fixture(scope="module")
 def example_raw_df(generate_df_with_coords):
+    from hover.module_config import ABSTAIN_DECODED
+
     df = generate_df_with_coords(300)
-    df["label"] = module_config.ABSTAIN_DECODED
+    df["label"] = ABSTAIN_DECODED
     return df
 
 
@@ -153,6 +162,8 @@ def example_labeled_df(generate_df_with_coords):
 
 @pytest.fixture(scope="module")
 def example_everything_df(example_raw_df, generate_df_with_coords):
+    from hover.core.local_config import DATASET_SUBSET_FIELD
+
     raw_df = example_raw_df.copy()
     raw_df[DATASET_SUBSET_FIELD] = "raw"
     labeled_df = generate_df_with_coords(200)
@@ -182,6 +193,8 @@ def subroutine_dataset_with_vectorizer(df, dataset_cls, vectorizer):
 
 @pytest.fixture(scope="module")
 def example_text_dataset(example_everything_df, dummy_vectorizer):
+    from hover.core.dataset import SupervisableTextDataset
+
     return subroutine_dataset_with_vectorizer(
         example_everything_df,
         SupervisableTextDataset,
@@ -191,6 +204,8 @@ def example_text_dataset(example_everything_df, dummy_vectorizer):
 
 @pytest.fixture(scope="module")
 def example_image_dataset(example_everything_df, dummy_vectorizer):
+    from hover.core.dataset import SupervisableImageDataset
+
     return subroutine_dataset_with_vectorizer(
         example_everything_df,
         SupervisableImageDataset,
@@ -200,6 +215,8 @@ def example_image_dataset(example_everything_df, dummy_vectorizer):
 
 @pytest.fixture(scope="module")
 def example_audio_dataset(example_everything_df, dummy_vectorizer):
+    from hover.core.dataset import SupervisableAudioDataset
+
     return subroutine_dataset_with_vectorizer(
         example_everything_df,
         SupervisableAudioDataset,
