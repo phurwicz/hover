@@ -11,6 +11,7 @@
     -   loading data for training models
 """
 import os
+import hover
 import numpy as np
 import pandas as pd
 from tqdm import tqdm
@@ -749,7 +750,7 @@ class SupervisableDataset(Loggable):
     def vectorizer_lookup(self, *args, **kwargs):
         self._fail("assigning vectorizer lookup by reference is forbidden.")
 
-    def compute_nd_embedding(self, vectorizer, method, dimension=2, **kwargs):
+    def compute_nd_embedding(self, vectorizer, method=None, dimension=2, **kwargs):
         """
         ???+ note "Get embeddings in n-dimensional space and return the dimensionality reducer."
             Reference: [`DimensionalityReducer`](https://github.com/phurwicz/hover/blob/main/hover/core/representation/reduction.py)
@@ -763,6 +764,8 @@ class SupervisableDataset(Loggable):
         """
         from hover.core.representation.reduction import DimensionalityReducer
 
+        if method is None:
+            method = hover.config["data.embedding"]["default_reduction_method"]
         # register the vectorizer for scenarios that may need it
         self.vectorizer_lookup[dimension] = vectorizer
 

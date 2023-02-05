@@ -5,6 +5,7 @@
 
     Icing on the cake: unify the syntax across different kinds of reducers.
 """
+import hover
 import numpy as np
 from hover.core import Loggable
 from .local_config import KWARG_TRANSLATOR
@@ -21,7 +22,7 @@ class DimensionalityReducer(Loggable):
         self.reference_array = array
 
     @staticmethod
-    def create_reducer(method, *args, **kwargs):
+    def create_reducer(method=None, *args, **kwargs):
         """
         ???+ note "Handle kwarg translation and dynamic imports."
 
@@ -31,6 +32,9 @@ class DimensionalityReducer(Loggable):
             | `*args`    |        | forwarded to the reducer |
             | `**kwargs` |        | translated and forwarded |
         """
+        if method is None:
+            method = hover.config["data.embedding"]["default_reduction_method"]
+
         if method == "umap":
             import umap
 
