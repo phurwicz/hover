@@ -40,10 +40,11 @@ def pytest_addoption(parser):
 
 def pytest_configure(config):
     alt_config_path = os.path.join(os.getcwd(), config.getoption("--hover-ini"))
-    if os.path.isfile(alt_config_path):
-        hover.config.load_override(alt_config_path)
-    else:
-        raise ValueError
+    if alt_config_path.endswith(".ini"):
+        if os.path.isfile(alt_config_path):
+            hover.config.load_override(alt_config_path)
+        else:
+            raise ValueError(f"Invalid config path {alt_config_path}")
 
 
 @pytest.fixture(scope="module")
