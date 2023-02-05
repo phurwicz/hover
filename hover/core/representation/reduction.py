@@ -57,7 +57,7 @@ class DimensionalityReducer(Loggable):
         reducer = reducer_cls(*args, **translated_kwargs)
         return reducer
 
-    def fit_transform(self, method, *args, **kwargs):
+    def fit_transform(self, method=None, *args, **kwargs):
         """
         ???+ note "Fit and transform an array and store the reducer."
             | Param      | Type   | Description              |
@@ -66,12 +66,15 @@ class DimensionalityReducer(Loggable):
             | `*args`    |        | forwarded to the reducer |
             | `**kwargs` |        | forwarded to the reducer |
         """
-        reducer = DimensionalityReducer.create_reducer(method, *args, **kwargs)
+        if method is None:
+            method = hover.config["data.embedding"]["default_reduction_method"]
+
+        reducer = DimensionalityReducer.create_reducer(method=method, *args, **kwargs)
         embedding = reducer.fit_transform(self.reference_array)
         setattr(self, method, reducer)
         return embedding
 
-    def transform(self, array, method):
+    def transform(self, array, method=None):
         """
         ???+ note "Transform an array with a already-fitted reducer."
             | Param      | Type         | Description              |
@@ -79,6 +82,9 @@ class DimensionalityReducer(Loggable):
             | `array`    | `np.ndarray` | the array to transform   |
             | `method`   | `str`        | `"umap"` or `"ivis"`     |
         """
+        if method is None:
+            method = hover.config["data.embedding"]["default_reduction_method"]
+
         assert isinstance(array, np.ndarray), f"Expected np.ndarray, got {type(array)}"
         # edge case: array is too small
         if array.shape[0] < 1:
