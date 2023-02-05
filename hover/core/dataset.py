@@ -824,7 +824,7 @@ class SupervisableDataset(Loggable):
         self._good(f"Computed {dimension}-d embedding in columns {embedding_cols}")
         return reducer
 
-    def compute_2d_embedding(self, vectorizer, method, **kwargs):
+    def compute_2d_embedding(self, vectorizer, method=None, **kwargs):
         """
         ???+ note "Get embeddings in the xy-plane and return the dimensionality reducer."
             A special case of `compute_nd_embedding`.
@@ -835,7 +835,9 @@ class SupervisableDataset(Loggable):
             | `method`     | `str`      | arg for `DimensionalityReducer`    |
             | `**kwargs`   |            | kwargs for `DimensionalityReducer` |
         """
-        reducer = self.compute_nd_embedding(vectorizer, method, dimension=2, **kwargs)
+        reducer = self.compute_nd_embedding(
+            vectorizer, method=None, dimension=2, **kwargs
+        )
         return reducer
 
     def loader(self, key, *vectorizers, batch_size=64, smoothing_coeff=0.0):
