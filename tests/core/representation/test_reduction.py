@@ -34,9 +34,9 @@ def test_dimensionality_reduction(n_points=1000):
     assert embedding.shape == (0,)
 
     reducer.fit_transform(
-        "umap", dimension=4, k=3, distance="pn", batch_size=16, epochs=20
+        "ivis", dimension=4, k=3, distance="pn", batch_size=16, epochs=20
     )
-    embedding = reducer.transform(arr, "umap")
+    embedding = reducer.transform(arr, "ivis")
     assert embedding.shape == (n_points, 4)
 
     try:
