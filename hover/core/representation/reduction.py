@@ -5,6 +5,7 @@
 
     Icing on the cake: unify the syntax across different kinds of reducers.
 """
+import hover
 import numpy as np
 from hover.core import Loggable
 from .local_config import KWARG_TRANSLATOR
@@ -21,7 +22,7 @@ class DimensionalityReducer(Loggable):
         self.reference_array = array
 
     @staticmethod
-    def create_reducer(method, *args, **kwargs):
+    def create_reducer(method=None, *args, **kwargs):
         """
         ???+ note "Handle kwarg translation and dynamic imports."
 
@@ -31,6 +32,9 @@ class DimensionalityReducer(Loggable):
             | `*args`    |        | forwarded to the reducer |
             | `**kwargs` |        | translated and forwarded |
         """
+        if method is None:
+            method = hover.config["data.embedding"]["default_reduction_method"]
+
         if method == "umap":
             import umap
 
@@ -53,7 +57,7 @@ class DimensionalityReducer(Loggable):
         reducer = reducer_cls(*args, **translated_kwargs)
         return reducer
 
-    def fit_transform(self, method, *args, **kwargs):
+    def fit_transform(self, method=None, *args, **kwargs):
         """
         ???+ note "Fit and transform an array and store the reducer."
             | Param      | Type   | Description              |
@@ -62,12 +66,15 @@ class DimensionalityReducer(Loggable):
             | `*args`    |        | forwarded to the reducer |
             | `**kwargs` |        | forwarded to the reducer |
         """
-        reducer = DimensionalityReducer.create_reducer(method, *args, **kwargs)
+        if method is None:
+            method = hover.config["data.embedding"]["default_reduction_method"]
+
+        reducer = DimensionalityReducer.create_reducer(method=method, *args, **kwargs)
         embedding = reducer.fit_transform(self.reference_array)
         setattr(self, method, reducer)
         return embedding
 
-    def transform(self, array, method):
+    def transform(self, array, method=None):
         """
         ???+ note "Transform an array with a already-fitted reducer."
             | Param      | Type         | Description              |
@@ -75,6 +82,9 @@ class DimensionalityReducer(Loggable):
             | `array`    | `np.ndarray` | the array to transform   |
             | `method`   | `str`        | `"umap"` or `"ivis"`     |
         """
+        if method is None:
+            method = hover.config["data.embedding"]["default_reduction_method"]
+
         assert isinstance(array, np.ndarray), f"Expected np.ndarray, got {type(array)}"
         # edge case: array is too small
         if array.shape[0] < 1:

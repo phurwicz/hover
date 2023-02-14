@@ -28,9 +28,9 @@ def test_dimensionality_reduction(n_points=1000):
     reducer.fit_transform(
         "umap", n_neighbors=3, min_dist=0.01, dimension=3, metric="euclidean"
     )
-    embedding = reducer.transform(arr, "umap")
+    embedding = reducer.transform(arr)
     assert embedding.shape == (n_points, 3)
-    embedding = reducer.transform(np.array([]), "umap")
+    embedding = reducer.transform(np.array([]))
     assert embedding.shape == (0,)
 
     reducer.fit_transform(

@@ -11,6 +11,7 @@
     -   loading data for training models
 """
 import os
+import hover
 import numpy as np
 import pandas as pd
 from tqdm import tqdm
@@ -749,7 +750,7 @@ class SupervisableDataset(Loggable):
     def vectorizer_lookup(self, *args, **kwargs):
         self._fail("assigning vectorizer lookup by reference is forbidden.")
 
-    def compute_nd_embedding(self, vectorizer, method, dimension=2, **kwargs):
+    def compute_nd_embedding(self, vectorizer, method=None, dimension=2, **kwargs):
         """
         ???+ note "Get embeddings in n-dimensional space and return the dimensionality reducer."
             Reference: [`DimensionalityReducer`](https://github.com/phurwicz/hover/blob/main/hover/core/representation/reduction.py)
@@ -763,6 +764,8 @@ class SupervisableDataset(Loggable):
         """
         from hover.core.representation.reduction import DimensionalityReducer
 
+        if method is None:
+            method = hover.config["data.embedding"]["default_reduction_method"]
         # register the vectorizer for scenarios that may need it
         self.vectorizer_lookup[dimension] = vectorizer
 
@@ -821,7 +824,7 @@ class SupervisableDataset(Loggable):
         self._good(f"Computed {dimension}-d embedding in columns {embedding_cols}")
         return reducer
 
-    def compute_2d_embedding(self, vectorizer, method, **kwargs):
+    def compute_2d_embedding(self, vectorizer, method=None, **kwargs):
         """
         ???+ note "Get embeddings in the xy-plane and return the dimensionality reducer."
             A special case of `compute_nd_embedding`.
@@ -832,7 +835,9 @@ class SupervisableDataset(Loggable):
             | `method`     | `str`      | arg for `DimensionalityReducer`    |
             | `**kwargs`   |            | kwargs for `DimensionalityReducer` |
         """
-        reducer = self.compute_nd_embedding(vectorizer, method, dimension=2, **kwargs)
+        reducer = self.compute_nd_embedding(
+            vectorizer, method=None, dimension=2, **kwargs
+        )
         return reducer
 
     def loader(self, key, *vectorizers, batch_size=64, smoothing_coeff=0.0):
