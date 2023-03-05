@@ -50,8 +50,8 @@
   
 
 
-  <script>window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga("create","UA-211167044-1","auto"),ga("set","anonymizeIp",!0),ga("send","pageview"),document.addEventListener("DOMContentLoaded",function(){document.forms.search&&document.forms.search.query.addEventListener("blur",function(){var e;this.value&&(e=document.location.pathname,ga("send","pageview",e+"?q="+this.value))}),"undefined"!=typeof location$&&location$.subscribe(function(e){ga("send","pageview",e.pathname)})})</script>
-  <script async src="https://www.google-analytics.com/analytics.js"></script>
+  <script>function gtag(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],gtag("js",new Date),gtag("config","G-M3WR5YEJ33"),document.addEventListener("DOMContentLoaded",function(){document.forms.search&&document.forms.search.query.addEventListener("blur",function(){this.value&&gtag("event","search",{search_term:this.value})}),"undefined"!=typeof location$&&location$.subscribe(function(e){gtag("config","G-M3WR5YEJ33",{page_path:e.pathname})})})</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-M3WR5YEJ33"></script>
 
 
     
@@ -971,7 +971,7 @@ DimensionalityReducer            (<span title="hover.core.Loggable">Loggable</sp
         <span class="bp">self</span><span class="o">.</span><span class="n">reference_array</span> <span class="o">=</span> <span class="n">array</span>
 
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">create_reducer</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">create_reducer</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        ???+ note &quot;Handle kwarg translation and dynamic imports.&quot;</span>
 
@@ -981,6 +981,9 @@ DimensionalityReducer            (<span title="hover.core.Loggable">Loggable</sp
 <span class="sd">            | `*args`    |        | forwarded to the reducer |</span>
 <span class="sd">            | `**kwargs` |        | translated and forwarded |</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">method</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">method</span> <span class="o">=</span> <span class="n">hover</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;data.embedding&quot;</span><span class="p">][</span><span class="s2">&quot;default_reduction_method&quot;</span><span class="p">]</span>
+
         <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;umap&quot;</span><span class="p">:</span>
             <span class="kn">import</span> <span class="nn">umap</span>
 
@@ -1003,7 +1006,7 @@ DimensionalityReducer            (<span title="hover.core.Loggable">Loggable</sp
         <span class="n">reducer</span> <span class="o">=</span> <span class="n">reducer_cls</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">translated_kwargs</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">reducer</span>
 
-    <span class="k">def</span> <span class="nf">fit_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">fit_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        ???+ note &quot;Fit and transform an array and store the reducer.&quot;</span>
 <span class="sd">            | Param      | Type   | Description              |</span>
@@ -1012,12 +1015,15 @@ DimensionalityReducer            (<span title="hover.core.Loggable">Loggable</sp
 <span class="sd">            | `*args`    |        | forwarded to the reducer |</span>
 <span class="sd">            | `**kwargs` |        | forwarded to the reducer |</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">reducer</span> <span class="o">=</span> <span class="n">DimensionalityReducer</span><span class="o">.</span><span class="n">create_reducer</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">method</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">method</span> <span class="o">=</span> <span class="n">hover</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;data.embedding&quot;</span><span class="p">][</span><span class="s2">&quot;default_reduction_method&quot;</span><span class="p">]</span>
+
+        <span class="n">reducer</span> <span class="o">=</span> <span class="n">DimensionalityReducer</span><span class="o">.</span><span class="n">create_reducer</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="n">embedding</span> <span class="o">=</span> <span class="n">reducer</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reference_array</span><span class="p">)</span>
         <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">reducer</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">embedding</span>
 
-    <span class="k">def</span> <span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">array</span><span class="p">,</span> <span class="n">method</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">array</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        ???+ note &quot;Transform an array with a already-fitted reducer.&quot;</span>
 <span class="sd">            | Param      | Type         | Description              |</span>
@@ -1025,6 +1031,9 @@ DimensionalityReducer            (<span title="hover.core.Loggable">Loggable</sp
 <span class="sd">            | `array`    | `np.ndarray` | the array to transform   |</span>
 <span class="sd">            | `method`   | `str`        | `&quot;umap&quot;` or `&quot;ivis&quot;`     |</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">method</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">method</span> <span class="o">=</span> <span class="n">hover</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;data.embedding&quot;</span><span class="p">][</span><span class="s2">&quot;default_reduction_method&quot;</span><span class="p">]</span>
+
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;Expected np.ndarray, got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">array</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
         <span class="c1"># edge case: array is too small</span>
         <span class="k">if</span> <span class="n">array</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
@@ -1105,7 +1114,7 @@ DimensionalityReducer            (<span title="hover.core.Loggable">Loggable</sp
 
 
 <h4 id="hover.core.representation.reduction.DimensionalityReducer.create_reducer" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">create_reducer</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">create_reducer</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
 
   <span class="doc doc-properties">
       <small class="doc doc-property doc-property-staticmethod"><code>staticmethod</code></small>
@@ -1148,7 +1157,7 @@ DimensionalityReducer            (<span title="hover.core.Loggable">Loggable</sp
         <details class="quote">
           <summary>Source code in <code>hover/core/representation/reduction.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="nd">@staticmethod</span>
-<span class="k">def</span> <span class="nf">create_reducer</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">create_reducer</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    ???+ note &quot;Handle kwarg translation and dynamic imports.&quot;</span>
 
@@ -1158,6 +1167,9 @@ DimensionalityReducer            (<span title="hover.core.Loggable">Loggable</sp
 <span class="sd">        | `*args`    |        | forwarded to the reducer |</span>
 <span class="sd">        | `**kwargs` |        | translated and forwarded |</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">method</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">method</span> <span class="o">=</span> <span class="n">hover</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;data.embedding&quot;</span><span class="p">][</span><span class="s2">&quot;default_reduction_method&quot;</span><span class="p">]</span>
+
     <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;umap&quot;</span><span class="p">:</span>
         <span class="kn">import</span> <span class="nn">umap</span>
 
@@ -1192,7 +1204,7 @@ DimensionalityReducer            (<span title="hover.core.Loggable">Loggable</sp
 
 
 <h4 id="hover.core.representation.reduction.DimensionalityReducer.fit_transform" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">fit_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">fit_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
 
 
 </h4>
@@ -1231,7 +1243,7 @@ DimensionalityReducer            (<span title="hover.core.Loggable">Loggable</sp
 
         <details class="quote">
           <summary>Source code in <code>hover/core/representation/reduction.py</code></summary>
-          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">fit_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">fit_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    ???+ note &quot;Fit and transform an array and store the reducer.&quot;</span>
 <span class="sd">        | Param      | Type   | Description              |</span>
@@ -1240,7 +1252,10 @@ DimensionalityReducer            (<span title="hover.core.Loggable">Loggable</sp
 <span class="sd">        | `*args`    |        | forwarded to the reducer |</span>
 <span class="sd">        | `**kwargs` |        | forwarded to the reducer |</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">reducer</span> <span class="o">=</span> <span class="n">DimensionalityReducer</span><span class="o">.</span><span class="n">create_reducer</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">method</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">method</span> <span class="o">=</span> <span class="n">hover</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;data.embedding&quot;</span><span class="p">][</span><span class="s2">&quot;default_reduction_method&quot;</span><span class="p">]</span>
+
+    <span class="n">reducer</span> <span class="o">=</span> <span class="n">DimensionalityReducer</span><span class="o">.</span><span class="n">create_reducer</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="n">embedding</span> <span class="o">=</span> <span class="n">reducer</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reference_array</span><span class="p">)</span>
     <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">reducer</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">embedding</span>
@@ -1257,7 +1272,7 @@ DimensionalityReducer            (<span title="hover.core.Loggable">Loggable</sp
 
 
 <h4 id="hover.core.representation.reduction.DimensionalityReducer.transform" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">array</span><span class="p">,</span> <span class="n">method</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">array</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
 
 
 </h4>
@@ -1291,7 +1306,7 @@ DimensionalityReducer            (<span title="hover.core.Loggable">Loggable</sp
 
         <details class="quote">
           <summary>Source code in <code>hover/core/representation/reduction.py</code></summary>
-          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">array</span><span class="p">,</span> <span class="n">method</span><span class="p">):</span>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">array</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    ???+ note &quot;Transform an array with a already-fitted reducer.&quot;</span>
 <span class="sd">        | Param      | Type         | Description              |</span>
@@ -1299,6 +1314,9 @@ DimensionalityReducer            (<span title="hover.core.Loggable">Loggable</sp
 <span class="sd">        | `array`    | `np.ndarray` | the array to transform   |</span>
 <span class="sd">        | `method`   | `str`        | `&quot;umap&quot;` or `&quot;ivis&quot;`     |</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">method</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">method</span> <span class="o">=</span> <span class="n">hover</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;data.embedding&quot;</span><span class="p">][</span><span class="s2">&quot;default_reduction_method&quot;</span><span class="p">]</span>
+
     <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;Expected np.ndarray, got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">array</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
     <span class="c1"># edge case: array is too small</span>
     <span class="k">if</span> <span class="n">array</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>

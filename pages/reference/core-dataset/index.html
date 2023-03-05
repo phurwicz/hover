@@ -50,8 +50,8 @@
   
 
 
-  <script>window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga("create","UA-211167044-1","auto"),ga("set","anonymizeIp",!0),ga("send","pageview"),document.addEventListener("DOMContentLoaded",function(){document.forms.search&&document.forms.search.query.addEventListener("blur",function(){var e;this.value&&(e=document.location.pathname,ga("send","pageview",e+"?q="+this.value))}),"undefined"!=typeof location$&&location$.subscribe(function(e){ga("send","pageview",e.pathname)})})</script>
-  <script async src="https://www.google-analytics.com/analytics.js"></script>
+  <script>function gtag(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],gtag("js",new Date),gtag("config","G-M3WR5YEJ33"),document.addEventListener("DOMContentLoaded",function(){document.forms.search&&document.forms.search.query.addEventListener("blur",function(){this.value&&gtag("event","search",{search_term:this.value})}),"undefined"!=typeof location$&&location$.subscribe(function(e){gtag("config","G-M3WR5YEJ33",{page_path:e.pathname})})})</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-M3WR5YEJ33"></script>
 
 
     
@@ -1859,7 +1859,7 @@ SupervisableDataset            (<span title="hover.core.Loggable">Loggable</span
     <span class="k">def</span> <span class="nf">vectorizer_lookup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_fail</span><span class="p">(</span><span class="s2">&quot;assigning vectorizer lookup by reference is forbidden.&quot;</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">compute_nd_embedding</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vectorizer</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">compute_nd_embedding</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vectorizer</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        ???+ note &quot;Get embeddings in n-dimensional space and return the dimensionality reducer.&quot;</span>
 <span class="sd">            Reference: [`DimensionalityReducer`](https://github.com/phurwicz/hover/blob/main/hover/core/representation/reduction.py)</span>
@@ -1873,6 +1873,8 @@ SupervisableDataset            (<span title="hover.core.Loggable">Loggable</span
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="kn">from</span> <span class="nn">hover.core.representation.reduction</span> <span class="kn">import</span> <span class="n">DimensionalityReducer</span>
 
+        <span class="k">if</span> <span class="n">method</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">method</span> <span class="o">=</span> <span class="n">hover</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;data.embedding&quot;</span><span class="p">][</span><span class="s2">&quot;default_reduction_method&quot;</span><span class="p">]</span>
         <span class="c1"># register the vectorizer for scenarios that may need it</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">vectorizer_lookup</span><span class="p">[</span><span class="n">dimension</span><span class="p">]</span> <span class="o">=</span> <span class="n">vectorizer</span>
 
@@ -1931,7 +1933,7 @@ SupervisableDataset            (<span title="hover.core.Loggable">Loggable</span
         <span class="bp">self</span><span class="o">.</span><span class="n">_good</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Computed </span><span class="si">{</span><span class="n">dimension</span><span class="si">}</span><span class="s2">-d embedding in columns </span><span class="si">{</span><span class="n">embedding_cols</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">reducer</span>
 
-    <span class="k">def</span> <span class="nf">compute_2d_embedding</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vectorizer</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">compute_2d_embedding</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vectorizer</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        ???+ note &quot;Get embeddings in the xy-plane and return the dimensionality reducer.&quot;</span>
 <span class="sd">            A special case of `compute_nd_embedding`.</span>
@@ -1942,7 +1944,9 @@ SupervisableDataset            (<span title="hover.core.Loggable">Loggable</span
 <span class="sd">            | `method`     | `str`      | arg for `DimensionalityReducer`    |</span>
 <span class="sd">            | `**kwargs`   |            | kwargs for `DimensionalityReducer` |</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">reducer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_nd_embedding</span><span class="p">(</span><span class="n">vectorizer</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">reducer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_nd_embedding</span><span class="p">(</span>
+            <span class="n">vectorizer</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span>
         <span class="k">return</span> <span class="n">reducer</span>
 
     <span class="k">def</span> <span class="nf">loader</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="o">*</span><span class="n">vectorizers</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">smoothing_coeff</span><span class="o">=</span><span class="mf">0.0</span><span class="p">):</span>
@@ -2078,7 +2082,7 @@ SupervisableDataset            (<span title="hover.core.Loggable">Loggable</span
 
 
 <h3 id="hover.core.dataset.SupervisableDataset.compute_2d_embedding" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">compute_2d_embedding</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vectorizer</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">compute_2d_embedding</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vectorizer</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
 
 
 </h3>
@@ -2118,7 +2122,7 @@ SupervisableDataset            (<span title="hover.core.Loggable">Loggable</span
 
         <details class="quote">
           <summary>Source code in <code>hover/core/dataset.py</code></summary>
-          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">compute_2d_embedding</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vectorizer</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">compute_2d_embedding</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vectorizer</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    ???+ note &quot;Get embeddings in the xy-plane and return the dimensionality reducer.&quot;</span>
 <span class="sd">        A special case of `compute_nd_embedding`.</span>
@@ -2129,7 +2133,9 @@ SupervisableDataset            (<span title="hover.core.Loggable">Loggable</span
 <span class="sd">        | `method`     | `str`      | arg for `DimensionalityReducer`    |</span>
 <span class="sd">        | `**kwargs`   |            | kwargs for `DimensionalityReducer` |</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">reducer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_nd_embedding</span><span class="p">(</span><span class="n">vectorizer</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="n">reducer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_nd_embedding</span><span class="p">(</span>
+        <span class="n">vectorizer</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">)</span>
     <span class="k">return</span> <span class="n">reducer</span>
 </code></pre></div>
         </details>
@@ -2187,7 +2193,7 @@ SupervisableDataset            (<span title="hover.core.Loggable">Loggable</span
 
 
 <h3 id="hover.core.dataset.SupervisableDataset.compute_nd_embedding" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">compute_nd_embedding</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vectorizer</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">compute_nd_embedding</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vectorizer</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
 
 
 </h3>
@@ -2232,7 +2238,7 @@ SupervisableDataset            (<span title="hover.core.Loggable">Loggable</span
 
         <details class="quote">
           <summary>Source code in <code>hover/core/dataset.py</code></summary>
-          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">compute_nd_embedding</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vectorizer</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">compute_nd_embedding</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vectorizer</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    ???+ note &quot;Get embeddings in n-dimensional space and return the dimensionality reducer.&quot;</span>
 <span class="sd">        Reference: [`DimensionalityReducer`](https://github.com/phurwicz/hover/blob/main/hover/core/representation/reduction.py)</span>
@@ -2246,6 +2252,8 @@ SupervisableDataset            (<span title="hover.core.Loggable">Loggable</span
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="kn">from</span> <span class="nn">hover.core.representation.reduction</span> <span class="kn">import</span> <span class="n">DimensionalityReducer</span>
 
+    <span class="k">if</span> <span class="n">method</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">method</span> <span class="o">=</span> <span class="n">hover</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;data.embedding&quot;</span><span class="p">][</span><span class="s2">&quot;default_reduction_method&quot;</span><span class="p">]</span>
     <span class="c1"># register the vectorizer for scenarios that may need it</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">vectorizer_lookup</span><span class="p">[</span><span class="n">dimension</span><span class="p">]</span> <span class="o">=</span> <span class="n">vectorizer</span>
 
