@@ -8,6 +8,12 @@ on:
     - cron: "0 0 * * 1"
   push:
     branches: [ main ]
+    paths:
+      - 'hover/**.py'
+      - 'docs/pages/**.md'
+      - 'docs/pipelines/*.py'
+      - 'docs/snippets/markdown/dataset-prep.md'
+      - 'docs/snippets/py/*.*'
   pull_request:
     branches: [ main ]
     paths:
