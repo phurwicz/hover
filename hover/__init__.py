@@ -36,7 +36,7 @@ config = ConfigIndex(
                 AutolockedConfigValue(
                     "bokeh_palette_usage",
                     "Specify how colors from the palette should be chosen when there are fewer categories than colors. This needs to be 'iterate' or 'linspace'",
-                    Turbo256,
+                    "linspace",
                     validation=lambda x: x in ["iterate", "linspace"],
                 ),
                 AutolockedConfigValue(
