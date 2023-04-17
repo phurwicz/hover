@@ -30,13 +30,17 @@ def auto_label_color(labels):
     use_labels = sorted(use_labels, reverse=False)
 
     palette = hover.config["visual"]["bokeh_palette"]
-    assert len(use_labels) <= len(
-        palette
-    ), f"Too many labels to support (max at {len(palette)})"
+    usage = hover.config["visual"]["bokeh_palette_usage"]
+    nlabels, ncolors = len(use_labels), len(palette)
+    assert nlabels <= ncolors, f"Too many labels to support (max at {len(palette)})"
 
-    use_palette_idx = np.linspace(0.0, len(palette), len(use_labels) + 2).astype(int)[
-        1:-1
-    ]
+    if usage.lower() == "iterate":
+        use_palette_idx = range(0, nlabels)
+    elif usage.lower() == "linspace":
+        use_palette_idx = np.linspace(-1.0, ncolors, nlabels + 2).astype(int)[1:-1]
+    else:
+        raise ValueError(f"Unexpected bokeh palette usage {usage}")
+
     assert len(set(use_palette_idx)) == len(
         use_palette_idx
     ), "Found repeated palette index"

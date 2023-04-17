@@ -29,9 +29,15 @@ config = ConfigIndex(
                 ),
                 AutolockedConfigValue(
                     "bokeh_palette",
-                    "The bokeh color palette to use for plotting.",
+                    "The bokeh color palette to use for plotting. This should be a list of hex color codes.",
                     Turbo256,
                     validation=lambda x: hasattr(x, "__iter__"),
+                ),
+                AutolockedConfigValue(
+                    "bokeh_palette_usage",
+                    "Specify how colors from the palette should be chosen when there are fewer categories than colors. This needs to be 'iterate' or 'linspace'",
+                    Turbo256,
+                    validation=lambda x: x in ["iterate", "linspace"],
                 ),
                 AutolockedConfigValue(
                     "table_img_style",
