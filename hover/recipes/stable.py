@@ -22,6 +22,7 @@ def simple_annotator(dataset, **kwargs):
         | :------------------ | :----------------- |
         | manage data subsets | make annotations   |
     """
+    dataset.setup_bokeh_elements(reset=True)
     layout, _ = _simple_annotator(dataset, **kwargs)
     return layout
 
@@ -55,6 +56,7 @@ def linked_annotator(dataset, **kwargs):
         | :------------------ | :------------------ | :----------------- |
         | manage data subsets | search -> highlight | make annotations   |
     """
+    dataset.setup_bokeh_elements(reset=True)
     layout, _ = _linked_annotator(dataset, **kwargs)
     return layout
 

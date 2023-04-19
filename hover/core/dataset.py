@@ -72,13 +72,23 @@ class SupervisableDataset(Loggable):
         self.setup_dfs(*args, **kwargs)
         self.df_deduplicate()
         self.compute_feature_index()
+        self.setup_bokeh_elements()
+        self._vectorizer_lookup = OrderedDict()
+        self._good("finished initialization.")
+
+    def setup_bokeh_elements(self, reset=False):
+        """
+        ???+ note "Reset the bokeh elements in the dataset."
+        """
+        if (not reset) and getattr(self, "_bokeh_ready", False):
+            self._warn("bokeh elements already set up. Skipping unless `reset=True`.")
+            return
         self.setup_widgets()
-        # self.setup_label_coding() # redundant if setup_pop_table() immediately calls this again
         self.setup_file_export()
         self.setup_pop_table()
         self.setup_sel_table()
-        self._vectorizer_lookup = OrderedDict()
-        self._good(f"{self.__class__.__name__}: finished initialization.")
+        self._bokeh_ready = True
+        self._info("finished setting up bokeh elements.")
 
     def setup_dfs(
         self,
