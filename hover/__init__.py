@@ -25,7 +25,7 @@ config = ConfigIndex(
             ],
         ),
         Config(
-            "visual",
+            ConfigSection.VISUAL,
             [
                 AutolockedConfigValue(
                     ConfigKey.ABSTAIN_HEXCOLOR,
@@ -74,7 +74,8 @@ config = ConfigIndex(
             ConfigSection.DATA_COLUMNS,
             [
                 AutolockedConfigValue(
-                    ConfigKey.ENCODED_LABEL_KEY,
+                    # ConfigKey.ENCODED_LABEL_KEY,
+                    "encoded_label_key",
                     "The column name for the encoded label.",
                     "label_encoded",
                     validation=Validator.is_str,

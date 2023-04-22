@@ -6,7 +6,7 @@ class ConfigSection:
     VISUAL = "visual"
     DATA_EMBEDDING = "data.embedding"
     DATA_COLUMNS = "data.columns"
-    DATA_VALUES = "data.columns"
+    DATA_VALUES = "data.values"
 
 
 class ConfigKey:
