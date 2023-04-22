@@ -1,7 +1,6 @@
 """
 ???+ note "Base class(es) for ALL explorer implementations."
 """
-import pandas as pd
 from abc import ABC, abstractmethod
 from collections import OrderedDict, defaultdict
 from bokeh.events import SelectionGeometry
@@ -345,13 +344,15 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
         expected_not_supplied = expected_keys.difference(supplied_keys)
 
         for _key in supplied_not_expected:
-            self._warn(
-                f"{self.__class__.__name__}.__init__(): got unexpected df key {_key}"
+            self._fail(
+                f"expected df keys {list(expected_keys)}, got unexpected df key {_key}"
             )
         for _key in expected_not_supplied:
-            self._warn(
-                f"{self.__class__.__name__}.__init__(): missing expected df key {_key}"
-            )
+            self._fail(f"expected df keys {list(expected_keys)}, missing df key {_key}")
+        # raise an exception if the supplied keys and expected keys are any different
+        assert (
+            not supplied_not_expected and not expected_not_supplied
+        ), "df key mismatch"
 
         # assign df with column checks
         self.dfs = dict()
@@ -371,11 +372,6 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
                 else:
                     _df[_col] = _default
             self.dfs[_key] = _df.copy() if copy else _df
-
-        # expected dfs must be present
-        for _key in expected_not_supplied:
-            _df = pd.DataFrame(columns=list(mandatory_col_to_default.keys()))
-            self.dfs[_key] = _df
 
     def _setup_sources(self):
         """

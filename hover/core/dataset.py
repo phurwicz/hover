@@ -11,7 +11,6 @@
     -   loading data for training models
 """
 import os
-import hover
 import numpy as np
 import pandas as pd
 from tqdm import tqdm
@@ -35,6 +34,7 @@ from .local_config import (
     dataset_default_sel_table_kwargs,
     COLOR_GLYPH_TEMPLATE,
     DATASET_SUBSET_FIELD,
+    DEFAULT_REDUCTION_METHOD,
     embedding_field,
 )
 
@@ -160,6 +160,12 @@ class SupervisableDataset(Loggable):
                 _df = pd.DataFrame(columns=[self.__class__.FEATURE_KEY, "label"])
 
             self.dfs[_key] = _df
+
+    def subset(self, key):
+        """
+        ???+ note "Return the DataFrame by reference for the given subset."
+        """
+        return self.dfs[key]
 
     def copy(self):
         """
@@ -760,7 +766,9 @@ class SupervisableDataset(Loggable):
     def vectorizer_lookup(self, *args, **kwargs):
         self._fail("assigning vectorizer lookup by reference is forbidden.")
 
-    def compute_nd_embedding(self, vectorizer, method=None, dimension=2, **kwargs):
+    def compute_nd_embedding(
+        self, vectorizer, method=DEFAULT_REDUCTION_METHOD, dimension=2, **kwargs
+    ):
         """
         ???+ note "Get embeddings in n-dimensional space and return the dimensionality reducer."
             Reference: [`DimensionalityReducer`](https://github.com/phurwicz/hover/blob/main/hover/core/representation/reduction.py)
@@ -774,8 +782,6 @@ class SupervisableDataset(Loggable):
         """
         from hover.core.representation.reduction import DimensionalityReducer
 
-        if method is None:
-            method = hover.config["data.embedding"]["default_reduction_method"]
         # register the vectorizer for scenarios that may need it
         self.vectorizer_lookup[dimension] = vectorizer
 
@@ -846,7 +852,7 @@ class SupervisableDataset(Loggable):
             | `**kwargs`   |            | kwargs for `DimensionalityReducer` |
         """
         reducer = self.compute_nd_embedding(
-            vectorizer, method=None, dimension=2, **kwargs
+            vectorizer, method=method, dimension=2, **kwargs
         )
         return reducer
 
