@@ -74,8 +74,7 @@ config = ConfigIndex(
             ConfigSection.DATA_COLUMNS,
             [
                 AutolockedConfigValue(
-                    # ConfigKey.ENCODED_LABEL_KEY,
-                    "encoded_label_key",
+                    ConfigKey.ENCODED_LABEL_KEY,
                     "The column name for the encoded label.",
                     "label_encoded",
                     validation=Validator.is_str,
