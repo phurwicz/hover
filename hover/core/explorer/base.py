@@ -12,6 +12,7 @@ from hover.core.local_config import (
     blank_callback_on_change as blank,
 )
 from hover.utils.bokeh_helper import bokeh_hover_tooltip
+from hover.utils.dataframe import dataframe_with_no_rows
 from hover.utils.meta.traceback import RichTracebackABCMeta
 from hover.utils.misc import RootUnionFind
 from .local_config import SEARCH_SCORE_FIELD
@@ -344,15 +345,9 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
         expected_not_supplied = expected_keys.difference(supplied_keys)
 
         for _key in supplied_not_expected:
-            self._fail(
-                f"expected df keys {list(expected_keys)}, got unexpected df key {_key}"
-            )
+            self._warn(f"expected df keys {list(expected_keys)}, not {_key}")
         for _key in expected_not_supplied:
-            self._fail(f"expected df keys {list(expected_keys)}, missing df key {_key}")
-        # raise an exception if the supplied keys and expected keys are any different
-        assert (
-            not supplied_not_expected and not expected_not_supplied
-        ), "df key mismatch"
+            self._warn(f"expected df keys {list(expected_keys)}, missing {_key}")
 
         # assign df with column checks
         self.dfs = dict()
@@ -372,6 +367,11 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
                 else:
                     _df[_col] = _default
             self.dfs[_key] = _df.copy() if copy else _df
+
+        # expected dfs must be present
+        for _key in expected_not_supplied:
+            _df = dataframe_with_no_rows(list(mandatory_col_to_default.keys()))
+            self.dfs[_key] = _df
 
     def _setup_sources(self):
         """
