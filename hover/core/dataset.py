@@ -783,6 +783,11 @@ class SupervisableDataset(Loggable):
         from hover.core.representation.reduction import DimensionalityReducer
 
         # register the vectorizer for scenarios that may need it
+        assert (
+            isinstance(dimension, int) and dimension >= 2
+        ), "Invalid dimension {dimension}}"
+        if dimension in self.vectorizer_lookup:
+            self._warn(f"Overwriting embedding with dimension {dimension}.")
         self.vectorizer_lookup[dimension] = vectorizer
 
         # prepare input vectors to manifold learning
@@ -790,7 +795,6 @@ class SupervisableDataset(Loggable):
         trans_subset = [*self.__class__.PRIVATE_SUBSETS]
 
         assert not set(fit_subset).intersection(set(trans_subset)), "Unexpected overlap"
-        assert isinstance(dimension, int) and dimension >= 2
         embedding_cols = [embedding_field(dimension, i) for i in range(dimension)]
 
         # compute vectors and keep track which where to slice the array for fitting
@@ -821,7 +825,7 @@ class SupervisableDataset(Loggable):
             (fit_subset, fit_embedding),
             (trans_subset, trans_embedding),
         ]:
-            # edge case: embedding is too small
+            # edge case: embedding has no rows
             if _embedding.shape[0] < 1:
                 for _key in _subset:
                     assert (
