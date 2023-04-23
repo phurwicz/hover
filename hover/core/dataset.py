@@ -840,7 +840,9 @@ class SupervisableDataset(Loggable):
         self._good(f"Computed {dimension}-d embedding in columns {embedding_cols}")
         return reducer
 
-    def compute_2d_embedding(self, vectorizer, method=None, **kwargs):
+    def compute_2d_embedding(
+        self, vectorizer, method=DEFAULT_REDUCTION_METHOD, **kwargs
+    ):
         """
         ???+ note "Get embeddings in the xy-plane and return the dimensionality reducer."
             A special case of `compute_nd_embedding`.
