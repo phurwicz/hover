@@ -37,7 +37,7 @@ config = ConfigIndex(
                     ConfigKey.BOKEH_PALETTE,
                     "The bokeh color palette to use for plotting. This should be a list of hex color codes.",
                     Turbo256,
-                    validation=Validator.is_iterable,
+                    validation=Validator.is_iterable_of_hex_color,
                 ),
                 AutolockedConfigValue(
                     ConfigKey.BOKEH_PALETTE_USAGE,

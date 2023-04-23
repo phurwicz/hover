@@ -37,6 +37,15 @@ class Validator:
         return hasattr(x, "__iter__")
 
     @staticmethod
+    def is_iterable_of_hex_color(x):
+        if not Validator.is_iterable(x):
+            return False
+        for i in x:
+            if not Validator.is_hex_color(i):
+                return False
+        return True
+
+    @staticmethod
     def is_supported_dimensionality_reduction(x):
         return x.lower() in ["umap", "ivis"]
 
