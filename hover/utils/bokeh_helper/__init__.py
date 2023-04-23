@@ -18,6 +18,8 @@ from .local_config import (
     TOOLTIP_LABEL_TEMPLATE,
     TOOLTIP_COORDS_DIV,
     TOOLTIP_INDEX_DIV,
+    BOKEH_PALETTE_USAGE,
+    BOKEH_PALETTE,
 )
 
 
@@ -29,8 +31,7 @@ def auto_label_color(labels):
     use_labels.discard(module_config.ABSTAIN_DECODED)
     use_labels = sorted(use_labels, reverse=False)
 
-    palette = hover.config["visual"]["bokeh_palette"]
-    usage = hover.config["visual"]["bokeh_palette_usage"]
+    palette, usage = BOKEH_PALETTE, BOKEH_PALETTE_USAGE
     nlabels, ncolors = len(use_labels), len(palette)
     assert nlabels <= ncolors, f"Too many labels to support (max at {len(palette)})"
 

@@ -41,7 +41,7 @@ setuptools.setup(
         # dimensionality reduction: UMAP is included
         "umap-learn>=0.3.10",
         # module config customization
-        "flexmod>=0.1.0",
+        "flexmod>=0.1.2",
         # optional: more dimensionality reduction methods
         # "ivis[cpu]>=1.7",
         # optional: distant supervision

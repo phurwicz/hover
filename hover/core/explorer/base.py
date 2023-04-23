@@ -1,7 +1,6 @@
 """
 ???+ note "Base class(es) for ALL explorer implementations."
 """
-import pandas as pd
 from abc import ABC, abstractmethod
 from collections import OrderedDict, defaultdict
 from bokeh.events import SelectionGeometry
@@ -13,6 +12,7 @@ from hover.core.local_config import (
     blank_callback_on_change as blank,
 )
 from hover.utils.bokeh_helper import bokeh_hover_tooltip
+from hover.utils.dataframe import dataframe_with_no_rows
 from hover.utils.meta.traceback import RichTracebackABCMeta
 from hover.utils.misc import RootUnionFind
 from .local_config import SEARCH_SCORE_FIELD
@@ -345,13 +345,9 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
         expected_not_supplied = expected_keys.difference(supplied_keys)
 
         for _key in supplied_not_expected:
-            self._warn(
-                f"{self.__class__.__name__}.__init__(): got unexpected df key {_key}"
-            )
+            self._warn(f"expected df keys {list(expected_keys)}, not {_key}")
         for _key in expected_not_supplied:
-            self._warn(
-                f"{self.__class__.__name__}.__init__(): missing expected df key {_key}"
-            )
+            self._warn(f"expected df keys {list(expected_keys)}, missing {_key}")
 
         # assign df with column checks
         self.dfs = dict()
@@ -374,7 +370,7 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
 
         # expected dfs must be present
         for _key in expected_not_supplied:
-            _df = pd.DataFrame(columns=list(mandatory_col_to_default.keys()))
+            _df = dataframe_with_no_rows(list(mandatory_col_to_default.keys()))
             self.dfs[_key] = _df
 
     def _setup_sources(self):

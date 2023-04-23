@@ -11,7 +11,6 @@
     -   loading data for training models
 """
 import os
-import hover
 import numpy as np
 import pandas as pd
 from tqdm import tqdm
@@ -35,6 +34,7 @@ from .local_config import (
     dataset_default_sel_table_kwargs,
     COLOR_GLYPH_TEMPLATE,
     DATASET_SUBSET_FIELD,
+    DEFAULT_REDUCTION_METHOD,
     embedding_field,
 )
 
@@ -160,6 +160,12 @@ class SupervisableDataset(Loggable):
                 _df = pd.DataFrame(columns=[self.__class__.FEATURE_KEY, "label"])
 
             self.dfs[_key] = _df
+
+    def subset(self, key):
+        """
+        ???+ note "Return the DataFrame by reference for the given subset."
+        """
+        return self.dfs[key]
 
     def copy(self):
         """
@@ -760,7 +766,9 @@ class SupervisableDataset(Loggable):
     def vectorizer_lookup(self, *args, **kwargs):
         self._fail("assigning vectorizer lookup by reference is forbidden.")
 
-    def compute_nd_embedding(self, vectorizer, method=None, dimension=2, **kwargs):
+    def compute_nd_embedding(
+        self, vectorizer, method=DEFAULT_REDUCTION_METHOD, dimension=2, **kwargs
+    ):
         """
         ???+ note "Get embeddings in n-dimensional space and return the dimensionality reducer."
             Reference: [`DimensionalityReducer`](https://github.com/phurwicz/hover/blob/main/hover/core/representation/reduction.py)
@@ -774,9 +782,12 @@ class SupervisableDataset(Loggable):
         """
         from hover.core.representation.reduction import DimensionalityReducer
 
-        if method is None:
-            method = hover.config["data.embedding"]["default_reduction_method"]
         # register the vectorizer for scenarios that may need it
+        assert (
+            isinstance(dimension, int) and dimension >= 2
+        ), "Invalid dimension {dimension}}"
+        if dimension in self.vectorizer_lookup:
+            self._warn(f"Overwriting embedding with dimension {dimension}.")
         self.vectorizer_lookup[dimension] = vectorizer
 
         # prepare input vectors to manifold learning
@@ -784,7 +795,6 @@ class SupervisableDataset(Loggable):
         trans_subset = [*self.__class__.PRIVATE_SUBSETS]
 
         assert not set(fit_subset).intersection(set(trans_subset)), "Unexpected overlap"
-        assert isinstance(dimension, int) and dimension >= 2
         embedding_cols = [embedding_field(dimension, i) for i in range(dimension)]
 
         # compute vectors and keep track which where to slice the array for fitting
@@ -815,7 +825,7 @@ class SupervisableDataset(Loggable):
             (fit_subset, fit_embedding),
             (trans_subset, trans_embedding),
         ]:
-            # edge case: embedding is too small
+            # edge case: embedding has no rows
             if _embedding.shape[0] < 1:
                 for _key in _subset:
                     assert (
@@ -834,7 +844,9 @@ class SupervisableDataset(Loggable):
         self._good(f"Computed {dimension}-d embedding in columns {embedding_cols}")
         return reducer
 
-    def compute_2d_embedding(self, vectorizer, method=None, **kwargs):
+    def compute_2d_embedding(
+        self, vectorizer, method=DEFAULT_REDUCTION_METHOD, **kwargs
+    ):
         """
         ???+ note "Get embeddings in the xy-plane and return the dimensionality reducer."
             A special case of `compute_nd_embedding`.
@@ -846,7 +858,7 @@ class SupervisableDataset(Loggable):
             | `**kwargs`   |            | kwargs for `DimensionalityReducer` |
         """
         reducer = self.compute_nd_embedding(
-            vectorizer, method=None, dimension=2, **kwargs
+            vectorizer, method=method, dimension=2, **kwargs
         )
         return reducer
 
