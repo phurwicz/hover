@@ -14,6 +14,7 @@ from hover.core.local_config import (
 from hover.utils.bokeh_helper import bokeh_hover_tooltip
 from hover.utils.meta.traceback import RichTracebackABCMeta
 from hover.utils.misc import RootUnionFind
+from hover.utils.typecheck import TypedValueDict
 from hover.module_config import DataFrame
 from .local_config import SEARCH_SCORE_FIELD
 
@@ -325,7 +326,22 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
         """
         return {_col: None for _col in self.__class__.MANDATORY_COLUMNS}
 
-    def _setup_dfs(self, df_dict, copy=False):
+    @property
+    def dfs(self):
+        """
+        ???+ note "Subset -> DataFrame mapping."
+        """
+        return self._dfs
+
+    @dfs.setter
+    def dfs(self, dfs):
+        assert isinstance(
+            dfs, TypedValueDict
+        ), f"Expected TypedValueDict, got {type(dfs)}"
+        assert not hasattr(self, "_dfs"), "Resetting `dfs` is forbidden."
+        self._dfs = dfs
+
+    def _setup_dfs(self, df_dict):
         """
         ???+ note "Check and store DataFrames **by reference by default**."
             Intended to be extended in child classes for pre/post processing.
@@ -333,9 +349,10 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
             | Param       | Type   | Description                  |
             | :---------- | :----- | :--------------------------- |
             | `df_dict`   | `dict` | `str` -> `DataFrame` mapping |
-            | `copy`      | `bool` | whether to copy `DataFrame`s |
         """
         self._info("Setting up DataFrames")
+        for _df in df_dict.values():
+            assert isinstance(_df, DataFrame), f"Expected DataFrame, got {type(_df)}"
         supplied_keys = set(df_dict.keys())
         expected_keys = set(self.__class__.SUBSET_GLYPH_KWARGS.keys())
 
@@ -350,7 +367,11 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
             self._warn(f"expected df keys {list(expected_keys)}, missing {_key}")
 
         # assign df with column checks
-        self.dfs = dict()
+        if not hasattr(self, "dfs"):
+            self.dfs = TypedValueDict(DataFrame)
+        else:
+            self.dfs.clear()
+
         mandatory_col_to_default = self._mandatory_column_defaults()
         for _key in expected_and_supplied:
             _df = df_dict[_key]
@@ -365,8 +386,8 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
                     assert _df.shape[0] == 0, _msg
                 # default value available, will use it to create column
                 else:
-                    _df.column_assign_constant(_col, _default)
-            self.dfs[_key] = _df.copy() if copy else _df
+                    _df.set_column_by_constant(_col, _default)
+            self.dfs[_key] = _df
 
         # expected dfs must be present
         for _key in expected_not_supplied:
@@ -380,7 +401,8 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
         """
         self._info("Setting up sources")
         self.sources = {
-            _key: ColumnDataSource(_df.to_dict()) for _key, _df in self.dfs.items()
+            _key: ColumnDataSource(_df.to_dict_of_lists())
+            for _key, _df in self.dfs.items()
         }
         self._postprocess_sources()
 
@@ -534,7 +556,7 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
             such as dynamic plotting kwargs, need to be re-assigned.
         """
         for _key in self.dfs.keys():
-            self.sources[_key].data = self.dfs[_key].to_dict()
+            self.sources[_key].data = self.dfs[_key].to_dict_of_lists()
         self._postprocess_sources()
 
         # reset selections now that source indices may have changed
@@ -843,6 +865,9 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
             else:
                 # embedding columns must be the same across subsets
                 assert embedding_cols == _emb_cols, "Inconsistent embedding columns"
+        assert (
+            embedding_cols is not None
+        ), f"No embedding columns found: {[_df.columns for _df in self.dfs.values()]}"
         assert (
             len(embedding_cols) >= 2
         ), f"Expected at least two embedding columns, found {embedding_cols}"

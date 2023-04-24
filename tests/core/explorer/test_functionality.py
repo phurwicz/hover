@@ -3,7 +3,7 @@ Corresponds to the `hover.core.explorer.functionality` module.
 For mechanisms that are invariant across `hover.core.explorer.feature`.
 """
 
-from hover import module_config
+from hover.module_config import ABSTAIN_DECODED
 from hover.recipes.subroutine import get_explorer_class
 from bokeh.events import ButtonClick, MenuItemClick
 from .local_helper import (
@@ -61,10 +61,10 @@ class TestBokehBaseExplorer:
                 assert annotator.sources["raw"].data == prev_source_data
 
         df_dict = {
-            "raw": example_raw_df.copy(),
-            "train": example_labeled_df.copy(),
-            "dev": example_labeled_df.copy(),
-            "test": example_labeled_df.copy(),
+            "raw": example_raw_df,
+            "train": example_labeled_df,
+            "dev": example_labeled_df,
+            "test": example_labeled_df,
         }
 
         # test four subset combinations of df_dicts
@@ -181,13 +181,10 @@ class TestBokehAnnotator:
             assert explorer.sources["raw"].selected.indices == _expected_selected
 
         # actual labeling
-        assert (
-            explorer.dfs["raw"].loc[[0, 1], "label"]
-            == [module_config.ABSTAIN_DECODED] * 2
-        ).all()
+        assert (explorer.dfs["raw"]["label"][[0, 1]] == [ABSTAIN_DECODED] * 2).all()
         explorer.annotator_input.value = "A"
         explorer.annotator_apply._trigger_event(apply_event)
-        assert (explorer.dfs["raw"].loc[[0, 1], "label"] == ["A"] * 2).all()
+        assert (explorer.dfs["raw"]["label"][[0, 1]] == ["A"] * 2).all()
 
 
 @pytest.mark.core

@@ -33,7 +33,19 @@ class AbstractDataframe(ABC):
         return self.__class__(self._df.copy())
 
     def __getitem__(self, key):
-        return self._df[key]
+        if isinstance(key, int) or isinstance(key, str):
+            return self._df[key]
+        elif hasattr(key, "__iter__"):
+            if isinstance(key[0], str):
+                return self.select_columns(key)
+            elif isinstance(key[0], int):
+                return self.select_rows(key)
+            else:
+                raise NotImplementedError(f"key {key} is not supported.")
+        elif isinstance(key, slice):
+            return self.select_rows(range(*key.indices(self.shape[0])))
+        else:
+            raise NotImplementedError(f"key {key} is not supported.")
 
     @property
     def columns(self):
@@ -45,6 +57,9 @@ class AbstractDataframe(ABC):
 
     def column_counter(self, column):
         return Counter(self.__class__.series_tolist(self._df[column]))
+
+    def select_columns(self, columns):
+        return self.__class__(self._df[columns])
 
     @classmethod
     def empty_with_columns(cls, columns):
@@ -75,6 +90,10 @@ class AbstractDataframe(ABC):
         raise NotImplementedError
 
     @abstractmethod
+    def row(self, index):
+        raise NotImplementedError
+
+    @abstractmethod
     def select_rows(self, indices):
         raise NotImplementedError
 
@@ -87,11 +106,11 @@ class AbstractDataframe(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def column_assign_constant(self, column, value, indices=None):
+    def set_column_by_constant(self, column, value, indices=None):
         raise NotImplementedError
 
     @abstractmethod
-    def column_assign_list(self, column, values, indices=None):
+    def set_column_by_array(self, column, values, indices=None):
         raise NotImplementedError
 
     @abstractmethod
@@ -116,7 +135,7 @@ class PandasDataframe(AbstractDataframe):
 
     @classmethod
     def empty_with_columns(cls, columns):
-        return cls(columns=columns)
+        return cls(pd.DataFrame(columns=columns))
 
     @classmethod
     def vertical_concat(cls, df_list):
@@ -140,8 +159,18 @@ class PandasDataframe(AbstractDataframe):
     def to_list_of_dicts(self):
         return self._df.to_dict(orient="records")
 
+    def row(self, index):
+        assert isinstance(index, int), f"index must be int, not {type(index)}"
+        return self._df.iloc[index]
+
     def select_rows(self, indices):
-        return self._df.iloc[indices]
+        assert (
+            isinstance(indices, list)
+            or isinstance(indices, np.ndarray)
+            or isinstance(indices, slice)
+            or isinstance(indices, range)
+        ), f"indices must be list, np.ndarray, or slice, not {type(indices)}"
+        return self.__class__(self._df.iloc[indices])
 
     def filter_rows_by_operator(self, column, operator, value):
         mask = operator(self._df[column], value)
@@ -152,20 +181,23 @@ class PandasDataframe(AbstractDataframe):
             self._df.drop_duplicates(subset, keep=keep).reset_index(drop=True)
         )
 
-    def column_assign_constant(self, column, value, indices=None):
+    def set_column_by_constant(self, column, value, indices=None):
         if indices is None:
             self._df[column] = value
         else:
             self._df.loc[indices, column] = value
 
-    def column_assign_list(self, column, values, indices=None):
+    def set_column_by_array(self, column, values, indices=None):
         if indices is None:
             self._df[column] = values
         else:
             self._df.loc[indices, column] = values
 
     def row_apply(self, function, indices=None):
-        return self._df.iloc[indices].apply(function, axis=1)
+        if indices is None:
+            return self._df.apply(function, axis=1)
+        else:
+            return self._df.iloc[indices].apply(function, axis=1)
 
     def get_cell_by_row_column(self, row_idx, column_name):
         return self._df.at[row_idx, column_name]
@@ -183,7 +215,7 @@ class PolarsDataframe(AbstractDataframe):
 
     @classmethod
     def empty_with_columns(cls, columns):
-        return cls({col: [] for col in columns})
+        return cls(pl.DataFrame({col: [] for col in columns}))
 
     @classmethod
     def vertical_concat(cls, df_list):
@@ -207,6 +239,10 @@ class PolarsDataframe(AbstractDataframe):
     def to_list_of_dicts(self):
         return self._df.to_dicts()
 
+    def row(self, index):
+        assert isinstance(index, int), f"index must be int, not {type(index)}"
+        return self._df[index]
+
     def select_rows(self, indices):
         return self._df[indices]
 
@@ -218,7 +254,7 @@ class PolarsDataframe(AbstractDataframe):
     def unique(self, subset, keep):
         return self.__class__(self._df.unique(subset, keep=keep, maintain_order=True))
 
-    def column_assign_constant(self, column, value, indices=None):
+    def set_column_by_constant(self, column, value, indices=None):
         if indices is None:
             self._df = self._df.with_column(pl.lit(value).alias(column))
         else:
@@ -229,7 +265,7 @@ class PolarsDataframe(AbstractDataframe):
                 .alias(column)
             )
 
-    def column_assign_list(self, column, values, indices=None):
+    def set_column_by_array(self, column, values, indices=None):
         if indices is None:
             self._df = self._df.with_columns(pl.Series(values).alias(column))
         else:

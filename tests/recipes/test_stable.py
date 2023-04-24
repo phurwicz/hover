@@ -1,4 +1,5 @@
 import pytest
+from hover.module_config import DataFrame
 from hover.recipes.stable import (
     _simple_annotator,
     _linked_annotator,
@@ -43,7 +44,9 @@ def subroutine_common_test(dataset):
     # evict a point from selection
     evict_idx = 5
     # prepare expected values post eviction
-    expected_texts = dataset.dfs["raw"].loc[raw_view_select, feature].tolist()
+    expected_texts = DataFrame.series_tolist(
+        dataset.dfs["raw"].select_rows(raw_view_select)[feature]
+    )
     expected_texts.pop(evict_idx)
     # make sub-selection
     dataset.sel_table.source.selected.indices = [evict_idx]
@@ -90,16 +93,24 @@ def subroutine_common_test(dataset):
     assert subset_to_patch == "train"
     assert idx_to_patch == (raw_view_select + train_view_select)[raw_idx_to_patch]
     # prepare an edit patch
-    old_label = dataset.dfs[subset_to_patch].at[idx_to_patch, "label"]
+    old_label = dataset.dfs[subset_to_patch].get_cell_by_row_column(
+        idx_to_patch, "label"
+    )
     new_label = PSEUDO_LABELS[0]
     if old_label == new_label:
         new_label = PSEUDO_LABELS[1]
     dataset.sel_table.source.data["label"][raw_idx_to_patch] = new_label
     dataset.sel_table.source.selected.indices = [raw_idx_to_patch]
     # execute patch
-    assert dataset.dfs[subset_to_patch].at[idx_to_patch, "label"] != new_label
+    assert (
+        dataset.dfs[subset_to_patch].get_cell_by_row_column(idx_to_patch, "label")
+        != new_label
+    )
     action_patch_selection(dataset)
-    assert dataset.dfs[subset_to_patch].at[idx_to_patch, "label"] == new_label
+    assert (
+        dataset.dfs[subset_to_patch].get_cell_by_row_column(idx_to_patch, "label")
+        == new_label
+    )
 
 
 @pytest.mark.lite

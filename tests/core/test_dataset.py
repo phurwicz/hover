@@ -1,6 +1,7 @@
 import pytest
 import os
 from hover.core.dataset import SupervisableTextDataset
+from hover.module_config import DataFrame
 from bokeh.events import MenuItemClick
 
 
@@ -37,6 +38,9 @@ class TestSupervisableTextDataset:
             feature_key="content",
             label_key="mark",
         )
+        for _df in dataset.dfs.values():
+            assert isinstance(_df, DataFrame), f"Expecting DataFrame, got {type(_df)}"
+
         dataset.validate_labels()
 
         # check the subset sizes
@@ -69,7 +73,7 @@ class TestSupervisableTextDataset:
     @pytest.mark.lite
     def test_validate_labels(example_text_dataset):
         dataset = example_text_dataset.copy()
-        dataset.dfs["train"].at[0, "label"] = "invalid_label"
+        dataset.dfs["train"].set_cell_by_row_column(0, "label", "invalid_label")
 
         try:
             dataset.validate_labels()
@@ -83,7 +87,11 @@ class TestSupervisableTextDataset:
     @pytest.mark.lite
     def test_compute_feature_index(example_text_dataset):
         dataset = example_text_dataset.copy()
-        dataset.dfs["raw"].at[0, "text"] = dataset.dfs["raw"].at[1, "text"]
+        dataset.dfs["raw"].set_cell_by_row_column(
+            0,
+            "text",
+            dataset.dfs["raw"].get_cell_by_row_column(1, "text"),
+        )
 
         try:
             dataset.compute_feature_index()
@@ -95,7 +103,7 @@ class TestSupervisableTextDataset:
     @pytest.mark.lite
     def test_locate_by_feature_value(example_text_dataset):
         dataset = example_text_dataset.copy()
-        feature_value = dataset.dfs["raw"].at[0, "text"]
+        feature_value = dataset.dfs["raw"].get_cell_by_row_column(0, "text")
         subset, index = dataset.locate_by_feature_value(feature_value)
         assert subset == "raw" and index == 0
 
@@ -137,7 +145,7 @@ class TestSupervisableTextDataset:
         dataset.compute_nd_embedding(dummy_vectorizer, dimension=3)
 
         # empty one of the dfs; should not break the method
-        dataset.dfs["test"] = dataset.dfs["test"].loc[0:0]
+        dataset.dfs["test"] = dataset.dfs["test"][0:0]
         dataset.compute_2d_embedding(dummy_vectorizer)
 
         # verify that the vectorizer has been remembered

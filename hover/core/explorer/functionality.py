@@ -189,8 +189,7 @@ class BokehDataAnnotator(BokehBaseExplorer):
             self._info(f"applying {len(selected_idx)} annotations...")
 
             # update label in both the df and the data source
-            self.dfs["raw"].loc[selected_idx, "label"] = label
-            self.dfs["raw"].column_assign_constant(
+            self.dfs["raw"].set_column_by_constant(
                 "label",
                 label,
                 indices=selected_idx,
@@ -669,7 +668,7 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
             num_nontrivial = len(list(filter(lambda l: l != ABSTAIN_DECODED, labels)))
 
             # update label in both the df and the data source
-            self.dfs["raw"].column_assign_list("label", labels, indices=selected_idx)
+            self.dfs["raw"].set_column_by_array("label", labels, indices=selected_idx)
             for _idx, _label in zip(selected_idx, labels):
                 _idx = int(_idx)
                 self.sources["raw"].patch({"label": [(_idx, _label)]})

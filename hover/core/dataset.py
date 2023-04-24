@@ -25,6 +25,7 @@ from hover.module_config import (
 from hover.core import Loggable
 from hover.utils.bokeh_helper import auto_label_color
 from hover.utils.misc import current_time
+from hover.utils.typecheck import TypedValueDict
 from bokeh.models import (
     Button,
     CheckboxGroup,
@@ -156,16 +157,33 @@ class SupervisableDataset(Loggable):
         }
 
         # initialize dataframes
-        self.dfs = dict()
+        self.dfs = TypedValueDict(DataFrame)
         for _key, _dictl in dictls.items():
             if _dictl:
                 _df = DataFrame.construct(_dictl)
-                assert self.__class__.FEATURE_KEY in _df.columns
-                assert "label" in _df.columns
+                assert (
+                    self.__class__.FEATURE_KEY in _df.columns
+                ), f"Expected feature key {self.__class__.FEATURE_KEY}"
+                assert "label" in _df.columns, "Expected label key 'label'"
             else:
                 _df = DataFrame.construct(columns=[self.__class__.FEATURE_KEY, "label"])
 
             self.dfs[_key] = _df
+
+    @property
+    def dfs(self):
+        """
+        ???+ note "Subset -> DataFrame mapping."
+        """
+        return self._dfs
+
+    @dfs.setter
+    def dfs(self, dfs):
+        assert isinstance(
+            dfs, TypedValueDict
+        ), f"Expected TypedValueDict, got {type(dfs)}"
+        assert not hasattr(self, "_dfs"), "Resetting `dfs` is forbidden."
+        self._dfs = dfs
 
     def subset(self, key):
         """
@@ -430,7 +448,9 @@ class SupervisableDataset(Loggable):
                     return
 
                 sel_slice = self.dfs[sub_k].select_rows(selected_idx)
-                valid_slice = sel_slice[sel_slice["label"] != ABSTAIN_DECODED]
+                valid_slice = sel_slice.filter_rows_by_operator(
+                    "label", operator.ne, ABSTAIN_DECODED
+                )
 
                 # concat to the end and do some accounting
                 size_before = self.dfs[sub_to].shape[0]
@@ -476,7 +496,7 @@ class SupervisableDataset(Loggable):
                 sub_slice = explorer.dfs[subset].select_rows(selected_idx)
                 sel_slices.append(sub_slice)
 
-            selected = pd.concat(sel_slices, axis=0)
+            selected = DataFrame.vertical_concat(sel_slices)
             self._callback_update_selection(selected)
 
         def callback_view_refresh():
@@ -566,7 +586,7 @@ class SupervisableDataset(Loggable):
             _invalid_indices = np.where(_mask == 0)[0].tolist()
             if _invalid_indices:
                 self._fail(f"Subset {_key} has invalid labels:")
-                self._print(self.dfs[_key].select_rows(_invalid_indices))
+                self._print(self.dfs[_key].select_rows(_invalid_indices)())
                 if raise_exception:
                     raise ValueError("invalid labels")
 
@@ -743,7 +763,7 @@ class SupervisableDataset(Loggable):
         for _key in ordered_subsets:
             before[_key] = self.dfs[_key].shape[0]
             columns[_key] = self.dfs[_key].columns
-            self.dfs[_key].column_assign_constant("__subset", _key)
+            self.dfs[_key].set_column_by_constant("__subset", _key)
 
         # concatenate in order and deduplicate
         overall_df = DataFrame.vertical_concat(
@@ -827,11 +847,11 @@ class SupervisableDataset(Loggable):
         trans_embedding = reducer.transform(trans_arr[fit_num:], method)
 
         # assign x and y coordinates to dataset
-        start_idx = 0
         for _subset, _embedding in [
             (fit_subset, fit_embedding),
             (trans_subset, trans_embedding),
         ]:
+            start_idx = 0
             # edge case: embedding has no rows
             if _embedding.shape[0] < 1:
                 for _key in _subset:
@@ -841,11 +861,16 @@ class SupervisableDataset(Loggable):
                 continue
             for _key in _subset:
                 _length = self.dfs[_key].shape[0]
+                print(start_idx, start_idx + _length, _embedding.shape)
+                _embedding_slice = _embedding[start_idx : (start_idx + _length), :]
+                assert (
+                    _length == _embedding_slice.shape[0]
+                ), f"Unexpected length {_length} vs {_embedding_slice.shape}; embedding total {_embedding.shape}"
                 for _i in range(dimension):
                     _col = embedding_cols[_i]
-                    self.dfs[_key].column_assign_list(
+                    self.dfs[_key].set_column_by_array(
                         _col,
-                        _embedding[start_idx : (start_idx + _length), _i],
+                        _embedding_slice[:, _i],
                         indices=None,
                     )
                 start_idx += _length
