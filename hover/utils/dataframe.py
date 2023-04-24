@@ -29,9 +29,6 @@ class AbstractDataframe(ABC):
         df = cls.DF_TYPE(*args, **kwargs)
         return cls(df)
 
-    def copy(self):
-        return self.__class__(self._df.copy())
-
     def __getitem__(self, key):
         if isinstance(key, int) or isinstance(key, str):
             return self._df[key]
@@ -50,6 +47,10 @@ class AbstractDataframe(ABC):
     @property
     def columns(self):
         return self._df.columns
+
+    @columns.setter
+    def columns(self):
+        raise NotImplementedError("setting columns is forbidden.")
 
     @property
     def shape(self):
@@ -75,6 +76,10 @@ class AbstractDataframe(ABC):
 
     @classmethod
     def series_tolist(cls, series):
+        raise NotImplementedError
+
+    @abstractmethod
+    def copy(self):
         raise NotImplementedError
 
     @abstractmethod
@@ -139,6 +144,8 @@ class PandasDataframe(AbstractDataframe):
 
     @classmethod
     def vertical_concat(cls, df_list):
+        for _df in df_list:
+            assert isinstance(_df, cls), f"df must be of type {cls}"
         pd_list = [df() for df in df_list]
         return cls(pd.concat(pd_list, axis=0, sort=False, ignore_index=True))
 
@@ -149,6 +156,9 @@ class PandasDataframe(AbstractDataframe):
     @classmethod
     def series_tolist(cls, series):
         return series.tolist()
+
+    def copy(self):
+        return self.__class__(self._df.copy())
 
     def to_pandas(self):
         return self._df.copy()
@@ -182,12 +192,25 @@ class PandasDataframe(AbstractDataframe):
         )
 
     def set_column_by_constant(self, column, value, indices=None):
+        assert np.isscalar(value), f"value must be scalar, not {type(value)}"
+
         if indices is None:
             self._df[column] = value
         else:
             self._df.loc[indices, column] = value
 
     def set_column_by_array(self, column, values, indices=None):
+        assert not np.isscalar(values), f"values must be array-like, not {type(values)}"
+        target_length = self._df.shape[0] if indices is None else len(indices)
+        if hasattr(values, "__len__"):
+            assert (
+                len(values) == target_length
+            ), f"length mismatch: {len(values)} != {self._df.shape[0]}"
+        if hasattr(values, "shape"):
+            assert (
+                values.shape[0] == target_length
+            ), f"length mismatch: {values.shape[0]} != {self._df.shape[0]}"
+
         if indices is None:
             self._df[column] = values
         else:
@@ -219,6 +242,8 @@ class PolarsDataframe(AbstractDataframe):
 
     @classmethod
     def vertical_concat(cls, df_list):
+        for _df in df_list:
+            assert isinstance(_df, cls), f"df must be of type {cls}"
         pl_list = [df() for df in df_list]
         return cls(pl.concat(pl_list, how="vertical"))
 
@@ -229,6 +254,9 @@ class PolarsDataframe(AbstractDataframe):
     @classmethod
     def series_tolist(cls, series):
         return series.to_list()
+
+    def copy(self):
+        return self.__class__(self._df.clone())
 
     def to_pandas(self):
         return self._df.to_pandas()

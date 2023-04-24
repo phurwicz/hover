@@ -32,6 +32,7 @@ setuptools.setup(
         # data handling
         "pandas>=1.3.0",
         "polars>=0.17.0",
+        "pyarrow>=11.0.0",
         "numpy>=1.22",
         # computations
         "scipy>=1.3.2",
