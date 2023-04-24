@@ -25,6 +25,18 @@ config = ConfigIndex(
             ],
         ),
         Config(
+            ConfigSection.BACKEND,
+            [
+                AutolockedConfigValue(
+                    ConfigKey.DATAFRAME_LIBRARY,
+                    "The library to use for internal dataframes. Must be 'pandas' or 'polars'.",
+                    "pandas",
+                    validation=Validator.is_supported_dataframe_library,
+                    preprocessor=Preprocessor.lower,
+                ),
+            ],
+        ),
+        Config(
             ConfigSection.VISUAL,
             [
                 AutolockedConfigValue(
@@ -32,6 +44,7 @@ config = ConfigIndex(
                     "Hex code of RGB color.",
                     "#dcdcdc",
                     validation=Validator.is_hex_color,
+                    preprocessor=Preprocessor.lower,
                 ),
                 AutolockedConfigValue(
                     ConfigKey.BOKEH_PALETTE,
@@ -44,6 +57,7 @@ config = ConfigIndex(
                     "Specify how colors from the palette should be chosen when there are fewer categories than colors. This needs to be 'iterate' or 'linspace'",
                     "linspace",
                     validation=Validator.is_supported_traversal_mode,
+                    preprocessor=Preprocessor.lower,
                 ),
                 AutolockedConfigValue(
                     ConfigKey.TABLE_IMG_STYLE,
@@ -67,6 +81,7 @@ config = ConfigIndex(
                     "Default method for dimensionality reduction. Currently either 'umap' or 'ivis'.",
                     "umap",
                     validation=Validator.is_supported_dimensionality_reduction,
+                    preprocessor=Preprocessor.lower,
                 ),
             ],
         ),

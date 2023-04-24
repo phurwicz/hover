@@ -12,9 +12,9 @@ from hover.core.local_config import (
     blank_callback_on_change as blank,
 )
 from hover.utils.bokeh_helper import bokeh_hover_tooltip
-from hover.utils.dataframe import dataframe_with_no_rows
 from hover.utils.meta.traceback import RichTracebackABCMeta
 from hover.utils.misc import RootUnionFind
+from hover.module_config import DataFrame
 from .local_config import SEARCH_SCORE_FIELD
 
 STANDARD_PLOT_TOOLS = [
@@ -285,7 +285,7 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
                     col_patch in _df.columns
                 ), f"Subset {_key} expecting column {col_patch} among columns, got {_df.columns}"
                 # find all array lengths; note that the data subset can be empty
-                _num_patches_seen = _df[col_patch].apply(len).values
+                _num_patches_seen = DataFrame.series_values(_df[col_patch].apply(len))
                 assert (
                     len(set(_num_patches_seen)) <= 1
                 ), f"Expecting consistent number of patches, got {_num_patches_seen}"
@@ -309,7 +309,7 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
         def update_patch(attr, old, new):
             for _key, _df in self.dfs.items():
                 # calculate the patch corresponding to slider value
-                _value = [_arr[new] for _arr in _df[col_patch].values]
+                _value = [_arr[new] for _arr in DataFrame.series_values(_df[col_patch])]
                 _slice = slice(_df.shape[0])
                 _patch = {col_original: [(_slice, _value)]}
                 self.sources[_key].patch(_patch)
@@ -365,12 +365,12 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
                     assert _df.shape[0] == 0, _msg
                 # default value available, will use it to create column
                 else:
-                    _df[_col] = _default
+                    _df.column_assign_constant(_col, _default)
             self.dfs[_key] = _df.copy() if copy else _df
 
         # expected dfs must be present
         for _key in expected_not_supplied:
-            _df = dataframe_with_no_rows(list(mandatory_col_to_default.keys()))
+            _df = DataFrame.empty_with_columns(list(mandatory_col_to_default.keys()))
             self.dfs[_key] = _df
 
     def _setup_sources(self):
@@ -379,7 +379,9 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
             Intended to be extended in child classes for pre/post processing.
         """
         self._info("Setting up sources")
-        self.sources = {_key: ColumnDataSource(_df) for _key, _df in self.dfs.items()}
+        self.sources = {
+            _key: ColumnDataSource(_df.to_dict()) for _key, _df in self.dfs.items()
+        }
         self._postprocess_sources()
 
         # initialize attributes that couple with sources
@@ -532,7 +534,7 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
             such as dynamic plotting kwargs, need to be re-assigned.
         """
         for _key in self.dfs.keys():
-            self.sources[_key].data = self.dfs[_key]
+            self.sources[_key].data = self.dfs[_key].to_dict()
         self._postprocess_sources()
 
         # reset selections now that source indices may have changed
@@ -854,7 +856,7 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
 
         labels = set()
         for _key in self.dfs.keys():
-            labels = labels.union(set(self.dfs[_key]["label"].values))
+            labels = labels.union(set(DataFrame.series_values(self.dfs[_key]["label"])))
 
         return auto_label_color(labels)
 

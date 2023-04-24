@@ -3,6 +3,17 @@ from .config_constants import (
     ConfigSection as Section,
     ConfigKey as Key,
 )
+from .utils.dataframe import (
+    PandasDataframe,
+    PolarsDataframe,
+)
+
+# dataframe implementation
+DataFrame = (
+    PandasDataframe
+    if hover.config[Section.BACKEND][Key.DATAFRAME_LIBRARY].lower() == "pandas"
+    else PolarsDataframe
+)
 
 # constants for the abstain mechanism
 ABSTAIN_DECODED = hover.config[Section.DATA_VALUES][Key.ABSTAIN_DECODED]

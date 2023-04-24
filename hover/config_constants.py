@@ -3,6 +3,7 @@ import re
 
 class ConfigSection:
     IO = "io"
+    BACKEND = "backend"
     VISUAL = "visual"
     DATA_EMBEDDING = "data.embedding"
     DATA_COLUMNS = "data.columns"
@@ -11,6 +12,7 @@ class ConfigSection:
 
 class ConfigKey:
     DATA_SAVE_DIR = "data_save_dir"
+    DATAFRAME_LIBRARY = "dataframe_library"
     ABSTAIN_HEXCOLOR = "abstain_hexcolor"
     BOKEH_PALETTE = "bokeh_palette"
     BOKEH_PALETTE_USAGE = "bokeh_palette_usage"
@@ -46,12 +48,16 @@ class Validator:
         return True
 
     @staticmethod
+    def is_supported_dataframe_library(x):
+        return x in ["pandas", "polars"]
+
+    @staticmethod
     def is_supported_dimensionality_reduction(x):
-        return x.lower() in ["umap", "ivis"]
+        return x in ["umap", "ivis"]
 
     @staticmethod
     def is_supported_traversal_mode(x):
-        return x.lower() in ["iterate", "linspace"]
+        return x in ["iterate", "linspace"]
 
     @staticmethod
     def is_str(x):
@@ -66,3 +72,7 @@ class Preprocessor:
     @staticmethod
     def remove_quote_at_ends(x):
         return re.sub(r"(^[\'\"]|[\'\"]$)", "", x)
+
+    @staticmethod
+    def lower(x):
+        return x.lower()
