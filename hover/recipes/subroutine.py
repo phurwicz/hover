@@ -306,14 +306,14 @@ def active_learning_components(dataset, vecnet, **kwargs):
             if _length == 0:
                 continue
             _slice = slice(offset, offset + _length)
-            dataset.subset(_key)["pred_label"] = labels[_slice]
-            dataset.subset(_key)["pred_score"] = scores[_slice]
+            dataset.subset(_key).set_column_by_array("pred_label", labels[_slice])
+            dataset.subset(_key).set_column_by_array("pred_score", scores[_slice])
             for i, _col in enumerate(manifold_traj_cols):
                 # all steps, selected slice
                 _traj = traj_arr[:, _slice, i]
                 # selected slice, all steps
                 _traj = list(np.swapaxes(_traj, 0, 1))
-                dataset.subset(_key)[f"{_col}_traj"] = _traj
+                dataset.subset(_key).set_column_by_array(f"{_col}_traj", _traj)
 
             offset += _length
 
