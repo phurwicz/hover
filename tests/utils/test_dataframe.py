@@ -22,40 +22,82 @@ DATAFRAME_VALUE_TEST_CASES = [
 ]
 
 
-class TestPandasDataframe:
-    """Tests for the PandasDataframe class."""
+class TestDataframe:
+    """
+    Consistency tests across pandas, polars, and hover dataframes.
+    """
 
     @pytest.mark.parametrize("df_data", DATAFRAME_VALUE_TEST_CASES)
     def test_basics(self, df_data):
         pd_df = pd.DataFrame(df_data)
-        df = PandasDataframe(pd_df)
-        assert df() is pd_df
-        assert df().equals(PandasDataframe.construct(df_data)())
-        assert df.copy()() is not df()
-        assert (df.columns == df().columns).all()
-        assert df.shape == df().shape
+        pl_df = pl.DataFrame(df_data)
+        df_pd = PandasDataframe(pd_df)
+        df_pl = PolarsDataframe(pl_df)
+
+        assert df_pd() is pd_df
+        assert df_pl() is pl_df
+
+        assert df_pd().equals(PandasDataframe.construct(df_data)())
+        assert df_pl().frame_equal(PolarsDataframe.construct(df_data)())
+
+        assert df_pd().equals(df_pl().to_pandas())
+        assert df_pd().equals(df_pd.to_pandas())
+        assert df_pd().equals(df_pl.to_pandas())
+
+        assert df_pd.copy()() is not df_pd()
+        assert df_pl.copy()() is not df_pl()
+
+        assert (df_pd.columns == df_pd().columns).all()
+        assert df_pl.columns == df_pl().columns
+
+        assert df_pd.shape == df_pd().shape == df_pl.shape == df_pl().shape
 
     def test_empty_with_columns(self):
-        df = PandasDataframe.empty_with_columns(["a", "b"])
-        pd_df = pd.DataFrame(columns=["a", "b"])
-        assert df().equals(pd_df)
-        assert df.shape == (0, 2)
+        columns = ["a", "b"]
+
+        df_pd = PandasDataframe.empty_with_columns(columns)
+        df_pl = PolarsDataframe.empty_with_columns(columns)
+        pd_df = pd.DataFrame(columns=columns)
+        pl_df = pl.DataFrame({_col: [] for _col in columns})
+
+        assert df_pd().equals(pd_df)
+        assert df_pl().frame_equal(pl_df)
+        assert df_pd.shape == df_pl.shape == (0, 2)
 
     @pytest.mark.parametrize("df_data", DATAFRAME_VALUE_TEST_CASES)
     def test_vertical_concat(self, df_data):
-        df_a = PandasDataframe.construct(df_data)
-        df_b = df_a.copy()
-        pd_df_a = df_a()
-        pd_df_b = df_b()
-        df_ab = PandasDataframe.vertical_concat([df_a, df_b])
+        df_pd_a = PandasDataframe.construct(df_data)
+        df_pd_b = df_pd_a.copy()
+        df_pl_a = PolarsDataframe.construct(df_data)
+        df_pl_b = df_pl_a.copy()
+        pd_df_a = df_pd_a()
+        pd_df_b = df_pd_b()
+        pl_df_a = df_pl_a()
+        pl_df_b = df_pl_b()
+        df_pd_ab = PandasDataframe.vertical_concat([df_pd_a, df_pd_b])
+        df_pl_ab = PolarsDataframe.vertical_concat([df_pl_a, df_pl_b])
+
         pd_df_ab = pd.concat([pd_df_a, pd_df_b], axis=0, ignore_index=True)
-        assert df_ab().equals(pd_df_ab)
+        pl_df_ab = pl.concat([pl_df_a, pl_df_b], how="vertical")
+        assert df_pd_ab().equals(pd_df_ab)
+        assert df_pl_ab().frame_equal(pl_df_ab)
+        assert df_pl_ab().to_pandas().equals(pd_df_ab)
 
         try:
             _ = PandasDataframe.vertical_concat([pd_df_a, pd_df_b])
             raise Exception("Should have raised an AssertionError")
         except AssertionError:
             pass
+
+        try:
+            _ = PolarsDataframe.vertical_concat([pl_df_a, pl_df_b])
+            raise Exception("Should have raised an AssertionError")
+        except AssertionError:
+            pass
+
+    """
+    The tests below have not yet included polars.
+    """
 
     @pytest.mark.parametrize("values", SERIES_VALUE_TEST_CASES)
     def test_series_class_methods(self, values):
@@ -182,45 +224,3 @@ class TestPandasDataframe:
         assert old_value == pd_df.at[row, col]
         pd_df.at[row, col] = value
         assert df.get_cell_by_row_column(row, col) == pd_df.at[row, col]
-
-
-class TestPolarsDataframe:
-    """Tests for the PandasDataframe class."""
-
-    @pytest.mark.parametrize("df_data", DATAFRAME_VALUE_TEST_CASES)
-    def test_basics(self, df_data):
-        pl_df = pl.DataFrame(df_data)
-        df = PolarsDataframe(pl_df)
-        assert df() is pl_df
-        assert df().frame_equal(PolarsDataframe.construct(df_data)())
-        assert df.copy()() is not df()
-        assert df.columns == df().columns
-        assert df.shape == df().shape
-
-    def test_empty_with_columns(self):
-        df = PolarsDataframe.empty_with_columns(["a", "b"])
-        pl_df = pl.DataFrame({_col: [] for _col in ["a", "b"]})
-        assert df().frame_equal(pl_df)
-        assert df.shape == (0, 2)
-
-    @pytest.mark.parametrize("df_data", DATAFRAME_VALUE_TEST_CASES)
-    def test_vertical_concat(self, df_data):
-        df_a = PolarsDataframe.construct(df_data)
-        df_b = df_a.copy()
-        pl_df_a = df_a()
-        pl_df_b = df_b()
-        df_ab = PolarsDataframe.vertical_concat([df_a, df_b])
-        pl_df_ab = pl.concat([pl_df_a, pl_df_b], how="vertical")
-        pd_df_ab = pd.concat(
-            [pl_df_a.to_pandas(), pl_df_b.to_pandas()],
-            axis=0,
-            ignore_index=True,
-        )
-        assert df_ab().frame_equal(pl_df_ab)
-        assert df_ab().to_pandas().equals(pd_df_ab)
-
-        try:
-            _ = PolarsDataframe.vertical_concat([pl_df_a, pl_df_b])
-            raise Exception("Should have raised an AssertionError")
-        except AssertionError:
-            pass
