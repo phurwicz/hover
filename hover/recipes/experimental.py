@@ -30,6 +30,7 @@ def snorkel_crosscheck(dataset, lf_list, **kwargs):
         | :------------------ | :------------------------- | :----------------- | :------------------ |
         | manage data subsets | inspect labeling functions | make annotations   | search and filter   |
     """
+    dataset.setup_bokeh_elements(reset=True)
     layout, _ = _snorkel_crosscheck(dataset, lf_list, **kwargs)
     return layout
 
@@ -93,6 +94,8 @@ def active_learning(dataset, vecnet, **kwargs):
         | :------------------ | :------------------------ | :----------------- | :------------------ |
         | manage data subsets | inspect model predictions | make annotations   | search and filter   |
     """
+    dataset.setup_bokeh_elements(reset=True)
+    vecnet.setup_bokeh_elements(reset=True)
     layout, _ = _active_learning(dataset, vecnet, **kwargs)
     return layout
 

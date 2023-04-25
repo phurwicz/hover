@@ -122,7 +122,17 @@ class VectorNet(BaseVectorNet):
 
         self._callback_reset_nn_optimizer = callback_reset_nn_optimizer
         self.setup_nn(use_existing_state_dict=True)
+        self.setup_bokeh_elements()
         self._setup_widgets()
+
+    def setup_bokeh_elements(self, reset=False):
+        if (not reset) and getattr(self, "_bokeh_ready", False):
+            self._warn("bokeh elements already set up. Skipping unless `reset=True`.")
+            return
+
+        self._setup_widgets()
+        self._bokeh_ready = True
+        self._info("finished setting up bokeh elements.")
 
     def auto_adjust_setup(self, labels, auto_skip=True):
         """
