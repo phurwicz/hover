@@ -8,6 +8,18 @@ import pandas as pd
 import polars as pl
 from abc import ABC, abstractmethod
 from collections import Counter
+from functools import wraps
+
+
+def sametype(func):
+    @wraps(func)
+    def wrapper(obj, *args, **kwargs):
+        value = func(obj, *args, **kwargs)
+        if not isinstance(value, obj.__class__):
+            value = obj.__class__(value)
+        return value
+
+    return wrapper
 
 
 class AbstractDataframe(ABC):
@@ -157,8 +169,9 @@ class PandasDataframe(AbstractDataframe):
     def series_tolist(cls, series):
         return series.tolist()
 
+    @sametype
     def copy(self):
-        return self.__class__(self._df.copy())
+        return self._df.copy()
 
     def to_pandas(self):
         return self._df.copy()
@@ -173,6 +186,7 @@ class PandasDataframe(AbstractDataframe):
         assert isinstance(index, int), f"index must be int, not {type(index)}"
         return self._df.iloc[index]
 
+    @sametype
     def select_rows(self, indices):
         assert (
             isinstance(indices, list)
@@ -180,16 +194,16 @@ class PandasDataframe(AbstractDataframe):
             or isinstance(indices, slice)
             or isinstance(indices, range)
         ), f"indices must be list, np.ndarray, or slice, not {type(indices)}"
-        return self.__class__(self._df.iloc[indices])
+        return self._df.iloc[indices]
 
+    @sametype
     def filter_rows_by_operator(self, column, operator, value):
         mask = operator(self._df[column], value)
-        return self.__class__(self._df[mask].reset_index(drop=True))
+        return self._df[mask].reset_index(drop=True)
 
+    @sametype
     def unique(self, subset, keep):
-        return self.__class__(
-            self._df.drop_duplicates(subset, keep=keep).reset_index(drop=True)
-        )
+        return self._df.drop_duplicates(subset, keep=keep).reset_index(drop=True)
 
     def set_column_by_constant(self, column, value, indices=None):
         assert np.isscalar(value), f"value must be scalar, not {type(value)}"
@@ -255,8 +269,9 @@ class PolarsDataframe(AbstractDataframe):
     def series_tolist(cls, series):
         return series.to_list()
 
+    @sametype
     def copy(self):
-        return self.__class__(self._df.clone())
+        return self._df.clone()
 
     def to_pandas(self):
         return self._df.to_pandas()
@@ -271,22 +286,25 @@ class PolarsDataframe(AbstractDataframe):
         assert isinstance(index, int), f"index must be int, not {type(index)}"
         return self._df[index]
 
+    @sametype
     def select_rows(self, indices):
         return self._df[indices]
 
+    @sametype
     def filter_rows_by_operator(self, column, operator, value):
         mask = operator(self._df[column], value)
         indices = np.where(mask)[0]
-        return self.__class__(self._df[indices])
+        return self._df[indices]
 
+    @sametype
     def unique(self, subset, keep):
-        return self.__class__(self._df.unique(subset, keep=keep, maintain_order=True))
+        return self._df.unique(subset, keep=keep, maintain_order=True)
 
     def set_column_by_constant(self, column, value, indices=None):
         if indices is None:
-            self._df = self._df.with_column(pl.lit(value).alias(column))
+            self._df = self._df.with_columns(pl.lit(value).alias(column))
         else:
-            self._df = self._df.with_column(
+            self._df = self._df.with_columns(
                 pl.when(pl.col("index").is_in(indices))
                 .then(pl.lit(value))
                 .otherwise(pl.col(column))
