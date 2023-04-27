@@ -1,4 +1,4 @@
-from hover import module_config
+from hover.module_config import DataFrame, ABSTAIN_DECODED
 from hover.core.explorer.local_config import SEARCH_SCORE_FIELD
 from hover.utils.snorkel_helper import labeling_function
 from bokeh.events import SelectionGeometry
@@ -112,7 +112,7 @@ def subroutine_rules_from_text_df(df):
     """
     Dummy rules for predictable outcome.
     """
-    texts = df["text"].tolist()
+    texts = DataFrame.series_tolist(df["text"])
     assert len(texts) >= 20, f"Expected at least 20 texts, got {len(texts)}"
     first_six_texts = set(texts[:6])
     first_ten_texts = set(texts[:10])
@@ -120,7 +120,7 @@ def subroutine_rules_from_text_df(df):
     def subroutine_lookup(query, pool, label):
         if query in pool:
             return label
-        return module_config.ABSTAIN_DECODED
+        return ABSTAIN_DECODED
 
     @labeling_function(targets=["A"], name="narrow_rule_a")
     def narrow_rule_a_clone(row):

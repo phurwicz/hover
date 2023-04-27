@@ -133,9 +133,7 @@ class BokehDataAnnotator(BokehBaseExplorer):
         color_dict = self.auto_color_mapping()
 
         for _key, _df in self.dfs.items():
-            _color = DF.series_tolist(
-                _df["label"].apply(lambda label: color_dict.get(label, "gainsboro"))
-            )
+            _color = _df.column_map("label", color_dict, format="list")
             self.sources[_key].add(_color, SOURCE_COLOR_FIELD)
 
     def _update_colors(self):
@@ -147,11 +145,7 @@ class BokehDataAnnotator(BokehBaseExplorer):
         # infer glyph colors dynamically
         color_dict = self.auto_color_mapping()
 
-        color_list = (
-            self.dfs["raw"]["label"]
-            .apply(lambda label: color_dict.get(label, "gainsboro"))
-            .tolist()
-        )
+        color_list = self.dfs["raw"].column_map("label", color_dict, format="list")
         self.sources["raw"].patch(
             {SOURCE_COLOR_FIELD: [(slice(len(color_list)), color_list)]}
         )
@@ -299,9 +293,6 @@ class BokehSoftLabelExplorer(BokehBaseExplorer):
         # infer glyph color from labels
         color_dict = self.auto_color_mapping()
 
-        def get_color(label):
-            return color_dict.get(label, "gainsboro")
-
         # infer glyph alpha from pseudo-percentile of soft label scores
         scores = np.concatenate(
             [DF.series_tolist(_df[self.score_col]) for _df in self.dfs.values()]
@@ -319,8 +310,8 @@ class BokehSoftLabelExplorer(BokehBaseExplorer):
 
         # infer alpha from score percentiles
         for _key, _df in self.dfs.items():
-            _color = DF.series_tolist(_df[self.label_col].apply(get_color))
-            _alpha = DF.series_tolist(_df[self.score_col].apply(pseudo_percentile))
+            _color = _df.column_map(self.label_col, color_dict, format="list")
+            _alpha = _df.column_apply(self.score_col, pseudo_percentile, format="list")
             self.sources[_key].add(_color, SOURCE_COLOR_FIELD)
             self.sources[_key].add(_alpha, SOURCE_ALPHA_FIELD)
 

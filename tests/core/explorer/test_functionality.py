@@ -3,7 +3,7 @@ Corresponds to the `hover.core.explorer.functionality` module.
 For mechanisms that are invariant across `hover.core.explorer.feature`.
 """
 
-from hover.module_config import ABSTAIN_DECODED
+from hover.module_config import DataFrame, ABSTAIN_DECODED
 from hover.recipes.subroutine import get_explorer_class
 from bokeh.events import ButtonClick, MenuItemClick
 from .local_helper import (
@@ -98,7 +98,7 @@ class TestBokehFinder:
         explorer.plot()
 
         # dynamically construct patterns with predictable outcome
-        texts = explorer.dfs["raw"]["text"].tolist()
+        texts = DataFrame.series_tolist(explorer.dfs["raw"]["text"])
         first_token_of_ten = set()
         first_token_of_two = set()
         for i, _text in enumerate(texts):
@@ -337,7 +337,7 @@ class TestBokehSnorkel:
         explorer.lf_filter_trigger._trigger_event(filter_event)
         explorer.lf_apply_trigger._trigger_event(apply_event)
 
-        first_six_labels = explorer.dfs["raw"]["label"].iloc[:6].tolist()
+        first_six_labels = DataFrame.series_tolist(explorer.dfs["raw"]["label"])[:6]
         assert first_six_labels == ["A"] * 6
 
         # add more rules, check menu again
@@ -365,7 +365,7 @@ class TestBokehSnorkel:
         _event = MenuItemClick(explorer.lf_apply_trigger, item="narrow_rule_b")
         explorer.lf_apply_trigger._trigger_event(_event)
 
-        first_six_labels = explorer.dfs["raw"]["label"].iloc[:6].tolist()
+        first_six_labels = DataFrame.series_tolist(explorer.dfs["raw"]["label"])[:6]
         assert first_six_labels == ["B"] * 6
 
         # use two pops to check against misremoval of renderers

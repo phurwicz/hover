@@ -579,11 +579,13 @@ class SupervisableDataset(Loggable):
         for _key in [*self.__class__.PUBLIC_SUBSETS, *self.__class__.PRIVATE_SUBSETS]:
             _invalid_indices = None
             assert "label" in self.dfs[_key].columns
-            _mask = self.dfs[_key]["label"].apply(
-                lambda x: int(x in self.label_encoder)
+            _mask = np.logical_not(
+                self.dfs[_key].column_isin(
+                    "label",
+                    self.label_encoder.keys(),
+                )
             )
-            # DO NOT change the "==" to "is"; False in pandas is not False below
-            _invalid_indices = np.where(_mask == 0)[0].tolist()
+            _invalid_indices = np.where(_mask)[0].tolist()
             if _invalid_indices:
                 self._fail(f"Subset {_key} has invalid labels:")
                 self._print(self.dfs[_key].select_rows(_invalid_indices)())
@@ -925,9 +927,7 @@ class SupervisableDataset(Loggable):
         batch_size = min(batch_size, df.shape[0])
 
         # prepare output vectors
-        labels = DataFrame.series_tolist(
-            df["label"].apply(lambda x: self.label_encoder[x])
-        )
+        labels = df.column_map("label", self.label_encoder, format="list")
         output_vectors = one_hot(labels, num_classes=len(self.classes))
         if smoothing_coeff > 0.0:
             output_vectors = label_smoothing(

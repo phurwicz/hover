@@ -6,6 +6,7 @@ This module is intended to capture pandas/polars logic.
 import numpy as np
 import pandas as pd
 import polars as pl
+import warnings
 from abc import ABC, abstractmethod
 from collections import Counter
 from functools import wraps
@@ -118,6 +119,10 @@ class AbstractDataframe(ABC):
     def series_tolist(cls, series):
         raise NotImplementedError
 
+    @classmethod
+    def series_to_format(cls, series, format):
+        raise NotImplementedError
+
     @abstractmethod
     def copy(self):
         raise NotImplementedError
@@ -159,6 +164,24 @@ class AbstractDataframe(ABC):
         raise NotImplementedError
 
     @abstractmethod
+    def _pre_apply(self, indices, as_column):
+        raise NotImplementedError
+
+    @abstractmethod
+    def column_map(self, column, mapping, indices=None, as_column=None, format="numpy"):
+        raise NotImplementedError
+
+    @abstractmethod
+    def column_isin(self, column, lookup, indices=None, as_column=None, format="numpy"):
+        raise NotImplementedError
+
+    @abstractmethod
+    def column_apply(
+        self, column, function, indices=None, as_column=None, format="numpy"
+    ):
+        raise NotImplementedError
+
+    @abstractmethod
     def row_apply(self, function, indices=None, as_column=None, format="numpy"):
         raise NotImplementedError
 
@@ -196,6 +219,19 @@ class PandasDataframe(AbstractDataframe):
     @classmethod
     def series_tolist(cls, series):
         return series.tolist()
+
+    @classmethod
+    def series_to_format(cls, series, format):
+        if format == "numpy":
+            return series.values
+        elif format == "list":
+            return series.tolist()
+        elif format == "series":
+            return series
+        else:
+            raise ValueError(
+                f"format must be 'numpy', 'list', or 'series', got {format}"
+            )
 
     @sametype
     def copy(self):
@@ -258,31 +294,48 @@ class PandasDataframe(AbstractDataframe):
             indices = convert_indices_to_list(indices, self.shape[0])
             self._df.loc[indices, column] = values
 
-    def row_apply(self, function, indices=None, as_column=None, format="numpy"):
+    def _pre_apply(self, indices, as_column):
         if indices is None:
-            series = self._df.apply(function, axis=1)
             if as_column is not None:
                 assert isinstance(
                     as_column, str
                 ), f"as_column must be str, got {type(as_column)}"
-                self._df[as_column] = series
-                return
+            return self._df, as_column
         else:
             assert (
                 as_column is None
             ), f"as_column must be None when indices are specifed, got {as_column}"
-            series = self._df.iloc[indices].apply(function, axis=1)
+            # unlike loc, iloc needs no conversion
+            return self._df.iloc[indices], None
 
-        if format == "numpy":
-            return series.values
-        elif format == "list":
-            return series.tolist()
-        elif format == "series":
-            return series
+    def _post_apply(self, series, as_column, format):
+        if as_column is None:
+            return self.__class__.series_to_format(series, format)
         else:
-            raise ValueError(
-                f"format must be 'numpy', 'list', or 'series', got {format}"
-            )
+            self._df[as_column] = series
+            return
+
+    def column_map(self, column, mapping, indices=None, as_column=None, format="numpy"):
+        subject, as_column = self._pre_apply(indices, as_column)
+        series = subject[column].map(mapping)
+        return self._post_apply(series, as_column, format)
+
+    def column_isin(self, column, lookup, indices=None, as_column=None, format="numpy"):
+        subject, as_column = self._pre_apply(indices, as_column)
+        series = subject[column].isin(lookup)
+        return self._post_apply(series, as_column, format)
+
+    def column_apply(
+        self, column, function, indices=None, as_column=None, format="numpy"
+    ):
+        subject, as_column = self._pre_apply(indices, as_column)
+        series = subject[column].apply(function)
+        return self._post_apply(series, as_column, format)
+
+    def row_apply(self, function, indices=None, as_column=None, format="numpy"):
+        subject, as_column = self._pre_apply(indices, as_column)
+        series = subject.apply(function, axis=1)
+        return self._post_apply(series, as_column, format)
 
     def get_cell_by_row_column(self, row_idx, column_name):
         return self._df.at[row_idx, column_name]
@@ -316,6 +369,19 @@ class PolarsDataframe(AbstractDataframe):
     @classmethod
     def series_tolist(cls, series):
         return series.to_list()
+
+    @classmethod
+    def series_to_format(cls, series, format):
+        if format == "numpy":
+            return series.to_numpy()
+        elif format == "list":
+            return series.to_list()
+        elif format == "series":
+            return series
+        else:
+            raise ValueError(
+                f"format must be 'numpy', 'list', or 'series', got {format}"
+            )
 
     @sametype
     def copy(self):
@@ -384,7 +450,7 @@ class PolarsDataframe(AbstractDataframe):
             )
             self._df = self._df.update(patch)
 
-    def row_apply(self, function, indices=None, as_column=None, format="numpy"):
+    def _pre_apply(self, indices, as_column):
         # determine the column name for the result
         if as_column is None:
             col_name = "result"
@@ -399,32 +465,64 @@ class PolarsDataframe(AbstractDataframe):
             ), f"as_column must be None when indices are specifed, got {as_column}"
             col_name = as_column
 
+        # determine the subject of the apply
+        subject = self._df if indices is None else self.select_rows(indices)()
+
+        return subject, col_name
+
+    def _post_apply(self, series, as_column, format):
+        if as_column is None:
+            return self.__class__.series_to_format(series, format)
+        else:
+            self._df = self._df.with_columns(series.alias(as_column))
+            return
+
+    def column_map(self, column, mapping, indices=None, as_column=None, format="numpy"):
+        subject, _ = self._pre_apply(indices, as_column)
+        series = subject[column].map_dict(mapping)
+        return self._post_apply(series, as_column, format)
+
+    def column_isin(self, column, lookup, indices=None, as_column=None, format="numpy"):
+        subject, _ = self._pre_apply(indices, as_column)
+        series = subject[column].is_in(lookup)
+        return self._post_apply(series, as_column, format)
+
+    def column_apply(
+        self, column, function, indices=None, as_column=None, format="numpy"
+    ):
+        subject, _ = self._pre_apply(indices, as_column)
+        example_value = function(self.get_cell_by_row_column(0, column))
+        dtype = type(example_value)
+        series = subject[column].apply(function, return_dtype=dtype)
+        return self._post_apply(series, as_column, format)
+
+    def row_apply(self, function, indices=None, as_column=None, format="numpy"):
+        # determine the return type for df.apply
+        example_value = function(self._df.row(0, named=True))
+        dtype = type(example_value)
+
+        subject, col = self._pre_apply(indices, as_column)
+
         # create the function to be applied
-        to_apply = pl.struct(self._df.columns).apply(function).alias("result")
+        to_apply = (
+            pl.struct(self._df.columns).apply(function, return_dtype=dtype).alias(col)
+        )
 
         # apply the function
         if as_column is None:
-            if indices is None:
-                series = self._df.with_columns(to_apply)[col_name]
-            else:
-                series = self.select_rows(indices)().with_columns(to_apply)[col_name]
-
-            if format == "numpy":
-                return series.to_numpy()
-            elif format == "list":
-                return series.to_list()
-            elif format == "series":
-                return series
-            else:
-                raise ValueError(
-                    f"format must be 'numpy', 'list', or 'series', got {format}"
-                )
+            series = subject.with_columns(to_apply)[col]
+            return self.__class__.series_to_format(series, format)
         else:
-            self._df = self._df.with_columns(to_apply)
+            assert subject is self._df, "subject must be self._df"
+            self._df = subject.with_columns(to_apply)
             return
 
     def get_cell_by_row_column(self, row_idx, column_name):
-        return self._df[row_idx, column_name]
+        return self._df.row(row_idx, named=True)[column_name]
 
     def set_cell_by_row_column(self, row_idx, column_name, value):
+        if isinstance(value, (list, tuple, np.ndarray, pd.Series)):
+            warnings.warn(
+                "Setting a single cell with a list-like object may not yet be supported by polars."
+            )
         self._df[row_idx, column_name] = value

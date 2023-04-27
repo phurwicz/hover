@@ -26,6 +26,8 @@ DATAFRAME_VALUE_TEST_CASES = [
     },
 ]
 
+HASHABLE_COLUMNS = ["int", "bool", "str"]
+
 ROW_INDICES_TEST_CASES = [
     [0, 1],
     np.array([0, 1, 3]),
@@ -33,6 +35,19 @@ ROW_INDICES_TEST_CASES = [
     range(0, 10, 2),
     None,
 ]
+
+
+def numpy_to_native(value):
+    """
+    Convert numpy types to native types.
+    """
+    if isinstance(value, np.ndarray):
+        value = value.tolist()
+    elif isinstance(value, np.generic):
+        value = value.item()
+    else:
+        assert isinstance(value, (list, tuple, dict, str, bool, int, float))
+    return value
 
 
 @pytest.mark.lite
@@ -298,6 +313,107 @@ class TestDataframe:
 
     @pytest.mark.parametrize("df_data", DATAFRAME_VALUE_TEST_CASES)
     @pytest.mark.parametrize("indices", ROW_INDICES_TEST_CASES)
+    def test_column_map(self, df_data, indices):
+        for col in HASHABLE_COLUMNS:
+            if col not in df_data.keys():
+                continue
+            df_pd, df_pl, pd_df, pl_df = self._get_dataframes(df_data)
+            mapping = pd_df[col].value_counts().to_dict()
+            indices_list = (
+                list(range(df_pd.shape[0]))
+                if indices is None
+                else convert_indices_to_list(indices, size=df_pd.shape[0])
+            )
+
+            pd_df_series = pd_df.loc[indices_list, col].map(mapping)
+            df_pd_series = df_pd.column_map(
+                col, mapping, indices=indices, format="series"
+            )
+            df_pl_numpy = df_pl.column_map(
+                col, mapping, indices=indices, format="numpy"
+            )
+            df_pl_list = df_pl.column_map(col, mapping, indices=indices, format="list")
+            assert df_pd_series.equals(pd_df_series)
+            assert np.equal(df_pl_numpy, pd_df_series.values).all()
+            assert df_pl_list == pd_df_series.tolist()
+
+            df_pd.column_map(col, mapping, indices=None, as_column="result")
+            df_pl.column_map(col, mapping, indices=None, as_column="result")
+            assert not df_pd().equals(pd_df)
+            assert not df_pl().frame_equal(pl_df)
+            assert df_pd().equals(df_pl.to_pandas())
+
+    @pytest.mark.parametrize("df_data", DATAFRAME_VALUE_TEST_CASES)
+    @pytest.mark.parametrize("indices", ROW_INDICES_TEST_CASES)
+    def test_column_isin(self, df_data, indices):
+        for col in HASHABLE_COLUMNS:
+            if col not in df_data.keys():
+                continue
+            df_pd, df_pl, pd_df, pl_df = self._get_dataframes(df_data)
+            lookup = set(pd_df.loc[::2, col].values)
+            indices_list = (
+                list(range(df_pd.shape[0]))
+                if indices is None
+                else convert_indices_to_list(indices, size=df_pd.shape[0])
+            )
+
+            pd_df_series = pd_df.loc[indices_list, col].isin(lookup)
+            df_pd_series = df_pd.column_isin(
+                col, lookup, indices=indices, format="series"
+            )
+            df_pl_numpy = df_pl.column_isin(
+                col, lookup, indices=indices, format="numpy"
+            )
+            df_pl_list = df_pl.column_isin(col, lookup, indices=indices, format="list")
+            assert df_pd_series.equals(pd_df_series)
+            assert np.equal(df_pl_numpy, pd_df_series.values).all()
+            assert df_pl_list == pd_df_series.tolist()
+
+            df_pd.column_isin(col, lookup, indices=None, as_column="result")
+            df_pl.column_isin(col, lookup, indices=None, as_column="result")
+            assert not df_pd().equals(pd_df)
+            assert not df_pl().frame_equal(pl_df)
+            assert df_pd().equals(df_pl.to_pandas())
+
+    @pytest.mark.parametrize("df_data", DATAFRAME_VALUE_TEST_CASES)
+    @pytest.mark.parametrize("indices", ROW_INDICES_TEST_CASES)
+    def test_column_apply(self, df_data, indices):
+        df_tmp, _, _, _ = self._get_dataframes(df_data)
+
+        def func(x):
+            if isinstance(x, (str, int, float)):
+                return x * 2
+            elif hasattr(x, "__iter__"):
+                return sum(x)
+            else:
+                return str(x)
+
+        for col in df_tmp.columns:
+            df_pd, df_pl, pd_df, pl_df = self._get_dataframes(df_data)
+            indices_list = (
+                list(range(df_pd.shape[0]))
+                if indices is None
+                else convert_indices_to_list(indices, size=df_pd.shape[0])
+            )
+
+            pd_df_series = pd_df.loc[indices_list, col].apply(func)
+            df_pd_series = df_pd.column_apply(
+                col, func, indices=indices, format="series"
+            )
+            df_pl_numpy = df_pl.column_apply(col, func, indices=indices, format="numpy")
+            df_pl_list = df_pl.column_apply(col, func, indices=indices, format="list")
+            assert df_pd_series.equals(pd_df_series)
+            assert np.equal(df_pl_numpy, pd_df_series.values).all()
+            assert df_pl_list == pd_df_series.tolist()
+
+            df_pd.column_apply(col, func, indices=None, as_column="result")
+            df_pl.column_apply(col, func, indices=None, as_column="result")
+            assert not df_pd().equals(pd_df)
+            assert not df_pl().frame_equal(pl_df)
+            assert df_pd().equals(df_pl.to_pandas())
+
+    @pytest.mark.parametrize("df_data", DATAFRAME_VALUE_TEST_CASES)
+    @pytest.mark.parametrize("indices", ROW_INDICES_TEST_CASES)
     def test_row_apply(self, df_data, indices):
         df_pd, df_pl, pd_df, pl_df = self._get_dataframes(df_data)
         indices_list = (
@@ -309,18 +425,13 @@ class TestDataframe:
         def func(row):
             return str(row["int"])
 
-        pd_result_series = pd_df.loc[indices_list].apply(func, axis=1)
-        assert df_pd.row_apply(func, indices=indices, format="series").equals(
-            pd_result_series
-        )
-        assert np.equal(
-            df_pl.row_apply(func, indices=indices, format="numpy"),
-            pd_result_series.values,
-        ).all()
-        assert (
-            df_pl.row_apply(func, indices=indices, format="list")
-            == pd_result_series.tolist()
-        )
+        pd_df_series = pd_df.loc[indices_list].apply(func, axis=1)
+        df_pd_series = df_pd.row_apply(func, indices=indices, format="series")
+        df_pl_numpy = df_pl.row_apply(func, indices=indices, format="numpy")
+        df_pl_list = df_pl.row_apply(func, indices=indices, format="list")
+        assert df_pd_series.equals(pd_df_series)
+        assert np.equal(df_pl_numpy, pd_df_series.values).all()
+        assert df_pl_list == pd_df_series.tolist()
 
         df_pd.row_apply(func, indices=None, as_column="result")
         df_pl.row_apply(func, indices=None, as_column="result")
@@ -328,27 +439,48 @@ class TestDataframe:
         assert not df_pl().frame_equal(pl_df)
         assert df_pd().equals(df_pl.to_pandas())
 
-    """
-    The tests below have not yet included polars.
-    """
-
     @pytest.mark.parametrize("df_data", DATAFRAME_VALUE_TEST_CASES)
     def test_get_cell_by_row_column(self, df_data):
-        df = PandasDataframe.construct(df_data)
-        pd_df = pd.DataFrame(df_data)
-        row = np.random.randint(0, df.shape[0])
-        col = np.random.choice(df.columns)
-        assert df.get_cell_by_row_column(row, col) == pd_df.at[row, col]
+        df_pd, df_pl, pd_df, pl_df = self._get_dataframes(df_data)
+        for col in df_pd.columns:
+            row = np.random.randint(0, df_pd.shape[0])
+
+            df_pd_val = df_pd.get_cell_by_row_column(row, col)
+            df_pl_val = df_pl.get_cell_by_row_column(row, col)
+            pd_df_val = pd_df.at[row, col]
+            pl_df_val = pl_df.row(row, named=True)[col]
+
+            if isinstance(df_pd_val, np.ndarray):
+                assert np.equal(df_pd_val, df_pl_val).all()
+                assert np.equal(df_pd_val, pd_df_val).all()
+                assert np.equal(df_pd_val, pl_df_val).all()
+            else:
+                assert df_pd_val == df_pl_val == pd_df_val == pl_df_val
 
     @pytest.mark.parametrize("df_data", DATAFRAME_VALUE_TEST_CASES)
     def test_set_cell_by_row_column(self, df_data):
-        df = PandasDataframe.construct(df_data)
-        pd_df = pd.DataFrame(df_data)
-        row = np.random.randint(0, df.shape[0])
-        col = np.random.choice(df.columns)
-        old_value = df.get_cell_by_row_column(row, col)
-        value = df.get_cell_by_row_column(df.shape[0] - 1 - row, col)
-        df.set_cell_by_row_column(row, col, value)
-        assert old_value == pd_df.at[row, col]
-        pd_df.at[row, col] = value
-        assert df.get_cell_by_row_column(row, col) == pd_df.at[row, col]
+        df_pd, df_pl, pd_df, pl_df = self._get_dataframes(df_data)
+        for col in df_pd.columns:
+            row = np.random.randint(0, df_pd.shape[0] // 2)
+            old_value = df_pd.get_cell_by_row_column(row, col)
+            value = df_pd.get_cell_by_row_column(df_pd.shape[0] - 1 - row, col)
+            value = numpy_to_native(value)
+
+            # as of Apr 2023: pyarrow does not support assigning a list to a polars cell
+            tolerated = pl.exceptions.ArrowError if isinstance(value, list) else None
+
+            try:
+                df_pd.set_cell_by_row_column(row, col, value)
+                df_pl.set_cell_by_row_column(row, col, value)
+                assert pd_df.at[row, col] == pl_df[row, col] == old_value
+
+                df_pd_val = df_pd.get_cell_by_row_column(row, col)
+                df_pl_val = df_pl.get_cell_by_row_column(row, col)
+                assert df_pd_val == df_pl_val == value
+
+                pd_df.at[row, col] = value
+                pl_df[row, col] = value
+                self._assert_equivalent_dataframes(df_pd(), df_pl(), pd_df, pl_df)
+            except Exception as e:
+                if tolerated is None or not isinstance(e, tolerated):
+                    raise e
