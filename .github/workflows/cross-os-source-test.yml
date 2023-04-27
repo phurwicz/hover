@@ -36,4 +36,4 @@ jobs:
 
     - name: Test - alt config 1
       run: |
-        tox -e test_api --hover-ini tests/module_config/hover_alt_config_1.ini
+        tox -e test_api -- --hover-ini tests/module_config/hover_alt_config_1.ini
