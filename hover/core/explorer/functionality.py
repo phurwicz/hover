@@ -662,9 +662,7 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
                 )
                 return
 
-            labels = DF.series_values(
-                self.dfs["raw"].row_apply(lf, indices=selected_idx)
-            )
+            labels = self.dfs["raw"].row_apply(lf, indices=selected_idx, format="numpy")
             num_nontrivial = len(list(filter(lambda l: l != ABSTAIN_DECODED, labels)))
 
             # update label in both the df and the data source
@@ -701,8 +699,8 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
 
             for _key, _source in self.sources.items():
                 _selected = _source.selected.indices
-                _labels = DF.series_values(
-                    self.dfs[_key].row_apply(lf, indices=_selected)
+                _labels = self.dfs[_key].row_apply(
+                    lf, indices=_selected, format="numpy"
                 )
                 _kept = [
                     _idx
@@ -809,8 +807,8 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
         assert lf_name in self.lf_data, f"trying to refresh non-existing LF: {lf_name}"
 
         lf = self.lf_data[lf_name]["lf"]
-        L_raw = DF.series_values(self.dfs["raw"].row_apply(lf))
-        L_labeled = DF.series_values(self.dfs["labeled"].row_apply(lf))
+        L_raw = self.dfs["raw"].row_apply(lf, format="numpy")
+        L_labeled = self.dfs["labeled"].row_apply(lf, format="numpy")
 
         glyph_codes = self.lf_data[lf_name]["glyphs"].keys()
         if "C" in glyph_codes:
@@ -852,9 +850,9 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
 
         # calculate predicted labels if not provided
         if L_raw is None:
-            L_raw = DF.series_values(self.dfs["raw"].row_apply(lf))
+            L_raw = self.dfs["raw"].row_apply(lf, format="numpy")
         if L_labeled is None:
-            L_labeled = DF.series_values(self.dfs["labeled"].row_apply(lf))
+            L_labeled = self.dfs["labeled"].row_apply(lf, format="numpy")
 
         # prepare plot settings
         assert self.palette, f"Palette depleted, # LFs: {len(self.lf_data)}"
