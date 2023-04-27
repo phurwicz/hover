@@ -91,12 +91,12 @@ def dummy_labeling_function_list():
 
     @labeling_function(targets=["rec.autos"])
     def auto_keywords(row):
-        flag = re.search(r"(wheel|diesel|gasoline|automobile|vehicle)", row.text)
+        flag = re.search(r"(wheel|diesel|gasoline|automobile|vehicle)", row["text"])
         return "rec.autos" if flag else ABSTAIN_DECODED
 
     @labeling_function(targets=["rec.sport.baseball"])
     def baseball_keywords(row):
-        flag = re.search(r"(baseball|stadium|\ bat\ |\ base\ )", row.text)
+        flag = re.search(r"(baseball|stadium|\ bat\ |\ base\ )", row["text"])
         return "rec.sport.baseball" if flag else ABSTAIN_DECODED
 
     lf_list = [auto_keywords, baseball_keywords]

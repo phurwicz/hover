@@ -8,6 +8,7 @@
 import re
 import numpy as np
 import hover.core.explorer as hovex
+from hover.module_config import DataFrame as DF
 from bokeh.layouts import row, column
 from bokeh.models import Button
 from rich.console import Console
@@ -287,7 +288,7 @@ def active_learning_components(dataset, vecnet, **kwargs):
         use_subsets = ("raw", "train", "dev")
         inps = []
         for _key in use_subsets:
-            inps.extend(dataset.subset(_key)[feature_key].tolist())
+            inps.extend(DF.series_tolist(dataset.subset(_key)[feature_key]))
 
         probs = vecnet.predict_proba(inps)
         labels = [dataset.label_decoder[_val] for _val in probs.argmax(axis=-1)]
