@@ -12,6 +12,20 @@ from collections import Counter
 from functools import wraps
 
 
+TYPE_TO_POLARS = {
+    int: pl.Int64,
+    float: pl.Float64,
+    str: pl.Utf8,
+    bool: pl.Boolean,
+    np.int64: pl.Int64,
+    np.float64: pl.Float64,
+    pd.Int64Dtype: pl.Int64,
+    pd.Float64Dtype: pl.Float64,
+    pd.StringDtype: pl.Utf8,
+    pd.BooleanDtype: pl.Boolean,
+}
+
+
 def sametype(func):
     @wraps(func)
     def wrapper(obj, *args, **kwargs):
@@ -104,7 +118,7 @@ class AbstractDataframe(ABC):
         return self.__class__(self._df[columns])
 
     @classmethod
-    def empty_with_columns(cls, columns):
+    def empty_with_columns(cls, column_to_default):
         raise NotImplementedError
 
     @classmethod
@@ -164,10 +178,6 @@ class AbstractDataframe(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def _pre_apply(self, indices, as_column):
-        raise NotImplementedError
-
-    @abstractmethod
     def column_map(self, column, mapping, indices=None, as_column=None, format="numpy"):
         raise NotImplementedError
 
@@ -202,8 +212,8 @@ class PandasDataframe(AbstractDataframe):
     DF_TYPE = pd.DataFrame
 
     @classmethod
-    def empty_with_columns(cls, columns):
-        return cls(pd.DataFrame(columns=columns))
+    def empty_with_columns(cls, column_to_type):
+        return cls(pd.DataFrame(columns=column_to_type.keys()))
 
     @classmethod
     def vertical_concat(cls, df_list):
@@ -255,6 +265,8 @@ class PandasDataframe(AbstractDataframe):
         if indices is None:
             return self
         indices = convert_indices_to_list(indices, self.shape[0])
+        if len(indices) == 0:
+            return pd.DataFrame(columns=self.columns)
         return self._df.iloc[indices]
 
     @sametype
@@ -352,14 +364,33 @@ class PolarsDataframe(AbstractDataframe):
     DF_TYPE = pl.DataFrame
 
     @classmethod
-    def empty_with_columns(cls, columns):
-        return cls(pl.DataFrame({col: [] for col in columns}))
+    def empty_with_columns(cls, column_to_type):
+        return cls(
+            pl.DataFrame(
+                schema={
+                    col: TYPE_TO_POLARS[_type] for col, _type in column_to_type.items()
+                },
+            )
+        )
 
     @classmethod
     def vertical_concat(cls, df_list):
+        schema = None
+        pl_list = []
         for _df in df_list:
             assert isinstance(_df, cls), f"df must be of type {cls}"
-        pl_list = [df() for df in df_list]
+            _pl = _df()
+            if _pl.shape[0] == 0:
+                continue
+            if schema is None:
+                schema = _pl.schema
+            else:
+                assert (
+                    schema == _pl.schema
+                ), f"all dataframes must have same schema, got {schema} and {_pl.schema}"
+            pl_list.append(_pl)
+
+        assert schema is not None, "all dataframes were empty"
         return cls(pl.concat(pl_list, how="vertical"))
 
     @classmethod
@@ -402,13 +433,16 @@ class PolarsDataframe(AbstractDataframe):
 
     @sametype
     def select_rows(self, indices):
+        indices = convert_indices_to_list(indices, size=self._df.shape[0])
+        if len(indices) == 0:
+            return self._df.head(0)
         return self._df[indices]
 
     @sametype
     def filter_rows_by_operator(self, column, operator, value):
-        mask = operator(self._df[column], value)
+        mask = self.__class__.series_values(operator(self._df[column], value))
         indices = np.where(mask)[0]
-        return self._df[indices]
+        return self.select_rows(indices)
 
     @sametype
     def unique(self, subset, keep):
@@ -477,9 +511,20 @@ class PolarsDataframe(AbstractDataframe):
             self._df = self._df.with_columns(series.alias(as_column))
             return
 
+    def _get_return_type(self, value):
+        original_type = type(value)
+        if original_type not in TYPE_TO_POLARS:
+            raise TypeError(f"Unsupported return type: {original_type} for {value}")
+        return TYPE_TO_POLARS[original_type]
+
     def column_map(self, column, mapping, indices=None, as_column=None, format="numpy"):
         subject, _ = self._pre_apply(indices, as_column)
-        series = subject[column].map_dict(mapping)
+        example_value = list(mapping.values())[0]
+        dtype = self._get_return_type(example_value)
+        if self.shape[0] > 0:
+            series = subject[column].map_dict(mapping, return_dtype=dtype)
+        else:
+            series = pl.Series([], dtype=dtype)
         return self._post_apply(series, as_column, format)
 
     def column_isin(self, column, lookup, indices=None, as_column=None, format="numpy"):
@@ -491,23 +536,36 @@ class PolarsDataframe(AbstractDataframe):
         self, column, function, indices=None, as_column=None, format="numpy"
     ):
         subject, _ = self._pre_apply(indices, as_column)
-        example_value = function(self.get_cell_by_row_column(0, column))
-        dtype = type(example_value)
-        series = subject[column].apply(function, return_dtype=dtype)
+        if self.shape[0] > 0:
+            example_value = function(self.get_cell_by_row_column(0, column))
+            dtype = self._get_return_type(example_value)
+            series = subject[column].apply(function, return_dtype=dtype)
+        else:
+            series = pl.Series([])
         return self._post_apply(series, as_column, format)
 
     def row_apply(self, function, indices=None, as_column=None, format="numpy"):
         # determine the return type for df.apply
-        example_value = function(self._df.row(0, named=True))
-        dtype = type(example_value)
+        if self.shape[0] > 0:
+            example_value = function(self._df.row(0, named=True))
+            dtype = self._get_return_type(example_value)
+        else:
+            dtype = None
 
         subject, col = self._pre_apply(indices, as_column)
+
+        # handle empty subject
+        if subject.shape[0] == 0:
+            if as_column is None:
+                return self.__class__.series_to_format(pl.Series([]), format)
+            else:
+                self._df = self._df.with_columns(pl.Series([]).alias(as_column))
+                return
 
         # create the function to be applied
         to_apply = (
             pl.struct(self._df.columns).apply(function, return_dtype=dtype).alias(col)
         )
-
         # apply the function
         if as_column is None:
             series = subject.with_columns(to_apply)[col]

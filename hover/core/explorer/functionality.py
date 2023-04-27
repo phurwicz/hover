@@ -271,20 +271,20 @@ class BokehSoftLabelExplorer(BokehBaseExplorer):
             )
         return specified
 
-    def _mandatory_column_defaults(self):
+    def _mandatory_column_info(self):
         """
-        ???+ note "Mandatory columns and default values."
+        ???+ note "Mandatory columns, types, and default values."
 
             If default value is None, will raise exception if the column is not found.
         """
-        column_to_value = super()._mandatory_column_defaults()
-        column_to_value.update(
+        column_info = super()._mandatory_column_info()
+        column_info.update(
             {
-                self.label_col: ABSTAIN_DECODED,
-                self.score_col: 0.5,
+                self.label_col: {"type": str, "default": ABSTAIN_DECODED},
+                self.score_col: {"type": float, "default": 0.5},
             }
         )
-        return column_to_value
+        return column_info
 
     def _postprocess_sources(self):
         """
@@ -441,17 +441,17 @@ class BokehMarginExplorer(BokehBaseExplorer):
         self.label_col_b = label_col_b
         super().__init__(df_dict, **kwargs)
 
-    def _mandatory_column_defaults(self):
+    def _mandatory_column_info(self):
         """
         ???+ note "Mandatory columns and default values."
 
             If default value is None, will raise exception if the column is not found.
         """
-        column_to_value = super()._mandatory_column_defaults()
+        column_to_value = super()._mandatory_column_info()
         column_to_value.update(
             {
-                self.label_col_a: None,
-                self.label_col_b: None,
+                self.label_col_a: {"type": str, "default": None},
+                self.label_col_b: {"type": str, "default": None},
             }
         )
         return column_to_value
@@ -474,8 +474,8 @@ class BokehMarginExplorer(BokehBaseExplorer):
 
             # create agreement/increment/decrement subsets
             # note: comparing series with constant is the same in pandas/polars
-            mask_a = self.dfs[_key][self.label_col_a] == label
-            mask_b = self.dfs[_key][self.label_col_b] == label
+            mask_a = DF.series_values(self.dfs[_key][self.label_col_a] == label)
+            mask_b = DF.series_values(self.dfs[_key][self.label_col_b] == label)
             col_a_pos = np.where(mask_a)[0].tolist()
             col_a_neg = np.where(np.logical_not(mask_a))[0].tolist()
             col_b_pos = np.where(mask_b)[0].tolist()

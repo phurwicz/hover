@@ -23,7 +23,10 @@ class BokehForText(BokehBaseExplorer):
     """
 
     PRIMARY_FEATURE = "text"
-    MANDATORY_COLUMNS = [PRIMARY_FEATURE, "label"]
+    MANDATORY_COLUMN_TO_TYPE_DEFAULT = {
+        PRIMARY_FEATURE: (str, None),
+        "label": (str, None),
+    }
     TOOLTIP_KWARGS = {
         "label": {"label": "Label"},
         "text": {"text": "Text"},
@@ -174,7 +177,10 @@ class BokehForAudio(BokehForUrlToVector):
     """
 
     PRIMARY_FEATURE = "audio"
-    MANDATORY_COLUMNS = [PRIMARY_FEATURE, "label"]
+    MANDATORY_COLUMN_TO_TYPE_DEFAULT = {
+        PRIMARY_FEATURE: (str, None),
+        "label": (str, None),
+    }
     TOOLTIP_KWARGS = {
         "label": {"label": "Label"},
         "audio": {"audio": ""},
@@ -197,7 +203,10 @@ class BokehForImage(BokehForUrlToVector):
     """
 
     PRIMARY_FEATURE = "image"
-    MANDATORY_COLUMNS = [PRIMARY_FEATURE, "label"]
+    MANDATORY_COLUMN_TO_TYPE_DEFAULT = {
+        PRIMARY_FEATURE: (str, None),
+        "label": (str, None),
+    }
     TOOLTIP_KWARGS = {
         "label": {"label": "Label"},
         "image": {"image": TOOLTIP_IMG_STYLE},

@@ -2,6 +2,7 @@ from hover.utils.dataframe import (
     PandasDataframe,
     PolarsDataframe,
     convert_indices_to_list,
+    TYPE_TO_POLARS,
 )
 from pprint import pformat
 import numpy as np
@@ -30,6 +31,7 @@ HASHABLE_COLUMNS = ["int", "bool", "str"]
 
 ROW_INDICES_TEST_CASES = [
     [0, 1],
+    [],
     np.array([0, 1, 3]),
     slice(0, 10, 2),
     range(0, 10, 2),
@@ -106,16 +108,20 @@ class TestDataframe:
         assert df_pd.shape == df_pd().shape == df_pl.shape == df_pl().shape
 
     def test_empty_with_columns(self):
-        columns = ["a", "b"]
+        column_to_type = {"a": str, "b": int, "c": bool}
 
-        df_pd = PandasDataframe.empty_with_columns(columns)
-        df_pl = PolarsDataframe.empty_with_columns(columns)
-        pd_df = pd.DataFrame(columns=columns)
-        pl_df = pl.DataFrame({_col: [] for _col in columns})
+        df_pd = PandasDataframe.empty_with_columns(column_to_type)
+        df_pl = PolarsDataframe.empty_with_columns(column_to_type)
+        pd_df = pd.DataFrame(columns=column_to_type.keys())
+        pl_df = pl.DataFrame(
+            schema={
+                col: TYPE_TO_POLARS[_type] for col, _type in column_to_type.items()
+            },
+        )
 
         assert df_pd().equals(pd_df)
         assert df_pl().frame_equal(pl_df)
-        assert df_pd.shape == df_pl.shape == (0, 2)
+        assert df_pd.shape == df_pl.shape == (0, 3)
 
     @pytest.mark.parametrize("df_data", DATAFRAME_VALUE_TEST_CASES)
     def test_vertical_concat(self, df_data):
@@ -214,25 +220,29 @@ class TestDataframe:
             pass
 
     @pytest.mark.parametrize("df_data", DATAFRAME_VALUE_TEST_CASES)
-    def test_select_rows(self, df_data):
+    @pytest.mark.parametrize("indices", ROW_INDICES_TEST_CASES)
+    def test_select_rows(self, df_data, indices):
+        if indices is None:
+            return
+
         df_pd, df_pl, pd_df, pl_df = self._get_dataframes(df_data)
 
-        for _arg in [
-            [0, 1],
-            np.array([0, 1, 3]),
-            slice(0, 10, 2),
-            range(0, 10, 2),
-        ]:
-            _df_pd_rows = df_pd.select_rows(_arg)()
-            _df_pl_rows = df_pl.select_rows(_arg)()
-            _pd_df_rows = pd_df.iloc[_arg]
-            _pl_df_rows = pl_df[_arg]
-            self._assert_equivalent_dataframes(
-                _df_pd_rows,
-                _df_pl_rows,
-                _pd_df_rows,
-                _pl_df_rows,
-            )
+        df_pd_rows = df_pd.select_rows(indices)()
+        df_pl_rows = df_pl.select_rows(indices)()
+
+        indices_list = convert_indices_to_list(indices, size=df_pd.shape[0])
+        if len(indices_list) == 0:
+            pd_df_rows = pd.DataFrame(columns=pd_df.columns)
+            pl_df_rows = pl.DataFrame({}, schema=pl_df.schema)
+        else:
+            pd_df_rows = pd_df.iloc[indices_list]
+            pl_df_rows = pl_df[indices_list]
+        self._assert_equivalent_dataframes(
+            df_pd_rows,
+            df_pl_rows,
+            pd_df_rows,
+            pl_df_rows,
+        )
 
     @pytest.mark.parametrize("df_data", DATAFRAME_VALUE_TEST_CASES)
     def test_filter_rows_by_operator(self, df_data):
@@ -319,6 +329,10 @@ class TestDataframe:
                 continue
             df_pd, df_pl, pd_df, pl_df = self._get_dataframes(df_data)
             mapping = pd_df[col].value_counts().to_dict()
+            if col == "str":
+                mapping = {
+                    _k: "#b0b0b0" for _k in pd_df[col].value_counts().to_dict().keys()
+                }
             indices_list = (
                 list(range(df_pd.shape[0]))
                 if indices is None
