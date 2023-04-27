@@ -22,6 +22,34 @@ def sametype(func):
     return wrapper
 
 
+def convert_indices_to_list(indices, size):
+    if isinstance(indices, list):
+        return indices
+    elif isinstance(indices, np.ndarray):
+        return indices.astype(int).tolist()
+    elif isinstance(indices, slice):
+        assert isinstance(
+            size, int
+        ), f"size must be provided for slice indices, got {size}."
+        return list(range(*indices.indices(size)))
+    else:
+        try:
+            return list(indices)
+        except Exception:
+            raise NotImplementedError(f"Indices type {type(indices)} is not supported.")
+
+
+def array_length_check(array, target_length):
+    if hasattr(array, "__len__"):
+        assert (
+            len(array) == target_length
+        ), f"length mismatch: {len(array)} != {target_length}"
+    if hasattr(array, "shape"):
+        assert (
+            array.shape[0] == target_length
+        ), f"length mismatch: {array.shape[0]} != {target_length}"
+
+
 class AbstractDataframe(ABC):
     """
     ???+ note "An abstract class for hover-specific dataframe operations."
@@ -107,7 +135,7 @@ class AbstractDataframe(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def row(self, index):
+    def get_row_as_dict(self, index):
         raise NotImplementedError
 
     @abstractmethod
@@ -131,7 +159,7 @@ class AbstractDataframe(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def row_apply(self, function, indices=None):
+    def row_apply(self, function, indices=None, as_column=None, format="numpy"):
         raise NotImplementedError
 
     @abstractmethod
@@ -182,18 +210,15 @@ class PandasDataframe(AbstractDataframe):
     def to_list_of_dicts(self):
         return self._df.to_dict(orient="records")
 
-    def row(self, index):
+    def get_row_as_dict(self, index):
         assert isinstance(index, int), f"index must be int, not {type(index)}"
-        return self._df.iloc[index]
+        return self._df.iloc[index].to_dict()
 
     @sametype
     def select_rows(self, indices):
-        assert (
-            isinstance(indices, list)
-            or isinstance(indices, np.ndarray)
-            or isinstance(indices, slice)
-            or isinstance(indices, range)
-        ), f"indices must be list, np.ndarray, or slice, not {type(indices)}"
+        if indices is None:
+            return self
+        indices = convert_indices_to_list(indices, self.shape[0])
         return self._df.iloc[indices]
 
     @sametype
@@ -211,30 +236,53 @@ class PandasDataframe(AbstractDataframe):
         if indices is None:
             self._df[column] = value
         else:
+            # use conversion to avoid pandas loc taking inclusive slice
+            indices = convert_indices_to_list(indices, self.shape[0])
             self._df.loc[indices, column] = value
 
     def set_column_by_array(self, column, values, indices=None):
         assert not np.isscalar(values), f"values must be array-like, not {type(values)}"
-        target_length = self._df.shape[0] if indices is None else len(indices)
-        if hasattr(values, "__len__"):
-            assert (
-                len(values) == target_length
-            ), f"length mismatch: {len(values)} != {self._df.shape[0]}"
-        if hasattr(values, "shape"):
-            assert (
-                values.shape[0] == target_length
-            ), f"length mismatch: {values.shape[0]} != {self._df.shape[0]}"
+        if indices is None:
+            target_length = self._df.shape[0]
+        else:
+            # use conversion to avoid pandas loc taking inclusive slice
+            indices = convert_indices_to_list(indices, self.shape[0])
+            target_length = len(indices)
+
+        array_length_check(values, target_length)
 
         if indices is None:
             self._df[column] = values
         else:
+            # use conversion to avoid pandas loc taking inclusive slice
+            indices = convert_indices_to_list(indices, self.shape[0])
             self._df.loc[indices, column] = values
 
-    def row_apply(self, function, indices=None):
+    def row_apply(self, function, indices=None, as_column=None, format="numpy"):
         if indices is None:
-            return self._df.apply(function, axis=1)
+            series = self._df.apply(function, axis=1)
+            if as_column is not None:
+                assert isinstance(
+                    as_column, str
+                ), f"as_column must be str, got {type(as_column)}"
+                self._df[as_column] = series
+                return
         else:
-            return self._df.iloc[indices].apply(function, axis=1)
+            assert (
+                as_column is None
+            ), f"as_column must be None when indices are specifed, got {as_column}"
+            series = self._df.iloc[indices].apply(function, axis=1)
+
+        if format == "numpy":
+            return series.values
+        elif format == "list":
+            return series.tolist()
+        elif format == "series":
+            return series
+        else:
+            raise ValueError(
+                f"format must be 'numpy', 'list', or 'series', got {format}"
+            )
 
     def get_cell_by_row_column(self, row_idx, column_name):
         return self._df.at[row_idx, column_name]
@@ -282,9 +330,9 @@ class PolarsDataframe(AbstractDataframe):
     def to_list_of_dicts(self):
         return self._df.to_dicts()
 
-    def row(self, index):
+    def get_row_as_dict(self, index):
         assert isinstance(index, int), f"index must be int, not {type(index)}"
-        return self._df[index]
+        return self._df.row(index, named=True)
 
     @sametype
     def select_rows(self, indices):
@@ -304,23 +352,76 @@ class PolarsDataframe(AbstractDataframe):
         if indices is None:
             self._df = self._df.with_columns(pl.lit(value).alias(column))
         else:
-            self._df = self._df.with_columns(
-                pl.when(pl.col("index").is_in(indices))
+            # handle slice / array and convert to lookup
+            indices = set(convert_indices_to_list(indices, size=self._df.shape[0]))
+
+            # create a temporary index column for predicating
+            tmp_index_col = "index"
+            while tmp_index_col in self._df.columns:
+                tmp_index_col += "_"
+            tmp_df = self._df.with_columns(
+                pl.arange(0, self._df.shape[0]).alias(tmp_index_col)
+            )
+
+            self._df = tmp_df.with_columns(
+                pl.when(pl.col(tmp_index_col).is_in(indices))
                 .then(pl.lit(value))
                 .otherwise(pl.col(column))
                 .alias(column)
-            )
+            ).drop(tmp_index_col)
 
     def set_column_by_array(self, column, values, indices=None):
         if indices is None:
             self._df = self._df.with_columns(pl.Series(values).alias(column))
         else:
-            raise NotImplementedError(
-                "Column-list partial assign is a to-do for polars."
+            indices = convert_indices_to_list(indices, size=self._df.shape[0])
+            array_length_check(values, len(indices))
+            lookup = dict(zip(indices, values))
+            patch = pl.DataFrame(
+                {
+                    column: [lookup.get(i, None) for i in range(self._df.shape[0])],
+                }
             )
+            self._df = self._df.update(patch)
 
-    def row_apply(self, function, indices=None):
-        raise NotImplementedError("Row-wise apply is a to-do for polars.")
+    def row_apply(self, function, indices=None, as_column=None, format="numpy"):
+        # determine the column name for the result
+        if as_column is None:
+            col_name = "result"
+            while col_name in self._df.columns:
+                col_name += "_"
+        else:
+            assert isinstance(
+                as_column, str
+            ), f"as_column must be str, got {type(as_column)}"
+            assert (
+                indices is None
+            ), f"as_column must be None when indices are specifed, got {as_column}"
+            col_name = as_column
+
+        # create the function to be applied
+        to_apply = pl.struct(self._df.columns).apply(function).alias("result")
+
+        # apply the function
+        if as_column is None:
+            if indices is None:
+                series = self._df.with_columns(to_apply)[col_name]
+            else:
+                series = self.select_rows(indices)().with_columns(to_apply)[col_name]
+
+            if format == "numpy":
+                return series.to_numpy()
+            elif format == "list":
+                return series.to_list()
+            elif format == "series":
+                return series
+            else:
+                raise ValueError(
+                    f"format must be 'numpy', 'list', or 'series', got {format}"
+                )
+        else:
+            self._df = self._df.with_columns(to_apply)
+            return
 
     def get_cell_by_row_column(self, row_idx, column_name):
         return self._df[row_idx, column_name]
