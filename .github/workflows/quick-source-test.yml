@@ -47,11 +47,18 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-${{ runner.python-version }}-tox-env-
 
-    - name: Test and make coverage report
+    - name: Get dependencies
       run: |
         pip install --upgrade pip
         pip install --upgrade tox tox-gh-actions
+
+    - name: Test - default config
+      run: |
         tox -e test_api
+
+    - name: Test - alt config 1
+      run: |
+        tox -e test_api --hover-ini tests/module_config/hover_alt_config_1.ini
 
     - name: Codacy Coverage Reporter
       uses: codacy/codacy-coverage-reporter-action@master

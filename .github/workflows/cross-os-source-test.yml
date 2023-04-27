@@ -25,8 +25,15 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
 
-    - name: Test with Tox
+    - name: Get dependencies
       run: |
         pip install --upgrade pip
         pip install --upgrade tox tox-gh-actions
+
+    - name: Test - default config
+      run: |
         tox -e test_api
+
+    - name: Test - alt config 1
+      run: |
+        tox -e test_api --hover-ini tests/module_config/hover_alt_config_1.ini
