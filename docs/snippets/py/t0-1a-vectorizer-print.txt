@@ -1,4 +1,4 @@
-text = dataset.dfs["raw"]()[0, "text"]
+text = dataset.dfs["raw"]().loc[0, "text"]
 vec = vectorizer(text)
 print(f"Text: {text}")
 print(f"Vector shape: {vec.shape}")
