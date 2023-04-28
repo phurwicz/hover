@@ -918,7 +918,7 @@ class SupervisableDataset(Loggable):
         batch_size = min(batch_size, df.shape[0])
 
         # prepare output vectors
-        labels = df.column_map("label", self.label_encoder, format="list")
+        labels = df.column_map("label", self.label_encoder, form="list")
         output_vectors = one_hot(labels, num_classes=len(self.classes))
         if smoothing_coeff > 0.0:
             output_vectors = label_smoothing(
