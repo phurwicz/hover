@@ -166,7 +166,7 @@ class AbstractDataframe(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def unique(self):
+    def unique(self, subset, keep):
         raise NotImplementedError
 
     @abstractmethod
@@ -200,7 +200,7 @@ class AbstractDataframe(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def set_cell_by_row_column(self, row_idx, column_name):
+    def set_cell_by_row_column(self, row_idx, column_name, value):
         raise NotImplementedError
 
 

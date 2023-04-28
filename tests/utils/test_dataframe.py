@@ -207,7 +207,7 @@ class TestDataframe:
         pd_row = pd_df.iloc[0].to_dict()
         pl_row = pl_df.row(0, named=True)
 
-        row_pd == row_pl == pd_row == pl_row
+        assert row_pd == row_pl == pd_row == pl_row
 
         try:
             _ = df_pd.get_row_as_dict([0, 1])
