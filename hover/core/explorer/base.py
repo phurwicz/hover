@@ -1,7 +1,6 @@
 """
 ???+ note "Base class(es) for ALL explorer implementations."
 """
-import pandas as pd
 from abc import ABC, abstractmethod
 from collections import OrderedDict, defaultdict
 from bokeh.events import SelectionGeometry
@@ -15,6 +14,8 @@ from hover.core.local_config import (
 from hover.utils.bokeh_helper import bokeh_hover_tooltip
 from hover.utils.meta.traceback import RichTracebackABCMeta
 from hover.utils.misc import RootUnionFind
+from hover.utils.typecheck import TypedValueDict
+from hover.module_config import DataFrame
 from .local_config import SEARCH_SCORE_FIELD
 
 STANDARD_PLOT_TOOLS = [
@@ -51,7 +52,7 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
     SELECTION_PROCESSING_STAGES = ["save", "load", "write", "read"]
 
     PRIMARY_FEATURE = None
-    MANDATORY_COLUMNS = ["label"]
+    MANDATORY_COLUMN_TO_TYPE_DEFAULT = {"label": (str, None)}
     TOOLTIP_KWARGS = {
         "label": {"label": "Label"},
         "coords": True,
@@ -285,7 +286,7 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
                     col_patch in _df.columns
                 ), f"Subset {_key} expecting column {col_patch} among columns, got {_df.columns}"
                 # find all array lengths; note that the data subset can be empty
-                _num_patches_seen = _df[col_patch].apply(len).values
+                _num_patches_seen = _df.column_apply(col_patch, len, output="list")
                 assert (
                     len(set(_num_patches_seen)) <= 1
                 ), f"Expecting consistent number of patches, got {_num_patches_seen}"
@@ -309,7 +310,7 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
         def update_patch(attr, old, new):
             for _key, _df in self.dfs.items():
                 # calculate the patch corresponding to slider value
-                _value = [_arr[new] for _arr in _df[col_patch].values]
+                _value = [_arr[new] for _arr in DataFrame.series_values(_df[col_patch])]
                 _slice = slice(_df.shape[0])
                 _patch = {col_original: [(_slice, _value)]}
                 self.sources[_key].patch(_patch)
@@ -317,15 +318,36 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
         slider.on_change("value", update_patch)
         self._good(f"Patching {col_original} using {col_patch}")
 
-    def _mandatory_column_defaults(self):
+    def _mandatory_column_info(self):
         """
-        ???+ note "Mandatory columns and default values."
+        ???+ note "Mandatory columns, types, and default values."
 
             If default value is None, will raise exception if the column is not found.
         """
-        return {_col: None for _col in self.__class__.MANDATORY_COLUMNS}
+        return {
+            _col: {"type": _type, "default": _default}
+            for _col, (
+                _type,
+                _default,
+            ) in self.__class__.MANDATORY_COLUMN_TO_TYPE_DEFAULT.items()
+        }
 
-    def _setup_dfs(self, df_dict, copy=False):
+    @property
+    def dfs(self):
+        """
+        ???+ note "Subset -> DataFrame mapping."
+        """
+        return self._dfs
+
+    @dfs.setter
+    def dfs(self, dfs):
+        assert isinstance(
+            dfs, TypedValueDict
+        ), f"Expected TypedValueDict, got {type(dfs)}"
+        assert not hasattr(self, "_dfs"), "Resetting `dfs` is forbidden."
+        self._dfs = dfs
+
+    def _setup_dfs(self, df_dict):
         """
         ???+ note "Check and store DataFrames **by reference by default**."
             Intended to be extended in child classes for pre/post processing.
@@ -333,9 +355,10 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
             | Param       | Type   | Description                  |
             | :---------- | :----- | :--------------------------- |
             | `df_dict`   | `dict` | `str` -> `DataFrame` mapping |
-            | `copy`      | `bool` | whether to copy `DataFrame`s |
         """
         self._info("Setting up DataFrames")
+        for _df in df_dict.values():
+            assert isinstance(_df, DataFrame), f"Expected DataFrame, got {type(_df)}"
         supplied_keys = set(df_dict.keys())
         expected_keys = set(self.__class__.SUBSET_GLYPH_KWARGS.keys())
 
@@ -345,20 +368,21 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
         expected_not_supplied = expected_keys.difference(supplied_keys)
 
         for _key in supplied_not_expected:
-            self._warn(
-                f"{self.__class__.__name__}.__init__(): got unexpected df key {_key}"
-            )
+            self._warn(f"expected df keys {list(expected_keys)}, not {_key}")
         for _key in expected_not_supplied:
-            self._warn(
-                f"{self.__class__.__name__}.__init__(): missing expected df key {_key}"
-            )
+            self._warn(f"expected df keys {list(expected_keys)}, missing {_key}")
 
         # assign df with column checks
-        self.dfs = dict()
-        mandatory_col_to_default = self._mandatory_column_defaults()
+        if not hasattr(self, "dfs"):
+            self.dfs = TypedValueDict(DataFrame)
+        else:
+            self.dfs.clear()
+
+        mandatory_col_info = self._mandatory_column_info()
         for _key in expected_and_supplied:
             _df = df_dict[_key]
-            for _col, _default in mandatory_col_to_default.items():
+            for _col, _dict in mandatory_col_info.items():
+                _default = _dict["default"]
                 # column exists: all good
                 if _col in _df.columns:
                     continue
@@ -369,12 +393,14 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
                     assert _df.shape[0] == 0, _msg
                 # default value available, will use it to create column
                 else:
-                    _df[_col] = _default
-            self.dfs[_key] = _df.copy() if copy else _df
+                    _df.set_column_by_constant(_col, _default)
+            self.dfs[_key] = _df
 
         # expected dfs must be present
         for _key in expected_not_supplied:
-            _df = pd.DataFrame(columns=list(mandatory_col_to_default.keys()))
+            _df = DataFrame.empty_with_columns(
+                {col: _d["type"] for col, _d in mandatory_col_info.items()}
+            )
             self.dfs[_key] = _df
 
     def _setup_sources(self):
@@ -383,7 +409,10 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
             Intended to be extended in child classes for pre/post processing.
         """
         self._info("Setting up sources")
-        self.sources = {_key: ColumnDataSource(_df) for _key, _df in self.dfs.items()}
+        self.sources = {
+            _key: ColumnDataSource(_df.to_dict_of_lists())
+            for _key, _df in self.dfs.items()
+        }
         self._postprocess_sources()
 
         # initialize attributes that couple with sources
@@ -536,7 +565,7 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
             such as dynamic plotting kwargs, need to be re-assigned.
         """
         for _key in self.dfs.keys():
-            self.sources[_key].data = self.dfs[_key]
+            self.sources[_key].data = self.dfs[_key].to_dict_of_lists()
         self._postprocess_sources()
 
         # reset selections now that source indices may have changed
@@ -846,6 +875,9 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
                 # embedding columns must be the same across subsets
                 assert embedding_cols == _emb_cols, "Inconsistent embedding columns"
         assert (
+            embedding_cols is not None
+        ), f"No embedding columns found: {[_df.columns for _df in self.dfs.values()]}"
+        assert (
             len(embedding_cols) >= 2
         ), f"Expected at least two embedding columns, found {embedding_cols}"
         return embedding_cols
@@ -858,7 +890,7 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
 
         labels = set()
         for _key in self.dfs.keys():
-            labels = labels.union(set(self.dfs[_key]["label"].values))
+            labels = labels.union(set(DataFrame.series_values(self.dfs[_key]["label"])))
 
         return auto_label_color(labels)
 

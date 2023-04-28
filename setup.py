@@ -31,6 +31,8 @@ setuptools.setup(
         "torch>=1.10.0",
         # data handling
         "pandas>=1.3.0",
+        "polars>=0.17.0",
+        "pyarrow>=11.0.0",
         "numpy>=1.22",
         # computations
         "scipy>=1.3.2",
@@ -41,7 +43,7 @@ setuptools.setup(
         # dimensionality reduction: UMAP is included
         "umap-learn>=0.3.10",
         # module config customization
-        "flexmod>=0.1.0",
+        "flexmod>=0.1.2",
         # optional: more dimensionality reduction methods
         # "ivis[cpu]>=1.7",
         # optional: distant supervision

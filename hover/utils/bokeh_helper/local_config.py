@@ -1,3 +1,13 @@
+import hover
+from hover.config_constants import (
+    ConfigSection as Section,
+    ConfigKey as Key,
+)
+
+
+BOKEH_PALETTE = hover.config[Section.VISUAL][Key.BOKEH_PALETTE]
+BOKEH_PALETTE_USAGE = hover.config[Section.VISUAL][Key.BOKEH_PALETTE_USAGE]
+
 TOOLTIP_TEXT_TEMPLATE = """
     <div style="word-wrap: break-word; width: 95%; text-overflow: ellipsis; line-height: 90%">
         <span style="font-size: 11px;">

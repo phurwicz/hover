@@ -1,124 +1,145 @@
 """
 Module root where constants get configured.
 """
-import re
+from .config_constants import (
+    ConfigSection,
+    ConfigKey,
+    Validator,
+    Preprocessor,
+)
 from flexmod import AutolockedConfigValue, Config, ConfigIndex
 from bokeh.palettes import Turbo256
+
 
 config = ConfigIndex(
     [
         Config(
-            "io",
+            ConfigSection.IO,
             [
                 AutolockedConfigValue(
-                    "data_save_dir",
+                    ConfigKey.DATA_SAVE_DIR,
                     "The directory path for saving labeled data.",
                     ".",
-                    validation=lambda x: isinstance(x, str),
+                    validation=Validator.is_str,
                 ),
             ],
         ),
         Config(
-            "visual",
+            ConfigSection.BACKEND,
             [
                 AutolockedConfigValue(
-                    "abstain_hexcolor",
+                    ConfigKey.DATAFRAME_LIBRARY,
+                    "The library to use for internal dataframes. Must be 'pandas' or 'polars'.",
+                    "pandas",
+                    validation=Validator.is_supported_dataframe_library,
+                    preprocessor=Preprocessor.lower,
+                ),
+            ],
+        ),
+        Config(
+            ConfigSection.VISUAL,
+            [
+                AutolockedConfigValue(
+                    ConfigKey.ABSTAIN_HEXCOLOR,
                     "Hex code of RGB color.",
                     "#dcdcdc",
-                    validation=lambda x: bool(re.match(r"^\#[0-9a-fA-F]{6}$", x)),
+                    validation=Validator.is_hex_color,
+                    preprocessor=Preprocessor.lower,
                 ),
                 AutolockedConfigValue(
-                    "bokeh_palette",
+                    ConfigKey.BOKEH_PALETTE,
                     "The bokeh color palette to use for plotting. This should be a list of hex color codes.",
                     Turbo256,
-                    validation=lambda x: hasattr(x, "__iter__"),
+                    validation=Validator.is_iterable_of_hex_color,
                 ),
                 AutolockedConfigValue(
-                    "bokeh_palette_usage",
+                    ConfigKey.BOKEH_PALETTE_USAGE,
                     "Specify how colors from the palette should be chosen when there are fewer categories than colors. This needs to be 'iterate' or 'linspace'",
                     "linspace",
-                    validation=lambda x: x in ["iterate", "linspace"],
+                    validation=Validator.is_supported_traversal_mode,
+                    preprocessor=Preprocessor.lower,
                 ),
                 AutolockedConfigValue(
-                    "table_img_style",
+                    ConfigKey.TABLE_IMG_STYLE,
                     "HTML style of images shown in selection tables.",
                     "max-height: 100%; max-width: 100%; object-fit: contain",
-                    preprocessor=lambda x: re.sub(r"(^[\'\"]|[\'\"]$)", "", x),
+                    preprocessor=Preprocessor.remove_quote_at_ends,
                 ),
                 AutolockedConfigValue(
-                    "tooltip_img_style",
+                    ConfigKey.TOOLTIP_IMG_STYLE,
                     "HTML style of images shown in mouse-over-data-point tooltips.",
                     "float: left; margin: 2px 2px 2px 2px; width: 60px; height: 60px;",
-                    preprocessor=lambda x: re.sub(r"(^[\'\"]|[\'\"]$)", "", x),
+                    preprocessor=Preprocessor.remove_quote_at_ends,
                 ),
             ],
         ),
         Config(
-            "data.embedding",
+            ConfigSection.DATA_EMBEDDING,
             [
                 AutolockedConfigValue(
-                    "default_reduction_method",
+                    ConfigKey.DEFAULT_REDUCTION_METHOD,
                     "Default method for dimensionality reduction. Currently either 'umap' or 'ivis'.",
                     "umap",
-                    validation=lambda x: x in ["umap", "ivis"],
+                    validation=Validator.is_supported_dimensionality_reduction,
+                    preprocessor=Preprocessor.lower,
                 ),
             ],
         ),
         Config(
-            "data.columns",
+            ConfigSection.DATA_COLUMNS,
             [
                 AutolockedConfigValue(
-                    "encoded_label_key",
+                    ConfigKey.ENCODED_LABEL_KEY,
                     "The column name for the encoded label.",
                     "label_encoded",
-                    validation=lambda x: isinstance(x, str),
+                    validation=Validator.is_str,
                 ),
                 AutolockedConfigValue(
-                    "dataset_subset_field",
+                    ConfigKey.DATASET_SUBSET_FIELD,
                     "The column name for dataset subsets.",
                     "SUBSET",
-                    validation=lambda x: isinstance(x, str),
+                    validation=Validator.is_str,
                 ),
                 AutolockedConfigValue(
-                    "embedding_field_prefix",
+                    ConfigKey.EMBEDDING_FIELD_PREFIX,
                     "The prefix of column names for embedding coordinates.",
                     "embed_",
-                    validation=lambda x: isinstance(x, str),
+                    validation=Validator.is_str,
                 ),
                 AutolockedConfigValue(
-                    "source_color_field",
+                    ConfigKey.SOURCE_COLOR_FIELD,
                     "The column name for plotted data point color.",
                     "__COLOR__",
-                    validation=lambda x: isinstance(x, str),
+                    validation=Validator.is_str,
                 ),
                 AutolockedConfigValue(
-                    "source_alpha_field",
+                    ConfigKey.SOURCE_ALPHA_FIELD,
                     "The column name for plotted data point color alpha (opacity).",
                     "__ALPHA__",
-                    validation=lambda x: isinstance(x, str),
+                    validation=Validator.is_str,
                 ),
                 AutolockedConfigValue(
-                    "search_score_field",
+                    ConfigKey.SEARCH_SCORE_FIELD,
                     "The column name for data points' score from search widgets.",
                     "__SEARCH_SCORE__",
-                    validation=lambda x: isinstance(x, str),
+                    validation=Validator.is_str,
                 ),
             ],
         ),
         Config(
-            "data.values",
+            ConfigSection.DATA_VALUES,
             [
                 AutolockedConfigValue(
-                    "abstain_decoded",
+                    ConfigKey.ABSTAIN_DECODED,
                     "The placeholder label indicating 'no label yet'.",
                     "ABSTAIN",
-                    validation=lambda x: isinstance(x, str),
+                    validation=Validator.is_str,
                 ),
                 AutolockedConfigValue(
-                    "abstain_encoded",
+                    ConfigKey.ABSTAIN_ENCODED,
                     "The encoded value of 'no label yet' which should almost always be -1, never 0 or positive.",
                     -1,
-                    validation=lambda x: isinstance(x, int) and x < 0,
+                    validation=Validator.is_negative_int,
                 ),
             ],
         ),

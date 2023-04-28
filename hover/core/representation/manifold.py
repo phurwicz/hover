@@ -2,11 +2,11 @@
 Manifold similarity measures for any collection of sequences of vectors.
 Can be useful for improved interpretability of neural nets.
 """
-import hover
 from tqdm import tqdm
 from scipy.spatial import procrustes
 from hover.core import Loggable
 from .reduction import DimensionalityReducer
+from .local_config import DEFAULT_REDUCTION_METHOD
 
 
 class LayerwiseManifold(Loggable):
@@ -64,7 +64,7 @@ class LayerwiseManifold(Loggable):
         :type method: str
         """
         if method is None:
-            method = hover.config["data.embedding"]["default_reduction_method"]
+            method = DEFAULT_REDUCTION_METHOD
 
         # default kwargs should fix random state and seed
         # so that randomness does not introduce disparity

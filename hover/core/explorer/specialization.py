@@ -19,7 +19,7 @@ class BokehTextFinder(BokehDataFinder, BokehForText):
     """
 
     TOOLTIP_KWARGS = BokehForText.TOOLTIP_KWARGS
-    MANDATORY_COLUMNS = BokehForText.MANDATORY_COLUMNS
+    MANDATORY_COLUMN_TO_TYPE_DEFAULT = BokehForText.MANDATORY_COLUMN_TO_TYPE_DEFAULT
     SUBSET_GLYPH_KWARGS = BokehDataFinder.SUBSET_GLYPH_KWARGS
 
     def _layout_widgets(self):
@@ -42,7 +42,7 @@ class BokehTextAnnotator(BokehDataAnnotator, BokehForText):
     """
 
     TOOLTIP_KWARGS = BokehForText.TOOLTIP_KWARGS
-    MANDATORY_COLUMNS = BokehForText.MANDATORY_COLUMNS
+    MANDATORY_COLUMN_TO_TYPE_DEFAULT = BokehForText.MANDATORY_COLUMN_TO_TYPE_DEFAULT
     SUBSET_GLYPH_KWARGS = BokehDataAnnotator.SUBSET_GLYPH_KWARGS
 
     def _layout_widgets(self):
@@ -63,7 +63,7 @@ class BokehTextSoftLabel(BokehSoftLabelExplorer, BokehForText):
     """
 
     TOOLTIP_KWARGS = BokehForText.TOOLTIP_KWARGS
-    MANDATORY_COLUMNS = BokehForText.MANDATORY_COLUMNS
+    MANDATORY_COLUMN_TO_TYPE_DEFAULT = BokehForText.MANDATORY_COLUMN_TO_TYPE_DEFAULT
     SUBSET_GLYPH_KWARGS = BokehSoftLabelExplorer.SUBSET_GLYPH_KWARGS
 
     def _layout_widgets(self):
@@ -84,7 +84,7 @@ class BokehTextMargin(BokehMarginExplorer, BokehForText):
     """
 
     TOOLTIP_KWARGS = BokehForText.TOOLTIP_KWARGS
-    MANDATORY_COLUMNS = BokehForText.MANDATORY_COLUMNS
+    MANDATORY_COLUMN_TO_TYPE_DEFAULT = BokehForText.MANDATORY_COLUMN_TO_TYPE_DEFAULT
     SUBSET_GLYPH_KWARGS = BokehMarginExplorer.SUBSET_GLYPH_KWARGS
 
     def _layout_widgets(self):
@@ -104,7 +104,7 @@ class BokehTextSnorkel(BokehSnorkelExplorer, BokehForText):
     """
 
     TOOLTIP_KWARGS = BokehForText.TOOLTIP_KWARGS
-    MANDATORY_COLUMNS = BokehForText.MANDATORY_COLUMNS
+    MANDATORY_COLUMN_TO_TYPE_DEFAULT = BokehForText.MANDATORY_COLUMN_TO_TYPE_DEFAULT
     SUBSET_GLYPH_KWARGS = BokehSnorkelExplorer.SUBSET_GLYPH_KWARGS
 
     def _layout_widgets(self):
@@ -125,7 +125,7 @@ class BokehAudioFinder(BokehDataFinder, BokehForAudio):
     """
 
     TOOLTIP_KWARGS = BokehForAudio.TOOLTIP_KWARGS
-    MANDATORY_COLUMNS = BokehForAudio.MANDATORY_COLUMNS
+    MANDATORY_COLUMN_TO_TYPE_DEFAULT = BokehForAudio.MANDATORY_COLUMN_TO_TYPE_DEFAULT
     SUBSET_GLYPH_KWARGS = BokehDataFinder.SUBSET_GLYPH_KWARGS
 
     def _layout_widgets(self):
@@ -148,7 +148,7 @@ class BokehAudioAnnotator(BokehDataAnnotator, BokehForAudio):
     """
 
     TOOLTIP_KWARGS = BokehForAudio.TOOLTIP_KWARGS
-    MANDATORY_COLUMNS = BokehForAudio.MANDATORY_COLUMNS
+    MANDATORY_COLUMN_TO_TYPE_DEFAULT = BokehForAudio.MANDATORY_COLUMN_TO_TYPE_DEFAULT
     SUBSET_GLYPH_KWARGS = BokehDataAnnotator.SUBSET_GLYPH_KWARGS
 
     def _layout_widgets(self):
@@ -169,7 +169,7 @@ class BokehAudioSoftLabel(BokehSoftLabelExplorer, BokehForAudio):
     """
 
     TOOLTIP_KWARGS = BokehForAudio.TOOLTIP_KWARGS
-    MANDATORY_COLUMNS = BokehForAudio.MANDATORY_COLUMNS
+    MANDATORY_COLUMN_TO_TYPE_DEFAULT = BokehForAudio.MANDATORY_COLUMN_TO_TYPE_DEFAULT
     SUBSET_GLYPH_KWARGS = BokehSoftLabelExplorer.SUBSET_GLYPH_KWARGS
 
     def _layout_widgets(self):
@@ -190,7 +190,7 @@ class BokehAudioMargin(BokehMarginExplorer, BokehForAudio):
     """
 
     TOOLTIP_KWARGS = BokehForAudio.TOOLTIP_KWARGS
-    MANDATORY_COLUMNS = BokehForAudio.MANDATORY_COLUMNS
+    MANDATORY_COLUMN_TO_TYPE_DEFAULT = BokehForAudio.MANDATORY_COLUMN_TO_TYPE_DEFAULT
     SUBSET_GLYPH_KWARGS = BokehMarginExplorer.SUBSET_GLYPH_KWARGS
 
     def _layout_widgets(self):
@@ -210,7 +210,7 @@ class BokehAudioSnorkel(BokehSnorkelExplorer, BokehForAudio):
     """
 
     TOOLTIP_KWARGS = BokehForAudio.TOOLTIP_KWARGS
-    MANDATORY_COLUMNS = BokehForAudio.MANDATORY_COLUMNS
+    MANDATORY_COLUMN_TO_TYPE_DEFAULT = BokehForAudio.MANDATORY_COLUMN_TO_TYPE_DEFAULT
     SUBSET_GLYPH_KWARGS = BokehSnorkelExplorer.SUBSET_GLYPH_KWARGS
 
     def _layout_widgets(self):
@@ -231,7 +231,7 @@ class BokehImageFinder(BokehDataFinder, BokehForImage):
     """
 
     TOOLTIP_KWARGS = BokehForImage.TOOLTIP_KWARGS
-    MANDATORY_COLUMNS = BokehForImage.MANDATORY_COLUMNS
+    MANDATORY_COLUMN_TO_TYPE_DEFAULT = BokehForImage.MANDATORY_COLUMN_TO_TYPE_DEFAULT
     SUBSET_GLYPH_KWARGS = BokehDataFinder.SUBSET_GLYPH_KWARGS
 
     def _layout_widgets(self):
@@ -254,7 +254,7 @@ class BokehImageAnnotator(BokehDataAnnotator, BokehForImage):
     """
 
     TOOLTIP_KWARGS = BokehForImage.TOOLTIP_KWARGS
-    MANDATORY_COLUMNS = BokehForImage.MANDATORY_COLUMNS
+    MANDATORY_COLUMN_TO_TYPE_DEFAULT = BokehForImage.MANDATORY_COLUMN_TO_TYPE_DEFAULT
     SUBSET_GLYPH_KWARGS = BokehDataAnnotator.SUBSET_GLYPH_KWARGS
 
     def _layout_widgets(self):
@@ -275,7 +275,7 @@ class BokehImageSoftLabel(BokehSoftLabelExplorer, BokehForImage):
     """
 
     TOOLTIP_KWARGS = BokehForImage.TOOLTIP_KWARGS
-    MANDATORY_COLUMNS = BokehForImage.MANDATORY_COLUMNS
+    MANDATORY_COLUMN_TO_TYPE_DEFAULT = BokehForImage.MANDATORY_COLUMN_TO_TYPE_DEFAULT
     SUBSET_GLYPH_KWARGS = BokehSoftLabelExplorer.SUBSET_GLYPH_KWARGS
 
     def _layout_widgets(self):
@@ -296,7 +296,7 @@ class BokehImageMargin(BokehMarginExplorer, BokehForImage):
     """
 
     TOOLTIP_KWARGS = BokehForImage.TOOLTIP_KWARGS
-    MANDATORY_COLUMNS = BokehForImage.MANDATORY_COLUMNS
+    MANDATORY_COLUMN_TO_TYPE_DEFAULT = BokehForImage.MANDATORY_COLUMN_TO_TYPE_DEFAULT
     SUBSET_GLYPH_KWARGS = BokehMarginExplorer.SUBSET_GLYPH_KWARGS
 
     def _layout_widgets(self):
@@ -316,7 +316,7 @@ class BokehImageSnorkel(BokehSnorkelExplorer, BokehForImage):
     """
 
     TOOLTIP_KWARGS = BokehForImage.TOOLTIP_KWARGS
-    MANDATORY_COLUMNS = BokehForImage.MANDATORY_COLUMNS
+    MANDATORY_COLUMN_TO_TYPE_DEFAULT = BokehForImage.MANDATORY_COLUMN_TO_TYPE_DEFAULT
     SUBSET_GLYPH_KWARGS = BokehSnorkelExplorer.SUBSET_GLYPH_KWARGS
 
     def _layout_widgets(self):

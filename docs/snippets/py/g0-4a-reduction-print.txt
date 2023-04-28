@@ -1,1 +1,1 @@
-dataset.dfs["raw"].head(5)
+dataset.dfs["raw"]().head(5)

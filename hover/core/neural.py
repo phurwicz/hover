@@ -4,7 +4,6 @@
     `torch`-based template classes for implementing neural nets that work the most smoothly with `hover`.
 """
 import os
-import hover
 import numpy as np
 import torch
 import torch.nn.functional as F
@@ -15,6 +14,7 @@ from shutil import copyfile
 from hover.core import Loggable
 from hover.utils.metrics import classification_accuracy
 from hover.utils.misc import current_time
+from .local_config import DEFAULT_REDUCTION_METHOD
 
 
 class BaseVectorNet(Loggable):
@@ -325,7 +325,11 @@ class VectorNet(BaseVectorNet):
         return probs
 
     def manifold_trajectory(
-        self, inps, method=None, reducer_kwargs=None, spline_kwargs=None
+        self,
+        inps,
+        method=DEFAULT_REDUCTION_METHOD,
+        reducer_kwargs=None,
+        spline_kwargs=None,
     ):
         """
         ???+ note "Compute a propagation trajectory of the dataset manifold through the neural net."
@@ -345,9 +349,6 @@ class VectorNet(BaseVectorNet):
         """
         from hover.core.representation.manifold import LayerwiseManifold
         from hover.core.representation.trajectory import manifold_spline
-
-        if method is None:
-            method = hover.config["data.embedding"]["default_reduction_method"]
 
         reducer_kwargs = reducer_kwargs or {}
         spline_kwargs = spline_kwargs or {}

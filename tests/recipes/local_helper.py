@@ -1,4 +1,5 @@
 import time
+import operator
 from bokeh.document import Document
 from bokeh.events import ButtonClick, MenuItemClick
 from hover import module_config
@@ -28,22 +29,20 @@ def action_patch_selection(dataset):
 def action_apply_labels(annotator):
     apply_event = ButtonClick(annotator.annotator_apply)
     annotator.annotator_apply._trigger_event(apply_event)
-    labeled_slice = annotator.dfs["raw"][
-        annotator.dfs["raw"]["label"] != module_config.ABSTAIN_DECODED
-    ]
+    labeled_slice = annotator.dfs["raw"].filter_rows_by_operator(
+        "label", operator.ne, module_config.ABSTAIN_DECODED
+    )()
     return labeled_slice
 
 
 def action_commit_selection(dataset, subset="train"):
     commit_event = MenuItemClick(dataset.data_committer, item=subset)
     dataset.data_committer._trigger_event(commit_event)
-    return dataset
 
 
 def action_deduplicate(dataset):
     dedup_event = ButtonClick(dataset.dedup_trigger)
     dataset.dedup_trigger._trigger_event(dedup_event)
-    return dataset
 
 
 def action_push_data(dataset):
