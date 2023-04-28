@@ -123,33 +123,35 @@ class TestDataframe:
         assert df_pl().frame_equal(pl_df)
         assert df_pd.shape == df_pl.shape == (0, 3)
 
-    @pytest.mark.parametrize("df_data", DATAFRAME_VALUE_TEST_CASES)
-    def test_vertical_concat(self, df_data):
-        df_pd_a = PandasDataframe.construct(df_data)
-        df_pd_b = df_pd_a.copy()
-        df_pl_a = PolarsDataframe.construct(df_data)
-        df_pl_b = df_pl_a.copy()
+    @pytest.mark.parametrize("df_data_a", DATAFRAME_VALUE_TEST_CASES)
+    @pytest.mark.parametrize("df_data_b", DATAFRAME_VALUE_TEST_CASES[::-1])
+    def test_concat_rows(self, df_data_a, df_data_b):
+        df_pd_a = PandasDataframe.construct(df_data_a)
+        df_pd_b = PandasDataframe.construct(df_data_b)
+        df_pl_a = PolarsDataframe.construct(df_data_a)
+        df_pl_b = PolarsDataframe.construct(df_data_b)
         pd_df_a = df_pd_a()
         pd_df_b = df_pd_b()
         pl_df_a = df_pl_a()
         pl_df_b = df_pl_b()
-        df_pd_ab = PandasDataframe.vertical_concat([df_pd_a, df_pd_b])
-        df_pl_ab = PolarsDataframe.vertical_concat([df_pl_a, df_pl_b])
+        df_pd_ab = PandasDataframe.concat_rows([df_pd_a, df_pd_b])
+        df_pl_ab = PolarsDataframe.concat_rows([df_pl_a, df_pl_b])
 
         pd_df_ab = pd.concat([pd_df_a, pd_df_b], axis=0, ignore_index=True)
-        pl_df_ab = pl.concat([pl_df_a, pl_df_b], how="vertical")
+        # use diagonal for non-overlapping columns
+        pl_df_ab = pl.concat([pl_df_a, pl_df_b], how="diagonal")
         assert df_pd_ab().equals(pd_df_ab)
         assert df_pl_ab().frame_equal(pl_df_ab)
         assert df_pl_ab().to_pandas().equals(pd_df_ab)
 
         try:
-            _ = PandasDataframe.vertical_concat([pd_df_a, pd_df_b])
+            _ = PandasDataframe.concat_rows([pd_df_a, pd_df_b])
             raise Exception("Should have raised an AssertionError")
         except AssertionError:
             pass
 
         try:
-            _ = PolarsDataframe.vertical_concat([pl_df_a, pl_df_b])
+            _ = PolarsDataframe.concat_rows([pl_df_a, pl_df_b])
             raise Exception("Should have raised an AssertionError")
         except AssertionError:
             pass

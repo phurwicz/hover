@@ -8,7 +8,7 @@ import pandas as pd
 import polars as pl
 import warnings
 from abc import ABC, abstractmethod
-from collections import Counter
+from collections import Counter, OrderedDict
 from functools import wraps
 
 
@@ -122,7 +122,7 @@ class AbstractDataframe(ABC):
         raise NotImplementedError
 
     @classmethod
-    def vertical_concat(cls, df_a, df_b):
+    def concat_rows(cls, df_list):
         raise NotImplementedError
 
     @classmethod
@@ -216,7 +216,7 @@ class PandasDataframe(AbstractDataframe):
         return cls(pd.DataFrame(columns=column_to_type.keys()))
 
     @classmethod
-    def vertical_concat(cls, df_list):
+    def concat_rows(cls, df_list):
         for _df in df_list:
             assert isinstance(_df, cls), f"df must be of type {cls}"
         pd_list = [df() for df in df_list]
@@ -374,24 +374,28 @@ class PolarsDataframe(AbstractDataframe):
         )
 
     @classmethod
-    def vertical_concat(cls, df_list):
+    def concat_rows(cls, df_list):
         schema = None
         pl_list = []
+
+        # basic type, length, and schema checks; get the union'ed schema
         for _df in df_list:
             assert isinstance(_df, cls), f"df must be of type {cls}"
             _pl = _df()
             if _pl.shape[0] == 0:
                 continue
             if schema is None:
-                schema = _pl.schema
+                schema = OrderedDict(_pl.schema)
             else:
-                assert (
-                    schema == _pl.schema
-                ), f"all dataframes must have same schema, got {schema} and {_pl.schema}"
+                for col, dtype in _pl.schema.items():
+                    assert (
+                        schema.get(col, dtype) == dtype
+                    ), f"all dataframes must have consistent schema, got {schema} and {_pl.schema}"
+                schema.update(_pl.schema)
             pl_list.append(_pl)
 
         assert schema is not None, "all dataframes were empty"
-        return cls(pl.concat(pl_list, how="vertical"))
+        return cls(pl.concat(pl_list, how="diagonal"))
 
     @classmethod
     def series_values(cls, series):

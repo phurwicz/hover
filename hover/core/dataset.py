@@ -13,11 +13,10 @@
 import os
 import operator
 import numpy as np
-import pandas as pd
 from tqdm import tqdm
 from collections import OrderedDict
 from hover.module_config import (
-    DataFrame,
+    DataFrame as DF,
     ABSTAIN_DECODED,
     ABSTAIN_ENCODED,
     DATA_SAVE_DIR,
@@ -119,7 +118,7 @@ class SupervisableDataset(Loggable):
             | `label_key`   | `str`  | the key for the `**str**` label in supervised data |
         """
 
-        def dictl_transform(dictl, labels=True):
+        def dictl_transform(dictl, subset, labels=True):
             """
             Burner function to transform the input list of dictionaries into standard format.
             """
@@ -144,31 +143,33 @@ class SupervisableDataset(Loggable):
                 if not labels:
                     trans_d["label"] = ABSTAIN_DECODED
 
+                trans_d[DATASET_SUBSET_FIELD] = subset
+
                 return trans_d
 
             return [burner(_d) for _d in dictl]
 
         # standardize records
-        dictls = {
-            "raw": dictl_transform(raw_dictl, labels=False),
-            "train": dictl_transform(train_dictl),
-            "dev": dictl_transform(dev_dictl),
-            "test": dictl_transform(test_dictl),
-        }
+        dictls = [
+            *dictl_transform(raw_dictl, "raw", labels=False),
+            *dictl_transform(train_dictl, "train"),
+            *dictl_transform(dev_dictl, "dev"),
+            *dictl_transform(test_dictl, "test"),
+        ]
+        all_subsets_df = DF.construct(dictls)
+
+        assert all_subsets_df.shape[0] > 0, "Expected non-empty dataset"
+        assert (
+            self.__class__.FEATURE_KEY in all_subsets_df.columns
+        ), f"Expected feature key {self.__class__.FEATURE_KEY}"
+        assert "label" in all_subsets_df.columns, "Expected label key 'label'"
 
         # initialize dataframes
-        self.dfs = TypedValueDict(DataFrame)
-        for _key, _dictl in dictls.items():
-            if _dictl:
-                _df = DataFrame.construct(_dictl)
-                assert (
-                    self.__class__.FEATURE_KEY in _df.columns
-                ), f"Expected feature key {self.__class__.FEATURE_KEY}"
-                assert "label" in _df.columns, "Expected label key 'label'"
-            else:
-                _df = DataFrame.construct(columns=[self.__class__.FEATURE_KEY, "label"])
-
-            self.dfs[_key] = _df
+        self.dfs = TypedValueDict(DF)
+        for _key in ["raw", "train", "dev", "test"]:
+            self.dfs[_key] = all_subsets_df.filter_rows_by_operator(
+                DATASET_SUBSET_FIELD, operator.eq, _key
+            )
 
     @property
     def dfs(self):
@@ -209,7 +210,7 @@ class SupervisableDataset(Loggable):
         """
         feature_to_subset_idx = {}
         for _subset, _df in self.dfs.items():
-            _values = DataFrame.series_values(_df[self.__class__.FEATURE_KEY])
+            _values = DF.series_values(_df[self.__class__.FEATURE_KEY])
             for i, _val in enumerate(_values):
                 if _val in feature_to_subset_idx:
                     raise ValueError(
@@ -243,13 +244,7 @@ class SupervisableDataset(Loggable):
         """
         ???+ note "Export to a pandas DataFrame."
         """
-        dfs = []
-        for _subset in ["raw", "train", "dev", "test"]:
-            _df = self.dfs[_subset].to_pandas()
-            _df[DATASET_SUBSET_FIELD] = _subset
-            dfs.append(_df)
-
-        return pd.concat(dfs, axis=0)
+        return DF.concat_rows(self.dfs.values()).to_pandas()
 
     @classmethod
     def from_pandas(cls, df, **kwargs):
@@ -261,11 +256,11 @@ class SupervisableDataset(Loggable):
         """
         SUBSETS = cls.SCRATCH_SUBSETS + cls.PUBLIC_SUBSETS + cls.PRIVATE_SUBSETS
 
-        if DATASET_SUBSET_FIELD not in df.columns:
-            raise ValueError(
-                f"Expecting column '{DATASET_SUBSET_FIELD}' in the DataFrame which takes values from {SUBSETS}"
-            )
+        assert (
+            DATASET_SUBSET_FIELD in df.columns
+        ), f"Expecting column '{DATASET_SUBSET_FIELD}' in the DataFrame which takes values from {SUBSETS}"
 
+        # use the 'silly' approach for robustness
         dictls = {}
         for _subset in ["raw", "train", "dev", "test"]:
             _sub_df = df[df[DATASET_SUBSET_FIELD] == _subset]
@@ -454,9 +449,7 @@ class SupervisableDataset(Loggable):
 
                 # concat to the end and do some accounting
                 size_before = self.dfs[sub_to].shape[0]
-                self.dfs[sub_to] = DataFrame.vertical_concat(
-                    [self.dfs[sub_to], valid_slice]
-                )
+                self.dfs[sub_to] = DF.concat_rows([self.dfs[sub_to], valid_slice])
                 size_mid = self.dfs[sub_to].shape[0]
                 self.dfs[sub_to] = self.dfs[sub_to].unique(
                     subset=[self.__class__.FEATURE_KEY],
@@ -496,7 +489,7 @@ class SupervisableDataset(Loggable):
                 sub_slice = explorer.dfs[subset].select_rows(selected_idx)
                 sel_slices.append(sub_slice)
 
-            selected = DataFrame.vertical_concat(sel_slices)
+            selected = DF.concat_rows(sel_slices)
             self._callback_update_selection(selected)
 
         def callback_view_refresh():
@@ -549,7 +542,7 @@ class SupervisableDataset(Loggable):
         all_labels = set()
         for _key in [*self.__class__.PUBLIC_SUBSETS, *self.__class__.PRIVATE_SUBSETS]:
             _df = self.dfs[_key]
-            _found_labels = set(DataFrame.series_tolist(_df["label"]))
+            _found_labels = set(DF.series_tolist(_df["label"]))
             all_labels = all_labels.union(_found_labels)
 
         # exclude ABSTAIN from self.classes, but include it in the encoding
@@ -765,18 +758,17 @@ class SupervisableDataset(Loggable):
         for _key in ordered_subsets:
             before[_key] = self.dfs[_key].shape[0]
             columns[_key] = self.dfs[_key].columns
-            self.dfs[_key].set_column_by_constant("__subset", _key)
+            # update subset for rows that have been copied / moved
+            self.dfs[_key].set_column_by_constant(DATASET_SUBSET_FIELD, _key)
 
         # concatenate in order and deduplicate
-        overall_df = DataFrame.vertical_concat(
-            [self.dfs[_key] for _key in ordered_subsets]
-        )
+        overall_df = DF.concat_rows([self.dfs[_key] for _key in ordered_subsets])
         overall_df = overall_df.unique(subset=[self.__class__.FEATURE_KEY], keep="last")
 
         # cut up slices
         for _key in ordered_subsets:
             self.dfs[_key] = overall_df.filter_rows_by_operator(
-                "__subset", operator.eq, _key
+                DATASET_SUBSET_FIELD, operator.eq, _key
             )[columns[_key]]
             after[_key] = self.dfs[_key].shape[0]
             self._info(f"--subset {_key} rows: {before[_key]} -> {after[_key]}.")
@@ -826,12 +818,12 @@ class SupervisableDataset(Loggable):
         feature_inp = []
         for _key in fit_subset:
             feature_inp.extend(
-                DataFrame.series_tolist(self.dfs[_key][self.__class__.FEATURE_KEY])
+                DF.series_tolist(self.dfs[_key][self.__class__.FEATURE_KEY])
             )
         fit_num = len(feature_inp)
         for _key in trans_subset:
             feature_inp.extend(
-                DataFrame.series_tolist(self.dfs[_key][self.__class__.FEATURE_KEY])
+                DF.series_tolist(self.dfs[_key][self.__class__.FEATURE_KEY])
             )
         trans_arr = np.array(
             [vectorizer(_inp) for _inp in tqdm(feature_inp, desc="Vectorizing")]
@@ -863,7 +855,6 @@ class SupervisableDataset(Loggable):
                 continue
             for _key in _subset:
                 _length = self.dfs[_key].shape[0]
-                print(start_idx, start_idx + _length, _embedding.shape)
                 _embedding_slice = _embedding[start_idx : (start_idx + _length), :]
                 assert (
                     _length == _embedding_slice.shape[0]
@@ -937,7 +928,7 @@ class SupervisableDataset(Loggable):
         # prepare input vectors
         assert len(vectorizers) > 0, "Expected at least one vectorizer"
         multi_flag = len(vectorizers) > 1
-        features = DataFrame.series_tolist(df[self.__class__.FEATURE_KEY])
+        features = DF.series_tolist(df[self.__class__.FEATURE_KEY])
 
         input_vector_lists = []
         for _vec_func in vectorizers:
