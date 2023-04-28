@@ -2,14 +2,13 @@
 ???+ note "Useful subroutines for working with bokeh in general."
 """
 import os
-import hover
 import numpy as np
 from functools import wraps
 from traceback import format_exc
 from urllib.parse import urljoin, urlparse
 from bokeh.models import PreText
 from bokeh.layouts import column
-from hover import module_config
+from hover.module_config import ABSTAIN_DECODED, ABSTAIN_HEXCOLOR
 from .local_config import (
     TOOLTIP_TEXT_TEMPLATE,
     TOOLTIP_IMAGE_TEMPLATE,
@@ -28,7 +27,7 @@ def auto_label_color(labels):
     ???+ note "Create a label->hex color mapping dict."
     """
     use_labels = set(labels)
-    use_labels.discard(module_config.ABSTAIN_DECODED)
+    use_labels.discard(ABSTAIN_DECODED)
     use_labels = sorted(use_labels, reverse=False)
 
     palette, usage = BOKEH_PALETTE, BOKEH_PALETTE_USAGE
@@ -51,7 +50,7 @@ def auto_label_color(labels):
 
     use_palette = [palette[i] for i in use_palette_idx]
     color_dict = {
-        module_config.ABSTAIN_DECODED: module_config.ABSTAIN_HEXCOLOR,
+        ABSTAIN_DECODED: ABSTAIN_HEXCOLOR,
         **{_l: _c for _l, _c in zip(use_labels, use_palette)},
     }
     return color_dict
