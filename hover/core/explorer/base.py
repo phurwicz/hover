@@ -286,7 +286,7 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
                     col_patch in _df.columns
                 ), f"Subset {_key} expecting column {col_patch} among columns, got {_df.columns}"
                 # find all array lengths; note that the data subset can be empty
-                _num_patches_seen = _df.column_apply(col_patch, len, form="list")
+                _num_patches_seen = _df.column_apply(col_patch, len, output="list")
                 assert (
                     len(set(_num_patches_seen)) <= 1
                 ), f"Expecting consistent number of patches, got {_num_patches_seen}"

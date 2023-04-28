@@ -343,10 +343,12 @@ class TestDataframe:
 
             pd_df_series = pd_df.loc[indices_list, col].map(mapping)
             df_pd_series = df_pd.column_map(
-                col, mapping, indices=indices, form="series"
+                col, mapping, indices=indices, output="series"
             )
-            df_pl_numpy = df_pl.column_map(col, mapping, indices=indices, form="numpy")
-            df_pl_list = df_pl.column_map(col, mapping, indices=indices, form="list")
+            df_pl_numpy = df_pl.column_map(
+                col, mapping, indices=indices, output="numpy"
+            )
+            df_pl_list = df_pl.column_map(col, mapping, indices=indices, output="list")
             assert df_pd_series.equals(pd_df_series)
             assert np.equal(df_pl_numpy, pd_df_series.values).all()
             assert df_pl_list == pd_df_series.tolist()
@@ -373,10 +375,12 @@ class TestDataframe:
 
             pd_df_series = pd_df.loc[indices_list, col].isin(lookup)
             df_pd_series = df_pd.column_isin(
-                col, lookup, indices=indices, form="series"
+                col, lookup, indices=indices, output="series"
             )
-            df_pl_numpy = df_pl.column_isin(col, lookup, indices=indices, form="numpy")
-            df_pl_list = df_pl.column_isin(col, lookup, indices=indices, form="list")
+            df_pl_numpy = df_pl.column_isin(
+                col, lookup, indices=indices, output="numpy"
+            )
+            df_pl_list = df_pl.column_isin(col, lookup, indices=indices, output="list")
             assert df_pd_series.equals(pd_df_series)
             assert np.equal(df_pl_numpy, pd_df_series.values).all()
             assert df_pl_list == pd_df_series.tolist()
@@ -409,9 +413,11 @@ class TestDataframe:
             )
 
             pd_df_series = pd_df.loc[indices_list, col].apply(func)
-            df_pd_series = df_pd.column_apply(col, func, indices=indices, form="series")
-            df_pl_numpy = df_pl.column_apply(col, func, indices=indices, form="numpy")
-            df_pl_list = df_pl.column_apply(col, func, indices=indices, form="list")
+            df_pd_series = df_pd.column_apply(
+                col, func, indices=indices, output="series"
+            )
+            df_pl_numpy = df_pl.column_apply(col, func, indices=indices, output="numpy")
+            df_pl_list = df_pl.column_apply(col, func, indices=indices, output="list")
             assert df_pd_series.equals(pd_df_series)
             assert np.equal(df_pl_numpy, pd_df_series.values).all()
             assert df_pl_list == pd_df_series.tolist()
@@ -436,9 +442,9 @@ class TestDataframe:
             return str(row["int"])
 
         pd_df_series = pd_df.loc[indices_list].apply(func, axis=1)
-        df_pd_series = df_pd.row_apply(func, indices=indices, form="series")
-        df_pl_numpy = df_pl.row_apply(func, indices=indices, form="numpy")
-        df_pl_list = df_pl.row_apply(func, indices=indices, form="list")
+        df_pd_series = df_pd.row_apply(func, indices=indices, output="series")
+        df_pl_numpy = df_pl.row_apply(func, indices=indices, output="numpy")
+        df_pl_list = df_pl.row_apply(func, indices=indices, output="list")
         assert df_pd_series.equals(pd_df_series)
         assert np.equal(df_pl_numpy, pd_df_series.values).all()
         assert df_pl_list == pd_df_series.tolist()

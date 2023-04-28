@@ -134,7 +134,7 @@ class AbstractDataframe(ABC):
         raise NotImplementedError
 
     @classmethod
-    def series_to(cls, series, form):
+    def series_to(cls, series, output):
         raise NotImplementedError
 
     @abstractmethod
@@ -178,21 +178,21 @@ class AbstractDataframe(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def column_map(self, column, mapping, indices=None, as_column=None, form="numpy"):
+    def column_map(self, column, mapping, indices=None, as_column=None, output="numpy"):
         raise NotImplementedError
 
     @abstractmethod
-    def column_isin(self, column, lookup, indices=None, as_column=None, form="numpy"):
+    def column_isin(self, column, lookup, indices=None, as_column=None, output="numpy"):
         raise NotImplementedError
 
     @abstractmethod
     def column_apply(
-        self, column, function, indices=None, as_column=None, form="numpy"
+        self, column, function, indices=None, as_column=None, output="numpy"
     ):
         raise NotImplementedError
 
     @abstractmethod
-    def row_apply(self, function, indices=None, as_column=None, form="numpy"):
+    def row_apply(self, function, indices=None, as_column=None, output="numpy"):
         raise NotImplementedError
 
     @abstractmethod
@@ -231,15 +231,17 @@ class PandasDataframe(AbstractDataframe):
         return series.tolist()
 
     @classmethod
-    def series_to(cls, series, form):
-        if form == "numpy":
+    def series_to(cls, series, output):
+        if output == "numpy":
             return series.values
-        elif form == "list":
+        elif output == "list":
             return series.tolist()
-        elif form == "series":
+        elif output == "series":
             return series
         else:
-            raise ValueError(f"form must be 'numpy', 'list', or 'series', got {form}")
+            raise ValueError(
+                f"output must be 'numpy', 'list', or 'series', got {output}"
+            )
 
     @sametype
     def copy(self):
@@ -318,34 +320,34 @@ class PandasDataframe(AbstractDataframe):
             # unlike loc, iloc needs no conversion
             return self._df.iloc[indices], None
 
-    def _post_apply(self, series, as_column, form):
+    def _post_apply(self, series, as_column, output):
         if as_column is None:
-            return self.__class__.series_to(series, form)
+            return self.__class__.series_to(series, output)
         else:
             self._df[as_column] = series
             return
 
-    def column_map(self, column, mapping, indices=None, as_column=None, form="numpy"):
+    def column_map(self, column, mapping, indices=None, as_column=None, output="numpy"):
         subject, as_column = self._pre_apply(indices, as_column)
         series = subject[column].map(mapping)
-        return self._post_apply(series, as_column, form)
+        return self._post_apply(series, as_column, output)
 
-    def column_isin(self, column, lookup, indices=None, as_column=None, form="numpy"):
+    def column_isin(self, column, lookup, indices=None, as_column=None, output="numpy"):
         subject, as_column = self._pre_apply(indices, as_column)
         series = subject[column].isin(lookup)
-        return self._post_apply(series, as_column, form)
+        return self._post_apply(series, as_column, output)
 
     def column_apply(
-        self, column, function, indices=None, as_column=None, form="numpy"
+        self, column, function, indices=None, as_column=None, output="numpy"
     ):
         subject, as_column = self._pre_apply(indices, as_column)
         series = subject[column].apply(function)
-        return self._post_apply(series, as_column, form)
+        return self._post_apply(series, as_column, output)
 
-    def row_apply(self, function, indices=None, as_column=None, form="numpy"):
+    def row_apply(self, function, indices=None, as_column=None, output="numpy"):
         subject, as_column = self._pre_apply(indices, as_column)
         series = subject.apply(function, axis=1)
-        return self._post_apply(series, as_column, form)
+        return self._post_apply(series, as_column, output)
 
     def get_cell_by_row_column(self, row_idx, column_name):
         return self._df.at[row_idx, column_name]
@@ -404,15 +406,17 @@ class PolarsDataframe(AbstractDataframe):
         return series.to_list()
 
     @classmethod
-    def series_to(cls, series, form):
-        if form == "numpy":
+    def series_to(cls, series, output):
+        if output == "numpy":
             return series.to_numpy()
-        elif form == "list":
+        elif output == "list":
             return series.to_list()
-        elif form == "series":
+        elif output == "series":
             return series
         else:
-            raise ValueError(f"form must be 'numpy', 'list', or 'series', got {form}")
+            raise ValueError(
+                f"output must be 'numpy', 'list', or 'series', got {output}"
+            )
 
     @sametype
     def copy(self):
@@ -504,9 +508,9 @@ class PolarsDataframe(AbstractDataframe):
 
         return subject, col_name
 
-    def _post_apply(self, series, as_column, form):
+    def _post_apply(self, series, as_column, output):
         if as_column is None:
-            return self.__class__.series_to(series, form)
+            return self.__class__.series_to(series, output)
         else:
             self._df = self._df.with_columns(series.alias(as_column))
             return
@@ -517,7 +521,7 @@ class PolarsDataframe(AbstractDataframe):
             raise TypeError(f"Unsupported return type: {original_type} for {value}")
         return TYPE_TO_POLARS[original_type]
 
-    def column_map(self, column, mapping, indices=None, as_column=None, form="numpy"):
+    def column_map(self, column, mapping, indices=None, as_column=None, output="numpy"):
         subject, _ = self._pre_apply(indices, as_column)
         example_value = list(mapping.values())[0]
         dtype = self._get_return_type(example_value)
@@ -525,15 +529,15 @@ class PolarsDataframe(AbstractDataframe):
             series = subject[column].map_dict(mapping, return_dtype=dtype)
         else:
             series = pl.Series([], dtype=dtype)
-        return self._post_apply(series, as_column, form)
+        return self._post_apply(series, as_column, output)
 
-    def column_isin(self, column, lookup, indices=None, as_column=None, form="numpy"):
+    def column_isin(self, column, lookup, indices=None, as_column=None, output="numpy"):
         subject, _ = self._pre_apply(indices, as_column)
         series = subject[column].is_in(lookup)
-        return self._post_apply(series, as_column, form)
+        return self._post_apply(series, as_column, output)
 
     def column_apply(
-        self, column, function, indices=None, as_column=None, form="numpy"
+        self, column, function, indices=None, as_column=None, output="numpy"
     ):
         subject, _ = self._pre_apply(indices, as_column)
         if self.shape[0] > 0:
@@ -542,9 +546,9 @@ class PolarsDataframe(AbstractDataframe):
             series = subject[column].apply(function, return_dtype=dtype)
         else:
             series = pl.Series([])
-        return self._post_apply(series, as_column, form)
+        return self._post_apply(series, as_column, output)
 
-    def row_apply(self, function, indices=None, as_column=None, form="numpy"):
+    def row_apply(self, function, indices=None, as_column=None, output="numpy"):
         # determine the return type for df.apply
         if self.shape[0] > 0:
             example_value = function(self._df.row(0, named=True))
@@ -557,7 +561,7 @@ class PolarsDataframe(AbstractDataframe):
         # handle empty subject
         if subject.shape[0] == 0:
             if as_column is None:
-                return self.__class__.series_to(pl.Series([]), form)
+                return self.__class__.series_to(pl.Series([]), output)
             else:
                 self._df = self._df.with_columns(pl.Series([]).alias(as_column))
                 return
@@ -569,7 +573,7 @@ class PolarsDataframe(AbstractDataframe):
         # apply the function
         if as_column is None:
             series = subject.with_columns(to_apply)[col]
-            return self.__class__.series_to(series, form)
+            return self.__class__.series_to(series, output)
         else:
             assert subject is self._df, "subject must be self._df"
             self._df = subject.with_columns(to_apply)

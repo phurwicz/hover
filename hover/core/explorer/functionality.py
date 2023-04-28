@@ -133,7 +133,7 @@ class BokehDataAnnotator(BokehBaseExplorer):
         color_dict = self.auto_color_mapping()
 
         for _key, _df in self.dfs.items():
-            _color = _df.column_map("label", color_dict, form="list")
+            _color = _df.column_map("label", color_dict, output="list")
             self.sources[_key].add(_color, SOURCE_COLOR_FIELD)
 
     def _update_colors(self):
@@ -145,7 +145,7 @@ class BokehDataAnnotator(BokehBaseExplorer):
         # infer glyph colors dynamically
         color_dict = self.auto_color_mapping()
 
-        color_list = self.dfs["raw"].column_map("label", color_dict, form="list")
+        color_list = self.dfs["raw"].column_map("label", color_dict, output="list")
         self.sources["raw"].patch(
             {SOURCE_COLOR_FIELD: [(slice(len(color_list)), color_list)]}
         )
@@ -310,8 +310,8 @@ class BokehSoftLabelExplorer(BokehBaseExplorer):
 
         # infer alpha from score percentiles
         for _key, _df in self.dfs.items():
-            _color = _df.column_map(self.label_col, color_dict, form="list")
-            _alpha = _df.column_apply(self.score_col, pseudo_percentile, form="list")
+            _color = _df.column_map(self.label_col, color_dict, output="list")
+            _alpha = _df.column_apply(self.score_col, pseudo_percentile, output="list")
             self.sources[_key].add(_color, SOURCE_COLOR_FIELD)
             self.sources[_key].add(_alpha, SOURCE_ALPHA_FIELD)
 
@@ -653,7 +653,7 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
                 )
                 return
 
-            labels = self.dfs["raw"].row_apply(lf, indices=selected_idx, form="numpy")
+            labels = self.dfs["raw"].row_apply(lf, indices=selected_idx, output="numpy")
             num_nontrivial = len(list(filter(lambda l: l != ABSTAIN_DECODED, labels)))
 
             # update label in both the df and the data source
@@ -690,7 +690,9 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
 
             for _key, _source in self.sources.items():
                 _selected = _source.selected.indices
-                _labels = self.dfs[_key].row_apply(lf, indices=_selected, form="numpy")
+                _labels = self.dfs[_key].row_apply(
+                    lf, indices=_selected, output="numpy"
+                )
                 _kept = [
                     _idx
                     for _idx, _label in zip(_selected, _labels)
@@ -796,8 +798,8 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
         assert lf_name in self.lf_data, f"trying to refresh non-existing LF: {lf_name}"
 
         lf = self.lf_data[lf_name]["lf"]
-        L_raw = self.dfs["raw"].row_apply(lf, form="numpy")
-        L_labeled = self.dfs["labeled"].row_apply(lf, form="numpy")
+        L_raw = self.dfs["raw"].row_apply(lf, output="numpy")
+        L_labeled = self.dfs["labeled"].row_apply(lf, output="numpy")
 
         glyph_codes = self.lf_data[lf_name]["glyphs"].keys()
         if "C" in glyph_codes:
@@ -839,9 +841,9 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
 
         # calculate predicted labels if not provided
         if L_raw is None:
-            L_raw = self.dfs["raw"].row_apply(lf, form="numpy")
+            L_raw = self.dfs["raw"].row_apply(lf, output="numpy")
         if L_labeled is None:
-            L_labeled = self.dfs["labeled"].row_apply(lf, form="numpy")
+            L_labeled = self.dfs["labeled"].row_apply(lf, output="numpy")
 
         # prepare plot settings
         assert self.palette, f"Palette depleted, # LFs: {len(self.lf_data)}"

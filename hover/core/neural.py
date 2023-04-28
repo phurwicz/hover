@@ -269,7 +269,7 @@ class VectorNet(BaseVectorNet):
             end=7.0,
             value=self.__class__.DEFAULT_OPTIM_LOGLR,
             step=0.1,
-            form=CustomJSTickFormatter(code="return Math.pow(0.1, tick).toFixed(8)"),
+            format=CustomJSTickFormatter(code="return Math.pow(0.1, tick).toFixed(8)"),
         )
 
         def update_lr(attr, old, new):
