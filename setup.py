@@ -13,7 +13,7 @@ def get_description():
 
 setuptools.setup(
     name="hover",
-    version="0.8.1",
+    version="0.9.0",
     description="Label data at scale. Fun and precision included.",
     long_description=get_description(),
     long_description_content_type="text/markdown",
