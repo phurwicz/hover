@@ -124,7 +124,7 @@ def generate_pandas_df_with_coords():
         )
         for i in range(embedding_dim):
             _col = embedding_field(embedding_dim, i)
-            df[_col] = np.random.normal(loc=0.0, scale=1.0, size=df.shape[0])
+            df[_col] = np.random.normal(loc=0.0, scale=5.0, size=df.shape[0])
         return df
 
     return random_df_with_coords
@@ -158,16 +158,16 @@ def example_raw_df(example_raw_pandas_df):
 
 
 @pytest.fixture(scope="module")
-def example_soft_label_df(example_raw_pandas_df):
-    df = example_raw_pandas_df.copy()
+def example_soft_label_df(generate_pandas_df_with_coords):
+    df = generate_pandas_df_with_coords(100)
     df["pred_label"] = df.apply(RANDOM_LABEL, axis=1)
     df["pred_score"] = df.apply(RANDOM_SCORE, axis=1)
     return wrap_pandas_df(df)
 
 
 @pytest.fixture(scope="module")
-def example_margin_df(example_raw_pandas_df):
-    df = example_raw_pandas_df.copy()
+def example_margin_df(generate_pandas_df_with_coords):
+    df = generate_pandas_df_with_coords(100)
     df["label_1"] = df.apply(RANDOM_LABEL, axis=1)
     df["label_2"] = df.apply(RANDOM_LABEL, axis=1)
     return wrap_pandas_df(df)
