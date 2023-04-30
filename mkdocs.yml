@@ -17,22 +17,35 @@ theme:
       - navigation.tabs
       - search.suggest
       - toc.integrate
+    palette:
+      # Palette toggle for light mode
+      - scheme: default
+        toggle:
+          icon: material/weather-night
+          name: Switch to dark mode
+
+      # Palette toggle for dark mode
+      - scheme: slate
+        toggle:
+          icon: material/weather-sunny
+          name: Switch to light mode
 
 nav:
     - Home: 'index.md'
-    - 'Tutorial':
+    - 'Basics':
         - 'Quickstart': 'pages/tutorial/t0-quickstart.md'
         - 'Using Recipes': 'pages/tutorial/t1-active-learning.md'
-        - 'Server Options': 'pages/tutorial/t2-bokeh-app.md'
-        - 'Dataset Mechanisms': 'pages/tutorial/t3-dataset-population-selection.md'
-        - 'Annotator & Plot Tools': 'pages/tutorial/t4-annotator-dataset-interaction.md'
+        - 'Managing Data': 'pages/tutorial/t3-dataset-population-selection.md'
+        - 'Applying Labels': 'pages/tutorial/t4-annotator-dataset-interaction.md'
+        - 'Handling Image Data': 'pages/guides/g0-datatype-image.md'
+        - 'Handling Audio Data': 'pages/guides/g1-datatype-audio.md'
+    - 'Customization':
+        - 'Host Options': 'pages/tutorial/t2-bokeh-app.md'
+        - 'Custom Config': 'pages/guides/g2-hover-config.md'
+    - 'Powerful Tricks':
         - 'Finder & Selection Filter': 'pages/tutorial/t5-finder-filter.md'
         - 'Soft Label & Joint Filters': 'pages/tutorial/t6-softlabel-joint-filter.md'
         - 'Custom Labeling Functions': 'pages/tutorial/t7-snorkel-improvise-rules.md'
-    - 'Guides':
-        - 'Image Data': 'pages/guides/g0-datatype-image.md'
-        - 'Audio Data': 'pages/guides/g1-datatype-audio.md'
-        - 'Custom Config': 'pages/guides/g2-hover-config.md'
     #    - 'Data Type: Multimodal': 'pages/topics/datatype-multimodal.md'
         #- 'Why Hover': 'pages/topics/what-hover-is.md'
         #- 'Customized Usage':
@@ -78,6 +91,19 @@ plugins:
             show_source: true
       watch:
         - hover
+  - i18n:
+      default_language: en
+      languages:
+        en: English
+        # fr: français
+        zh: 简体中文
+      nav_translations:
+        zh:
+          Home: 主页
+          Basics: 基础使用
+          Customization: 自定配置
+          Powerful Tricks: 高级技巧
+          API Reference: API 指南
 
 extra:
   version:
