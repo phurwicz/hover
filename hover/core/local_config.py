@@ -1,5 +1,9 @@
 import re
 import hover
+from hover.config_constants import (
+    ConfigSection as Section,
+    ConfigKey as Key,
+)
 from bokeh.models import (
     Div,
     TableColumn,
@@ -8,7 +12,10 @@ from bokeh.models import (
 )
 
 
-DATASET_SUBSET_FIELD = hover.config["data.columns"]["dataset_subset_field"]
+DEFAULT_REDUCTION_METHOD = hover.config[Section.DATA_EMBEDDING][
+    Key.DEFAULT_REDUCTION_METHOD
+]
+DATASET_SUBSET_FIELD = hover.config[Section.DATA_COLUMNS][Key.DATASET_SUBSET_FIELD]
 
 COLOR_GLYPH_TEMPLATE = """
 <p style="color:<%= value %>;">
@@ -16,7 +23,7 @@ COLOR_GLYPH_TEMPLATE = """
 </p>
 """
 
-EMBEDDING_FIELD_PREFIX = hover.config["data.columns"]["embedding_field_prefix"]
+EMBEDDING_FIELD_PREFIX = hover.config[Section.DATA_COLUMNS][Key.EMBEDDING_FIELD_PREFIX]
 EMBEDDING_FIELD_REGEX = r"\d+d_\d+$"
 
 
@@ -53,7 +60,7 @@ def dataset_default_sel_table_columns(feature_key):
             template="""<span href="#" data-toggle="tooltip" title="<%= value %>"><%= value %></span>"""
         )
     elif feature_key == "image":
-        style = hover.config["visual"]["table_img_style"]
+        style = hover.config[Section.VISUAL][Key.TABLE_IMG_STYLE]
         # width is easily adjustable on the UI, no need to make configurable here
         feature_col_kwargs["width"] = 200
         feature_col_kwargs["formatter"] = HTMLTemplateFormatter(

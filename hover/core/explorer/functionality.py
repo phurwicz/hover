@@ -6,7 +6,10 @@ from collections import OrderedDict
 from bokeh.models import CDSView, IndexFilter, Dropdown, Button
 from bokeh.palettes import Category20
 from bokeh.layouts import row
-from hover import module_config
+from hover.module_config import (
+    DataFrame as DF,
+    ABSTAIN_DECODED,
+)
 from hover.utils.misc import current_time
 from hover.utils.bokeh_helper import bokeh_hover_tooltip
 from .local_config import SOURCE_COLOR_FIELD, SOURCE_ALPHA_FIELD, SEARCH_SCORE_FIELD
@@ -130,11 +133,7 @@ class BokehDataAnnotator(BokehBaseExplorer):
         color_dict = self.auto_color_mapping()
 
         for _key, _df in self.dfs.items():
-            _color = (
-                _df["label"]
-                .apply(lambda label: color_dict.get(label, "gainsboro"))
-                .tolist()
-            )
+            _color = _df.column_map("label", color_dict, output="list")
             self.sources[_key].add(_color, SOURCE_COLOR_FIELD)
 
     def _update_colors(self):
@@ -146,11 +145,7 @@ class BokehDataAnnotator(BokehBaseExplorer):
         # infer glyph colors dynamically
         color_dict = self.auto_color_mapping()
 
-        color_list = (
-            self.dfs["raw"]["label"]
-            .apply(lambda label: color_dict.get(label, "gainsboro"))
-            .tolist()
-        )
+        color_list = self.dfs["raw"].column_map("label", color_dict, output="list")
         self.sources["raw"].patch(
             {SOURCE_COLOR_FIELD: [(slice(len(color_list)), color_list)]}
         )
@@ -188,7 +183,11 @@ class BokehDataAnnotator(BokehBaseExplorer):
             self._info(f"applying {len(selected_idx)} annotations...")
 
             # update label in both the df and the data source
-            self.dfs["raw"].loc[selected_idx, "label"] = label
+            self.dfs["raw"].set_column_by_constant(
+                "label",
+                label,
+                indices=selected_idx,
+            )
             patch_to_apply = [(_idx, label) for _idx in selected_idx]
             self.sources["raw"].patch({"label": patch_to_apply})
             self._good(f"applied {len(selected_idx)} annotations: {label}")
@@ -272,20 +271,20 @@ class BokehSoftLabelExplorer(BokehBaseExplorer):
             )
         return specified
 
-    def _mandatory_column_defaults(self):
+    def _mandatory_column_info(self):
         """
-        ???+ note "Mandatory columns and default values."
+        ???+ note "Mandatory columns, types, and default values."
 
             If default value is None, will raise exception if the column is not found.
         """
-        column_to_value = super()._mandatory_column_defaults()
-        column_to_value.update(
+        column_info = super()._mandatory_column_info()
+        column_info.update(
             {
-                self.label_col: module_config.ABSTAIN_DECODED,
-                self.score_col: 0.5,
+                self.label_col: {"type": str, "default": ABSTAIN_DECODED},
+                self.score_col: {"type": float, "default": 0.5},
             }
         )
-        return column_to_value
+        return column_info
 
     def _postprocess_sources(self):
         """
@@ -294,12 +293,9 @@ class BokehSoftLabelExplorer(BokehBaseExplorer):
         # infer glyph color from labels
         color_dict = self.auto_color_mapping()
 
-        def get_color(label):
-            return color_dict.get(label, "gainsboro")
-
         # infer glyph alpha from pseudo-percentile of soft label scores
         scores = np.concatenate(
-            [_df[self.score_col].tolist() for _df in self.dfs.values()]
+            [DF.series_tolist(_df[self.score_col]) for _df in self.dfs.values()]
         )
         scores_mean = scores.mean()
         scores_std = scores.std() + 1e-4
@@ -314,8 +310,8 @@ class BokehSoftLabelExplorer(BokehBaseExplorer):
 
         # infer alpha from score percentiles
         for _key, _df in self.dfs.items():
-            _color = _df[self.label_col].apply(get_color).tolist()
-            _alpha = _df[self.score_col].apply(pseudo_percentile).tolist()
+            _color = _df.column_map(self.label_col, color_dict, output="list")
+            _alpha = _df.column_apply(self.score_col, pseudo_percentile, output="list")
             self.sources[_key].add(_color, SOURCE_COLOR_FIELD)
             self.sources[_key].add(_alpha, SOURCE_ALPHA_FIELD)
 
@@ -346,6 +342,7 @@ class BokehSoftLabelExplorer(BokehBaseExplorer):
             """
             Calculate indices with score between lower/upper bounds.
             """
+            # note: comparing series with scalar is the same in pandas/polars
             keep_l = set(np.where(df[self.score_col] >= lower)[0])
             keep_u = set(np.where(df[self.score_col] <= upper)[0])
             kept = keep_l.intersection(keep_u)
@@ -444,17 +441,17 @@ class BokehMarginExplorer(BokehBaseExplorer):
         self.label_col_b = label_col_b
         super().__init__(df_dict, **kwargs)
 
-    def _mandatory_column_defaults(self):
+    def _mandatory_column_info(self):
         """
         ???+ note "Mandatory columns and default values."
 
             If default value is None, will raise exception if the column is not found.
         """
-        column_to_value = super()._mandatory_column_defaults()
+        column_to_value = super()._mandatory_column_info()
         column_to_value.update(
             {
-                self.label_col_a: None,
-                self.label_col_b: None,
+                self.label_col_a: {"type": str, "default": None},
+                self.label_col_b: {"type": str, "default": None},
             }
         )
         return column_to_value
@@ -476,10 +473,13 @@ class BokehMarginExplorer(BokehBaseExplorer):
             eff_kwargs["legend_label"] = f"{label}"
 
             # create agreement/increment/decrement subsets
-            col_a_pos = np.where(self.dfs[_key][self.label_col_a] == label)[0].tolist()
-            col_a_neg = np.where(self.dfs[_key][self.label_col_a] != label)[0].tolist()
-            col_b_pos = np.where(self.dfs[_key][self.label_col_b] == label)[0].tolist()
-            col_b_neg = np.where(self.dfs[_key][self.label_col_b] != label)[0].tolist()
+            # note: comparing series with constant is the same in pandas/polars
+            mask_a = DF.series_values(self.dfs[_key][self.label_col_a] == label)
+            mask_b = DF.series_values(self.dfs[_key][self.label_col_b] == label)
+            col_a_pos = np.where(mask_a)[0].tolist()
+            col_a_neg = np.where(np.logical_not(mask_a))[0].tolist()
+            col_b_pos = np.where(mask_b)[0].tolist()
+            col_b_neg = np.where(np.logical_not(mask_b))[0].tolist()
             agreement_view = CDSView(
                 source=_source, filters=[IndexFilter(col_a_pos), IndexFilter(col_b_pos)]
             )
@@ -653,13 +653,11 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
                 )
                 return
 
-            labels = self.dfs["raw"].iloc[selected_idx].apply(lf, axis=1).values
-            num_nontrivial = len(
-                list(filter(lambda l: l != module_config.ABSTAIN_DECODED, labels))
-            )
+            labels = self.dfs["raw"].row_apply(lf, indices=selected_idx, output="numpy")
+            num_nontrivial = len(list(filter(lambda l: l != ABSTAIN_DECODED, labels)))
 
             # update label in both the df and the data source
-            self.dfs["raw"].loc[selected_idx, "label"] = labels
+            self.dfs["raw"].set_column_by_array("label", labels, indices=selected_idx)
             for _idx, _label in zip(selected_idx, labels):
                 _idx = int(_idx)
                 self.sources["raw"].patch({"label": [(_idx, _label)]})
@@ -692,11 +690,13 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
 
             for _key, _source in self.sources.items():
                 _selected = _source.selected.indices
-                _labels = self.dfs[_key].iloc[_selected].apply(lf, axis=1).values
+                _labels = self.dfs[_key].row_apply(
+                    lf, indices=_selected, output="numpy"
+                )
                 _kept = [
                     _idx
                     for _idx, _label in zip(_selected, _labels)
-                    if _label != module_config.ABSTAIN_DECODED
+                    if _label != ABSTAIN_DECODED
                 ]
                 self.sources[_key].selected.indices = _kept
 
@@ -798,8 +798,8 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
         assert lf_name in self.lf_data, f"trying to refresh non-existing LF: {lf_name}"
 
         lf = self.lf_data[lf_name]["lf"]
-        L_raw = self.dfs["raw"].apply(lf, axis=1).values
-        L_labeled = self.dfs["labeled"].apply(lf, axis=1).values
+        L_raw = self.dfs["raw"].row_apply(lf, output="numpy")
+        L_labeled = self.dfs["labeled"].row_apply(lf, output="numpy")
 
         glyph_codes = self.lf_data[lf_name]["glyphs"].keys()
         if "C" in glyph_codes:
@@ -841,9 +841,9 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
 
         # calculate predicted labels if not provided
         if L_raw is None:
-            L_raw = self.dfs["raw"].apply(lf, axis=1).values
+            L_raw = self.dfs["raw"].row_apply(lf, output="numpy")
         if L_labeled is None:
-            L_labeled = self.dfs["labeled"].apply(lf, axis=1).values
+            L_labeled = self.dfs["labeled"].row_apply(lf, output="numpy")
 
         # prepare plot settings
         assert self.palette, f"Palette depleted, # LFs: {len(self.lf_data)}"
@@ -923,8 +923,8 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
         if L_labeled.shape[0] == 0:
             indices = []
         else:
-            agreed = self.dfs["labeled"]["label"].values == L_labeled
-            attempted = L_labeled != module_config.ABSTAIN_DECODED
+            agreed = DF.series_values(self.dfs["labeled"]["label"]) == L_labeled
+            attempted = L_labeled != ABSTAIN_DECODED
             indices = np.where(np.multiply(agreed, attempted))[0].tolist()
         view = CDSView(source=self.sources["labeled"], filters=[IndexFilter(indices)])
         return view
@@ -939,8 +939,8 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
         if L_labeled.shape[0] == 0:
             indices = []
         else:
-            disagreed = self.dfs["labeled"]["label"].values != L_labeled
-            attempted = L_labeled != module_config.ABSTAIN_DECODED
+            disagreed = DF.series_values(self.dfs["labeled"]["label"]) != L_labeled
+            attempted = L_labeled != ABSTAIN_DECODED
             indices = np.where(np.multiply(disagreed, attempted))[0].tolist()
         view = CDSView(source=self.sources["labeled"], filters=[IndexFilter(indices)])
         return view
@@ -956,8 +956,10 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
         if L_labeled.shape[0] == 0:
             indices = []
         else:
-            targetable = np.isin(self.dfs["labeled"]["label"], targets)
-            abstained = L_labeled == module_config.ABSTAIN_DECODED
+            targetable = np.isin(
+                DF.series_values(self.dfs["labeled"]["label"]), targets
+            )
+            abstained = L_labeled == ABSTAIN_DECODED
             indices = np.where(np.multiply(targetable, abstained))[0].tolist()
         view = CDSView(source=self.sources["labeled"], filters=[IndexFilter(indices)])
         return view
@@ -972,6 +974,6 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
         if L_raw.shape[0] == 0:
             indices = []
         else:
-            indices = np.where(L_raw != module_config.ABSTAIN_DECODED)[0].tolist()
+            indices = np.where(L_raw != ABSTAIN_DECODED)[0].tolist()
         view = CDSView(source=self.sources["raw"], filters=[IndexFilter(indices)])
         return view

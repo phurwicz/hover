@@ -6,17 +6,21 @@ from hover.recipes.experimental import (
     active_learning,
     snorkel_crosscheck,
 )
+from hover.module_config import DataFrame as DF
 from bokeh.events import ButtonClick, SelectionGeometry
 from .local_helper import execute_handle_function
 
 
 def test_active_learning(example_text_dataset, dummy_vecnet_callback):
+    def read_scores(dataset, subset):
+        return DF.series_values(dataset.dfs[subset]["pred_score"]).copy()
+
     dataset = example_text_dataset.copy()
     vecnet = dummy_vecnet_callback(dataset)
     layout, objects = _active_learning(dataset, vecnet)
     assert layout.visible
 
-    initial_scores = dataset.dfs["raw"]["pred_score"].values.copy()
+    initial_scores = read_scores(dataset, "raw")
 
     finder, annotator = objects["finder"], objects["annotator"]
     softlabel = objects["softlabel"]
@@ -26,7 +30,7 @@ def test_active_learning(example_text_dataset, dummy_vecnet_callback):
 
     # train for default number of epochs
     model_trainer._trigger_event(train_event)
-    first_scores = dataset.dfs["raw"]["pred_score"].values.copy()
+    first_scores = read_scores(dataset, "raw")
     assert not np.allclose(first_scores, initial_scores)
 
     # emulating user interaction: slide coords to view manifold trajectory
@@ -35,7 +39,7 @@ def test_active_learning(example_text_dataset, dummy_vecnet_callback):
 
     # train for 1 more epoch
     model_trainer._trigger_event(train_event)
-    second_scores = dataset.dfs["raw"]["pred_score"].values
+    second_scores = read_scores(dataset, "raw")
     assert not np.allclose(second_scores, first_scores)
     # take 25 and 75 percentiles of scores for later use
     range_low, range_high = np.percentile(second_scores, [25, 75]).tolist()

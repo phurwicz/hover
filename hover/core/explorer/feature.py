@@ -2,11 +2,11 @@
 ???+ note "Intermediate classes based on the main feature."
 """
 import re
-import hover
 import numpy as np
 from functools import lru_cache
 from bokeh.models import TextInput, Slider
 from .base import BokehBaseExplorer
+from .local_config import TOOLTIP_IMG_STYLE
 
 
 class BokehForText(BokehBaseExplorer):
@@ -23,7 +23,10 @@ class BokehForText(BokehBaseExplorer):
     """
 
     PRIMARY_FEATURE = "text"
-    MANDATORY_COLUMNS = [PRIMARY_FEATURE, "label"]
+    MANDATORY_COLUMN_TO_TYPE_DEFAULT = {
+        PRIMARY_FEATURE: (str, None),
+        "label": (str, None),
+    }
     TOOLTIP_KWARGS = {
         "label": {"label": "Label"},
         "text": {"text": "Text"},
@@ -174,7 +177,10 @@ class BokehForAudio(BokehForUrlToVector):
     """
 
     PRIMARY_FEATURE = "audio"
-    MANDATORY_COLUMNS = [PRIMARY_FEATURE, "label"]
+    MANDATORY_COLUMN_TO_TYPE_DEFAULT = {
+        PRIMARY_FEATURE: (str, None),
+        "label": (str, None),
+    }
     TOOLTIP_KWARGS = {
         "label": {"label": "Label"},
         "audio": {"audio": ""},
@@ -197,10 +203,13 @@ class BokehForImage(BokehForUrlToVector):
     """
 
     PRIMARY_FEATURE = "image"
-    MANDATORY_COLUMNS = [PRIMARY_FEATURE, "label"]
+    MANDATORY_COLUMN_TO_TYPE_DEFAULT = {
+        PRIMARY_FEATURE: (str, None),
+        "label": (str, None),
+    }
     TOOLTIP_KWARGS = {
         "label": {"label": "Label"},
-        "image": {"image": hover.config["visual"]["tooltip_img_style"]},
+        "image": {"image": TOOLTIP_IMG_STYLE},
         "coords": True,
         "index": True,
     }

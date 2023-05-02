@@ -1,2 +1,2 @@
 # what we did adds 'embed_2d_0' and 'embed_2d_1' columns to the DataFrames in dataset.dfs
-dataset.dfs["raw"].head(5)
+dataset.dfs["raw"]().head(5)

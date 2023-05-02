@@ -11,15 +11,20 @@
     -   loading data for training models
 """
 import os
-import hover
+import operator
 import numpy as np
-import pandas as pd
 from tqdm import tqdm
 from collections import OrderedDict
-from hover import module_config
+from hover.module_config import (
+    DataFrame as DF,
+    ABSTAIN_DECODED,
+    ABSTAIN_ENCODED,
+    DATA_SAVE_DIR,
+)
 from hover.core import Loggable
 from hover.utils.bokeh_helper import auto_label_color
 from hover.utils.misc import current_time
+from hover.utils.typecheck import TypedValueDict
 from bokeh.models import (
     Button,
     CheckboxGroup,
@@ -35,6 +40,7 @@ from .local_config import (
     dataset_default_sel_table_kwargs,
     COLOR_GLYPH_TEMPLATE,
     DATASET_SUBSET_FIELD,
+    DEFAULT_REDUCTION_METHOD,
     embedding_field,
 )
 
@@ -112,7 +118,7 @@ class SupervisableDataset(Loggable):
             | `label_key`   | `str`  | the key for the `**str**` label in supervised data |
         """
 
-        def dictl_transform(dictl, labels=True):
+        def dictl_transform(dictl, subset, labels=True):
             """
             Burner function to transform the input list of dictionaries into standard format.
             """
@@ -135,31 +141,56 @@ class SupervisableDataset(Loggable):
                 trans_d = {key_transform.get(_k, _k): _v for _k, _v in d.items()}
 
                 if not labels:
-                    trans_d["label"] = module_config.ABSTAIN_DECODED
+                    trans_d["label"] = ABSTAIN_DECODED
+
+                trans_d[DATASET_SUBSET_FIELD] = subset
 
                 return trans_d
 
             return [burner(_d) for _d in dictl]
 
         # standardize records
-        dictls = {
-            "raw": dictl_transform(raw_dictl, labels=False),
-            "train": dictl_transform(train_dictl),
-            "dev": dictl_transform(dev_dictl),
-            "test": dictl_transform(test_dictl),
-        }
+        dictls = [
+            *dictl_transform(raw_dictl, "raw", labels=False),
+            *dictl_transform(train_dictl, "train"),
+            *dictl_transform(dev_dictl, "dev"),
+            *dictl_transform(test_dictl, "test"),
+        ]
+        all_subsets_df = DF.construct(dictls)
+
+        assert all_subsets_df.shape[0] > 0, "Expected non-empty dataset"
+        assert (
+            self.__class__.FEATURE_KEY in all_subsets_df.columns
+        ), f"Expected feature key {self.__class__.FEATURE_KEY}"
+        assert "label" in all_subsets_df.columns, "Expected label key 'label'"
 
         # initialize dataframes
-        self.dfs = dict()
-        for _key, _dictl in dictls.items():
-            if _dictl:
-                _df = pd.DataFrame(_dictl)
-                assert self.__class__.FEATURE_KEY in _df.columns
-                assert "label" in _df.columns
-            else:
-                _df = pd.DataFrame(columns=[self.__class__.FEATURE_KEY, "label"])
+        self.dfs = TypedValueDict(DF)
+        for _key in ["raw", "train", "dev", "test"]:
+            self.dfs[_key] = all_subsets_df.filter_rows_by_operator(
+                DATASET_SUBSET_FIELD, operator.eq, _key
+            )
 
-            self.dfs[_key] = _df
+    @property
+    def dfs(self):
+        """
+        ???+ note "Subset -> DataFrame mapping."
+        """
+        return self._dfs
+
+    @dfs.setter
+    def dfs(self, dfs):
+        assert isinstance(
+            dfs, TypedValueDict
+        ), f"Expected TypedValueDict, got {type(dfs)}"
+        assert not hasattr(self, "_dfs"), "Resetting `dfs` is forbidden."
+        self._dfs = dfs
+
+    def subset(self, key):
+        """
+        ???+ note "Return the DataFrame by reference for the given subset."
+        """
+        return self.dfs[key]
 
     def copy(self):
         """
@@ -179,7 +210,7 @@ class SupervisableDataset(Loggable):
         """
         feature_to_subset_idx = {}
         for _subset, _df in self.dfs.items():
-            _values = _df[self.__class__.FEATURE_KEY].values
+            _values = DF.series_values(_df[self.__class__.FEATURE_KEY])
             for i, _val in enumerate(_values):
                 if _val in feature_to_subset_idx:
                     raise ValueError(
@@ -196,7 +227,9 @@ class SupervisableDataset(Loggable):
         """
         subset, index = self.feature_to_subset_idx[value]
 
-        current_value = self.dfs[subset].at[index, self.__class__.FEATURE_KEY]
+        current_value = self.dfs[subset].get_cell_by_row_column(
+            index, self.__class__.FEATURE_KEY
+        )
         if current_value != value:
             if auto_recompute:
                 self._warn("locate_by_feature_value mismatch. Recomputing index.")
@@ -211,13 +244,7 @@ class SupervisableDataset(Loggable):
         """
         ???+ note "Export to a pandas DataFrame."
         """
-        dfs = []
-        for _subset in ["raw", "train", "dev", "test"]:
-            _df = self.dfs[_subset].copy()
-            _df[DATASET_SUBSET_FIELD] = _subset
-            dfs.append(_df)
-
-        return pd.concat(dfs, axis=0)
+        return DF.concat_rows(self.dfs.values()).to_pandas()
 
     @classmethod
     def from_pandas(cls, df, **kwargs):
@@ -229,11 +256,11 @@ class SupervisableDataset(Loggable):
         """
         SUBSETS = cls.SCRATCH_SUBSETS + cls.PUBLIC_SUBSETS + cls.PRIVATE_SUBSETS
 
-        if DATASET_SUBSET_FIELD not in df.columns:
-            raise ValueError(
-                f"Expecting column '{DATASET_SUBSET_FIELD}' in the DataFrame which takes values from {SUBSETS}"
-            )
+        assert (
+            DATASET_SUBSET_FIELD in df.columns
+        ), f"Expecting column '{DATASET_SUBSET_FIELD}' in the DataFrame which takes values from {SUBSETS}"
 
+        # use the 'silly' approach for robustness
         dictls = {}
         for _subset in ["raw", "train", "dev", "test"]:
             _sub_df = df[df[DATASET_SUBSET_FIELD] == _subset]
@@ -415,22 +442,18 @@ class SupervisableDataset(Loggable):
                     )
                     return
 
-                sel_slice = self.dfs[sub_k].iloc[selected_idx]
-                valid_slice = sel_slice[
-                    sel_slice["label"] != module_config.ABSTAIN_DECODED
-                ]
+                sel_slice = self.dfs[sub_k].select_rows(selected_idx)
+                valid_slice = sel_slice.filter_rows_by_operator(
+                    "label", operator.ne, ABSTAIN_DECODED
+                )
 
                 # concat to the end and do some accounting
                 size_before = self.dfs[sub_to].shape[0]
-                self.dfs[sub_to] = pd.concat(
-                    [self.dfs[sub_to], valid_slice],
-                    axis=0,
-                    sort=False,
-                    ignore_index=True,
-                )
+                self.dfs[sub_to] = DF.concat_rows([self.dfs[sub_to], valid_slice])
                 size_mid = self.dfs[sub_to].shape[0]
-                self.dfs[sub_to].drop_duplicates(
-                    subset=[self.__class__.FEATURE_KEY], keep="last", inplace=True
+                self.dfs[sub_to] = self.dfs[sub_to].unique(
+                    subset=[self.__class__.FEATURE_KEY],
+                    keep="last",
                 )
                 size_after = self.dfs[sub_to].shape[0]
 
@@ -463,10 +486,10 @@ class SupervisableDataset(Loggable):
             sel_slices = []
             for subset in subsets:
                 selected_idx = sorted(explorer.sources[subset].selected.indices)
-                sub_slice = explorer.dfs[subset].iloc[selected_idx]
+                sub_slice = explorer.dfs[subset].select_rows(selected_idx)
                 sel_slices.append(sub_slice)
 
-            selected = pd.concat(sel_slices, axis=0)
+            selected = DF.concat_rows(sel_slices)
             self._callback_update_selection(selected)
 
         def callback_view_refresh():
@@ -519,15 +542,15 @@ class SupervisableDataset(Loggable):
         all_labels = set()
         for _key in [*self.__class__.PUBLIC_SUBSETS, *self.__class__.PRIVATE_SUBSETS]:
             _df = self.dfs[_key]
-            _found_labels = set(_df["label"].tolist())
+            _found_labels = set(DF.series_tolist(_df["label"]))
             all_labels = all_labels.union(_found_labels)
 
         # exclude ABSTAIN from self.classes, but include it in the encoding
-        all_labels.discard(module_config.ABSTAIN_DECODED)
+        all_labels.discard(ABSTAIN_DECODED)
         self.classes = sorted(all_labels)
         self.label_encoder = {
             **{_label: _i for _i, _label in enumerate(self.classes)},
-            module_config.ABSTAIN_DECODED: module_config.ABSTAIN_ENCODED,
+            ABSTAIN_DECODED: ABSTAIN_ENCODED,
         }
         self.label_decoder = {_v: _k for _k, _v in self.label_encoder.items()}
 
@@ -549,14 +572,16 @@ class SupervisableDataset(Loggable):
         for _key in [*self.__class__.PUBLIC_SUBSETS, *self.__class__.PRIVATE_SUBSETS]:
             _invalid_indices = None
             assert "label" in self.dfs[_key].columns
-            _mask = self.dfs[_key]["label"].apply(
-                lambda x: int(x in self.label_encoder)
+            _mask = np.logical_not(
+                self.dfs[_key].column_isin(
+                    "label",
+                    self.label_encoder.keys(),
+                )
             )
-            # DO NOT change the "==" to "is"; False in pandas is not False below
-            _invalid_indices = np.where(_mask == 0)[0].tolist()
+            _invalid_indices = np.where(_mask)[0].tolist()
             if _invalid_indices:
                 self._fail(f"Subset {_key} has invalid labels:")
-                self._print(self.dfs[_key].loc[_invalid_indices])
+                self._print(self.dfs[_key].select_rows(_invalid_indices)())
                 if raise_exception:
                     raise ValueError("invalid labels")
 
@@ -579,7 +604,7 @@ class SupervisableDataset(Loggable):
             # auto-determine the export path root
             if path_root is None:
                 timestamp = current_time("%Y%m%d%H%M%S")
-                export_dir = module_config.DATA_SAVE_DIR
+                export_dir = DATA_SAVE_DIR
                 path_root = os.path.join(export_dir, f"hover-dataset-{timestamp}")
 
             export_df = self.to_pandas()
@@ -641,13 +666,13 @@ class SupervisableDataset(Loggable):
             self.setup_label_coding()
 
             # re-compute label population
-            eff_labels = [module_config.ABSTAIN_DECODED, *self.classes]
+            eff_labels = [ABSTAIN_DECODED, *self.classes]
             color_dict = auto_label_color(self.classes)
             eff_colors = [color_dict[_label] for _label in eff_labels]
 
             pop_data = dict(color=eff_colors, label=eff_labels)
             for _subset in subsets:
-                _subpop = self.dfs[_subset]["label"].value_counts()
+                _subpop = self.dfs[_subset].column_counter("label")
                 pop_data[f"count_{_subset}"] = [
                     _subpop.get(_label, 0) for _label in eff_labels
                 ]
@@ -686,7 +711,7 @@ class SupervisableDataset(Loggable):
             """
             To be triggered as a subroutine of `self.selection_viewer`.
             """
-            sel_source.data = selected_df.to_dict(orient="list")
+            sel_source.data = selected_df.to_dict_of_lists()
             # now that selection table has changed, clear sub-selection
             sel_source.selected.indices = []
 
@@ -703,7 +728,9 @@ class SupervisableDataset(Loggable):
                 feature_value = sel_source.data[self.__class__.FEATURE_KEY][i]
                 subset, idx = self.locate_by_feature_value(feature_value)
                 for key in sel_source.data.keys():
-                    self.dfs[subset].at[idx, key] = sel_source.data[key][i]
+                    self.dfs[subset].set_cell_by_row_column(
+                        idx, key, sel_source.data[key][i]
+                    )
 
             self._good(f"Selection table: edited {len(raw_indices)} dataset rows.")
             # if edited labels (which is common), then population has changed
@@ -731,21 +758,17 @@ class SupervisableDataset(Loggable):
         for _key in ordered_subsets:
             before[_key] = self.dfs[_key].shape[0]
             columns[_key] = self.dfs[_key].columns
-            self.dfs[_key]["__subset"] = _key
+            # update subset for rows that have been copied / moved
+            self.dfs[_key].set_column_by_constant(DATASET_SUBSET_FIELD, _key)
 
         # concatenate in order and deduplicate
-        overall_df = pd.concat(
-            [self.dfs[_key] for _key in ordered_subsets], axis=0, sort=False
-        )
-        overall_df.drop_duplicates(
-            subset=[self.__class__.FEATURE_KEY], keep="last", inplace=True
-        )
-        overall_df.reset_index(drop=True, inplace=True)
+        overall_df = DF.concat_rows([self.dfs[_key] for _key in ordered_subsets])
+        overall_df = overall_df.unique(subset=[self.__class__.FEATURE_KEY], keep="last")
 
         # cut up slices
         for _key in ordered_subsets:
-            self.dfs[_key] = overall_df[overall_df["__subset"] == _key].reset_index(
-                drop=True, inplace=False
+            self.dfs[_key] = overall_df.filter_rows_by_operator(
+                DATASET_SUBSET_FIELD, operator.eq, _key
             )[columns[_key]]
             after[_key] = self.dfs[_key].shape[0]
             self._info(f"--subset {_key} rows: {before[_key]} -> {after[_key]}.")
@@ -760,7 +783,9 @@ class SupervisableDataset(Loggable):
     def vectorizer_lookup(self, *args, **kwargs):
         self._fail("assigning vectorizer lookup by reference is forbidden.")
 
-    def compute_nd_embedding(self, vectorizer, method=None, dimension=2, **kwargs):
+    def compute_nd_embedding(
+        self, vectorizer, method=DEFAULT_REDUCTION_METHOD, dimension=2, **kwargs
+    ):
         """
         ???+ note "Get embeddings in n-dimensional space and return the dimensionality reducer."
             Reference: [`DimensionalityReducer`](https://github.com/phurwicz/hover/blob/main/hover/core/representation/reduction.py)
@@ -774,9 +799,12 @@ class SupervisableDataset(Loggable):
         """
         from hover.core.representation.reduction import DimensionalityReducer
 
-        if method is None:
-            method = hover.config["data.embedding"]["default_reduction_method"]
         # register the vectorizer for scenarios that may need it
+        assert (
+            isinstance(dimension, int) and dimension >= 2
+        ), "Invalid dimension {dimension}}"
+        if dimension in self.vectorizer_lookup:
+            self._warn(f"Overwriting embedding with dimension {dimension}.")
         self.vectorizer_lookup[dimension] = vectorizer
 
         # prepare input vectors to manifold learning
@@ -784,16 +812,19 @@ class SupervisableDataset(Loggable):
         trans_subset = [*self.__class__.PRIVATE_SUBSETS]
 
         assert not set(fit_subset).intersection(set(trans_subset)), "Unexpected overlap"
-        assert isinstance(dimension, int) and dimension >= 2
         embedding_cols = [embedding_field(dimension, i) for i in range(dimension)]
 
         # compute vectors and keep track which where to slice the array for fitting
         feature_inp = []
         for _key in fit_subset:
-            feature_inp.extend(self.dfs[_key][self.__class__.FEATURE_KEY].tolist())
+            feature_inp.extend(
+                DF.series_tolist(self.dfs[_key][self.__class__.FEATURE_KEY])
+            )
         fit_num = len(feature_inp)
         for _key in trans_subset:
-            feature_inp.extend(self.dfs[_key][self.__class__.FEATURE_KEY].tolist())
+            feature_inp.extend(
+                DF.series_tolist(self.dfs[_key][self.__class__.FEATURE_KEY])
+            )
         trans_arr = np.array(
             [vectorizer(_inp) for _inp in tqdm(feature_inp, desc="Vectorizing")]
         )
@@ -810,12 +841,12 @@ class SupervisableDataset(Loggable):
         trans_embedding = reducer.transform(trans_arr[fit_num:], method)
 
         # assign x and y coordinates to dataset
-        start_idx = 0
         for _subset, _embedding in [
             (fit_subset, fit_embedding),
             (trans_subset, trans_embedding),
         ]:
-            # edge case: embedding is too small
+            start_idx = 0
+            # edge case: embedding has no rows
             if _embedding.shape[0] < 1:
                 for _key in _subset:
                     assert (
@@ -824,17 +855,25 @@ class SupervisableDataset(Loggable):
                 continue
             for _key in _subset:
                 _length = self.dfs[_key].shape[0]
+                _embedding_slice = _embedding[start_idx : (start_idx + _length), :]
+                assert (
+                    _length == _embedding_slice.shape[0]
+                ), f"Unexpected length {_length} vs {_embedding_slice.shape}; embedding total {_embedding.shape}"
                 for _i in range(dimension):
                     _col = embedding_cols[_i]
-                    self.dfs[_key][_col] = pd.Series(
-                        _embedding[start_idx : (start_idx + _length), _i]
+                    self.dfs[_key].set_column_by_array(
+                        _col,
+                        _embedding_slice[:, _i],
+                        indices=None,
                     )
                 start_idx += _length
 
         self._good(f"Computed {dimension}-d embedding in columns {embedding_cols}")
         return reducer
 
-    def compute_2d_embedding(self, vectorizer, method=None, **kwargs):
+    def compute_2d_embedding(
+        self, vectorizer, method=DEFAULT_REDUCTION_METHOD, **kwargs
+    ):
         """
         ???+ note "Get embeddings in the xy-plane and return the dimensionality reducer."
             A special case of `compute_nd_embedding`.
@@ -846,7 +885,7 @@ class SupervisableDataset(Loggable):
             | `**kwargs`   |            | kwargs for `DimensionalityReducer` |
         """
         reducer = self.compute_nd_embedding(
-            vectorizer, method=None, dimension=2, **kwargs
+            vectorizer, method=method, dimension=2, **kwargs
         )
         return reducer
 
@@ -869,7 +908,9 @@ class SupervisableDataset(Loggable):
         )
 
         # take the slice that has a meaningful label
-        df = self.dfs[key][self.dfs[key]["label"] != module_config.ABSTAIN_DECODED]
+        df = self.dfs[key].filter_rows_by_operator(
+            "label", operator.ne, ABSTAIN_DECODED
+        )
 
         # edge case: valid slice is too small
         if df.shape[0] < 1:
@@ -877,7 +918,7 @@ class SupervisableDataset(Loggable):
         batch_size = min(batch_size, df.shape[0])
 
         # prepare output vectors
-        labels = df["label"].apply(lambda x: self.label_encoder[x]).tolist()
+        labels = df.column_map("label", self.label_encoder, output="list")
         output_vectors = one_hot(labels, num_classes=len(self.classes))
         if smoothing_coeff > 0.0:
             output_vectors = label_smoothing(
@@ -887,7 +928,7 @@ class SupervisableDataset(Loggable):
         # prepare input vectors
         assert len(vectorizers) > 0, "Expected at least one vectorizer"
         multi_flag = len(vectorizers) > 1
-        features = df[self.__class__.FEATURE_KEY].tolist()
+        features = DF.series_tolist(df[self.__class__.FEATURE_KEY])
 
         input_vector_lists = []
         for _vec_func in vectorizers:

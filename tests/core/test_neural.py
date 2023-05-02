@@ -2,6 +2,7 @@ import pytest
 import numpy as np
 from copy import deepcopy
 from hover.core.neural import VectorNet
+from hover.module_config import DataFrame
 
 
 @pytest.fixture
@@ -84,7 +85,7 @@ class TestVectorNet(object):
     def test_manifold_trajectory(example_vecnet, example_raw_df):
         for _method in ["umap", "ivis"]:
             traj_arr, seq_arr, disparities = example_vecnet.manifold_trajectory(
-                example_raw_df["text"].tolist()
+                DataFrame.series_tolist(example_raw_df["text"])
             )
             assert isinstance(traj_arr, np.ndarray)
             assert isinstance(seq_arr, np.ndarray)

@@ -7,11 +7,12 @@
 """
 import re
 import numpy as np
-import hover
 import hover.core.explorer as hovex
+from hover.module_config import DataFrame as DF
 from bokeh.layouts import row, column
 from bokeh.models import Button
 from rich.console import Console
+from .local_config import DEFAULT_REDUCTION_METHOD
 
 
 EXPLORER_CATALOG = {
@@ -112,7 +113,7 @@ def standard_annotator(dataset, **kwargs):
     annotator.activate_search()
     annotator.plot()
 
-    # subscribe for df updates
+    # subscribe for dataset updates
     dataset.subscribe_update_push(annotator, {_k: _k for _k in subsets})
 
     # annotators can commit to a dataset
@@ -152,7 +153,7 @@ def standard_finder(dataset, **kwargs):
     finder.activate_search()
     finder.plot()
 
-    # subscribe for df updates
+    # subscribe for dataset updates
     dataset.subscribe_update_push(finder, {_k: _k for _k in subsets})
     return finder
 
@@ -269,7 +270,7 @@ def active_learning_components(dataset, vecnet, **kwargs):
         vecnet.auto_adjust_setup(dataset.classes)
 
         train_loader = vecnet.prepare_loader(dataset, "train", smoothing_coeff=0.2)
-        if dataset.dfs["dev"].shape[0] > 0:
+        if dataset.subset("dev").shape[0] > 0:
             dev_loader = vecnet.prepare_loader(dataset, "dev")
         else:
             dataset._warn("dev set is empty, borrowing train set for validation.")
@@ -287,33 +288,33 @@ def active_learning_components(dataset, vecnet, **kwargs):
         use_subsets = ("raw", "train", "dev")
         inps = []
         for _key in use_subsets:
-            inps.extend(dataset.dfs[_key][feature_key].tolist())
+            inps.extend(DF.series_tolist(dataset.subset(_key)[feature_key]))
 
         probs = vecnet.predict_proba(inps)
         labels = [dataset.label_decoder[_val] for _val in probs.argmax(axis=-1)]
         scores = probs.max(axis=-1).tolist()
         traj_arr, _, _ = vecnet.manifold_trajectory(
             inps,
-            method=hover.config["data.embedding"]["default_reduction_method"],
+            method=DEFAULT_REDUCTION_METHOD,
             reducer_kwargs=dict(dimension=manifold_dim),
             spline_kwargs=dict(points_per_step=5),
         )
 
         offset = 0
         for _key in use_subsets:
-            _length = dataset.dfs[_key].shape[0]
+            _length = dataset.subset(_key).shape[0]
             # skip subset if empty
             if _length == 0:
                 continue
             _slice = slice(offset, offset + _length)
-            dataset.dfs[_key]["pred_label"] = labels[_slice]
-            dataset.dfs[_key]["pred_score"] = scores[_slice]
+            dataset.subset(_key).set_column_by_array("pred_label", labels[_slice])
+            dataset.subset(_key).set_column_by_array("pred_score", scores[_slice])
             for i, _col in enumerate(manifold_traj_cols):
                 # all steps, selected slice
                 _traj = traj_arr[:, _slice, i]
                 # selected slice, all steps
                 _traj = list(np.swapaxes(_traj, 0, 1))
-                dataset.dfs[_key][f"{_col}_traj"] = _traj
+                dataset.subset(_key).set_column_by_array(f"{_col}_traj", _traj)
 
             offset += _length
 
