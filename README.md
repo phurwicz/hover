@@ -1,11 +1,11 @@
 ![Hover](https://raw.githubusercontent.com/phurwicz/hover/main/docs/images/hover-logo-title.png)
 
-[![en](https://img.shields.io/badge/lang-en-green.svg)](https://github.com/phurwicz/hover/blob/main/README.md)
-[![zh](https://img.shields.io/badge/lang-zh-green.svg)](https://github.com/phurwicz/hover/blob/main/README.zh.md)
-
 > Explore and label on a map of your data.
 >
 > Get enough to feed your model in no time.
+
+[![en](https://img.shields.io/badge/lang-en-green.svg)](https://github.com/phurwicz/hover/blob/main/README.md)
+[![zh](https://img.shields.io/badge/语言-中文-green.svg)](https://github.com/phurwicz/hover/blob/main/README.zh.md)
 
 [![PyPI Version](https://img.shields.io/pypi/v/hover?logo=pypi&logoColor=white)](https://pypi.org/project/hover/)
 [![Conda Version](https://img.shields.io/conda/vn/conda-forge/hover)](https://github.com/conda-forge/hover-feedstock)
