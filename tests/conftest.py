@@ -108,6 +108,7 @@ def dummy_labeling_function_list():
 def generate_pandas_df_with_coords():
     import faker
     from hover.core.local_config import embedding_field
+    from hover.module_config import ABSTAIN_DECODED
 
     fake_en = faker.Faker("en")
 
@@ -118,6 +119,7 @@ def generate_pandas_df_with_coords():
                     "text": fake_en.paragraph(3),
                     "audio": f"https://dom.ain/path/to/audio/file-{uuid.uuid1()}.mp3",
                     "image": f"https://dom.ain/path/to/image/file-{uuid.uuid1()}.jpg",
+                    "label": ABSTAIN_DECODED,
                 }
                 for i in range(size)
             ]
@@ -145,11 +147,7 @@ def wrap_pandas_df(pandas_df):
 
 @pytest.fixture(scope="module")
 def example_raw_pandas_df(generate_pandas_df_with_coords):
-    from hover.module_config import ABSTAIN_DECODED
-
-    df = generate_pandas_df_with_coords(300)
-    df["label"] = ABSTAIN_DECODED
-    return df
+    return generate_pandas_df_with_coords(300)
 
 
 @pytest.fixture(scope="module")
