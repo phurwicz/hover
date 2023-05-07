@@ -715,7 +715,7 @@ class TestDataframeBenchmark:
         "size,types,func,pdms,pdcoeff,plcoeff",
         [
             (500000, ("int",), lambda x: x**3, 1000, 1.01, 0.8),
-            (500000, ("str",), lambda x: len(x), 1000, 1.01, 1.0),
+            (500000, ("str",), len, 1000, 1.01, 1.0),
         ],
     )
     def test_benchmark_column_apply(self, size, types, func, pdms, pdcoeff, plcoeff):
