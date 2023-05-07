@@ -35,11 +35,12 @@ nav:
     - 'Basics':
         - 'Quickstart': 'pages/tutorial/t0-quickstart.md'
         - 'Using Recipes': 'pages/tutorial/t1-active-learning.md'
+        - 'Handling Images': 'pages/guides/g0-datatype-image.md'
+        - 'Handling Audio': 'pages/guides/g1-datatype-audio.md'
+    - 'Mechanisms':
         - 'Managing Data': 'pages/tutorial/t3-dataset-population-selection.md'
         - 'Applying Labels': 'pages/tutorial/t4-annotator-dataset-interaction.md'
-        - 'Handling Image Data': 'pages/guides/g0-datatype-image.md'
-        - 'Handling Audio Data': 'pages/guides/g1-datatype-audio.md'
-    - 'Customization':
+    - 'Options':
         - 'Host Options': 'pages/tutorial/t2-bokeh-app.md'
         - 'Custom Config': 'pages/guides/g2-hover-config.md'
     - 'Powerful Tricks':
@@ -56,17 +57,17 @@ nav:
     - 'API Reference':
         - 'hover.recipes': 'pages/reference/recipes.md'
         - 'hover.core':
-            - 'hover.core.dataset': 'pages/reference/core-dataset.md'
-            - 'hover.core.explorer':
+            - '.dataset': 'pages/reference/core-dataset.md'
+            - '.explorer':
                 - '.base': 'pages/reference/core-explorer-base.md'
                 - '.feature': 'pages/reference/core-explorer-feature.md'
                 - '.functionality': 'pages/reference/core-explorer-functionality.md'
                 - '.specialization': 'pages/reference/core-explorer-specialization.md'
-            - 'hover.core.neural': 'pages/reference/core-neural.md'
-            - 'hover.core.representation': 'pages/reference/core-representation.md'
+            - '.neural': 'pages/reference/core-neural.md'
+            - '.representation': 'pages/reference/core-representation.md'
         - 'hover.utils':
-            - 'hover.utils.bokeh_helper': 'pages/reference/utils-bokeh_helper.md'
-            - 'hover.utils.snorkel_helper': 'pages/reference/utils-snorkel_helper.md'
+            - '.bokeh_helper': 'pages/reference/utils-bokeh_helper.md'
+            - '.snorkel_helper': 'pages/reference/utils-snorkel_helper.md'
 
 markdown_extensions:
   - admonition
@@ -101,7 +102,8 @@ plugins:
         zh:
           Home: 主页
           Basics: 基础使用
-          Customization: 自定配置
+          Mechanisms: 理解机制
+          Options: 自定配置
           Powerful Tricks: 高级技巧
           API Reference: API 指南
 
