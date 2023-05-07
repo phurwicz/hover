@@ -4,13 +4,19 @@ from hover.utils.dataframe import (
     convert_indices_to_list,
     TYPE_TO_POLARS,
 )
+from functools import lru_cache
 from pprint import pformat
+import gc
 import numpy as np
 import pandas as pd
 import polars as pl
+import time
+import faker
 import pytest
 import operator
 
+
+EN_FAKER = faker.Faker("en")
 
 SERIES_VALUE_TEST_CASES = [
     list(range(30)),
@@ -39,6 +45,23 @@ ROW_INDICES_TEST_CASES = [
 ]
 
 
+@lru_cache(maxsize=10)
+def generate_benchmark_dataframe(size, types=("int", "str"), lazy=True):
+    data = dict()
+    for _type in types:
+        if _type == "int":
+            data[_type] = np.random.randint(0, 100, size=size)
+        elif _type == "str":
+            data[_type] = (
+                [EN_FAKER.paragraph(1)] * size
+                if lazy
+                else [EN_FAKER.paragraph(1) for _ in range(size)]
+            )
+        else:
+            raise ValueError(f"Unrecognized type: {_type}")
+    return data
+
+
 def numpy_to_native(value):
     """
     Convert numpy types to native types.
@@ -52,32 +75,34 @@ def numpy_to_native(value):
     return value
 
 
+def get_dataframes(df_data):
+    """
+    Subroutine for creating dataframes in tests.
+    """
+    df_pd = PandasDataframe.construct(df_data)
+    df_pl = PolarsDataframe.construct(df_data)
+    pd_df = pd.DataFrame(df_data)
+    pl_df = pl.DataFrame(df_data)
+
+    return df_pd, df_pl, pd_df, pl_df
+
+
+def assert_equivalent_dataframes(df_pd, df_pl, pd_df, pl_df):
+    """
+    Subroutine for checking dataframe values.
+    """
+    assert df_pd.equals(pd_df), f"{pformat(df_pd)}\n{pformat(pd_df)}"
+    assert df_pl.frame_equal(pl_df), f"{pformat(df_pl)}\n{pformat(pl_df)}"
+    assert df_pl.to_dicts() == df_pd.to_dict(
+        orient="records"
+    ), f"{pformat(df_pl)}\n{pformat(df_pd)}"
+
+
 @pytest.mark.lite
 class TestDataframe:
     """
     Consistency tests across pandas, polars, and hover dataframes.
     """
-
-    def _get_dataframes(self, df_data):
-        """
-        Subroutine for creating dataframes in tests.
-        """
-        df_pd = PandasDataframe.construct(df_data)
-        df_pl = PolarsDataframe.construct(df_data)
-        pd_df = pd.DataFrame(df_data)
-        pl_df = pl.DataFrame(df_data)
-
-        return df_pd, df_pl, pd_df, pl_df
-
-    def _assert_equivalent_dataframes(self, df_pd, df_pl, pd_df, pl_df):
-        """
-        Subroutine for checking dataframe values.
-        """
-        assert df_pd.equals(pd_df), f"{pformat(df_pd)}\n{pformat(pd_df)}"
-        assert df_pl.frame_equal(pl_df), f"{pformat(df_pl)}\n{pformat(pl_df)}"
-        assert df_pl.to_dicts() == df_pd.to_dict(
-            orient="records"
-        ), f"{pformat(df_pl)}\n{pformat(df_pd)}"
 
     @pytest.mark.parametrize("df_data", DATAFRAME_VALUE_TEST_CASES)
     def test_basics(self, df_data):
@@ -126,14 +151,8 @@ class TestDataframe:
     @pytest.mark.parametrize("df_data_a", DATAFRAME_VALUE_TEST_CASES)
     @pytest.mark.parametrize("df_data_b", DATAFRAME_VALUE_TEST_CASES[::-1])
     def test_concat_rows(self, df_data_a, df_data_b):
-        df_pd_a = PandasDataframe.construct(df_data_a)
-        df_pd_b = PandasDataframe.construct(df_data_b)
-        df_pl_a = PolarsDataframe.construct(df_data_a)
-        df_pl_b = PolarsDataframe.construct(df_data_b)
-        pd_df_a = df_pd_a()
-        pd_df_b = df_pd_b()
-        pl_df_a = df_pl_a()
-        pl_df_b = df_pl_b()
+        df_pd_a, df_pl_a, pd_df_a, pl_df_a = get_dataframes(df_data_a)
+        df_pd_b, df_pl_b, pd_df_b, pl_df_b = get_dataframes(df_data_b)
         df_pd_ab = PandasDataframe.concat_rows([df_pd_a, df_pd_b])
         df_pl_ab = PolarsDataframe.concat_rows([df_pl_a, df_pl_b])
 
@@ -178,7 +197,7 @@ class TestDataframe:
 
     @pytest.mark.parametrize("df_data", DATAFRAME_VALUE_TEST_CASES)
     def test_to_dict_of_lists(self, df_data):
-        df_pd, df_pl, pd_df, pl_df = self._get_dataframes(df_data)
+        df_pd, df_pl, pd_df, pl_df = get_dataframes(df_data)
 
         df_pd_dict = df_pd.to_dict_of_lists()
         df_pl_dict = df_pl.to_dict_of_lists()
@@ -189,7 +208,7 @@ class TestDataframe:
 
     @pytest.mark.parametrize("df_data", DATAFRAME_VALUE_TEST_CASES)
     def test_to_list_of_dicts(self, df_data):
-        df_pd, df_pl, pd_df, pl_df = self._get_dataframes(df_data)
+        df_pd, df_pl, pd_df, pl_df = get_dataframes(df_data)
 
         df_pd_dictl = df_pd.to_list_of_dicts()
         df_pl_dictl = df_pl.to_list_of_dicts()
@@ -200,7 +219,7 @@ class TestDataframe:
 
     @pytest.mark.parametrize("df_data", DATAFRAME_VALUE_TEST_CASES)
     def test_get_row_as_dict(self, df_data):
-        df_pd, df_pl, pd_df, pl_df = self._get_dataframes(df_data)
+        df_pd, df_pl, pd_df, pl_df = get_dataframes(df_data)
 
         row_pd = df_pd.get_row_as_dict(0)
         row_pl = df_pl.get_row_as_dict(0)
@@ -227,7 +246,7 @@ class TestDataframe:
         if indices is None:
             return
 
-        df_pd, df_pl, pd_df, pl_df = self._get_dataframes(df_data)
+        df_pd, df_pl, pd_df, pl_df = get_dataframes(df_data)
 
         df_pd_rows = df_pd.select_rows(indices)()
         df_pl_rows = df_pl.select_rows(indices)()
@@ -239,7 +258,7 @@ class TestDataframe:
         else:
             pd_df_rows = pd_df.iloc[indices_list]
             pl_df_rows = pl_df[indices_list]
-        self._assert_equivalent_dataframes(
+        assert_equivalent_dataframes(
             df_pd_rows,
             df_pl_rows,
             pd_df_rows,
@@ -248,7 +267,7 @@ class TestDataframe:
 
     @pytest.mark.parametrize("df_data", DATAFRAME_VALUE_TEST_CASES)
     def test_filter_rows_by_operator(self, df_data):
-        df_pd, df_pl, pd_df, pl_df = self._get_dataframes(df_data)
+        df_pd, df_pl, pd_df, pl_df = get_dataframes(df_data)
 
         for _op in [operator.eq, operator.ne, operator.gt, operator.lt]:
             _df_pd_slice = df_pd.filter_rows_by_operator("int", _op, 5)()
@@ -257,7 +276,7 @@ class TestDataframe:
             )
             _df_pl_slice = df_pl.filter_rows_by_operator("int", _op, 5)()
             _pl_df_slice = pl_df[np.where(_op(pl_df["int"], 5))[0]]
-            self._assert_equivalent_dataframes(
+            assert_equivalent_dataframes(
                 _df_pd_slice,
                 _df_pl_slice,
                 _pd_df_slice,
@@ -266,14 +285,14 @@ class TestDataframe:
 
     @pytest.mark.parametrize("df_data", DATAFRAME_VALUE_TEST_CASES)
     def test_unique(self, df_data):
-        df_pd, df_pl, pd_df, pl_df = self._get_dataframes(df_data)
+        df_pd, df_pl, pd_df, pl_df = get_dataframes(df_data)
 
         df_pd_unique = df_pd.unique("bool", keep="last")()
         pd_df_unique = pd_df.drop_duplicates("bool", keep="last").reset_index(drop=True)
         df_pl_unique = df_pl.unique("bool", keep="last")()
         pl_df_unique = pl_df.unique("bool", keep="last", maintain_order=True)
 
-        self._assert_equivalent_dataframes(
+        assert_equivalent_dataframes(
             df_pd_unique,
             df_pl_unique,
             pd_df_unique,
@@ -283,7 +302,7 @@ class TestDataframe:
     @pytest.mark.parametrize("df_data", DATAFRAME_VALUE_TEST_CASES)
     @pytest.mark.parametrize("indices", ROW_INDICES_TEST_CASES)
     def test_set_column_by_constant(self, df_data, indices):
-        df_pd, df_pl, pd_df, pl_df = self._get_dataframes(df_data)
+        df_pd, df_pl, pd_df, pl_df = get_dataframes(df_data)
         indices_list = (
             list(range(df_pd.shape[0]))
             if indices is None
@@ -299,12 +318,12 @@ class TestDataframe:
         for i in indices_list:
             pl_df[i, col] = value
 
-        self._assert_equivalent_dataframes(df_pd(), df_pl(), pd_df, pl_df)
+        assert_equivalent_dataframes(df_pd(), df_pl(), pd_df, pl_df)
 
     @pytest.mark.parametrize("df_data", DATAFRAME_VALUE_TEST_CASES)
     @pytest.mark.parametrize("indices", ROW_INDICES_TEST_CASES)
     def test_set_column_by_array(self, df_data, indices):
-        df_pd, df_pl, pd_df, pl_df = self._get_dataframes(df_data)
+        df_pd, df_pl, pd_df, pl_df = get_dataframes(df_data)
         indices_list = (
             list(range(df_pd.shape[0]))
             if indices is None
@@ -321,7 +340,7 @@ class TestDataframe:
             pl.DataFrame({col: [lookup.get(i, None) for i in range(pl_df.shape[0])]})
         )
 
-        self._assert_equivalent_dataframes(df_pd(), df_pl(), pd_df, pl_df)
+        assert_equivalent_dataframes(df_pd(), df_pl(), pd_df, pl_df)
 
     @pytest.mark.parametrize("df_data", DATAFRAME_VALUE_TEST_CASES)
     @pytest.mark.parametrize("indices", ROW_INDICES_TEST_CASES)
@@ -329,7 +348,7 @@ class TestDataframe:
         for col in HASHABLE_COLUMNS:
             if col not in df_data.keys():
                 continue
-            df_pd, df_pl, pd_df, pl_df = self._get_dataframes(df_data)
+            df_pd, df_pl, pd_df, pl_df = get_dataframes(df_data)
             mapping = pd_df[col].value_counts().to_dict()
             if col == "str":
                 mapping = {
@@ -365,7 +384,7 @@ class TestDataframe:
         for col in HASHABLE_COLUMNS:
             if col not in df_data.keys():
                 continue
-            df_pd, df_pl, pd_df, pl_df = self._get_dataframes(df_data)
+            df_pd, df_pl, pd_df, pl_df = get_dataframes(df_data)
             lookup = set(pd_df.loc[::2, col].values)
             indices_list = (
                 list(range(df_pd.shape[0]))
@@ -394,7 +413,7 @@ class TestDataframe:
     @pytest.mark.parametrize("df_data", DATAFRAME_VALUE_TEST_CASES)
     @pytest.mark.parametrize("indices", ROW_INDICES_TEST_CASES)
     def test_column_apply(self, df_data, indices):
-        df_tmp, _, _, _ = self._get_dataframes(df_data)
+        df_tmp, _, _, _ = get_dataframes(df_data)
 
         def func(x):
             if isinstance(x, (str, int, float)):
@@ -405,7 +424,7 @@ class TestDataframe:
                 return str(x)
 
         for col in df_tmp.columns:
-            df_pd, df_pl, pd_df, pl_df = self._get_dataframes(df_data)
+            df_pd, df_pl, pd_df, pl_df = get_dataframes(df_data)
             indices_list = (
                 list(range(df_pd.shape[0]))
                 if indices is None
@@ -431,7 +450,7 @@ class TestDataframe:
     @pytest.mark.parametrize("df_data", DATAFRAME_VALUE_TEST_CASES)
     @pytest.mark.parametrize("indices", ROW_INDICES_TEST_CASES)
     def test_row_apply(self, df_data, indices):
-        df_pd, df_pl, pd_df, pl_df = self._get_dataframes(df_data)
+        df_pd, df_pl, pd_df, pl_df = get_dataframes(df_data)
         indices_list = (
             list(range(df_pd.shape[0]))
             if indices is None
@@ -457,7 +476,7 @@ class TestDataframe:
 
     @pytest.mark.parametrize("df_data", DATAFRAME_VALUE_TEST_CASES)
     def test_get_cell_by_row_column(self, df_data):
-        df_pd, df_pl, pd_df, pl_df = self._get_dataframes(df_data)
+        df_pd, df_pl, pd_df, pl_df = get_dataframes(df_data)
         for col in df_pd.columns:
             row = np.random.randint(0, df_pd.shape[0])
 
@@ -475,7 +494,7 @@ class TestDataframe:
 
     @pytest.mark.parametrize("df_data", DATAFRAME_VALUE_TEST_CASES)
     def test_set_cell_by_row_column(self, df_data):
-        df_pd, df_pl, pd_df, pl_df = self._get_dataframes(df_data)
+        df_pd, df_pl, pd_df, pl_df = get_dataframes(df_data)
         for col in df_pd.columns:
             row = np.random.randint(0, df_pd.shape[0] // 2)
             old_value = df_pd.get_cell_by_row_column(row, col)
@@ -496,7 +515,239 @@ class TestDataframe:
 
                 pd_df.at[row, col] = value
                 pl_df[row, col] = value
-                self._assert_equivalent_dataframes(df_pd(), df_pl(), pd_df, pl_df)
+                assert_equivalent_dataframes(df_pd(), df_pl(), pd_df, pl_df)
             except Exception as e:
                 if tolerated is None or not isinstance(e, tolerated):
                     raise e
+
+
+@pytest.mark.benchmark
+class TestDataframeBenchmark:
+    """
+    Benchamarking - responsible for performance, not correctness.
+    """
+
+    def _benchmark_subroutine(self, pd_, pdx_, plx_, pdms, pdcoeff, plcoeff, runs=10):
+        """
+        Run callbacks and check that they are faster than the given thresholds.
+        Pandas native class callbacks have absolute thresholds.
+        Hover wrapped class callbacks have relative (to pandas) thresholds.
+        """
+
+        def tic():
+            return time.time() * 1000
+
+        pdms_avg, pdx_avg, plx_avg = 0, 0, 0
+
+        gc.disable()
+        for _ in range(runs):
+            gc.collect()
+            pdms_l = tic()
+            pd_()
+            pdms_r = tic()
+            pdms_avg += pdms_r - pdms_l
+
+            pdx_l = tic()
+            pdx_()
+            pdx_r = tic()
+            pdx_avg += pdx_r - pdx_l
+
+            plx_l = tic()
+            plx_()
+            plx_r = tic()
+            plx_avg += plx_r - plx_l
+
+        gc.enable()
+        pdms_avg, pdx_avg, plx_avg = pdms_avg / runs, pdx_avg / runs, plx_avg / runs
+
+        errors = []
+        if pdms_avg > pdms:
+            errors.append(f"Pandas took too long: {pdms_avg} > {pdms}")
+        if pdms_avg * pdcoeff < pdx_avg:
+            errors.append(
+                f"Pandas (wrapped) overhead: {pdx_avg} > {pdms_avg} * {pdcoeff}"
+            )
+        if pdms_avg * plcoeff < plx_avg:
+            errors.append(
+                f"Polars (wrapped) overhead: {plx_avg} > {pdms_avg} * {plcoeff}"
+            )
+
+        assert not errors, "\n".join(errors)
+
+    @pytest.mark.parametrize(
+        "size,types,pdms,pdcoeff,plcoeff",
+        [
+            (50000, ("int",), 15, 1.05, 2.0),
+            (500000, ("int",), 150, 1.01, 2.0),
+        ],
+    )
+    def test_benchmark_concat_rows(self, size, types, pdms, pdcoeff, plcoeff):
+        df_data = generate_benchmark_dataframe(size, types=types)
+        df_pd, df_pl, pd_df, _ = get_dataframes(df_data)
+
+        self._benchmark_subroutine(
+            lambda: pd.concat([pd_df, pd_df], axis=0, sort=False, ignore_index=True),
+            lambda: PandasDataframe.concat_rows([df_pd, df_pd]),
+            lambda: PolarsDataframe.concat_rows([df_pl, df_pl]),
+            pdms,
+            pdcoeff,
+            plcoeff,
+        )
+
+    @pytest.mark.parametrize(
+        "size,types,pdms,pdcoeff,plcoeff",
+        [
+            (500000, ("int",), 120, 1.01, 2.0),
+        ],
+    )
+    def test_benchmark_select_rows(self, size, types, pdms, pdcoeff, plcoeff):
+        df_data = generate_benchmark_dataframe(size, types=types)
+        df_pd, df_pl, pd_df, _ = get_dataframes(df_data)
+
+        maxidx, draw_size = df_pd.shape[0], df_pd.shape[0] // 5
+        indices = sorted(set(np.random.randint(0, maxidx, size=draw_size).tolist()))
+
+        self._benchmark_subroutine(
+            lambda: pd_df.iloc[indices],
+            lambda: df_pd.select_rows(indices),
+            lambda: df_pl.select_rows(indices),
+            pdms,
+            pdcoeff,
+            plcoeff,
+        )
+
+    @pytest.mark.parametrize(
+        "size,types,pdms,pdcoeff,plcoeff",
+        [
+            (500000, ("int",), 10, 1.01, 2.5),
+        ],
+    )
+    def test_benchmark_filter_rows_by_operator(
+        self, size, types, pdms, pdcoeff, plcoeff
+    ):
+        df_data = generate_benchmark_dataframe(size, types=types)
+        df_pd, df_pl, pd_df, _ = get_dataframes(df_data)
+        col, val = types[0], pd_df.at[0, types[0]]
+
+        self._benchmark_subroutine(
+            lambda: pd_df[pd_df[col] == val],
+            lambda: df_pd.filter_rows_by_operator(col, operator.eq, val),
+            lambda: df_pl.filter_rows_by_operator(col, operator.eq, val),
+            pdms,
+            pdcoeff,
+            plcoeff,
+        )
+
+    @pytest.mark.parametrize(
+        "size,types,pdms,pdcoeff,plcoeff",
+        [
+            (500000, ("int",), 100, 1.01, 3.0),
+        ],
+    )
+    def test_benchmark_set_column_by_constant(
+        self, size, types, pdms, pdcoeff, plcoeff
+    ):
+        df_data = generate_benchmark_dataframe(size, types=types)
+        df_pd, df_pl, pd_df, _ = get_dataframes(df_data)
+
+        maxidx, draw_size = df_pd.shape[0], df_pd.shape[0] // 5
+        indices = sorted(set(np.random.randint(0, maxidx, size=draw_size).tolist()))
+        col, val = types[0], pd_df.at[0, types[0]]
+
+        def pd_func():
+            pd_df.loc[indices, col] = val
+            return pd_df
+
+        self._benchmark_subroutine(
+            pd_func,
+            lambda: df_pd.set_column_by_constant(col, val, indices),
+            lambda: df_pl.set_column_by_constant(col, val, indices),
+            pdms,
+            pdcoeff,
+            plcoeff,
+        )
+
+    @pytest.mark.parametrize(
+        "size,types,pdms,pdcoeff,plcoeff",
+        [
+            (500000, ("int",), 40, 1.01, 2.0),
+            (500000, ("str",), 110, 1.01, 7.0),
+        ],
+    )
+    def test_benchmark_column_map(self, size, types, pdms, pdcoeff, plcoeff):
+        df_data = generate_benchmark_dataframe(size, types=types)
+        df_pd, df_pl, pd_df, _ = get_dataframes(df_data)
+
+        col = types[0]
+        mapping = {v: v * 2 for v in pd_df[col].unique().tolist()}
+        self._benchmark_subroutine(
+            lambda: pd_df[col].map(mapping),
+            lambda: df_pd.column_map(col, mapping),
+            lambda: df_pl.column_map(col, mapping),
+            pdms,
+            pdcoeff,
+            plcoeff,
+        )
+
+    @pytest.mark.parametrize(
+        "size,types,pdms,pdcoeff,plcoeff",
+        [
+            (500000, ("int",), 20, 1.01, 2.0),
+            (500000, ("str",), 45, 1.01, 3.0),
+        ],
+    )
+    def test_benchmark_column_isin(self, size, types, pdms, pdcoeff, plcoeff):
+        df_data = generate_benchmark_dataframe(size, types=types)
+        df_pd, df_pl, pd_df, _ = get_dataframes(df_data)
+
+        col = types[0]
+        lookup = set(pd_df[col].loc[::10].tolist())
+        self._benchmark_subroutine(
+            lambda: pd_df[col].isin(lookup),
+            lambda: df_pd.column_isin(col, lookup),
+            lambda: df_pl.column_isin(col, lookup),
+            pdms,
+            pdcoeff,
+            plcoeff,
+        )
+
+    @pytest.mark.parametrize(
+        "size,types,func,pdms,pdcoeff,plcoeff",
+        [
+            (500000, ("int",), lambda x: x**3, 1000, 1.01, 0.8),
+            (500000, ("str",), len, 1000, 1.01, 1.0),
+        ],
+    )
+    def test_benchmark_column_apply(self, size, types, func, pdms, pdcoeff, plcoeff):
+        df_data = generate_benchmark_dataframe(size, types=types)
+        df_pd, df_pl, pd_df, _ = get_dataframes(df_data)
+
+        col = types[0]
+        self._benchmark_subroutine(
+            lambda: pd_df[col].apply(func),
+            lambda: df_pd.column_apply(col, func),
+            lambda: df_pl.column_apply(col, func),
+            pdms,
+            pdcoeff,
+            plcoeff,
+        )
+
+    @pytest.mark.parametrize(
+        "size,types,func,pdms,pdcoeff,plcoeff",
+        [
+            (500000, ("int", "str"), lambda row: row["int"] ** 3, 5000, 1.01, 0.25),
+            (500000, ("int", "str"), lambda row: len(row["str"]), 5000, 1.01, 0.25),
+        ],
+    )
+    def test_benchmark_row_apply(self, size, types, func, pdms, pdcoeff, plcoeff):
+        df_data = generate_benchmark_dataframe(size, types=types)
+        df_pd, df_pl, pd_df, _ = get_dataframes(df_data)
+
+        self._benchmark_subroutine(
+            lambda: pd_df.apply(func, axis=1),
+            lambda: df_pd.row_apply(func),
+            lambda: df_pl.row_apply(func),
+            pdms,
+            pdcoeff,
+            plcoeff,
+        )

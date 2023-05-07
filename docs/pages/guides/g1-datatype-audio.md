@@ -1,4 +1,4 @@
-> `hover` supports bulk-labeling audios through their URLs.
+> `hover` supports bulk-labeling audios through their URLs (which can be local).
 >
 > :bulb: Let's do a quickstart for audios and note what's different from texts.
 

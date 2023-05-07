@@ -18,6 +18,8 @@ class ConfigKey:
     BOKEH_PALETTE_USAGE = "bokeh_palette_usage"
     TABLE_IMG_STYLE = "table_img_style"
     TOOLTIP_IMG_STYLE = "tooltip_img_style"
+    SEARCH_MATCH_HEXCOLOR = "search_match_hexcolor"
+    DATAPOINT_BASE_SIZE = "datapoint_base_size"
     DEFAULT_REDUCTION_METHOD = "default_reduction_method"
     ENCODED_LABEL_KEY = "encoded_label_key"
     DATASET_SUBSET_FIELD = "dataset_subset_field"
@@ -64,8 +66,11 @@ class Validator:
         return isinstance(x, str)
 
     @staticmethod
-    def is_negative_int(x):
-        return isinstance(x, int) and x < 0
+    def is_int_and_compare(op, value):
+        def func(x):
+            return isinstance(x, int) and op(x, value)
+
+        return func
 
 
 class Preprocessor:

@@ -100,7 +100,7 @@ The `annotator` will amplify the sizes of positive-match data points and shrink 
 
 ### **Preview: Use Search for Selection in Finder**
 
-In a particular kind of plots called `finder` (see later in the tutorials), the search widget can directly operate on your selection as a filter.
+In a particular kind of plot called `finder` (search it in the README!), the search widget can directly operate on your selection as a filter.
 
 ## **The Plot and The Dataset**
 

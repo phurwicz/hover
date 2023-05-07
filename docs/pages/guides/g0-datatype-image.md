@@ -1,4 +1,4 @@
-> `hover` supports bulk-labeling images through their URLs.
+> `hover` supports bulk-labeling images through their URLs (which can be local).
 >
 > :bulb: Let's do a quickstart for images and note what's different from texts.
 
