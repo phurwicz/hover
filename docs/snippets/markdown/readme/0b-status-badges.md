@@ -1,0 +1,7 @@
+[![PyPI Version](https://img.shields.io/pypi/v/hover?logo=pypi&logoColor=white)](https://pypi.org/project/hover/)
+[![Conda Version](https://img.shields.io/conda/vn/conda-forge/hover)](https://github.com/conda-forge/hover-feedstock)
+![Downloads](https://static.pepy.tech/personalized-badge/hover?period=total&units=international_system&left_color=grey&right_color=brightgreen&left_text=pypi%20downloads)
+![Main Build Status](https://img.shields.io/github/actions/workflow/status/phurwicz/hover/cross-os-source-test.yml?branch=main&label=main&logo=github)
+![Nightly Build Status](https://img.shields.io/github/actions/workflow/status/phurwicz/hover/quick-source-test.yml?branch=nightly&label=nightly&logo=github)
+![Codacy Grade](https://img.shields.io/codacy/grade/689827d9077b43ac8721c7658d122d1a?logo=codacy&logoColor=white)
+![Codacy Coverage](https://img.shields.io/codacy/coverage/689827d9077b43ac8721c7658d122d1a/main?logo=codacy&logoColor=white)
