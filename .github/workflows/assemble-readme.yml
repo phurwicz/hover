@@ -20,6 +20,11 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Prepare Git
+        run: |
+          git config user.name ${{ secrets.ACTIONS_GIT_USERNAME }}
+          git config user.email ${{ secrets.ACTIONS_GIT_EMAIL }}
+
       - name: Run script and get output files
         run: |
           pip install -r requirements-dev.txt

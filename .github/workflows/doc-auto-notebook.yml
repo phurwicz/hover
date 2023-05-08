@@ -35,8 +35,8 @@ jobs:
 
     - name: Prepare Git
       run: |
-        git config --global user.name ${{ secrets.ACTIONS_GIT_USERNAME }}
-        git config --global user.email ${{ secrets.ACTIONS_GIT_EMAIL }}
+        git config user.name ${{ secrets.ACTIONS_GIT_USERNAME }}
+        git config user.email ${{ secrets.ACTIONS_GIT_EMAIL }}
         git checkout pipeline/notebook-generation
         git merge origin/main --no-edit
         git push
