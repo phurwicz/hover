@@ -31,7 +31,7 @@ jobs:
           python docs/pipelines/generate_readme.py
           mv docs/pipelines/README*.md ./
           git add ./README*.md
-          git commit -m ""
+          git commit -m "Assemble README files from snippets"
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v5
