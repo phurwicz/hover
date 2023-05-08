@@ -1,0 +1,34 @@
+# This workflow will generate README files based on the doc snippets.
+
+name: Assemble Multilingual README
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'docs/snippets/markdown/readme/'
+      - 'docs/pipelines/README.md.template'
+      - 'docs/pipelines/generate_readme.py'
+  workflow_dispatch:
+
+jobs:
+  assemble-readme:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Run script and get output files
+        run: |
+          python docs/pipelines/generate_readme.py
+          mv docs/pipelines/README*.md ./
+          git add ./README*.md
+          git commit -m ""
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          commit-message: Assemble README files from snippets
+          title: Automatic README update
+          body: Assemble README files from snippets
+          branch: assemble-readme
