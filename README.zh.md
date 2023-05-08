@@ -3,6 +3,7 @@
 > 通过向量降维, 极速探索和批量标注数据, 并用作模型训练或其它用途.
 
 [![en](https://img.shields.io/badge/lang-en-green.svg)](https://github.com/phurwicz/hover/blob/main/README.md)
+[![zh](https://img.shields.io/badge/语言-中文-green.svg)](https://github.com/phurwicz/hover/blob/main/README.zh.md)
 
 [![PyPI Version](https://img.shields.io/pypi/v/hover?logo=pypi&logoColor=white)](https://pypi.org/project/hover/)
 [![Conda Version](https://img.shields.io/conda/vn/conda-forge/hover)](https://github.com/conda-forge/hover-feedstock)
@@ -23,11 +24,11 @@
 
 ## :rocket: 在线演示
 
-### [**With code**](https://phurwicz.github.io/hover/pages/tutorial/t0-quickstart/)
+### [**Notebook教程**](https://phurwicz.github.io/hover/pages/tutorial/t0-quickstart/)
 
 -   查看含代码的教程, 可在浏览器中编辑和运行, 无需安装依赖.
 
-### [**Without code**](https://mybinder.org/v2/gh/phurwicz/hover-binder/master?urlpath=/proxy/5006/app-simple-annotator)
+### [**示例标注界面**](https://mybinder.org/v2/gh/phurwicz/hover-binder/master?urlpath=/proxy/5006/app-simple-annotator)
 
 -   跳过所有代码, 进入托管在Binder上的标注界面.
 
@@ -89,15 +90,15 @@
   <img src="https://raw.githubusercontent.com/phurwicz/hover-gallery/main/0.7.0/evict-and-patch.gif">
 </details>
 
-## :package: 安装
+## :package: Install
 
 > Python: 3.8+
 >
-> 操作系统: Linux & Mac & Windows
+> OS: Linux & Mac & Windows
 
 PyPI: `pip install hover`
 
-Conda-forge: `conda install -c conda-forge hover`
+Conda: `conda install -c conda-forge hover`
 
 ## :book: 资料
 
@@ -108,7 +109,7 @@ Conda-forge: `conda install -c conda-forge hover`
 
 ## :flags: 新动态
 
--   **Jan 21, 2023** version 0.8.0 is now available. Check out the [changelog](https://github.com/phurwicz/hover/blob/main/CHANGELOG.md) for details :partying_face:.
+-   **Jan 21, 2023** 新版本 0.8.0 已就绪, 可查看 [changelog](https://github.com/phurwicz/hover/blob/main/CHANGELOG.md) 获悉详情 :partying_face:.
 
 ## :bell: 其它说明
 
@@ -123,7 +124,7 @@ Conda-forge: `conda install -c conda-forge hover`
 -   `./requirements-dev.txt` 列出了开发者所需的依赖.
 -   我们建议在提交PR前启用[.pre-commit-config.yaml](https://github.com/phurwicz/hover/blob/main/.pre-commit-config.yaml)中列出的pre-commit hook.
 
-### Citation
+### 引用
 
 如果`hover`对您的工作有帮助, 请[告诉我们](https://github.com/phurwicz/hover/discussions)或引用 :hugs:
 
