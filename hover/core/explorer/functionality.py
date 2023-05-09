@@ -12,7 +12,13 @@ from hover.module_config import (
 )
 from hover.utils.misc import current_time
 from hover.utils.bokeh_helper import bokeh_hover_tooltip
-from .local_config import SOURCE_COLOR_FIELD, SOURCE_ALPHA_FIELD, SEARCH_SCORE_FIELD
+from .local_config import (
+    SOURCE_COLOR_FIELD,
+    SOURCE_ALPHA_FIELD,
+    SEARCH_SCORE_FIELD,
+    SEARCH_MATCH_HEXCOLOR,
+    SEARCH_DATAPOINT_SIZE_PARAMS,
+)
 from .base import BokehBaseExplorer
 
 
@@ -30,9 +36,9 @@ class BokehDataFinder(BokehBaseExplorer):
         _key: {
             "constant": {"line_alpha": 0.4},
             "search": {
-                "size": ("size", 10, 5, 7),
+                "size": SEARCH_DATAPOINT_SIZE_PARAMS,
                 "fill_alpha": ("fill_alpha", 0.4, 0.1, 0.2),
-                "color": ("color", "coral", "linen", "gainsboro"),
+                "color": ("color", SEARCH_MATCH_HEXCOLOR, "linen", "gainsboro"),
             },
         }
         for _key in ["raw", "train", "dev", "test"]
@@ -117,7 +123,7 @@ class BokehDataAnnotator(BokehBaseExplorer):
         _key: {
             "constant": {"line_alpha": 0.3},
             "search": {
-                "size": ("size", 10, 5, 7),
+                "size": SEARCH_DATAPOINT_SIZE_PARAMS,
                 "fill_alpha": ("fill_alpha", 0.5, 0.1, 0.4),
             },
         }
@@ -229,7 +235,10 @@ class BokehSoftLabelExplorer(BokehBaseExplorer):
     """
 
     SUBSET_GLYPH_KWARGS = {
-        _key: {"constant": {"line_alpha": 0.5}, "search": {"size": ("size", 10, 5, 7)}}
+        _key: {
+            "constant": {"line_alpha": 0.5},
+            "search": {"size": SEARCH_DATAPOINT_SIZE_PARAMS},
+        }
         for _key in ["raw", "train", "dev"]
     }
     DEFAULT_SUBSET_MAPPING = {_k: _k for _k in ["raw", "train", "dev"]}
@@ -416,7 +425,7 @@ class BokehMarginExplorer(BokehBaseExplorer):
     SUBSET_GLYPH_KWARGS = {
         _key: {
             "constant": {"color": "gainsboro", "line_alpha": 0.5, "fill_alpha": 0.0},
-            "search": {"size": ("size", 10, 5, 7)},
+            "search": {"size": SEARCH_DATAPOINT_SIZE_PARAMS},
         }
         for _key in ["raw", "train", "dev"]
     }

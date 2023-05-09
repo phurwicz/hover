@@ -1,6 +1,7 @@
 """
 Module root where constants get configured.
 """
+import operator
 from .config_constants import (
     ConfigSection,
     ConfigKey,
@@ -71,6 +72,19 @@ config = ConfigIndex(
                     "float: left; margin: 2px 2px 2px 2px; width: 60px; height: 60px;",
                     preprocessor=Preprocessor.remove_quote_at_ends,
                 ),
+                AutolockedConfigValue(
+                    ConfigKey.SEARCH_MATCH_HEXCOLOR,
+                    "Hex code of the color to use on the data points matching a search widget. Note that only the `finder` plot changes color.",
+                    "#ee4443",
+                    validation=Validator.is_hex_color,
+                    preprocessor=Preprocessor.lower,
+                ),
+                AutolockedConfigValue(
+                    ConfigKey.DATAPOINT_BASE_SIZE,
+                    "The base (bokeh) size of data points in the scatter plot. Size may change to highlight/dehighlight data points. Must be at least 3.",
+                    7,
+                    validation=Validator.is_int_and_compare(operator.ge, 3),
+                ),
             ],
         ),
         Config(
@@ -139,7 +153,7 @@ config = ConfigIndex(
                     ConfigKey.ABSTAIN_ENCODED,
                     "The encoded value of 'no label yet' which should almost always be -1, never 0 or positive.",
                     -1,
-                    validation=Validator.is_negative_int,
+                    validation=Validator.is_int_and_compare(operator.lt, 0),
                 ),
             ],
         ),

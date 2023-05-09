@@ -16,7 +16,7 @@ from hover.utils.meta.traceback import RichTracebackABCMeta
 from hover.utils.misc import RootUnionFind
 from hover.utils.typecheck import TypedValueDict
 from hover.module_config import DataFrame
-from .local_config import SEARCH_SCORE_FIELD
+from .local_config import SEARCH_SCORE_FIELD, SEARCH_DATAPOINT_SIZE_PARAMS
 
 STANDARD_PLOT_TOOLS = [
     # change the scope
@@ -662,7 +662,7 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
         pass
 
     def _subroutine_search_source_change(
-        self, subset, kwargs, altered_param=("size", 10, 5, 7)
+        self, subset, kwargs, altered_param=SEARCH_DATAPOINT_SIZE_PARAMS
     ):
         """
         ???+ note "Subroutine of `activate_search()` on a specific subset."
