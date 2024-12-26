@@ -7,7 +7,7 @@ from .functionality import (
     BokehDataAnnotator,
     BokehSoftLabelExplorer,
     BokehMarginExplorer,
-    BokehSnorkelExplorer,
+    BokehLabelingFunctionExplorer,
 )
 from .feature import BokehForText, BokehForAudio, BokehForImage
 from bokeh.layouts import column, row
@@ -98,14 +98,14 @@ class BokehTextMargin(BokehMarginExplorer, BokehForText):
         return column(*layout_rows)
 
 
-class BokehTextSnorkel(BokehSnorkelExplorer, BokehForText):
+class BokehTextLabelingFunction(BokehLabelingFunctionExplorer, BokehForText):
     """
-    ???+ note "The text flavor of `BokehSnorkelExplorer`.""
+    ???+ note "The text flavor of `BokehLabelingFunctionExplorer`.""
     """
 
     TOOLTIP_KWARGS = BokehForText.TOOLTIP_KWARGS
     MANDATORY_COLUMN_TO_TYPE_DEFAULT = BokehForText.MANDATORY_COLUMN_TO_TYPE_DEFAULT
-    SUBSET_GLYPH_KWARGS = BokehSnorkelExplorer.SUBSET_GLYPH_KWARGS
+    SUBSET_GLYPH_KWARGS = BokehLabelingFunctionExplorer.SUBSET_GLYPH_KWARGS
 
     def _layout_widgets(self):
         """Define the layout of widgets."""
@@ -204,14 +204,14 @@ class BokehAudioMargin(BokehMarginExplorer, BokehForAudio):
         return column(*layout_rows)
 
 
-class BokehAudioSnorkel(BokehSnorkelExplorer, BokehForAudio):
+class BokehAudioLabelingFunction(BokehLabelingFunctionExplorer, BokehForAudio):
     """
-    ???+ note "The audio flavor of `BokehSnorkelExplorer`.""
+    ???+ note "The audio flavor of `BokehLabelingFunctionExplorer`.""
     """
 
     TOOLTIP_KWARGS = BokehForAudio.TOOLTIP_KWARGS
     MANDATORY_COLUMN_TO_TYPE_DEFAULT = BokehForAudio.MANDATORY_COLUMN_TO_TYPE_DEFAULT
-    SUBSET_GLYPH_KWARGS = BokehSnorkelExplorer.SUBSET_GLYPH_KWARGS
+    SUBSET_GLYPH_KWARGS = BokehLabelingFunctionExplorer.SUBSET_GLYPH_KWARGS
 
     def _layout_widgets(self):
         """Define the layout of widgets."""
@@ -310,14 +310,14 @@ class BokehImageMargin(BokehMarginExplorer, BokehForImage):
         return column(*layout_rows)
 
 
-class BokehImageSnorkel(BokehSnorkelExplorer, BokehForImage):
+class BokehImageLabelingFunction(BokehLabelingFunctionExplorer, BokehForImage):
     """
-    ???+ note "The image flavor of `BokehSnorkelExplorer`.""
+    ???+ note "The image flavor of `BokehLabelingFunctionExplorer`.""
     """
 
     TOOLTIP_KWARGS = BokehForImage.TOOLTIP_KWARGS
     MANDATORY_COLUMN_TO_TYPE_DEFAULT = BokehForImage.MANDATORY_COLUMN_TO_TYPE_DEFAULT
-    SUBSET_GLYPH_KWARGS = BokehSnorkelExplorer.SUBSET_GLYPH_KWARGS
+    SUBSET_GLYPH_KWARGS = BokehLabelingFunctionExplorer.SUBSET_GLYPH_KWARGS
 
     def _layout_widgets(self):
         """Define the layout of widgets."""

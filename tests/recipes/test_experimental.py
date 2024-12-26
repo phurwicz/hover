@@ -2,9 +2,9 @@ import pytest
 import numpy as np
 from hover.recipes.experimental import (
     _active_learning,
-    _snorkel_crosscheck,
+    _labeling_function_crosscheck,
     active_learning,
-    snorkel_crosscheck,
+    labeling_function_crosscheck,
 )
 from hover.module_config import DataFrame as DF
 from bokeh.events import ButtonClick, SelectionGeometry
@@ -93,9 +93,9 @@ def test_active_learning(example_text_dataset, dummy_vecnet_callback):
     assert unfilter_select == initial_select
 
 
-# def test_snorkel_crosscheck(example_audio_dataset, dummy_labeling_function_list):
+# def test_labeling_function_crosscheck(example_audio_dataset, dummy_labeling_function_list):
 #     dataset = example_audio_dataset.copy()
-#     layout, objects = _snorkel_crosscheck(dataset, dummy_labeling_function_list)
+#     layout, objects = _labeling_function_crosscheck(dataset, dummy_labeling_function_list)
 #     assert layout.visible
 #
 #     # TODO: add emulations of user activity
@@ -106,16 +106,15 @@ def test_active_learning(example_text_dataset, dummy_vecnet_callback):
 def test_servable_experimental(
     example_text_dataset,
     dummy_vecnet_callback,
-    # dummy_labeling_function_list,
+    dummy_labeling_function_list,
 ):
     # one dataset for each recipe
     dataset = example_text_dataset.copy()
     vecnet = dummy_vecnet_callback(dataset)
     active = active_learning(dataset, vecnet)
 
-    # dataset = example_text_dataset.copy()
-    # snorkel = snorkel_crosscheck(dataset, dummy_labeling_function_list)
+    dataset = example_text_dataset.copy()
+    crosscheck = labeling_function_crosscheck(dataset, dummy_labeling_function_list)
 
-    # for handle in [active, snorkel]:
-    for handle in [active]:
+    for handle in [active, crosscheck]:
         execute_handle_function(handle)

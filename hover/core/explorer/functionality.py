@@ -512,7 +512,7 @@ class BokehMarginExplorer(BokehBaseExplorer):
                 )
 
 
-class BokehSnorkelExplorer(BokehBaseExplorer):
+class BokehLabelingFunctionExplorer(BokehBaseExplorer):
     """
     ???+ note "Plot data points along with labeling function (LF) outputs."
 
@@ -736,7 +736,7 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
         ???+ note "Add or refresh a single labeling function on the plot."
             | Param       | Type             | Description                  |
             | :---------- | :--------------- | :--------------------------- |
-            | `lf`        | `callable`       | labeling function decorated by `@labeling_function()` from `hover.utils.snorkel_helper` |
+            | `lf`        | `callable`       | labeling function decorated by `@labeling_function()` from `hover.utils.labeling_function` |
             | `**kwargs`  |             | forwarded to `self.plot_new_lf()` |
         """
         # keep track of added LF
@@ -833,14 +833,14 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
         ???+ note "Plot a single labeling function and keep its settings for update."
             | Param       | Type             | Description                  |
             | :---------- | :--------------- | :--------------------------- |
-            | `lf`        | `callable`       | labeling function decorated by `@labeling_function()` from `hover.utils.snorkel_helper` |
+            | `lf`        | `callable`       | labeling function decorated by `@labeling_function()` from `hover.utils.labeling_function` |
             | `L_raw`     | `np.ndarray`     | predictions, in decoded `str`, on the `"raw"` set |
             | `L_labeled` | `np.ndarray`     | predictions, in decoded `str`, on the `"labeled"` set |
             | `include`   | `tuple` of `str` | "C" for correct, "I" for incorrect, "M" for missed", "H" for hit: types of predictions to make visible in the plot |
             | `**kwargs`  |                  | forwarded to plotting markers |
 
 
-            - lf: labeling function decorated by `@labeling_function()` from `hover.utils.snorkel_helper`
+            - lf: labeling function decorated by `@labeling_function()` from `hover.utils.labeling_function`
             - L_raw: numpy.ndarray
             - L_labeled: numpy.ndarray
             - include: subsets to show, which can be correct(C)/incorrect(I)/missed(M)/hit(H).
@@ -938,7 +938,7 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
             agreed = DF.series_values(self.dfs["labeled"]["label"]) == L_labeled
             attempted = L_labeled != ABSTAIN_DECODED
             indices = np.where(np.multiply(agreed, attempted))[0].tolist()
-        view = CDSView(source=self.sources["labeled"], filters=[IndexFilter(indices)])
+        view = CDSView(filter=IndexFilter(indices))
         return view
 
     def _view_incorrect(self, L_labeled):
@@ -954,7 +954,7 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
             disagreed = DF.series_values(self.dfs["labeled"]["label"]) != L_labeled
             attempted = L_labeled != ABSTAIN_DECODED
             indices = np.where(np.multiply(disagreed, attempted))[0].tolist()
-        view = CDSView(source=self.sources["labeled"], filters=[IndexFilter(indices)])
+        view = CDSView(filter=IndexFilter(indices))
         return view
 
     def _view_missed(self, L_labeled, targets):
@@ -973,7 +973,7 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
             )
             abstained = L_labeled == ABSTAIN_DECODED
             indices = np.where(np.multiply(targetable, abstained))[0].tolist()
-        view = CDSView(source=self.sources["labeled"], filters=[IndexFilter(indices)])
+        view = CDSView(filter=IndexFilter(indices))
         return view
 
     def _view_hit(self, L_raw):
@@ -987,5 +987,5 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
             indices = []
         else:
             indices = np.where(L_raw != ABSTAIN_DECODED)[0].tolist()
-        view = CDSView(source=self.sources["raw"], filters=[IndexFilter(indices)])
+        view = CDSView(filter=IndexFilter(indices))
         return view

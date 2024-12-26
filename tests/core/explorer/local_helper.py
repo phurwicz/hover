@@ -1,7 +1,7 @@
 from hover.module_config import DataFrame, ABSTAIN_DECODED
 from hover.core.explorer.local_config import SEARCH_SCORE_FIELD
 
-# from hover.utils.snorkel_helper import labeling_function
+from hover.utils.labeling_function import labeling_function
 from bokeh.events import SelectionGeometry
 from tests.local_config import RANDOM_LABEL, PSEUDO_LABELS
 
@@ -11,11 +11,11 @@ FUNCTIONALITY_TO_SPECIAL_ARGS = {
     "annotator": tuple(),
     "finder": tuple(),
     "margin": ("label_1", "label_2"),
-    "snorkel": tuple(),
+    "labelingfunction": tuple(),
     "softlabel": ("pred_label", "pred_score"),
 }
 
-# RANDOM_LABEL_LF = labeling_function(targets=PSEUDO_LABELS)(RANDOM_LABEL)
+RANDOM_LABEL_LF = labeling_function(targets=PSEUDO_LABELS)(RANDOM_LABEL)
 
 
 def almost_global_select(figure):

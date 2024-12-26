@@ -3,12 +3,12 @@ from hover.core.explorer.functionality import (
     BokehDataAnnotator,
     BokehDataFinder,
     BokehSoftLabelExplorer,
-    BokehSnorkelExplorer,
+    BokehLabelingFunctionExplorer,
 )
 from hover.recipes.subroutine import (
     standard_annotator,
     standard_finder,
-    standard_snorkel,
+    standard_labeling_function,
     standard_softlabel,
 )
 
@@ -35,5 +35,5 @@ def test_autobuild_explorer(
         softlabel = standard_softlabel(dataset)
         assert isinstance(softlabel, BokehSoftLabelExplorer)
 
-        snorkel = standard_snorkel(dataset)
-        assert isinstance(snorkel, BokehSnorkelExplorer)
+        labeling = standard_labeling_function(dataset)
+        assert isinstance(labeling, BokehLabelingFunctionExplorer)

@@ -8,7 +8,7 @@ from hover.recipes.subroutine import get_explorer_class
 from bokeh.events import ButtonClick, MenuItemClick
 from .local_helper import (
     MAIN_FEATURES,
-    # RANDOM_LABEL_LF,
+    RANDOM_LABEL_LF,
     almost_global_select,
     subroutine_selection_filter,
     subroutine_rules_from_text_df,
@@ -245,131 +245,131 @@ class TestBokehMargin:
             _ = _explorer.view()
 
 
-# @pytest.mark.core
-# class TestBokehSnorkel:
-#     @staticmethod
-#     @pytest.mark.lite
-#     def test_init(example_raw_df, example_labeled_df):
-#         for _feature in MAIN_FEATURES:
-#             _cls = get_explorer_class("snorkel", _feature)
-#             _explorer = _cls({"raw": example_raw_df, "labeled": example_labeled_df})
-#             _explorer.plot()
-#             _explorer.plot_lf(RANDOM_LABEL_LF, include=("C", "I", "M", "H"))
-#             _ = _explorer.view()
-#
-#     @staticmethod
-#     @pytest.mark.lite
-#     def test_lf_labeling(example_raw_df, example_labeled_df):
-#         """
-#         No difference across text / image / audio.
-#         Just using text should suffice.
-#         """
-#         explorer = get_explorer_class("snorkel", "text")(
-#             {
-#                 "raw": example_raw_df,
-#                 "labeled": example_labeled_df,
-#             }
-#         )
-#         explorer.plot()
-#         initial_palette_size = len(explorer.palette)
-#
-#         # create some dummy rules for predictable outcome
-#         lf_collection = subroutine_rules_from_text_df(explorer.dfs["raw"])
-#         narrow_rule_a = lf_collection["narrow_a"]
-#         narrow_rule_b = lf_collection["narrow_b"]
-#         broad_rule_a = lf_collection["broad_a"]
-#         broad_rule_b = lf_collection["broad_b"]
-#         # add a rule, check menu
-#         explorer.plot_lf(narrow_rule_b)
-#         assert explorer.lf_apply_trigger.menu == ["narrow_rule_b"]
-#         assert explorer.lf_filter_trigger.menu == ["narrow_rule_b"]
-#
-#         # subscribe to a LF list, refresh, and check again
-#         lf_list = [narrow_rule_a, broad_rule_a]
-#         explorer.subscribed_lf_list = lf_list
-#         refresh_event = ButtonClick(explorer.lf_list_refresher)
-#         explorer.lf_list_refresher._trigger_event(refresh_event)
-#         lf_names_so_far = ["narrow_rule_a", "broad_rule_a"]
-#         assert explorer.lf_apply_trigger.menu == lf_names_so_far
-#         assert explorer.lf_filter_trigger.menu == lf_names_so_far
-#
-#         # add an existing rule: menu, glyph, and view should stay the same
-#         old_narrow_a_lf = explorer.lf_data["narrow_rule_a"]["lf"]
-#         old_narrow_a_glyph_c = explorer.lf_data["narrow_rule_a"]["glyphs"]["C"]
-#         old_narrow_a_view_c = old_narrow_a_glyph_c.view
-#         explorer.plot_lf(narrow_rule_a)
-#         assert explorer.lf_apply_trigger.menu == lf_names_so_far
-#         assert explorer.lf_filter_trigger.menu == lf_names_so_far
-#         narrow_a_data_dict = explorer.lf_data["narrow_rule_a"]
-#         assert narrow_a_data_dict["lf"] is old_narrow_a_lf
-#         assert narrow_a_data_dict["glyphs"]["C"] is old_narrow_a_glyph_c
-#         assert narrow_a_data_dict["glyphs"]["C"].view is old_narrow_a_view_c
-#
-#         # overwrite a rule: the dict reference in lf_data should stay the same
-#         # menu items and glyph references should stay the same
-#         # the view references of the glyphs should have changed
-#         narrow_rule_a = lf_collection["narrow_a_clone"]
-#         explorer.plot_lf(narrow_rule_a)
-#         assert explorer.lf_apply_trigger.menu == lf_names_so_far
-#         assert explorer.lf_filter_trigger.menu == lf_names_so_far
-#         assert narrow_a_data_dict["lf"] is not old_narrow_a_lf
-#         assert narrow_a_data_dict["glyphs"]["C"] is old_narrow_a_glyph_c
-#         assert narrow_a_data_dict["glyphs"]["C"].view is not old_narrow_a_view_c
-#
-#         # empty click: nothing selected
-#         filter_event = MenuItemClick(explorer.lf_filter_trigger, item="broad_rule_a")
-#         apply_event = MenuItemClick(explorer.lf_apply_trigger, item="narrow_rule_a")
-#         explorer.lf_filter_trigger._trigger_event(filter_event)
-#         explorer.lf_apply_trigger._trigger_event(apply_event)
-#
-#         # emulate selection by user
-#         # slice to first ten, then assign A to first six
-#         all_raw_idx = list(range(explorer.dfs["raw"].shape[0]))
-#         # note: bokeh's SelectionGeometry seems to not actually make a selection
-#         # note: the indices assignment has to happen before SelectionGeometry trigger
-#         # - this is for treating indices assignment as a manual select
-#         explorer.sources["raw"].selected.indices = all_raw_idx[:]
-#         select_event = almost_global_select(explorer.figure)
-#         explorer.figure._trigger_event(select_event)
-#         assert explorer.sources["raw"].selected.indices == all_raw_idx
-#
-#         # actually triggering LFs on a valid selection
-#         explorer.lf_filter_trigger._trigger_event(filter_event)
-#         explorer.lf_apply_trigger._trigger_event(apply_event)
-#
-#         first_six_labels = DataFrame.series_tolist(explorer.dfs["raw"]["label"])[:6]
-#         assert first_six_labels == ["A"] * 6
-#
-#         # add more rules, check menu again
-#         lf_list.append(narrow_rule_b)
-#         lf_list.append(broad_rule_b)
-#         explorer.lf_list_refresher._trigger_event(refresh_event)
-#
-#         lf_names_so_far = [
-#             "narrow_rule_a",
-#             "broad_rule_a",
-#             "narrow_rule_b",
-#             "broad_rule_b",
-#         ]
-#         assert explorer.lf_apply_trigger.menu == lf_names_so_far
-#         assert explorer.lf_filter_trigger.menu == lf_names_so_far
-#
-#         # note: bokeh's SelectionGeometry seems to not actually make a selection
-#         # note: the indices assignment has to happen before SelectionGeometry trigger
-#         # - this is for treating indices assignment as a manual select
-#         explorer.sources["raw"].selected.indices = all_raw_idx[:]
-#         explorer.figure._trigger_event(select_event)
-#         # slice to first ten, then assign B to first six
-#         _event = MenuItemClick(explorer.lf_filter_trigger, item="broad_rule_b")
-#         explorer.lf_filter_trigger._trigger_event(_event)
-#         _event = MenuItemClick(explorer.lf_apply_trigger, item="narrow_rule_b")
-#         explorer.lf_apply_trigger._trigger_event(_event)
-#
-#         first_six_labels = DataFrame.series_tolist(explorer.dfs["raw"]["label"])[:6]
-#         assert first_six_labels == ["B"] * 6
-#
-#         # use two pops to check against misremoval of renderers
-#         lf_list.pop()
-#         lf_list.pop()
-#         explorer.lf_list_refresher._trigger_event(refresh_event)
-#         assert len(explorer.palette) == initial_palette_size - len(lf_list)
+@pytest.mark.core
+class TestBokehLabelingFunction:
+    @staticmethod
+    @pytest.mark.lite
+    def test_init(example_raw_df, example_labeled_df):
+        for _feature in MAIN_FEATURES:
+            _cls = get_explorer_class("labelingfunction", _feature)
+            _explorer = _cls({"raw": example_raw_df, "labeled": example_labeled_df})
+            _explorer.plot()
+            _explorer.plot_lf(RANDOM_LABEL_LF, include=("C", "I", "M", "H"))
+            _ = _explorer.view()
+
+    @staticmethod
+    @pytest.mark.lite
+    def test_lf_labeling(example_raw_df, example_labeled_df):
+        """
+        No difference across text / image / audio.
+        Just using text should suffice.
+        """
+        explorer = get_explorer_class("labelingfunction", "text")(
+            {
+                "raw": example_raw_df,
+                "labeled": example_labeled_df,
+            }
+        )
+        explorer.plot()
+        initial_palette_size = len(explorer.palette)
+
+        # create some dummy rules for predictable outcome
+        lf_collection = subroutine_rules_from_text_df(explorer.dfs["raw"])
+        narrow_rule_a = lf_collection["narrow_a"]
+        narrow_rule_b = lf_collection["narrow_b"]
+        broad_rule_a = lf_collection["broad_a"]
+        broad_rule_b = lf_collection["broad_b"]
+        # add a rule, check menu
+        explorer.plot_lf(narrow_rule_b)
+        assert explorer.lf_apply_trigger.menu == ["narrow_rule_b"]
+        assert explorer.lf_filter_trigger.menu == ["narrow_rule_b"]
+
+        # subscribe to a LF list, refresh, and check again
+        lf_list = [narrow_rule_a, broad_rule_a]
+        explorer.subscribed_lf_list = lf_list
+        refresh_event = ButtonClick(explorer.lf_list_refresher)
+        explorer.lf_list_refresher._trigger_event(refresh_event)
+        lf_names_so_far = ["narrow_rule_a", "broad_rule_a"]
+        assert explorer.lf_apply_trigger.menu == lf_names_so_far
+        assert explorer.lf_filter_trigger.menu == lf_names_so_far
+
+        # add an existing rule: menu, glyph, and view should stay the same
+        old_narrow_a_lf = explorer.lf_data["narrow_rule_a"]["lf"]
+        old_narrow_a_glyph_c = explorer.lf_data["narrow_rule_a"]["glyphs"]["C"]
+        old_narrow_a_view_c = old_narrow_a_glyph_c.view
+        explorer.plot_lf(narrow_rule_a)
+        assert explorer.lf_apply_trigger.menu == lf_names_so_far
+        assert explorer.lf_filter_trigger.menu == lf_names_so_far
+        narrow_a_data_dict = explorer.lf_data["narrow_rule_a"]
+        assert narrow_a_data_dict["lf"] is old_narrow_a_lf
+        assert narrow_a_data_dict["glyphs"]["C"] is old_narrow_a_glyph_c
+        assert narrow_a_data_dict["glyphs"]["C"].view is old_narrow_a_view_c
+
+        # overwrite a rule: the dict reference in lf_data should stay the same
+        # menu items and glyph references should stay the same
+        # the view references of the glyphs should have changed
+        narrow_rule_a = lf_collection["narrow_a_clone"]
+        explorer.plot_lf(narrow_rule_a)
+        assert explorer.lf_apply_trigger.menu == lf_names_so_far
+        assert explorer.lf_filter_trigger.menu == lf_names_so_far
+        assert narrow_a_data_dict["lf"] is not old_narrow_a_lf
+        assert narrow_a_data_dict["glyphs"]["C"] is old_narrow_a_glyph_c
+        assert narrow_a_data_dict["glyphs"]["C"].view is not old_narrow_a_view_c
+
+        # empty click: nothing selected
+        filter_event = MenuItemClick(explorer.lf_filter_trigger, item="broad_rule_a")
+        apply_event = MenuItemClick(explorer.lf_apply_trigger, item="narrow_rule_a")
+        explorer.lf_filter_trigger._trigger_event(filter_event)
+        explorer.lf_apply_trigger._trigger_event(apply_event)
+
+        # emulate selection by user
+        # slice to first ten, then assign A to first six
+        all_raw_idx = list(range(explorer.dfs["raw"].shape[0]))
+        # note: bokeh's SelectionGeometry seems to not actually make a selection
+        # note: the indices assignment has to happen before SelectionGeometry trigger
+        # - this is for treating indices assignment as a manual select
+        explorer.sources["raw"].selected.indices = all_raw_idx[:]
+        select_event = almost_global_select(explorer.figure)
+        explorer.figure._trigger_event(select_event)
+        assert explorer.sources["raw"].selected.indices == all_raw_idx
+
+        # actually triggering LFs on a valid selection
+        explorer.lf_filter_trigger._trigger_event(filter_event)
+        explorer.lf_apply_trigger._trigger_event(apply_event)
+
+        first_six_labels = DataFrame.series_tolist(explorer.dfs["raw"]["label"])[:6]
+        assert first_six_labels == ["A"] * 6
+
+        # add more rules, check menu again
+        lf_list.append(narrow_rule_b)
+        lf_list.append(broad_rule_b)
+        explorer.lf_list_refresher._trigger_event(refresh_event)
+
+        lf_names_so_far = [
+            "narrow_rule_a",
+            "broad_rule_a",
+            "narrow_rule_b",
+            "broad_rule_b",
+        ]
+        assert explorer.lf_apply_trigger.menu == lf_names_so_far
+        assert explorer.lf_filter_trigger.menu == lf_names_so_far
+
+        # note: bokeh's SelectionGeometry seems to not actually make a selection
+        # note: the indices assignment has to happen before SelectionGeometry trigger
+        # - this is for treating indices assignment as a manual select
+        explorer.sources["raw"].selected.indices = all_raw_idx[:]
+        explorer.figure._trigger_event(select_event)
+        # slice to first ten, then assign B to first six
+        _event = MenuItemClick(explorer.lf_filter_trigger, item="broad_rule_b")
+        explorer.lf_filter_trigger._trigger_event(_event)
+        _event = MenuItemClick(explorer.lf_apply_trigger, item="narrow_rule_b")
+        explorer.lf_apply_trigger._trigger_event(_event)
+
+        first_six_labels = DataFrame.series_tolist(explorer.dfs["raw"]["label"])[:6]
+        assert first_six_labels == ["B"] * 6
+
+        # use two pops to check against misremoval of renderers
+        lf_list.pop()
+        lf_list.pop()
+        explorer.lf_list_refresher._trigger_event(refresh_event)
+        assert len(explorer.palette) == initial_palette_size - len(lf_list)

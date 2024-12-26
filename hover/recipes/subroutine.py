@@ -8,6 +8,7 @@
 import re
 import numpy as np
 import hover.core.explorer as hovex
+from enum import Enum
 from hover.module_config import DataFrame as DF
 from bokeh.layouts import row, column
 from bokeh.models import Button
@@ -15,31 +16,45 @@ from rich.console import Console
 from .local_config import DEFAULT_REDUCTION_METHOD
 
 
+class Feature(Enum):
+    TEXT = "text"
+    IMAGE = "image"
+    AUDIO = "audio"
+
+
+class Functionality(Enum):
+    ANNOTATOR = "annotator"
+    FINDER = "finder"
+    MARGIN = "margin"
+    LABELING_FUNCTION = "labelingfunction"
+    SOFTLABEL = "softlabel"
+
+
 EXPLORER_CATALOG = {
-    "finder": {
-        "text": hovex.BokehTextFinder,
-        "audio": hovex.BokehAudioFinder,
-        "image": hovex.BokehImageFinder,
+    Functionality.FINDER.value: {
+        Feature.TEXT.value: hovex.BokehTextFinder,
+        Feature.AUDIO.value: hovex.BokehAudioFinder,
+        Feature.IMAGE.value: hovex.BokehImageFinder,
     },
-    "annotator": {
-        "text": hovex.BokehTextAnnotator,
-        "audio": hovex.BokehAudioAnnotator,
-        "image": hovex.BokehImageAnnotator,
+    Functionality.ANNOTATOR.value: {
+        Feature.TEXT.value: hovex.BokehTextAnnotator,
+        Feature.AUDIO.value: hovex.BokehAudioAnnotator,
+        Feature.IMAGE.value: hovex.BokehImageAnnotator,
     },
-    "margin": {
-        "text": hovex.BokehTextMargin,
-        "audio": hovex.BokehAudioMargin,
-        "image": hovex.BokehImageMargin,
+    Functionality.MARGIN.value: {
+        Feature.TEXT.value: hovex.BokehTextMargin,
+        Feature.AUDIO.value: hovex.BokehAudioMargin,
+        Feature.IMAGE.value: hovex.BokehImageMargin,
     },
-    "softlabel": {
-        "text": hovex.BokehTextSoftLabel,
-        "audio": hovex.BokehAudioSoftLabel,
-        "image": hovex.BokehImageSoftLabel,
+    Functionality.SOFTLABEL.value: {
+        Feature.TEXT.value: hovex.BokehTextSoftLabel,
+        Feature.AUDIO.value: hovex.BokehAudioSoftLabel,
+        Feature.IMAGE.value: hovex.BokehImageSoftLabel,
     },
-    "snorkel": {
-        "text": hovex.BokehTextSnorkel,
-        "audio": hovex.BokehAudioSnorkel,
-        "image": hovex.BokehImageSnorkel,
+    Functionality.LABELING_FUNCTION.value: {
+        Feature.TEXT.value: hovex.BokehTextLabelingFunction,
+        Feature.AUDIO.value: hovex.BokehAudioLabelingFunction,
+        Feature.IMAGE.value: hovex.BokehImageLabelingFunction,
     },
 }
 
@@ -69,7 +84,7 @@ def get_explorer_class(task, feature):
 
         | Param     | Type  | Description                          |
         | :-------- | :---- | :----------------------------------- |
-        | `task`    | `str` | name of the task, which can be `"finder"`, `"annotator"`, `"margin"`, `"softlabel"`, or `"snorkel"` |
+        | `task`    | `str` | name of the task, which can be `"finder"`, `"annotator"`, `"margin"`, `"softlabel"`, or `"labelingfunction"` |
         | `feature` | `str` | name of the main feature, which can be `"text"`, `"audio"` or `"image"` |
 
         Usage:
@@ -158,11 +173,11 @@ def standard_finder(dataset, **kwargs):
     return finder
 
 
-def standard_snorkel(dataset, **kwargs):
+def standard_labeling_function(dataset, **kwargs):
     """
-    ???+ note "Set up a `BokehSnorkelExplorer` for a `SupervisableDataset`."
+    ???+ note "Set up a `BokehLabelingFunctionExplorer` for a `SupervisableDataset`."
 
-        The snorkel explorer has a few standard interactions with the dataset:
+        The labeling function explorer has a few standard interactions with the dataset:
 
         -   read "raw" and "dev" subsets of the dataset, interpreting "dev" as "labeled"
         -   subscribe to all updates in those subsets
@@ -170,25 +185,25 @@ def standard_snorkel(dataset, **kwargs):
         | Param      | Type     | Description                          |
         | :--------- | :------- | :----------------------------------- |
         | `dataset`  | `SupervisableDataset` | the dataset to link to  |
-        | `**kwargs` | | kwargs to forward to the `BokehSnorkelExplorer` |
+        | `**kwargs` | | kwargs to forward to the `BokehLabelingFunctionExplorer` |
     """
     # auto-detect the (main) feature to use
     feature = dataset.__class__.FEATURE_KEY
-    explorer_cls = get_explorer_class("snorkel", feature)
+    explorer_cls = get_explorer_class("labelingfunction", feature)
 
     # first "static" version of the plot
-    snorkel = explorer_cls.from_dataset(
+    labeling = explorer_cls.from_dataset(
         dataset,
         {"raw": "raw", "dev": "labeled"},
-        title="Snorkel: □ for correct, x for incorrect, + for missed, o for hit; click on legends to hide or show LF",
+        title="LabelingFunction: □ for correct, x for incorrect, + for missed, o for hit; click on legends to hide or show LF",
         **kwargs,
     )
-    snorkel.activate_search()
-    snorkel.plot()
+    labeling.activate_search()
+    labeling.plot()
 
     # subscribe to dataset widgets
-    dataset.subscribe_update_push(snorkel, {"raw": "raw", "dev": "labeled"})
-    return snorkel
+    dataset.subscribe_update_push(labeling, {"raw": "raw", "dev": "labeled"})
+    return labeling
 
 
 def standard_softlabel(dataset, **kwargs):

@@ -7,70 +7,70 @@ from .subroutine import (
     recipe_layout,
     standard_annotator,
     standard_finder,
-    standard_snorkel,
+    standard_labeling_function,
     active_learning_components,
 )
 from hover.utils.bokeh_helper import servable
 
 
-@servable(title="Snorkel Crosscheck")
-def snorkel_crosscheck(dataset, lf_list, **kwargs):
+@servable(title="LabelingFunction Crosscheck")
+def labeling_function_crosscheck(dataset, lf_list, **kwargs):
     """
     ???+ note "Display the dataset for annotation, cross-checking with labeling functions."
 
         | Param     | Type     | Description                          |
         | :-------- | :------- | :----------------------------------- |
         | `dataset` | `SupervisableDataset` | the dataset to link to  |
-        | `lf_list` | `list`   | a list of callables decorated by `@hover.utils.snorkel_helper.labeling_function` |
+        | `lf_list` | `list`   | a list of callables decorated by `@hover.utils.labeling_function.labeling_function` |
         | `**kwargs` |       | kwargs to forward to each Bokeh figure |
 
         Expected visual layout:
 
-        | SupervisableDataset | BokehSnorkelExplorer       | BokehDataAnnotator | BokehDataFinder     |
+        | SupervisableDataset | BokehLabelingFunctionExplorer       | BokehDataAnnotator | BokehDataFinder     |
         | :------------------ | :------------------------- | :----------------- | :------------------ |
         | manage data subsets | inspect labeling functions | make annotations   | search and filter   |
     """
     dataset.setup_bokeh_elements(reset=True)
-    layout, _ = _snorkel_crosscheck(dataset, lf_list, **kwargs)
+    layout, _ = _labeling_function_crosscheck(dataset, lf_list, **kwargs)
     return layout
 
 
-def _snorkel_crosscheck(dataset, lf_list, layout_style="horizontal", **kwargs):
+def _labeling_function_crosscheck(dataset, lf_list, layout_style="horizontal", **kwargs):
     """
-    ???+ note "Cousin of snorkel_crosscheck which exposes objects in the layout."
+    ???+ note "Cousin of labeling_function_crosscheck which exposes objects in the layout."
     """
     # building-block subroutines
-    snorkel = standard_snorkel(dataset, **kwargs)
-    snorkel.subscribed_lf_list = lf_list
+    labeling = standard_labeling_function(dataset, **kwargs)
+    labeling.subscribed_lf_list = lf_list
     annotator = standard_annotator(dataset, **kwargs)
     finder = standard_finder(dataset, **kwargs)
 
     # plot labeling functions
     for _lf in lf_list:
-        snorkel.plot_lf(_lf)
-    snorkel.figure.legend.click_policy = "hide"
+        labeling.plot_lf(_lf)
+    labeling.figure.legend.click_policy = "hide"
 
     # link selections
     annotator.link_selection(
         finder,
         {_key: _key for _key in ["raw", "train", "dev", "test"]},
     )
-    # note that SnorkelExplorer has different subsets
+    # note that LabelingFunctionExplorer has different subsets
     annotator.link_selection(
-        snorkel,
+        labeling,
         {"raw": "raw", "dev": "labeled"},
     )
 
     sidebar = dataset.view()
     layout = recipe_layout(
-        sidebar, snorkel.view(), annotator.view(), finder.view(), style=layout_style
+        sidebar, labeling.view(), annotator.view(), finder.view(), style=layout_style
     )
 
     objects = {
         "dataset": dataset,
         "annotator": annotator,
         "finder": finder,
-        "snorkel": snorkel,
+        "labeling_function": labeling,
         "sidebar": sidebar,
     }
     return layout, objects
