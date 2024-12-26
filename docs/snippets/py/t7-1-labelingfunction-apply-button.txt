@@ -1,0 +1,5 @@
+from hover.recipes.subroutine import standard_labeling_function
+
+labeling_function_plot = standard_labeling_function(dataset)
+labeling_function_plot.subscribed_lf_list = LABELING_FUNCTIONS
+show(labeling_function_plot.lf_apply_trigger, notebook_url=notebook_url)

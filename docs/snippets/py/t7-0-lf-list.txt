@@ -1,4 +1,4 @@
-from hover.utils.snorkel_helper import labeling_function
+from hover.utils.labeling_function import labeling_function
 from hover.module_config import ABSTAIN_DECODED as ABSTAIN
 import re
 

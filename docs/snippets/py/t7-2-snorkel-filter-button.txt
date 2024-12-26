@@ -1,1 +1,0 @@
-show(snorkel_plot.lf_filter_trigger, notebook_url=notebook_url)

@@ -47,8 +47,6 @@ setuptools.setup(
         "flexmod>=0.1.2",
         # optional: more dimensionality reduction methods
         # "ivis[cpu]>=1.7",
-        # optional: distant supervision
-        # "snorkel>=0.9.8",
     ],
     python_requires=">=3.10",
     classifiers=[

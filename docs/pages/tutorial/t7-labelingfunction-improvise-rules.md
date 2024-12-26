@@ -1,4 +1,4 @@
-> Suppose we have some custom functions for labeling or filtering data, which resembles [`snorkel`](https://github.com/snorkel-team/snorkel)'s typical scenario.
+> Suppose we have some custom functions for labeling or filtering data, which is a common distant supervision scenario similar to [`snorkel`](https://github.com/snorkel-team/snorkel) workflows.
 >
 > :speedboat: Let's see how these functions can be combined with `hover`.
 
@@ -7,7 +7,6 @@
 {!docs/snippets/markdown/component-tutorial.md!}
 {!docs/snippets/markdown/local-dependency.md!}
 {!docs/snippets/markdown/local-dep-text.md!}
-{!docs/snippets/markdown/local-dep-snorkel.md!}
 {!docs/snippets/markdown/local-dep-jupyter-bokeh.md!}
 
 ## **Preparation**
@@ -21,7 +20,7 @@ Labeling functions are functions that **take a `pd.DataFrame` row and return a l
 Inside the function one can do many things, but let's start with simple keywords wrapped in regex:
 
 ??? info "About the decorator @labeling_function"
-    ::: hover.utils.snorkel_helper.labeling_function
+    ::: hover.utils.labeling_function.labeling_function
 
 <pre data-executable>
 {!docs/snippets/py/t7-0-lf-list.txt!}
@@ -33,7 +32,7 @@ Inside the function one can do many things, but let's start with simple keywords
 
 ### **Using a Function to Apply Labels**
 
-Hover's `SnorkelExplorer` (short as `snorkel`) can take the labeling functions above and apply them on areas of data that you choose. The widget below is responsible for labeling:
+Hover's `LabelingFunctionExplorer` (short as `labelingfunction`) can take the labeling functions above and apply them on areas of data that you choose. The widget below is responsible for labeling:
 
 {!docs/snippets/markdown/jupyterlab-js-issue.md!}
 
@@ -42,7 +41,7 @@ Hover's `SnorkelExplorer` (short as `snorkel`) can take the labeling functions a
 
 {!docs/snippets/py/tz-bokeh-notebook-remote.txt!}
 
-{!docs/snippets/py/t7-1-snorkel-apply-button.txt!}
+{!docs/snippets/py/t7-1-labelingfunction-apply-button.txt!}
 </pre><br>
 
 ### **Using a Function to Apply Filters**
@@ -52,7 +51,7 @@ Any function that labels is also a function that filters. The filter condition i
 {!docs/snippets/markdown/jupyterlab-js-issue.md!}
 
 <pre data-executable>
-{!docs/snippets/py/t7-2-snorkel-filter-button.txt!}
+{!docs/snippets/py/t7-2-labelingfunction-filter-button.txt!}
 </pre><br>
 
 Unlike the toggled filters for `finder` and `softlabel`, filtering with functions is on a per-click basis. In other words, this particular filtration doesn't persist when you select another area.
@@ -69,7 +68,7 @@ Run the block below and open the resulting URL to launch a recipe.
     -   then go to the launched app and refresh the functions!
 
 <pre data-executable>
-{!docs/snippets/py/t7-3-snorkel-crosscheck.txt!}
+{!docs/snippets/py/t7-3-labelingfunction-crosscheck.txt!}
 
 {!docs/snippets/py/tz-bokeh-show-server.txt!}
 

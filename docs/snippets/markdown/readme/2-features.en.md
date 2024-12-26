@@ -39,7 +39,7 @@
 </details>
 
 <details>
-  <summary> `Snorkel`: <b>custom functions</b> for labeling and filtering</summary>
+  <summary> `LabelingFunction`: <b>custom functions</b> for labeling and filtering</summary>
   <img src="https://raw.githubusercontent.com/phurwicz/hover-gallery/main/0.7.0/labeling-function.gif">
 </details>
 

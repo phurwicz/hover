@@ -5,8 +5,6 @@ markdown-include>=0.7.0
 jupyter
 jupyterlab
 # dependencies for specific code
-## distant supervision
-snorkel>=0.9.8
 ## text vectorizer
 spacy
 ## image vectorizer

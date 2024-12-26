@@ -11,7 +11,7 @@ NAME_TO_SCRIPT_REL = {
     "t4-annotator-plot-tools": "../pages/tutorial/t4-annotator-dataset-interaction.md",
     "t5-finder-selection-filter": "../pages/tutorial/t5-finder-filter.md",
     "t6-soft-label-joint-filters": "../pages/tutorial/t6-softlabel-joint-filter.md",
-    "t7-custom-labeling-functions": "../pages/tutorial/t7-snorkel-improvise-rules.md",
+    "t7-custom-labeling-functions": "../pages/tutorial/t7-labelingfunction-improvise-rules.md",
     "g0-image-data": "../pages/guides/g0-datatype-image.md",
     "g1-audio-data": "../pages/guides/g1-datatype-audio.md",
 }

@@ -35,7 +35,7 @@
 </details>
 
 <details>
-  <summary> `Snorkel`: <b>自定义函数</b> 来过滤数据或直接打标</summary>
+  <summary> `LabelingFunction`: <b>自定义函数</b> 来过滤数据或直接打标</summary>
   <img src="https://raw.githubusercontent.com/phurwicz/hover-gallery/main/0.7.0/labeling-function.gif">
 </details>
 
