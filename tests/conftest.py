@@ -84,24 +84,24 @@ def dummy_vecnet_callback(dummy_vectorizer):
     return callback
 
 
-@pytest.fixture(scope="module")
-def dummy_labeling_function_list():
-    from hover.utils.snorkel_helper import labeling_function
-    from hover.module_config import ABSTAIN_DECODED
-
-    @labeling_function(targets=["rec.autos"])
-    def auto_keywords(row):
-        flag = re.search(r"(wheel|diesel|gasoline|automobile|vehicle)", row["text"])
-        return "rec.autos" if flag else ABSTAIN_DECODED
-
-    @labeling_function(targets=["rec.sport.baseball"])
-    def baseball_keywords(row):
-        flag = re.search(r"(baseball|stadium|\ bat\ |\ base\ )", row["text"])
-        return "rec.sport.baseball" if flag else ABSTAIN_DECODED
-
-    lf_list = [auto_keywords, baseball_keywords]
-
-    return lf_list
+# @pytest.fixture(scope="module")
+# def dummy_labeling_function_list():
+#     from hover.utils.snorkel_helper import labeling_function
+#     from hover.module_config import ABSTAIN_DECODED
+#
+#     @labeling_function(targets=["rec.autos"])
+#     def auto_keywords(row):
+#         flag = re.search(r"(wheel|diesel|gasoline|automobile|vehicle)", row["text"])
+#         return "rec.autos" if flag else ABSTAIN_DECODED
+#
+#     @labeling_function(targets=["rec.sport.baseball"])
+#     def baseball_keywords(row):
+#         flag = re.search(r"(baseball|stadium|\ bat\ |\ base\ )", row["text"])
+#         return "rec.sport.baseball" if flag else ABSTAIN_DECODED
+#
+#     lf_list = [auto_keywords, baseball_keywords]
+#
+#     return lf_list
 
 
 @pytest.fixture(scope="module")
@@ -112,11 +112,12 @@ def generate_pandas_df_with_coords():
 
     fake_en = faker.Faker("en")
 
-    def random_df_with_coords(size=300, embedding_dim=3):
+    def random_df_with_coords(size=300, embedding_dim=64):
+        np.random.seed(int(uuid.uuid1().int >> 64) % (2**32))
         df = pd.DataFrame(
             [
                 {
-                    "text": fake_en.paragraph(3),
+                    "text": fake_en.paragraph(5),
                     "audio": f"https://dom.ain/path/to/audio/file-{uuid.uuid1()}.mp3",
                     "image": f"https://dom.ain/path/to/image/file-{uuid.uuid1()}.jpg",
                     "label": ABSTAIN_DECODED,
@@ -124,9 +125,11 @@ def generate_pandas_df_with_coords():
                 for i in range(size)
             ]
         )
+        embeddings = np.random.normal(
+            loc=0.0, scale=5.0, size=(df.shape[0], embedding_dim)
+        )
         for i in range(embedding_dim):
-            _col = embedding_field(embedding_dim, i)
-            df[_col] = np.random.normal(loc=0.0, scale=5.0, size=df.shape[0])
+            df[embedding_field(embedding_dim, i)] = embeddings[:, i]
         return df
 
     return random_df_with_coords

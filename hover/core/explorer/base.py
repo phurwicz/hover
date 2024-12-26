@@ -819,6 +819,7 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
             | :------ | :------ | :----------------------------- |
             | `other` | `BokehBaseExplorer` | the other explorer |
         """
+
         # link selection option values
         def option_lr(attr, old, new):
             other.selection_option_box.active = self.selection_option_box.active
@@ -882,15 +883,18 @@ class BokehBaseExplorer(Loggable, ABC, metaclass=RichTracebackABCMeta):
         ), f"Expected at least two embedding columns, found {embedding_cols}"
         return embedding_cols
 
-    def auto_color_mapping(self):
+    def auto_color_mapping(self, additional_label_columns=tuple()):
         """
         ???+ note "Find all labels and an appropriate color for each."
         """
         from hover.utils.bokeh_helper import auto_label_color
 
         labels = set()
-        for _key in self.dfs.keys():
-            labels = labels.union(set(DataFrame.series_values(self.dfs[_key]["label"])))
+        for _col in ["label", *additional_label_columns]:
+            for _key in self.dfs.keys():
+                labels = labels.union(
+                    set(DataFrame.series_values(self.dfs[_key][_col]))
+                )
 
         return auto_label_color(labels)
 

@@ -104,7 +104,7 @@ class BokehDataFinder(BokehBaseExplorer):
         """
         xy_axes = self.find_embedding_fields()[:2]
         for _key, _source in self.sources.items():
-            self.figure.circle(
+            self.figure.scatter(
                 *xy_axes, name=_key, source=_source, **self.glyph_kwargs[_key]
             )
             self._good(f"Plotted subset {_key} with {self.dfs[_key].shape[0]} points")
@@ -213,7 +213,7 @@ class BokehDataAnnotator(BokehBaseExplorer):
         """
         xy_axes = self.find_embedding_fields()[:2]
         for _key, _source in self.sources.items():
-            self.figure.circle(
+            self.figure.scatter(
                 *xy_axes,
                 name=_key,
                 color=SOURCE_COLOR_FIELD,
@@ -300,7 +300,7 @@ class BokehSoftLabelExplorer(BokehBaseExplorer):
         ???+ note "Infer glyph colors from the label dynamically."
         """
         # infer glyph color from labels
-        color_dict = self.auto_color_mapping()
+        color_dict = self.auto_color_mapping(additional_label_columns=[self.label_col])
 
         # infer glyph alpha from pseudo-percentile of soft label scores
         scores = np.concatenate(
@@ -407,7 +407,7 @@ class BokehSoftLabelExplorer(BokehBaseExplorer):
             eff_kwargs.update(preset_kwargs)
             eff_kwargs.update(kwargs)
 
-            self.figure.circle(*xy_axes, name=_key, source=_source, **eff_kwargs)
+            self.figure.scatter(*xy_axes, name=_key, source=_source, **eff_kwargs)
             self._good(f"Plotted subset {_key} with {self.dfs[_key].shape[0]} points")
 
 
@@ -490,26 +490,26 @@ class BokehMarginExplorer(BokehBaseExplorer):
             col_b_pos = np.where(mask_b)[0].tolist()
             col_b_neg = np.where(np.logical_not(mask_b))[0].tolist()
             agreement_view = CDSView(
-                source=_source, filters=[IndexFilter(col_a_pos), IndexFilter(col_b_pos)]
+                filter=(IndexFilter(col_a_pos) & IndexFilter(col_b_pos))
             )
             increment_view = CDSView(
-                source=_source, filters=[IndexFilter(col_a_neg), IndexFilter(col_b_pos)]
+                filter=(IndexFilter(col_a_neg) & IndexFilter(col_b_pos))
             )
             decrement_view = CDSView(
-                source=_source, filters=[IndexFilter(col_a_pos), IndexFilter(col_b_neg)]
+                filter=(IndexFilter(col_a_pos) & IndexFilter(col_b_neg))
             )
 
             to_plot = [
-                {"view": agreement_view, "marker": self.figure.square},
-                {"view": increment_view, "marker": self.figure.x},
-                {"view": decrement_view, "marker": self.figure.cross},
+                {"view": agreement_view, "marker": "square"},
+                {"view": increment_view, "marker": "x"},
+                {"view": decrement_view, "marker": "cross"},
             ]
 
             # plot created subsets
             for _dict in to_plot:
-                _view = _dict["view"]
-                _marker = _dict["marker"]
-                _marker(*xy_axes, name=_key, source=_source, view=_view, **eff_kwargs)
+                self.figure.scatter(
+                    *xy_axes, name=_key, source=_source, **_dict, **eff_kwargs
+                )
 
 
 class BokehSnorkelExplorer(BokehBaseExplorer):
@@ -726,7 +726,7 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
         ???+ note "Plot the raw subset in the background."
         """
         xy_axes = self.find_embedding_fields()[:2]
-        self.figure.circle(
+        self.figure.scatter(
             *xy_axes, name="raw", source=self.sources["raw"], **self.glyph_kwargs["raw"]
         )
         self._good(f"Plotted subset raw with {self.dfs['raw'].shape[0]} points")
@@ -876,7 +876,8 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
         # add correct/incorrect/missed/hit glyphs
         if "C" in include:
             view = self._view_correct(L_labeled)
-            data_dict["glyphs"]["C"] = self.figure.square(
+            data_dict["glyphs"]["C"] = self.figure.scatter(
+                marker="square",
                 *xy_axes,
                 source=self.sources["labeled"],
                 view=view,
@@ -886,7 +887,8 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
             )
         if "I" in include:
             view = self._view_incorrect(L_labeled)
-            data_dict["glyphs"]["I"] = self.figure.x(
+            data_dict["glyphs"]["I"] = self.figure.scatter(
+                marker="x",
                 *xy_axes,
                 source=self.sources["labeled"],
                 view=view,
@@ -896,7 +898,8 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
             )
         if "M" in include:
             view = self._view_missed(L_labeled, lf.targets)
-            data_dict["glyphs"]["M"] = self.figure.cross(
+            data_dict["glyphs"]["M"] = self.figure.scatter(
+                marker="cross",
                 *xy_axes,
                 source=self.sources["labeled"],
                 view=view,
@@ -906,7 +909,7 @@ class BokehSnorkelExplorer(BokehBaseExplorer):
             )
         if "H" in include:
             view = self._view_hit(L_raw)
-            data_dict["glyphs"]["H"] = self.figure.circle(
+            data_dict["glyphs"]["H"] = self.figure.scatter(
                 *xy_axes,
                 source=self.sources["raw"],
                 view=view,

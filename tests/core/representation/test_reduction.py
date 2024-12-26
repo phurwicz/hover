@@ -21,7 +21,6 @@ def test_create_reducer(n_points=1000):
 
 
 def test_dimensionality_reduction(n_points=1000):
-
     arr = np.random.rand(n_points, 20)
     reducer = DimensionalityReducer(arr)
 

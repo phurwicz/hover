@@ -13,7 +13,7 @@ def get_description():
 
 setuptools.setup(
     name="hover",
-    version="0.9.0",
+    version="0.10.0",
     description="Label data at scale. Fun and precision included.",
     long_description=get_description(),
     long_description_content_type="text/markdown",
@@ -24,24 +24,25 @@ setuptools.setup(
     install_requires=[
         # python-version-specific example: "numpy>=1.14,<=1.21.5;python_version<'3.8.0'",
         # interactive/static visualization
-        "bokeh>=3.0.3",
+        "bokeh>=3.4.3",
         # preprocessors
-        "scikit-learn>=0.20.0",
+        "scikit-learn>=1.4.0",
         # neural stuff
-        "torch>=1.10.0",
+        "torch>=2.0.0",
         # data handling
-        "pandas>=1.3.0",
-        "polars>=0.17.0",
-        "pyarrow>=11.0.0",
-        "numpy>=1.22",
+        "pandas>=2.0.0",
+        "polars>=1.10.0",
+        "pyarrow>=18.0.0",
+        # "numpy>=2.0.0",
+        "numpy>=1.25.0,<2.0.0",
         # computations
-        "scipy>=1.3.2",
+        "scipy>=1.10.0",
         # utilities
         "tqdm>=4.0",
         "rich>=11.0.0",
         "deprecated>=1.1.0",
         # dimensionality reduction: UMAP is included
-        "umap-learn>=0.3.10",
+        "umap-learn>=0.5.0",
         # module config customization
         "flexmod>=0.1.2",
         # optional: more dimensionality reduction methods
@@ -49,7 +50,7 @@ setuptools.setup(
         # optional: distant supervision
         # "snorkel>=0.9.8",
     ],
-    python_requires=">=3.8",
+    python_requires=">=3.10",
     classifiers=[
         "Programming Language :: Python :: 3",
         "Development Status :: 4 - Beta",

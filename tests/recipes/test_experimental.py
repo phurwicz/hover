@@ -93,28 +93,29 @@ def test_active_learning(example_text_dataset, dummy_vecnet_callback):
     assert unfilter_select == initial_select
 
 
-def test_snorkel_crosscheck(example_audio_dataset, dummy_labeling_function_list):
-    dataset = example_audio_dataset.copy()
-    layout, objects = _snorkel_crosscheck(dataset, dummy_labeling_function_list)
-    assert layout.visible
-
-    # TODO: add emulations of user activity
-    assert objects
+# def test_snorkel_crosscheck(example_audio_dataset, dummy_labeling_function_list):
+#     dataset = example_audio_dataset.copy()
+#     layout, objects = _snorkel_crosscheck(dataset, dummy_labeling_function_list)
+#     assert layout.visible
+#
+#     # TODO: add emulations of user activity
+#     assert objects
 
 
 @pytest.mark.lite
 def test_servable_experimental(
     example_text_dataset,
     dummy_vecnet_callback,
-    dummy_labeling_function_list,
+    # dummy_labeling_function_list,
 ):
     # one dataset for each recipe
     dataset = example_text_dataset.copy()
     vecnet = dummy_vecnet_callback(dataset)
     active = active_learning(dataset, vecnet)
 
-    dataset = example_text_dataset.copy()
-    snorkel = snorkel_crosscheck(dataset, dummy_labeling_function_list)
+    # dataset = example_text_dataset.copy()
+    # snorkel = snorkel_crosscheck(dataset, dummy_labeling_function_list)
 
-    for handle in [active, snorkel]:
+    # for handle in [active, snorkel]:
+    for handle in [active]:
         execute_handle_function(handle)

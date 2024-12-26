@@ -526,7 +526,7 @@ class PolarsDataframe(AbstractDataframe):
         example_value = list(mapping.values())[0]
         dtype = self._get_return_type(example_value)
         if self.shape[0] > 0:
-            series = subject[column].map_dict(mapping, return_dtype=dtype)
+            series = subject[column].replace_strict(mapping, return_dtype=dtype)
         else:
             series = pl.Series([], dtype=dtype)
         return self._post_apply(series, as_column, output)
@@ -543,7 +543,8 @@ class PolarsDataframe(AbstractDataframe):
         if self.shape[0] > 0:
             example_value = function(self.get_cell_by_row_column(0, column))
             dtype = self._get_return_type(example_value)
-            series = subject[column].apply(function, return_dtype=dtype)
+            series = subject[column].map_elements(function, return_dtype=dtype)
+            # series = subject[column].apply(function, return_dtype=dtype)
         else:
             series = pl.Series([])
         return self._post_apply(series, as_column, output)
@@ -568,7 +569,9 @@ class PolarsDataframe(AbstractDataframe):
 
         # create the function to be applied
         to_apply = (
-            pl.struct(self._df.columns).apply(function, return_dtype=dtype).alias(col)
+            pl.struct(self._df.columns)
+            .map_elements(function, return_dtype=dtype)
+            .alias(col)
         )
         # apply the function
         if as_column is None:

@@ -92,7 +92,7 @@ def assert_equivalent_dataframes(df_pd, df_pl, pd_df, pl_df):
     Subroutine for checking dataframe values.
     """
     assert df_pd.equals(pd_df), f"{pformat(df_pd)}\n{pformat(pd_df)}"
-    assert df_pl.frame_equal(pl_df), f"{pformat(df_pl)}\n{pformat(pl_df)}"
+    assert df_pl.equals(pl_df), f"{pformat(df_pl)}\n{pformat(pl_df)}"
     assert df_pl.to_dicts() == df_pd.to_dict(
         orient="records"
     ), f"{pformat(df_pl)}\n{pformat(df_pd)}"
@@ -118,7 +118,7 @@ class TestDataframe:
         assert df_pl() is pl_df
 
         assert df_pd().equals(PandasDataframe.construct(df_data)())
-        assert df_pl().frame_equal(PolarsDataframe.construct(df_data)())
+        assert df_pl().equals(PolarsDataframe.construct(df_data)())
 
         assert df_pd.copy()() is not df_pd()
         assert df_pl.copy()() is not df_pl()
@@ -145,7 +145,7 @@ class TestDataframe:
         )
 
         assert df_pd().equals(pd_df)
-        assert df_pl().frame_equal(pl_df)
+        assert df_pl().equals(pl_df)
         assert df_pd.shape == df_pl.shape == (0, 3)
 
     @pytest.mark.parametrize("df_data_a", DATAFRAME_VALUE_TEST_CASES)
@@ -160,7 +160,7 @@ class TestDataframe:
         # use diagonal for non-overlapping columns
         pl_df_ab = pl.concat([pl_df_a, pl_df_b], how="diagonal")
         assert df_pd_ab().equals(pd_df_ab)
-        assert df_pl_ab().frame_equal(pl_df_ab)
+        assert df_pl_ab().equals(pl_df_ab)
         assert df_pl_ab().to_pandas().equals(pd_df_ab)
 
         try:
@@ -375,7 +375,7 @@ class TestDataframe:
             df_pd.column_map(col, mapping, indices=None, as_column="result")
             df_pl.column_map(col, mapping, indices=None, as_column="result")
             assert not df_pd().equals(pd_df)
-            assert not df_pl().frame_equal(pl_df)
+            assert not df_pl().equals(pl_df)
             assert df_pd().equals(df_pl.to_pandas())
 
     @pytest.mark.parametrize("df_data", DATAFRAME_VALUE_TEST_CASES)
@@ -407,7 +407,7 @@ class TestDataframe:
             df_pd.column_isin(col, lookup, indices=None, as_column="result")
             df_pl.column_isin(col, lookup, indices=None, as_column="result")
             assert not df_pd().equals(pd_df)
-            assert not df_pl().frame_equal(pl_df)
+            assert not df_pl().equals(pl_df)
             assert df_pd().equals(df_pl.to_pandas())
 
     @pytest.mark.parametrize("df_data", DATAFRAME_VALUE_TEST_CASES)
@@ -444,7 +444,7 @@ class TestDataframe:
             df_pd.column_apply(col, func, indices=None, as_column="result")
             df_pl.column_apply(col, func, indices=None, as_column="result")
             assert not df_pd().equals(pd_df)
-            assert not df_pl().frame_equal(pl_df)
+            assert not df_pl().equals(pl_df)
             assert df_pd().equals(df_pl.to_pandas())
 
     @pytest.mark.parametrize("df_data", DATAFRAME_VALUE_TEST_CASES)
@@ -471,7 +471,7 @@ class TestDataframe:
         df_pd.row_apply(func, indices=None, as_column="result")
         df_pl.row_apply(func, indices=None, as_column="result")
         assert not df_pd().equals(pd_df)
-        assert not df_pl().frame_equal(pl_df)
+        assert not df_pl().equals(pl_df)
         assert df_pd().equals(df_pl.to_pandas())
 
     @pytest.mark.parametrize("df_data", DATAFRAME_VALUE_TEST_CASES)
@@ -501,8 +501,10 @@ class TestDataframe:
             value = df_pd.get_cell_by_row_column(df_pd.shape[0] - 1 - row, col)
             value = numpy_to_native(value)
 
-            # as of Apr 2023: pyarrow does not support assigning a list to a polars cell
-            tolerated = pl.exceptions.ArrowError if isinstance(value, list) else None
+            # # as of Dec 2024: polars does not support assigning a list to a polars cell
+            tolerated = (
+                pl.exceptions.InvalidOperationError if isinstance(value, list) else None
+            )
 
             try:
                 df_pd.set_cell_by_row_column(row, col, value)
